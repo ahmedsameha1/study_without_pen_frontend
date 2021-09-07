@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.study_without_pen_by_flutter">
+    package="com.ahmedsameha1.peninbin">
    <application
         android:label="study_without_pen_by_flutter"
         android:icon="@mipmap/ic_launcher">
