@@ -1,8 +1,9 @@
 class UserAccount {
   late final String _id;
   late String _firstName;
+  String? _middleNames;
 
-  UserAccount(String _id, String _firstName) {
+  UserAccount(String _id, String _firstName, String? _middleNames) {
     /////////////////////////////////////////////////////////////////////////
     // id validation
     if (_id.isNotEmpty) {
@@ -18,21 +19,47 @@ class UserAccount {
     if (_firstName.isNotEmpty) {
       final regExp = RegExp(r"^\s{0}\S{1}([^\S\r\n]*\S)*\s{0}$");
       if (!regExp.hasMatch(_firstName)) {
-        throw ArgumentError("firstName cannot start with whitespace characters and cannot end with whitespace characters");
+        throw ArgumentError(
+            "firstName cannot start with whitespace characters and cannot end with whitespace characters");
       }
     } else {
       throw ArgumentError("firstName cannot be an empty String");
     }
+    /////////////////////////////////////////////////////////////////////////
+    // middleNames validation
+    if (_middleNames != null && _middleNames.isNotEmpty) {
+      final regExp = RegExp(r"^\s{0}\S{1}([^\S\r\n]*\S)*\s{0}$");
+      if (!regExp.hasMatch(_middleNames)) {
+        throw ArgumentError(
+            "middleNames cannot start with whitespace characters and cannot end with whitespace characters");
+      }
+    } else if (_middleNames != null) {
+      throw ArgumentError("middleNames cannot be an empty String");
+    }
     this._id = _id;
     this._firstName = _firstName;
+    this._middleNames = _middleNames;
   }
 
   String get id => _id;
   String get firstName => _firstName;
+  String? get middleNames => _middleNames;
+
+  set middleNames(String? _middleNames) {
+    if (_middleNames != null && _middleNames.isNotEmpty) {
+      final regExp = RegExp(r"^\s{0}\S{1}([^\S\r\n]*\S)*\s{0}$");
+      if (!regExp.hasMatch(_middleNames)) {
+        throw ArgumentError(
+            "middleNames cannot start with whitespace characters and cannot end with whitespace characters");
+      }
+    } else if (_middleNames != null) {
+      throw ArgumentError("middleNames cannot be an empty String");
+    }
+    this._middleNames = _middleNames;
+  }
 }
 
 /*
-  String? _middleName;
   String _lastName;
   DateTime _birthDay;
   Gender _gender;
@@ -44,8 +71,7 @@ class UserAccount {
   DateTime _lastSignOutTime;
   String _socialMediaAddress;
 */
-  /*
-      this._middleName,
+/*
       this._lastName,
       this._gender,
       this._email,
@@ -59,7 +85,7 @@ class UserAccount {
 
    */
 
-  /*
+/*
   String get socialMediaAddress => _socialMediaAddress;
 
   DateTime get lastSignOutTime => _lastSignOutTime;
@@ -79,8 +105,6 @@ class UserAccount {
   DateTime get birthDay => _birthDay;
 
   String get lastName => _lastName;
-
-  String? get middleName => _middleName;
 
 
 
