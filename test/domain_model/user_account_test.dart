@@ -17,6 +17,11 @@ main() {
      expect(() => UserAccount("f\tf", "name"), throwsArgumentError);
      expect(() => UserAccount("f", "name"), returnsNormally);
    });
+   test("id has been assigned the correct value", () {
+     final userAccount = UserAccount("id", "name");
+     final id = userAccount.id;
+     expect("id", id);
+   });
   });
   group("firstName tests", () {
     test("firstName isn't empty", () {
