@@ -1,7 +1,10 @@
 class UserAccount {
   late final String _id;
+  late String _firstName;
 
-  UserAccount(String _id) {
+  UserAccount(String _id, String _firstName) {
+    /////////////////////////////////////////////////////////////////////////
+    // id validation
     if (_id.isNotEmpty) {
       RegExp regExp = RegExp(r"^\S+$");
       if (!regExp.hasMatch(_id)) {
@@ -10,13 +13,25 @@ class UserAccount {
     } else {
       throw ArgumentError("id cannot be an empty String");
     }
+    /////////////////////////////////////////////////////////////////////////
+    // firstName validation
+    if (_firstName.isNotEmpty) {
+      final regExp = RegExp(r"^\s{0}\S{1}([^\S\r\n]*\S)*\s{0}$");
+      if (!regExp.hasMatch(_firstName)) {
+        throw ArgumentError("firstName cannot start with whitespace characters and cannot end with whitespace characters");
+      }
+    } else {
+      throw ArgumentError("firstName cannot be an empty String");
+    }
     this._id = _id;
+    this._firstName = _firstName;
   }
 
   String get id => _id;
+  String get firstName => _firstName;
 }
 
-/* String _firstName;
+/*
   String? _middleName;
   String _lastName;
   DateTime _birthDay;
@@ -29,7 +44,7 @@ class UserAccount {
   DateTime _lastSignOutTime;
   String _socialMediaAddress;
 */
-  /*    this._firstName,
+  /*
       this._middleName,
       this._lastName,
       this._gender,
@@ -67,7 +82,7 @@ class UserAccount {
 
   String? get middleName => _middleName;
 
-  String get firstName => _firstName;
+
 
 
   String get fullName => "$_firstName ${_middleName != null? _middleName: ""} $_lastName";
