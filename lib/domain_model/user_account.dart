@@ -45,6 +45,19 @@ class UserAccount {
   String get firstName => _firstName;
   String? get middleNames => _middleNames;
 
+  set firstName(String _firstName) {
+    if (_firstName.isNotEmpty) {
+      final regExp = RegExp(r"^\s{0}\S{1}([^\S\r\n]*\S)*\s{0}$");
+      if (!regExp.hasMatch(_firstName)) {
+        throw ArgumentError(
+            "firstName cannot start with whitespace characters and cannot end with whitespace characters");
+      }
+    } else {
+      throw ArgumentError("firstName cannot be an empty String");
+    }
+    this._firstName = _firstName;
+  }
+
   set middleNames(String? _middleNames) {
     if (_middleNames != null && _middleNames.isNotEmpty) {
       final regExp = RegExp(r"^\s{0}\S{1}([^\S\r\n]*\S)*\s{0}$");

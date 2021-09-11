@@ -26,6 +26,10 @@ main() {
   group("firstName tests", () {
     test("firstName isn't empty", () {
       expect(() => UserAccount("id", "", "names"), throwsArgumentError);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = "";
+      }, throwsArgumentError);
     });
     test(
         "firstName doesn't start with whitespace and doesn't end with whitespace",
@@ -42,11 +46,54 @@ main() {
           () => UserAccount("id", "ff tty b vtewro", "names"), returnsNormally);
       expect(() => UserAccount("id", "ff .tty b vtewro", "names"),
           returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = " ";
+      }, throwsArgumentError);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = " f";
+      }, throwsArgumentError);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = "f ";
+      }, throwsArgumentError);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = " f ";
+      }, throwsArgumentError);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = "f";
+      }, returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = "f t";
+      }, returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = "ff tty";
+      }, returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = "ff tty b";
+      }, returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = "ff tty b vtewro";
+      }, returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names");
+        userAccount.firstName = "ff .tty b vtewro";
+      }, returnsNormally);
     });
     test("firstName has been assigned the correct value", () {
       final userAccount = UserAccount("id", "name", "names");
-      final firstName = userAccount.firstName;
+      var firstName = userAccount.firstName;
       expect("name", firstName);
+      userAccount.firstName = "name2";
+      firstName = userAccount.firstName;
+      expect("name2", firstName);
     });
   });
   group("middleNames tests", () {
