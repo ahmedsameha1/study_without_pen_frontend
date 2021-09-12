@@ -3,9 +3,10 @@ class UserAccount {
   late String _firstName;
   String? _middleNames;
   late String _lastName;
+  late DateTime _birthDay;
 
-  UserAccount(
-      String _id, String _firstName, String? _middleNames, String _lastName) {
+  UserAccount(String _id, String _firstName, String? _middleNames,
+      String _lastName, DateTime _birthDay) {
     /////////////////////////////////////////////////////////////////////////
     // id validation
     if (_id.isNotEmpty) {
@@ -49,16 +50,24 @@ class UserAccount {
     } else {
       throw ArgumentError("lastName cannot be an empty String");
     }
+    /////////////////////////////////////////////////////////////////////////
+    // birthDay validation
+    final now = DateTime.now();
+    if (_birthDay.isAtSameMomentAs(now) || _birthDay.isAfter(now)) {
+      throw ArgumentError("birthDay cannot be after now");
+    }
     this._id = _id;
     this._firstName = _firstName;
     this._middleNames = _middleNames;
     this._lastName = _lastName;
+    this._birthDay = _birthDay;
   }
 
   String get id => _id;
   String get firstName => _firstName;
   String? get middleNames => _middleNames;
   String get lastName => _lastName;
+  DateTime get birthDay => _birthDay;
 
   set firstName(String _firstName) {
     if (_firstName.isNotEmpty) {
@@ -98,10 +107,17 @@ class UserAccount {
     }
     this._lastName = _lastName;
   }
+
+  set birthDay(DateTime _birthDay) {
+    final now = DateTime.now();
+    if (_birthDay.isAtSameMomentAs(now) || _birthDay.isAfter(now)) {
+      throw ArgumentError("birthDay cannot be after now");
+    }
+    this._birthDay = _birthDay;
+  }
 }
 
 /*
-  DateTime _birthDay;
   Gender _gender;
   String _email;
   bool _isEmailVerified;
@@ -115,7 +131,6 @@ class UserAccount {
       this._gender,
       this._email,
       this._isEmailVerified,
-      this._birthDay,
       this._createdAt,
       this._modifiedAt,
       this._lastSignInTime,
@@ -140,8 +155,6 @@ class UserAccount {
   String get email => _email;
 
   Gender get gender => _gender;
-
-  DateTime get birthDay => _birthDay;
 
 
   String get fullName => "$_firstName ${_middleName != null? _middleName: ""} $_lastName";
