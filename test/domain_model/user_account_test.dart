@@ -4,91 +4,106 @@ import 'package:study_without_pen_by_flutter/domain_model/user_account.dart';
 main() {
   group("id tests", () {
     test("id isn't empty", () {
-      expect(() => UserAccount("", "name", "names"), throwsArgumentError);
+      expect(
+          () => UserAccount("", "name", "names", "name"), throwsArgumentError);
     });
     test("id doesn't contain any whitespace characters", () {
-      expect(() => UserAccount(" ", "name", "names"), throwsArgumentError);
-      expect(() => UserAccount("\t", "name", "names"), throwsArgumentError);
-      expect(() => UserAccount("\n", "name", "names"), throwsArgumentError);
-      expect(() => UserAccount("f\t", "name", "names"), throwsArgumentError);
-      expect(() => UserAccount("f ", "name", "names"), throwsArgumentError);
-      expect(() => UserAccount("\nf ", "name", "names"), throwsArgumentError);
-      expect(() => UserAccount("\tf", "name", "names"), throwsArgumentError);
-      expect(() => UserAccount("f\tf", "name", "names"), throwsArgumentError);
-      expect(() => UserAccount("f", "name", "names"), returnsNormally);
+      expect(
+          () => UserAccount(" ", "name", "names", "name"), throwsArgumentError);
+      expect(() => UserAccount("\t", "name", "names", "name"),
+          throwsArgumentError);
+      expect(() => UserAccount("\n", "name", "names", "name"),
+          throwsArgumentError);
+      expect(() => UserAccount("f\t", "name", "names", "name"),
+          throwsArgumentError);
+      expect(() => UserAccount("f ", "name", "names", "name"),
+          throwsArgumentError);
+      expect(() => UserAccount("\nf ", "name", "names", "name"),
+          throwsArgumentError);
+      expect(() => UserAccount("\tf", "name", "names", "name"),
+          throwsArgumentError);
+      expect(() => UserAccount("f\tf", "name", "names", "name"),
+          throwsArgumentError);
+      expect(() => UserAccount("f", "name", "names", "name"), returnsNormally);
     });
     test("id has been assigned the correct value", () {
-      final userAccount = UserAccount("id", "name", "names");
+      final userAccount = UserAccount("id", "name", "names", "name");
       final id = userAccount.id;
       expect("id", id);
     });
   });
   group("firstName tests", () {
     test("firstName isn't empty", () {
-      expect(() => UserAccount("id", "", "names"), throwsArgumentError);
+      expect(() => UserAccount("id", "", "names", "name"), throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = "";
       }, throwsArgumentError);
     });
     test(
         "firstName doesn't start with whitespace and doesn't end with whitespace",
         () {
-      expect(() => UserAccount("id", " ", "names"), throwsArgumentError);
-      expect(() => UserAccount("id", " f", "names"), throwsArgumentError);
-      expect(() => UserAccount("id", "f ", "names"), throwsArgumentError);
-      expect(() => UserAccount("id", " f ", "names"), throwsArgumentError);
-      expect(() => UserAccount("id", "f", "names"), returnsNormally);
-      expect(() => UserAccount("id", "f t", "names"), returnsNormally);
-      expect(() => UserAccount("id", "ff tty", "names"), returnsNormally);
-      expect(() => UserAccount("id", "ff tty b", "names"), returnsNormally);
       expect(
-          () => UserAccount("id", "ff tty b vtewro", "names"), returnsNormally);
-      expect(() => UserAccount("id", "ff .tty b vtewro", "names"),
+          () => UserAccount("id", " ", "names", "name"), throwsArgumentError);
+      expect(
+          () => UserAccount("id", " f", "names", "name"), throwsArgumentError);
+      expect(
+          () => UserAccount("id", "f ", "names", "name"), throwsArgumentError);
+      expect(
+          () => UserAccount("id", " f ", "names", "name"), throwsArgumentError);
+      expect(() => UserAccount("id", "f", "names", "name"), returnsNormally);
+      expect(() => UserAccount("id", "f t", "names", "name"), returnsNormally);
+      expect(
+          () => UserAccount("id", "ff tty", "names", "name"), returnsNormally);
+      expect(() => UserAccount("id", "ff tty b", "names", "name"),
+          returnsNormally);
+      expect(() => UserAccount("id", "ff tty b vtewro", "names", "name"),
+          returnsNormally);
+      expect(() => UserAccount("id", "ff .tty b vtewro", "names", "name"),
           returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = " ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = " f";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = "f ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = " f ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = "f";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = "f t";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = "ff tty";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = "ff tty b";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.firstName = "ff .tty b vtewro";
       }, returnsNormally);
     });
     test("firstName has been assigned the correct value", () {
-      final userAccount = UserAccount("id", "name", "names");
+      final userAccount = UserAccount("id", "name", "names", "name");
       var firstName = userAccount.firstName;
       expect("name", firstName);
       userAccount.firstName = "name2";
@@ -98,88 +113,172 @@ main() {
   });
   group("middleNames tests", () {
     test("middleNames can be null", () {
-      expect(() => UserAccount("id", "name", null), returnsNormally);
+      expect(() => UserAccount("id", "name", null, "name"), returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = null;
       }, returnsNormally);
     });
     test("middleNames isn't empty", () {
-      expect(() => UserAccount("id", "name", ""), throwsArgumentError);
+      expect(() => UserAccount("id", "name", "", "name"), throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = "";
       }, throwsArgumentError);
     });
     test(
         "middleNames doesn't start with whitespace and doesn't end with whitespace",
         () {
-      expect(() => UserAccount("id", "name", " "), throwsArgumentError);
-      expect(() => UserAccount("id", "name", " f"), throwsArgumentError);
-      expect(() => UserAccount("id", "name", "f "), throwsArgumentError);
-      expect(() => UserAccount("id", "name", " f "), throwsArgumentError);
-      expect(() => UserAccount("id", "name", "f"), returnsNormally);
-      expect(() => UserAccount("id", "name", "f t"), returnsNormally);
-      expect(() => UserAccount("id", "name", "ff tty"), returnsNormally);
-      expect(() => UserAccount("id", "name", "ff tty b"), returnsNormally);
+      expect(() => UserAccount("id", "name", " ", "name"), throwsArgumentError);
       expect(
-          () => UserAccount("id", "name", "ff tty b vtewro"), returnsNormally);
+          () => UserAccount("id", "name", " f", "name"), throwsArgumentError);
       expect(
-          () => UserAccount("id", "name", "ff .tty b vtewro"), returnsNormally);
+          () => UserAccount("id", "name", "f ", "name"), throwsArgumentError);
+      expect(
+          () => UserAccount("id", "name", " f ", "name"), throwsArgumentError);
+      expect(() => UserAccount("id", "name", "f", "name"), returnsNormally);
+      expect(() => UserAccount("id", "name", "f t", "name"), returnsNormally);
+      expect(
+          () => UserAccount("id", "name", "ff tty", "name"), returnsNormally);
+      expect(
+          () => UserAccount("id", "name", "ff tty b", "name"), returnsNormally);
+      expect(() => UserAccount("id", "name", "ff tty b vtewro", "name"),
+          returnsNormally);
+      expect(() => UserAccount("id", "name", "ff .tty b vtewro", "name"),
+          returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = " ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = " f";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = "f ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = " f ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = "f";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = "f t";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = "ff tty";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = "ff tty b";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount("id", "name", "names");
+        final userAccount = UserAccount("id", "name", "names", "name");
         userAccount.middleNames = "ff .tty b vtewro";
       }, returnsNormally);
     });
     test("middleNames has been assigned the correct value", () {
-      var userAccount = UserAccount("id", "name", "names");
+      var userAccount = UserAccount("id", "name", "names", "name");
       var middleNames = userAccount.middleNames;
       expect("names", middleNames);
       userAccount.middleNames = null;
       middleNames = userAccount.middleNames;
       expect(null, middleNames);
-      userAccount = UserAccount("id", "name", null);
+      userAccount = UserAccount("id", "name", null, "name");
       middleNames = userAccount.middleNames;
       expect(null, middleNames);
       userAccount.middleNames = "names";
       middleNames = userAccount.middleNames;
       expect("names", middleNames);
+    });
+  });
+  group("lastName tests", () {
+    test("lastName isn't empty", () {
+      expect(() => UserAccount("id", "name", "names", ""), throwsArgumentError);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = "";
+      }, throwsArgumentError);
+    });
+    test(
+        "lastName doesn't start with whitespace and doesn't end with whitespace",
+        () {
+      expect(
+          () => UserAccount("id", "name", "names", " "), throwsArgumentError);
+      expect(
+          () => UserAccount("id", "name", "names", " f"), throwsArgumentError);
+      expect(
+          () => UserAccount("id", "name", "names", "f "), throwsArgumentError);
+      expect(
+          () => UserAccount("id", "name", "names", " f "), throwsArgumentError);
+      expect(() => UserAccount("id", "name", "names", "f"), returnsNormally);
+      expect(() => UserAccount("id", "name", "names", "f t"), returnsNormally);
+      expect(
+          () => UserAccount("id", "name", "names", "ff tty"), returnsNormally);
+      expect(() => UserAccount("id", "name", "names", "ff tty b"),
+          returnsNormally);
+      expect(() => UserAccount("id", "name", "names", "ff tty b vtewro"),
+          returnsNormally);
+      expect(() => UserAccount("id", "name", "names", "ff .tty b vtewro"),
+          returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = " ";
+      }, throwsArgumentError);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = " f";
+      }, throwsArgumentError);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = "f ";
+      }, throwsArgumentError);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = " f ";
+      }, throwsArgumentError);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = "f";
+      }, returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = "f t";
+      }, returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = "ff tty";
+      }, returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = "ff tty b";
+      }, returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = "ff tty b vtewro";
+      }, returnsNormally);
+      expect(() {
+        final userAccount = UserAccount("id", "name", "names", "name");
+        userAccount.lastName = "ff .tty b vtewro";
+      }, returnsNormally);
+    });
+    test("lastName has been assigned the correct value", () {
+      final userAccount = UserAccount("id", "name", "names", "name");
+      var lastName = userAccount.lastName;
+      expect("name", lastName);
+      userAccount.lastName = "name2";
+      lastName = userAccount.lastName;
+      expect("name2", lastName);
     });
   });
 }

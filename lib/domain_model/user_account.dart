@@ -2,8 +2,10 @@ class UserAccount {
   late final String _id;
   late String _firstName;
   String? _middleNames;
+  late String _lastName;
 
-  UserAccount(String _id, String _firstName, String? _middleNames) {
+  UserAccount(
+      String _id, String _firstName, String? _middleNames, String _lastName) {
     /////////////////////////////////////////////////////////////////////////
     // id validation
     if (_id.isNotEmpty) {
@@ -36,14 +38,27 @@ class UserAccount {
     } else if (_middleNames != null) {
       throw ArgumentError("middleNames cannot be an empty String");
     }
+    /////////////////////////////////////////////////////////////////////////
+    // lastName validation
+    if (_lastName.isNotEmpty) {
+      final regExp = RegExp(r"^\s{0}\S{1}([^\S\r\n]*\S)*\s{0}$");
+      if (!regExp.hasMatch(_lastName)) {
+        throw ArgumentError(
+            "lastName cannot start with whitespace characters and cannot end with whitespace characters");
+      }
+    } else {
+      throw ArgumentError("lastName cannot be an empty String");
+    }
     this._id = _id;
     this._firstName = _firstName;
     this._middleNames = _middleNames;
+    this._lastName = _lastName;
   }
 
   String get id => _id;
   String get firstName => _firstName;
   String? get middleNames => _middleNames;
+  String get lastName => _lastName;
 
   set firstName(String _firstName) {
     if (_firstName.isNotEmpty) {
@@ -70,10 +85,22 @@ class UserAccount {
     }
     this._middleNames = _middleNames;
   }
+
+  set lastName(String _lastName) {
+    if (_lastName.isNotEmpty) {
+      final regExp = RegExp(r"^\s{0}\S{1}([^\S\r\n]*\S)*\s{0}$");
+      if (!regExp.hasMatch(_lastName)) {
+        throw ArgumentError(
+            "lastName cannot start with whitespace characters and cannot end with whitespace characters");
+      }
+    } else {
+      throw ArgumentError("lastName cannot be an empty String");
+    }
+    this._lastName = _lastName;
+  }
 }
 
 /*
-  String _lastName;
   DateTime _birthDay;
   Gender _gender;
   String _email;
@@ -85,7 +112,6 @@ class UserAccount {
   String _socialMediaAddress;
 */
 /*
-      this._lastName,
       this._gender,
       this._email,
       this._isEmailVerified,
@@ -116,10 +142,6 @@ class UserAccount {
   Gender get gender => _gender;
 
   DateTime get birthDay => _birthDay;
-
-  String get lastName => _lastName;
-
-
 
 
   String get fullName => "$_firstName ${_middleName != null? _middleName: ""} $_lastName";
