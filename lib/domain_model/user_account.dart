@@ -4,9 +4,10 @@ class UserAccount {
   String? _middleNames;
   late String _lastName;
   late DateTime _birthDay;
+  Gender _gender = Gender.UNSPECIFIED;
 
   UserAccount(String _id, String _firstName, String? _middleNames,
-      String _lastName, DateTime _birthDay) {
+      String _lastName, DateTime _birthDay, Gender _gender) {
     /////////////////////////////////////////////////////////////////////////
     // id validation
     if (_id.isNotEmpty) {
@@ -61,6 +62,7 @@ class UserAccount {
     this._middleNames = _middleNames;
     this._lastName = _lastName;
     this._birthDay = _birthDay;
+    this._gender = _gender;
   }
 
   String get id => _id;
@@ -68,6 +70,7 @@ class UserAccount {
   String? get middleNames => _middleNames;
   String get lastName => _lastName;
   DateTime get birthDay => _birthDay;
+  Gender get gender => _gender;
 
   set firstName(String _firstName) {
     if (_firstName.isNotEmpty) {
@@ -115,10 +118,14 @@ class UserAccount {
     }
     this._birthDay = _birthDay;
   }
+
+  set gender(Gender _gender) {
+    this._gender = _gender;
+  }
 }
 
+enum Gender { MALE, FEMALE, UNSPECIFIED }
 /*
-  Gender _gender;
   String _email;
   bool _isEmailVerified;
   final DateTime _createdAt;
@@ -128,7 +135,6 @@ class UserAccount {
   String _socialMediaAddress;
 */
 /*
-      this._gender,
       this._email,
       this._isEmailVerified,
       this._createdAt,
@@ -153,8 +159,6 @@ class UserAccount {
   bool get isEmailVerified => _isEmailVerified;
 
   String get email => _email;
-
-  Gender get gender => _gender;
 
 
   String get fullName => "$_firstName ${_middleName != null? _middleName: ""} $_lastName";

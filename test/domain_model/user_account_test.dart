@@ -5,51 +5,51 @@ main() {
   group("id tests", () {
     test("id isn't empty", () {
       expect(
-          () => UserAccount(
-              "", "name", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("", "name", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
     });
     test("id doesn't contain any whitespace characters", () {
       expect(
-          () => UserAccount(
-              " ", "name", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount(" ", "name", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "\t", "name", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("\t", "name", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "\n", "name", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("\n", "name", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "f\t", "name", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("f\t", "name", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "f ", "name", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("f ", "name", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "\nf ", "name", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("\nf ", "name", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "\tf", "name", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("\tf", "name", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "f\tf", "name", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("f\tf", "name", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "f", "name", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("f", "name", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
     });
     test("id has been assigned the correct value", () {
-      final userAccount =
-          UserAccount("id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+      final userAccount = UserAccount("id", "name", "names", "name",
+          DateTime.utc(1989, 11, 9), Gender.MALE);
       final id = userAccount.id;
       expect("id", id);
     });
@@ -57,12 +57,12 @@ main() {
   group("firstName tests", () {
     test("firstName isn't empty", () {
       expect(
-          () =>
-              UserAccount("id", "", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = "";
       }, throwsArgumentError);
     });
@@ -70,99 +70,99 @@ main() {
         "firstName doesn't start with whitespace and doesn't end with whitespace",
         () {
       expect(
-          () => UserAccount(
-              "id", " ", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", " ", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", " f", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", " f", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", "f ", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "f ", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", " f ", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", " f ", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", "f", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "f", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
-          () => UserAccount(
-              "id", "f t", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "f t", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
-          () => UserAccount(
-              "id", "ff tty", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "ff tty", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
-          () => UserAccount(
-              "id", "ff tty b", "names", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "ff tty b", "names", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
           () => UserAccount("id", "ff tty b vtewro", "names", "name",
-              DateTime.utc(1989, 11, 9)),
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
           () => UserAccount("id", "ff .tty b vtewro", "names", "name",
-              DateTime.utc(1989, 11, 9)),
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = " ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = " f";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = "f ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = " f ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = "f";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = "f t";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = "ff tty";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = "ff tty b";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.firstName = "ff .tty b vtewro";
       }, returnsNormally);
     });
     test("firstName has been assigned the correct value", () {
-      final userAccount =
-          UserAccount("id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+      final userAccount = UserAccount("id", "name", "names", "name",
+          DateTime.utc(1989, 11, 9), Gender.MALE);
       var firstName = userAccount.firstName;
       expect("name", firstName);
       userAccount.firstName = "name2";
@@ -173,23 +173,23 @@ main() {
   group("middleNames tests", () {
     test("middleNames can be null", () {
       expect(
-          () => UserAccount(
-              "id", "name", null, "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", null, "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = null;
       }, returnsNormally);
     });
     test("middleNames isn't empty", () {
       expect(
-          () =>
-              UserAccount("id", "name", "", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount(
+              "id", "name", "", "name", DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = "";
       }, throwsArgumentError);
     });
@@ -197,106 +197,106 @@ main() {
         "middleNames doesn't start with whitespace and doesn't end with whitespace",
         () {
       expect(
-          () =>
-              UserAccount("id", "name", " ", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", " ", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", "name", " f", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", " f", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", "name", "f ", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "f ", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", "name", " f ", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", " f ", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () =>
-              UserAccount("id", "name", "f", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "f", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
-          () => UserAccount(
-              "id", "name", "f t", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "f t", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
-          () => UserAccount(
-              "id", "name", "ff tty", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "ff tty", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
-          () => UserAccount(
-              "id", "name", "ff tty b", "name", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "ff tty b", "name",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
           () => UserAccount("id", "name", "ff tty b vtewro", "name",
-              DateTime.utc(1989, 11, 9)),
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
           () => UserAccount("id", "name", "ff .tty b vtewro", "name",
-              DateTime.utc(1989, 11, 9)),
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = " ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = " f";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = "f ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = " f ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = "f";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = "f t";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = "ff tty";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = "ff tty b";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.middleNames = "ff .tty b vtewro";
       }, returnsNormally);
     });
     test("middleNames has been assigned the correct value", () {
-      var userAccount =
-          UserAccount("id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+      var userAccount = UserAccount("id", "name", "names", "name",
+          DateTime.utc(1989, 11, 9), Gender.MALE);
       var middleNames = userAccount.middleNames;
       expect("names", middleNames);
       userAccount.middleNames = null;
       middleNames = userAccount.middleNames;
       expect(null, middleNames);
-      userAccount =
-          UserAccount("id", "name", null, "name", DateTime.utc(1989, 11, 9));
+      userAccount = UserAccount(
+          "id", "name", null, "name", DateTime.utc(1989, 11, 9), Gender.MALE);
       middleNames = userAccount.middleNames;
       expect(null, middleNames);
       userAccount.middleNames = "names";
@@ -307,12 +307,12 @@ main() {
   group("lastName tests", () {
     test("lastName isn't empty", () {
       expect(
-          () =>
-              UserAccount("id", "name", "names", "", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "names", "",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = "";
       }, throwsArgumentError);
     });
@@ -320,99 +320,99 @@ main() {
         "lastName doesn't start with whitespace and doesn't end with whitespace",
         () {
       expect(
-          () => UserAccount(
-              "id", "name", "names", " ", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "names", " ",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", "name", "names", " f", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "names", " f",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", "name", "names", "f ", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "names", "f ",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", "name", "names", " f ", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "names", " f ",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           throwsArgumentError);
       expect(
-          () => UserAccount(
-              "id", "name", "names", "f", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "names", "f",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
-          () => UserAccount(
-              "id", "name", "names", "f t", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "names", "f t",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
-          () => UserAccount(
-              "id", "name", "names", "ff tty", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "names", "ff tty",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
-          () => UserAccount(
-              "id", "name", "names", "ff tty b", DateTime.utc(1989, 11, 9)),
+          () => UserAccount("id", "name", "names", "ff tty b",
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
           () => UserAccount("id", "name", "names", "ff tty b vtewro",
-              DateTime.utc(1989, 11, 9)),
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(
           () => UserAccount("id", "name", "names", "ff .tty b vtewro",
-              DateTime.utc(1989, 11, 9)),
+              DateTime.utc(1989, 11, 9), Gender.MALE),
           returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = " ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = " f";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = "f ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = " f ";
       }, throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = "f";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = "f t";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = "ff tty";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = "ff tty b";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.lastName = "ff .tty b vtewro";
       }, returnsNormally);
     });
     test("lastName has been assigned the correct value", () {
-      final userAccount =
-          UserAccount("id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+      final userAccount = UserAccount("id", "name", "names", "name",
+          DateTime.utc(1989, 11, 9), Gender.MALE);
       var lastName = userAccount.lastName;
       expect("name", lastName);
       userAccount.lastName = "name2";
@@ -424,22 +424,33 @@ main() {
     test("birthDay is before now", () {
       expect(
           () => UserAccount("id", "name", "names", "name",
-              DateTime.now().add(Duration(days: 500))),
+              DateTime.now().add(Duration(days: 500)), Gender.MALE),
           throwsArgumentError);
       expect(() {
-        final userAccount = UserAccount(
-            "id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+        final userAccount = UserAccount("id", "name", "names", "name",
+            DateTime.utc(1989, 11, 9), Gender.MALE);
         userAccount.birthDay = DateTime.now().add(Duration(days: 500));
       }, throwsArgumentError);
     });
     test("birthDay has been assigned the correct value", () {
-      final userAccount =
-          UserAccount("id", "name", "names", "name", DateTime.utc(1989, 11, 9));
+      final userAccount = UserAccount("id", "name", "names", "name",
+          DateTime.utc(1989, 11, 9), Gender.MALE);
       var birthDay = userAccount.birthDay;
       expect(DateTime.utc(1989, 11, 9), birthDay);
       userAccount.birthDay = DateTime.utc(1999, 11, 11);
       birthDay = userAccount.birthDay;
       expect(DateTime.utc(1999, 11, 11), birthDay);
+    });
+  });
+  group("gender tests", () {
+    test("gender has been assigned the correct value", () {
+      final userAccount = UserAccount("id", "name", "names", "names",
+          DateTime.utc(1989, 11, 9), Gender.MALE);
+      var gender = userAccount.gender;
+      expect(Gender.MALE, gender);
+      userAccount.gender = Gender.FEMALE;
+      gender = userAccount.gender;
+      expect(Gender.FEMALE, gender);
     });
   });
 }
