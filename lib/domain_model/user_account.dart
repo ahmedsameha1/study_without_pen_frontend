@@ -6,9 +6,17 @@ class UserAccount {
   late DateTime _birthDay;
   Gender _gender = Gender.UNSPECIFIED;
   String? _email;
+  late bool _isEmailVerified;
 
-  UserAccount(String _id, String _firstName, String? _middleNames,
-      String _lastName, DateTime _birthDay, Gender _gender, String? _email) {
+  UserAccount(
+      String _id,
+      String _firstName,
+      String? _middleNames,
+      String _lastName,
+      DateTime _birthDay,
+      Gender _gender,
+      String? _email,
+      bool _isEmailVerified) {
     /////////////////////////////////////////////////////////////////////////
     // id validation
     if (_id.isNotEmpty) {
@@ -69,6 +77,7 @@ class UserAccount {
     Authentication System
     */
     this._email = _email;
+    this._isEmailVerified = _isEmailVerified;
   }
 
   String get id => _id;
@@ -78,6 +87,7 @@ class UserAccount {
   DateTime get birthDay => _birthDay;
   Gender get gender => _gender;
   String? get email => _email;
+  bool get isEmailVerified => _isEmailVerified;
 
   set firstName(String _firstName) {
     if (_firstName.isNotEmpty) {
@@ -133,11 +143,14 @@ class UserAccount {
   set email(String? _email) {
     this._email = _email;
   }
+
+  set isEmailVerified(bool _isEmailVerified) {
+    this._isEmailVerified = _isEmailVerified;
+  }
 }
 
 enum Gender { MALE, FEMALE, UNSPECIFIED }
 /*
-  bool _isEmailVerified;
   final DateTime _createdAt;
   DateTime _modifiedAt;
   DateTime _lastSignInTime;
@@ -145,7 +158,6 @@ enum Gender { MALE, FEMALE, UNSPECIFIED }
   String _socialMediaAddress;
 */
 /*
-      this._isEmailVerified,
       this._createdAt,
       this._modifiedAt,
       this._lastSignInTime,
@@ -164,8 +176,6 @@ enum Gender { MALE, FEMALE, UNSPECIFIED }
   DateTime get modifiedAt => _modifiedAt;
 
   DateTime get createdAt => _createdAt;
-
-  bool get isEmailVerified => _isEmailVerified;
 
 
   String get fullName => "$_firstName ${_middleName != null? _middleName: ""} $_lastName";
