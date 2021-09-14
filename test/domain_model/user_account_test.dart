@@ -1155,6 +1155,19 @@ main() {
               false,
               DateTime.utc(2020, 7, 7)),
           returnsNormally);
+      expect(() {
+        var userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            "abc@abc.com",
+            false,
+            DateTime.utc(2020, 7, 7));
+        userAccount.email = null;
+      }, returnsNormally);
     });
     test("email has been assigned the correct value", () {
       var userAccount = UserAccount(
