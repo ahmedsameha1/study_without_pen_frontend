@@ -7,6 +7,7 @@ class UserAccount {
   Gender _gender = Gender.UNSPECIFIED;
   String? _email;
   late bool _isEmailVerified;
+  DateTime? _createdAt;
 
   UserAccount(
       String _id,
@@ -16,7 +17,8 @@ class UserAccount {
       DateTime _birthDay,
       Gender _gender,
       String? _email,
-      bool _isEmailVerified) {
+      bool _isEmailVerified,
+      DateTime? _createdAt) {
     /////////////////////////////////////////////////////////////////////////
     // id validation
     if (_id.isNotEmpty) {
@@ -78,6 +80,11 @@ class UserAccount {
     */
     this._email = _email;
     this._isEmailVerified = _isEmailVerified;
+    /*
+    There is no validation for _createdAt because it should come from the Firebase
+    Authentication System
+    */
+    this._createdAt = _createdAt;
   }
 
   String get id => _id;
@@ -88,6 +95,7 @@ class UserAccount {
   Gender get gender => _gender;
   String? get email => _email;
   bool get isEmailVerified => _isEmailVerified;
+  DateTime? get createdAt => _createdAt;
 
   set firstName(String _firstName) {
     if (_firstName.isNotEmpty) {
@@ -147,18 +155,20 @@ class UserAccount {
   set isEmailVerified(bool _isEmailVerified) {
     this._isEmailVerified = _isEmailVerified;
   }
+
+  set createdAt(DateTime? _createdAt) {
+    this._createdAt = _createdAt;
+  }
 }
 
 enum Gender { MALE, FEMALE, UNSPECIFIED }
 /*
-  final DateTime _createdAt;
   DateTime _modifiedAt;
   DateTime _lastSignInTime;
   DateTime _lastSignOutTime;
   String _socialMediaAddress;
 */
 /*
-      this._createdAt,
       this._modifiedAt,
       this._lastSignInTime,
       this._lastSignOutTime,
@@ -174,8 +184,6 @@ enum Gender { MALE, FEMALE, UNSPECIFIED }
   DateTime get lastSignInTime => _lastSignInTime;
 
   DateTime get modifiedAt => _modifiedAt;
-
-  DateTime get createdAt => _createdAt;
 
 
   String get fullName => "$_firstName ${_middleName != null? _middleName: ""} $_lastName";
