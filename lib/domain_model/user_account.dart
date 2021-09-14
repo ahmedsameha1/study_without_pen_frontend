@@ -157,6 +157,13 @@ class UserAccount {
   }
 
   set createdAt(DateTime? _createdAt) {
+    if (_createdAt == null) {
+      throw ArgumentError("_createdAt cannot be set to null");
+    }
+    if (this._createdAt != null) {
+      throw ArgumentError(
+          "_createdAt cannot be set if it has a non-null value");
+    }
     this._createdAt = _createdAt;
   }
 }

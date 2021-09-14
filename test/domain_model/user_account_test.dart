@@ -1222,11 +1222,13 @@ main() {
     });
   });
   group("_createdAt tests", () {
-    test("_createdAt can be null", () {
+    test("_createdAt can be null while UserAccount construction", () {
       expect(
           () => UserAccount("id", "name", "names", "name",
               DateTime.utc(1989, 11, 9), Gender.MALE, null, true, null),
           returnsNormally);
+    });
+    test("_createdAt cannot be set to null using its setter", () {
       expect(() {
         var userAccount = UserAccount(
             "id",
@@ -1239,7 +1241,22 @@ main() {
             true,
             DateTime.utc(2020, 7, 7));
         userAccount.createdAt = null;
-      }, returnsNormally);
+      }, throwsArgumentError);
+    });
+    test("_createdAt cannot be set if it has a non-null value", () {
+      expect(() {
+        var userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7));
+        userAccount.createdAt = DateTime(2020, 1, 1);
+      }, throwsArgumentError);
     });
     test("_created has been assigned the correct value", () {
       var userAccount = UserAccount(
@@ -1254,9 +1271,6 @@ main() {
           DateTime.utc(2020, 7, 7));
       var createdAt = userAccount.createdAt;
       expect(DateTime.utc(2020, 7, 7), createdAt);
-      userAccount.createdAt = null;
-      createdAt = userAccount.createdAt;
-      expect(null, createdAt);
       userAccount = UserAccount("id", "name", "names", "name",
           DateTime.utc(1989, 11, 9), Gender.MALE, null, true, null);
       createdAt = userAccount.createdAt;
