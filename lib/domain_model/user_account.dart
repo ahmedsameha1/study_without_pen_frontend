@@ -11,6 +11,7 @@ class UserAccount {
   late bool _isEmailVerified;
   DateTime? _createdAt;
   DateTime? _lasModificationAt;
+  DateTime? _lastSignInAt;
 
   UserAccount(
       String _id,
@@ -22,7 +23,8 @@ class UserAccount {
       String? _email,
       bool _isEmailVerified,
       DateTime? _createdAt,
-      DateTime? _lastModificationAt) {
+      DateTime? _lastModificationAt,
+      DateTime? _lastSignInAt) {
     final now = clock.now();
     /////////////////////////////////////////////////////////////////////////
     // id validation
@@ -97,6 +99,11 @@ class UserAccount {
       throw ArgumentError("_lastModificationAt cannot be equal or after now");
     }
     this._lasModificationAt = _lastModificationAt;
+    /*
+    There is no validation for _lastSignInAt because it should come from the Firebase
+    Authentication System
+    */
+    this._lastSignInAt = _lastSignInAt;
   }
 
   String get id => _id;
@@ -109,6 +116,7 @@ class UserAccount {
   bool get isEmailVerified => _isEmailVerified;
   DateTime? get createdAt => _createdAt;
   DateTime? get lastModificationAt => _lasModificationAt;
+  DateTime? get lastSignInAt => _lastSignInAt;
 
   set firstName(String _firstName) {
     if (_firstName.isNotEmpty) {
@@ -197,16 +205,21 @@ class UserAccount {
     }
     this._createdAt = _createdAt;
   }
+
+  set lastSignInAt(DateTime? _lastSignInAt) {
+    if (_lastSignInAt == null) {
+      throw ArgumentError("_lastSignInAt cannot be set to null");
+    }
+    this._lastSignInAt = _lastSignInAt;
+  }
 }
 
 enum Gender { MALE, FEMALE, UNSPECIFIED }
 /*
-  DateTime _lastSignInTime;
   DateTime _lastSignOutTime;
   String _socialMediaAddress;
 */
 /*
-      this._lastSignInTime,
       this._lastSignOutTime,
       this._socialMediaAddress
 
@@ -216,8 +229,6 @@ enum Gender { MALE, FEMALE, UNSPECIFIED }
   String get socialMediaAddress => _socialMediaAddress;
 
   DateTime get lastSignOutTime => _lastSignOutTime;
-
-  DateTime get lastSignInTime => _lastSignInTime;
 
 
   String get fullName => "$_firstName ${_middleName != null? _middleName: ""} $_lastName";
