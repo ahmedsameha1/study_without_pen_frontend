@@ -1,3 +1,5 @@
+import 'package:clock/clock.dart';
+
 class UserAccount {
   late final String _id;
   late String _firstName;
@@ -8,6 +10,7 @@ class UserAccount {
   String? _email;
   late bool _isEmailVerified;
   DateTime? _createdAt;
+  DateTime? _lasModificationAt;
 
   UserAccount(
       String _id,
@@ -18,7 +21,9 @@ class UserAccount {
       Gender _gender,
       String? _email,
       bool _isEmailVerified,
-      DateTime? _createdAt) {
+      DateTime? _createdAt,
+      DateTime? _lastModificationAt) {
+    final now = clock.now();
     /////////////////////////////////////////////////////////////////////////
     // id validation
     if (_id.isNotEmpty) {
@@ -64,7 +69,6 @@ class UserAccount {
     }
     /////////////////////////////////////////////////////////////////////////
     // birthDay validation
-    final now = DateTime.now();
     if (_birthDay.isAtSameMomentAs(now) || _birthDay.isAfter(now)) {
       throw ArgumentError("birthDay cannot be after now");
     }
@@ -85,6 +89,14 @@ class UserAccount {
     Authentication System
     */
     this._createdAt = _createdAt;
+    /////////////////////////////////////////////////////////////////////////
+    // _lastModificationAt validation
+    if (_lastModificationAt != null &&
+        (_lastModificationAt.isAtSameMomentAs(now) ||
+            _lastModificationAt.isAfter(now))) {
+      throw ArgumentError("_lastModificationAt cannot be equal or after now");
+    }
+    this._lasModificationAt = _lastModificationAt;
   }
 
   String get id => _id;
@@ -96,6 +108,7 @@ class UserAccount {
   String? get email => _email;
   bool get isEmailVerified => _isEmailVerified;
   DateTime? get createdAt => _createdAt;
+  DateTime? get lastModificationAt => _lasModificationAt;
 
   set firstName(String _firstName) {
     if (_firstName.isNotEmpty) {
@@ -107,7 +120,10 @@ class UserAccount {
     } else {
       throw ArgumentError("firstName cannot be an empty String");
     }
-    this._firstName = _firstName;
+    if (_firstName != this._firstName) {
+      this._firstName = _firstName;
+      _lasModificationAt = clock.now();
+    }
   }
 
   set middleNames(String? _middleNames) {
@@ -120,7 +136,10 @@ class UserAccount {
     } else if (_middleNames != null) {
       throw ArgumentError("middleNames cannot be an empty String");
     }
-    this._middleNames = _middleNames;
+    if (_middleNames != this._middleNames) {
+      this._middleNames = _middleNames;
+      this._lasModificationAt = clock.now();
+    }
   }
 
   set lastName(String _lastName) {
@@ -133,7 +152,10 @@ class UserAccount {
     } else {
       throw ArgumentError("lastName cannot be an empty String");
     }
-    this._lastName = _lastName;
+    if (_lastName != this._lastName) {
+      this._lastName = _lastName;
+      this._lasModificationAt = clock.now();
+    }
   }
 
   set birthDay(DateTime _birthDay) {
@@ -141,15 +163,24 @@ class UserAccount {
     if (_birthDay.isAtSameMomentAs(now) || _birthDay.isAfter(now)) {
       throw ArgumentError("birthDay cannot be after now");
     }
-    this._birthDay = _birthDay;
+    if (_birthDay != this._birthDay) {
+      this._birthDay = _birthDay;
+      this._lasModificationAt = clock.now();
+    }
   }
 
   set gender(Gender _gender) {
-    this._gender = _gender;
+    if (_gender != this._gender) {
+      this._gender = _gender;
+      this._lasModificationAt = clock.now();
+    }
   }
 
   set email(String? _email) {
-    this._email = _email;
+    if (_email != this._email) {
+      this._email = _email;
+      this._lasModificationAt = clock.now();
+    }
   }
 
   set isEmailVerified(bool _isEmailVerified) {
@@ -170,13 +201,11 @@ class UserAccount {
 
 enum Gender { MALE, FEMALE, UNSPECIFIED }
 /*
-  DateTime _modifiedAt;
   DateTime _lastSignInTime;
   DateTime _lastSignOutTime;
   String _socialMediaAddress;
 */
 /*
-      this._modifiedAt,
       this._lastSignInTime,
       this._lastSignOutTime,
       this._socialMediaAddress
@@ -189,8 +218,6 @@ enum Gender { MALE, FEMALE, UNSPECIFIED }
   DateTime get lastSignOutTime => _lastSignOutTime;
 
   DateTime get lastSignInTime => _lastSignInTime;
-
-  DateTime get modifiedAt => _modifiedAt;
 
 
   String get fullName => "$_firstName ${_middleName != null? _middleName: ""} $_lastName";

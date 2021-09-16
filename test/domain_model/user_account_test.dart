@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/domain_model/user_account.dart';
 
@@ -14,7 +15,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
     });
     test("id doesn't contain any whitespace characters", () {
@@ -28,7 +30,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -40,7 +43,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -52,7 +56,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -64,7 +69,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -76,7 +82,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -88,7 +95,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -100,7 +108,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -112,7 +121,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -124,7 +134,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
     });
     test("id has been assigned the correct value", () {
@@ -137,7 +148,8 @@ main() {
           Gender.MALE,
           null,
           false,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       final id = userAccount.id;
       expect("id", id);
     });
@@ -154,7 +166,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(() {
         final userAccount = UserAccount(
@@ -166,7 +179,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = "";
       }, throwsArgumentError);
     });
@@ -183,7 +197,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -195,7 +210,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -207,7 +223,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -219,7 +236,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -231,7 +249,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -243,7 +262,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -255,7 +275,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -267,7 +288,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -279,7 +301,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -291,7 +314,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(() {
         final userAccount = UserAccount(
@@ -303,7 +327,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = " ";
       }, throwsArgumentError);
       expect(() {
@@ -316,7 +341,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = " f";
       }, throwsArgumentError);
       expect(() {
@@ -329,7 +355,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = "f ";
       }, throwsArgumentError);
       expect(() {
@@ -342,7 +369,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = " f ";
       }, throwsArgumentError);
       expect(() {
@@ -355,7 +383,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = "f";
       }, returnsNormally);
       expect(() {
@@ -368,7 +397,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = "f t";
       }, returnsNormally);
       expect(() {
@@ -381,7 +411,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = "ff tty";
       }, returnsNormally);
       expect(() {
@@ -394,7 +425,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = "ff tty b";
       }, returnsNormally);
       expect(() {
@@ -407,7 +439,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
@@ -420,7 +453,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.firstName = "ff .tty b vtewro";
       }, returnsNormally);
     });
@@ -434,7 +468,8 @@ main() {
           Gender.MALE,
           null,
           false,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       var firstName = userAccount.firstName;
       expect("name", firstName);
       userAccount.firstName = "name2";
@@ -454,7 +489,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(() {
         final userAccount = UserAccount(
@@ -466,14 +502,24 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = null;
       }, returnsNormally);
     });
     test("middleNames isn't empty", () {
       expect(
-          () => UserAccount("id", "name", "", "name", DateTime.utc(1989, 11, 9),
-              Gender.MALE, null, false, DateTime.utc(2020, 7, 7)),
+          () => UserAccount(
+              "id",
+              "name",
+              "",
+              "name",
+              DateTime.utc(1989, 11, 9),
+              Gender.MALE,
+              null,
+              false,
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(() {
         final userAccount = UserAccount(
@@ -485,7 +531,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = "";
       }, throwsArgumentError);
     });
@@ -502,7 +549,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -514,7 +562,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -526,7 +575,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -538,7 +588,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -550,7 +601,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -562,7 +614,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -574,7 +627,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -586,7 +640,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -598,7 +653,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -610,7 +666,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(() {
         final userAccount = UserAccount(
@@ -622,7 +679,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = " ";
       }, throwsArgumentError);
       expect(() {
@@ -635,7 +693,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = " f";
       }, throwsArgumentError);
       expect(() {
@@ -648,7 +707,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = "f ";
       }, throwsArgumentError);
       expect(() {
@@ -661,7 +721,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = " f ";
       }, throwsArgumentError);
       expect(() {
@@ -674,7 +735,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = "f";
       }, returnsNormally);
       expect(() {
@@ -687,7 +749,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = "f t";
       }, returnsNormally);
       expect(() {
@@ -700,7 +763,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = "ff tty";
       }, returnsNormally);
       expect(() {
@@ -713,7 +777,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = "ff tty b";
       }, returnsNormally);
       expect(() {
@@ -726,7 +791,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
@@ -739,7 +805,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.middleNames = "ff .tty b vtewro";
       }, returnsNormally);
     });
@@ -753,7 +820,8 @@ main() {
           Gender.MALE,
           null,
           false,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       var middleNames = userAccount.middleNames;
       expect("names", middleNames);
       userAccount.middleNames = null;
@@ -768,7 +836,8 @@ main() {
           Gender.MALE,
           null,
           false,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       middleNames = userAccount.middleNames;
       expect(null, middleNames);
       userAccount.middleNames = "names";
@@ -788,7 +857,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(() {
         final userAccount = UserAccount(
@@ -800,7 +870,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = "";
       }, throwsArgumentError);
     });
@@ -817,7 +888,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -829,7 +901,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -841,7 +914,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -853,7 +927,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -865,7 +940,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -877,7 +953,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -889,7 +966,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -901,7 +979,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -913,7 +992,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -925,7 +1005,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(() {
         final userAccount = UserAccount(
@@ -937,7 +1018,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = " ";
       }, throwsArgumentError);
       expect(() {
@@ -950,7 +1032,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = " f";
       }, throwsArgumentError);
       expect(() {
@@ -963,7 +1046,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = "f ";
       }, throwsArgumentError);
       expect(() {
@@ -976,7 +1060,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = " f ";
       }, throwsArgumentError);
       expect(() {
@@ -989,7 +1074,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = "f";
       }, returnsNormally);
       expect(() {
@@ -1002,7 +1088,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = "f t";
       }, returnsNormally);
       expect(() {
@@ -1015,7 +1102,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = "ff tty";
       }, returnsNormally);
       expect(() {
@@ -1028,7 +1116,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = "ff tty b";
       }, returnsNormally);
       expect(() {
@@ -1041,7 +1130,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
@@ -1054,7 +1144,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.lastName = "ff .tty b vtewro";
       }, returnsNormally);
     });
@@ -1068,7 +1159,8 @@ main() {
           Gender.MALE,
           null,
           false,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       var lastName = userAccount.lastName;
       expect("name", lastName);
       userAccount.lastName = "name2";
@@ -1088,7 +1180,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           throwsArgumentError);
       expect(() {
         final userAccount = UserAccount(
@@ -1100,7 +1193,8 @@ main() {
             Gender.MALE,
             null,
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.birthDay = DateTime.now().add(Duration(days: 500));
       }, throwsArgumentError);
     });
@@ -1114,7 +1208,8 @@ main() {
           Gender.MALE,
           null,
           false,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       var birthDay = userAccount.birthDay;
       expect(DateTime.utc(1989, 11, 9), birthDay);
       userAccount.birthDay = DateTime.utc(1999, 11, 11);
@@ -1133,7 +1228,8 @@ main() {
           Gender.MALE,
           null,
           false,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       var gender = userAccount.gender;
       expect(Gender.MALE, gender);
       userAccount.gender = Gender.FEMALE;
@@ -1153,7 +1249,8 @@ main() {
               Gender.MALE,
               null,
               false,
-              DateTime.utc(2020, 7, 7)),
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
       expect(() {
         var userAccount = UserAccount(
@@ -1165,7 +1262,8 @@ main() {
             Gender.MALE,
             "abc@abc.com",
             false,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.email = null;
       }, returnsNormally);
     });
@@ -1179,7 +1277,8 @@ main() {
           Gender.MALE,
           null,
           false,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       var email = userAccount.email;
       expect(null, email);
       userAccount = UserAccount(
@@ -1191,7 +1290,8 @@ main() {
           Gender.MALE,
           "abc@abc.com",
           false,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       email = userAccount.email;
       expect("abc@abc.com", email);
       userAccount.email = "abc@abc.com";
@@ -1213,7 +1313,8 @@ main() {
           Gender.MALE,
           null,
           true,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       var isEmailVerified = userAccount.isEmailVerified;
       expect(true, isEmailVerified);
       userAccount.isEmailVerified = false;
@@ -1224,8 +1325,17 @@ main() {
   group("_createdAt tests", () {
     test("_createdAt can be null while UserAccount construction", () {
       expect(
-          () => UserAccount("id", "name", "names", "name",
-              DateTime.utc(1989, 11, 9), Gender.MALE, null, true, null),
+          () => UserAccount(
+              "id",
+              "name",
+              "names",
+              "name",
+              DateTime.utc(1989, 11, 9),
+              Gender.MALE,
+              null,
+              true,
+              null,
+              DateTime.utc(2020, 10, 10)),
           returnsNormally);
     });
     test("_createdAt cannot be set to null using its setter", () {
@@ -1239,7 +1349,8 @@ main() {
             Gender.MALE,
             null,
             true,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.createdAt = null;
       }, throwsArgumentError);
     });
@@ -1254,7 +1365,8 @@ main() {
             Gender.MALE,
             null,
             true,
-            DateTime.utc(2020, 7, 7));
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
         userAccount.createdAt = DateTime(2020, 1, 1);
       }, throwsArgumentError);
     });
@@ -1268,16 +1380,301 @@ main() {
           Gender.MALE,
           null,
           true,
-          DateTime.utc(2020, 7, 7));
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
       var createdAt = userAccount.createdAt;
       expect(DateTime.utc(2020, 7, 7), createdAt);
-      userAccount = UserAccount("id", "name", "names", "name",
-          DateTime.utc(1989, 11, 9), Gender.MALE, null, true, null);
+      userAccount = UserAccount(
+          "id",
+          "name",
+          "names",
+          "name",
+          DateTime.utc(1989, 11, 9),
+          Gender.MALE,
+          null,
+          true,
+          null,
+          DateTime.utc(2020, 10, 10));
       createdAt = userAccount.createdAt;
       expect(null, createdAt);
       userAccount.createdAt = DateTime.utc(2020, 7, 7);
       createdAt = userAccount.createdAt;
       expect(DateTime.utc(2020, 7, 7), createdAt);
+    });
+  });
+  group("_lastModificationAt tests", () {
+    test("_lastModificationAt can be null while UserAccount construction", () {
+      expect(
+          () => UserAccount(
+              "id",
+              "name",
+              "names",
+              "name",
+              DateTime.utc(1989, 11, 9),
+              Gender.MALE,
+              null,
+              true,
+              DateTime.utc(2020, 7, 7),
+              null),
+          returnsNormally);
+    });
+    test(
+        "_lastModificationAt cannot be equal or after now while UserAccount construction",
+        () {
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        expect(
+            () => UserAccount(
+                "id",
+                "name",
+                "names",
+                "name",
+                DateTime.utc(1989, 11, 9),
+                Gender.MALE,
+                null,
+                true,
+                DateTime.utc(2020, 7, 7),
+                clock.now().add(Duration(days: 500))),
+            throwsArgumentError);
+        expect(
+            () => UserAccount(
+                "id",
+                "name",
+                "names",
+                "name",
+                DateTime.utc(1989, 11, 9),
+                Gender.MALE,
+                null,
+                true,
+                DateTime.utc(2020, 7, 7),
+                clock.now()),
+            throwsArgumentError);
+      });
+    });
+    test("_lastModificationAt has been updated when firstName has been updated",
+        () {
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.firstName = "name2";
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+      });
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.firstName = "name";
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+      });
+    });
+    test(
+        "_lastModificationAt has been updated when _middleNames has been updated",
+        () {
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.middleNames = "names2";
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+      });
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.middleNames = "names";
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+      });
+    });
+    test("_lastModificationAt has been updated when _lastName has been updated",
+        () {
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.lastName = "name2";
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+      });
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.lastName = "name";
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+      });
+    });
+    test("_lastModificationAt has been updated when _birthDay has been updated",
+        () {
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.birthDay = DateTime.utc(1989, 6, 6);
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+      });
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.birthDay = DateTime.utc(1989, 11, 9);
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+      });
+    });
+    test("_lastModificationAt has been updated when _gender has been updated",
+        () {
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.gender = Gender.FEMALE;
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+      });
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.gender = Gender.MALE;
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+      });
+    });
+    test("_lastModificationAt has been updated when _email has been updated",
+        () {
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.email = "abc@abc.com";
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+      });
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        final userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            "abc@abc.com",
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10));
+        userAccount.email = "abc@abc.com";
+        final lastModificationAt = userAccount.lastModificationAt;
+        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+      });
+    });
+    test("_lastModificationAt has been assigned the correct value", () {
+      var userAccount = UserAccount(
+          "id",
+          "name",
+          "names",
+          "name",
+          DateTime.utc(1989, 11, 9),
+          Gender.MALE,
+          null,
+          true,
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10));
+      final lastModificationAt = userAccount.lastModificationAt;
+      expect(DateTime.utc(2020, 10, 10), lastModificationAt);
     });
   });
 }
