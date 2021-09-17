@@ -127,6 +127,8 @@ class UserAccount {
   DateTime? get lastModificationAt => _lasModificationAt;
   DateTime? get lastSignInAt => _lastSignInAt;
   DateTime? get lastSignOutAt => _lastSignOutAt;
+  String get fullName =>
+      "$_firstName${_middleNames != null ? " ${_middleNames}" : ""} $_lastName";
 
   set firstName(String _firstName) {
     if (_firstName.isNotEmpty) {
@@ -238,18 +240,3 @@ class UserAccount {
 }
 
 enum Gender { MALE, FEMALE, UNSPECIFIED }
-/*
-  String _socialMediaAddress;
-*/
-/*
-      this._socialMediaAddress
-
-   */
-
-/*
-  String get socialMediaAddress => _socialMediaAddress;
-
-
-  String get fullName => "$_firstName ${_middleName != null? _middleName: ""} $_lastName";
-
-   */

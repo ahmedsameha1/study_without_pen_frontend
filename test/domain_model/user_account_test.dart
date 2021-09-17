@@ -2118,5 +2118,25 @@ main() {
       lastSignOutAt = userAccount.lastSignOutAt;
       expect(DateTime.utc(2020, 12, 12), lastSignOutAt);
     });
+    test("fullName getter return the correct full name", () {
+      final userAccount = UserAccount(
+          "id",
+          "name",
+          "names",
+          "name",
+          DateTime.utc(1989, 11, 9),
+          Gender.MALE,
+          null,
+          true,
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10),
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
+      var fullName = userAccount.fullName;
+      expect("name names name", fullName);
+      userAccount.middleNames = null;
+      fullName = userAccount.fullName;
+      expect("name name", fullName);
+    });
   });
 }
