@@ -30,6 +30,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   # TODO remember to show that you use this library to the user and show Apache 2.0 license // license work should be done
   clock: ^1.1.0
+  # TODO MIT license // license work should be done
+  uuid: ^3.0.4
 
 dev_dependencies:
   flutter_test:
