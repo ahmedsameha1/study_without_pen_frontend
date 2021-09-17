@@ -17,7 +17,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
     });
     test("id doesn't contain any whitespace characters", () {
@@ -33,7 +34,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -47,7 +49,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -61,7 +64,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -75,7 +79,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -89,7 +94,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -103,7 +109,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -117,7 +124,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -131,7 +139,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -145,7 +154,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
     });
     test("id has been assigned the correct value", () {
@@ -160,7 +170,8 @@ main() {
           false,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       final id = userAccount.id;
       expect("id", id);
     });
@@ -179,7 +190,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(() {
         final userAccount = UserAccount(
@@ -193,7 +205,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = "";
       }, throwsArgumentError);
     });
@@ -212,7 +225,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -226,7 +240,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -240,7 +255,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -254,7 +270,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -268,7 +285,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -282,7 +300,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -296,7 +315,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -310,7 +330,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -324,7 +345,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -338,7 +360,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(() {
         final userAccount = UserAccount(
@@ -352,7 +375,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = " ";
       }, throwsArgumentError);
       expect(() {
@@ -367,7 +391,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = " f";
       }, throwsArgumentError);
       expect(() {
@@ -382,7 +407,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = "f ";
       }, throwsArgumentError);
       expect(() {
@@ -397,7 +423,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = " f ";
       }, throwsArgumentError);
       expect(() {
@@ -412,7 +439,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = "f";
       }, returnsNormally);
       expect(() {
@@ -427,7 +455,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = "f t";
       }, returnsNormally);
       expect(() {
@@ -442,7 +471,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = "ff tty";
       }, returnsNormally);
       expect(() {
@@ -457,7 +487,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = "ff tty b";
       }, returnsNormally);
       expect(() {
@@ -472,7 +503,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
@@ -487,7 +519,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = "ff .tty b vtewro";
       }, returnsNormally);
     });
@@ -503,7 +536,8 @@ main() {
           false,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       var firstName = userAccount.firstName;
       expect("name", firstName);
       userAccount.firstName = "name2";
@@ -525,7 +559,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(() {
         final userAccount = UserAccount(
@@ -539,7 +574,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = null;
       }, returnsNormally);
     });
@@ -556,7 +592,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(() {
         final userAccount = UserAccount(
@@ -570,7 +607,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "";
       }, throwsArgumentError);
     });
@@ -589,7 +627,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -603,7 +642,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -617,7 +657,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -631,7 +672,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -645,7 +687,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -659,7 +702,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -673,7 +717,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -687,7 +732,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -701,7 +747,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -715,7 +762,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(() {
         final userAccount = UserAccount(
@@ -729,7 +777,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = " ";
       }, throwsArgumentError);
       expect(() {
@@ -744,7 +793,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = " f";
       }, throwsArgumentError);
       expect(() {
@@ -759,7 +809,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "f ";
       }, throwsArgumentError);
       expect(() {
@@ -774,7 +825,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = " f ";
       }, throwsArgumentError);
       expect(() {
@@ -789,7 +841,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "f";
       }, returnsNormally);
       expect(() {
@@ -804,7 +857,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "f t";
       }, returnsNormally);
       expect(() {
@@ -819,7 +873,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "ff tty";
       }, returnsNormally);
       expect(() {
@@ -834,7 +889,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "ff tty b";
       }, returnsNormally);
       expect(() {
@@ -849,7 +905,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
@@ -864,7 +921,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "ff .tty b vtewro";
       }, returnsNormally);
     });
@@ -880,7 +938,8 @@ main() {
           false,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       var middleNames = userAccount.middleNames;
       expect("names", middleNames);
       userAccount.middleNames = null;
@@ -897,7 +956,8 @@ main() {
           false,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       middleNames = userAccount.middleNames;
       expect(null, middleNames);
       userAccount.middleNames = "names";
@@ -919,7 +979,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(() {
         final userAccount = UserAccount(
@@ -933,7 +994,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = "";
       }, throwsArgumentError);
     });
@@ -952,7 +1014,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -966,7 +1029,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -980,7 +1044,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -994,7 +1059,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(
           () => UserAccount(
@@ -1008,7 +1074,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -1022,7 +1089,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -1036,7 +1104,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -1050,7 +1119,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -1064,7 +1134,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(
           () => UserAccount(
@@ -1078,7 +1149,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(() {
         final userAccount = UserAccount(
@@ -1092,7 +1164,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = " ";
       }, throwsArgumentError);
       expect(() {
@@ -1107,7 +1180,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = " f";
       }, throwsArgumentError);
       expect(() {
@@ -1122,7 +1196,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = "f ";
       }, throwsArgumentError);
       expect(() {
@@ -1137,7 +1212,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = " f ";
       }, throwsArgumentError);
       expect(() {
@@ -1152,7 +1228,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = "f";
       }, returnsNormally);
       expect(() {
@@ -1167,7 +1244,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = "f t";
       }, returnsNormally);
       expect(() {
@@ -1182,7 +1260,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = "ff tty";
       }, returnsNormally);
       expect(() {
@@ -1197,7 +1276,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = "ff tty b";
       }, returnsNormally);
       expect(() {
@@ -1212,7 +1292,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = "ff tty b vtewro";
       }, returnsNormally);
       expect(() {
@@ -1227,7 +1308,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = "ff .tty b vtewro";
       }, returnsNormally);
     });
@@ -1243,7 +1325,8 @@ main() {
           false,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       var lastName = userAccount.lastName;
       expect("name", lastName);
       userAccount.lastName = "name2";
@@ -1265,7 +1348,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           throwsArgumentError);
       expect(() {
         final userAccount = UserAccount(
@@ -1279,7 +1363,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.birthDay = DateTime.now().add(Duration(days: 500));
       }, throwsArgumentError);
     });
@@ -1295,7 +1380,8 @@ main() {
           false,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       var birthDay = userAccount.birthDay;
       expect(DateTime.utc(1989, 11, 9), birthDay);
       userAccount.birthDay = DateTime.utc(1999, 11, 11);
@@ -1316,7 +1402,8 @@ main() {
           false,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       var gender = userAccount.gender;
       expect(Gender.MALE, gender);
       userAccount.gender = Gender.FEMALE;
@@ -1338,7 +1425,8 @@ main() {
               false,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
       expect(() {
         var userAccount = UserAccount(
@@ -1352,7 +1440,8 @@ main() {
             false,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.email = null;
       }, returnsNormally);
     });
@@ -1368,7 +1457,8 @@ main() {
           false,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       var email = userAccount.email;
       expect(null, email);
       userAccount = UserAccount(
@@ -1382,7 +1472,8 @@ main() {
           false,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       email = userAccount.email;
       expect("abc@abc.com", email);
       userAccount.email = "abc@abc.com";
@@ -1406,7 +1497,8 @@ main() {
           true,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       var isEmailVerified = userAccount.isEmailVerified;
       expect(true, isEmailVerified);
       userAccount.isEmailVerified = false;
@@ -1428,7 +1520,8 @@ main() {
               true,
               null,
               DateTime.utc(2020, 10, 10),
-              DateTime.utc(2020, 11, 11)),
+              DateTime.utc(2020, 11, 11),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
     });
     test("_createdAt cannot be set to null using its setter", () {
@@ -1444,7 +1537,8 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.createdAt = null;
       }, throwsArgumentError);
     });
@@ -1461,7 +1555,8 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.createdAt = DateTime(2020, 1, 1);
       }, throwsArgumentError);
     });
@@ -1477,7 +1572,8 @@ main() {
           true,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       var createdAt = userAccount.createdAt;
       expect(DateTime.utc(2020, 7, 7), createdAt);
       userAccount = UserAccount(
@@ -1491,7 +1587,8 @@ main() {
           true,
           null,
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       createdAt = userAccount.createdAt;
       expect(null, createdAt);
       userAccount.createdAt = DateTime.utc(2020, 7, 7);
@@ -1512,8 +1609,9 @@ main() {
               null,
               true,
               DateTime.utc(2020, 7, 7),
+              null,
               DateTime.utc(2020, 11, 11),
-              null),
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
     });
     test(
@@ -1532,7 +1630,8 @@ main() {
                 true,
                 DateTime.utc(2020, 7, 7),
                 clock.now().add(Duration(days: 500)),
-                DateTime.utc(2020, 11, 11)),
+                DateTime.utc(2020, 11, 11),
+                DateTime.utc(2020, 12, 12)),
             throwsArgumentError);
         expect(
             () => UserAccount(
@@ -1546,13 +1645,14 @@ main() {
                 true,
                 DateTime.utc(2020, 7, 7),
                 clock.now(),
-                DateTime.utc(2020, 11, 11)),
+                DateTime.utc(2020, 11, 11),
+                DateTime.utc(2020, 12, 12)),
             throwsArgumentError);
       });
     });
     test("_lastModificationAt has been updated when firstName has been updated",
         () {
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1564,12 +1664,13 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = "name2";
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
       });
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1581,16 +1682,17 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.firstName = "name";
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
       });
     });
     test(
         "_lastModificationAt has been updated when _middleNames has been updated",
         () {
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1602,12 +1704,13 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "names2";
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
       });
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1619,15 +1722,16 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "names";
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
       });
     });
     test("_lastModificationAt has been updated when _lastName has been updated",
         () {
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1639,12 +1743,13 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = "name2";
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
       });
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1656,15 +1761,16 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastName = "name";
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
       });
     });
     test("_lastModificationAt has been updated when _birthDay has been updated",
         () {
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1676,12 +1782,13 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.birthDay = DateTime.utc(1989, 6, 6);
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
       });
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1693,15 +1800,16 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.birthDay = DateTime.utc(1989, 11, 9);
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
       });
     });
     test("_lastModificationAt has been updated when _gender has been updated",
         () {
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1713,12 +1821,13 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.gender = Gender.FEMALE;
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
       });
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1730,15 +1839,16 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.gender = Gender.MALE;
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
       });
     });
     test("_lastModificationAt has been updated when _email has been updated",
         () {
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1750,12 +1860,13 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.email = "abc@abc.com";
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), lastModificationAt);
+        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
       });
-      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
             "id",
             "name",
@@ -1767,10 +1878,11 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.email = "abc@abc.com";
         final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 11, 11), isNot(equals(lastModificationAt)));
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
       });
     });
     test("_lastModificationAt has been assigned the correct value", () {
@@ -1785,7 +1897,8 @@ main() {
           true,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       final lastModificationAt = userAccount.lastModificationAt;
       expect(DateTime.utc(2020, 10, 10), lastModificationAt);
     });
@@ -1804,7 +1917,8 @@ main() {
               true,
               DateTime.utc(2020, 7, 7),
               DateTime.utc(2020, 8, 8),
-              null),
+              null,
+              DateTime.utc(2020, 12, 12)),
           returnsNormally);
     });
     test("_lastSignInAt cannot be set to null using its setter", () {
@@ -1820,7 +1934,8 @@ main() {
             true,
             DateTime.utc(2020, 7, 7),
             DateTime.utc(2020, 10, 10),
-            DateTime.utc(2020, 11, 11));
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
         userAccount.lastSignInAt = null;
       }, throwsArgumentError);
     });
@@ -1836,7 +1951,8 @@ main() {
           true,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          null);
+          null,
+          DateTime.utc(2020, 12, 12));
       var lastSignInAt = userAccount.lastSignInAt;
       expect(null, lastSignInAt);
       userAccount.lastSignInAt = DateTime.utc(2020, 11, 11);
@@ -1853,9 +1969,154 @@ main() {
           true,
           DateTime.utc(2020, 7, 7),
           DateTime.utc(2020, 10, 10),
-          DateTime.utc(2020, 11, 11));
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
       lastSignInAt = userAccount.lastSignInAt;
       expect(DateTime.utc(2020, 11, 11), lastSignInAt);
+    });
+  });
+  group("_lastSignOutAt tests", () {
+    test("_lastSignOutAt can be null while UserAccount construction", () {
+      expect(
+          () => UserAccount(
+              "id",
+              "name",
+              "names",
+              "name",
+              DateTime.utc(1989, 11, 9),
+              Gender.MALE,
+              null,
+              true,
+              DateTime.utc(2020, 7, 7),
+              DateTime.utc(2020, 8, 8),
+              DateTime.utc(2020, 11, 11),
+              null),
+          returnsNormally);
+    });
+    test(
+        "_lastSignOutAt cannot be equal or after now while UserAccount construction",
+        () {
+      withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
+        expect(
+            () => UserAccount(
+                "id",
+                "name",
+                "names",
+                "name",
+                DateTime.utc(1989, 11, 9),
+                Gender.MALE,
+                null,
+                true,
+                DateTime.utc(2020, 7, 7),
+                DateTime.utc(2020, 8, 8),
+                DateTime.utc(2020, 11, 11),
+                clock.now().add(Duration(days: 500))),
+            throwsArgumentError);
+        expect(
+            () => UserAccount(
+                "id",
+                "name",
+                "names",
+                "name",
+                DateTime.utc(1989, 11, 9),
+                Gender.MALE,
+                null,
+                true,
+                DateTime.utc(2020, 7, 7),
+                DateTime.utc(2020, 8, 8),
+                DateTime.utc(2020, 11, 11),
+                clock.now()),
+            throwsArgumentError);
+      });
+    });
+    test("_lastSignOutAt cannot be set to null using its setter", () {
+      expect(() {
+        var userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10),
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
+        userAccount.lastSignOutAt = null;
+      }, throwsArgumentError);
+    });
+    test(
+        "_lastSignOutAt cannot be set to be equal or before _lastSignInAt using its setter",
+        () {
+      expect(() {
+        var userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10),
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
+        userAccount.lastSignOutAt = DateTime.utc(2020, 11, 11);
+      }, throwsArgumentError);
+      expect(() {
+        var userAccount = UserAccount(
+            "id",
+            "name",
+            "names",
+            "name",
+            DateTime.utc(1989, 11, 9),
+            Gender.MALE,
+            null,
+            true,
+            DateTime.utc(2020, 7, 7),
+            DateTime.utc(2020, 10, 10),
+            DateTime.utc(2020, 11, 11),
+            DateTime.utc(2020, 12, 12));
+        userAccount.lastSignOutAt = DateTime.utc(2020, 11, 1);
+      }, throwsArgumentError);
+    });
+    test("_lastSignOutAt has been assigned the correct value", () {
+      var userAccount = UserAccount(
+          "id",
+          "name",
+          "names",
+          "name",
+          DateTime.utc(1989, 11, 9),
+          Gender.MALE,
+          null,
+          true,
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10),
+          DateTime.utc(2020, 11, 11),
+          null);
+      var lastSignOutAt = userAccount.lastSignOutAt;
+      expect(null, lastSignOutAt);
+      userAccount.lastSignOutAt = DateTime.utc(2020, 11, 13);
+      lastSignOutAt = userAccount.lastSignOutAt;
+      expect(DateTime.utc(2020, 11, 13), lastSignOutAt);
+      userAccount = UserAccount(
+          "id",
+          "name",
+          "names",
+          "name",
+          DateTime.utc(1989, 11, 9),
+          Gender.MALE,
+          null,
+          true,
+          DateTime.utc(2020, 7, 7),
+          DateTime.utc(2020, 10, 10),
+          DateTime.utc(2020, 11, 11),
+          DateTime.utc(2020, 12, 12));
+      lastSignOutAt = userAccount.lastSignOutAt;
+      expect(DateTime.utc(2020, 12, 12), lastSignOutAt);
     });
   });
 }

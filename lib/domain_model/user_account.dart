@@ -12,6 +12,7 @@ class UserAccount {
   DateTime? _createdAt;
   DateTime? _lasModificationAt;
   DateTime? _lastSignInAt;
+  DateTime? _lastSignOutAt;
 
   UserAccount(
       String _id,
@@ -24,7 +25,8 @@ class UserAccount {
       bool _isEmailVerified,
       DateTime? _createdAt,
       DateTime? _lastModificationAt,
-      DateTime? _lastSignInAt) {
+      DateTime? _lastSignInAt,
+      DateTime? _lastSignOutAt) {
     final now = clock.now();
     /////////////////////////////////////////////////////////////////////////
     // id validation
@@ -104,6 +106,13 @@ class UserAccount {
     Authentication System
     */
     this._lastSignInAt = _lastSignInAt;
+    /////////////////////////////////////////////////////////////////////////
+    // _lastSignOutAt validation
+    if (_lastSignOutAt != null &&
+        (_lastSignOutAt.isAtSameMomentAs(now) || _lastSignOutAt.isAfter(now))) {
+      throw ArgumentError("_lastSignOutAt cannot be equal or after now");
+    }
+    this._lastSignOutAt = _lastSignOutAt;
   }
 
   String get id => _id;
@@ -117,6 +126,7 @@ class UserAccount {
   DateTime? get createdAt => _createdAt;
   DateTime? get lastModificationAt => _lasModificationAt;
   DateTime? get lastSignInAt => _lastSignInAt;
+  DateTime? get lastSignOutAt => _lastSignOutAt;
 
   set firstName(String _firstName) {
     if (_firstName.isNotEmpty) {
@@ -212,23 +222,32 @@ class UserAccount {
     }
     this._lastSignInAt = _lastSignInAt;
   }
+
+  set lastSignOutAt(DateTime? _lastSignOutAt) {
+    if (_lastSignOutAt == null) {
+      throw ArgumentError("_lastSignOutAt cannot be set to null");
+    }
+    if (_lastSignInAt != null &&
+        (_lastSignOutAt.isAtSameMomentAs(_lastSignInAt!) ||
+            _lastSignOutAt.isBefore(_lastSignInAt!))) {
+      throw ArgumentError(
+          "_lastSignOutAt cannot be set to be equal or before _lastSignInAt");
+    }
+    this._lastSignOutAt = _lastSignOutAt;
+  }
 }
 
 enum Gender { MALE, FEMALE, UNSPECIFIED }
 /*
-  DateTime _lastSignOutTime;
   String _socialMediaAddress;
 */
 /*
-      this._lastSignOutTime,
       this._socialMediaAddress
 
    */
 
 /*
   String get socialMediaAddress => _socialMediaAddress;
-
-  DateTime get lastSignOutTime => _lastSignOutTime;
 
 
   String get fullName => "$_firstName ${_middleName != null? _middleName: ""} $_lastName";
