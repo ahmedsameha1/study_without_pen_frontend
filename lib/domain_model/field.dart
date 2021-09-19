@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
+
 class Field {
   static const int NAME_MAXIMUM_LENGTH = 64;
+  static const int COLOR_MAXIMUM = 0xffffffff;
   late final String _id;
   late String _name;
+  int? _color;
 
-  Field(String uuid, String name) {
+  Field(String uuid, String name, [int? color]) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -21,10 +25,18 @@ class Field {
       throw ArgumentError("_name length cannot be greater than 64 character");
     }
     this._name = name;
+    /////////////////////////////////////////////////////////////////////////
+    // _color validation
+    if (color != null && (color > COLOR_MAXIMUM || color < 0x00000000)) {
+      throw ArgumentError(
+          "_color must be equal or smaller than 0xffffffff and must be equal or greater than 0x00000000");
+    }
+    this._color = color;
   }
 
   String get id => _id;
   String get name => _name;
+  int? get color => _color;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -36,5 +48,15 @@ class Field {
       throw ArgumentError("_name length cannot be greater than 64 character");
     }
     this._name = name;
+  }
+
+  set color(int? color) {
+    /////////////////////////////////////////////////////////////////////////
+    // _color validation
+    if (color != null && (color > COLOR_MAXIMUM || color < 0x00000000)) {
+      throw ArgumentError(
+          "_color must be equal or smaller than 0xffffffff and must be equal or greater than 0x00000000");
+    }
+    this._color = color;
   }
 }

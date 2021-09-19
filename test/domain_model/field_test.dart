@@ -63,4 +63,46 @@ main() {
       expect("name2", name);
     });
   });
+  group("_color test", () {
+    test("_color can be null", () {
+      expect(() => Field(uuid.v4(), "name", null), returnsNormally);
+      expect(() {
+        final field = Field(uuid.v4(), "name", 0x0000ff00);
+        field.color = null;
+      }, returnsNormally);
+    });
+    test(
+        "_color must be equal or smaller than 0xffffffff and must be equal or greater than 0x00000000",
+        () {
+      expect(() => Field(uuid.v4(), "name", 0xff00ff001), throwsArgumentError);
+      expect(() => Field(uuid.v4(), "name", -0x00000001), throwsArgumentError);
+      expect(() => Field(uuid.v4(), "name", 0xff00ff00), returnsNormally);
+      expect(() {
+        final field = Field(uuid.v4(), "name");
+        field.color = 0xff00ff001;
+      }, throwsArgumentError);
+      expect(() {
+        final field = Field(uuid.v4(), "name");
+        field.color = -0x00000001;
+      }, throwsArgumentError);
+      expect(() {
+        final field = Field(uuid.v4(), "name");
+        field.color = 0xff00ff00;
+      }, returnsNormally);
+    });
+    test("_color has been assigned the correct value", () {
+      var field = Field(uuid.v4(), "name", null);
+      var color = field.color;
+      expect(null, color);
+      field.color = 0xff00ff00;
+      color = field.color;
+      expect(0xff00ff00, color);
+      field = Field(uuid.v4(), "name", 0xff00ff00);
+      color = field.color;
+      expect(0xff00ff00, color);
+      field.color = null;
+      color = field.color;
+      expect(null, color);
+    });
+  });
 }
