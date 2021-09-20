@@ -6,27 +6,30 @@ main() {
   final uuid = Uuid();
   group("_id tests", () {
     test("_id is a valid UUID", () {
-      expect(() => Field("", "name"), throwsArgumentError);
-      expect(() => Field("whfw", "name"), throwsArgumentError);
-      expect(() => Field(uuid.v4(), "name"), returnsNormally);
+      expect(() => Field("", "name", "id"), throwsArgumentError);
+      expect(() => Field("whfw", "name", "id"), throwsArgumentError);
+      expect(() => Field(uuid.v4(), "name", "id"), returnsNormally);
     });
     test("_id has been assigned the correct value", () {
       String uuidString = uuid.v4();
-      final field = Field(uuidString, "name");
+      final field = Field(uuidString, "name", "id");
       final id = field.id;
       expect(uuidString, id);
     });
   });
   group("_name tests", () {
     test("_name isn't empty", () {
-      expect(() => Field(uuid.v4(), ""), throwsArgumentError);
+      expect(() => Field(uuid.v4(), "", "id"), throwsArgumentError);
       expect(() {
-        final field = Field(uuid.v4(), "name");
+        final field = Field(uuid.v4(), "name", "id");
         field.name = "";
       }, throwsArgumentError);
     });
     test("_name has length that is not greater than 64 character", () {
-      expect(() => Field(uuid.v4(), """
+      expect(
+          () => Field(
+              uuid.v4(),
+              """
     fffffffffffffffffffff
     fffffffffffffffff
     fffffffffffffffff
@@ -37,9 +40,11 @@ main() {
     fffffffffffffffffff
     fffffffffffffffffff
     ffffffffffffffffff
-    """), throwsArgumentError);
+    """,
+              "id"),
+          throwsArgumentError);
       expect(() {
-        final field = Field(uuid.v4(), "name");
+        final field = Field(uuid.v4(), "name", "id");
         field.name = """
     fffffffffffffffffffff
     fffffffffffffffff
@@ -55,7 +60,7 @@ main() {
       }, throwsArgumentError);
     });
     test("_name has been assigned the correct value", () {
-      final field = Field(uuid.v4(), "name");
+      final field = Field(uuid.v4(), "name", "id");
       var name = field.name;
       expect("name", name);
       field.name = "name2";
@@ -65,44 +70,53 @@ main() {
   });
   group("_color test", () {
     test("_color can be null", () {
-      expect(() => Field(uuid.v4(), "name", null), returnsNormally);
+      expect(() => Field(uuid.v4(), "name", "id", null), returnsNormally);
       expect(() {
-        final field = Field(uuid.v4(), "name", 0x0000ff00);
+        final field = Field(uuid.v4(), "name", "id", 0x0000ff00);
         field.color = null;
       }, returnsNormally);
     });
     test(
         "_color must be equal or smaller than 0xffffffff and must be equal or greater than 0x00000000",
         () {
-      expect(() => Field(uuid.v4(), "name", 0xff00ff001), throwsArgumentError);
-      expect(() => Field(uuid.v4(), "name", -0x00000001), throwsArgumentError);
-      expect(() => Field(uuid.v4(), "name", 0xff00ff00), returnsNormally);
+      expect(() => Field(uuid.v4(), "name", "id", 0xff00ff001),
+          throwsArgumentError);
+      expect(() => Field(uuid.v4(), "name", "id", -0x00000001),
+          throwsArgumentError);
+      expect(() => Field(uuid.v4(), "name", "id", 0xff00ff00), returnsNormally);
       expect(() {
-        final field = Field(uuid.v4(), "name");
+        final field = Field(uuid.v4(), "name", "id");
         field.color = 0xff00ff001;
       }, throwsArgumentError);
       expect(() {
-        final field = Field(uuid.v4(), "name");
+        final field = Field(uuid.v4(), "name", "id");
         field.color = -0x00000001;
       }, throwsArgumentError);
       expect(() {
-        final field = Field(uuid.v4(), "name");
+        final field = Field(uuid.v4(), "name", "id");
         field.color = 0xff00ff00;
       }, returnsNormally);
     });
     test("_color has been assigned the correct value", () {
-      var field = Field(uuid.v4(), "name", null);
+      var field = Field(uuid.v4(), "name", "id", null);
       var color = field.color;
       expect(null, color);
       field.color = 0xff00ff00;
       color = field.color;
       expect(0xff00ff00, color);
-      field = Field(uuid.v4(), "name", 0xff00ff00);
+      field = Field(uuid.v4(), "name", "id", 0xff00ff00);
       color = field.color;
       expect(0xff00ff00, color);
       field.color = null;
       color = field.color;
       expect(null, color);
+    });
+  });
+  group("_userAccountId tests", () {
+    test("_userAccountId has been assigned the correct value", () {
+      var field = Field(uuid.v4(), "name", "id");
+      var userAccountId = field.userAccountId;
+      expect("id", userAccountId);
     });
   });
 }
