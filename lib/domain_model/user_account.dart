@@ -28,16 +28,11 @@ class UserAccount {
       DateTime? _lastSignInAt,
       DateTime? _lastSignOutAt) {
     final now = clock.now();
-    /////////////////////////////////////////////////////////////////////////
-    // id validation
-    if (_id.isNotEmpty) {
-      RegExp regExp = RegExp(r"^\S+$");
-      if (!regExp.hasMatch(_id)) {
-        throw ArgumentError("id cannot contain any whitespace character");
-      }
-    } else {
-      throw ArgumentError("id cannot be an empty String");
-    }
+    /*
+    There is no validation for _id because it should come from the Firebase
+    Authentication System
+    */
+    this._id = _id;
     /////////////////////////////////////////////////////////////////////////
     // firstName validation
     if (_firstName.isNotEmpty) {
@@ -49,6 +44,7 @@ class UserAccount {
     } else {
       throw ArgumentError("firstName cannot be an empty String");
     }
+    this._firstName = _firstName;
     /////////////////////////////////////////////////////////////////////////
     // middleNames validation
     if (_middleNames != null && _middleNames.isNotEmpty) {
@@ -60,6 +56,7 @@ class UserAccount {
     } else if (_middleNames != null) {
       throw ArgumentError("middleNames cannot be an empty String");
     }
+    this._middleNames = _middleNames;
     /////////////////////////////////////////////////////////////////////////
     // lastName validation
     if (_lastName.isNotEmpty) {
@@ -71,15 +68,12 @@ class UserAccount {
     } else {
       throw ArgumentError("lastName cannot be an empty String");
     }
+    this._lastName = _lastName;
     /////////////////////////////////////////////////////////////////////////
     // birthDay validation
     if (_birthDay.isAtSameMomentAs(now) || _birthDay.isAfter(now)) {
       throw ArgumentError("birthDay cannot be after now");
     }
-    this._id = _id;
-    this._firstName = _firstName;
-    this._middleNames = _middleNames;
-    this._lastName = _lastName;
     this._birthDay = _birthDay;
     this._gender = _gender;
     /*
