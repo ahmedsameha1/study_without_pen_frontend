@@ -6,15 +6,61 @@ main() {
   final uuid = Uuid();
   group("_id tests", () {
     test("_id is a valid UUID", () {
-      expect(() => FieldList(""), throwsArgumentError);
-      expect(() => FieldList("whfw"), throwsArgumentError);
-      expect(() => FieldList(uuid.v4()), returnsNormally);
+      expect(() => FieldList("", "name"), throwsArgumentError);
+      expect(() => FieldList("whfw", "name"), throwsArgumentError);
+      expect(() => FieldList(uuid.v4(), "name"), returnsNormally);
     });
     test("_id has been assigned the correct value", () {
       String uuidString = uuid.v4();
-      final fieldList = FieldList(uuidString);
+      final fieldList = FieldList(uuidString, "name");
       final id = fieldList.id;
       expect(uuidString, id);
+    });
+  });
+  group("_name tests", () {
+    test("_name isn't empty", () {
+      expect(() => FieldList(uuid.v4(), ""), throwsArgumentError);
+      expect(() {
+        final field = FieldList(uuid.v4(), "name");
+        field.name = "";
+      }, throwsArgumentError);
+    });
+    test("_name has length that is not greater than 64 character", () {
+      expect(() => FieldList(uuid.v4(), """
+    fffffffffffffffffffff
+    fffffffffffffffff
+    fffffffffffffffff
+    ffffffffffffffffff
+    ffffffffffffffffff
+    fffffffffffffffff
+    fffffffffffffffff
+    fffffffffffffffffff
+    fffffffffffffffffff
+    ffffffffffffffffff
+    """), throwsArgumentError);
+      expect(() {
+        final field = FieldList(uuid.v4(), "name");
+        field.name = """
+    fffffffffffffffffffff
+    fffffffffffffffff
+    fffffffffffffffff
+    ffffffffffffffffff
+    ffffffffffffffffff
+    fffffffffffffffff
+    fffffffffffffffff
+    fffffffffffffffffff
+    fffffffffffffffffff
+    ffffffffffffffffff
+    """;
+      }, throwsArgumentError);
+    });
+    test("_name has been assigned the correct value", () {
+      final field = FieldList(uuid.v4(), "name");
+      var name = field.name;
+      expect("name", name);
+      field.name = "name2";
+      name = field.name;
+      expect("name2", name);
     });
   });
 }
