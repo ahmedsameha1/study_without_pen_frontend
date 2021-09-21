@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
 import 'package:uuid/uuid.dart';
@@ -62,5 +64,22 @@ main() {
       name = field.name;
       expect("name2", name);
     });
+  });
+  test("_locale has been assigned the correct value", () {
+    var fieldList = FieldList(uuid.v4(), "name");
+    var locale = fieldList.locale;
+    expect(null, locale);
+    fieldList = FieldList(uuid.v4(), "name", locale: null);
+    locale = fieldList.locale;
+    expect(null, locale);
+    fieldList.locale = Locale("fr", "CA");
+    locale = fieldList.locale;
+    expect(Locale("fr", "CA"), locale);
+    fieldList = FieldList(uuid.v4(), "name", locale: Locale("fr", "CA"));
+    locale = fieldList.locale;
+    expect(Locale("fr", "CA"), locale);
+    fieldList.locale = null;
+    locale = fieldList.locale;
+    expect(null, locale);
   });
 }

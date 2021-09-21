@@ -1,9 +1,12 @@
+import 'dart:ui';
+
 class FieldList {
   static const int NAME_MAXIMUM_LENGTH = 64;
   late final String _id;
   late String _name;
+  Locale? _locale;
 
-  FieldList(String uuid, String name) {
+  FieldList(String uuid, String name, {Locale? locale}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -21,10 +24,12 @@ class FieldList {
       throw ArgumentError("_name length cannot be greater than 64 character");
     }
     this._name = name;
+    this._locale = locale;
   }
 
   String get id => _id;
   String get name => _name;
+  Locale? get locale => _locale;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -36,5 +41,9 @@ class FieldList {
       throw ArgumentError("_name length cannot be greater than 64 character");
     }
     this._name = name;
+  }
+
+  set locale(Locale? locale) {
+    this._locale = locale;
   }
 }
