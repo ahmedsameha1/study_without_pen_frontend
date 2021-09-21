@@ -5,8 +5,11 @@ class FieldList {
   late final String _id;
   late String _name;
   Locale? _locale;
+  CheckType _checkType = CheckType.NON_STRICT_IGNORE_CASE;
 
-  FieldList(String uuid, String name, {Locale? locale}) {
+  FieldList(String uuid, String name,
+      {Locale? locale,
+      CheckType checkType = CheckType.NON_STRICT_IGNORE_CASE}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -25,11 +28,13 @@ class FieldList {
     }
     this._name = name;
     this._locale = locale;
+    this._checkType = checkType;
   }
 
   String get id => _id;
   String get name => _name;
   Locale? get locale => _locale;
+  CheckType get checkType => _checkType;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -46,4 +51,15 @@ class FieldList {
   set locale(Locale? locale) {
     this._locale = locale;
   }
+
+  set checkType(CheckType checkType) {
+    this._checkType = checkType;
+  }
+}
+
+enum CheckType {
+  NON_STRICT_IGNORE_CASE,
+  NON_STRICT_DO_NOT_IGNORE_CASE,
+  IGNORE_CASE,
+  DO_NOT_IGNORE_CASE
 }

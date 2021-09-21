@@ -82,4 +82,16 @@ main() {
     locale = fieldList.locale;
     expect(null, locale);
   });
+  test("_checkType has been assigned the correct value", () {
+    var fieldList = FieldList(uuid.v4(), "name");
+    var checkType = fieldList.checkType;
+    expect(CheckType.NON_STRICT_IGNORE_CASE, checkType);
+    fieldList =
+        FieldList(uuid.v4(), "name", checkType: CheckType.DO_NOT_IGNORE_CASE);
+    checkType = fieldList.checkType;
+    expect(CheckType.DO_NOT_IGNORE_CASE, checkType);
+    fieldList.checkType = CheckType.IGNORE_CASE;
+    checkType = fieldList.checkType;
+    expect(CheckType.IGNORE_CASE, checkType);
+  });
 }
