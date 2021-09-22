@@ -6,10 +6,12 @@ class FieldList {
   late String _name;
   Locale? _locale;
   CheckType _checkType = CheckType.NON_STRICT_IGNORE_CASE;
+  SortBy _sortBy = SortBy.CREATION_DATE_DESC;
 
   FieldList(String uuid, String name,
       {Locale? locale,
-      CheckType checkType = CheckType.NON_STRICT_IGNORE_CASE}) {
+      CheckType checkType = CheckType.NON_STRICT_IGNORE_CASE,
+      SortBy sortBy = SortBy.CREATION_DATE_DESC}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -29,12 +31,14 @@ class FieldList {
     this._name = name;
     this._locale = locale;
     this._checkType = checkType;
+    this._sortBy = sortBy;
   }
 
   String get id => _id;
   String get name => _name;
   Locale? get locale => _locale;
   CheckType get checkType => _checkType;
+  SortBy get sortBy => _sortBy;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -55,6 +59,10 @@ class FieldList {
   set checkType(CheckType checkType) {
     this._checkType = checkType;
   }
+
+  set sortBy(SortBy sortBy) {
+    this._sortBy = sortBy;
+  }
 }
 
 enum CheckType {
@@ -62,4 +70,21 @@ enum CheckType {
   NON_STRICT_DO_NOT_IGNORE_CASE,
   IGNORE_CASE,
   DO_NOT_IGNORE_CASE
+}
+
+enum SortBy {
+  CREATION_DATE_DESC,
+  ANSWER_DESC,
+  QUESTION_ASC,
+  ANSWER_ASC,
+  DATE_DESC,
+  DATE_ASC,
+  QUESTION_DESC,
+  CREATION_DATE_ASC,
+  ORDER_ASC,
+  ORDER_DESC,
+  RANK_ASC,
+  RANK_DESC,
+  WRONGNESS_ASC,
+  WRONGNESS_DESC
 }

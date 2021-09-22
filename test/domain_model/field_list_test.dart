@@ -94,4 +94,15 @@ main() {
     checkType = fieldList.checkType;
     expect(CheckType.IGNORE_CASE, checkType);
   });
+  test("_sortBy has been assigned the correct value", () {
+    var fieldList = FieldList(uuid.v4(), "name");
+    var sortBy = fieldList.sortBy;
+    expect(SortBy.CREATION_DATE_DESC, sortBy);
+    fieldList = FieldList(uuid.v4(), "name", sortBy: SortBy.ANSWER_ASC);
+    sortBy = fieldList.sortBy;
+    expect(SortBy.ANSWER_ASC, sortBy);
+    fieldList.sortBy = SortBy.QUESTION_ASC;
+    sortBy = fieldList.sortBy;
+    expect(SortBy.QUESTION_ASC, sortBy);
+  });
 }
