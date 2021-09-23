@@ -7,11 +7,13 @@ class FieldList {
   Locale? _locale;
   CheckType _checkType = CheckType.NON_STRICT_IGNORE_CASE;
   SortBy _sortBy = SortBy.CREATION_DATE_DESC;
+  Color _color = Color(0xffffffff);
 
   FieldList(String uuid, String name,
       {Locale? locale,
       CheckType checkType = CheckType.NON_STRICT_IGNORE_CASE,
-      SortBy sortBy = SortBy.CREATION_DATE_DESC}) {
+      SortBy sortBy = SortBy.CREATION_DATE_DESC,
+      Color color = const Color(0xffffffff)}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -32,6 +34,7 @@ class FieldList {
     this._locale = locale;
     this._checkType = checkType;
     this._sortBy = sortBy;
+    this._color = color;
   }
 
   String get id => _id;
@@ -39,6 +42,7 @@ class FieldList {
   Locale? get locale => _locale;
   CheckType get checkType => _checkType;
   SortBy get sortBy => _sortBy;
+  Color get color => _color;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -62,6 +66,10 @@ class FieldList {
 
   set sortBy(SortBy sortBy) {
     this._sortBy = sortBy;
+  }
+
+  set color(Color color) {
+    this._color = color;
   }
 }
 

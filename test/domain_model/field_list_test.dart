@@ -105,4 +105,15 @@ main() {
     sortBy = fieldList.sortBy;
     expect(SortBy.QUESTION_ASC, sortBy);
   });
+  test("_color has been assigned the correct value", () {
+    var fieldList = FieldList(uuid.v4(), "name");
+    var color = fieldList.color;
+    expect(Color(0xffffffff), color);
+    fieldList = FieldList(uuid.v4(), "name", color: Color(0xff00ff00));
+    color = fieldList.color;
+    expect(Color(0xff00ff00), color);
+    fieldList.color = Color(0xff0000ff);
+    color = fieldList.color;
+    expect(Color(0xff0000ff), color);
+  });
 }
