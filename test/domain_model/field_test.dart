@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/domain_model/field.dart';
 import 'package:uuid/uuid.dart';
@@ -68,49 +70,16 @@ main() {
       expect("name2", name);
     });
   });
-  group("_color test", () {
-    test("_color can be null", () {
-      expect(() => Field(uuid.v4(), "name", "id", null), returnsNormally);
-      expect(() {
-        final field = Field(uuid.v4(), "name", "id", 0x0000ff00);
-        field.color = null;
-      }, returnsNormally);
-    });
-    test(
-        "_color must be equal or smaller than 0xffffffff and must be equal or greater than 0x00000000",
-        () {
-      expect(() => Field(uuid.v4(), "name", "id", 0xff00ff001),
-          throwsArgumentError);
-      expect(() => Field(uuid.v4(), "name", "id", -0x00000001),
-          throwsArgumentError);
-      expect(() => Field(uuid.v4(), "name", "id", 0xff00ff00), returnsNormally);
-      expect(() {
-        final field = Field(uuid.v4(), "name", "id");
-        field.color = 0xff00ff001;
-      }, throwsArgumentError);
-      expect(() {
-        final field = Field(uuid.v4(), "name", "id");
-        field.color = -0x00000001;
-      }, throwsArgumentError);
-      expect(() {
-        final field = Field(uuid.v4(), "name", "id");
-        field.color = 0xff00ff00;
-      }, returnsNormally);
-    });
-    test("_color has been assigned the correct value", () {
-      var field = Field(uuid.v4(), "name", "id", null);
-      var color = field.color;
-      expect(null, color);
-      field.color = 0xff00ff00;
-      color = field.color;
-      expect(0xff00ff00, color);
-      field = Field(uuid.v4(), "name", "id", 0xff00ff00);
-      color = field.color;
-      expect(0xff00ff00, color);
-      field.color = null;
-      color = field.color;
-      expect(null, color);
-    });
+  test("_color has been assigned the correct value", () {
+    var field = Field(uuid.v4(), "name", "id");
+    var color = field.color;
+    expect(Color(0xffffffff), color);
+    field.color = Color(0xff00ff00);
+    color = field.color;
+    expect(Color(0xff00ff00), color);
+    field = Field(uuid.v4(), "name", "id", color: Color(0xff00ff00));
+    color = field.color;
+    expect(Color(0xff00ff00), color);
   });
   group("_userAccountId tests", () {
     test("_userAccountId has been assigned the correct value", () {

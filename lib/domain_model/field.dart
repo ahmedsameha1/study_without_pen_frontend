@@ -1,12 +1,15 @@
+import 'dart:ui';
+
 class Field {
   static const int NAME_MAXIMUM_LENGTH = 64;
   static const int COLOR_MAXIMUM = 0xffffffff;
   late final String _id;
   late String _name;
   late String _userAccountId;
-  int? _color;
+  Color _color = Color(0xffffffff);
 
-  Field(String uuid, String name, String userAccountId, [int? color]) {
+  Field(String uuid, String name, String userAccountId,
+      {Color color = const Color(0xffffffff)}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -31,17 +34,13 @@ class Field {
     this._userAccountId = userAccountId;
     /////////////////////////////////////////////////////////////////////////
     // _color validation
-    if (color != null && (color > COLOR_MAXIMUM || color < 0x00000000)) {
-      throw ArgumentError(
-          "_color must be equal or smaller than 0xffffffff and must be equal or greater than 0x00000000");
-    }
     this._color = color;
   }
 
   String get id => _id;
   String get name => _name;
   String get userAccountId => _userAccountId;
-  int? get color => _color;
+  Color get color => _color;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -55,13 +54,7 @@ class Field {
     this._name = name;
   }
 
-  set color(int? color) {
-    /////////////////////////////////////////////////////////////////////////
-    // _color validation
-    if (color != null && (color > COLOR_MAXIMUM || color < 0x00000000)) {
-      throw ArgumentError(
-          "_color must be equal or smaller than 0xffffffff and must be equal or greater than 0x00000000");
-    }
+  set color(Color color) {
     this._color = color;
   }
 }
