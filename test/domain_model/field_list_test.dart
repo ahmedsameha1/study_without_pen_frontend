@@ -116,4 +116,58 @@ main() {
     color = fieldList.color;
     expect(Color(0xff0000ff), color);
   });
+  group("_questionAreaSize tests", () {
+    test("_questionAreaSize cannot be smaller than 1", () {
+      expect(() => FieldList(uuid.v4(), "name", questionAreaSize: 0),
+          throwsArgumentError);
+      expect(() => FieldList(uuid.v4(), "name", questionAreaSize: -1),
+          throwsArgumentError);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name");
+        fieldList.questionAreaSize = 0;
+      }, throwsArgumentError);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name");
+        fieldList.questionAreaSize = -1;
+      }, throwsArgumentError);
+    });
+    test("_questionAreaSize has been assigned the correct value", () {
+      var fieldList = FieldList(uuid.v4(), "name");
+      var questionAreaSize = fieldList.questionAreaSize;
+      expect(1, questionAreaSize);
+      fieldList = FieldList(uuid.v4(), "name", questionAreaSize: 2);
+      questionAreaSize = fieldList.questionAreaSize;
+      expect(2, questionAreaSize);
+      fieldList.questionAreaSize = 3;
+      questionAreaSize = fieldList.questionAreaSize;
+      expect(3, questionAreaSize);
+    });
+  });
+  group("_answerAreaSize tests", () {
+    test("_answerAreaSize cannot be smaller than 1", () {
+      expect(() => FieldList(uuid.v4(), "name", answerAreaSize: 0),
+          throwsArgumentError);
+      expect(() => FieldList(uuid.v4(), "name", answerAreaSize: -1),
+          throwsArgumentError);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name");
+        fieldList.answerAreaSize = 0;
+      }, throwsArgumentError);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name");
+        fieldList.answerAreaSize = -1;
+      }, throwsArgumentError);
+    });
+    test("_answerAreaSize has been assigned the correct value", () {
+      var fieldList = FieldList(uuid.v4(), "name");
+      var answerAreaSize = fieldList.answerAreaSize;
+      expect(1, answerAreaSize);
+      fieldList = FieldList(uuid.v4(), "name", answerAreaSize: 2);
+      answerAreaSize = fieldList.answerAreaSize;
+      expect(2, answerAreaSize);
+      fieldList.answerAreaSize = 3;
+      answerAreaSize = fieldList.answerAreaSize;
+      expect(3, answerAreaSize);
+    });
+  });
 }

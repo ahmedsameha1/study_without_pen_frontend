@@ -2,18 +2,26 @@ import 'dart:ui';
 
 class FieldList {
   static const int NAME_MAXIMUM_LENGTH = 64;
+  static const int QUESTION_AREA_SIZE_DEFAULT = 1;
+  static const int MINIMUM_QUESTION_AREA_SIZE = 1;
+  static const int ANSWER_AREA_SIZE_DEFAULT = 1;
+  static const int MINIMUM_ANSWER_AREA_SIZE = 1;
   late final String _id;
   late String _name;
   Locale? _locale;
   CheckType _checkType = CheckType.NON_STRICT_IGNORE_CASE;
   SortBy _sortBy = SortBy.CREATION_DATE_DESC;
   Color _color = Color(0xffffffff);
+  int _questionAreaSize = QUESTION_AREA_SIZE_DEFAULT;
+  int _answerAreaSize = ANSWER_AREA_SIZE_DEFAULT;
 
   FieldList(String uuid, String name,
       {Locale? locale,
       CheckType checkType = CheckType.NON_STRICT_IGNORE_CASE,
       SortBy sortBy = SortBy.CREATION_DATE_DESC,
-      Color color = const Color(0xffffffff)}) {
+      Color color = const Color(0xffffffff),
+      int questionAreaSize = QUESTION_AREA_SIZE_DEFAULT,
+      int answerAreaSize = ANSWER_AREA_SIZE_DEFAULT}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -35,6 +43,18 @@ class FieldList {
     this._checkType = checkType;
     this._sortBy = sortBy;
     this._color = color;
+    /////////////////////////////////////////////////////////////////////////
+    // _questionAreaSize validation
+    if (questionAreaSize < MINIMUM_QUESTION_AREA_SIZE) {
+      throw ArgumentError("_questionAreaSize cannot be smaller than 1");
+    }
+    this._questionAreaSize = questionAreaSize;
+    /////////////////////////////////////////////////////////////////////////
+    // _answerAreaSize validation
+    if (answerAreaSize < MINIMUM_ANSWER_AREA_SIZE) {
+      throw ArgumentError("_answerAreaSize cannot be smaller than 1");
+    }
+    this._answerAreaSize = answerAreaSize;
   }
 
   String get id => _id;
@@ -43,6 +63,8 @@ class FieldList {
   CheckType get checkType => _checkType;
   SortBy get sortBy => _sortBy;
   Color get color => _color;
+  int get questionAreaSize => _questionAreaSize;
+  int get answerAreaSize => _answerAreaSize;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -70,6 +92,24 @@ class FieldList {
 
   set color(Color color) {
     this._color = color;
+  }
+
+  set questionAreaSize(int questionAreaSize) {
+    /////////////////////////////////////////////////////////////////////////
+    // _questionAreaSize validation
+    if (questionAreaSize < MINIMUM_QUESTION_AREA_SIZE) {
+      throw ArgumentError("_questionAreaSize cannot be smaller than 1");
+    }
+    this._questionAreaSize = questionAreaSize;
+  }
+
+  set answerAreaSize(int answerAreaSize) {
+    /////////////////////////////////////////////////////////////////////////
+    // _answerAreaSize validation
+    if (answerAreaSize < MINIMUM_ANSWER_AREA_SIZE) {
+      throw ArgumentError("_answerAreaSize cannot be smaller than 1");
+    }
+    this._answerAreaSize = answerAreaSize;
   }
 }
 
