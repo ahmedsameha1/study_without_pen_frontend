@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:clock/clock.dart';
+
 class Field {
   static const int NAME_MAXIMUM_LENGTH = 64;
   static const int COLOR_MAXIMUM = 0xffffffff;
@@ -7,11 +9,13 @@ class Field {
   late String _name;
   late String _userAccountId;
   Color _color = Color(0xffffffff);
+  DateTime _createdAt = clock.now();
 
   Field(String uuid, String name, String userAccountId,
-      {Color color = const Color(0xffffffff)}) {
+      {DateTime? createdAt, Color color = const Color(0xffffffff)}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
+    if (createdAt == null) createdAt = clock.now();
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
     if (!regexp.hasMatch(uuid)) {
@@ -35,12 +39,19 @@ class Field {
     /////////////////////////////////////////////////////////////////////////
     // _color validation
     this._color = color;
+    /////////////////////////////////////////////////////////////////////////
+    // _createdAt validation
+    if (createdAt.isAfter(clock.now())) {
+      throw ArgumentError("_createdAt cannot be in the future");
+    }
+    this._createdAt = createdAt;
   }
 
   String get id => _id;
   String get name => _name;
   String get userAccountId => _userAccountId;
   Color get color => _color;
+  DateTime get createdAt => _createdAt;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/domain_model/field.dart';
 import 'package:uuid/uuid.dart';
@@ -81,11 +82,39 @@ main() {
     color = field.color;
     expect(Color(0xff00ff00), color);
   });
-  group("_userAccountId tests", () {
-    test("_userAccountId has been assigned the correct value", () {
-      var field = Field(uuid.v4(), "name", "id");
-      var userAccountId = field.userAccountId;
-      expect("id", userAccountId);
+  test("_userAccountId has been assigned the correct value", () {
+    var field = Field(uuid.v4(), "name", "id");
+    var userAccountId = field.userAccountId;
+    expect("id", userAccountId);
+  });
+  group("_createdAt tests", () {
+    test("_createdAt cannot be in the future", () {
+      withClock(Clock.fixed(DateTime.utc(2020, 1, 1)), () {
+        expect(
+            () => Field(uuid.v4(), "name", "id",
+                createdAt: clock.now().add(Duration(days: 500))),
+            throwsArgumentError);
+        expect(() => Field(uuid.v4(), "name", "id", createdAt: clock.now()),
+            returnsNormally);
+        expect(
+            () => Field(uuid.v4(), "name", "id",
+                createdAt: clock.now().subtract(Duration(days: 500))),
+            returnsNormally);
+      });
+    });
+    test("_createdAt has been assigned the correct value", () {
+      withClock(Clock.fixed(DateTime.utc(2020, 1, 1)), () {
+        var field = Field(uuid.v4(), "name", "id");
+        var createdAt = field.createdAt;
+        expect(clock.now(), createdAt);
+        field = Field(uuid.v4(), "name", "id", createdAt: null);
+        createdAt = field.createdAt;
+        expect(clock.now(), createdAt);
+        field = Field(uuid.v4(), "name", "id",
+            createdAt: clock.now().subtract(Duration(days: 500)));
+        createdAt = field.createdAt;
+        expect(clock.now().subtract(Duration(days: 500)), createdAt);
+      });
     });
   });
 }
