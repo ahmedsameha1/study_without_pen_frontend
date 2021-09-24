@@ -10,6 +10,7 @@ class FieldList {
   static const CheckType CHECK_TYPE_DEFAULT = CheckType.NON_STRICT_IGNORE_CASE;
   static const TestTextSize TEST_TEXT_SIZE_DEFAULT = TestTextSize.NORMAL;
   static const bool IS_INFO_BAR_SHOWN_DEFAULT = true;
+  static const bool DOES_READ_ANSWER_DEFAULT = false;
   late final String _id;
   late String _name;
   Locale? _locale;
@@ -20,6 +21,7 @@ class FieldList {
   int _answerAreaSize = ANSWER_AREA_SIZE_DEFAULT;
   TestTextSize _testTextSize = TEST_TEXT_SIZE_DEFAULT;
   bool _isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT;
+  bool _doesReadAnswer = DOES_READ_ANSWER_DEFAULT;
 
   FieldList(String uuid, String name,
       {Locale? locale,
@@ -29,7 +31,8 @@ class FieldList {
       int questionAreaSize = QUESTION_AREA_SIZE_DEFAULT,
       int answerAreaSize = ANSWER_AREA_SIZE_DEFAULT,
       TestTextSize testTextSize = TEST_TEXT_SIZE_DEFAULT,
-      bool isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT}) {
+      bool isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT,
+      bool doesReadAnswer = DOES_READ_ANSWER_DEFAULT}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -65,6 +68,7 @@ class FieldList {
     this._answerAreaSize = answerAreaSize;
     this._testTextSize = testTextSize;
     this._isInfoBarShown = isInfoBarShown;
+    this._doesReadAnswer = doesReadAnswer;
   }
 
   String get id => _id;
@@ -77,6 +81,7 @@ class FieldList {
   int get answerAreaSize => _answerAreaSize;
   TestTextSize get testTextSize => _testTextSize;
   bool get isInfoBarShown => _isInfoBarShown;
+  bool get doesReadAnswer => _doesReadAnswer;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -130,6 +135,10 @@ class FieldList {
 
   set isInfoBarShown(bool isInfoBarShown) {
     this._isInfoBarShown = isInfoBarShown;
+  }
+
+  set doesReadAnswer(bool doesReadAnswer) {
+    this._doesReadAnswer = doesReadAnswer;
   }
 }
 

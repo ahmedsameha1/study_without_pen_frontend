@@ -192,4 +192,15 @@ main() {
     isInfoBarShown = fieldList.isInfoBarShown;
     expect(true, isInfoBarShown);
   });
+  test("_doesReadAnswer has been assigned the correct value", () {
+    var fieldList = FieldList(uuid.v4(), "name");
+    var doesReadAnswer = fieldList.doesReadAnswer;
+    expect(FieldList.DOES_READ_ANSWER_DEFAULT, doesReadAnswer);
+    fieldList = FieldList(uuid.v4(), "name", doesReadAnswer: true);
+    doesReadAnswer = fieldList.doesReadAnswer;
+    expect(true, doesReadAnswer);
+    fieldList.doesReadAnswer = false;
+    doesReadAnswer = fieldList.doesReadAnswer;
+    expect(false, doesReadAnswer);
+  });
 }
