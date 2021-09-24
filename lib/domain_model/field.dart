@@ -13,9 +13,9 @@ class Field {
 
   Field(String uuid, String name, String userAccountId,
       {DateTime? createdAt, Color color = const Color(0xffffffff)}) {
+    if (createdAt == null) createdAt = clock.now();
     /////////////////////////////////////////////////////////////////////////
     // _id validation
-    if (createdAt == null) createdAt = clock.now();
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
     if (!regexp.hasMatch(uuid)) {

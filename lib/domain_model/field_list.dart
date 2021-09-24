@@ -13,6 +13,7 @@ class FieldList {
   static const bool DOES_READ_ANSWER_DEFAULT = false;
   late final String _id;
   late String _name;
+  late String _fieldId;
   Locale? _locale;
   CheckType _checkType = CHECK_TYPE_DEFAULT;
   SortBy _sortBy = SORT_BY_DEFAULT;
@@ -23,7 +24,7 @@ class FieldList {
   bool _isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT;
   bool _doesReadAnswer = DOES_READ_ANSWER_DEFAULT;
 
-  FieldList(String uuid, String name,
+  FieldList(String uuid, String name, String fieldId,
       {Locale? locale,
       CheckType checkType = CHECK_TYPE_DEFAULT,
       SortBy sortBy = SORT_BY_DEFAULT,
@@ -33,10 +34,10 @@ class FieldList {
       TestTextSize testTextSize = TEST_TEXT_SIZE_DEFAULT,
       bool isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT,
       bool doesReadAnswer = DOES_READ_ANSWER_DEFAULT}) {
-    /////////////////////////////////////////////////////////////////////////
-    // _id validation
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
+    /////////////////////////////////////////////////////////////////////////
+    // _id validation
     if (!regexp.hasMatch(uuid)) {
       throw ArgumentError("_id must be a valid UUID");
     }
@@ -50,6 +51,12 @@ class FieldList {
       throw ArgumentError("_name length cannot be greater than 64 character");
     }
     this._name = name;
+    /////////////////////////////////////////////////////////////////////////
+    // _fieldId validation
+    if (!regexp.hasMatch(fieldId)) {
+      throw ArgumentError("_id must be a valid UUID");
+    }
+    this._fieldId = fieldId;
     this._locale = locale;
     this._checkType = checkType;
     this._sortBy = sortBy;
@@ -73,6 +80,7 @@ class FieldList {
 
   String get id => _id;
   String get name => _name;
+  String get fieldId => _fieldId;
   Locale? get locale => _locale;
   CheckType get checkType => _checkType;
   SortBy get sortBy => _sortBy;
