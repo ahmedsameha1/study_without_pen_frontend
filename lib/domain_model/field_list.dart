@@ -11,6 +11,7 @@ class FieldList {
   static const TestTextSize TEST_TEXT_SIZE_DEFAULT = TestTextSize.NORMAL;
   static const bool IS_INFO_BAR_SHOWN_DEFAULT = true;
   static const bool DOES_READ_ANSWER_DEFAULT = false;
+  static const int USAGE_COUNT_DEFAULT = 0;
   late final String _id;
   late String _name;
   late String _fieldId;
@@ -23,6 +24,7 @@ class FieldList {
   TestTextSize _testTextSize = TEST_TEXT_SIZE_DEFAULT;
   bool _isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT;
   bool _doesReadAnswer = DOES_READ_ANSWER_DEFAULT;
+  int _usageCount = USAGE_COUNT_DEFAULT;
 
   FieldList(String uuid, String name, String fieldId,
       {Locale? locale,
@@ -33,7 +35,8 @@ class FieldList {
       int answerAreaSize = ANSWER_AREA_SIZE_DEFAULT,
       TestTextSize testTextSize = TEST_TEXT_SIZE_DEFAULT,
       bool isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT,
-      bool doesReadAnswer = DOES_READ_ANSWER_DEFAULT}) {
+      bool doesReadAnswer = DOES_READ_ANSWER_DEFAULT,
+      int usageCount = USAGE_COUNT_DEFAULT}) {
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
     /////////////////////////////////////////////////////////////////////////
@@ -76,6 +79,12 @@ class FieldList {
     this._testTextSize = testTextSize;
     this._isInfoBarShown = isInfoBarShown;
     this._doesReadAnswer = doesReadAnswer;
+    /////////////////////////////////////////////////////////////////////////
+    // _usageCount validation
+    if (usageCount < 0) {
+      throw ArgumentError("_usageCount cannot be negative");
+    }
+    this._usageCount = usageCount;
   }
 
   String get id => _id;
@@ -90,6 +99,7 @@ class FieldList {
   TestTextSize get testTextSize => _testTextSize;
   bool get isInfoBarShown => _isInfoBarShown;
   bool get doesReadAnswer => _doesReadAnswer;
+  int get usageCount => _usageCount;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -147,6 +157,16 @@ class FieldList {
 
   set doesReadAnswer(bool doesReadAnswer) {
     this._doesReadAnswer = doesReadAnswer;
+  }
+
+  set usageCount(int usageCount) {
+    /////////////////////////////////////////////////////////////////////////
+    // _usageCount validation
+    if (usageCount <= _usageCount) {
+      throw ArgumentError(
+          "_usageCount cannot be set to equal or smaller value than the current value");
+    }
+    this._usageCount = usageCount;
   }
 }
 

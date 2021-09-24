@@ -28,7 +28,10 @@ main() {
       }, throwsArgumentError);
     });
     test("_name has length that is not greater than 64 character", () {
-      expect(() => FieldList(uuid.v4(), """
+      expect(
+          () => FieldList(
+              uuid.v4(),
+              """
     fffffffffffffffffffff
     fffffffffffffffff
     fffffffffffffffff
@@ -39,7 +42,9 @@ main() {
     fffffffffffffffffff
     fffffffffffffffffff
     ffffffffffffffffff
-    """, uuid.v4()), throwsArgumentError);
+    """,
+              uuid.v4()),
+          throwsArgumentError);
       expect(() {
         final field = FieldList(uuid.v4(), "name", uuid.v4());
         field.name = """
@@ -88,7 +93,8 @@ main() {
     fieldList.locale = Locale("fr", "CA");
     locale = fieldList.locale;
     expect(Locale("fr", "CA"), locale);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(), locale: Locale("fr", "CA"));
+    fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), locale: Locale("fr", "CA"));
     locale = fieldList.locale;
     expect(Locale("fr", "CA"), locale);
     fieldList.locale = null;
@@ -99,8 +105,8 @@ main() {
     var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
     var checkType = fieldList.checkType;
     expect(FieldList.CHECK_TYPE_DEFAULT, checkType);
-    fieldList =
-        FieldList(uuid.v4(), "name", uuid.v4(), checkType: CheckType.DO_NOT_IGNORE_CASE);
+    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+        checkType: CheckType.DO_NOT_IGNORE_CASE);
     checkType = fieldList.checkType;
     expect(CheckType.DO_NOT_IGNORE_CASE, checkType);
     fieldList.checkType = CheckType.IGNORE_CASE;
@@ -111,7 +117,8 @@ main() {
     var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
     var sortBy = fieldList.sortBy;
     expect(FieldList.SORT_BY_DEFAULT, sortBy);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(), sortBy: SortBy.ANSWER_ASC);
+    fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), sortBy: SortBy.ANSWER_ASC);
     sortBy = fieldList.sortBy;
     expect(SortBy.ANSWER_ASC, sortBy);
     fieldList.sortBy = SortBy.QUESTION_ASC;
@@ -122,7 +129,8 @@ main() {
     var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
     var color = fieldList.color;
     expect(Color(0xffffffff), color);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(), color: Color(0xff00ff00));
+    fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), color: Color(0xff00ff00));
     color = fieldList.color;
     expect(Color(0xff00ff00), color);
     fieldList.color = Color(0xff0000ff);
@@ -133,7 +141,8 @@ main() {
     test("_questionAreaSize cannot be smaller than 1", () {
       expect(() => FieldList(uuid.v4(), "name", uuid.v4(), questionAreaSize: 0),
           throwsArgumentError);
-      expect(() => FieldList(uuid.v4(), "name", uuid.v4(), questionAreaSize: -1),
+      expect(
+          () => FieldList(uuid.v4(), "name", uuid.v4(), questionAreaSize: -1),
           throwsArgumentError);
       expect(() {
         var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
@@ -187,7 +196,8 @@ main() {
     var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
     var testTextSize = fieldList.testTextSize;
     expect(FieldList.TEST_TEXT_SIZE_DEFAULT, testTextSize);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(), testTextSize: TestTextSize.SMALL);
+    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+        testTextSize: TestTextSize.SMALL);
     testTextSize = fieldList.testTextSize;
     expect(TestTextSize.SMALL, testTextSize);
     fieldList.testTextSize = TestTextSize.SO_LARGE;
@@ -215,5 +225,34 @@ main() {
     fieldList.doesReadAnswer = false;
     doesReadAnswer = fieldList.doesReadAnswer;
     expect(false, doesReadAnswer);
+  });
+  group("_usageCount tests", () {
+    test("_usageCount cannot be negative", () {
+      expect(() => FieldList(uuid.v4(), "name", uuid.v4(), usageCount: -1),
+          throwsArgumentError);
+      expect(() {
+        final field = FieldList(uuid.v4(), "name", uuid.v4());
+        field.usageCount = -1;
+      }, throwsArgumentError);
+      expect(() {
+        final field = FieldList(uuid.v4(), "name", uuid.v4(), usageCount: 10);
+        field.usageCount = 10;
+      }, throwsArgumentError);
+      expect(() {
+        final field = FieldList(uuid.v4(), "name", uuid.v4(), usageCount: 10);
+        field.usageCount = 9;
+      }, throwsArgumentError);
+    });
+    test("_usageCount has been assigned the correct value", () {
+      var field = FieldList(uuid.v4(), "name", uuid.v4());
+      var usageCount = field.usageCount;
+      expect(FieldList.USAGE_COUNT_DEFAULT, usageCount);
+      field = FieldList(uuid.v4(), "name", uuid.v4(), usageCount: 10);
+      usageCount = field.usageCount;
+      expect(10, usageCount);
+      field.usageCount = 11;
+      usageCount = field.usageCount;
+      expect(11, usageCount);
+    });
   });
 }
