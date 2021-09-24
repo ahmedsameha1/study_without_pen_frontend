@@ -117,4 +117,33 @@ main() {
       });
     });
   });
+  group("_usageCount tests", () {
+    test("_usageCount cannot be negative", () {
+      expect(() => Field(uuid.v4(), "name", "id", usageCount: -1),
+          throwsArgumentError);
+      expect(() {
+        final field = Field(uuid.v4(), "name", "id");
+        field.usageCount = -1;
+      }, throwsArgumentError);
+      expect(() {
+        final field = Field(uuid.v4(), "name", "id", usageCount: 10);
+        field.usageCount = 10;
+      }, throwsArgumentError);
+      expect(() {
+        final field = Field(uuid.v4(), "name", "id", usageCount: 10);
+        field.usageCount = 9;
+      }, throwsArgumentError);
+    });
+    test("_usageCount has been assigned the correct value", () {
+      var field = Field(uuid.v4(), "name", "id");
+      var usageCount = field.usageCount;
+      expect(Field.USAGE_COUNT_DEFAULT, usageCount);
+      field = Field(uuid.v4(), "name", "id", usageCount: 10);
+      usageCount = field.usageCount;
+      expect(10, usageCount);
+      field.usageCount = 11;
+      usageCount = field.usageCount;
+      expect(11, usageCount);
+    });
+  });
 }
