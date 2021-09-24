@@ -9,6 +9,7 @@ class FieldList {
   static const SortBy SORT_BY_DEFAULT = SortBy.CREATION_DATE_DESC;
   static const CheckType CHECK_TYPE_DEFAULT = CheckType.NON_STRICT_IGNORE_CASE;
   static const TestTextSize TEST_TEXT_SIZE_DEFAULT = TestTextSize.NORMAL;
+  static const bool IS_INFO_BAR_SHOWN_DEFAULT = true;
   late final String _id;
   late String _name;
   Locale? _locale;
@@ -18,6 +19,7 @@ class FieldList {
   int _questionAreaSize = QUESTION_AREA_SIZE_DEFAULT;
   int _answerAreaSize = ANSWER_AREA_SIZE_DEFAULT;
   TestTextSize _testTextSize = TEST_TEXT_SIZE_DEFAULT;
+  bool _isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT;
 
   FieldList(String uuid, String name,
       {Locale? locale,
@@ -26,7 +28,8 @@ class FieldList {
       Color color = const Color(0xffffffff),
       int questionAreaSize = QUESTION_AREA_SIZE_DEFAULT,
       int answerAreaSize = ANSWER_AREA_SIZE_DEFAULT,
-      TestTextSize testTextSize = TEST_TEXT_SIZE_DEFAULT}) {
+      TestTextSize testTextSize = TEST_TEXT_SIZE_DEFAULT,
+      bool isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -61,6 +64,7 @@ class FieldList {
     }
     this._answerAreaSize = answerAreaSize;
     this._testTextSize = testTextSize;
+    this._isInfoBarShown = isInfoBarShown;
   }
 
   String get id => _id;
@@ -72,6 +76,7 @@ class FieldList {
   int get questionAreaSize => _questionAreaSize;
   int get answerAreaSize => _answerAreaSize;
   TestTextSize get testTextSize => _testTextSize;
+  bool get isInfoBarShown => _isInfoBarShown;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -121,6 +126,10 @@ class FieldList {
 
   set testTextSize(TestTextSize testTextSize) {
     this._testTextSize = testTextSize;
+  }
+
+  set isInfoBarShown(bool isInfoBarShown) {
+    this._isInfoBarShown = isInfoBarShown;
   }
 }
 

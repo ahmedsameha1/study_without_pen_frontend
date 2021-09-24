@@ -170,7 +170,7 @@ main() {
       expect(3, answerAreaSize);
     });
   });
-  test("_testTextSize tests", () {
+  test("_testTextSize has been assigned the correct value", () {
     var fieldList = FieldList(uuid.v4(), "name");
     var testTextSize = fieldList.testTextSize;
     expect(FieldList.TEST_TEXT_SIZE_DEFAULT, testTextSize);
@@ -180,5 +180,16 @@ main() {
     fieldList.testTextSize = TestTextSize.SO_LARGE;
     testTextSize = fieldList.testTextSize;
     expect(TestTextSize.SO_LARGE, testTextSize);
+  });
+  test("_isInfoBarShown has been assigned the correct value", () {
+    var fieldList = FieldList(uuid.v4(), "name");
+    var isInfoBarShown = fieldList.isInfoBarShown;
+    expect(FieldList.IS_INFO_BAR_SHOWN_DEFAULT, isInfoBarShown);
+    fieldList = FieldList(uuid.v4(), "name", isInfoBarShown: false);
+    isInfoBarShown = fieldList.isInfoBarShown;
+    expect(false, isInfoBarShown);
+    fieldList.isInfoBarShown = true;
+    isInfoBarShown = fieldList.isInfoBarShown;
+    expect(true, isInfoBarShown);
   });
 }
