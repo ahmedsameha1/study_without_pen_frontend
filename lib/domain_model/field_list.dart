@@ -6,12 +6,13 @@ class FieldList {
   static const int MINIMUM_QUESTION_AREA_SIZE = 1;
   static const int ANSWER_AREA_SIZE_DEFAULT = 1;
   static const int MINIMUM_ANSWER_AREA_SIZE = 1;
+  static const SortBy SORT_BY_DEFAULT = SortBy.CREATION_DATE_DESC;
   static const TestTextSize TEST_TEXT_SIZE_DEFAULT = TestTextSize.NORMAL;
   late final String _id;
   late String _name;
   Locale? _locale;
   CheckType _checkType = CheckType.NON_STRICT_IGNORE_CASE;
-  SortBy _sortBy = SortBy.CREATION_DATE_DESC;
+  SortBy _sortBy = SORT_BY_DEFAULT;
   Color _color = Color(0xffffffff);
   int _questionAreaSize = QUESTION_AREA_SIZE_DEFAULT;
   int _answerAreaSize = ANSWER_AREA_SIZE_DEFAULT;
@@ -20,7 +21,7 @@ class FieldList {
   FieldList(String uuid, String name,
       {Locale? locale,
       CheckType checkType = CheckType.NON_STRICT_IGNORE_CASE,
-      SortBy sortBy = SortBy.CREATION_DATE_DESC,
+      SortBy sortBy = SORT_BY_DEFAULT,
       Color color = const Color(0xffffffff),
       int questionAreaSize = QUESTION_AREA_SIZE_DEFAULT,
       int answerAreaSize = ANSWER_AREA_SIZE_DEFAULT,

@@ -97,7 +97,7 @@ main() {
   test("_sortBy has been assigned the correct value", () {
     var fieldList = FieldList(uuid.v4(), "name");
     var sortBy = fieldList.sortBy;
-    expect(SortBy.CREATION_DATE_DESC, sortBy);
+    expect(FieldList.SORT_BY_DEFAULT, sortBy);
     fieldList = FieldList(uuid.v4(), "name", sortBy: SortBy.ANSWER_ASC);
     sortBy = fieldList.sortBy;
     expect(SortBy.ANSWER_ASC, sortBy);
