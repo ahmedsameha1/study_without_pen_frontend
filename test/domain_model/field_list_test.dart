@@ -85,7 +85,7 @@ main() {
   test("_checkType has been assigned the correct value", () {
     var fieldList = FieldList(uuid.v4(), "name");
     var checkType = fieldList.checkType;
-    expect(CheckType.NON_STRICT_IGNORE_CASE, checkType);
+    expect(FieldList.CHECK_TYPE_DEFAULT, checkType);
     fieldList =
         FieldList(uuid.v4(), "name", checkType: CheckType.DO_NOT_IGNORE_CASE);
     checkType = fieldList.checkType;
