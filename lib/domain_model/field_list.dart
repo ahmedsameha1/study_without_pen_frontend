@@ -6,6 +6,7 @@ class FieldList {
   static const int MINIMUM_QUESTION_AREA_SIZE = 1;
   static const int ANSWER_AREA_SIZE_DEFAULT = 1;
   static const int MINIMUM_ANSWER_AREA_SIZE = 1;
+  static const TestTextSize TEST_TEXT_SIZE_DEFAULT = TestTextSize.NORMAL;
   late final String _id;
   late String _name;
   Locale? _locale;
@@ -14,6 +15,7 @@ class FieldList {
   Color _color = Color(0xffffffff);
   int _questionAreaSize = QUESTION_AREA_SIZE_DEFAULT;
   int _answerAreaSize = ANSWER_AREA_SIZE_DEFAULT;
+  TestTextSize _testTextSize = TEST_TEXT_SIZE_DEFAULT;
 
   FieldList(String uuid, String name,
       {Locale? locale,
@@ -21,7 +23,8 @@ class FieldList {
       SortBy sortBy = SortBy.CREATION_DATE_DESC,
       Color color = const Color(0xffffffff),
       int questionAreaSize = QUESTION_AREA_SIZE_DEFAULT,
-      int answerAreaSize = ANSWER_AREA_SIZE_DEFAULT}) {
+      int answerAreaSize = ANSWER_AREA_SIZE_DEFAULT,
+      TestTextSize testTextSize = TEST_TEXT_SIZE_DEFAULT}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -55,6 +58,7 @@ class FieldList {
       throw ArgumentError("_answerAreaSize cannot be smaller than 1");
     }
     this._answerAreaSize = answerAreaSize;
+    this._testTextSize = testTextSize;
   }
 
   String get id => _id;
@@ -65,6 +69,7 @@ class FieldList {
   Color get color => _color;
   int get questionAreaSize => _questionAreaSize;
   int get answerAreaSize => _answerAreaSize;
+  TestTextSize get testTextSize => _testTextSize;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -111,6 +116,10 @@ class FieldList {
     }
     this._answerAreaSize = answerAreaSize;
   }
+
+  set testTextSize(TestTextSize testTextSize) {
+    this._testTextSize = testTextSize;
+  }
 }
 
 enum CheckType {
@@ -136,3 +145,5 @@ enum SortBy {
   WRONGNESS_ASC,
   WRONGNESS_DESC
 }
+
+enum TestTextSize { SO_SMALL, SMALL, NORMAL, LARGE, SO_LARGE }

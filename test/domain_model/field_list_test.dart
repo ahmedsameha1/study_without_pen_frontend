@@ -170,4 +170,15 @@ main() {
       expect(3, answerAreaSize);
     });
   });
+  test("_testTextSize tests", () {
+    var fieldList = FieldList(uuid.v4(), "name");
+    var testTextSize = fieldList.testTextSize;
+    expect(FieldList.TEST_TEXT_SIZE_DEFAULT, testTextSize);
+    fieldList = FieldList(uuid.v4(), "name", testTextSize: TestTextSize.SMALL);
+    testTextSize = fieldList.testTextSize;
+    expect(TestTextSize.SMALL, testTextSize);
+    fieldList.testTextSize = TestTextSize.SO_LARGE;
+    testTextSize = fieldList.testTextSize;
+    expect(TestTextSize.SO_LARGE, testTextSize);
+  });
 }
