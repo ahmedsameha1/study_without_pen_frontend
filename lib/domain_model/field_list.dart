@@ -13,6 +13,15 @@ class FieldList {
   static const bool DOES_READ_ANSWER_DEFAULT = false;
   static const int USAGE_COUNT_DEFAULT = 0;
   static const int? EMULATION_NUMBER_OF_QUESTIONS_DEFAULT = null;
+  static const List<int> EMULATION_DAYS_DEFAULT = [
+    DateTime.monday,
+    DateTime.tuesday,
+    DateTime.wednesday,
+    DateTime.thursday,
+    DateTime.friday,
+    DateTime.saturday,
+    DateTime.sunday
+  ];
   late final String _id;
   late String _name;
   late String _fieldId;
@@ -27,6 +36,7 @@ class FieldList {
   bool _doesReadAnswer = DOES_READ_ANSWER_DEFAULT;
   int _usageCount = USAGE_COUNT_DEFAULT;
   int? _emulationNumberOfQuestions = EMULATION_NUMBER_OF_QUESTIONS_DEFAULT;
+  List<int> _emulationDays = EMULATION_DAYS_DEFAULT;
 
   FieldList(String uuid, String name, String fieldId,
       {Locale? locale,
@@ -39,8 +49,8 @@ class FieldList {
       bool isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT,
       bool doesReadAnswer = DOES_READ_ANSWER_DEFAULT,
       int usageCount = USAGE_COUNT_DEFAULT,
-      int? emulationNumberOfQuestions =
-          EMULATION_NUMBER_OF_QUESTIONS_DEFAULT}) {
+      int? emulationNumberOfQuestions = EMULATION_NUMBER_OF_QUESTIONS_DEFAULT,
+      List<int> emulationDays = EMULATION_DAYS_DEFAULT}) {
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
     /////////////////////////////////////////////////////////////////////////
@@ -96,6 +106,19 @@ class FieldList {
           "_emulationNumberOfQuestions cannot be smaller than 1");
     }
     this._emulationNumberOfQuestions = emulationNumberOfQuestions;
+    /////////////////////////////////////////////////////////////////////////
+    // _emulationDays validation
+    if (emulationDays.length > 7) {
+      throw ArgumentError("_emulationDays length must be smaller than 8");
+    }
+    if (emulationDays.any((element) => element > 7 || element < 1)) {
+      throw ArgumentError(
+          "_emulationDays elements cannot be smaller than 1 or greater than 7");
+    }
+    if (emulationDays.toSet().length < emulationDays.length) {
+      throw ArgumentError("_emulationDays cannot contain duplicated elements");
+    }
+    this._emulationDays = emulationDays;
   }
 
   String get id => _id;
@@ -112,6 +135,7 @@ class FieldList {
   bool get doesReadAnswer => _doesReadAnswer;
   int get usageCount => _usageCount;
   int? get emulationNumberOfQuestions => _emulationNumberOfQuestions;
+  List<int> get emulationDays => _emulationDays;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -189,6 +213,22 @@ class FieldList {
           "_emulationNumberOfQuestions cannot be smaller than 1");
     }
     this._emulationNumberOfQuestions = emulationNumberOfQuestions;
+  }
+
+  set emulationDays(List<int> emulationDays) {
+    /////////////////////////////////////////////////////////////////////////
+    // _emulationDays validation
+    if (emulationDays.length > 7) {
+      throw ArgumentError("_emulationDays length must be smaller than 8");
+    }
+    if (emulationDays.any((element) => element > 7 || element < 1)) {
+      throw ArgumentError(
+          "_emulationDays elements cannot be smaller than 1 or greater than 7");
+    }
+    if (emulationDays.toSet().length < emulationDays.length) {
+      throw ArgumentError("_emulationDays cannot contain duplicated elements");
+    }
+    this._emulationDays = emulationDays;
   }
 }
 

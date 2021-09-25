@@ -305,4 +305,57 @@ main() {
       expect(null, emulationNumberOfQuestions);
     });
   });
+  group("_emulationDays tests", () {
+    test("_emulationDays length is smaller than 8", () {
+      expect(
+          () => FieldList(uuid.v4(), "name", uuid.v4(),
+              emulationDays: [1, 2, 3, 4, 5, 6, 7, 7]),
+          throwsArgumentError);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        fieldList.emulationDays = [1, 2, 3, 4, 5, 6, 7, 7];
+      }, throwsArgumentError);
+    });
+    test("_emulationDays elements cannot be smaller than 1 or greater than 7",
+        () {
+      expect(
+          () => FieldList(uuid.v4(), "name", uuid.v4(),
+              emulationDays: [1, 2, 3, 4, 5, 6, 8]),
+          throwsArgumentError);
+      expect(
+          () => FieldList(uuid.v4(), "name", uuid.v4(),
+              emulationDays: [0, 2, 3, 4, 5, 6, 7]),
+          throwsArgumentError);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        fieldList.emulationDays = [1, 2, 3, 4, 5, 6, 8];
+      }, throwsArgumentError);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        fieldList.emulationDays = [0, 2, 3, 4, 5, 6, 7];
+      }, throwsArgumentError);
+    });
+    test("_emulationDays cannot contain duplicated elements", () {
+      expect(
+          () => FieldList(uuid.v4(), "name", uuid.v4(),
+              emulationDays: [1, 2, 3, 3, 5]),
+          throwsArgumentError);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        fieldList.emulationDays = [1, 2, 3, 3, 5];
+      }, throwsArgumentError);
+    });
+    test("_emulationDays has been assigned the correct value", () {
+      var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+      var emulationDays = fieldList.emulationDays;
+      expect(FieldList.EMULATION_DAYS_DEFAULT, emulationDays);
+      fieldList =
+          FieldList(uuid.v4(), "name", uuid.v4(), emulationDays: [2, 4, 6]);
+      emulationDays = fieldList.emulationDays;
+      expect([2, 4, 6], emulationDays);
+      fieldList.emulationDays = [1, 3, 5];
+      emulationDays = fieldList.emulationDays;
+      expect([1, 3, 5], emulationDays);
+    });
+  });
 }
