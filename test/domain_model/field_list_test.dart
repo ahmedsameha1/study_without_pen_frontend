@@ -255,4 +255,54 @@ main() {
       expect(11, usageCount);
     });
   });
+  group("_emulationNumberOfQuestions tests", () {
+    test("_emulationNumberOfQuestions can be null", () {
+      expect(
+          () => FieldList(uuid.v4(), "name", uuid.v4(),
+              emulationNumberOfQuestions: null),
+          returnsNormally);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        fieldList.emulationNumberOfQuestions = null;
+      }, returnsNormally);
+    });
+    test("_emulationNumberOfQuestions cannot be smaller than 1", () {
+      expect(
+          () => FieldList(uuid.v4(), "name", uuid.v4(),
+              emulationNumberOfQuestions: 0),
+          throwsArgumentError);
+      expect(
+          () => FieldList(uuid.v4(), "name", uuid.v4(),
+              emulationNumberOfQuestions: -1),
+          throwsArgumentError);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        fieldList.emulationNumberOfQuestions = 0;
+      }, throwsArgumentError);
+      expect(() {
+        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        fieldList.emulationNumberOfQuestions = -1;
+      }, throwsArgumentError);
+    });
+    test("_emulationNumberOfQuestions has been assigned the correct value", () {
+      var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+      var emulationNumberOfQuestions = fieldList.emulationNumberOfQuestions;
+      expect(FieldList.EMULATION_NUMBER_OF_QUESTIONS_DEFAULT,
+          emulationNumberOfQuestions);
+      fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+          emulationNumberOfQuestions: null);
+      emulationNumberOfQuestions = fieldList.emulationNumberOfQuestions;
+      expect(null, emulationNumberOfQuestions);
+      fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+          emulationNumberOfQuestions: 10);
+      emulationNumberOfQuestions = fieldList.emulationNumberOfQuestions;
+      expect(10, emulationNumberOfQuestions);
+      fieldList.emulationNumberOfQuestions = 5;
+      emulationNumberOfQuestions = fieldList.emulationNumberOfQuestions;
+      expect(5, emulationNumberOfQuestions);
+      fieldList.emulationNumberOfQuestions = null;
+      emulationNumberOfQuestions = fieldList.emulationNumberOfQuestions;
+      expect(null, emulationNumberOfQuestions);
+    });
+  });
 }

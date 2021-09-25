@@ -12,6 +12,7 @@ class FieldList {
   static const bool IS_INFO_BAR_SHOWN_DEFAULT = true;
   static const bool DOES_READ_ANSWER_DEFAULT = false;
   static const int USAGE_COUNT_DEFAULT = 0;
+  static const int? EMULATION_NUMBER_OF_QUESTIONS_DEFAULT = null;
   late final String _id;
   late String _name;
   late String _fieldId;
@@ -25,6 +26,7 @@ class FieldList {
   bool _isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT;
   bool _doesReadAnswer = DOES_READ_ANSWER_DEFAULT;
   int _usageCount = USAGE_COUNT_DEFAULT;
+  int? _emulationNumberOfQuestions = EMULATION_NUMBER_OF_QUESTIONS_DEFAULT;
 
   FieldList(String uuid, String name, String fieldId,
       {Locale? locale,
@@ -36,7 +38,9 @@ class FieldList {
       TestTextSize testTextSize = TEST_TEXT_SIZE_DEFAULT,
       bool isInfoBarShown = IS_INFO_BAR_SHOWN_DEFAULT,
       bool doesReadAnswer = DOES_READ_ANSWER_DEFAULT,
-      int usageCount = USAGE_COUNT_DEFAULT}) {
+      int usageCount = USAGE_COUNT_DEFAULT,
+      int? emulationNumberOfQuestions =
+          EMULATION_NUMBER_OF_QUESTIONS_DEFAULT}) {
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
     /////////////////////////////////////////////////////////////////////////
@@ -85,6 +89,13 @@ class FieldList {
       throw ArgumentError("_usageCount cannot be negative");
     }
     this._usageCount = usageCount;
+    /////////////////////////////////////////////////////////////////////////
+    // _emulationNumberOfQuestions validation
+    if (emulationNumberOfQuestions != null && emulationNumberOfQuestions < 1) {
+      throw ArgumentError(
+          "_emulationNumberOfQuestions cannot be smaller than 1");
+    }
+    this._emulationNumberOfQuestions = emulationNumberOfQuestions;
   }
 
   String get id => _id;
@@ -100,6 +111,7 @@ class FieldList {
   bool get isInfoBarShown => _isInfoBarShown;
   bool get doesReadAnswer => _doesReadAnswer;
   int get usageCount => _usageCount;
+  int? get emulationNumberOfQuestions => _emulationNumberOfQuestions;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -167,6 +179,16 @@ class FieldList {
           "_usageCount cannot be set to equal or smaller value than the current value");
     }
     this._usageCount = usageCount;
+  }
+
+  set emulationNumberOfQuestions(int? emulationNumberOfQuestions) {
+    /////////////////////////////////////////////////////////////////////////
+    // _emulationNumberOfQuestions validation
+    if (emulationNumberOfQuestions != null && emulationNumberOfQuestions < 1) {
+      throw ArgumentError(
+          "_emulationNumberOfQuestions cannot be smaller than 1");
+    }
+    this._emulationNumberOfQuestions = emulationNumberOfQuestions;
   }
 }
 
