@@ -364,7 +364,7 @@ main() {
     var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
     var testsReadingQuestionLetterDuration =
         fieldList.testsReadingQuestionLetterDuration;
-    expect(FieldList.TESTS_READING_QUESTION_LETTER_DURATION,
+    expect(FieldList.TESTS_READING_QUESTION_LETTER_DURATION_DEFAULT,
         testsReadingQuestionLetterDuration);
     fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
         testsReadingQuestionLetterDuration: Duration(seconds: 2));
@@ -379,5 +379,21 @@ main() {
     testsReadingQuestionLetterDuration =
         fieldList.testsReadingQuestionLetterDuration;
     expect(null, testsReadingQuestionLetterDuration);
+  });
+  test("_testsFindingAnswerDuration has been assigned the correct value", () {
+    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var testsFindingAnswerDuration = fieldList.testsFindingAnswerDuration;
+    expect(FieldList.TESTS_READING_QUESTION_LETTER_DURATION_DEFAULT,
+        testsFindingAnswerDuration);
+    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+        testsFindingAnswerDuration: Duration(seconds: 2));
+    testsFindingAnswerDuration = fieldList.testsFindingAnswerDuration;
+    expect(Duration(seconds: 2), testsFindingAnswerDuration);
+    fieldList.testsFindingAnswerDuration = Duration(seconds: 4);
+    testsFindingAnswerDuration = fieldList.testsFindingAnswerDuration;
+    expect(Duration(seconds: 4), testsFindingAnswerDuration);
+    fieldList.testsFindingAnswerDuration = null;
+    testsFindingAnswerDuration = fieldList.testsFindingAnswerDuration;
+    expect(null, testsFindingAnswerDuration);
   });
 }

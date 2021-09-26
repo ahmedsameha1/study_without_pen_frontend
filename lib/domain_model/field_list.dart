@@ -22,7 +22,8 @@ class FieldList {
     DateTime.saturday,
     DateTime.sunday
   ];
-  static const Duration? TESTS_READING_QUESTION_LETTER_DURATION = null;
+  static const Duration? TESTS_READING_QUESTION_LETTER_DURATION_DEFAULT = null;
+  static const Duration? TESTS_FINDING_ANSWER_DURATION_DEFAULT = null;
   late final String _id;
   late String _name;
   late String _fieldId;
@@ -39,7 +40,8 @@ class FieldList {
   int? _emulationNumberOfQuestions = EMULATION_NUMBER_OF_QUESTIONS_DEFAULT;
   List<int> _emulationDays = EMULATION_DAYS_DEFAULT;
   Duration? _testsReadingQuestionLetterDuration =
-      TESTS_READING_QUESTION_LETTER_DURATION;
+      TESTS_READING_QUESTION_LETTER_DURATION_DEFAULT;
+  Duration? _testsFindingAnswerDuration = TESTS_FINDING_ANSWER_DURATION_DEFAULT;
 
   FieldList(String uuid, String name, String fieldId,
       {Locale? locale,
@@ -55,7 +57,9 @@ class FieldList {
       int? emulationNumberOfQuestions = EMULATION_NUMBER_OF_QUESTIONS_DEFAULT,
       List<int> emulationDays = EMULATION_DAYS_DEFAULT,
       Duration? testsReadingQuestionLetterDuration =
-          TESTS_READING_QUESTION_LETTER_DURATION}) {
+          TESTS_READING_QUESTION_LETTER_DURATION_DEFAULT,
+      Duration? testsFindingAnswerDuration =
+          TESTS_FINDING_ANSWER_DURATION_DEFAULT}) {
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
     /////////////////////////////////////////////////////////////////////////
@@ -126,6 +130,7 @@ class FieldList {
     this._emulationDays = emulationDays;
     this._testsReadingQuestionLetterDuration =
         testsReadingQuestionLetterDuration;
+    this._testsFindingAnswerDuration = testsFindingAnswerDuration;
   }
 
   String get id => _id;
@@ -145,6 +150,7 @@ class FieldList {
   List<int> get emulationDays => _emulationDays;
   Duration? get testsReadingQuestionLetterDuration =>
       _testsReadingQuestionLetterDuration;
+  Duration? get testsFindingAnswerDuration => _testsFindingAnswerDuration;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -244,6 +250,10 @@ class FieldList {
       Duration? testsReadingQuestionLetterDuration) {
     this._testsReadingQuestionLetterDuration =
         testsReadingQuestionLetterDuration;
+  }
+
+  set testsFindingAnswerDuration(Duration? testsFindingAnswerDuration) {
+    this._testsFindingAnswerDuration = testsFindingAnswerDuration;
   }
 }
 
