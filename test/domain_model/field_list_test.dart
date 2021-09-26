@@ -396,4 +396,22 @@ main() {
     testsFindingAnswerDuration = fieldList.testsFindingAnswerDuration;
     expect(null, testsFindingAnswerDuration);
   });
+  test("_testsTypingAnswerLetterDuration has been assigned the correct value",
+      () {
+    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var testsTypingAnswerLetterDuration =
+        fieldList.testsTypingAnswerLetterDuration;
+    expect(FieldList.TESTS_READING_QUESTION_LETTER_DURATION_DEFAULT,
+        testsTypingAnswerLetterDuration);
+    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+        testsTypingAnswerLetterDuration: Duration(seconds: 2));
+    testsTypingAnswerLetterDuration = fieldList.testsTypingAnswerLetterDuration;
+    expect(Duration(seconds: 2), testsTypingAnswerLetterDuration);
+    fieldList.testsTypingAnswerLetterDuration = Duration(seconds: 4);
+    testsTypingAnswerLetterDuration = fieldList.testsTypingAnswerLetterDuration;
+    expect(Duration(seconds: 4), testsTypingAnswerLetterDuration);
+    fieldList.testsTypingAnswerLetterDuration = null;
+    testsTypingAnswerLetterDuration = fieldList.testsTypingAnswerLetterDuration;
+    expect(null, testsTypingAnswerLetterDuration);
+  });
 }
