@@ -22,6 +22,7 @@ class FieldList {
     DateTime.saturday,
     DateTime.sunday
   ];
+  static const Duration? TESTS_READING_QUESTION_LETTER_DURATION = null;
   late final String _id;
   late String _name;
   late String _fieldId;
@@ -37,6 +38,8 @@ class FieldList {
   int _usageCount = USAGE_COUNT_DEFAULT;
   int? _emulationNumberOfQuestions = EMULATION_NUMBER_OF_QUESTIONS_DEFAULT;
   List<int> _emulationDays = EMULATION_DAYS_DEFAULT;
+  Duration? _testsReadingQuestionLetterDuration =
+      TESTS_READING_QUESTION_LETTER_DURATION;
 
   FieldList(String uuid, String name, String fieldId,
       {Locale? locale,
@@ -50,7 +53,9 @@ class FieldList {
       bool doesReadAnswer = DOES_READ_ANSWER_DEFAULT,
       int usageCount = USAGE_COUNT_DEFAULT,
       int? emulationNumberOfQuestions = EMULATION_NUMBER_OF_QUESTIONS_DEFAULT,
-      List<int> emulationDays = EMULATION_DAYS_DEFAULT}) {
+      List<int> emulationDays = EMULATION_DAYS_DEFAULT,
+      Duration? testsReadingQuestionLetterDuration =
+          TESTS_READING_QUESTION_LETTER_DURATION}) {
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
     /////////////////////////////////////////////////////////////////////////
@@ -119,6 +124,8 @@ class FieldList {
       throw ArgumentError("_emulationDays cannot contain duplicated elements");
     }
     this._emulationDays = emulationDays;
+    this._testsReadingQuestionLetterDuration =
+        testsReadingQuestionLetterDuration;
   }
 
   String get id => _id;
@@ -136,6 +143,8 @@ class FieldList {
   int get usageCount => _usageCount;
   int? get emulationNumberOfQuestions => _emulationNumberOfQuestions;
   List<int> get emulationDays => _emulationDays;
+  Duration? get testsReadingQuestionLetterDuration =>
+      _testsReadingQuestionLetterDuration;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -229,6 +238,12 @@ class FieldList {
       throw ArgumentError("_emulationDays cannot contain duplicated elements");
     }
     this._emulationDays = emulationDays;
+  }
+
+  set testsReadingQuestionLetterDuration(
+      Duration? testsReadingQuestionLetterDuration) {
+    this._testsReadingQuestionLetterDuration =
+        testsReadingQuestionLetterDuration;
   }
 }
 

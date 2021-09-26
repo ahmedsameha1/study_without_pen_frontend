@@ -358,4 +358,26 @@ main() {
       expect([1, 3, 5], emulationDays);
     });
   });
+  test(
+      "_testsReadingQuestionLetterDuration has been assigned the correct value",
+      () {
+    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var testsReadingQuestionLetterDuration =
+        fieldList.testsReadingQuestionLetterDuration;
+    expect(FieldList.TESTS_READING_QUESTION_LETTER_DURATION,
+        testsReadingQuestionLetterDuration);
+    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+        testsReadingQuestionLetterDuration: Duration(seconds: 2));
+    testsReadingQuestionLetterDuration =
+        fieldList.testsReadingQuestionLetterDuration;
+    expect(Duration(seconds: 2), testsReadingQuestionLetterDuration);
+    fieldList.testsReadingQuestionLetterDuration = Duration(seconds: 4);
+    testsReadingQuestionLetterDuration =
+        fieldList.testsReadingQuestionLetterDuration;
+    expect(Duration(seconds: 4), testsReadingQuestionLetterDuration);
+    fieldList.testsReadingQuestionLetterDuration = null;
+    testsReadingQuestionLetterDuration =
+        fieldList.testsReadingQuestionLetterDuration;
+    expect(null, testsReadingQuestionLetterDuration);
+  });
 }
