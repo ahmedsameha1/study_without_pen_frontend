@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
 import 'package:uuid/uuid.dart';
@@ -8,22 +9,32 @@ main() {
   final uuid = Uuid();
   group("_id tests", () {
     test("_id is a valid UUID", () {
-      expect(() => FieldList("", "name", uuid.v4()), throwsArgumentError);
-      expect(() => FieldList("whfw", "name", uuid.v4()), throwsArgumentError);
-      expect(() => FieldList(uuid.v4(), "name", uuid.v4()), returnsNormally);
+      expect(() => FieldList("", "name", uuid.v4(), DateTime.utc(2020, 1, 1)),
+          throwsArgumentError);
+      expect(
+          () => FieldList("whfw", "name", uuid.v4(), DateTime.utc(2020, 1, 1)),
+          throwsArgumentError);
+      expect(
+          () =>
+              FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1)),
+          returnsNormally);
     });
     test("_id has been assigned the correct value", () {
       String uuidString = uuid.v4();
-      final fieldList = FieldList(uuidString, "name", uuid.v4());
+      final fieldList =
+          FieldList(uuidString, "name", uuid.v4(), DateTime.utc(2020, 1, 1));
       final id = fieldList.id;
       expect(uuidString, id);
     });
   });
   group("_name tests", () {
     test("_name isn't empty", () {
-      expect(() => FieldList(uuid.v4(), "", uuid.v4()), throwsArgumentError);
+      expect(
+          () => FieldList(uuid.v4(), "", uuid.v4(), DateTime.utc(2020, 1, 1)),
+          throwsArgumentError);
       expect(() {
-        final field = FieldList(uuid.v4(), "name", uuid.v4());
+        final field =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         field.name = "";
       }, throwsArgumentError);
     });
@@ -43,10 +54,12 @@ main() {
     fffffffffffffffffff
     ffffffffffffffffff
     """,
-              uuid.v4()),
+              uuid.v4(),
+              DateTime.utc(2020, 1, 1)),
           throwsArgumentError);
       expect(() {
-        final field = FieldList(uuid.v4(), "name", uuid.v4());
+        final field =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         field.name = """
     fffffffffffffffffffff
     fffffffffffffffff
@@ -62,7 +75,8 @@ main() {
       }, throwsArgumentError);
     });
     test("_name has been assigned the correct value", () {
-      final field = FieldList(uuid.v4(), "name", uuid.v4());
+      final field =
+          FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
       var name = field.name;
       expect("name", name);
       field.name = "name2";
@@ -72,29 +86,40 @@ main() {
   });
   group("_fieldId tests", () {
     test("_fieldId is a valid UUID", () {
-      expect(() => FieldList(uuid.v4(), "name", ""), throwsArgumentError);
-      expect(() => FieldList(uuid.v4(), "name", "huew"), throwsArgumentError);
-      expect(() => FieldList(uuid.v4(), "name", uuid.v4()), returnsNormally);
+      expect(() => FieldList(uuid.v4(), "name", "", DateTime.utc(2020, 1, 1)),
+          throwsArgumentError);
+      expect(
+          () => FieldList(uuid.v4(), "name", "huew", DateTime.utc(2020, 1, 1)),
+          throwsArgumentError);
+      expect(
+          () =>
+              FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1)),
+          returnsNormally);
     });
     test("_fieldId has been assigned the correct value", () {
       final uuidString = uuid.v4();
-      final fieldList = FieldList(uuid.v4(), "name", uuidString);
+      final fieldList =
+          FieldList(uuid.v4(), "name", uuidString, DateTime.utc(2020, 1, 1));
       final fieldId = fieldList.fieldId;
       expect(uuidString, fieldId);
     });
   });
   test("_locale has been assigned the correct value", () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var locale = fieldList.locale;
     expect(null, locale);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(), locale: null);
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+        locale: null);
     locale = fieldList.locale;
     expect(null, locale);
     fieldList.locale = Locale("fr", "CA");
     locale = fieldList.locale;
     expect(Locale("fr", "CA"), locale);
-    fieldList =
-        FieldList(uuid.v4(), "name", uuid.v4(), locale: Locale("fr", "CA"));
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+        locale: Locale("fr", "CA"));
     locale = fieldList.locale;
     expect(Locale("fr", "CA"), locale);
     fieldList.locale = null;
@@ -102,10 +127,12 @@ main() {
     expect(null, locale);
   });
   test("_checkType has been assigned the correct value", () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var checkType = fieldList.checkType;
     expect(FieldList.CHECK_TYPE_DEFAULT, checkType);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
         checkType: CheckType.DO_NOT_IGNORE_CASE);
     checkType = fieldList.checkType;
     expect(CheckType.DO_NOT_IGNORE_CASE, checkType);
@@ -114,11 +141,13 @@ main() {
     expect(CheckType.IGNORE_CASE, checkType);
   });
   test("_sortBy has been assigned the correct value", () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var sortBy = fieldList.sortBy;
     expect(FieldList.SORT_BY_DEFAULT, sortBy);
-    fieldList =
-        FieldList(uuid.v4(), "name", uuid.v4(), sortBy: SortBy.ANSWER_ASC);
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+        sortBy: SortBy.ANSWER_ASC);
     sortBy = fieldList.sortBy;
     expect(SortBy.ANSWER_ASC, sortBy);
     fieldList.sortBy = SortBy.QUESTION_ASC;
@@ -126,11 +155,13 @@ main() {
     expect(SortBy.QUESTION_ASC, sortBy);
   });
   test("_color has been assigned the correct value", () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var color = fieldList.color;
     expect(Color(0xffffffff), color);
-    fieldList =
-        FieldList(uuid.v4(), "name", uuid.v4(), color: Color(0xff00ff00));
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+        color: Color(0xff00ff00));
     color = fieldList.color;
     expect(Color(0xff00ff00), color);
     fieldList.color = Color(0xff0000ff);
@@ -139,25 +170,35 @@ main() {
   });
   group("_questionAreaSize tests", () {
     test("_questionAreaSize cannot be smaller than 1", () {
-      expect(() => FieldList(uuid.v4(), "name", uuid.v4(), questionAreaSize: 0),
+      expect(
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+              questionAreaSize: 0),
           throwsArgumentError);
       expect(
-          () => FieldList(uuid.v4(), "name", uuid.v4(), questionAreaSize: -1),
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+              questionAreaSize: -1),
           throwsArgumentError);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.questionAreaSize = 0;
       }, throwsArgumentError);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.questionAreaSize = -1;
       }, throwsArgumentError);
     });
     test("_questionAreaSize has been assigned the correct value", () {
-      var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+      var fieldList =
+          FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
       var questionAreaSize = fieldList.questionAreaSize;
       expect(1, questionAreaSize);
-      fieldList = FieldList(uuid.v4(), "name", uuid.v4(), questionAreaSize: 2);
+      fieldList = FieldList(
+          uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+          questionAreaSize: 2);
       questionAreaSize = fieldList.questionAreaSize;
       expect(2, questionAreaSize);
       fieldList.questionAreaSize = 3;
@@ -167,24 +208,35 @@ main() {
   });
   group("_answerAreaSize tests", () {
     test("_answerAreaSize cannot be smaller than 1", () {
-      expect(() => FieldList(uuid.v4(), "name", uuid.v4(), answerAreaSize: 0),
+      expect(
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+              answerAreaSize: 0),
           throwsArgumentError);
-      expect(() => FieldList(uuid.v4(), "name", uuid.v4(), answerAreaSize: -1),
+      expect(
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+              answerAreaSize: -1),
           throwsArgumentError);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.answerAreaSize = 0;
       }, throwsArgumentError);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.answerAreaSize = -1;
       }, throwsArgumentError);
     });
     test("_answerAreaSize has been assigned the correct value", () {
-      var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+      var fieldList =
+          FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
       var answerAreaSize = fieldList.answerAreaSize;
       expect(1, answerAreaSize);
-      fieldList = FieldList(uuid.v4(), "name", uuid.v4(), answerAreaSize: 2);
+      fieldList = FieldList(
+          uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+          answerAreaSize: 2);
       answerAreaSize = fieldList.answerAreaSize;
       expect(2, answerAreaSize);
       fieldList.answerAreaSize = 3;
@@ -193,10 +245,12 @@ main() {
     });
   });
   test("_testTextSize has been assigned the correct value", () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var testTextSize = fieldList.testTextSize;
     expect(FieldList.TEST_TEXT_SIZE_DEFAULT, testTextSize);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
         testTextSize: TestTextSize.SMALL);
     testTextSize = fieldList.testTextSize;
     expect(TestTextSize.SMALL, testTextSize);
@@ -205,10 +259,13 @@ main() {
     expect(TestTextSize.SO_LARGE, testTextSize);
   });
   test("_isInfoBarShown has been assigned the correct value", () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var isInfoBarShown = fieldList.isInfoBarShown;
     expect(FieldList.IS_INFO_BAR_SHOWN_DEFAULT, isInfoBarShown);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(), isInfoBarShown: false);
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+        isInfoBarShown: false);
     isInfoBarShown = fieldList.isInfoBarShown;
     expect(false, isInfoBarShown);
     fieldList.isInfoBarShown = true;
@@ -216,10 +273,13 @@ main() {
     expect(true, isInfoBarShown);
   });
   test("_doesReadAnswer has been assigned the correct value", () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var doesReadAnswer = fieldList.doesReadAnswer;
     expect(FieldList.DOES_READ_ANSWER_DEFAULT, doesReadAnswer);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(), doesReadAnswer: true);
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+        doesReadAnswer: true);
     doesReadAnswer = fieldList.doesReadAnswer;
     expect(true, doesReadAnswer);
     fieldList.doesReadAnswer = false;
@@ -228,26 +288,36 @@ main() {
   });
   group("_usageCount tests", () {
     test("_usageCount cannot be negative", () {
-      expect(() => FieldList(uuid.v4(), "name", uuid.v4(), usageCount: -1),
+      expect(
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+              usageCount: -1),
           throwsArgumentError);
       expect(() {
-        final field = FieldList(uuid.v4(), "name", uuid.v4());
+        final field =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         field.usageCount = -1;
       }, throwsArgumentError);
       expect(() {
-        final field = FieldList(uuid.v4(), "name", uuid.v4(), usageCount: 10);
+        final field = FieldList(
+            uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+            usageCount: 10);
         field.usageCount = 10;
       }, throwsArgumentError);
       expect(() {
-        final field = FieldList(uuid.v4(), "name", uuid.v4(), usageCount: 10);
+        final field = FieldList(
+            uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+            usageCount: 10);
         field.usageCount = 9;
       }, throwsArgumentError);
     });
     test("_usageCount has been assigned the correct value", () {
-      var field = FieldList(uuid.v4(), "name", uuid.v4());
+      var field =
+          FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
       var usageCount = field.usageCount;
       expect(FieldList.USAGE_COUNT_DEFAULT, usageCount);
-      field = FieldList(uuid.v4(), "name", uuid.v4(), usageCount: 10);
+      field = FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+          usageCount: 10);
       usageCount = field.usageCount;
       expect(10, usageCount);
       field.usageCount = 11;
@@ -258,42 +328,51 @@ main() {
   group("_emulationNumberOfQuestions tests", () {
     test("_emulationNumberOfQuestions can be null", () {
       expect(
-          () => FieldList(uuid.v4(), "name", uuid.v4(),
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
               emulationNumberOfQuestions: null),
           returnsNormally);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.emulationNumberOfQuestions = null;
       }, returnsNormally);
     });
     test("_emulationNumberOfQuestions cannot be smaller than 1", () {
       expect(
-          () => FieldList(uuid.v4(), "name", uuid.v4(),
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
               emulationNumberOfQuestions: 0),
           throwsArgumentError);
       expect(
-          () => FieldList(uuid.v4(), "name", uuid.v4(),
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
               emulationNumberOfQuestions: -1),
           throwsArgumentError);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.emulationNumberOfQuestions = 0;
       }, throwsArgumentError);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.emulationNumberOfQuestions = -1;
       }, throwsArgumentError);
     });
     test("_emulationNumberOfQuestions has been assigned the correct value", () {
-      var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+      var fieldList =
+          FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
       var emulationNumberOfQuestions = fieldList.emulationNumberOfQuestions;
       expect(FieldList.EMULATION_NUMBER_OF_QUESTIONS_DEFAULT,
           emulationNumberOfQuestions);
-      fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+      fieldList = FieldList(
+          uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
           emulationNumberOfQuestions: null);
       emulationNumberOfQuestions = fieldList.emulationNumberOfQuestions;
       expect(null, emulationNumberOfQuestions);
-      fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+      fieldList = FieldList(
+          uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
           emulationNumberOfQuestions: 10);
       emulationNumberOfQuestions = fieldList.emulationNumberOfQuestions;
       expect(10, emulationNumberOfQuestions);
@@ -308,49 +387,59 @@ main() {
   group("_emulationDays tests", () {
     test("_emulationDays length is smaller than 8", () {
       expect(
-          () => FieldList(uuid.v4(), "name", uuid.v4(),
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
               emulationDays: [1, 2, 3, 4, 5, 6, 7, 7]),
           throwsArgumentError);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.emulationDays = [1, 2, 3, 4, 5, 6, 7, 7];
       }, throwsArgumentError);
     });
     test("_emulationDays elements cannot be smaller than 1 or greater than 7",
         () {
       expect(
-          () => FieldList(uuid.v4(), "name", uuid.v4(),
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
               emulationDays: [1, 2, 3, 4, 5, 6, 8]),
           throwsArgumentError);
       expect(
-          () => FieldList(uuid.v4(), "name", uuid.v4(),
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
               emulationDays: [0, 2, 3, 4, 5, 6, 7]),
           throwsArgumentError);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.emulationDays = [1, 2, 3, 4, 5, 6, 8];
       }, throwsArgumentError);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.emulationDays = [0, 2, 3, 4, 5, 6, 7];
       }, throwsArgumentError);
     });
     test("_emulationDays cannot contain duplicated elements", () {
       expect(
-          () => FieldList(uuid.v4(), "name", uuid.v4(),
+          () => FieldList(
+              uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
               emulationDays: [1, 2, 3, 3, 5]),
           throwsArgumentError);
       expect(() {
-        var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+        var fieldList =
+            FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
         fieldList.emulationDays = [1, 2, 3, 3, 5];
       }, throwsArgumentError);
     });
     test("_emulationDays has been assigned the correct value", () {
-      var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+      var fieldList =
+          FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
       var emulationDays = fieldList.emulationDays;
       expect(FieldList.EMULATION_DAYS_DEFAULT, emulationDays);
-      fieldList =
-          FieldList(uuid.v4(), "name", uuid.v4(), emulationDays: [2, 4, 6]);
+      fieldList = FieldList(
+          uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+          emulationDays: [2, 4, 6]);
       emulationDays = fieldList.emulationDays;
       expect([2, 4, 6], emulationDays);
       fieldList.emulationDays = [1, 3, 5];
@@ -361,12 +450,14 @@ main() {
   test(
       "_testsReadingQuestionLetterDuration has been assigned the correct value",
       () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var testsReadingQuestionLetterDuration =
         fieldList.testsReadingQuestionLetterDuration;
     expect(FieldList.TESTS_READING_QUESTION_LETTER_DURATION_DEFAULT,
         testsReadingQuestionLetterDuration);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
         testsReadingQuestionLetterDuration: Duration(seconds: 2));
     testsReadingQuestionLetterDuration =
         fieldList.testsReadingQuestionLetterDuration;
@@ -381,11 +472,13 @@ main() {
     expect(null, testsReadingQuestionLetterDuration);
   });
   test("_testsFindingAnswerDuration has been assigned the correct value", () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var testsFindingAnswerDuration = fieldList.testsFindingAnswerDuration;
     expect(FieldList.TESTS_FINDING_ANSWER_DURATION_DEFAULT,
         testsFindingAnswerDuration);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
         testsFindingAnswerDuration: Duration(seconds: 2));
     testsFindingAnswerDuration = fieldList.testsFindingAnswerDuration;
     expect(Duration(seconds: 2), testsFindingAnswerDuration);
@@ -398,12 +491,14 @@ main() {
   });
   test("_testsTypingAnswerLetterDuration has been assigned the correct value",
       () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var testsTypingAnswerLetterDuration =
         fieldList.testsTypingAnswerLetterDuration;
     expect(FieldList.TESTS_TYPING_ANSWER_LETTER_DURATION_DEFAULT,
         testsTypingAnswerLetterDuration);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
         testsTypingAnswerLetterDuration: Duration(seconds: 2));
     testsTypingAnswerLetterDuration = fieldList.testsTypingAnswerLetterDuration;
     expect(Duration(seconds: 2), testsTypingAnswerLetterDuration);
@@ -417,13 +512,15 @@ main() {
   test(
       "_studyTillCorrectReadingQuestionLetterDuration has been assigned the correct value",
       () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var studyTillCorrectReadingQuestionLetterDuration =
         fieldList.studyTillCorrectReadingQuestionLetterDuration;
     expect(
         FieldList.STUDY_TILL_CORRECT_READING_QUESTION_LETTER_DURATION_DEFAULT,
         studyTillCorrectReadingQuestionLetterDuration);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
         studyTillCorrectReadingQuestionLetterDuration: Duration(seconds: 2));
     studyTillCorrectReadingQuestionLetterDuration =
         fieldList.studyTillCorrectReadingQuestionLetterDuration;
@@ -441,12 +538,14 @@ main() {
   test(
       "_studyTillCorrectFindingAnswerDuration has been assigned the correct value",
       () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var studyTillCorrectFindingAnswerDuration =
         fieldList.studyTillCorrectFindingAnswerDuration;
     expect(FieldList.STUDY_TILL_CORRECT_FINDING_ANSWER_DURATION_DEFAULT,
         studyTillCorrectFindingAnswerDuration);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
         studyTillCorrectFindingAnswerDuration: Duration(seconds: 2));
     studyTillCorrectFindingAnswerDuration =
         fieldList.studyTillCorrectFindingAnswerDuration;
@@ -463,12 +562,14 @@ main() {
   test(
       "_studyTillCorrectTypingAnswerLetterDuration has been assigned the correct value",
       () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var studyTillCorrectTypingAnswerLetterDuration =
         fieldList.studyTillCorrectTypingAnswerLetterDuration;
     expect(FieldList.STUDY_TILL_CORRECT_TYPING_ANSWER_LETTER_DURATION_DEFAULT,
         studyTillCorrectTypingAnswerLetterDuration);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
         studyTillCorrectTypingAnswerLetterDuration: Duration(seconds: 2));
     studyTillCorrectTypingAnswerLetterDuration =
         fieldList.studyTillCorrectTypingAnswerLetterDuration;
@@ -483,11 +584,13 @@ main() {
     expect(null, studyTillCorrectTypingAnswerLetterDuration);
   });
   test("_testsTimeOfAnswerAction has been assigned the correct value", () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var testsTimeOfAnswerAction = fieldList.testsTimeOfAnswerAction;
     expect(
         FieldList.TESTS_TIME_OF_ANSWER_ACTION_DEFAULT, testsTimeOfAnswerAction);
-    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
         testsTimeOfAnswerAction: TestsTimeOfAnswerAction.NEXT);
     testsTimeOfAnswerAction = fieldList.testsTimeOfAnswerAction;
     expect(TestsTimeOfAnswerAction.NEXT, testsTimeOfAnswerAction);
@@ -496,15 +599,39 @@ main() {
     expect(TestsTimeOfAnswerAction.NOTIFY, testsTimeOfAnswerAction);
   });
   test("_doesObfuscateQuestion has been assigned the correct answer", () {
-    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
     var doesObfuscateQuestion = fieldList.doesObfuscateQuestion;
     expect(FieldList.DOES_OBFUSCATE_QUESTION_DEFAULT, doesObfuscateQuestion);
-    fieldList =
-        FieldList(uuid.v4(), "name", uuid.v4(), doesObfuscateQuestion: true);
+    fieldList = FieldList(
+        uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1),
+        doesObfuscateQuestion: true);
     doesObfuscateQuestion = fieldList.doesObfuscateQuestion;
     expect(true, doesObfuscateQuestion);
     fieldList.doesObfuscateQuestion = false;
     doesObfuscateQuestion = fieldList.doesObfuscateQuestion;
     expect(false, doesObfuscateQuestion);
+  });
+  group("_createdAt test", () {
+    test("_createdAt cannot be in the future", () {
+      withClock(Clock.fixed(DateTime.utc(2020, 1, 1)), () {
+        expect(
+            () => FieldList(uuid.v4(), "name", uuid.v4(),
+                clock.now().add(Duration(days: 500))),
+            throwsArgumentError);
+        expect(() => FieldList(uuid.v4(), "name", uuid.v4(), clock.now()),
+            returnsNormally);
+        expect(
+            () => FieldList(uuid.v4(), "name", uuid.v4(),
+                clock.now().subtract(Duration(days: 500))),
+            returnsNormally);
+      });
+    });
+    test("_createdAt has been assigned the correct value", () {
+      final fieldList =
+          FieldList(uuid.v4(), "name", uuid.v4(), DateTime.utc(2020, 1, 1));
+      final createdAt = fieldList.createdAt;
+      expect(DateTime.utc(2020, 1, 1), createdAt);
+    });
   });
 }

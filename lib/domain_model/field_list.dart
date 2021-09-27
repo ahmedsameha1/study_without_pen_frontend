@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:clock/clock.dart';
+
 class FieldList {
   static const int NAME_MAXIMUM_LENGTH = 64;
   static const int QUESTION_AREA_SIZE_DEFAULT = 1;
@@ -63,8 +65,9 @@ class FieldList {
   TestsTimeOfAnswerAction _testsTimeOfAnswerAction =
       TESTS_TIME_OF_ANSWER_ACTION_DEFAULT;
   bool _doesObfuscateQuestion = DOES_OBFUSCATE_QUESTION_DEFAULT;
+  late DateTime _createdAt;
 
-  FieldList(String uuid, String name, String fieldId,
+  FieldList(String uuid, String name, String fieldId, DateTime createdAt,
       {Locale? locale,
       CheckType checkType = CHECK_TYPE_DEFAULT,
       SortBy sortBy = SORT_BY_DEFAULT,
@@ -172,6 +175,12 @@ class FieldList {
         studyTillCorrectTypingAnswerLetterDuration;
     this._testsTimeOfAnswerAction = testsTimeOfAnswerAction;
     this._doesObfuscateQuestion = doesObfuscateQuestion;
+    /////////////////////////////////////////////////////////////////////////
+    // _createdAt validation
+    if (createdAt.isAfter(clock.now())) {
+      throw ArgumentError("_createdAt cannot be in the future");
+    }
+    this._createdAt = createdAt;
   }
 
   String get id => _id;
@@ -203,6 +212,7 @@ class FieldList {
   TestsTimeOfAnswerAction get testsTimeOfAnswerAction =>
       _testsTimeOfAnswerAction;
   bool get doesObfuscateQuestion => _doesObfuscateQuestion;
+  DateTime get createdAt => _createdAt;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
