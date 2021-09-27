@@ -10,14 +10,12 @@ class Field {
   late String _name;
   late String _userAccountId;
   Color _color = Color(0xffffffff);
-  DateTime _createdAt = clock.now();
+  late DateTime _createdAt;
   int _usageCount = USAGE_COUNT_DEFAULT;
 
-  Field(String uuid, String name, String userAccountId,
-      {DateTime? createdAt,
-      Color color = const Color(0xffffffff),
+  Field(String uuid, String name, String userAccountId, DateTime createdAt,
+      {Color color = const Color(0xffffffff),
       int usageCount = USAGE_COUNT_DEFAULT}) {
-    if (createdAt == null) createdAt = clock.now();
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
