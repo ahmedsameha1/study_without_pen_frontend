@@ -31,6 +31,9 @@ class FieldList {
       null;
   static const Duration?
       STUDY_TILL_CORRECT_TYPING_ANSWER_LETTER_DURATION_DEFAULT = null;
+  static const TestsTimeOfAnswerAction TESTS_TIME_OF_ANSWER_ACTION_DEFAULT =
+      TestsTimeOfAnswerAction.NOTIFY;
+  static const bool DOES_OBFUSCATE_QUESTION_DEFAULT = false;
   late final String _id;
   late String _name;
   late String _fieldId;
@@ -57,6 +60,9 @@ class FieldList {
       STUDY_TILL_CORRECT_FINDING_ANSWER_DURATION_DEFAULT;
   Duration? _studyTillCorrectTypingAnswerLetterDuration =
       STUDY_TILL_CORRECT_TYPING_ANSWER_LETTER_DURATION_DEFAULT;
+  TestsTimeOfAnswerAction _testsTimeOfAnswerAction =
+      TESTS_TIME_OF_ANSWER_ACTION_DEFAULT;
+  bool _doesObfuscateQuestion = DOES_OBFUSCATE_QUESTION_DEFAULT;
 
   FieldList(String uuid, String name, String fieldId,
       {Locale? locale,
@@ -82,7 +88,10 @@ class FieldList {
       Duration? studyTillCorrectFindingAnswerDuration =
           STUDY_TILL_CORRECT_FINDING_ANSWER_DURATION_DEFAULT,
       Duration? studyTillCorrectTypingAnswerLetterDuration =
-          STUDY_TILL_CORRECT_TYPING_ANSWER_LETTER_DURATION_DEFAULT}) {
+          STUDY_TILL_CORRECT_TYPING_ANSWER_LETTER_DURATION_DEFAULT,
+      TestsTimeOfAnswerAction testsTimeOfAnswerAction =
+          TestsTimeOfAnswerAction.NOTIFY,
+      bool doesObfuscateQuestion = DOES_OBFUSCATE_QUESTION_DEFAULT}) {
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
     /////////////////////////////////////////////////////////////////////////
@@ -161,6 +170,8 @@ class FieldList {
         studyTillCorrectFindingAnswerDuration;
     this._studyTillCorrectTypingAnswerLetterDuration =
         studyTillCorrectTypingAnswerLetterDuration;
+    this._testsTimeOfAnswerAction = testsTimeOfAnswerAction;
+    this._doesObfuscateQuestion = doesObfuscateQuestion;
   }
 
   String get id => _id;
@@ -189,6 +200,9 @@ class FieldList {
       _studyTillCorrectFindingAnswerDuration;
   Duration? get studyTillCorrectTypingAnswerLetterDuration =>
       _studyTillCorrectTypingAnswerLetterDuration;
+  TestsTimeOfAnswerAction get testsTimeOfAnswerAction =>
+      _testsTimeOfAnswerAction;
+  bool get doesObfuscateQuestion => _doesObfuscateQuestion;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -316,6 +330,14 @@ class FieldList {
     this._studyTillCorrectTypingAnswerLetterDuration =
         studyTillCorrectTypingAnswerLetterDuration;
   }
+
+  set testsTimeOfAnswerAction(TestsTimeOfAnswerAction testsTimeOfAnswerAction) {
+    this._testsTimeOfAnswerAction = testsTimeOfAnswerAction;
+  }
+
+  set doesObfuscateQuestion(bool doesObfuscateQuestion) {
+    this._doesObfuscateQuestion = doesObfuscateQuestion;
+  }
 }
 
 enum CheckType {
@@ -343,3 +365,5 @@ enum SortBy {
 }
 
 enum TestTextSize { SO_SMALL, SMALL, NORMAL, LARGE, SO_LARGE }
+
+enum TestsTimeOfAnswerAction { NOTIFY, NEXT }

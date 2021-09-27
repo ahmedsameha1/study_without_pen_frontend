@@ -482,4 +482,29 @@ main() {
         fieldList.studyTillCorrectTypingAnswerLetterDuration;
     expect(null, studyTillCorrectTypingAnswerLetterDuration);
   });
+  test("_testsTimeOfAnswerAction has been assigned the correct value", () {
+    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var testsTimeOfAnswerAction = fieldList.testsTimeOfAnswerAction;
+    expect(
+        FieldList.TESTS_TIME_OF_ANSWER_ACTION_DEFAULT, testsTimeOfAnswerAction);
+    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+        testsTimeOfAnswerAction: TestsTimeOfAnswerAction.NEXT);
+    testsTimeOfAnswerAction = fieldList.testsTimeOfAnswerAction;
+    expect(TestsTimeOfAnswerAction.NEXT, testsTimeOfAnswerAction);
+    fieldList.testsTimeOfAnswerAction = TestsTimeOfAnswerAction.NOTIFY;
+    testsTimeOfAnswerAction = fieldList.testsTimeOfAnswerAction;
+    expect(TestsTimeOfAnswerAction.NOTIFY, testsTimeOfAnswerAction);
+  });
+  test("_doesObfuscateQuestion has been assigned the correct answer", () {
+    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var doesObfuscateQuestion = fieldList.doesObfuscateQuestion;
+    expect(FieldList.DOES_OBFUSCATE_QUESTION_DEFAULT, doesObfuscateQuestion);
+    fieldList =
+        FieldList(uuid.v4(), "name", uuid.v4(), doesObfuscateQuestion: true);
+    doesObfuscateQuestion = fieldList.doesObfuscateQuestion;
+    expect(true, doesObfuscateQuestion);
+    fieldList.doesObfuscateQuestion = false;
+    doesObfuscateQuestion = fieldList.doesObfuscateQuestion;
+    expect(false, doesObfuscateQuestion);
+  });
 }
