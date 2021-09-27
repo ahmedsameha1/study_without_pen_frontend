@@ -383,7 +383,7 @@ main() {
   test("_testsFindingAnswerDuration has been assigned the correct value", () {
     var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
     var testsFindingAnswerDuration = fieldList.testsFindingAnswerDuration;
-    expect(FieldList.TESTS_READING_QUESTION_LETTER_DURATION_DEFAULT,
+    expect(FieldList.TESTS_FINDING_ANSWER_DURATION_DEFAULT,
         testsFindingAnswerDuration);
     fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
         testsFindingAnswerDuration: Duration(seconds: 2));
@@ -401,7 +401,7 @@ main() {
     var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
     var testsTypingAnswerLetterDuration =
         fieldList.testsTypingAnswerLetterDuration;
-    expect(FieldList.TESTS_READING_QUESTION_LETTER_DURATION_DEFAULT,
+    expect(FieldList.TESTS_TYPING_ANSWER_LETTER_DURATION_DEFAULT,
         testsTypingAnswerLetterDuration);
     fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
         testsTypingAnswerLetterDuration: Duration(seconds: 2));
@@ -413,5 +413,29 @@ main() {
     fieldList.testsTypingAnswerLetterDuration = null;
     testsTypingAnswerLetterDuration = fieldList.testsTypingAnswerLetterDuration;
     expect(null, testsTypingAnswerLetterDuration);
+  });
+  test(
+      "_studyTillCorrectReadingQuestionLetterDuration has been assigned the correct value",
+      () {
+    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var studyTillCorrectReadingQuestionLetterDuration =
+        fieldList.studyTillCorrectReadingQuestionLetterDuration;
+    expect(
+        FieldList.STUDY_TILL_CORRECT_READING_QUESTION_LETTER_DURATION_DEFAULT,
+        studyTillCorrectReadingQuestionLetterDuration);
+    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+        studyTillCorrectReadingQuestionLetterDuration: Duration(seconds: 2));
+    studyTillCorrectReadingQuestionLetterDuration =
+        fieldList.studyTillCorrectReadingQuestionLetterDuration;
+    expect(Duration(seconds: 2), studyTillCorrectReadingQuestionLetterDuration);
+    fieldList.studyTillCorrectReadingQuestionLetterDuration =
+        Duration(seconds: 4);
+    studyTillCorrectReadingQuestionLetterDuration =
+        fieldList.studyTillCorrectReadingQuestionLetterDuration;
+    expect(Duration(seconds: 4), studyTillCorrectReadingQuestionLetterDuration);
+    fieldList.studyTillCorrectReadingQuestionLetterDuration = null;
+    studyTillCorrectReadingQuestionLetterDuration =
+        fieldList.studyTillCorrectReadingQuestionLetterDuration;
+    expect(null, studyTillCorrectReadingQuestionLetterDuration);
   });
 }
