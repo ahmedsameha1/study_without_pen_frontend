@@ -29,6 +29,8 @@ class FieldList {
       STUDY_TILL_CORRECT_READING_QUESTION_LETTER_DURATION_DEFAULT = null;
   static const Duration? STUDY_TILL_CORRECT_FINDING_ANSWER_DURATION_DEFAULT =
       null;
+  static const Duration?
+      STUDY_TILL_CORRECT_TYPING_ANSWER_LETTER_DURATION_DEFAULT = null;
   late final String _id;
   late String _name;
   late String _fieldId;
@@ -53,6 +55,8 @@ class FieldList {
       STUDY_TILL_CORRECT_READING_QUESTION_LETTER_DURATION_DEFAULT;
   Duration? _studyTillCorrectFindingAnswerDuration =
       STUDY_TILL_CORRECT_FINDING_ANSWER_DURATION_DEFAULT;
+  Duration? _studyTillCorrectTypingAnswerLetterDuration =
+      STUDY_TILL_CORRECT_TYPING_ANSWER_LETTER_DURATION_DEFAULT;
 
   FieldList(String uuid, String name, String fieldId,
       {Locale? locale,
@@ -76,7 +80,9 @@ class FieldList {
       Duration? studyTillCorrectReadingQuestionLetterDuration =
           STUDY_TILL_CORRECT_READING_QUESTION_LETTER_DURATION_DEFAULT,
       Duration? studyTillCorrectFindingAnswerDuration =
-          STUDY_TILL_CORRECT_FINDING_ANSWER_DURATION_DEFAULT}) {
+          STUDY_TILL_CORRECT_FINDING_ANSWER_DURATION_DEFAULT,
+      Duration? studyTillCorrectTypingAnswerLetterDuration =
+          STUDY_TILL_CORRECT_TYPING_ANSWER_LETTER_DURATION_DEFAULT}) {
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
     /////////////////////////////////////////////////////////////////////////
@@ -153,6 +159,8 @@ class FieldList {
         studyTillCorrectReadingQuestionLetterDuration;
     this._studyTillCorrectFindingAnswerDuration =
         studyTillCorrectFindingAnswerDuration;
+    this._studyTillCorrectTypingAnswerLetterDuration =
+        studyTillCorrectTypingAnswerLetterDuration;
   }
 
   String get id => _id;
@@ -179,6 +187,8 @@ class FieldList {
       _studyTillCorrectReadingQuestionLetterDuration;
   Duration? get studyTillCorrectFindingAnswerDuration =>
       _studyTillCorrectFindingAnswerDuration;
+  Duration? get studyTillCorrectTypingAnswerLetterDuration =>
+      _studyTillCorrectTypingAnswerLetterDuration;
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////
@@ -299,6 +309,12 @@ class FieldList {
       Duration? studyTillCorrectFindingAnswerDuration) {
     this._studyTillCorrectFindingAnswerDuration =
         studyTillCorrectFindingAnswerDuration;
+  }
+
+  set studyTillCorrectTypingAnswerLetterDuration(
+      Duration? studyTillCorrectTypingAnswerLetterDuration) {
+    this._studyTillCorrectTypingAnswerLetterDuration =
+        studyTillCorrectTypingAnswerLetterDuration;
   }
 }
 

@@ -460,4 +460,26 @@ main() {
         fieldList.studyTillCorrectFindingAnswerDuration;
     expect(null, studyTillCorrectFindingAnswerDuration);
   });
+  test(
+      "_studyTillCorrectTypingAnswerLetterDuration has been assigned the correct value",
+      () {
+    var fieldList = FieldList(uuid.v4(), "name", uuid.v4());
+    var studyTillCorrectTypingAnswerLetterDuration =
+        fieldList.studyTillCorrectTypingAnswerLetterDuration;
+    expect(FieldList.STUDY_TILL_CORRECT_TYPING_ANSWER_LETTER_DURATION_DEFAULT,
+        studyTillCorrectTypingAnswerLetterDuration);
+    fieldList = FieldList(uuid.v4(), "name", uuid.v4(),
+        studyTillCorrectTypingAnswerLetterDuration: Duration(seconds: 2));
+    studyTillCorrectTypingAnswerLetterDuration =
+        fieldList.studyTillCorrectTypingAnswerLetterDuration;
+    expect(Duration(seconds: 2), studyTillCorrectTypingAnswerLetterDuration);
+    fieldList.studyTillCorrectTypingAnswerLetterDuration = Duration(seconds: 4);
+    studyTillCorrectTypingAnswerLetterDuration =
+        fieldList.studyTillCorrectTypingAnswerLetterDuration;
+    expect(Duration(seconds: 4), studyTillCorrectTypingAnswerLetterDuration);
+    fieldList.studyTillCorrectTypingAnswerLetterDuration = null;
+    studyTillCorrectTypingAnswerLetterDuration =
+        fieldList.studyTillCorrectTypingAnswerLetterDuration;
+    expect(null, studyTillCorrectTypingAnswerLetterDuration);
+  });
 }
