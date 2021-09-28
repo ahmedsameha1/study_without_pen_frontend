@@ -1,7 +1,8 @@
 class Entry {
   late final String _id;
   late String _answer;
-  Entry(String uuid, String answer) {
+  late String _fieldListId;
+  Entry(String uuid, String answer, String fieldListId) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -22,10 +23,17 @@ class Entry {
       throw ArgumentError("_answer cannot be an empty String");
     }
     this._answer = answer;
+    /////////////////////////////////////////////////////////////////////////
+    // _fieldListId validation
+    if (!regexp.hasMatch(fieldListId)) {
+      throw ArgumentError("_fieldListId must be a valid UUID");
+    }
+    this._fieldListId = fieldListId;
   }
 
   String get id => _id;
   String get answer => _answer;
+  String get fieldListId => _fieldListId;
 
   set answer(String answer) {
     /////////////////////////////////////////////////////////////////////////
