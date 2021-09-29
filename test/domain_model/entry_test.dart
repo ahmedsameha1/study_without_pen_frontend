@@ -143,4 +143,22 @@ main() {
       expect(11, askedCount);
     });
   });
+  group("_wronglyAnsweredCount tests", () {
+    test("_wronglyAnsweredCount isn't a negative integer", () {
+      expect(
+          () => Entry(uuid.v4(), "answer", uuid.v4(), wronglyAnsweredCount: -1),
+          throwsArgumentError);
+    });
+    test("_wronglyAnsweredCount has been assigned the correct value", () {
+      var entry = Entry(uuid.v4(), "answer", uuid.v4());
+      var wronglyAnsweredCount = entry.wronglyAnsweredCount;
+      expect(Entry.ASKED_COUNT_DEFAULT, wronglyAnsweredCount);
+      entry = Entry(uuid.v4(), "answer", uuid.v4(), wronglyAnsweredCount: 10);
+      wronglyAnsweredCount = entry.wronglyAnsweredCount;
+      expect(10, wronglyAnsweredCount);
+      entry.increaseWronglyAnsweredCountByOne();
+      wronglyAnsweredCount = entry.wronglyAnsweredCount;
+      expect(11, wronglyAnsweredCount);
+    });
+  });
 }
