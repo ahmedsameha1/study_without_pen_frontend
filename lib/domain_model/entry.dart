@@ -1,18 +1,23 @@
+import 'package:clock/clock.dart';
+
 class Entry {
   static const int ASKED_COUNT_DEFAULT = 0;
   static const int WRONGLY_ANSWERED_COUNT_DEFAULT = 0;
   static const Rank RANK_DEFAULT = Rank.LOW;
+  static const DateTime? EMULATED_CREATED_AT_DEFAULT = null;
   late final String _id;
   late String _answer;
   late String _fieldListId;
   int _askedCount = ASKED_COUNT_DEFAULT;
   int _wronglyAnsweredCount = WRONGLY_ANSWERED_COUNT_DEFAULT;
   Rank _rank = RANK_DEFAULT;
+  DateTime? _emulatedCreatedAt = EMULATED_CREATED_AT_DEFAULT;
 
   Entry(String uuid, String answer, String fieldListId,
       {int askedCount = ASKED_COUNT_DEFAULT,
       int wronglyAnsweredCount = WRONGLY_ANSWERED_COUNT_DEFAULT,
-      Rank rank = RANK_DEFAULT}) {
+      Rank rank = RANK_DEFAULT,
+      DateTime? emulatedCreatedAt = EMULATED_CREATED_AT_DEFAULT}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -52,6 +57,7 @@ class Entry {
     }
     this._wronglyAnsweredCount = wronglyAnsweredCount;
     this._rank = rank;
+    this._emulatedCreatedAt = emulatedCreatedAt;
   }
 
   String get id => _id;
@@ -60,6 +66,7 @@ class Entry {
   int get askedCount => _askedCount;
   int get wronglyAnsweredCount => _wronglyAnsweredCount;
   Rank get rank => _rank;
+  DateTime? get emulatedCreatedAt => _emulatedCreatedAt;
 
   set answer(String answer) {
     /////////////////////////////////////////////////////////////////////////
@@ -78,6 +85,13 @@ class Entry {
 
   set rank(Rank rank) {
     this._rank = rank;
+  }
+
+  set emulatedCreatedAt(DateTime? emulatedCreatedAt) {
+    if (emulatedCreatedAt != null && emulatedCreatedAt.isBefore(clock.now())) {
+      throw ArgumentError("_emulatedCreatedAt cannot be in the past");
+    }
+    this._emulatedCreatedAt = emulatedCreatedAt;
   }
 
   increaseAskedCountByOne() {

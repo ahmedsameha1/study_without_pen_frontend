@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/domain_model/entry.dart';
 import 'package:uuid/uuid.dart';
@@ -171,5 +172,32 @@ main() {
     entry.rank = Rank.MODERATE;
     rank = entry.rank;
     expect(Rank.MODERATE, rank);
+  });
+  group("_emulatedCreatedAt tests", () {
+    test("_emulatedCreatedAt cannot be set to past DateTime", () {
+      withClock(Clock.fixed(clock.now()), () {
+        expect(() {
+          var entry = Entry(uuid.v4(), "answer", uuid.v4());
+          entry.emulatedCreatedAt = clock.now().subtract(Duration(days: 500));
+        }, throwsArgumentError);
+      });
+    });
+    test("_emulatedCreatedAt has been assigned the correct value", () {
+      var entry = Entry(uuid.v4(), "answer", uuid.v4());
+      var emulateCreatedAt = entry.emulatedCreatedAt;
+      expect(Entry.EMULATED_CREATED_AT_DEFAULT, emulateCreatedAt);
+      entry = Entry(uuid.v4(), "answer", uuid.v4(),
+          emulatedCreatedAt: DateTime.utc(2020, 1, 1));
+      emulateCreatedAt = entry.emulatedCreatedAt;
+      expect(DateTime.utc(2020, 1, 1), emulateCreatedAt);
+      withClock(Clock.fixed(clock.now()), () {
+        entry.emulatedCreatedAt = clock.now().add(Duration(days: 500));
+        emulateCreatedAt = entry.emulatedCreatedAt;
+        expect(clock.now().add(Duration(days: 500)), emulateCreatedAt);
+      });
+      entry.emulatedCreatedAt = null;
+      emulateCreatedAt = entry.emulatedCreatedAt;
+      expect(null, emulateCreatedAt);
+    });
   });
 }
