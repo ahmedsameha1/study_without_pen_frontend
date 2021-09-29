@@ -126,4 +126,21 @@ main() {
       expect(uuidString, fieldListId);
     });
   });
+  group("_askedCount tests", () {
+    test("_askedCount isn't a negative integer", () {
+      expect(() => Entry(uuid.v4(), "answer", uuid.v4(), askedCount: -1),
+          throwsArgumentError);
+    });
+    test("_askedCount has been assigned the correct value", () {
+      var entry = Entry(uuid.v4(), "answer", uuid.v4());
+      var askedCount = entry.askedCount;
+      expect(Entry.ASKED_COUNT_DEFAULT, askedCount);
+      entry = Entry(uuid.v4(), "answer", uuid.v4(), askedCount: 10);
+      askedCount = entry.askedCount;
+      expect(10, askedCount);
+      entry.increaseAskedCountByOne();
+      askedCount = entry.askedCount;
+      expect(11, askedCount);
+    });
+  });
 }
