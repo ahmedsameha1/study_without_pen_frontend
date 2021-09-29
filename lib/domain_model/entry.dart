@@ -1,15 +1,18 @@
 class Entry {
   static const int ASKED_COUNT_DEFAULT = 0;
   static const int WRONGLY_ANSWERED_COUNT_DEFAULT = 0;
+  static const Rank RANK_DEFAULT = Rank.LOW;
   late final String _id;
   late String _answer;
   late String _fieldListId;
   int _askedCount = ASKED_COUNT_DEFAULT;
   int _wronglyAnsweredCount = WRONGLY_ANSWERED_COUNT_DEFAULT;
+  Rank _rank = RANK_DEFAULT;
 
   Entry(String uuid, String answer, String fieldListId,
       {int askedCount = ASKED_COUNT_DEFAULT,
-      int wronglyAnsweredCount = WRONGLY_ANSWERED_COUNT_DEFAULT}) {
+      int wronglyAnsweredCount = WRONGLY_ANSWERED_COUNT_DEFAULT,
+      Rank rank = RANK_DEFAULT}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -48,6 +51,7 @@ class Entry {
       throw ArgumentError("_wronglyAnsweredCount cannot be negative integer");
     }
     this._wronglyAnsweredCount = wronglyAnsweredCount;
+    this._rank = rank;
   }
 
   String get id => _id;
@@ -55,6 +59,7 @@ class Entry {
   String get fieldListId => _fieldListId;
   int get askedCount => _askedCount;
   int get wronglyAnsweredCount => _wronglyAnsweredCount;
+  Rank get rank => _rank;
 
   set answer(String answer) {
     /////////////////////////////////////////////////////////////////////////
@@ -71,6 +76,10 @@ class Entry {
     this._answer = answer;
   }
 
+  set rank(Rank rank) {
+    this._rank = rank;
+  }
+
   increaseAskedCountByOne() {
     _askedCount++;
   }
@@ -79,3 +88,5 @@ class Entry {
     _wronglyAnsweredCount++;
   }
 }
+
+enum Rank { LOW, MODERATE, IMPORTANT, VITAL }

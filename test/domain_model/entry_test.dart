@@ -161,4 +161,15 @@ main() {
       expect(11, wronglyAnsweredCount);
     });
   });
+  test("_rank has been assigned the correct value", () {
+    var entry = Entry(uuid.v4(), "answer", uuid.v4());
+    var rank = entry.rank;
+    expect(Entry.RANK_DEFAULT, rank);
+    entry = Entry(uuid.v4(), "answer", uuid.v4(), rank: Rank.IMPORTANT);
+    rank = entry.rank;
+    expect(Rank.IMPORTANT, rank);
+    entry.rank = Rank.MODERATE;
+    rank = entry.rank;
+    expect(Rank.MODERATE, rank);
+  });
 }
