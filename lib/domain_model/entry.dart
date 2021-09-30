@@ -1,6 +1,6 @@
 import 'package:clock/clock.dart';
 
-class Entry {
+abstract class Entry {
   static const int ASKED_COUNT_DEFAULT = 0;
   static const int WRONGLY_ANSWERED_COUNT_DEFAULT = 0;
   static const Rank RANK_DEFAULT = Rank.LOW;
