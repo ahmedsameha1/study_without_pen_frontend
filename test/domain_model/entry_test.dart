@@ -213,4 +213,37 @@ main() {
     didAskedAtCurrentTestRound = entry.didAskedAtCurrentTestRound;
     expect(true, didAskedAtCurrentTestRound);
   });
+  group("_order tests", () {
+    test("_order cannot be smaller than one", () {
+      expect(() => Entry(uuid.v4(), "answer", uuid.v4(), order: -1),
+          throwsArgumentError);
+      expect(() => Entry(uuid.v4(), "answer", uuid.v4(), order: 0),
+          throwsArgumentError);
+      expect(() {
+        var entry = Entry(uuid.v4(), "answer", uuid.v4());
+        entry.order = 0;
+      }, throwsArgumentError);
+      expect(() {
+        var entry = Entry(uuid.v4(), "answer", uuid.v4());
+        entry.order = -1;
+      }, throwsArgumentError);
+    });
+    test("_order has been assigned the correct value", () {
+      var entry = Entry(uuid.v4(), "answer", uuid.v4());
+      var order = entry.order;
+      expect(Entry.ORDER_DEFAULT, order);
+      entry = Entry(uuid.v4(), "answer", uuid.v4(), order: 3);
+      order = entry.order;
+      expect(3, order);
+      entry = Entry(uuid.v4(), "answer", uuid.v4(), order: null);
+      order = entry.order;
+      expect(null, order);
+      entry.order = 5;
+      order = entry.order;
+      expect(5, order);
+      entry.order = null;
+      order = entry.order;
+      expect(null, order);
+    });
+  });
 }
