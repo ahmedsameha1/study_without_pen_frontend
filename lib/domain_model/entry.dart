@@ -5,6 +5,7 @@ class Entry {
   static const int WRONGLY_ANSWERED_COUNT_DEFAULT = 0;
   static const Rank RANK_DEFAULT = Rank.LOW;
   static const DateTime? EMULATED_CREATED_AT_DEFAULT = null;
+  static const bool DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT = true;
   late final String _id;
   late String _answer;
   late String _fieldListId;
@@ -12,12 +13,15 @@ class Entry {
   int _wronglyAnsweredCount = WRONGLY_ANSWERED_COUNT_DEFAULT;
   Rank _rank = RANK_DEFAULT;
   DateTime? _emulatedCreatedAt = EMULATED_CREATED_AT_DEFAULT;
+  bool _didAskedAtCurrentTestRound = DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT;
 
   Entry(String uuid, String answer, String fieldListId,
       {int askedCount = ASKED_COUNT_DEFAULT,
       int wronglyAnsweredCount = WRONGLY_ANSWERED_COUNT_DEFAULT,
       Rank rank = RANK_DEFAULT,
-      DateTime? emulatedCreatedAt = EMULATED_CREATED_AT_DEFAULT}) {
+      DateTime? emulatedCreatedAt = EMULATED_CREATED_AT_DEFAULT,
+      bool didAskedAtCurrentTestRound =
+          DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT}) {
     /////////////////////////////////////////////////////////////////////////
     // _id validation
     final regexp = RegExp(
@@ -58,6 +62,7 @@ class Entry {
     this._wronglyAnsweredCount = wronglyAnsweredCount;
     this._rank = rank;
     this._emulatedCreatedAt = emulatedCreatedAt;
+    this._didAskedAtCurrentTestRound = didAskedAtCurrentTestRound;
   }
 
   String get id => _id;
@@ -67,6 +72,7 @@ class Entry {
   int get wronglyAnsweredCount => _wronglyAnsweredCount;
   Rank get rank => _rank;
   DateTime? get emulatedCreatedAt => _emulatedCreatedAt;
+  bool get didAskedAtCurrentTestRound => _didAskedAtCurrentTestRound;
 
   set answer(String answer) {
     /////////////////////////////////////////////////////////////////////////
@@ -92,6 +98,10 @@ class Entry {
       throw ArgumentError("_emulatedCreatedAt cannot be in the past");
     }
     this._emulatedCreatedAt = emulatedCreatedAt;
+  }
+
+  set didAskedAtCurrentTestRound(bool didAskedAtCurrentTestRound) {
+    this._didAskedAtCurrentTestRound = didAskedAtCurrentTestRound;
   }
 
   increaseAskedCountByOne() {

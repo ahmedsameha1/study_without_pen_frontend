@@ -200,4 +200,17 @@ main() {
       expect(null, emulateCreatedAt);
     });
   });
+  test("_didAskedAtCurrentTestRound has been assigned the correct value", () {
+    var entry = Entry(uuid.v4(), "answer", uuid.v4());
+    var didAskedAtCurrentTestRound = entry.didAskedAtCurrentTestRound;
+    expect(Entry.DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT,
+        didAskedAtCurrentTestRound);
+    entry = Entry(uuid.v4(), "answer", uuid.v4(),
+        didAskedAtCurrentTestRound: false);
+    didAskedAtCurrentTestRound = entry.didAskedAtCurrentTestRound;
+    expect(false, didAskedAtCurrentTestRound);
+    entry.didAskedAtCurrentTestRound = true;
+    didAskedAtCurrentTestRound = entry.didAskedAtCurrentTestRound;
+    expect(true, didAskedAtCurrentTestRound);
+  });
 }
