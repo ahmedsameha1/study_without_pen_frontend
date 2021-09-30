@@ -16,8 +16,9 @@ class Entry {
   DateTime? _emulatedCreatedAt = EMULATED_CREATED_AT_DEFAULT;
   bool _didAskedAtCurrentTestRound = DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT;
   int? _order = ORDER_DEFAULT;
+  late DateTime _createdAt;
 
-  Entry(String uuid, String answer, String fieldListId,
+  Entry(String uuid, String answer, String fieldListId, DateTime createdAt,
       {int askedCount = ASKED_COUNT_DEFAULT,
       int wronglyAnsweredCount = WRONGLY_ANSWERED_COUNT_DEFAULT,
       Rank rank = RANK_DEFAULT,
@@ -71,6 +72,12 @@ class Entry {
       throw ArgumentError("_order cannot be smaller than 1");
     }
     this._order = order;
+    /////////////////////////////////////////////////////////////////////////
+    // _createdAt validation
+    if (createdAt.isAfter(clock.now())) {
+      throw ArgumentError("_createdAt cannot be in the future");
+    }
+    this._createdAt = createdAt;
   }
 
   String get id => _id;
@@ -82,6 +89,7 @@ class Entry {
   DateTime? get emulatedCreatedAt => _emulatedCreatedAt;
   bool get didAskedAtCurrentTestRound => _didAskedAtCurrentTestRound;
   int? get order => _order;
+  DateTime get createdAt => _createdAt;
 
   set answer(String answer) {
     /////////////////////////////////////////////////////////////////////////
