@@ -12,6 +12,7 @@ class Field {
   Color _color = Color(0xffffffff);
   late DateTime _createdAt;
   int _usageCount = USAGE_COUNT_DEFAULT;
+  // TODO Do we need last modification at or last fetch time
 
   Field(String uuid, String name, String userAccountId, DateTime createdAt,
       {Color color = const Color(0xffffffff),

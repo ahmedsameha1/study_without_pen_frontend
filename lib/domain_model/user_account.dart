@@ -10,6 +10,7 @@ class UserAccount {
   String? _email;
   late bool _isEmailVerified;
   DateTime? _createdAt;
+  // TODO Investigate this field, like do we need it, when should it be updated, should we replace it with last fetch time
   DateTime? _lasModificationAt;
   DateTime? _lastSignInAt;
   DateTime? _lastSignOutAt;

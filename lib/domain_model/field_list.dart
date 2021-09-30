@@ -213,6 +213,7 @@ class FieldList {
       _testsTimeOfAnswerAction;
   bool get doesObfuscateQuestion => _doesObfuscateQuestion;
   DateTime get createdAt => _createdAt;
+  // TODO Do we need last modification at or last fetch time
 
   set name(String name) {
     /////////////////////////////////////////////////////////////////////////

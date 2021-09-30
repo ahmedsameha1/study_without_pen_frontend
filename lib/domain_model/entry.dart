@@ -17,6 +17,7 @@ class Entry {
   bool _didAskedAtCurrentTestRound = DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT;
   int? _order = ORDER_DEFAULT;
   late DateTime _createdAt;
+  // TODO Do we need last modification at or last fetch time
 
   Entry(String uuid, String answer, String fieldListId, DateTime createdAt,
       {int askedCount = ASKED_COUNT_DEFAULT,
