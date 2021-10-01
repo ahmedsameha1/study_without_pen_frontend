@@ -4,7 +4,9 @@ abstract class Test extends HasId {
   late String _fieldListId;
   late int _currentQuestionCounter;
   late int _triesNumber;
-  Test(String uuid, String fieldListId, int currentQuestionCounter, int triesNumber)
+  late Duration _elapsedTime;
+  Test(String uuid, String fieldListId, int currentQuestionCounter,
+      int triesNumber, Duration elapsedTime)
       : super(uuid) {
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
@@ -26,11 +28,13 @@ abstract class Test extends HasId {
       throw ArgumentError("_triesNumber cannot be smaller than one");
     }
     this._triesNumber = triesNumber;
+    this._elapsedTime = elapsedTime;
   }
 
   String get fieldListId => _fieldListId;
   int get currentQuestionCounter => _currentQuestionCounter;
   int get triesNumber => _triesNumber;
+  Duration get elapsedTime => _elapsedTime;
 
   set currentQuestionCounter(int currentQuestionCounter) {
     if (currentQuestionCounter <= _currentQuestionCounter) {
@@ -38,5 +42,13 @@ abstract class Test extends HasId {
           "_currentQuestionCounter cannot be set to be smaller than or equal its current value");
     }
     this._currentQuestionCounter = currentQuestionCounter;
+  }
+
+  set elapsedTime(Duration elapsedTime) {
+    if (elapsedTime.compareTo(this._elapsedTime) <= 0) {
+      throw ArgumentError(
+          "_elapsedTime cannot be set to be smaller than or equal the current value");
+    }
+    this._elapsedTime = elapsedTime;
   }
 }
