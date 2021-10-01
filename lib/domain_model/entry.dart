@@ -1,13 +1,13 @@
 import 'package:clock/clock.dart';
+import 'package:study_without_pen_by_flutter/domain_model/has_id.dart';
 
-abstract class Entry {
+abstract class Entry extends HasId {
   static const int ASKED_COUNT_DEFAULT = 0;
   static const int WRONGLY_ANSWERED_COUNT_DEFAULT = 0;
   static const Rank RANK_DEFAULT = Rank.LOW;
   static const DateTime? EMULATED_CREATED_AT_DEFAULT = null;
   static const bool DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT = true;
   static const int? ORDER_DEFAULT = null;
-  late final String _id;
   late String _answer;
   late String _fieldListId;
   int _askedCount = ASKED_COUNT_DEFAULT;
@@ -25,15 +25,10 @@ abstract class Entry {
       Rank rank = RANK_DEFAULT,
       DateTime? emulatedCreatedAt = EMULATED_CREATED_AT_DEFAULT,
       bool didAskedAtCurrentTestRound = DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT,
-      int? order = ORDER_DEFAULT}) {
-    /////////////////////////////////////////////////////////////////////////
-    // _id validation
+      int? order = ORDER_DEFAULT})
+      : super(uuid) {
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
-    if (!regexp.hasMatch(uuid)) {
-      throw ArgumentError("_id must be a valid UUID");
-    }
-    this._id = uuid;
     /////////////////////////////////////////////////////////////////////////
     // _answer validation
     if (answer.isNotEmpty) {
@@ -81,7 +76,6 @@ abstract class Entry {
     this._createdAt = createdAt;
   }
 
-  String get id => _id;
   String get answer => _answer;
   String get fieldListId => _fieldListId;
   int get askedCount => _askedCount;

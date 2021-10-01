@@ -1,12 +1,12 @@
 import 'dart:ui';
 
 import 'package:clock/clock.dart';
+import 'package:study_without_pen_by_flutter/domain_model/has_id.dart';
 
-class Field {
+class Field extends HasId {
   static const int NAME_MAXIMUM_LENGTH = 64;
   static const int USAGE_COUNT_DEFAULT = 0;
   static const int COLOR_MAXIMUM = 0xffffffff;
-  late final String _id;
   late String _name;
   late String _userAccountId;
   Color _color = Color(0xffffffff);
@@ -16,15 +16,8 @@ class Field {
 
   Field(String uuid, String name, String userAccountId, DateTime createdAt,
       {Color color = const Color(0xffffffff),
-      int usageCount = USAGE_COUNT_DEFAULT}) {
-    /////////////////////////////////////////////////////////////////////////
-    // _id validation
-    final regexp = RegExp(
-        "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
-    if (!regexp.hasMatch(uuid)) {
-      throw ArgumentError("_id must be a valid UUID");
-    }
-    this._id = uuid;
+      int usageCount = USAGE_COUNT_DEFAULT})
+      : super(uuid) {
     /////////////////////////////////////////////////////////////////////////
     // _name validation
     if (name.isEmpty) {
@@ -56,7 +49,6 @@ class Field {
     this._usageCount = usageCount;
   }
 
-  String get id => _id;
   String get name => _name;
   String get userAccountId => _userAccountId;
   Color get color => _color;

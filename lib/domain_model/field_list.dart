@@ -1,8 +1,9 @@
 import 'dart:ui';
 
 import 'package:clock/clock.dart';
+import 'package:study_without_pen_by_flutter/domain_model/has_id.dart';
 
-class FieldList {
+class FieldList extends HasId {
   static const int NAME_MAXIMUM_LENGTH = 64;
   static const int QUESTION_AREA_SIZE_DEFAULT = 1;
   static const int MINIMUM_QUESTION_AREA_SIZE = 1;
@@ -36,7 +37,6 @@ class FieldList {
   static const TestsTimeOfAnswerAction TESTS_TIME_OF_ANSWER_ACTION_DEFAULT =
       TestsTimeOfAnswerAction.NOTIFY;
   static const bool DOES_OBFUSCATE_QUESTION_DEFAULT = false;
-  late final String _id;
   late String _name;
   late String _fieldId;
   Locale? _locale;
@@ -94,15 +94,10 @@ class FieldList {
           STUDY_TILL_CORRECT_TYPING_ANSWER_LETTER_DURATION_DEFAULT,
       TestsTimeOfAnswerAction testsTimeOfAnswerAction =
           TestsTimeOfAnswerAction.NOTIFY,
-      bool doesObfuscateQuestion = DOES_OBFUSCATE_QUESTION_DEFAULT}) {
+      bool doesObfuscateQuestion = DOES_OBFUSCATE_QUESTION_DEFAULT})
+      : super(uuid) {
     final regexp = RegExp(
         "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
-    /////////////////////////////////////////////////////////////////////////
-    // _id validation
-    if (!regexp.hasMatch(uuid)) {
-      throw ArgumentError("_id must be a valid UUID");
-    }
-    this._id = uuid;
     /////////////////////////////////////////////////////////////////////////
     // _name validation
     if (name.isEmpty) {
@@ -183,7 +178,6 @@ class FieldList {
     this._createdAt = createdAt;
   }
 
-  String get id => _id;
   String get name => _name;
   String get fieldId => _fieldId;
   Locale? get locale => _locale;
