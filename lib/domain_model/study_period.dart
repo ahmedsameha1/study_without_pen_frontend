@@ -1,8 +1,9 @@
+import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
 import 'package:study_without_pen_by_flutter/domain_model/study_till_correct.dart';
 
 class StudyPeriod extends StudyTillCorrect {
-  StudyPeriod(String uuid, fieldListId, int currentQuestionCounter,
+  StudyPeriod(String uuid, FieldList fieldList, int currentQuestionCounter,
       int triesNumber, Duration elapsedTime)
-      : super(uuid, fieldListId, currentQuestionCounter, triesNumber,
+      : super(uuid, fieldList, currentQuestionCounter, triesNumber,
             elapsedTime);
 }

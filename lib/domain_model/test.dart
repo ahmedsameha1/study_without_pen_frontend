@@ -1,21 +1,15 @@
+import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
 import 'package:study_without_pen_by_flutter/domain_model/has_id.dart';
 
 abstract class Test extends HasId {
-  late String _fieldListId;
+  late FieldList _fieldList;
   late int _currentQuestionCounter;
   late int _triesNumber;
   late Duration _elapsedTime;
-  Test(String uuid, String fieldListId, int currentQuestionCounter,
+  Test(String uuid, FieldList fieldList, int currentQuestionCounter,
       int triesNumber, Duration elapsedTime)
       : super(uuid) {
-    final regexp = RegExp(
-        "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
-    /////////////////////////////////////////////////////////////////////////
-    // _fieldListId validation
-    if (!regexp.hasMatch(fieldListId)) {
-      throw ArgumentError("_fieldListId must be a valid UUID");
-    }
-    this._fieldListId = fieldListId;
+    this._fieldList = fieldList;
     /////////////////////////////////////////////////////////////////////////
     // _currentQuestionCounter validation
     if (currentQuestionCounter < 0) {
@@ -31,7 +25,7 @@ abstract class Test extends HasId {
     this._elapsedTime = elapsedTime;
   }
 
-  String get fieldListId => _fieldListId;
+  FieldList get fieldList => _fieldList;
   int get currentQuestionCounter => _currentQuestionCounter;
   int get triesNumber => _triesNumber;
   Duration get elapsedTime => _elapsedTime;
