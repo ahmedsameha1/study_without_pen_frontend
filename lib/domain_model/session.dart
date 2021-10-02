@@ -1,12 +1,12 @@
 import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
 import 'package:study_without_pen_by_flutter/domain_model/has_id.dart';
 
-abstract class Test extends HasId {
+abstract class Session extends HasId {
   late FieldList _fieldList;
   late int _currentQuestionCounter;
   late int _triesNumber;
   late Duration _elapsedTime;
-  Test(String uuid, FieldList fieldList, int currentQuestionCounter,
+  Session(String uuid, FieldList fieldList, int currentQuestionCounter,
       int triesNumber, Duration elapsedTime)
       : super(uuid) {
     this._fieldList = fieldList;
