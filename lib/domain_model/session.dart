@@ -45,4 +45,6 @@ abstract class Session extends HasId {
     }
     this._elapsedTime = elapsedTime;
   }
+
+  bool checkAnAnswer(String userAnswer);
 }

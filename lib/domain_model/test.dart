@@ -6,4 +6,9 @@ abstract class Test extends Session {
       int triesNumber, Duration elapsedTime)
       : super(
             uuid, fieldList, currentQuestionCounter, triesNumber, elapsedTime);
+
+  @override
+  bool checkAnAnswer(String userAnswer) {
+    throw UnimplementedError();
+  }
 }
