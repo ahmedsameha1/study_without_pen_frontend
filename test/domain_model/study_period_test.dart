@@ -45,34 +45,26 @@ main() {
       expect(
           () => StudyPeriod(uuid.v4(), fieldList, entries, -1, 1, Duration()),
           throwsArgumentError);
-      expect(() {
-        final studyPeriod =
-            StudyPeriod(uuid.v4(), fieldList, entries, 0, 1, Duration());
-        studyPeriod.currentQuestionCounter = -1;
-      }, throwsArgumentError);
     });
-    test(
-        "_currentQuestionCounter cannot be set to be smaller than or equal its current value",
-        () {
-      expect(() {
-        final studyPeriod =
-            StudyPeriod(uuid.v4(), fieldList, entries, 3, 1, Duration());
-        studyPeriod.currentQuestionCounter = 3;
-      }, throwsArgumentError);
-      expect(() {
-        final studyPeriod =
-            StudyPeriod(uuid.v4(), fieldList, entries, 3, 1, Duration());
-        studyPeriod.currentQuestionCounter = 2;
-      }, throwsArgumentError);
+    test("resetCurrentQuestionCounterToZero() test", () {
+      final studyPeriod =
+          StudyPeriod(uuid.v4(), fieldList, entries, 10, 1, Duration());
+      studyPeriod.resetCurrentQuestionCounterToZero();
+      var currentQuestionCounter = studyPeriod.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+    });
+    test("increaseCurrentQuestionCounterByOne() test", () {
+      final studyPeriod =
+          StudyPeriod(uuid.v4(), fieldList, entries, 10, 1, Duration());
+      studyPeriod.increaseCurrentQuestionCounterByOne();
+      var currentQuestionCounter = studyPeriod.currentQuestionCounter;
+      expect(11, currentQuestionCounter);
     });
     test("_currentQuestionCounter has been assigned the correct value", () {
       final studyPeriod =
           StudyPeriod(uuid.v4(), fieldList, entries, 3, 1, Duration());
       var currentQuestionCounter = studyPeriod.currentQuestionCounter;
       expect(3, currentQuestionCounter);
-      studyPeriod.currentQuestionCounter = 5;
-      currentQuestionCounter = studyPeriod.currentQuestionCounter;
-      expect(5, currentQuestionCounter);
     });
   });
   group("_triesNumber tests", () {

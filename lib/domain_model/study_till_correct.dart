@@ -5,11 +5,17 @@ import 'package:study_without_pen_by_flutter/utilities/compare_utility.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class StudyTillCorrect extends Session {
+  late int _currentQuestionCounter;
   late final List<TextEntry> _entries;
   StudyTillCorrect(String uuid, FieldList fieldList, List<TextEntry> entries,
       int currentQuestionCounter, int triesNumber, Duration elapsedTime)
-      : super(
-            uuid, fieldList, currentQuestionCounter, triesNumber, elapsedTime) {
+      : super(uuid, fieldList, triesNumber, elapsedTime) {
+    /////////////////////////////////////////////////////////////////////////
+    // _currentQuestionCounter validation
+    if (currentQuestionCounter < 0) {
+      throw ArgumentError("_currentQuestionCounter cannot be negative");
+    }
+    this._currentQuestionCounter = currentQuestionCounter;
     /////////////////////////////////////////////////////////////////////////
     // _entries validation
     if (entries.isEmpty) {
@@ -28,7 +34,16 @@ abstract class StudyTillCorrect extends Session {
     }
   }
 
+  int get currentQuestionCounter => _currentQuestionCounter;
   List<TextEntry> get entries => _entries;
+
+  resetCurrentQuestionCounterToZero() {
+    this._currentQuestionCounter = 0;
+  }
+
+  increaseCurrentQuestionCounterByOne() {
+    this._currentQuestionCounter++;
+  }
 
   @override
   bool checkAnAnswer(String userAnswer) {

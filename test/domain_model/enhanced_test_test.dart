@@ -39,33 +39,17 @@ main() {
     test("_currentQuestionCounter cannot be negative", () {
       expect(() => EnhancedTest(uuid.v4(), fieldList, -1, 1, Duration()),
           throwsArgumentError);
-      expect(() {
-        final enhancedTest =
-            EnhancedTest(uuid.v4(), fieldList, 0, 1, Duration());
-        enhancedTest.currentQuestionCounter = -1;
-      }, throwsArgumentError);
     });
-    test(
-        "_currentQuestionCounter cannot be set to be smaller than or equal its current value",
-        () {
-      expect(() {
-        final enhancedTest =
-            EnhancedTest(uuid.v4(), fieldList, 3, 1, Duration());
-        enhancedTest.currentQuestionCounter = 3;
-      }, throwsArgumentError);
-      expect(() {
-        final enhancedTest =
-            EnhancedTest(uuid.v4(), fieldList, 3, 1, Duration());
-        enhancedTest.currentQuestionCounter = 2;
-      }, throwsArgumentError);
+    test("increaseCurrentQuestionCounterByOne method test", () {
+      final enhancedTest = EnhancedTest(uuid.v4(), fieldList, 3, 1, Duration());
+      enhancedTest.increaseCurrentQuestionCounterByOne();
+      var currentQuestionCounter = enhancedTest.currentQuestionCounter;
+      expect(4, currentQuestionCounter);
     });
     test("_currentQuestionCounter has been assigned the correct value", () {
       final enhancedTest = EnhancedTest(uuid.v4(), fieldList, 3, 1, Duration());
       var currentQuestionCounter = enhancedTest.currentQuestionCounter;
       expect(3, currentQuestionCounter);
-      enhancedTest.currentQuestionCounter = 5;
-      currentQuestionCounter = enhancedTest.currentQuestionCounter;
-      expect(5, currentQuestionCounter);
     });
   });
   group("_triesNumber tests", () {

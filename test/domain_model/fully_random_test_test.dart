@@ -39,34 +39,19 @@ main() {
     test("_currentQuestionCounter cannot be negative", () {
       expect(() => FullyRandomTest(uuid.v4(), fieldList, -1, 1, Duration()),
           throwsArgumentError);
-      expect(() {
-        final fullyRandomTest =
-            FullyRandomTest(uuid.v4(), fieldList, 0, 1, Duration());
-        fullyRandomTest.currentQuestionCounter = -1;
-      }, throwsArgumentError);
     });
-    test(
-        "_currentQuestionCounter cannot be set to be smaller than or equal its current value",
-        () {
-      expect(() {
-        final fullyRandomTest =
-            FullyRandomTest(uuid.v4(), fieldList, 3, 1, Duration());
-        fullyRandomTest.currentQuestionCounter = 3;
-      }, throwsArgumentError);
-      expect(() {
-        final fullyRandomTest =
-            FullyRandomTest(uuid.v4(), fieldList, 3, 1, Duration());
-        fullyRandomTest.currentQuestionCounter = 2;
-      }, throwsArgumentError);
+    test("increaseCurrentQuestionCounterByOne method test", () {
+      final fullyRandomTest =
+          FullyRandomTest(uuid.v4(), fieldList, 3, 1, Duration());
+      fullyRandomTest.increaseCurrentQuestionCounterByOne();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(4, currentQuestionCounter);
     });
     test("_currentQuestionCounter has been assigned the correct value", () {
       final fullyRandomTest =
           FullyRandomTest(uuid.v4(), fieldList, 3, 1, Duration());
       var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
       expect(3, currentQuestionCounter);
-      fullyRandomTest.currentQuestionCounter = 5;
-      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
-      expect(5, currentQuestionCounter);
     });
   });
   group("_triesNumber tests", () {
