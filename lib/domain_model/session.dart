@@ -4,7 +4,11 @@ import 'package:study_without_pen_by_flutter/domain_model/has_id.dart';
 abstract class Session extends HasId {
   late FieldList _fieldList;
   late int _triesNumber;
+  int _triesCounter = 0;
   late Duration _elapsedTime;
+  bool _isCompleted = false;
+  bool _lastCheckedAnswerResult = false;
+  bool _shouldCheckAnAnswer = true;
   Session(
       String uuid, FieldList fieldList, int triesNumber, Duration elapsedTime)
       : super(uuid) {
@@ -21,6 +25,16 @@ abstract class Session extends HasId {
   FieldList get fieldList => _fieldList;
   int get triesNumber => _triesNumber;
   Duration get elapsedTime => _elapsedTime;
+  int get triesCounter => _triesCounter;
+  bool get isCompleted => _isCompleted;
+  bool get lastCheckedAnswerResult {
+    if (triesCounter < 1) {
+      throw StateError("there is not any checks of answers");
+    }
+    return _lastCheckedAnswerResult;
+  }
+
+  bool get shouldCheckAnAnswer => _shouldCheckAnAnswer;
 
   set elapsedTime(Duration elapsedTime) {
     if (elapsedTime.compareTo(this._elapsedTime) <= 0) {
@@ -30,5 +44,26 @@ abstract class Session extends HasId {
     this._elapsedTime = elapsedTime;
   }
 
-  bool checkAnAnswer(String userAnswer);
+  set lastCheckedAnswerResult(bool lastCheckedAnswerResult) {
+    this._lastCheckedAnswerResult = lastCheckedAnswerResult;
+  }
+
+  switchShouldCheckAnAnswer() {
+    this._shouldCheckAnAnswer = !this._shouldCheckAnAnswer;
+  }
+
+  increaseTriesCounterByOne() {
+    this._triesCounter++;
+  }
+
+  resetTriesCounterToZero() {
+    this._triesCounter = 0;
+  }
+
+  setSessionCompleted() {
+    this._isCompleted = true;
+  }
+
+  checkAnAnswer(String userAnswer);
+  next();
 }

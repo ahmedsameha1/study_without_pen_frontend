@@ -36,6 +36,7 @@ abstract class StudyTillCorrect extends Session {
 
   int get currentQuestionCounter => _currentQuestionCounter;
   List<TextEntry> get entries => _entries;
+  TextEntry get currentEntry => entries[currentQuestionCounter];
 
   resetCurrentQuestionCounterToZero() {
     this._currentQuestionCounter = 0;
@@ -46,19 +47,47 @@ abstract class StudyTillCorrect extends Session {
   }
 
   @override
-  bool checkAnAnswer(String userAnswer) {
+  checkAnAnswer(String userAnswer) {
+    if (!shouldCheckAnAnswer) {
+      throw StateError("Call next() first!");
+    }
+    increaseTriesCounterByOne();
     switch (fieldList.checkType) {
       case CheckType.DO_NOT_IGNORE_CASE:
-        return userAnswer == entries[currentQuestionCounter].answer;
+        lastCheckedAnswerResult =
+            userAnswer == entries[currentQuestionCounter].answer;
+        break;
       case CheckType.NON_STRICT_IGNORE_CASE:
-        return CompareUtility.nonStrictCompareIgnoreCase(
+        lastCheckedAnswerResult = CompareUtility.nonStrictCompareIgnoreCase(
             entries[currentQuestionCounter].answer, userAnswer);
+        break;
       case CheckType.NON_STRICT_DO_NOT_IGNORE_CASE:
-        return CompareUtility.nonStrictCompare(
+        lastCheckedAnswerResult = CompareUtility.nonStrictCompare(
             entries[currentQuestionCounter].answer, userAnswer);
+        break;
       case CheckType.IGNORE_CASE:
-        return userAnswer.toLowerCase() ==
+        lastCheckedAnswerResult = userAnswer.toLowerCase() ==
             entries[currentQuestionCounter].answer.toLowerCase();
+        break;
     }
+    switchShouldCheckAnAnswer();
+  }
+
+  @override
+  next() {
+    if (isCompleted) {
+      throw StateError("session has been completed");
+    }
+    if (shouldCheckAnAnswer) {
+      throw StateError("Call checkAnAnswer() first!");
+    }
+    if (lastCheckedAnswerResult || triesCounter == triesNumber) {
+      increaseCurrentQuestionCounterByOne();
+      resetTriesCounterToZero();
+      if (currentQuestionCounter == entries.length) {
+        setSessionCompleted();
+      }
+    }
+    switchShouldCheckAnAnswer();
   }
 }

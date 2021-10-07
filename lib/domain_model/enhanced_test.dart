@@ -6,4 +6,10 @@ class EnhancedTest extends Test {
       int triesNumber, Duration elapsedTime)
       : super(
             uuid, fieldList, currentQuestionCounter, triesNumber, elapsedTime);
+
+  @override
+  next() {
+    // TODO: implement next
+    throw UnimplementedError();
+  }
 }
