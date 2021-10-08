@@ -748,6 +748,8 @@ main() {
     var repeatedEntries = studyPeriod.repeatedEntries;
     expect(0, repeatedEntries.length);
     studyPeriod.next();
+    var shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     var currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(1, currentQuestionCounter);
     var isCompleted = studyPeriod.isCompleted;
@@ -755,6 +757,7 @@ main() {
     expect(() {
       studyPeriod.next();
     }, throwsStateError);
+    ///////////
     studyPeriod = StudyPeriod(
         uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
     currentEntry = studyPeriod.currentEntry;
@@ -769,6 +772,38 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(true, shouldShowTheCorrectAnswer);
+    currentQuestionCounter = studyPeriod.currentQuestionCounter;
+    expect(0, currentQuestionCounter);
+    isCompleted = studyPeriod.isCompleted;
+    expect(false, isCompleted);
+    triesCounter = studyPeriod.triesCounter;
+    expect(0, triesCounter);
+    studyPeriod.checkAnAnswer("answer answer1");
+    triesCounter = studyPeriod.triesCounter;
+    expect(1, triesCounter);
+    repeatedEntries = studyPeriod.repeatedEntries;
+    expect(1, repeatedEntries.length);
+    expect(true, repeatedEntries.contains(currentEntry));
+    studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(true, shouldShowTheCorrectAnswer);
+    currentQuestionCounter = studyPeriod.currentQuestionCounter;
+    expect(0, currentQuestionCounter);
+    isCompleted = studyPeriod.isCompleted;
+    expect(false, isCompleted);
+    triesCounter = studyPeriod.triesCounter;
+    expect(0, triesCounter);
+    studyPeriod.checkAnAnswer("answer1 answer1");
+    triesCounter = studyPeriod.triesCounter;
+    expect(1, triesCounter);
+    repeatedEntries = studyPeriod.repeatedEntries;
+    expect(1, repeatedEntries.length);
+    expect(true, repeatedEntries.contains(currentEntry));
+    studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(1, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -776,6 +811,7 @@ main() {
     expect(() {
       studyPeriod.next();
     }, throwsStateError);
+    ////////////
     studyPeriod = StudyPeriod(
         uuid.v4(), fieldList1, entries1, 0, 3, Duration(seconds: 10));
     currentEntry = studyPeriod.currentEntry;
@@ -789,6 +825,8 @@ main() {
     repeatedEntries = studyPeriod.repeatedEntries;
     expect(0, repeatedEntries.length);
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(1, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -796,6 +834,7 @@ main() {
     expect(() {
       studyPeriod.next();
     }, throwsStateError);
+    //////////
     studyPeriod = StudyPeriod(
         uuid.v4(), fieldList1, entries1, 0, 3, Duration(seconds: 10));
     currentEntry = studyPeriod.currentEntry;
@@ -810,10 +849,14 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(0, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
     expect(false, isCompleted);
+    triesCounter = studyPeriod.triesCounter;
+    expect(1, triesCounter);
     studyPeriod.checkAnAnswer("answer1 answer1");
     triesCounter = studyPeriod.triesCounter;
     expect(2, triesCounter);
@@ -821,6 +864,8 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(1, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -828,6 +873,7 @@ main() {
     expect(() {
       studyPeriod.next();
     }, throwsStateError);
+    //////////
     studyPeriod = StudyPeriod(
         uuid.v4(), fieldList1, entries1, 0, 3, Duration(seconds: 10));
     currentEntry = studyPeriod.currentEntry;
@@ -842,6 +888,53 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
+    currentQuestionCounter = studyPeriod.currentQuestionCounter;
+    expect(0, currentQuestionCounter);
+    isCompleted = studyPeriod.isCompleted;
+    expect(false, isCompleted);
+    triesCounter = studyPeriod.triesCounter;
+    expect(1, triesCounter);
+    studyPeriod.checkAnAnswer("answer answer1");
+    triesCounter = studyPeriod.triesCounter;
+    expect(2, triesCounter);
+    repeatedEntries = studyPeriod.repeatedEntries;
+    expect(1, repeatedEntries.length);
+    expect(true, repeatedEntries.contains(currentEntry));
+    studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
+    currentQuestionCounter = studyPeriod.currentQuestionCounter;
+    expect(0, currentQuestionCounter);
+    isCompleted = studyPeriod.isCompleted;
+    expect(false, isCompleted);
+    triesCounter = studyPeriod.triesCounter;
+    expect(2, triesCounter);
+    studyPeriod.checkAnAnswer("answer answer1");
+    triesCounter = studyPeriod.triesCounter;
+    expect(3, triesCounter);
+    repeatedEntries = studyPeriod.repeatedEntries;
+    expect(1, repeatedEntries.length);
+    expect(true, repeatedEntries.contains(currentEntry));
+    studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(true, shouldShowTheCorrectAnswer);
+    currentQuestionCounter = studyPeriod.currentQuestionCounter;
+    expect(0, currentQuestionCounter);
+    isCompleted = studyPeriod.isCompleted;
+    expect(false, isCompleted);
+    triesCounter = studyPeriod.triesCounter;
+    expect(0, triesCounter);
+    studyPeriod.checkAnAnswer("answer answer1");
+    triesCounter = studyPeriod.triesCounter;
+    expect(1, triesCounter);
+    repeatedEntries = studyPeriod.repeatedEntries;
+    expect(1, repeatedEntries.length);
+    expect(true, repeatedEntries.contains(currentEntry));
+    studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(0, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -853,6 +946,8 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(0, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -864,6 +959,36 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(true, shouldShowTheCorrectAnswer);
+    currentQuestionCounter = studyPeriod.currentQuestionCounter;
+    expect(0, currentQuestionCounter);
+    isCompleted = studyPeriod.isCompleted;
+    expect(false, isCompleted);
+    triesCounter = studyPeriod.triesCounter;
+    expect(0, triesCounter);
+    studyPeriod.checkAnAnswer("answer answer1");
+    triesCounter = studyPeriod.triesCounter;
+    expect(1, triesCounter);
+    repeatedEntries = studyPeriod.repeatedEntries;
+    expect(1, repeatedEntries.length);
+    expect(true, repeatedEntries.contains(currentEntry));
+    studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
+    currentQuestionCounter = studyPeriod.currentQuestionCounter;
+    expect(0, currentQuestionCounter);
+    isCompleted = studyPeriod.isCompleted;
+    expect(false, isCompleted);
+    studyPeriod.checkAnAnswer("answer1 answer1");
+    triesCounter = studyPeriod.triesCounter;
+    expect(2, triesCounter);
+    repeatedEntries = studyPeriod.repeatedEntries;
+    expect(1, repeatedEntries.length);
+    expect(true, repeatedEntries.contains(currentEntry));
+    studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(1, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -871,6 +996,7 @@ main() {
     expect(() {
       studyPeriod.next();
     }, throwsStateError);
+    ///////////
     studyPeriod = StudyPeriod(
         uuid.v4(), fieldList1, entries1, 0, 3, Duration(seconds: 10));
     currentEntry = studyPeriod.currentEntry;
@@ -885,10 +1011,14 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(0, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
     expect(false, isCompleted);
+    triesCounter = studyPeriod.triesCounter;
+    expect(1, triesCounter);
     studyPeriod.checkAnAnswer("answer answer1");
     triesCounter = studyPeriod.triesCounter;
     expect(2, triesCounter);
@@ -896,10 +1026,14 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(0, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
     expect(false, isCompleted);
+    triesCounter = studyPeriod.triesCounter;
+    expect(2, triesCounter);
     studyPeriod.checkAnAnswer("answer1 answer1");
     triesCounter = studyPeriod.triesCounter;
     expect(3, triesCounter);
@@ -907,6 +1041,8 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(1, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -914,6 +1050,7 @@ main() {
     expect(() {
       studyPeriod.next();
     }, throwsStateError);
+    ////////////
     var textEntryId2 = uuid.v4();
     var textEntryId3 = uuid.v4();
     entries1 = List<TextEntry>.unmodifiable([
@@ -940,6 +1077,8 @@ main() {
     repeatedEntries = studyPeriod.repeatedEntries;
     expect(0, repeatedEntries.length);
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(1, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -956,6 +1095,8 @@ main() {
     repeatedEntries = studyPeriod.repeatedEntries;
     expect(0, repeatedEntries.length);
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(2, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -972,6 +1113,8 @@ main() {
     repeatedEntries = studyPeriod.repeatedEntries;
     expect(0, repeatedEntries.length);
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(3, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -979,6 +1122,7 @@ main() {
     expect(() {
       studyPeriod.next();
     }, throwsStateError);
+    ////////////
     studyPeriod = StudyPeriod(
         uuid.v4(), fieldList1, entries1, 0, 3, Duration(seconds: 10));
     currentEntry = studyPeriod.currentEntry;
@@ -996,6 +1140,8 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(0, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -1013,6 +1159,8 @@ main() {
     expect(1, repeatedEntries.length);
     expect(true, repeatedEntries.contains(currentEntry));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(1, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -1031,6 +1179,8 @@ main() {
     expect(true, repeatedEntries.contains(currentEntry));
     expect(true, repeatedEntries.contains(studyPeriod.entries[1]));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(1, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -1049,6 +1199,8 @@ main() {
     expect(true, repeatedEntries.contains(currentEntry));
     expect(true, repeatedEntries.contains(studyPeriod.entries[1]));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(1, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -1067,6 +1219,61 @@ main() {
     expect(true, repeatedEntries.contains(currentEntry));
     expect(true, repeatedEntries.contains(studyPeriod.entries[1]));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(true, shouldShowTheCorrectAnswer);
+    currentQuestionCounter = studyPeriod.currentQuestionCounter;
+    expect(1, currentQuestionCounter);
+    isCompleted = studyPeriod.isCompleted;
+    expect(false, isCompleted);
+    triesCounter = studyPeriod.triesCounter;
+    expect(0, triesCounter);
+    studyPeriod.checkAnAnswer("answer answer2");
+    expect(() {
+      studyPeriod.checkAnAnswer("userAnswerff");
+    }, throwsStateError);
+    triesCounter = studyPeriod.triesCounter;
+    expect(1, triesCounter);
+    repeatedEntries = studyPeriod.repeatedEntries;
+    expect(2, repeatedEntries.length);
+    expect(true, repeatedEntries.contains(currentEntry));
+    expect(true, repeatedEntries.contains(studyPeriod.entries[1]));
+    studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
+    currentQuestionCounter = studyPeriod.currentQuestionCounter;
+    expect(1, currentQuestionCounter);
+    isCompleted = studyPeriod.isCompleted;
+    expect(false, isCompleted);
+    studyPeriod.checkAnAnswer("answer answer2");
+    expect(() {
+      studyPeriod.checkAnAnswer("userAnswerff");
+    }, throwsStateError);
+    triesCounter = studyPeriod.triesCounter;
+    expect(2, triesCounter);
+    repeatedEntries = studyPeriod.repeatedEntries;
+    expect(2, repeatedEntries.length);
+    expect(true, repeatedEntries.contains(currentEntry));
+    expect(true, repeatedEntries.contains(studyPeriod.entries[1]));
+    studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
+    currentQuestionCounter = studyPeriod.currentQuestionCounter;
+    expect(1, currentQuestionCounter);
+    isCompleted = studyPeriod.isCompleted;
+    expect(false, isCompleted);
+    studyPeriod.checkAnAnswer("answer2 answer2");
+    expect(() {
+      studyPeriod.checkAnAnswer("userAnswerff");
+    }, throwsStateError);
+    triesCounter = studyPeriod.triesCounter;
+    expect(3, triesCounter);
+    repeatedEntries = studyPeriod.repeatedEntries;
+    expect(2, repeatedEntries.length);
+    expect(true, repeatedEntries.contains(currentEntry));
+    expect(true, repeatedEntries.contains(studyPeriod.entries[1]));
+    studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(2, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;
@@ -1085,6 +1292,8 @@ main() {
     expect(true, repeatedEntries.contains(currentEntry));
     expect(true, repeatedEntries.contains(studyPeriod.entries[1]));
     studyPeriod.next();
+    shouldShowTheCorrectAnswer = studyPeriod.shouldShowTheCorrectAnswer;
+    expect(false, shouldShowTheCorrectAnswer);
     currentQuestionCounter = studyPeriod.currentQuestionCounter;
     expect(3, currentQuestionCounter);
     isCompleted = studyPeriod.isCompleted;

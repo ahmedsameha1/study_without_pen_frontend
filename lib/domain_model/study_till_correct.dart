@@ -8,6 +8,7 @@ abstract class StudyTillCorrect extends Session {
   late int _currentQuestionCounter;
   late List<TextEntry> _entries;
   late Set<TextEntry> _repeatedEntries = Set<TextEntry>.identity();
+  bool _shouldShowTheCorrectAnswer = false;
   StudyTillCorrect(String uuid, FieldList fieldList, List<TextEntry> entries,
       int currentQuestionCounter, int triesNumber, Duration elapsedTime)
       : super(uuid, fieldList, triesNumber, elapsedTime) {
@@ -39,6 +40,7 @@ abstract class StudyTillCorrect extends Session {
   List<TextEntry> get entries => _entries;
   TextEntry get currentEntry => entries[currentQuestionCounter];
   Set<TextEntry> get repeatedEntries => Set<TextEntry>.from(_repeatedEntries);
+  bool get shouldShowTheCorrectAnswer => _shouldShowTheCorrectAnswer;
 
   resetCurrentQuestionCounterToZero() {
     this._currentQuestionCounter = 0;
@@ -86,11 +88,19 @@ abstract class StudyTillCorrect extends Session {
     if (shouldCheckAnAnswer) {
       throw StateError("Call checkAnAnswer() first!");
     }
-    if (lastCheckedAnswerResult || triesCounter == triesNumber) {
+    if (lastCheckedAnswerResult) {
+      _shouldShowTheCorrectAnswer = false;
       increaseCurrentQuestionCounterByOne();
       resetTriesCounterToZero();
       if (currentQuestionCounter == entries.length) {
         setSessionCompleted();
+      }
+    } else {
+      if (triesCounter == triesNumber) {
+        _shouldShowTheCorrectAnswer = true;
+        resetTriesCounterToZero();
+      } else {
+        _shouldShowTheCorrectAnswer = false;
       }
     }
     switchShouldCheckAnAnswer();
