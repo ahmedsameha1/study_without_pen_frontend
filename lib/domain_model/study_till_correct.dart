@@ -6,7 +6,8 @@ import 'package:uuid/uuid.dart';
 
 abstract class StudyTillCorrect extends Session {
   late int _currentQuestionCounter;
-  late final List<TextEntry> _entries;
+  late List<TextEntry> _entries;
+  late Set<TextEntry> _repeatedEntries = Set<TextEntry>.identity();
   StudyTillCorrect(String uuid, FieldList fieldList, List<TextEntry> entries,
       int currentQuestionCounter, int triesNumber, Duration elapsedTime)
       : super(uuid, fieldList, triesNumber, elapsedTime) {
@@ -37,6 +38,7 @@ abstract class StudyTillCorrect extends Session {
   int get currentQuestionCounter => _currentQuestionCounter;
   List<TextEntry> get entries => _entries;
   TextEntry get currentEntry => entries[currentQuestionCounter];
+  Set<TextEntry> get repeatedEntries => Set<TextEntry>.from(_repeatedEntries);
 
   resetCurrentQuestionCounterToZero() {
     this._currentQuestionCounter = 0;
@@ -69,6 +71,9 @@ abstract class StudyTillCorrect extends Session {
         lastCheckedAnswerResult = userAnswer.toLowerCase() ==
             entries[currentQuestionCounter].answer.toLowerCase();
         break;
+    }
+    if (!lastCheckedAnswerResult) {
+      _repeatedEntries.add(entries[currentQuestionCounter]);
     }
     switchShouldCheckAnAnswer();
   }
