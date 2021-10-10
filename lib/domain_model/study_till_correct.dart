@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
 import 'package:study_without_pen_by_flutter/domain_model/session.dart';
 import 'package:study_without_pen_by_flutter/domain_model/text_entry.dart';
@@ -6,11 +8,13 @@ import 'package:uuid/uuid.dart';
 
 abstract class StudyTillCorrect extends Session {
   late int _currentQuestionCounter;
-  late List<TextEntry> _entries;
+  late Set<TextEntry> _entries;
   late Set<TextEntry> _repeatedEntries = Set<TextEntry>.identity();
   bool _shouldShowTheCorrectAnswer = false;
-  StudyTillCorrect(String uuid, FieldList fieldList, List<TextEntry> entries,
-      int currentQuestionCounter, int triesNumber, Duration elapsedTime)
+  int? _seed;
+  StudyTillCorrect(String uuid, FieldList fieldList, Set<TextEntry> entries,
+      int currentQuestionCounter, int triesNumber, Duration elapsedTime,
+      {int? seed})
       : super(uuid, fieldList, triesNumber, elapsedTime) {
     /////////////////////////////////////////////////////////////////////////
     // _currentQuestionCounter validation
@@ -34,11 +38,12 @@ abstract class StudyTillCorrect extends Session {
       }
       this._entries = entries;
     }
+    this._seed = seed;
   }
 
   int get currentQuestionCounter => _currentQuestionCounter;
-  List<TextEntry> get entries => _entries;
-  TextEntry get currentEntry => entries[currentQuestionCounter];
+  Set<TextEntry> get entries => _entries;
+  TextEntry get currentEntry => entries.elementAt(_currentQuestionCounter);
   Set<TextEntry> get repeatedEntries => Set<TextEntry>.from(_repeatedEntries);
   bool get shouldShowTheCorrectAnswer => _shouldShowTheCorrectAnswer;
 
@@ -59,23 +64,23 @@ abstract class StudyTillCorrect extends Session {
     switch (fieldList.checkType) {
       case CheckType.DO_NOT_IGNORE_CASE:
         lastCheckedAnswerResult =
-            userAnswer == entries[currentQuestionCounter].answer;
+            userAnswer == entries.elementAt(_currentQuestionCounter).answer;
         break;
       case CheckType.NON_STRICT_IGNORE_CASE:
         lastCheckedAnswerResult = CompareUtility.nonStrictCompareIgnoreCase(
-            entries[currentQuestionCounter].answer, userAnswer);
+            entries.elementAt(_currentQuestionCounter).answer, userAnswer);
         break;
       case CheckType.NON_STRICT_DO_NOT_IGNORE_CASE:
         lastCheckedAnswerResult = CompareUtility.nonStrictCompare(
-            entries[currentQuestionCounter].answer, userAnswer);
+            entries.elementAt(_currentQuestionCounter).answer, userAnswer);
         break;
       case CheckType.IGNORE_CASE:
         lastCheckedAnswerResult = userAnswer.toLowerCase() ==
-            entries[currentQuestionCounter].answer.toLowerCase();
+            entries.elementAt(_currentQuestionCounter).answer.toLowerCase();
         break;
     }
-    if (!lastCheckedAnswerResult) {
-      _repeatedEntries.add(entries[currentQuestionCounter]);
+    if (!lastCheckedAnswerResult && triesCounter == triesNumber) {
+      _repeatedEntries.add(entries.elementAt(_currentQuestionCounter));
     }
     switchShouldCheckAnAnswer();
   }
@@ -93,7 +98,14 @@ abstract class StudyTillCorrect extends Session {
       increaseCurrentQuestionCounterByOne();
       resetTriesCounterToZero();
       if (currentQuestionCounter == entries.length) {
-        setSessionCompleted();
+        if (_repeatedEntries.isNotEmpty) {
+          resetCurrentQuestionCounterToZero();
+          _entries = Set<TextEntry>.unmodifiable(
+              _repeatedEntries.toList()..shuffle(Random(_seed)));
+          _repeatedEntries = Set<TextEntry>.identity();
+        } else {
+          setSessionCompleted();
+        }
       }
     } else {
       if (triesCounter == triesNumber) {
