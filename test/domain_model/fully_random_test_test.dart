@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
-import 'package:study_without_pen_by_flutter/domain_model/fully_random_test.dart';
+import 'package:study_without_pen_by_flutter/domain_model/sessions.dart';
 import 'package:uuid/uuid.dart';
 
 main() {

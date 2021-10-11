@@ -1,10 +1,77 @@
 import 'dart:math';
 
 import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
-import 'package:study_without_pen_by_flutter/domain_model/session.dart';
+import 'package:study_without_pen_by_flutter/domain_model/has_id.dart';
 import 'package:study_without_pen_by_flutter/domain_model/text_entry.dart';
 import 'package:study_without_pen_by_flutter/utilities/compare_utility.dart';
 import 'package:uuid/uuid.dart';
+
+abstract class Session extends HasId {
+  late FieldList _fieldList;
+  late int _triesNumber;
+  int _triesCounter = 0;
+  late Duration _elapsedTime;
+  bool _isCompleted = false;
+  bool _lastCheckedAnswerResult = false;
+  bool _shouldCheckAnAnswer = true;
+  Session(
+      String uuid, FieldList fieldList, int triesNumber, Duration elapsedTime)
+      : super(uuid) {
+    this._fieldList = fieldList;
+    /////////////////////////////////////////////////////////////////////////
+    // _triesNumber validation
+    if (triesNumber < 1) {
+      throw ArgumentError("_triesNumber cannot be smaller than one");
+    }
+    this._triesNumber = triesNumber;
+    this._elapsedTime = elapsedTime;
+  }
+
+  FieldList get fieldList => _fieldList;
+  int get triesNumber => _triesNumber;
+  Duration get elapsedTime => _elapsedTime;
+  int get triesCounter => _triesCounter;
+  bool get isCompleted => _isCompleted;
+  bool get lastCheckedAnswerResult {
+    if (triesCounter < 1) {
+      throw StateError("there is not any checks of answers");
+    }
+    return _lastCheckedAnswerResult;
+  }
+
+  bool get shouldCheckAnAnswer => _shouldCheckAnAnswer;
+
+  set elapsedTime(Duration elapsedTime) {
+    if (elapsedTime.compareTo(this._elapsedTime) <= 0) {
+      throw ArgumentError(
+          "_elapsedTime cannot be set to be smaller than or equal the current value");
+    }
+    this._elapsedTime = elapsedTime;
+  }
+
+  set lastCheckedAnswerResult(bool lastCheckedAnswerResult) {
+    this._lastCheckedAnswerResult = lastCheckedAnswerResult;
+  }
+
+  switchShouldCheckAnAnswer() {
+    this._shouldCheckAnAnswer = !this._shouldCheckAnAnswer;
+  }
+
+  increaseTriesCounterByOne() {
+    this._triesCounter++;
+  }
+
+  resetTriesCounterToZero() {
+    this._triesCounter = 0;
+  }
+
+  setSessionCompleted() {
+    this._isCompleted = true;
+  }
+
+  checkAnAnswer(String userAnswer);
+  next();
+}
 
 abstract class StudyTillCorrect extends Session {
   late int _currentQuestionCounter;
@@ -116,5 +183,75 @@ abstract class StudyTillCorrect extends Session {
       }
     }
     switchShouldCheckAnAnswer();
+  }
+}
+
+abstract class Test extends Session {
+  late int _currentQuestionCounter;
+  Test(String uuid, FieldList fieldList, int currentQuestionCounter,
+      int triesNumber, Duration elapsedTime)
+      : super(uuid, fieldList, triesNumber, elapsedTime) {
+    /////////////////////////////////////////////////////////////////////////
+    // _currentQuestionCounter validation
+    if (currentQuestionCounter < 0) {
+      throw ArgumentError("_currentQuestionCounter cannot be negative");
+    }
+    this._currentQuestionCounter = currentQuestionCounter;
+  }
+
+  int get currentQuestionCounter => _currentQuestionCounter;
+
+  increaseCurrentQuestionCounterByOne() {
+    this._currentQuestionCounter++;
+  }
+
+  @override
+  bool checkAnAnswer(String userAnswer) {
+    throw UnimplementedError();
+  }
+}
+
+
+class AskAgainAfterTest extends StudyTillCorrect {
+  AskAgainAfterTest(String uuid, FieldList fieldList, Set<TextEntry> entries,
+      int currentQuestionCounter, int triesNumber, Duration elapsedTime,
+      {int? seed})
+      : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
+      elapsedTime,
+      seed: seed);
+}
+
+class StudyPeriod extends StudyTillCorrect {
+  StudyPeriod(String uuid, FieldList fieldList, Set<TextEntry> entries,
+      int currentQuestionCounter, int triesNumber, Duration elapsedTime,
+      {int? seed})
+      : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
+      elapsedTime,
+      seed: seed);
+}
+
+class EnhancedTest extends Test {
+  EnhancedTest(String uuid, FieldList fieldList, int currentQuestionCounter,
+      int triesNumber, Duration elapsedTime)
+      : super(
+      uuid, fieldList, currentQuestionCounter, triesNumber, elapsedTime);
+
+  @override
+  next() {
+    // TODO: implement next
+    throw UnimplementedError();
+  }
+}
+
+class FullyRandomTest extends Test {
+  FullyRandomTest(String uuid, FieldList fieldList, int currentQuestionCounter,
+      int triesNumber, Duration elapsedTime)
+      : super(
+      uuid, fieldList, currentQuestionCounter, triesNumber, elapsedTime);
+
+  @override
+  next() {
+    // TODO: implement next
+    throw UnimplementedError();
   }
 }
