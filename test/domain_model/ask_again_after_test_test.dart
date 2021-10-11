@@ -739,9 +739,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       var repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       var shouldShowTheCorrectAnswer =
           askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -772,10 +772,10 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       var repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true, repeatedEntries.contains(currentEntry));
-      askAgainAfterTest.next();
       var shouldShowTheCorrectAnswer =
           askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
@@ -788,10 +788,10 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true, repeatedEntries.contains(currentEntry));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -803,9 +803,6 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
-      repeatedEntries = askAgainAfterTest.repeatedEntries;
-      expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(currentEntry));
       askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -824,10 +821,10 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true, repeatedEntries.contains(currentEntry));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -837,9 +834,6 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
-      repeatedEntries = askAgainAfterTest.repeatedEntries;
-      expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(currentEntry));
       askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -858,9 +852,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -890,9 +884,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       var repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       var shouldShowTheCorrectAnswer =
           askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -923,9 +917,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       var repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       var shouldShowTheCorrectAnswer =
           askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -938,9 +932,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -970,9 +964,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       var repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       var shouldShowTheCorrectAnswer =
           askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -985,9 +979,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -999,10 +993,10 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true, repeatedEntries.contains(currentEntry));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1014,10 +1008,10 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true, repeatedEntries.contains(currentEntry));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1027,10 +1021,10 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true, repeatedEntries.contains(currentEntry));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1040,10 +1034,10 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true, repeatedEntries.contains(currentEntry));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1055,10 +1049,10 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true, repeatedEntries.contains(currentEntry));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1068,9 +1062,6 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
-      repeatedEntries = askAgainAfterTest.repeatedEntries;
-      expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(currentEntry));
       askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -1089,9 +1080,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1101,9 +1092,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1133,9 +1124,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       var repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       var shouldShowTheCorrectAnswer =
           askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -1148,9 +1139,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1162,9 +1153,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1205,9 +1196,9 @@ main() {
       }, throwsStateError);
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       var repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       var shouldShowTheCorrectAnswer =
           askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -1224,9 +1215,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1242,9 +1233,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1263,7 +1254,7 @@ main() {
       var textEntryId3 = uuid.v4();
       var textEntryId4 = uuid.v4();
       var textEntryId5 = uuid.v4();
-      var entries4 = Set<TextEntry>.unmodifiable([
+      var entries = Set<TextEntry>.unmodifiable([
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1)),
         TextEntry(textEntryId2, "question2", "answer2 answer2", uuid.v4(),
@@ -1279,7 +1270,7 @@ main() {
           uuid.v4(), "list1", uuid.v4(), DateTime.now(),
           checkType: CheckType.DO_NOT_IGNORE_CASE);
       var askAgainAfterTest = AskAgainAfterTest(
-          uuid.v4(), fieldList, entries4, 0, 3, Duration(seconds: 10),
+          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10),
           seed: 1);
       var currentEntry = askAgainAfterTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
@@ -1292,9 +1283,9 @@ main() {
       }, throwsStateError);
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       var repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       var shouldShowTheCorrectAnswer =
           askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -1311,9 +1302,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1329,9 +1320,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1347,9 +1338,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1365,11 +1356,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1384,11 +1375,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1401,11 +1392,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1418,11 +1409,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1438,11 +1429,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1455,11 +1446,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1472,11 +1463,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1489,13 +1480,13 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(3)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1510,13 +1501,13 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(3)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1529,13 +1520,13 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(3)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1548,13 +1539,13 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(3)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1569,13 +1560,13 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(3)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1588,13 +1579,13 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(3)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1607,13 +1598,13 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(3)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1626,13 +1617,13 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(3)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1645,6 +1636,7 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(3, repeatedEntries.length);
       expect(true,
@@ -1653,7 +1645,6 @@ main() {
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(3)));
       expect(true,
           repeatedEntries.contains(askAgainAfterTest.entries.elementAt(4)));
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1668,14 +1659,6 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
-      repeatedEntries = askAgainAfterTest.repeatedEntries;
-      expect(3, repeatedEntries.length);
-      expect(true,
-          repeatedEntries.contains(askAgainAfterTest.entries.elementAt(1)));
-      expect(true,
-          repeatedEntries.contains(askAgainAfterTest.entries.elementAt(3)));
-      expect(true,
-          repeatedEntries.contains(askAgainAfterTest.entries.elementAt(4)));
       askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -1685,13 +1668,13 @@ main() {
       expect(false, isCompleted);
       var newEntries = askAgainAfterTest.entries;
       expect(3, newEntries.length);
-      expect(true, newEntries.contains(entries4.elementAt(1)));
-      expect(true, newEntries.contains(entries4.elementAt(3)));
-      expect(true, newEntries.contains(entries4.elementAt(4)));
+      expect(true, newEntries.contains(entries.elementAt(1)));
+      expect(true, newEntries.contains(entries.elementAt(3)));
+      expect(true, newEntries.contains(entries.elementAt(4)));
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
       currentEntry = askAgainAfterTest.currentEntry;
-      expect(entries4.elementAt(4), currentEntry);
+      expect(entries.elementAt(4), currentEntry);
       //Second Round all will be answered wrongly
       askAgainAfterTest.checkAnAnswer("answer answer5");
       expect(() {
@@ -1699,9 +1682,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1714,9 +1697,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1729,10 +1712,10 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1747,10 +1730,10 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1763,10 +1746,10 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1779,10 +1762,10 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1795,11 +1778,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1814,11 +1797,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1831,11 +1814,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1848,11 +1831,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1865,11 +1848,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1882,12 +1865,12 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(3, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1902,12 +1885,12 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(3, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1920,12 +1903,12 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(3, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(4)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1938,11 +1921,6 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
-      repeatedEntries = askAgainAfterTest.repeatedEntries;
-      expect(3, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(4)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
       askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -1950,6 +1928,15 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      newEntries = askAgainAfterTest.entries;
+      expect(3, newEntries.length);
+      expect(true, newEntries.contains(entries.elementAt(1)));
+      expect(true, newEntries.contains(entries.elementAt(3)));
+      expect(true, newEntries.contains(entries.elementAt(4)));
+      repeatedEntries = askAgainAfterTest.repeatedEntries;
+      expect(0, repeatedEntries.length);
+      currentEntry = askAgainAfterTest.currentEntry;
+      expect(entries.elementAt(1), currentEntry);
       //Third Round two will be answered wrongly
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
@@ -1957,9 +1944,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1972,9 +1959,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -1987,10 +1974,10 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2005,10 +1992,10 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2021,10 +2008,10 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2037,10 +2024,10 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2053,11 +2040,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2072,11 +2059,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2089,11 +2076,11 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(2, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
+      expect(true, repeatedEntries.contains(entries.elementAt(3)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2106,10 +2093,6 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
-      repeatedEntries = askAgainAfterTest.repeatedEntries;
-      expect(2, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      expect(true, repeatedEntries.contains(entries4.elementAt(3)));
       askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -2117,6 +2100,14 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      newEntries = askAgainAfterTest.entries;
+      expect(2, newEntries.length);
+      expect(true, newEntries.contains(entries.elementAt(1)));
+      expect(true, newEntries.contains(entries.elementAt(3)));
+      repeatedEntries = askAgainAfterTest.repeatedEntries;
+      expect(0, repeatedEntries.length);
+      currentEntry = askAgainAfterTest.currentEntry;
+      expect(entries.elementAt(3), currentEntry);
       //Fourth Round one will be answered wrongly
       askAgainAfterTest.checkAnAnswer("answer4 answer4");
       expect(() {
@@ -2124,9 +2115,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2139,9 +2130,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2154,9 +2145,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2169,10 +2160,10 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(true, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2187,10 +2178,10 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
-      askAgainAfterTest.next();
+      expect(true, repeatedEntries.contains(entries.elementAt(1)));
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
@@ -2203,9 +2194,6 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
-      repeatedEntries = askAgainAfterTest.repeatedEntries;
-      expect(1, repeatedEntries.length);
-      expect(true, repeatedEntries.contains(entries4.elementAt(1)));
       askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
@@ -2213,6 +2201,13 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      newEntries = askAgainAfterTest.entries;
+      expect(1, newEntries.length);
+      expect(true, newEntries.contains(entries.elementAt(1)));
+      repeatedEntries = askAgainAfterTest.repeatedEntries;
+      expect(0, repeatedEntries.length);
+      currentEntry = askAgainAfterTest.currentEntry;
+      expect(entries.elementAt(1), currentEntry);
       //Fifth Round answer the only entry correctly
       askAgainAfterTest.checkAnAnswer("answer2 answer2");
       expect(() {
@@ -2220,9 +2215,9 @@ main() {
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      askAgainAfterTest.next();
       repeatedEntries = askAgainAfterTest.repeatedEntries;
       expect(0, repeatedEntries.length);
-      askAgainAfterTest.next();
       shouldShowTheCorrectAnswer = askAgainAfterTest.shouldShowTheCorrectAnswer;
       expect(false, shouldShowTheCorrectAnswer);
       currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;

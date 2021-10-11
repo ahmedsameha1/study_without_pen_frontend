@@ -1,25 +1,33 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
 import 'package:study_without_pen_by_flutter/domain_model/sessions.dart';
+import 'package:study_without_pen_by_flutter/domain_model/text_entry.dart';
 import 'package:uuid/uuid.dart';
 
 main() {
   final uuid = Uuid();
   final FieldList fieldList =
       FieldList(uuid.v4(), "list1", uuid.v4(), DateTime.now());
+  final Set<TextEntry> entries = Set<TextEntry>.unmodifiable([
+    TextEntry(
+        uuid.v4(), "question", "answer", uuid.v4(), DateTime.utc(2020, 1, 1))
+  ]);
   group("_id tests", () {
     test("_id is a valid UUID", () {
-      expect(() => FullyRandomTest("", fieldList, 0, 1, Duration()),
+      expect(() => FullyRandomTest("", fieldList, entries, 0, 1, Duration()),
           throwsArgumentError);
-      expect(() => FullyRandomTest("weuwe", fieldList, 0, 1, Duration()),
+      expect(
+          () => FullyRandomTest("weuwe", fieldList, entries, 0, 1, Duration()),
           throwsArgumentError);
-      expect(() => FullyRandomTest(uuid.v4(), fieldList, 0, 1, Duration()),
+      expect(
+          () =>
+              FullyRandomTest(uuid.v4(), fieldList, entries, 0, 1, Duration()),
           returnsNormally);
     });
     test("_id has been assigned the correct value", () {
       String uuidString = uuid.v4();
       final fullyRandomTest =
-          FullyRandomTest(uuidString, fieldList, 0, 1, Duration());
+          FullyRandomTest(uuidString, fieldList, entries, 0, 1, Duration());
       final id = fullyRandomTest.id;
       expect(uuidString, id);
     });
@@ -30,40 +38,46 @@ main() {
       final FieldList fieldList1 =
           FieldList(uuidString, "list1", uuid.v4(), DateTime.now());
       final fullyRandomTest =
-          FullyRandomTest(uuid.v4(), fieldList1, 0, 1, Duration());
+          FullyRandomTest(uuid.v4(), fieldList1, entries, 0, 1, Duration());
       final fieldListId = fullyRandomTest.fieldList.id;
       expect(uuidString, fieldListId);
     });
   });
   group("_currentQuestionCounter tests", () {
     test("_currentQuestionCounter cannot be negative", () {
-      expect(() => FullyRandomTest(uuid.v4(), fieldList, -1, 1, Duration()),
+      expect(
+          () =>
+              FullyRandomTest(uuid.v4(), fieldList, entries, -1, 1, Duration()),
           throwsArgumentError);
     });
     test("increaseCurrentQuestionCounterByOne method test", () {
       final fullyRandomTest =
-          FullyRandomTest(uuid.v4(), fieldList, 3, 1, Duration());
+          FullyRandomTest(uuid.v4(), fieldList, entries, 3, 1, Duration());
       fullyRandomTest.increaseCurrentQuestionCounterByOne();
       var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
       expect(4, currentQuestionCounter);
     });
     test("_currentQuestionCounter has been assigned the correct value", () {
       final fullyRandomTest =
-          FullyRandomTest(uuid.v4(), fieldList, 3, 1, Duration());
+          FullyRandomTest(uuid.v4(), fieldList, entries, 3, 1, Duration());
       var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
       expect(3, currentQuestionCounter);
     });
   });
   group("_triesNumber tests", () {
     test("_triesNumber cannot be smaller than one", () {
-      expect(() => FullyRandomTest(uuid.v4(), fieldList, 0, 0, Duration()),
+      expect(
+          () =>
+              FullyRandomTest(uuid.v4(), fieldList, entries, 0, 0, Duration()),
           throwsArgumentError);
-      expect(() => FullyRandomTest(uuid.v4(), fieldList, 0, -1, Duration()),
+      expect(
+          () =>
+              FullyRandomTest(uuid.v4(), fieldList, entries, 0, -1, Duration()),
           throwsArgumentError);
     });
     test("_triesNumber has been assigned the correct value", () {
       final fullyRandomTest =
-          FullyRandomTest(uuid.v4(), fieldList, 0, 3, Duration());
+          FullyRandomTest(uuid.v4(), fieldList, entries, 0, 3, Duration());
       var triesNumber = fullyRandomTest.triesNumber;
       expect(3, triesNumber);
     });
@@ -74,18 +88,18 @@ main() {
         () {
       expect(() {
         final fullyRandomTest =
-            FullyRandomTest(uuid.v4(), fieldList, 0, 3, Duration());
+            FullyRandomTest(uuid.v4(), fieldList, entries, 0, 3, Duration());
         fullyRandomTest.elapsedTime = Duration();
       }, throwsArgumentError);
       expect(() {
-        final fullyRandomTest =
-            FullyRandomTest(uuid.v4(), fieldList, 0, 3, Duration(seconds: 10));
+        final fullyRandomTest = FullyRandomTest(
+            uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
         fullyRandomTest.elapsedTime = Duration();
       }, throwsArgumentError);
     });
     test("_elapsedTime has been assigned the correct value", () {
-      final fullyRandomTest =
-          FullyRandomTest(uuid.v4(), fieldList, 0, 3, Duration(seconds: 10));
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
       var elapsedTime = fullyRandomTest.elapsedTime;
       expect(Duration(seconds: 10), elapsedTime);
       fullyRandomTest.elapsedTime = Duration(minutes: 1);
