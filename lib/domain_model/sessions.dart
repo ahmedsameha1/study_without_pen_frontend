@@ -184,10 +184,13 @@ abstract class StudyTillCorrect extends Session {
 }
 
 abstract class Test extends Session {
+  Map<String, List<String>> _wrongAnswers =
+      Map<String, List<String>>.identity();
   Test(String uuid, FieldList fieldList, Set<TextEntry> entries,
       int currentQuestionCounter, int triesNumber, Duration elapsedTime)
       : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
             elapsedTime);
+  Map<String, List<String>> get wrongAnswers => _wrongAnswers;
 }
 
 class AskAgainAfterTest extends StudyTillCorrect {
