@@ -6,11 +6,12 @@ import 'package:uuid/uuid.dart';
 
 main() {
   final uuid = Uuid();
+  final textEntryId = uuid.v4();
   final FieldList fieldList =
       FieldList(uuid.v4(), "list1", uuid.v4(), DateTime.now());
   final Set<TextEntry> entries = Set<TextEntry>.unmodifiable([
     TextEntry(
-        uuid.v4(), "question", "answer", uuid.v4(), DateTime.utc(2020, 1, 1))
+        textEntryId, "question", "answer", uuid.v4(), DateTime.utc(2020, 1, 1))
   ]);
   group("_id tests", () {
     test("_id is a valid UUID", () {
@@ -711,10 +712,1017 @@ main() {
       expect(true, result);
     });
   });
-  test("_wrongAnswers is an empty Map while object construction", () {
+  test("_wrongAnswers is populated with an empty list for each entry in entries while object construction", () {
     final fullyRandomTest = FullyRandomTest(
         uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
     Map<String, List<String>> wrongAnswers = fullyRandomTest.wrongAnswers;
-    expect(0, wrongAnswers.length);
+    expect(1, wrongAnswers.length);
+    expect(true, wrongAnswers.containsKey(textEntryId));
+  });
+  group("Session workflow tests", () {
+    test("One entry, one try, answered correctly", () {
+      var textEntryId1 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 1, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer1 answer1");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
+    test("One entry, one try, answered wrongly", () {
+      var textEntryId1 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 1, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer answer1");
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
+    test("One entry, three tries, answered correctly", () {
+      var textEntryId1 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer1 answer1");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
+    test("One entry, three tries, answered correctly in the third try", () {
+      var textEntryId1 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer answer1");
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answe answer1");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("answe answer1", wrongAnswers[textEntryId1]![1]);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer1 answer1");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(3, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("answe answer1", wrongAnswers[textEntryId1]![1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
+    test("One entry, three tries, answered wrongly", () {
+      var textEntryId1 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer answer1");
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answe answer1");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("answe answer1", wrongAnswers[textEntryId1]![1]);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer1 answer1");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(3, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("answe answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![2]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
+    test("Three entries, one try, answered correctly", () {
+      var textEntryId1 = uuid.v4();
+      var textEntryId2 = uuid.v4();
+      var textEntryId3 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId2, "question2", "answer2 answer2", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 1, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer1 answer1");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer2 answer2");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      expect([], wrongAnswers[textEntryId2]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer3 answer3");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(3, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      expect([], wrongAnswers[textEntryId2]);
+      expect([], wrongAnswers[textEntryId3]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
+    test("Three entries, one try, answered two wrongly, one correctly", () {
+      var textEntryId1 = uuid.v4();
+      var textEntryId2 = uuid.v4();
+      var textEntryId3 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId2, "question2", "answer2 answer2", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 1, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer1 answer1");
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer answer2");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer3 answer3");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(3, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      expect("nswer3 answer3", wrongAnswers[textEntryId3]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(2, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
+    test("Three entries, three tries, answered correctly", () {
+      var textEntryId1 = uuid.v4();
+      var textEntryId2 = uuid.v4();
+      var textEntryId3 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId2, "question2", "answer2 answer2", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer1 answer1");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer2 answer2");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      expect([], wrongAnswers[textEntryId2]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer3 answer3");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(3, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect([], wrongAnswers[textEntryId1]);
+      expect([], wrongAnswers[textEntryId2]);
+      expect([], wrongAnswers[textEntryId3]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
+    test("Three entries, three tries, answered correctly, two after tries", () {
+      var textEntryId1 = uuid.v4();
+      var textEntryId2 = uuid.v4();
+      var textEntryId3 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId2, "question2", "answer2 answer2", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer answer1");
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer1 answer1");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer1 answer1");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(3, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer2 answer2");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect([], wrongAnswers[textEntryId2]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer answer3");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect([], wrongAnswers[textEntryId2]);
+      expect("answer answer3", wrongAnswers[textEntryId3]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer3 answer3");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(3, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect([], wrongAnswers[textEntryId2]);
+      expect("answer answer3", wrongAnswers[textEntryId3]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
+    test("Three entries, three tries, all answered wrongly", () {
+      var textEntryId1 = uuid.v4();
+      var textEntryId2 = uuid.v4();
+      var textEntryId3 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId2, "question2", "answer2 answer2", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer answer1");
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer1 answer1");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer answer1");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(3, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId2, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer answer2");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer2 answer2");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      expect("nswer2 answer2", wrongAnswers[textEntryId2]![1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer answer2");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(3, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      expect("nswer2 answer2", wrongAnswers[textEntryId2]![1]);
+      expect("nswer answer2", wrongAnswers[textEntryId2]![2]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(2, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId3, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer answer3");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      expect("nswer2 answer2", wrongAnswers[textEntryId2]![1]);
+      expect("nswer answer2", wrongAnswers[textEntryId2]![2]);
+      expect("answer answer3", wrongAnswers[textEntryId3]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(2, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer3 answer3");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      expect("nswer2 answer2", wrongAnswers[textEntryId2]![1]);
+      expect("nswer answer2", wrongAnswers[textEntryId2]![2]);
+      expect("answer answer3", wrongAnswers[textEntryId3]![0]);
+      expect("nswer3 answer3", wrongAnswers[textEntryId3]![1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(2, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer answer3");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(3, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(3, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      expect("nswer2 answer2", wrongAnswers[textEntryId2]![1]);
+      expect("nswer answer2", wrongAnswers[textEntryId2]![2]);
+      expect("answer answer3", wrongAnswers[textEntryId3]![0]);
+      expect("nswer3 answer3", wrongAnswers[textEntryId3]![1]);
+      expect("nswer answer3", wrongAnswers[textEntryId3]![2]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(3, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
+    test("Three entries, three tries, two answered wrongly, one answered correctly", () {
+      var textEntryId1 = uuid.v4();
+      var textEntryId2 = uuid.v4();
+      var textEntryId3 = uuid.v4();
+      FieldList fieldList = FieldList(
+          uuid.v4(), "list1", uuid.v4(), DateTime.now(),
+          checkType: CheckType.DO_NOT_IGNORE_CASE);
+      var entries = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId2, "question2", "answer2 answer2", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      final fullyRandomTest = FullyRandomTest(
+          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+      TextEntry currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId1, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer answer1");
+      var triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      var currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+      var wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      var wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      var isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer1 answer1");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      fullyRandomTest.next();
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(0, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(0, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer answer1");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(3, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId2, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer answer2");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(1, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("answer2 answer2");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      currentEntry = fullyRandomTest.currentEntry;
+      expect(textEntryId3, currentEntry.id);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+      fullyRandomTest.checkAnAnswer("answer answer3");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      expect("answer answer3", wrongAnswers[textEntryId3]![0]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(1, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer3 answer3");
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(2, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      expect("answer answer3", wrongAnswers[textEntryId3]![0]);
+      expect("nswer3 answer3", wrongAnswers[textEntryId3]![1]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(2, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(1, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(false, isCompleted);
+      fullyRandomTest.checkAnAnswer("nswer answer3");
+      expect(() {
+        fullyRandomTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(3, triesCounter);
+      fullyRandomTest.next();
+      currentQuestionCounter = fullyRandomTest.currentQuestionCounter;
+      expect(3, currentQuestionCounter);
+      wrongAnswers = fullyRandomTest.wrongAnswers;
+      expect("answer answer1", wrongAnswers[textEntryId1]![0]);
+      expect("nswer1 answer1", wrongAnswers[textEntryId1]![1]);
+      expect("nswer answer1", wrongAnswers[textEntryId1]![2]);
+      expect("answer answer2", wrongAnswers[textEntryId2]![0]);
+      expect("answer answer3", wrongAnswers[textEntryId3]![0]);
+      expect("nswer3 answer3", wrongAnswers[textEntryId3]![1]);
+      expect("nswer answer3", wrongAnswers[textEntryId3]![2]);
+      triesCounter = fullyRandomTest.triesCounter;
+      expect(0, triesCounter);
+      wrongAnswerCounter = fullyRandomTest.wrongAnswerCounter;
+      expect(2, wrongAnswerCounter);
+      isCompleted = fullyRandomTest.isCompleted;
+      expect(true, isCompleted);
+      expect(() {
+        fullyRandomTest.next();
+      }, throwsStateError);
+    });
   });
 }

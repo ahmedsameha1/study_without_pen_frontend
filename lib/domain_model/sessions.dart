@@ -65,7 +65,6 @@ abstract class Session extends HasId {
     }
     return _lastCheckedAnswerResult;
   }
-
   bool get shouldCheckAnAnswer => _shouldCheckAnAnswer;
 
   set elapsedTime(Duration elapsedTime) {
@@ -184,13 +183,50 @@ abstract class StudyTillCorrect extends Session {
 }
 
 abstract class Test extends Session {
+  int _wrongAnswerCounter = 0;
   Map<String, List<String>> _wrongAnswers =
       Map<String, List<String>>.identity();
+  late String _lastAnswer;
   Test(String uuid, FieldList fieldList, Set<TextEntry> entries,
       int currentQuestionCounter, int triesNumber, Duration elapsedTime)
       : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
-            elapsedTime);
+            elapsedTime) {
+    _entries.forEach((element) {_wrongAnswers[element.id] = [];});
+  }
+
   Map<String, List<String>> get wrongAnswers => _wrongAnswers;
+  int get wrongAnswerCounter => _wrongAnswerCounter;
+
+  @override
+  checkAnAnswer(String userAnswer) {
+    super.checkAnAnswer(userAnswer);
+   _lastAnswer = userAnswer;
+  }
+
+  @override
+  next() {
+    if (isCompleted) {
+      throw StateError("session has been completed");
+    }
+    if (shouldCheckAnAnswer) {
+      throw StateError("Call checkAnAnswer() first!");
+    }
+    if (lastCheckedAnswerResult) {
+      increaseCurrentQuestionCounterByOne();
+      resetTriesCounterToZero();
+    } else {
+      _wrongAnswers[entries.elementAt(currentQuestionCounter).id]!.add(_lastAnswer);
+      if (triesCounter == triesNumber) {
+        resetTriesCounterToZero();
+        increaseCurrentQuestionCounterByOne();
+        _wrongAnswerCounter++;
+      }
+    }
+    if (currentQuestionCounter == entries.length) {
+      setSessionCompleted();
+    }
+    switchShouldCheckAnAnswer();
+  }
 }
 
 class AskAgainAfterTest extends StudyTillCorrect {
@@ -216,12 +252,6 @@ class EnhancedTest extends Test {
       int currentQuestionCounter, int triesNumber, Duration elapsedTime)
       : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
             elapsedTime);
-
-  @override
-  next() {
-    // TODO: implement next
-    throw UnimplementedError();
-  }
 }
 
 class FullyRandomTest extends Test {
@@ -229,10 +259,4 @@ class FullyRandomTest extends Test {
       int currentQuestionCounter, int triesNumber, Duration elapsedTime)
       : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
             elapsedTime);
-
-  @override
-  next() {
-    // TODO: implement next
-    throw UnimplementedError();
-  }
 }
