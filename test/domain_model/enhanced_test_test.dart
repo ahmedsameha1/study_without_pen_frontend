@@ -13,20 +13,25 @@ main() {
     TextEntry(
         textEntryId, "question", "answer", uuid.v4(), DateTime.utc(2020, 1, 1))
   ]);
+  final Map<String, List<String>> hints = {textEntryId: []};
   group("_id tests", () {
     test("_id is a valid UUID", () {
-      expect(() => EnhancedTest("", fieldList, entries, 0, 1, Duration()),
-          throwsArgumentError);
-      expect(() => EnhancedTest("weuwe", fieldList, entries, 0, 1, Duration()),
+      expect(
+          () => EnhancedTest("", fieldList, entries, hints, 0, 1, Duration()),
           throwsArgumentError);
       expect(
-          () => EnhancedTest(uuid.v4(), fieldList, entries, 0, 1, Duration()),
+          () => EnhancedTest(
+              "weuwe", fieldList, entries, hints, 0, 1, Duration()),
+          throwsArgumentError);
+      expect(
+          () => EnhancedTest(
+              uuid.v4(), fieldList, entries, hints, 0, 1, Duration()),
           returnsNormally);
     });
     test("_id has been assigned the correct value", () {
       String uuidString = uuid.v4();
       final enhancedTest =
-          EnhancedTest(uuidString, fieldList, entries, 0, 1, Duration());
+          EnhancedTest(uuidString, fieldList, entries, hints, 0, 1, Duration());
       final id = enhancedTest.id;
       expect(uuidString, id);
     });
@@ -37,7 +42,7 @@ main() {
       final FieldList fieldList1 =
           FieldList(uuidString, "list1", uuid.v4(), DateTime.now());
       final enhancedTest =
-          EnhancedTest(uuid.v4(), fieldList1, entries, 0, 1, Duration());
+          EnhancedTest(uuid.v4(), fieldList1, entries, hints, 0, 1, Duration());
       final fieldListId = enhancedTest.fieldList.id;
       expect(uuidString, fieldListId);
     });
@@ -45,19 +50,20 @@ main() {
   group("_currentQuestionCounter tests", () {
     test("_currentQuestionCounter cannot be negative", () {
       expect(
-          () => EnhancedTest(uuid.v4(), fieldList, entries, -1, 1, Duration()),
+          () => EnhancedTest(
+              uuid.v4(), fieldList, entries, hints, -1, 1, Duration()),
           throwsArgumentError);
     });
     test("increaseCurrentQuestionCounterByOne method test", () {
       final enhancedTest =
-          EnhancedTest(uuid.v4(), fieldList, entries, 3, 1, Duration());
+          EnhancedTest(uuid.v4(), fieldList, entries, hints, 3, 1, Duration());
       enhancedTest.increaseCurrentQuestionCounterByOne();
       var currentQuestionCounter = enhancedTest.currentQuestionCounter;
       expect(4, currentQuestionCounter);
     });
     test("_currentQuestionCounter has been assigned the correct value", () {
       final enhancedTest =
-          EnhancedTest(uuid.v4(), fieldList, entries, 3, 1, Duration());
+          EnhancedTest(uuid.v4(), fieldList, entries, hints, 3, 1, Duration());
       var currentQuestionCounter = enhancedTest.currentQuestionCounter;
       expect(3, currentQuestionCounter);
     });
@@ -65,41 +71,91 @@ main() {
   group("_entries tests", () {
     test("_entries cannot be an empty list", () {
       expect(
-          () => EnhancedTest(uuid.v4(), fieldList,
-              Set<TextEntry>.unmodifiable([]), 0, 3, Duration(seconds: 10)),
+          () => EnhancedTest(
+              uuid.v4(),
+              fieldList,
+              Set<TextEntry>.unmodifiable([]),
+              hints,
+              0,
+              3,
+              Duration(seconds: 10)),
           throwsArgumentError);
     });
     test("_entries cannot be a growable list", () {
       expect(
-          () => EnhancedTest(uuid.v4(), fieldList, entries.toList().toSet(), 0,
-              3, Duration(seconds: 10)),
+          () => EnhancedTest(uuid.v4(), fieldList, entries.toList().toSet(),
+              hints, 0, 3, Duration(seconds: 10)),
           throwsArgumentError);
     });
     test("_entries has been assigned the correct value", () {
+      var textEntryId1 = uuid.v4(), textEntryId2 = uuid.v4();
       final entries1 = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId2, "question2", "answer2", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      Map<String, List<String>> hints = {textEntryId1: [], textEntryId2: []};
+      final enhancedTest = EnhancedTest(
+          uuid.v4(), fieldList, entries1, hints, 0, 3, Duration(seconds: 10));
+      final entries2 = enhancedTest.entries;
+      expect(entries1, entries2);
+    });
+  });
+  group("hints tests", () {
+    test("hints must match entries in entries ids", () {
+      var textEntryId1 = uuid.v4(), textEntryId2 = uuid.v4();
+      var entries1 = Set<TextEntry>.unmodifiable([
         TextEntry(uuid.v4(), "question1", "answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1)),
         TextEntry(uuid.v4(), "question2", "answer2", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {textEntryId1: [], textEntryId2: []};
+      expect(
+          () => EnhancedTest(uuid.v4(), fieldList, entries1, hints, 0, 3,
+              Duration(seconds: 10)),
+          throwsArgumentError);
+      entries1 = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId2, "question2", "answer2", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      expect(
+          () => EnhancedTest(uuid.v4(), fieldList, entries1, hints, 0, 3,
+              Duration(seconds: 10)),
+          returnsNormally);
+    });
+    test("hints has been assigned the correct value", () {
+      var textEntryId1 = uuid.v4(), textEntryId2 = uuid.v4();
+      var entries1 = Set<TextEntry>.unmodifiable([
+        TextEntry(textEntryId1, "question1", "answer1", uuid.v4(),
+            DateTime.utc(2020, 1, 1)),
+        TextEntry(textEntryId2, "question2", "answer2", uuid.v4(),
+            DateTime.utc(2020, 1, 1))
+      ]);
+      Map<String, List<String>> hints = {textEntryId1: [], textEntryId2: []};
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries1, 0, 3, Duration(seconds: 10));
-      final entries2 = enhancedTest.entries;
-      expect(entries1, entries2);
+          uuid.v4(), fieldList, entries1, hints, 0, 3, Duration(seconds: 10));
+      final gotenHints = enhancedTest.hints;
+      expect(hints, gotenHints);
     });
   });
   group("_triesNumber tests", () {
     test("_triesNumber cannot be smaller than one", () {
       expect(
-          () => EnhancedTest(uuid.v4(), fieldList, entries, 0, 0, Duration()),
+          () => EnhancedTest(
+              uuid.v4(), fieldList, entries, hints, 0, 0, Duration()),
           throwsArgumentError);
       expect(
-          () => EnhancedTest(uuid.v4(), fieldList, entries, 0, -1, Duration()),
+          () => EnhancedTest(
+              uuid.v4(), fieldList, entries, hints, 0, -1, Duration()),
           throwsArgumentError);
     });
     test("_triesNumber has been assigned the correct value", () {
       final enhancedTest =
-          EnhancedTest(uuid.v4(), fieldList, entries, 0, 3, Duration());
+          EnhancedTest(uuid.v4(), fieldList, entries, hints, 0, 3, Duration());
       var triesNumber = enhancedTest.triesNumber;
       expect(3, triesNumber);
     });
@@ -109,19 +165,19 @@ main() {
         "_elapsedTime cannot be set to be smaller than or equal the current value",
         () {
       expect(() {
-        final enhancedTest =
-            EnhancedTest(uuid.v4(), fieldList, entries, 0, 3, Duration());
+        final enhancedTest = EnhancedTest(
+            uuid.v4(), fieldList, entries, hints, 0, 3, Duration());
         enhancedTest.elapsedTime = Duration();
       }, throwsArgumentError);
       expect(() {
         final enhancedTest = EnhancedTest(
-            uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+            uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
         enhancedTest.elapsedTime = Duration();
       }, throwsArgumentError);
     });
     test("_elapsedTime has been assigned the correct value", () {
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       var elapsedTime = enhancedTest.elapsedTime;
       expect(Duration(seconds: 10), elapsedTime);
       enhancedTest.elapsedTime = Duration(minutes: 1);
@@ -135,581 +191,583 @@ main() {
           uuid.v4(), "list1", uuid.v4(), DateTime.now(),
           checkType: CheckType.DO_NOT_IGNORE_CASE);
       var entries1 = Set<TextEntry>.unmodifiable([
-        TextEntry(uuid.v4(), "question1", "answer1 answer1", uuid.v4(),
+        TextEntry(textEntryId, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
       var enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("Answer1 answer1");
       var result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1 answr1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1   nswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("ansWer1 anwer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1 answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
     });
     test("IGNORE_CASE", () {
       var entries1 = Set<TextEntry>.unmodifiable([
-        TextEntry(uuid.v4(), "question1", "answer1 answer1", uuid.v4(),
+        TextEntry(textEntryId, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
       final fieldList1 = FieldList(
           uuid.v4(), "list1", uuid.v4(), DateTime.now(),
           checkType: CheckType.IGNORE_CASE);
       var enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1 answr1");
       var result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1   nswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("ansWer1 anwer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1 answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("Answer1 answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
     });
     test("NON_STRICT_IGNORE_CASE", () {
       var entries1 = Set<TextEntry>.unmodifiable([
-        TextEntry(uuid.v4(), "question1", "answer1, answer1", uuid.v4(),
+        TextEntry(textEntryId, "question1", "answer1, answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
       var fieldList1 = FieldList(uuid.v4(), "list1", uuid.v4(), DateTime.now(),
           checkType: CheckType.NON_STRICT_IGNORE_CASE);
       var enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1, answr1");
       var result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1,   nswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("ansWer1, anwer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1, answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("Answer1, answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\nanSwer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,    answer1\n");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\tanSwer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,    answer1\t");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\ranSwer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\t\ranSwer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,    answer1\r");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,    answer1\r\n");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\nanSwer1,    answer1\r");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1, \nanswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,\tanswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1 ,\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1\n,\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,\t\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,\r\n answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       entries1 = Set<TextEntry>.unmodifiable([
-        TextEntry(uuid.v4(), "question1", "answer1 answer1", uuid.v4(),
+        TextEntry(textEntryId, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
       fieldList1 = FieldList(uuid.v4(), "list1", uuid.v4(), DateTime.now(),
           checkType: CheckType.NON_STRICT_IGNORE_CASE);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1 answr1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1   nswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("ansWer1 anwer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1 answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("Answer1 answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\nanSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1    answer1\n");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\tanSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1    answer1\t");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\ranSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\t\ranSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1    answer1\r");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1    answer1\r\n");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\nanSwer1    answer1\r");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1 \nanswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1\tanswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1 \r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1\n\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1\t\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1\r\n answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
     });
     test("NON_STRICT_DO_NOT_IGNORE_CASE", () {
       var entries1 = Set<TextEntry>.unmodifiable([
-        TextEntry(uuid.v4(), "question1", "answer1, answer1", uuid.v4(),
+        TextEntry(textEntryId, "question1", "answer1, answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
       var fieldList1 = FieldList(uuid.v4(), "list1", uuid.v4(), DateTime.now(),
           checkType: CheckType.NON_STRICT_DO_NOT_IGNORE_CASE);
       var enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1, answr1");
       var result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1,   nswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("ansWer1, anwer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("Answer1, answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\nanSwer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,    answer1\n");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\tanSwer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,    aNswer1\t");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\ranSwer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\t\ranSwer1,    answEr1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answER1,    answer1\r");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\nanSwer1,    answer1\r");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1, \nanswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,\tanswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1 ,\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1\n,\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1,\t\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1,\r\n answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1, answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1,    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1,    answer1\r\n");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1,\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       entries1 = Set<TextEntry>.unmodifiable([
-        TextEntry(uuid.v4(), "question1", "answer1 answer1", uuid.v4(),
+        TextEntry(textEntryId, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
       fieldList1 = FieldList(uuid.v4(), "list1", uuid.v4(), DateTime.now(),
           checkType: CheckType.NON_STRICT_DO_NOT_IGNORE_CASE);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1 answr1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1   nswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("ansWer1 anwer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("Answer1 answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\nanSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1    answer1\n");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\tanSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1    aNswer1\t");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\ranSwer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\t\ranSwer1    answEr1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answER1    answer1\r");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("\nanSwer1    answer1\r");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1 \nanswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1\tanswer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1 \r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1\n\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("anSwer1\t\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(false, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1\r\n answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1 answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1    answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1    answer1\r\n");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
       enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList1, entries1, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList1, entries1, hints, 0, 1, Duration(seconds: 10));
       enhancedTest.checkAnAnswer("answer1\r answer1");
       result = enhancedTest.lastCheckedAnswerResult;
       expect(true, result);
     });
   });
-  test("_wrongAnswers is populated with an empty list for each entry in entries while object construction", () {
+  test(
+      "_wrongAnswers is populated with an empty list for each entry in entries while object construction",
+      () {
     final fullyRandomTest = FullyRandomTest(
-        uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+        uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
     Map<String, List<String>> wrongAnswers = fullyRandomTest.wrongAnswers;
     expect(1, wrongAnswers.length);
     expect(true, wrongAnswers.containsKey(textEntryId));
@@ -724,8 +782,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {textEntryId1: []};
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
@@ -761,8 +820,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {textEntryId1: []};
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
@@ -795,8 +855,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {textEntryId1: []};
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
@@ -832,8 +893,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {textEntryId1: []};
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
@@ -898,8 +960,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {textEntryId1: []};
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
@@ -971,8 +1034,13 @@ main() {
         TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {
+        textEntryId1: [],
+        textEntryId2: [],
+        textEntryId3: []
+      };
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
@@ -1051,8 +1119,13 @@ main() {
         TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {
+        textEntryId1: [],
+        textEntryId2: [],
+        textEntryId3: []
+      };
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 1, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
@@ -1128,8 +1201,13 @@ main() {
         TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {
+        textEntryId1: [],
+        textEntryId2: [],
+        textEntryId3: []
+      };
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
@@ -1205,8 +1283,13 @@ main() {
         TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {
+        textEntryId1: [],
+        textEntryId2: [],
+        textEntryId3: []
+      };
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
@@ -1337,8 +1420,13 @@ main() {
         TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {
+        textEntryId1: [],
+        textEntryId2: [],
+        textEntryId3: []
+      };
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
@@ -1538,7 +1626,9 @@ main() {
         enhancedTest.next();
       }, throwsStateError);
     });
-    test("Three entries, three tries, two answered wrongly, one answered correctly", () {
+    test(
+        "Three entries, three tries, two answered wrongly, one answered correctly",
+        () {
       var textEntryId1 = uuid.v4();
       var textEntryId2 = uuid.v4();
       var textEntryId3 = uuid.v4();
@@ -1553,8 +1643,13 @@ main() {
         TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
+      Map<String, List<String>> hints = {
+        textEntryId1: [],
+        textEntryId2: [],
+        textEntryId3: []
+      };
       final enhancedTest = EnhancedTest(
-          uuid.v4(), fieldList, entries, 0, 3, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {

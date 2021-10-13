@@ -10,14 +10,21 @@ abstract class Session extends HasId {
   late FieldList _fieldList;
   late int _currentQuestionCounter;
   late Set<TextEntry> _entries;
+  late Map<String, List<String>> _hints;
   late int _triesNumber;
   int _triesCounter = 0;
   late Duration _elapsedTime;
   bool _isCompleted = false;
   bool _lastCheckedAnswerResult = false;
   bool _shouldCheckAnAnswer = true;
-  Session(String uuid, FieldList fieldList, Set<TextEntry> entries,
-      int currentQuestionCounter, int triesNumber, Duration elapsedTime)
+  Session(
+      String uuid,
+      FieldList fieldList,
+      Set<TextEntry> entries,
+      Map<String, List<String>> hints,
+      int currentQuestionCounter,
+      int triesNumber,
+      Duration elapsedTime)
       : super(uuid) {
     this._fieldList = fieldList;
     /////////////////////////////////////////////////////////////////////////
@@ -43,6 +50,17 @@ abstract class Session extends HasId {
       this._entries = entries;
     }
     /////////////////////////////////////////////////////////////////////////
+    // _hints validation
+    if (hints.length != _entries.length) {
+      throw ArgumentError("_hints must match _entries in length");
+    }
+    entries.forEach((element) {
+      if (!hints.containsKey(element.id)) {
+        throw ArgumentError("hints doesn't match entries id ids");
+      }
+    });
+    this._hints = hints;
+    /////////////////////////////////////////////////////////////////////////
     // _triesNumber validation
     if (triesNumber < 1) {
       throw ArgumentError("_triesNumber cannot be smaller than one");
@@ -54,6 +72,7 @@ abstract class Session extends HasId {
   FieldList get fieldList => _fieldList;
   int get currentQuestionCounter => _currentQuestionCounter;
   Set<TextEntry> get entries => _entries;
+  Map<String, List<String>> get hints => _hints;
   TextEntry get currentEntry => entries.elementAt(_currentQuestionCounter);
   int get triesNumber => _triesNumber;
   Duration get elapsedTime => _elapsedTime;
@@ -65,6 +84,7 @@ abstract class Session extends HasId {
     }
     return _lastCheckedAnswerResult;
   }
+
   bool get shouldCheckAnAnswer => _shouldCheckAnAnswer;
 
   set elapsedTime(Duration elapsedTime) {
@@ -136,11 +156,17 @@ abstract class StudyTillCorrect extends Session {
   late Set<TextEntry> _repeatedEntries = Set<TextEntry>.identity();
   bool _shouldShowTheCorrectAnswer = false;
   int? _seed;
-  StudyTillCorrect(String uuid, FieldList fieldList, Set<TextEntry> entries,
-      int currentQuestionCounter, int triesNumber, Duration elapsedTime,
+  StudyTillCorrect(
+      String uuid,
+      FieldList fieldList,
+      Set<TextEntry> entries,
+      Map<String, List<String>> hints,
+      int currentQuestionCounter,
+      int triesNumber,
+      Duration elapsedTime,
       {int? seed})
-      : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
-            elapsedTime) {
+      : super(uuid, fieldList, entries, hints, currentQuestionCounter,
+            triesNumber, elapsedTime) {
     this._seed = seed;
   }
 
@@ -187,11 +213,19 @@ abstract class Test extends Session {
   Map<String, List<String>> _wrongAnswers =
       Map<String, List<String>>.identity();
   late String _lastAnswer;
-  Test(String uuid, FieldList fieldList, Set<TextEntry> entries,
-      int currentQuestionCounter, int triesNumber, Duration elapsedTime)
-      : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
-            elapsedTime) {
-    _entries.forEach((element) {_wrongAnswers[element.id] = [];});
+  Test(
+      String uuid,
+      FieldList fieldList,
+      Set<TextEntry> entries,
+      Map<String, List<String>> hints,
+      int currentQuestionCounter,
+      int triesNumber,
+      Duration elapsedTime)
+      : super(uuid, fieldList, entries, hints, currentQuestionCounter,
+            triesNumber, elapsedTime) {
+    _entries.forEach((element) {
+      _wrongAnswers[element.id] = [];
+    });
   }
 
   Map<String, List<String>> get wrongAnswers => _wrongAnswers;
@@ -200,7 +234,7 @@ abstract class Test extends Session {
   @override
   checkAnAnswer(String userAnswer) {
     super.checkAnAnswer(userAnswer);
-   _lastAnswer = userAnswer;
+    _lastAnswer = userAnswer;
   }
 
   @override
@@ -215,7 +249,8 @@ abstract class Test extends Session {
       increaseCurrentQuestionCounterByOne();
       resetTriesCounterToZero();
     } else {
-      _wrongAnswers[entries.elementAt(currentQuestionCounter).id]!.add(_lastAnswer);
+      _wrongAnswers[entries.elementAt(currentQuestionCounter).id]!
+          .add(_lastAnswer);
       if (triesCounter == triesNumber) {
         resetTriesCounterToZero();
         increaseCurrentQuestionCounterByOne();
@@ -230,33 +265,57 @@ abstract class Test extends Session {
 }
 
 class AskAgainAfterTest extends StudyTillCorrect {
-  AskAgainAfterTest(String uuid, FieldList fieldList, Set<TextEntry> entries,
-      int currentQuestionCounter, int triesNumber, Duration elapsedTime,
+  AskAgainAfterTest(
+      String uuid,
+      FieldList fieldList,
+      Set<TextEntry> entries,
+      Map<String, List<String>> hints,
+      int currentQuestionCounter,
+      int triesNumber,
+      Duration elapsedTime,
       {int? seed})
-      : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
-            elapsedTime,
+      : super(uuid, fieldList, entries, hints, currentQuestionCounter,
+            triesNumber, elapsedTime,
             seed: seed);
 }
 
 class StudyPeriod extends StudyTillCorrect {
-  StudyPeriod(String uuid, FieldList fieldList, Set<TextEntry> entries,
-      int currentQuestionCounter, int triesNumber, Duration elapsedTime,
+  StudyPeriod(
+      String uuid,
+      FieldList fieldList,
+      Set<TextEntry> entries,
+      Map<String, List<String>> hints,
+      int currentQuestionCounter,
+      int triesNumber,
+      Duration elapsedTime,
       {int? seed})
-      : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
-            elapsedTime,
+      : super(uuid, fieldList, entries, hints, currentQuestionCounter,
+            triesNumber, elapsedTime,
             seed: seed);
 }
 
 class EnhancedTest extends Test {
-  EnhancedTest(String uuid, FieldList fieldList, Set<TextEntry> entries,
-      int currentQuestionCounter, int triesNumber, Duration elapsedTime)
-      : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
-            elapsedTime);
+  EnhancedTest(
+      String uuid,
+      FieldList fieldList,
+      Set<TextEntry> entries,
+      Map<String, List<String>> hints,
+      int currentQuestionCounter,
+      int triesNumber,
+      Duration elapsedTime)
+      : super(uuid, fieldList, entries, hints, currentQuestionCounter,
+            triesNumber, elapsedTime);
 }
 
 class FullyRandomTest extends Test {
-  FullyRandomTest(String uuid, FieldList fieldList, Set<TextEntry> entries,
-      int currentQuestionCounter, int triesNumber, Duration elapsedTime)
-      : super(uuid, fieldList, entries, currentQuestionCounter, triesNumber,
-            elapsedTime);
+  FullyRandomTest(
+      String uuid,
+      FieldList fieldList,
+      Set<TextEntry> entries,
+      Map<String, List<String>> hints,
+      int currentQuestionCounter,
+      int triesNumber,
+      Duration elapsedTime)
+      : super(uuid, fieldList, entries, hints, currentQuestionCounter,
+            triesNumber, elapsedTime);
 }
