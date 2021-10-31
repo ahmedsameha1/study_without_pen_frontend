@@ -172,7 +172,15 @@ abstract class Session extends HasId {
     switchShouldCheckAnAnswer();
   }
 
-  next();
+  next() {
+    if (isCompleted) {
+      throw StateError("session has been completed");
+    }
+    if (shouldCheckAnAnswer) {
+      throw StateError("Call checkAnAnswer() first!");
+    }
+    switchShouldCheckAnAnswer();
+  }
 }
 
 abstract class StudyTillCorrect extends Session {
@@ -198,12 +206,7 @@ abstract class StudyTillCorrect extends Session {
 
   @override
   next() {
-    if (isCompleted) {
-      throw StateError("session has been completed");
-    }
-    if (shouldCheckAnAnswer) {
-      throw StateError("Call checkAnAnswer() first!");
-    }
+    super.next();
     if (lastCheckedAnswerResult) {
       _shouldShowTheCorrectAnswer = false;
       increaseCurrentQuestionCounterByOne();
@@ -228,7 +231,6 @@ abstract class StudyTillCorrect extends Session {
         _shouldShowTheCorrectAnswer = false;
       }
     }
-    switchShouldCheckAnAnswer();
   }
 }
 
@@ -263,12 +265,7 @@ abstract class Test extends Session {
 
   @override
   next() {
-    if (isCompleted) {
-      throw StateError("session has been completed");
-    }
-    if (shouldCheckAnAnswer) {
-      throw StateError("Call checkAnAnswer() first!");
-    }
+    super.next();
     if (lastCheckedAnswerResult) {
       increaseCurrentQuestionCounterByOne();
       resetTriesCounterToZero();
@@ -286,7 +283,6 @@ abstract class Test extends Session {
     if (currentQuestionCounter == entries.length) {
       setSessionCompleted();
     }
-    switchShouldCheckAnAnswer();
   }
 }
 
