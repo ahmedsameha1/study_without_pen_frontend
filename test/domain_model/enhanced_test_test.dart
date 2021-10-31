@@ -766,9 +766,9 @@ main() {
   test(
       "_wrongAnswers is populated with an empty list for each entry in entries while object construction",
       () {
-    final fullyRandomTest = FullyRandomTest(
+    final enhancedTest = EnhancedTest(
         uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
-    Map<String, List<String>> wrongAnswers = fullyRandomTest.wrongAnswers;
+    Map<String, List<String>> wrongAnswers = enhancedTest.wrongAnswers;
     expect(1, wrongAnswers.length);
     expect(true, wrongAnswers.containsKey(textEntryId));
   });
@@ -790,6 +790,10 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect(null, nextHint);
+      nextHint = enhancedTest.hint;
+      expect(null, nextHint);
       enhancedTest.checkAnAnswer("answer1 answer1");
       expect(() {
         enhancedTest.checkAnAnswer("userAnswerff");
@@ -820,7 +824,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       final enhancedTest = EnhancedTest(
           uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
@@ -828,6 +834,14 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint13", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
       enhancedTest.checkAnAnswer("answer answer1");
       var triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -855,7 +869,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       final enhancedTest = EnhancedTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
@@ -863,6 +879,14 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint13", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
       enhancedTest.checkAnAnswer("answer1 answer1");
       expect(() {
         enhancedTest.checkAnAnswer("userAnswerff");
@@ -893,7 +917,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       final enhancedTest = EnhancedTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
@@ -901,6 +927,8 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
       enhancedTest.checkAnAnswer("answer answer1");
       var triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -913,6 +941,12 @@ main() {
       expect(0, wrongAnswerCounter);
       var isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint13", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
       enhancedTest.checkAnAnswer("answe answer1");
       expect(() {
         enhancedTest.checkAnAnswer("userAnswerff");
@@ -960,7 +994,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       final enhancedTest = EnhancedTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = enhancedTest.currentEntry;
@@ -968,6 +1004,14 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint13", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
       enhancedTest.checkAnAnswer("answer answer1");
       var triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -999,6 +1043,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
       enhancedTest.checkAnAnswer("nswer1 answer1");
       triesCounter = enhancedTest.triesCounter;
       expect(3, triesCounter);
@@ -1035,9 +1081,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final enhancedTest = EnhancedTest(
           uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
@@ -1046,6 +1092,14 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint13", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
       enhancedTest.checkAnAnswer("answer1 answer1");
       expect(() {
         enhancedTest.checkAnAnswer("userAnswerff");
@@ -1063,6 +1117,12 @@ main() {
       expect(0, wrongAnswerCounter);
       var isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint22", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
       enhancedTest.checkAnAnswer("answer2 answer2");
       triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1078,6 +1138,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect(null, nextHint);
       enhancedTest.checkAnAnswer("answer3 answer3");
       expect(() {
         enhancedTest.checkAnAnswer("userAnswerff");
@@ -1120,9 +1182,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final enhancedTest = EnhancedTest(
           uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
@@ -1131,6 +1193,14 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint13", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
       enhancedTest.checkAnAnswer("answer1 answer1");
       var triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1145,6 +1215,12 @@ main() {
       expect(0, wrongAnswerCounter);
       var isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint22", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
       enhancedTest.checkAnAnswer("answer answer2");
       expect(() {
         enhancedTest.checkAnAnswer("userAnswerff");
@@ -1163,6 +1239,8 @@ main() {
       expect(1, wrongAnswerCounter);
       isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect(null, nextHint);
       enhancedTest.checkAnAnswer("nswer3 answer3");
       triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1202,9 +1280,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final enhancedTest = EnhancedTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
@@ -1213,6 +1291,8 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
       enhancedTest.checkAnAnswer("answer1 answer1");
       expect(() {
         enhancedTest.checkAnAnswer("userAnswerff");
@@ -1230,6 +1310,12 @@ main() {
       expect(0, wrongAnswerCounter);
       var isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint22", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
       enhancedTest.checkAnAnswer("answer2 answer2");
       triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1245,6 +1331,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect(null, nextHint);
       enhancedTest.checkAnAnswer("answer3 answer3");
       triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1284,9 +1372,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final enhancedTest = EnhancedTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
@@ -1295,6 +1383,10 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
       enhancedTest.checkAnAnswer("answer answer1");
       var triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1345,6 +1437,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
       enhancedTest.checkAnAnswer("answer2 answer2");
       expect(() {
         enhancedTest.checkAnAnswer("userAnswerff");
@@ -1364,6 +1458,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect(null, nextHint);
       enhancedTest.checkAnAnswer("answer answer3");
       triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1421,9 +1517,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final enhancedTest = EnhancedTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
@@ -1432,6 +1528,14 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint13", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
       enhancedTest.checkAnAnswer("answer answer1");
       var triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1488,6 +1592,12 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint22", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
       enhancedTest.checkAnAnswer("answer answer2");
       expect(() {
         enhancedTest.checkAnAnswer("userAnswerff");
@@ -1529,6 +1639,8 @@ main() {
       expect(1, wrongAnswerCounter);
       isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect("hint22", nextHint);
       enhancedTest.checkAnAnswer("nswer answer2");
       triesCounter = enhancedTest.triesCounter;
       expect(3, triesCounter);
@@ -1553,6 +1665,8 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      nextHint = enhancedTest.hint;
+      expect(null, nextHint);
       enhancedTest.checkAnAnswer("answer answer3");
       triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1600,6 +1714,8 @@ main() {
       expect(2, wrongAnswerCounter);
       isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect(null, nextHint);
       enhancedTest.checkAnAnswer("nswer answer3");
       triesCounter = enhancedTest.triesCounter;
       expect(3, triesCounter);
@@ -1644,9 +1760,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final enhancedTest = EnhancedTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
@@ -1655,6 +1771,16 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      var nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint13", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint11", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint12", nextHint);
       enhancedTest.checkAnAnswer("answer answer1");
       var triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1687,6 +1813,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect("hint13", nextHint);
       enhancedTest.checkAnAnswer("nswer answer1");
       expect(() {
         enhancedTest.checkAnAnswer("userAnswerff");
@@ -1711,6 +1839,12 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint22", nextHint);
+      nextHint = enhancedTest.hint;
+      expect("hint21", nextHint);
       enhancedTest.checkAnAnswer("answer answer2");
       triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1750,6 +1884,8 @@ main() {
       expect(() {
         enhancedTest.next();
       }, throwsStateError);
+      nextHint = enhancedTest.hint;
+      expect(null, nextHint);
       enhancedTest.checkAnAnswer("answer answer3");
       triesCounter = enhancedTest.triesCounter;
       expect(1, triesCounter);
@@ -1768,6 +1904,8 @@ main() {
       expect(1, wrongAnswerCounter);
       isCompleted = enhancedTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = enhancedTest.hint;
+      expect(null, nextHint);
       enhancedTest.checkAnAnswer("nswer3 answer3");
       triesCounter = enhancedTest.triesCounter;
       expect(2, triesCounter);

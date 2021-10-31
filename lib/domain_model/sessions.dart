@@ -17,6 +17,7 @@ abstract class Session extends HasId {
   bool _isCompleted = false;
   bool _lastCheckedAnswerResult = false;
   bool _shouldCheckAnAnswer = true;
+  int _currentHintCounter = 0;
   Session(
       String uuid,
       FieldList fieldList,
@@ -51,6 +52,7 @@ abstract class Session extends HasId {
     }
     /////////////////////////////////////////////////////////////////////////
     // _hints validation
+    // TODO prevent null values in hints map
     if (hints.length != _entries.length) {
       throw ArgumentError("_hints must match _entries in length");
     }
@@ -78,11 +80,28 @@ abstract class Session extends HasId {
   Duration get elapsedTime => _elapsedTime;
   int get triesCounter => _triesCounter;
   bool get isCompleted => _isCompleted;
+
   bool get lastCheckedAnswerResult {
     if (triesCounter < 1) {
       throw StateError("there is not any checks of answers");
     }
     return _lastCheckedAnswerResult;
+  }
+
+  String? get hint {
+    if (!_shouldCheckAnAnswer) {
+      throw StateError("Call next() first!");
+    }
+    if (hints[currentEntry.id] == null || hints[currentEntry.id]!.length == 0) {
+      return null;
+    } else {
+      if (hints[currentEntry.id]!.length > _currentHintCounter) {
+        return hints[currentEntry.id]![_currentHintCounter++];
+      } else {
+        resetCurrentHintCounterToZero();
+        return hints[currentEntry.id]![_currentHintCounter++];
+      }
+    }
   }
 
   bool get shouldCheckAnAnswer => _shouldCheckAnAnswer;
@@ -121,6 +140,10 @@ abstract class Session extends HasId {
 
   setSessionCompleted() {
     this._isCompleted = true;
+  }
+
+  resetCurrentHintCounterToZero() {
+    _currentHintCounter = 0;
   }
 
   checkAnAnswer(String userAnswer) {
@@ -185,6 +208,7 @@ abstract class StudyTillCorrect extends Session {
       _shouldShowTheCorrectAnswer = false;
       increaseCurrentQuestionCounterByOne();
       resetTriesCounterToZero();
+      resetCurrentHintCounterToZero();
       if (currentQuestionCounter == entries.length) {
         if (_repeatedEntries.isNotEmpty) {
           resetCurrentQuestionCounterToZero();
@@ -248,12 +272,14 @@ abstract class Test extends Session {
     if (lastCheckedAnswerResult) {
       increaseCurrentQuestionCounterByOne();
       resetTriesCounterToZero();
+      resetCurrentHintCounterToZero();
     } else {
       _wrongAnswers[entries.elementAt(currentQuestionCounter).id]!
           .add(_lastAnswer);
       if (triesCounter == triesNumber) {
         resetTriesCounterToZero();
         increaseCurrentQuestionCounterByOne();
+        resetCurrentHintCounterToZero();
         _wrongAnswerCounter++;
       }
     }

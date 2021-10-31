@@ -794,6 +794,10 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect(null, nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect(null, nextHint);
       fullyRandomTest.checkAnAnswer("answer1 answer1");
       expect(() {
         fullyRandomTest.checkAnAnswer("userAnswerff");
@@ -824,7 +828,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       final fullyRandomTest = FullyRandomTest(
           uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
       TextEntry currentEntry = fullyRandomTest.currentEntry;
@@ -832,6 +838,14 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint13", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
       fullyRandomTest.checkAnAnswer("answer answer1");
       var triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -859,7 +873,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       final fullyRandomTest = FullyRandomTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = fullyRandomTest.currentEntry;
@@ -867,6 +883,14 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint13", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
       fullyRandomTest.checkAnAnswer("answer1 answer1");
       expect(() {
         fullyRandomTest.checkAnAnswer("userAnswerff");
@@ -897,7 +921,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       final fullyRandomTest = FullyRandomTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = fullyRandomTest.currentEntry;
@@ -905,6 +931,8 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
       fullyRandomTest.checkAnAnswer("answer answer1");
       var triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -917,6 +945,12 @@ main() {
       expect(0, wrongAnswerCounter);
       var isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint13", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
       fullyRandomTest.checkAnAnswer("answe answer1");
       expect(() {
         fullyRandomTest.checkAnAnswer("userAnswerff");
@@ -964,7 +998,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       final fullyRandomTest = FullyRandomTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       TextEntry currentEntry = fullyRandomTest.currentEntry;
@@ -972,6 +1008,14 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint13", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
       fullyRandomTest.checkAnAnswer("answer answer1");
       var triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1003,6 +1047,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
       fullyRandomTest.checkAnAnswer("nswer1 answer1");
       triesCounter = fullyRandomTest.triesCounter;
       expect(3, triesCounter);
@@ -1039,9 +1085,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final fullyRandomTest = FullyRandomTest(
           uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
@@ -1050,6 +1096,14 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint13", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
       fullyRandomTest.checkAnAnswer("answer1 answer1");
       expect(() {
         fullyRandomTest.checkAnAnswer("userAnswerff");
@@ -1067,6 +1121,12 @@ main() {
       expect(0, wrongAnswerCounter);
       var isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint22", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
       fullyRandomTest.checkAnAnswer("answer2 answer2");
       triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1082,6 +1142,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect(null, nextHint);
       fullyRandomTest.checkAnAnswer("answer3 answer3");
       expect(() {
         fullyRandomTest.checkAnAnswer("userAnswerff");
@@ -1124,9 +1186,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final fullyRandomTest = FullyRandomTest(
           uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
@@ -1135,6 +1197,14 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint13", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
       fullyRandomTest.checkAnAnswer("answer1 answer1");
       var triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1149,6 +1219,12 @@ main() {
       expect(0, wrongAnswerCounter);
       var isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint22", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
       fullyRandomTest.checkAnAnswer("answer answer2");
       expect(() {
         fullyRandomTest.checkAnAnswer("userAnswerff");
@@ -1167,6 +1243,8 @@ main() {
       expect(1, wrongAnswerCounter);
       isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect(null, nextHint);
       fullyRandomTest.checkAnAnswer("nswer3 answer3");
       triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1206,9 +1284,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final fullyRandomTest = FullyRandomTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
@@ -1217,6 +1295,8 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
       fullyRandomTest.checkAnAnswer("answer1 answer1");
       expect(() {
         fullyRandomTest.checkAnAnswer("userAnswerff");
@@ -1234,6 +1314,12 @@ main() {
       expect(0, wrongAnswerCounter);
       var isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint22", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
       fullyRandomTest.checkAnAnswer("answer2 answer2");
       triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1249,6 +1335,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect(null, nextHint);
       fullyRandomTest.checkAnAnswer("answer3 answer3");
       triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1288,9 +1376,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final fullyRandomTest = FullyRandomTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
@@ -1299,6 +1387,10 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
       fullyRandomTest.checkAnAnswer("answer answer1");
       var triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1349,6 +1441,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
       fullyRandomTest.checkAnAnswer("answer2 answer2");
       expect(() {
         fullyRandomTest.checkAnAnswer("userAnswerff");
@@ -1368,6 +1462,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect(null, nextHint);
       fullyRandomTest.checkAnAnswer("answer answer3");
       triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1425,9 +1521,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final fullyRandomTest = FullyRandomTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
@@ -1436,6 +1532,14 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint13", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
       fullyRandomTest.checkAnAnswer("answer answer1");
       var triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1492,6 +1596,12 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint22", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
       fullyRandomTest.checkAnAnswer("answer answer2");
       expect(() {
         fullyRandomTest.checkAnAnswer("userAnswerff");
@@ -1533,6 +1643,8 @@ main() {
       expect(1, wrongAnswerCounter);
       isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect("hint22", nextHint);
       fullyRandomTest.checkAnAnswer("nswer answer2");
       triesCounter = fullyRandomTest.triesCounter;
       expect(3, triesCounter);
@@ -1557,6 +1669,8 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      nextHint = fullyRandomTest.hint;
+      expect(null, nextHint);
       fullyRandomTest.checkAnAnswer("answer answer3");
       triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1604,6 +1718,8 @@ main() {
       expect(2, wrongAnswerCounter);
       isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect(null, nextHint);
       fullyRandomTest.checkAnAnswer("nswer answer3");
       triesCounter = fullyRandomTest.triesCounter;
       expect(3, triesCounter);
@@ -1648,9 +1764,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       final fullyRandomTest = FullyRandomTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
@@ -1659,6 +1775,16 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      var nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint13", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint11", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint12", nextHint);
       fullyRandomTest.checkAnAnswer("answer answer1");
       var triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1691,6 +1817,8 @@ main() {
       expect(0, wrongAnswerCounter);
       isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect("hint13", nextHint);
       fullyRandomTest.checkAnAnswer("nswer answer1");
       expect(() {
         fullyRandomTest.checkAnAnswer("userAnswerff");
@@ -1715,6 +1843,12 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint22", nextHint);
+      nextHint = fullyRandomTest.hint;
+      expect("hint21", nextHint);
       fullyRandomTest.checkAnAnswer("answer answer2");
       triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1754,6 +1888,8 @@ main() {
       expect(() {
         fullyRandomTest.next();
       }, throwsStateError);
+      nextHint = fullyRandomTest.hint;
+      expect(null, nextHint);
       fullyRandomTest.checkAnAnswer("answer answer3");
       triesCounter = fullyRandomTest.triesCounter;
       expect(1, triesCounter);
@@ -1772,6 +1908,8 @@ main() {
       expect(1, wrongAnswerCounter);
       isCompleted = fullyRandomTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = fullyRandomTest.hint;
+      expect(null, nextHint);
       fullyRandomTest.checkAnAnswer("nswer3 answer3");
       triesCounter = fullyRandomTest.triesCounter;
       expect(2, triesCounter);

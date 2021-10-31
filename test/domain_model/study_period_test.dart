@@ -787,6 +787,8 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      var nextHint = studyPeriod.hint;
+      expect(null, nextHint);
       studyPeriod.checkAnAnswer("answer1 answer1");
       var triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -812,7 +814,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       var studyPeriod = StudyPeriod(
           uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
       var currentEntry = studyPeriod.currentEntry;
@@ -820,6 +824,10 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      var nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       var triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -835,6 +843,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = studyPeriod.triesCounter;
       expect(0, triesCounter);
+      nextHint = studyPeriod.hint;
+      expect("hint13", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -850,6 +860,10 @@ main() {
       expect(false, isCompleted);
       triesCounter = studyPeriod.triesCounter;
       expect(0, triesCounter);
+      nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
       studyPeriod.checkAnAnswer("answer1 answer1");
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -868,6 +882,10 @@ main() {
       currentEntry = studyPeriod.currentEntry;
       expect(textEntryId1, currentEntry.id);
       //Second Round
+      nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -881,6 +899,8 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint13", nextHint);
       studyPeriod.checkAnAnswer("answer1 answer1");
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -924,7 +944,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       var studyPeriod = StudyPeriod(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       var currentEntry = studyPeriod.currentEntry;
@@ -932,6 +954,14 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      var nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint13", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
       studyPeriod.checkAnAnswer("answer1 answer1");
       var triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -965,6 +995,10 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      var nextHint = studyPeriod.hint;
+      expect(null, nextHint);
+      nextHint = studyPeriod.hint;
+      expect(null, nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       var triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -979,6 +1013,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
+      nextHint = studyPeriod.hint;
+      expect(null, nextHint);
       studyPeriod.checkAnAnswer("answer1 answer1");
       triesCounter = studyPeriod.triesCounter;
       expect(2, triesCounter);
@@ -1004,7 +1040,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       var studyPeriod = StudyPeriod(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       var currentEntry = studyPeriod.currentEntry;
@@ -1012,6 +1050,8 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      var nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       var triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -1026,6 +1066,12 @@ main() {
       expect(false, isCompleted);
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint13", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       triesCounter = studyPeriod.triesCounter;
       expect(2, triesCounter);
@@ -1055,6 +1101,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = studyPeriod.triesCounter;
       expect(0, triesCounter);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -1068,6 +1116,8 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint13", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       triesCounter = studyPeriod.triesCounter;
       expect(2, triesCounter);
@@ -1127,6 +1177,14 @@ main() {
       currentEntry = studyPeriod.currentEntry;
       expect(textEntryId1, currentEntry.id);
       //Second round
+      nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint13", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -1164,7 +1222,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       var studyPeriod = StudyPeriod(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       var currentEntry = studyPeriod.currentEntry;
@@ -1172,6 +1232,14 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      var nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint13", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       var triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -1186,6 +1254,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       triesCounter = studyPeriod.triesCounter;
       expect(2, triesCounter);
@@ -1234,9 +1304,9 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       var studyPeriod = StudyPeriod(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
@@ -1245,6 +1315,14 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      var nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint13", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
       studyPeriod.checkAnAnswer("answer1 answer1");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1263,6 +1341,12 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint22", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
       studyPeriod.checkAnAnswer("answer2 answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1281,6 +1365,10 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      nextHint = studyPeriod.hint;
+      expect(null, nextHint);
+      nextHint = studyPeriod.hint;
+      expect(null, nextHint);
       studyPeriod.checkAnAnswer("answer3 answer3");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1321,11 +1409,11 @@ main() {
             DateTime.utc(2020, 1, 1))
       ]);
       Map<String, List<String>> hints = {
-        textEntryId1: [],
-        textEntryId2: [],
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
         textEntryId3: [],
-        textEntryId4: [],
-        textEntryId5: []
+        textEntryId4: ["hint41"],
+        textEntryId5: ["hint51", "hint52", "hint53", "hint54"]
       };
       FieldList fieldList = FieldList(
           uuid.v4(), "list1", uuid.v4(), DateTime.now(),
@@ -1338,6 +1426,14 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      var nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint13", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint11", nextHint);
       studyPeriod.checkAnAnswer("answer answer1");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1351,6 +1447,10 @@ main() {
       expect(false, shouldShowTheCorrectAnswer);
       var currentQuestionCounter = studyPeriod.currentQuestionCounter;
       expect(0, currentQuestionCounter);
+      nextHint = studyPeriod.hint;
+      expect("hint12", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint13", nextHint);
       var isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
       expect(() {
@@ -1359,6 +1459,9 @@ main() {
       studyPeriod.checkAnAnswer("answer1 answer1");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      expect(() {
+        studyPeriod.hint;
       }, throwsStateError);
       triesCounter = studyPeriod.triesCounter;
       expect(2, triesCounter);
@@ -1374,9 +1477,14 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      expect(() {
+        studyPeriod.hint;
       }, throwsStateError);
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -1392,6 +1500,8 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      nextHint = studyPeriod.hint;
+      expect("hint22", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1410,6 +1520,8 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1428,6 +1540,12 @@ main() {
       expect(false, isCompleted);
       triesCounter = studyPeriod.triesCounter;
       expect(0, triesCounter);
+      nextHint = studyPeriod.hint;
+      expect("hint22", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint22", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1444,6 +1562,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1464,6 +1584,9 @@ main() {
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
       }, throwsStateError);
+      expect(() {
+        studyPeriod.hint;
+      }, throwsStateError);
       triesCounter = studyPeriod.triesCounter;
       expect(3, triesCounter);
       studyPeriod.next();
@@ -1479,9 +1602,14 @@ main() {
       expect(() {
         studyPeriod.next();
       }, throwsStateError);
+      nextHint = studyPeriod.hint;
+      expect(null, nextHint);
       studyPeriod.checkAnAnswer("answer3 answer3");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      expect(() {
+        studyPeriod.hint;
       }, throwsStateError);
       triesCounter = studyPeriod.triesCounter;
       expect(1, triesCounter);
@@ -1495,6 +1623,8 @@ main() {
       expect(3, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1511,6 +1641,10 @@ main() {
       expect(3, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1527,6 +1661,8 @@ main() {
       expect(3, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1546,6 +1682,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = studyPeriod.triesCounter;
       expect(0, triesCounter);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1563,6 +1701,8 @@ main() {
       expect(3, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1580,6 +1720,8 @@ main() {
       expect(3, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1633,6 +1775,10 @@ main() {
       expect(4, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint51", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint52", nextHint);
       studyPeriod.checkAnAnswer("answer answer5");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1650,9 +1796,14 @@ main() {
       expect(4, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint53", nextHint);
       studyPeriod.checkAnAnswer("answer answer5");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      expect(() {
+        studyPeriod.hint;
       }, throwsStateError);
       triesCounter = studyPeriod.triesCounter;
       expect(2, triesCounter);
@@ -1667,6 +1818,8 @@ main() {
       expect(4, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint54", nextHint);
       studyPeriod.checkAnAnswer("answer answer5");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1687,6 +1840,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = studyPeriod.triesCounter;
       expect(0, triesCounter);
+      nextHint = studyPeriod.hint;
+      expect("hint51", nextHint);
       studyPeriod.checkAnAnswer("answer5 answer5");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1710,6 +1865,8 @@ main() {
       currentEntry = studyPeriod.currentEntry;
       expect(entries.elementAt(4), currentEntry);
       //Second Round all will be answered wrongly
+      nextHint = studyPeriod.hint;
+      expect("hint51", nextHint);
       studyPeriod.checkAnAnswer("answer answer5");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1725,6 +1882,10 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint52", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint53", nextHint);
       studyPeriod.checkAnAnswer("answer answer5");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1740,6 +1901,12 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint54", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint51", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint52", nextHint);
       studyPeriod.checkAnAnswer("answer answer5");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1774,6 +1941,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1806,6 +1975,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1842,6 +2013,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer4 answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1859,6 +2032,8 @@ main() {
       expect(2, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1876,6 +2051,8 @@ main() {
       expect(2, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint22", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1893,6 +2070,12 @@ main() {
       expect(2, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint22", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1931,6 +2114,8 @@ main() {
       expect(2, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint22", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -1972,6 +2157,12 @@ main() {
       currentEntry = studyPeriod.currentEntry;
       expect(entries.elementAt(1), currentEntry);
       //Third Round two will be answered wrongly
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint22", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -2036,6 +2227,10 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -2068,6 +2263,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -2121,6 +2318,18 @@ main() {
       expect(2, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint51", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint52", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint53", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint54", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint51", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint52", nextHint);
       studyPeriod.checkAnAnswer("answer5 answer5");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -2143,6 +2352,8 @@ main() {
       currentEntry = studyPeriod.currentEntry;
       expect(entries.elementAt(3), currentEntry);
       //Fourth Round one will be answered wrongly
+      nextHint = studyPeriod.hint;
+      expect("hint41", nextHint);
       studyPeriod.checkAnAnswer("answer4 answer4");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -2158,6 +2369,12 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint22", nextHint);
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -2188,6 +2405,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = studyPeriod.isCompleted;
       expect(false, isCompleted);
+      nextHint = studyPeriod.hint;
+      expect("hint22", nextHint);
       studyPeriod.checkAnAnswer("answer answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");
@@ -2243,6 +2462,8 @@ main() {
       currentEntry = studyPeriod.currentEntry;
       expect(entries.elementAt(1), currentEntry);
       //Fifth Round answer the only entry correctly
+      nextHint = studyPeriod.hint;
+      expect("hint21", nextHint);
       studyPeriod.checkAnAnswer("answer2 answer2");
       expect(() {
         studyPeriod.checkAnAnswer("userAnswerff");

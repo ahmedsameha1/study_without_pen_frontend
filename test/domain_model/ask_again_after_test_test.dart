@@ -789,6 +789,8 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      var nextHint = askAgainAfterTest.hint;
+      expect(null, nextHint);
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -815,7 +817,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       var askAgainAfterTest = AskAgainAfterTest(
           uuid.v4(), fieldList, entries, hints, 0, 1, Duration(seconds: 10));
       var currentEntry = askAgainAfterTest.currentEntry;
@@ -823,6 +827,10 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      var nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -839,6 +847,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(0, triesCounter);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint13", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -854,6 +864,10 @@ main() {
       expect(false, isCompleted);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(0, triesCounter);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -872,6 +886,10 @@ main() {
       currentEntry = askAgainAfterTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       //Second Round
+      nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -885,6 +903,8 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint13", nextHint);
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -928,7 +948,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       var askAgainAfterTest = AskAgainAfterTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       var currentEntry = askAgainAfterTest.currentEntry;
@@ -936,6 +958,14 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      var nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint13", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -970,6 +1000,10 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      var nextHint = askAgainAfterTest.hint;
+      expect(null, nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect(null, nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -985,6 +1019,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      nextHint = askAgainAfterTest.hint;
+      expect(null, nextHint);
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
@@ -1010,7 +1046,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       var askAgainAfterTest = AskAgainAfterTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       var currentEntry = askAgainAfterTest.currentEntry;
@@ -1018,6 +1056,8 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      var nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -1033,6 +1073,12 @@ main() {
       expect(false, isCompleted);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint13", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
@@ -1062,6 +1108,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(0, triesCounter);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -1075,6 +1123,8 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint13", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
@@ -1134,6 +1184,14 @@ main() {
       currentEntry = askAgainAfterTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       //Second round
+      nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint13", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -1171,7 +1229,9 @@ main() {
         TextEntry(textEntryId1, "question1", "answer1 answer1", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints = {textEntryId1: []};
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"]
+      };
       var askAgainAfterTest = AskAgainAfterTest(
           uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       var currentEntry = askAgainAfterTest.currentEntry;
@@ -1179,6 +1239,14 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      var nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint13", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       var triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -1194,6 +1262,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
@@ -1241,18 +1311,26 @@ main() {
         TextEntry(textEntryId3, "question3", "answer3 answer3", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints1 = {
-        textEntryId1: [],
-        textEntryId2: [],
-        textEntryId3: []
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
+        textEntryId3: [],
       };
       var askAgainAfterTest = AskAgainAfterTest(
-          uuid.v4(), fieldList, entries, hints1, 0, 3, Duration(seconds: 10));
+          uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10));
       var currentEntry = askAgainAfterTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      var nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint13", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1272,6 +1350,12 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint22", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
       askAgainAfterTest.checkAnAnswer("answer2 answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1290,6 +1374,10 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      nextHint = askAgainAfterTest.hint;
+      expect(null, nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect(null, nextHint);
       askAgainAfterTest.checkAnAnswer("answer3 answer3");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1329,24 +1417,32 @@ main() {
         TextEntry(textEntryId5, "question5", "answer5 answer5", uuid.v4(),
             DateTime.utc(2020, 1, 1))
       ]);
-      Map<String, List<String>> hints1 = {
-        textEntryId1: [],
-        textEntryId2: [],
+      Map<String, List<String>> hints = {
+        textEntryId1: ["hint11", "hint12", "hint13"],
+        textEntryId2: ["hint21", "hint22"],
         textEntryId3: [],
-        textEntryId4: [],
-        textEntryId5: []
+        textEntryId4: ["hint41"],
+        textEntryId5: ["hint51", "hint52", "hint53", "hint54"]
       };
       FieldList fieldList = FieldList(
           uuid.v4(), "list1", uuid.v4(), DateTime.now(),
           checkType: CheckType.DO_NOT_IGNORE_CASE);
       var askAgainAfterTest = AskAgainAfterTest(
-          uuid.v4(), fieldList, entries, hints1, 0, 3, Duration(seconds: 10),
+          uuid.v4(), fieldList, entries, hints, 0, 3, Duration(seconds: 10),
           seed: 1);
       var currentEntry = askAgainAfterTest.currentEntry;
       expect(textEntryId1, currentEntry.id);
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      var nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint13", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint11", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer1");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1361,6 +1457,10 @@ main() {
       expect(false, shouldShowTheCorrectAnswer);
       var currentQuestionCounter = askAgainAfterTest.currentQuestionCounter;
       expect(0, currentQuestionCounter);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint12", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint13", nextHint);
       var isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
       expect(() {
@@ -1369,6 +1469,9 @@ main() {
       askAgainAfterTest.checkAnAnswer("answer1 answer1");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      expect(() {
+        askAgainAfterTest.hint;
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
@@ -1384,9 +1487,14 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      expect(() {
+        askAgainAfterTest.hint;
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -1402,6 +1510,8 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint22", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1420,6 +1530,8 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1439,6 +1551,12 @@ main() {
       expect(false, isCompleted);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(0, triesCounter);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint22", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint22", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1456,6 +1574,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1477,6 +1597,9 @@ main() {
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
       }, throwsStateError);
+      expect(() {
+        askAgainAfterTest.hint;
+      }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(3, triesCounter);
       askAgainAfterTest.next();
@@ -1493,9 +1616,14 @@ main() {
       expect(() {
         askAgainAfterTest.next();
       }, throwsStateError);
+      nextHint = askAgainAfterTest.hint;
+      expect(null, nextHint);
       askAgainAfterTest.checkAnAnswer("answer3 answer3");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      expect(() {
+        askAgainAfterTest.hint;
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(1, triesCounter);
@@ -1510,6 +1638,8 @@ main() {
       expect(3, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1527,6 +1657,10 @@ main() {
       expect(3, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1544,6 +1678,8 @@ main() {
       expect(3, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1565,6 +1701,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(0, triesCounter);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1584,6 +1722,8 @@ main() {
       expect(3, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1603,6 +1743,8 @@ main() {
       expect(3, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1662,6 +1804,10 @@ main() {
       expect(4, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint51", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint52", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer5");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1681,9 +1827,14 @@ main() {
       expect(4, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint53", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer5");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
+      }, throwsStateError);
+      expect(() {
+        askAgainAfterTest.hint;
       }, throwsStateError);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(2, triesCounter);
@@ -1700,6 +1851,8 @@ main() {
       expect(4, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint54", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer5");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1723,6 +1876,8 @@ main() {
       expect(false, isCompleted);
       triesCounter = askAgainAfterTest.triesCounter;
       expect(0, triesCounter);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint51", nextHint);
       askAgainAfterTest.checkAnAnswer("answer5 answer5");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1746,6 +1901,8 @@ main() {
       currentEntry = askAgainAfterTest.currentEntry;
       expect(entries.elementAt(4), currentEntry);
       //Second Round all will be answered wrongly
+      nextHint = askAgainAfterTest.hint;
+      expect("hint51", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer5");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1761,6 +1918,10 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint52", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint53", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer5");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1776,6 +1937,12 @@ main() {
       expect(0, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint54", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint51", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint52", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer5");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1810,6 +1977,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1842,6 +2011,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1878,6 +2049,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer4 answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1895,6 +2068,8 @@ main() {
       expect(2, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1912,6 +2087,8 @@ main() {
       expect(2, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint22", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1929,6 +2106,12 @@ main() {
       expect(2, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint22", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -1967,6 +2150,8 @@ main() {
       expect(2, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint22", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -2008,6 +2193,12 @@ main() {
       currentEntry = askAgainAfterTest.currentEntry;
       expect(entries.elementAt(1), currentEntry);
       //Third Round two will be answered wrongly
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint22", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -2072,6 +2263,10 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -2104,6 +2299,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -2157,6 +2354,18 @@ main() {
       expect(2, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint51", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint52", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint53", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint54", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint51", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint52", nextHint);
       askAgainAfterTest.checkAnAnswer("answer5 answer5");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -2179,6 +2388,8 @@ main() {
       currentEntry = askAgainAfterTest.currentEntry;
       expect(entries.elementAt(3), currentEntry);
       //Fourth Round one will be answered wrongly
+      nextHint = askAgainAfterTest.hint;
+      expect("hint41", nextHint);
       askAgainAfterTest.checkAnAnswer("answer4 answer4");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -2194,6 +2405,12 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint22", nextHint);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -2224,6 +2441,8 @@ main() {
       expect(1, currentQuestionCounter);
       isCompleted = askAgainAfterTest.isCompleted;
       expect(false, isCompleted);
+      nextHint = askAgainAfterTest.hint;
+      expect("hint22", nextHint);
       askAgainAfterTest.checkAnAnswer("answer answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
@@ -2279,6 +2498,8 @@ main() {
       currentEntry = askAgainAfterTest.currentEntry;
       expect(entries.elementAt(1), currentEntry);
       //Fifth Round answer the only entry correctly
+      nextHint = askAgainAfterTest.hint;
+      expect("hint21", nextHint);
       askAgainAfterTest.checkAnAnswer("answer2 answer2");
       expect(() {
         askAgainAfterTest.checkAnAnswer("userAnswerff");
