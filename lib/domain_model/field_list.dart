@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:clock/clock.dart';
 import 'package:study_without_pen_by_flutter/domain_model/ids.dart';
 
-class FieldList extends HasId {
+class FieldList extends HasRelationalId {
   static const int NAME_MAXIMUM_LENGTH = 64;
   static const int QUESTION_AREA_SIZE_DEFAULT = 1;
   static const int MINIMUM_QUESTION_AREA_SIZE = 1;
@@ -96,9 +96,7 @@ class FieldList extends HasId {
       TestsTimeOfAnswerAction testsTimeOfAnswerAction =
           TestsTimeOfAnswerAction.NOTIFY,
       bool doesObfuscateQuestion = DOES_OBFUSCATE_QUESTION_DEFAULT})
-      : super(uuid) {
-    final regexp = RegExp(
-        "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
+      : super(uuid, fieldId) {
     /////////////////////////////////////////////////////////////////////////
     // _name validation
     if (name.isEmpty) {
@@ -108,12 +106,6 @@ class FieldList extends HasId {
       throw ArgumentError("_name length cannot be greater than 64 character");
     }
     this._name = name;
-    /////////////////////////////////////////////////////////////////////////
-    // _fieldId validation
-    if (!regexp.hasMatch(fieldId)) {
-      throw ArgumentError("_id must be a valid UUID");
-    }
-    this._fieldId = fieldId;
     this._locale = locale;
     this._checkType = checkType;
     this._sortBy = sortBy;
@@ -180,7 +172,7 @@ class FieldList extends HasId {
   }
 
   String get name => _name;
-  String get fieldId => _fieldId;
+  String get fieldId => relationalId;
   Locale? get locale => _locale;
   CheckType get checkType => _checkType;
   SortBy get sortBy => _sortBy;

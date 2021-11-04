@@ -1,7 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:study_without_pen_by_flutter/domain_model/ids.dart';
 
-abstract class Entry extends HasId {
+abstract class Entry extends HasRelationalId {
   static const int ASKED_COUNT_DEFAULT = 0;
   static const int WRONGLY_ANSWERED_COUNT_DEFAULT = 0;
   static const Rank RANK_DEFAULT = Rank.LOW;
@@ -9,7 +9,6 @@ abstract class Entry extends HasId {
   static const bool DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT = true;
   static const int? ORDER_DEFAULT = null;
   late String _answer;
-  late String _fieldListId;
   int _askedCount = ASKED_COUNT_DEFAULT;
   int _wronglyAnsweredCount = WRONGLY_ANSWERED_COUNT_DEFAULT;
   Rank _rank = RANK_DEFAULT;
@@ -26,9 +25,7 @@ abstract class Entry extends HasId {
       DateTime? emulatedCreatedAt = EMULATED_CREATED_AT_DEFAULT,
       bool didAskedAtCurrentTestRound = DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT,
       int? order = ORDER_DEFAULT})
-      : super(uuid) {
-    final regexp = RegExp(
-        "[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}");
+      : super(uuid, fieldListId) {
     /////////////////////////////////////////////////////////////////////////
     // _answer validation
     if (answer.isNotEmpty) {
@@ -41,12 +38,6 @@ abstract class Entry extends HasId {
       throw ArgumentError("_answer cannot be an empty String");
     }
     this._answer = answer;
-    /////////////////////////////////////////////////////////////////////////
-    // _fieldListId validation
-    if (!regexp.hasMatch(fieldListId)) {
-      throw ArgumentError("_fieldListId must be a valid UUID");
-    }
-    this._fieldListId = fieldListId;
     /////////////////////////////////////////////////////////////////////////
     // _askedCount validation
     if (askedCount < ASKED_COUNT_DEFAULT) {
@@ -77,7 +68,7 @@ abstract class Entry extends HasId {
   }
 
   String get answer => _answer;
-  String get fieldListId => _fieldListId;
+  String get fieldListId => relationalId;
   int get askedCount => _askedCount;
   int get wronglyAnsweredCount => _wronglyAnsweredCount;
   Rank get rank => _rank;
