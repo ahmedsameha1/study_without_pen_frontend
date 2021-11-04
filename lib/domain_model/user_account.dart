@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
+import 'package:study_without_pen_by_flutter/domain_model/so_basic.dart';
 
-class UserAccount {
+class UserAccount with ModificationTimeRecord {
   late final String _id;
   late String _firstName;
   String? _middleNames;
@@ -10,8 +11,7 @@ class UserAccount {
   String? _email;
   late bool _isEmailVerified;
   DateTime? _createdAt;
-  // TODO Investigate this field, like do we need it, when should it be updated, should we replace it with last fetch time
-  DateTime? _lasModificationAt;
+  // TODO do we need last fetch time field?
   DateTime? _lastSignInAt;
   DateTime? _lastSignOutAt;
 
@@ -25,7 +25,7 @@ class UserAccount {
       String? _email,
       bool _isEmailVerified,
       DateTime? _createdAt,
-      DateTime? _lastModificationAt,
+      DateTime? lastModifiedAt,
       DateTime? _lastSignInAt,
       DateTime? _lastSignOutAt) {
     final now = clock.now();
@@ -89,13 +89,12 @@ class UserAccount {
     */
     this._createdAt = _createdAt;
     /////////////////////////////////////////////////////////////////////////
-    // _lastModificationAt validation
-    if (_lastModificationAt != null &&
-        (_lastModificationAt.isAtSameMomentAs(now) ||
-            _lastModificationAt.isAfter(now))) {
+    // _lastModifiedAt validation
+    if (lastModifiedAt != null &&
+        (lastModifiedAt.isAtSameMomentAs(now) || lastModifiedAt.isAfter(now))) {
       throw ArgumentError("_lastModificationAt cannot be equal or after now");
     }
-    this._lasModificationAt = _lastModificationAt;
+    this.lastModifiedAt = lastModifiedAt;
     /*
     There is no validation for _lastSignInAt because it should come from the Firebase
     Authentication System
@@ -119,7 +118,6 @@ class UserAccount {
   String? get email => _email;
   bool get isEmailVerified => _isEmailVerified;
   DateTime? get createdAt => _createdAt;
-  DateTime? get lastModificationAt => _lasModificationAt;
   DateTime? get lastSignInAt => _lastSignInAt;
   DateTime? get lastSignOutAt => _lastSignOutAt;
   String get fullName =>
@@ -137,7 +135,7 @@ class UserAccount {
     }
     if (_firstName != this._firstName) {
       this._firstName = _firstName;
-      _lasModificationAt = clock.now();
+      lastModifiedAt = clock.now();
     }
   }
 
@@ -153,7 +151,7 @@ class UserAccount {
     }
     if (_middleNames != this._middleNames) {
       this._middleNames = _middleNames;
-      this._lasModificationAt = clock.now();
+      lastModifiedAt = clock.now();
     }
   }
 
@@ -169,7 +167,7 @@ class UserAccount {
     }
     if (_lastName != this._lastName) {
       this._lastName = _lastName;
-      this._lasModificationAt = clock.now();
+      lastModifiedAt = clock.now();
     }
   }
 
@@ -180,21 +178,21 @@ class UserAccount {
     }
     if (_birthDay != this._birthDay) {
       this._birthDay = _birthDay;
-      this._lasModificationAt = clock.now();
+      lastModifiedAt = clock.now();
     }
   }
 
   set gender(Gender _gender) {
     if (_gender != this._gender) {
       this._gender = _gender;
-      this._lasModificationAt = clock.now();
+      lastModifiedAt = clock.now();
     }
   }
 
   set email(String? _email) {
     if (_email != this._email) {
       this._email = _email;
-      this._lasModificationAt = clock.now();
+      lastModifiedAt = clock.now();
     }
   }
 

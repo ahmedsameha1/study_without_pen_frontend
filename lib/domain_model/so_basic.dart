@@ -26,3 +26,7 @@ String validateId(String uuid) {
   }
   return uuid;
 }
+
+mixin ModificationTimeRecord {
+  DateTime? lastModifiedAt;
+}

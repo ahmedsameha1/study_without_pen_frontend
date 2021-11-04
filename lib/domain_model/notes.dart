@@ -1,4 +1,4 @@
-import 'package:study_without_pen_by_flutter/domain_model/ids.dart';
+import 'package:study_without_pen_by_flutter/domain_model/so_basic.dart';
 
 abstract class Note extends HasRelationalId {
   late String _text;

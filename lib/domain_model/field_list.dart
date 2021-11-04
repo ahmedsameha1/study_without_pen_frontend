@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:clock/clock.dart';
-import 'package:study_without_pen_by_flutter/domain_model/ids.dart';
+import 'package:study_without_pen_by_flutter/domain_model/so_basic.dart';
 
 class FieldList extends HasRelationalId {
   static const int NAME_MAXIMUM_LENGTH = 64;

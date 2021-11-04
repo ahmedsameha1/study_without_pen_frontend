@@ -1442,8 +1442,8 @@ main() {
       expect(DateTime.utc(2020, 7, 7), createdAt);
     });
   });
-  group("_lastModificationAt tests", () {
-    test("_lastModificationAt can be null while UserAccount construction", () {
+  group("_lastModifiedAt tests", () {
+    test("_lastModifiedAt can be null while UserAccount construction", () {
       expect(
           () => UserAccount(
               "id",
@@ -1461,7 +1461,7 @@ main() {
           returnsNormally);
     });
     test(
-        "_lastModificationAt cannot be equal or after now while UserAccount construction",
+        "_lastModifiedAt cannot be equal or after now while UserAccount construction",
         () {
       withClock(Clock.fixed(DateTime.utc(2020, 11, 11)), () {
         expect(
@@ -1496,7 +1496,7 @@ main() {
             throwsArgumentError);
       });
     });
-    test("_lastModificationAt has been updated when firstName has been updated",
+    test("_lastModifiedAt has been updated when firstName has been updated",
         () {
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1513,8 +1513,8 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.firstName = "name2";
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), lastModifiedAt);
       });
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1531,12 +1531,12 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.firstName = "name";
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModifiedAt)));
       });
     });
     test(
-        "_lastModificationAt has been updated when _middleNames has been updated",
+        "_lastModifiedAt has been updated when _middleNames has been updated",
         () {
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1553,8 +1553,8 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "names2";
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), lastModifiedAt);
       });
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1571,11 +1571,11 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.middleNames = "names";
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModifiedAt)));
       });
     });
-    test("_lastModificationAt has been updated when _lastName has been updated",
+    test("_lastModifiedAt has been updated when _lastName has been updated",
         () {
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1592,8 +1592,8 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.lastName = "name2";
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), lastModifiedAt);
       });
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1610,11 +1610,11 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.lastName = "name";
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModifiedAt)));
       });
     });
-    test("_lastModificationAt has been updated when _birthDay has been updated",
+    test("_lastModifiedAt has been updated when _birthDay has been updated",
         () {
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1631,8 +1631,8 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.birthDay = DateTime.utc(1989, 6, 6);
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), lastModifiedAt);
       });
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1649,11 +1649,11 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.birthDay = DateTime.utc(1989, 11, 9);
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModifiedAt)));
       });
     });
-    test("_lastModificationAt has been updated when _gender has been updated",
+    test("_lastModifiedAt has been updated when _gender has been updated",
         () {
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1670,8 +1670,8 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.gender = Gender.FEMALE;
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), lastModifiedAt);
       });
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1688,11 +1688,11 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.gender = Gender.MALE;
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModifiedAt)));
       });
     });
-    test("_lastModificationAt has been updated when _email has been updated",
+    test("_lastModifiedAt has been updated when _email has been updated",
         () {
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1709,8 +1709,8 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.email = "abc@abc.com";
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), lastModificationAt);
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), lastModifiedAt);
       });
       withClock(Clock.fixed(DateTime.utc(2020, 12, 14)), () {
         final userAccount = UserAccount(
@@ -1727,11 +1727,11 @@ main() {
             DateTime.utc(2020, 11, 11),
             DateTime.utc(2020, 12, 12));
         userAccount.email = "abc@abc.com";
-        final lastModificationAt = userAccount.lastModificationAt;
-        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModificationAt)));
+        final lastModifiedAt = userAccount.lastModifiedAt;
+        expect(DateTime.utc(2020, 12, 14), isNot(equals(lastModifiedAt)));
       });
     });
-    test("_lastModificationAt has been assigned the correct value", () {
+    test("_lastModifiedAt has been assigned the correct value", () {
       var userAccount = UserAccount(
           "id",
           "name",
@@ -1745,8 +1745,8 @@ main() {
           DateTime.utc(2020, 10, 10),
           DateTime.utc(2020, 11, 11),
           DateTime.utc(2020, 12, 12));
-      final lastModificationAt = userAccount.lastModificationAt;
-      expect(DateTime.utc(2020, 10, 10), lastModificationAt);
+      final lastModifiedAt = userAccount.lastModifiedAt;
+      expect(DateTime.utc(2020, 10, 10), lastModifiedAt);
     });
   });
   group("_lastSignInAt tests", () {
