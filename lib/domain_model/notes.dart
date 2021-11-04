@@ -1,9 +1,10 @@
-import 'package:study_without_pen_by_flutter/domain_model/has_id.dart';
+import 'package:study_without_pen_by_flutter/domain_model/ids.dart';
 
-abstract class Note extends HasId {
+abstract class Note extends HasRelationalId {
   late String _text;
   // TODO Do we need last modification at or last fetch time
-  Note(String uuid, String text) : super(uuid) {
+  Note(String uuid, String text, String relationalId)
+      : super(uuid, relationalId) {
     /////////////////////////////////////////////////////////////////////////
     // _text validation
     if (text.isEmpty) {
@@ -25,5 +26,8 @@ abstract class Note extends HasId {
 }
 
 class FieldNote extends Note {
-  FieldNote(String uuid, String text) : super(uuid, text);
+  FieldNote(String uuid, String text, String fieldId)
+      : super(uuid, text, fieldId);
+
+  String get fieldId => relationalId;
 }

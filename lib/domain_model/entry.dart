@@ -1,5 +1,5 @@
 import 'package:clock/clock.dart';
-import 'package:study_without_pen_by_flutter/domain_model/has_id.dart';
+import 'package:study_without_pen_by_flutter/domain_model/ids.dart';
 
 abstract class Entry extends HasId {
   static const int ASKED_COUNT_DEFAULT = 0;

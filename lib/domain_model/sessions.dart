@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
-import 'package:study_without_pen_by_flutter/domain_model/has_id.dart';
+import 'package:study_without_pen_by_flutter/domain_model/ids.dart';
 import 'package:study_without_pen_by_flutter/domain_model/text_entry.dart';
 import 'package:study_without_pen_by_flutter/utilities/compare_utility.dart';
 import 'package:uuid/uuid.dart';
