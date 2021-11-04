@@ -66,6 +66,7 @@ class FieldList extends HasId {
       TESTS_TIME_OF_ANSWER_ACTION_DEFAULT;
   bool _doesObfuscateQuestion = DOES_OBFUSCATE_QUESTION_DEFAULT;
   late DateTime _createdAt;
+  // TODO Do we need last modification at or last fetch time
 
   FieldList(String uuid, String name, String fieldId, DateTime createdAt,
       {Locale? locale,
