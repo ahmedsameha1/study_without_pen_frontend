@@ -1,6 +1,7 @@
+import 'package:clock/clock.dart';
 import 'package:study_without_pen_by_flutter/domain_model/so_basic.dart';
 
-abstract class Note extends HasRelationalId {
+abstract class Note extends HasRelationalId with ModificationTimeRecord {
   late String _text;
   // TODO Do we need last modification at or last fetch time
   Note(String uuid, String text, String relationalId)
@@ -22,6 +23,7 @@ abstract class Note extends HasRelationalId {
       throw ArgumentError("_text cannot be an empty String");
     }
     _text = text;
+    lastModifiedAt = clock.now();
   }
 }
 

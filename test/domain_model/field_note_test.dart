@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/domain_model/notes.dart';
 import 'package:uuid/uuid.dart';
@@ -32,6 +33,14 @@ main() {
       fieldNote.text = "note2";
       text = fieldNote.text;
       expect("note2", text);
+    });
+    test("lastModifiedAt has been updated when _text reassigned", () {
+      withClock(Clock.fixed(clock.now()), () {
+        final fieldNote = FieldNote(uuid.v4(), "note", uuid.v4());
+        fieldNote.text = "note2";
+        final lastModifiedAt = fieldNote.lastModifiedAt;
+        expect(clock.now(), lastModifiedAt);
+      });
     });
   });
   group("_fieldId tests", () {
