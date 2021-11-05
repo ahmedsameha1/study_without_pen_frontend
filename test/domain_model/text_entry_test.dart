@@ -1,7 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/domain_model/entry.dart';
-import 'package:study_without_pen_by_flutter/domain_model/text_entry.dart';
 import 'package:uuid/uuid.dart';
 
 main() {
@@ -189,6 +188,15 @@ main() {
       answer = textEntry.answer;
       expect("answer2", answer);
     });
+    test("lastModifiedAt has been updated when _answer reassigned", () {
+      withClock(Clock.fixed(clock.now()), () {
+        final textEntry = TextEntry(uuid.v4(), "question", "answer", uuid.v4(),
+            DateTime.utc(2020, 1, 1));
+        textEntry.answer = "answer2";
+        final lastModifiedAt = textEntry.lastModifiedAt;
+        expect(clock.now(), lastModifiedAt);
+      });
+    });
   });
   group("_fieldListId tests", () {
     test("_fieldListId is a valid UUID", () {
@@ -259,19 +267,30 @@ main() {
       expect(11, wronglyAnsweredCount);
     });
   });
-  test("_rank has been assigned the correct value", () {
-    var textEntry = TextEntry(
-        uuid.v4(), "question", "answer", uuid.v4(), DateTime.utc(2020, 1, 1));
-    var rank = textEntry.rank;
-    expect(Entry.RANK_DEFAULT, rank);
-    textEntry = TextEntry(
-        uuid.v4(), "question", "answer", uuid.v4(), DateTime.utc(2020, 1, 1),
-        rank: Rank.IMPORTANT);
-    rank = textEntry.rank;
-    expect(Rank.IMPORTANT, rank);
-    textEntry.rank = Rank.MODERATE;
-    rank = textEntry.rank;
-    expect(Rank.MODERATE, rank);
+  group("_rank tests", () {
+    test("_rank has been assigned the correct value", () {
+      var textEntry = TextEntry(
+          uuid.v4(), "question", "answer", uuid.v4(), DateTime.utc(2020, 1, 1));
+      var rank = textEntry.rank;
+      expect(Entry.RANK_DEFAULT, rank);
+      textEntry = TextEntry(
+          uuid.v4(), "question", "answer", uuid.v4(), DateTime.utc(2020, 1, 1),
+          rank: Rank.IMPORTANT);
+      rank = textEntry.rank;
+      expect(Rank.IMPORTANT, rank);
+      textEntry.rank = Rank.MODERATE;
+      rank = textEntry.rank;
+      expect(Rank.MODERATE, rank);
+    });
+    test("lastModifiedAt has been updated when _rank reassigned", () {
+      withClock(Clock.fixed(clock.now()), () {
+        final textEntry = TextEntry(uuid.v4(), "question", "answer", uuid.v4(),
+            DateTime.utc(2020, 1, 1));
+        textEntry.rank = Rank.VITAL;
+        final lastModifiedAt = textEntry.lastModifiedAt;
+        expect(clock.now(), lastModifiedAt);
+      });
+    });
   });
   group("_emulatedCreatedAt tests", () {
     test("_emulatedCreatedAt cannot be set to past DateTime", () {
@@ -363,6 +382,15 @@ main() {
       textEntry.order = null;
       order = textEntry.order;
       expect(null, order);
+    });
+    test("lastModifiedAt has been updated when _order reassigned", () {
+      withClock(Clock.fixed(clock.now()), () {
+        final textEntry = TextEntry(uuid.v4(), "question", "answer", uuid.v4(),
+            DateTime.utc(2020, 1, 1));
+        textEntry.order = 77;
+        final lastModifiedAt = textEntry.lastModifiedAt;
+        expect(clock.now(), lastModifiedAt);
+      });
     });
   });
   group("_createdAt test", () {
@@ -548,6 +576,15 @@ main() {
       textEntry.question = "question2";
       question = textEntry.question;
       expect("question2", question);
+    });
+    test("lastModifiedAt has been updated when _question reassigned", () {
+      withClock(Clock.fixed(clock.now()), () {
+        final textEntry = TextEntry(uuid.v4(), "question", "answer", uuid.v4(),
+            DateTime.utc(2020, 1, 1));
+        textEntry.question = "question2";
+        final lastModifiedAt = textEntry.lastModifiedAt;
+        expect(clock.now(), lastModifiedAt);
+      });
     });
   });
 }

@@ -1,7 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:study_without_pen_by_flutter/domain_model/so_basic.dart';
 
-abstract class Entry extends HasRelationalId {
+abstract class Entry extends HasRelationalId with ModificationTimeRecord {
   static const int ASKED_COUNT_DEFAULT = 0;
   static const int WRONGLY_ANSWERED_COUNT_DEFAULT = 0;
   static const Rank RANK_DEFAULT = Rank.LOW;
@@ -16,7 +16,7 @@ abstract class Entry extends HasRelationalId {
   bool _didAskedAtCurrentTestRound = DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT;
   int? _order = ORDER_DEFAULT;
   late DateTime _createdAt;
-  // TODO Do we need last modification at or last fetch time
+  // TODO Do we need last fetch time?
 
   Entry(String uuid, String answer, String fieldListId, DateTime createdAt,
       {int askedCount = ASKED_COUNT_DEFAULT,
@@ -90,10 +90,12 @@ abstract class Entry extends HasRelationalId {
       throw ArgumentError("firstName cannot be an empty String");
     }
     this._answer = answer;
+    lastModifiedAt = clock.now();
   }
 
   set rank(Rank rank) {
     this._rank = rank;
+    lastModifiedAt = clock.now();
   }
 
   set emulatedCreatedAt(DateTime? emulatedCreatedAt) {
@@ -114,6 +116,7 @@ abstract class Entry extends HasRelationalId {
       throw ArgumentError("_order cannot be smaller than 1");
     }
     this._order = order;
+    lastModifiedAt = clock.now();
   }
 
   increaseAskedCountByOne() {
@@ -122,6 +125,58 @@ abstract class Entry extends HasRelationalId {
 
   increaseWronglyAnsweredCountByOne() {
     _wronglyAnsweredCount++;
+  }
+}
+
+class TextEntry extends Entry {
+  late String _question;
+  TextEntry(String uuid, String question, String answer, String fieldListId,
+      DateTime createdAt,
+      {int askedCount = Entry.ASKED_COUNT_DEFAULT,
+      int wronglyAnsweredCount = Entry.WRONGLY_ANSWERED_COUNT_DEFAULT,
+      Rank rank = Entry.RANK_DEFAULT,
+      DateTime? emulatedCreatedAt = Entry.EMULATED_CREATED_AT_DEFAULT,
+      bool didAskedAtCurrentTestRound =
+          Entry.DID_ASKED_AT_CURRENT_TEST_ROUND_DEFAULT,
+      int? order = Entry.ORDER_DEFAULT})
+      : super(uuid, answer, fieldListId, createdAt,
+            askedCount: askedCount,
+            wronglyAnsweredCount: wronglyAnsweredCount,
+            rank: rank,
+            emulatedCreatedAt: emulatedCreatedAt,
+            didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+            order: order) {
+    /////////////////////////////////////////////////////////////////////////
+    // _question validation
+    if (question.isNotEmpty) {
+      final regExp = RegExp(r"^\s{0}\S{1}(\s*\S)*\s{0}$");
+      if (!regExp.hasMatch(question)) {
+        throw ArgumentError(
+            "_question cannot start with whitespace characters and cannot end with whitespace characters");
+      }
+    } else {
+      throw ArgumentError("_question cannot be an empty String");
+    }
+    this._question = question;
+  }
+
+  String get question => _question;
+
+  //TODO Should we check if the passed value to the setter is the same of the current value of the field? and this on all setters of the project.
+  set question(String question) {
+    /////////////////////////////////////////////////////////////////////////
+    // _question validation
+    if (question.isNotEmpty) {
+      final regExp = RegExp(r"^\s{0}\S{1}(\s*\S)*\s{0}$");
+      if (!regExp.hasMatch(question)) {
+        throw ArgumentError(
+            "question cannot start with whitespace characters and cannot end with whitespace characters");
+      }
+    } else {
+      throw ArgumentError("question cannot be an empty String");
+    }
+    this._question = question;
+    lastModifiedAt = clock.now();
   }
 }
 

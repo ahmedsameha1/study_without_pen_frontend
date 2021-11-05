@@ -2,9 +2,10 @@ import 'dart:math';
 
 import 'package:study_without_pen_by_flutter/domain_model/field_list.dart';
 import 'package:study_without_pen_by_flutter/domain_model/so_basic.dart';
-import 'package:study_without_pen_by_flutter/domain_model/text_entry.dart';
 import 'package:study_without_pen_by_flutter/utilities/compare_utility.dart';
 import 'package:uuid/uuid.dart';
+
+import 'entry.dart';
 
 abstract class Session extends HasId {
   late FieldList _fieldList;
