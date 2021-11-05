@@ -34,6 +34,8 @@ dependencies:
   uuid: ^3.0.4
   # TODO BSD-3-Clause license // license work should be done
   firebase_core: ^1.9.0
+  # TODO BSD-3-Clause license // license work should be done
+  cloud_firestore: ^3.0.0
 
 dev_dependencies:
   flutter_test:
