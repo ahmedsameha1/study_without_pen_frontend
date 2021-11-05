@@ -33,3 +33,10 @@ class FieldNote extends Note {
 
   String get fieldId => relationalId;
 }
+
+class FieldListNote extends Note {
+  FieldListNote(String uuid, String text, String fieldListId)
+      : super(uuid, text, fieldListId);
+
+  String get fieldListId => relationalId;
+}
