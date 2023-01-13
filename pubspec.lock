@@ -7,9 +7,6 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "22.0.0"
-=======
     version: "50.0.0"
   _flutterfire_internals:
     dependency: transitive
@@ -18,40 +15,34 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.12"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.7.1"
-=======
     version: "5.2.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
+  analyzer_plugin:
+    dependency: transitive
+    description:
+      name: analyzer_plugin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.2"
   args:
     dependency: transitive
     description:
       name: args
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "2.2.0"
-=======
     version: "2.3.1"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   async:
     dependency: transitive
     description:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "2.6.1"
-=======
     version: "2.9.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   boolean_selector:
     dependency: transitive
     description:
@@ -59,15 +50,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-<<<<<<< HEAD
-  change_app_package_name:
-    dependency: "direct dev"
-    description:
-      name: change_app_package_name
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
-=======
   build:
     dependency: transitive
     description:
@@ -124,7 +106,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.4.3"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   characters:
     dependency: transitive
     description:
@@ -132,26 +113,29 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  charcode:
+    dependency: transitive
+    description:
+      name: charcode
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.1"
   checked_yaml:
     dependency: transitive
     description:
       name: checked_yaml
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.2.0"
+    version: "2.0.2"
   cli_util:
     dependency: transitive
     description:
       name: cli_util
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.3"
-=======
-    version: "2.0.2"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
+    version: "0.3.5"
   clock:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: clock
       url: "https://pub.dartlang.org"
@@ -170,29 +154,14 @@ packages:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.15.0"
-=======
     version: "1.16.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   convert:
     dependency: transitive
     description:
       name: convert
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "3.0.1"
-  coverage:
-    dependency: transitive
-    description:
-      name: coverage
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.3"
-=======
     version: "3.1.1"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   crypto:
     dependency: transitive
     description:
@@ -221,15 +190,19 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.2"
+  drift_dev:
+    dependency: "direct dev"
+    description:
+      name: drift_dev
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.4.1"
   fake_async:
     dependency: transitive
     description:
       name: fake_async
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.2.0"
-=======
     version: "1.3.1"
   ffi:
     dependency: transitive
@@ -238,16 +211,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   file:
     dependency: transitive
     description:
       name: file
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "6.1.2"
-=======
     version: "6.1.4"
   firebase_auth:
     dependency: "direct main"
@@ -298,7 +267,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   flutter:
     dependency: "direct main"
     description: flutter
@@ -311,6 +279,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.18.5+1"
+  flutter_lints:
+    dependency: "direct dev"
+    description:
+      name: flutter_lints
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -323,13 +298,18 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
-=======
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
+  freezed:
+    dependency: "direct dev"
+    description:
+      name: freezed
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.3.2"
   freezed_annotation:
     dependency: "direct main"
     description:
@@ -344,16 +324,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.2.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   glob:
     dependency: transitive
     description:
       name: glob
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "2.0.1"
-=======
     version: "2.1.1"
   go_router:
     dependency: "direct main"
@@ -369,27 +345,19 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   http_multi_server:
     dependency: transitive
     description:
       name: http_multi_server
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "3.0.1"
-=======
     version: "3.2.1"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   http_parser:
     dependency: transitive
     description:
       name: http_parser
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "4.0.0"
-=======
     version: "4.0.2"
   intl:
     dependency: transitive
@@ -398,7 +366,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.17.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   io:
     dependency: transitive
     description:
@@ -412,9 +379,6 @@ packages:
       name: js
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "0.6.3"
-=======
     version: "0.6.4"
   json_annotation:
     dependency: transitive
@@ -423,18 +387,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.7.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
+  lints:
+    dependency: transitive
+    description:
+      name: lints
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   logging:
     dependency: transitive
     description:
       name: logging
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.0.1"
-=======
     version: "1.1.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   matcher:
     dependency: transitive
     description:
@@ -455,38 +421,22 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.3.0"
-=======
     version: "1.8.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   mime:
     dependency: transitive
     description:
       name: mime
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.0.0"
-  node_preamble:
-    dependency: transitive
-    description:
-      name: node_preamble
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
-  package_config:
-    dependency: transitive
-    description:
-      name: package_config
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
-  path:
-=======
     version: "1.0.4"
+  mockito:
+    dependency: "direct dev"
+    description:
+      name: mockito
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.3.2"
   package_config:
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
     dependency: transitive
     description:
       name: package_config
@@ -499,16 +449,6 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.8.0"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.11.1"
-=======
     version: "1.8.2"
   path_provider:
     dependency: "direct main"
@@ -573,16 +513,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.3"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   pool:
     dependency: transitive
     description:
       name: pool
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.5.0"
-=======
     version: "1.5.1"
   process:
     dependency: transitive
@@ -591,37 +527,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   pub_semver:
     dependency: transitive
     description:
       name: pub_semver
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "2.0.0"
-  shelf:
-    dependency: transitive
-    description:
-      name: shelf
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.0"
-  shelf_packages_handler:
-    dependency: transitive
-    description:
-      name: shelf_packages_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.0"
-  shelf_static:
-    dependency: transitive
-    description:
-      name: shelf_static
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
-=======
     version: "2.1.3"
   pubspec_parse:
     dependency: transitive
@@ -630,6 +541,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  recase:
+    dependency: transitive
+    description:
+      name: recase
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.1.0"
   riverpod:
     dependency: transitive
     description:
@@ -658,39 +576,18 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   shelf_web_socket:
     dependency: transitive
     description:
       name: shelf_web_socket
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.0.1"
-=======
     version: "1.0.3"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   sky_engine:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.99"
-<<<<<<< HEAD
-  source_map_stack_trace:
-    dependency: transitive
-    description:
-      name: source_map_stack_trace
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
-  source_maps:
-    dependency: transitive
-    description:
-      name: source_maps
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.10.10"
-=======
   source_gen:
     dependency: transitive
     description:
@@ -698,7 +595,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.6"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   source_span:
     dependency: transitive
     description:
@@ -720,6 +616,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.12"
+  sqlparser:
+    dependency: transitive
+    description:
+      name: sqlparser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.26.0"
   stack_trace:
     dependency: transitive
     description:
@@ -761,34 +664,13 @@ packages:
       name: term_glyph
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.2.0"
-  test:
-    dependency: "direct dev"
-    description:
-      name: test
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.16.8"
-=======
     version: "1.2.1"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "0.3.0"
-  test_core:
-    dependency: transitive
-    description:
-      name: test_core
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.19"
-=======
     version: "0.4.12"
   timing:
     dependency: transitive
@@ -797,62 +679,26 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   typed_data:
     dependency: transitive
     description:
       name: typed_data
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.3.0"
-  vector_math:
-    dependency: transitive
-=======
     version: "1.3.1"
   uuid:
     dependency: "direct main"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
+    description:
+      name: uuid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.7"
+  vector_math:
+    dependency: transitive
     description:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "2.1.0"
-  vm_service:
-=======
-    version: "3.0.7"
-  vector_math:
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
-    dependency: transitive
-    description:
-      name: vm_service
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.2.0"
-  watcher:
-    dependency: transitive
-    description:
-      name: watcher
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
-  web_socket_channel:
-    dependency: transitive
-    description:
-      name: web_socket_channel
-      url: "https://pub.dartlang.org"
-    source: hosted
-<<<<<<< HEAD
-    version: "2.1.0"
-  webkit_inspection_protocol:
-    dependency: transitive
-    description:
-      name: webkit_inspection_protocol
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
-=======
     version: "2.1.2"
   watcher:
     dependency: transitive
@@ -882,18 +728,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0+3"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
   yaml:
     dependency: transitive
     description:
       name: yaml
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "3.1.0"
-=======
     version: "3.1.1"
->>>>>>> 06cc13a (Add/upgrade some dependencies in spec.yaml)
 sdks:
-  dart: ">=2.18.0 <3.0.0"
+  dart: ">=2.18.6 <3.0.0"
   flutter: ">=3.3.0"
