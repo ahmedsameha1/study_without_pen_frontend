@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:study_without_pen_by_flutter/firebase_options.dart';
 
 import 'app_runner.dart';
 
@@ -10,6 +11,6 @@ void main() async {
           runApp,
           WidgetsFlutterBinding.ensureInitialized,
           Firebase.initializeApp,
-          FirebaseOptions(apiKey: '', appId: '', messagingSenderId: '', projectId: ''))
+          DefaultFirebaseOptions.currentPlatform)
       .run());
 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1073823819661",
+    "project_id": "com-ahmedsameha1-peninbin",
+    "storage_bucket": "com-ahmedsameha1-peninbin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073823819661:android:e135a2c268d85528917fc4",
+        "android_client_info": {
+          "package_name": "com.ahmedsameha1.peninbin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1073823819661-u04ovc7ei8iad69175lmbqbgljl8f1um.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZeSn__l8V_1cO8zNTRUDtHx5Swosb4cQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1073823819661-u04ovc7ei8iad69175lmbqbgljl8f1um.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
