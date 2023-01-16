@@ -11,6 +11,7 @@ import 'package:study_without_pen_by_flutter/state/auth_state.dart';
 import 'package:study_without_pen_by_flutter/state/auth_state_notifier.dart';
 import 'package:study_without_pen_by_flutter/state/providers.dart';
 import 'package:study_without_pen_by_flutter/widget/main_widget.dart';
+import 'package:study_without_pen_by_flutter/widget/main_screen.dart';
 
 import '../state/auth_state_notifier_test.mocks.dart';
 import 'main_widget_test.mocks.dart';
@@ -29,7 +30,7 @@ void main() {
     expect(
         MainWidget.rootPathBuilder(MockBuildContext(), MockGoRouterState())
             .runtimeType,
-        Text);
+        MainScreen);
   });
 
   testWidgets("Test the precese of the main widgets",
@@ -45,7 +46,7 @@ void main() {
     expect(materialAppFinder, findsOneWidget);
     expect(
         find.descendant(
-            of: materialAppFinder, matching: find.byType(Text)),
+            of: materialAppFinder, matching: find.byType(MainScreen)),
         findsOneWidget);
     final MaterialApp materialAppWidget = tester.widget(materialAppFinder);
     expect(materialAppWidget.title, MainWidget.title);
