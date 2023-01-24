@@ -8,6 +8,8 @@ import 'package:uuid/uuid.dart';
 main() {
   late AppDatabase appDatabase;
   late EntryTextsDao entryTextsDao;
+  String id = const Uuid().v4();
+  String value = "value";
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     entryTextsDao = EntryTextsDao(appDatabase);
@@ -18,8 +20,6 @@ main() {
   });
 
   group("Create an EntryText", () {
-    String id = const Uuid().v4();
-    String value = "value";
     test("Invalid EntryText: id is an invalid UUID v4", () {
       var entryText = EntryText(id: "ehohw", value: value);
       expect(() async {
@@ -76,6 +76,33 @@ main() {
     test("Good case", () async {
       var entryText = EntryText(id: id, value: value);
       await entryTextsDao.create(entryText);
+    });
+  });
+
+  group("Getting EntryText", () {
+    test("Get an EntryText by id: not found", () async {
+      expect(await entryTextsDao.getById(id), equals(null));
+    });
+
+    test("Get an EntryText by id: Good case", () async {
+      var entryText = EntryText(id: id, value: value);
+      await entryTextsDao.create(entryText);
+      var gettedEntryText = await entryTextsDao.getById(id);
+      expect(gettedEntryText, isNot(null));
+      expect(gettedEntryText!.id, entryText.id);
+      expect(gettedEntryText!.value, entryText.value);
+    });
+  });
+  group("Delete an EntryText", () {
+    test("Good case1: when not found there is no error", () async {
+      await entryTextsDao.remove(id);
+    });
+
+    test("Good case2", () async {
+      var entryText = EntryText(id: id, value: value);
+      await entryTextsDao.create(entryText);
+      await entryTextsDao.remove(id);
+      expect(await entryTextsDao.getById(id), equals(null));
     });
   });
 }

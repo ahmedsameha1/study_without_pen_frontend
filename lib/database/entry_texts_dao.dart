@@ -15,6 +15,15 @@ class EntryTextsDao extends DatabaseAccessor<AppDatabase>
     }
     return into(entryTexts).insert(entryText);
   }
+
+  Future<EntryText?> getById(String id) {
+    return (select(entryTexts)..where(((tbl) => tbl.id.equals(id))))
+        .getSingleOrNull();
+  }
+
+  Future<int> remove(String id) {
+    return (delete(entryTexts)..where((tbl) => tbl.id.equals(id))).go();
+  }
 }
 
 bool isValid(String uuid) {
