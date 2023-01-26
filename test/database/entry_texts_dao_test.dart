@@ -93,6 +93,7 @@ main() {
       expect(gettedEntryText!.value, entryText.value);
     });
   });
+
   group("Delete an EntryText", () {
     test("Good case1: when not found there is no error", () async {
       await entryTextsDao.remove(id);

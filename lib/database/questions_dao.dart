@@ -14,11 +14,21 @@ class QuestionsDao extends DatabaseAccessor<AppDatabase>
     if (!isValid(question.id)) {
       throw InvalidDataException("id");
     }
-    if (question.questionType == QuestionType.EntryTextQuestion.index && !isValid(question.address)) {
+    if (question.questionType == QuestionType.EntryTextQuestion.index &&
+        !isValid(question.address)) {
       throw InvalidDataException("address");
     }
     return into(questions).insert(question);
   }
+
+  Future<int> remove(String id) {
+    return (delete(questions)..where((tbl) => tbl.id.equals(id))).go();
+  }
+
+  Future<Question?> getById(String id) {
+    return (select(questions)..where(((tbl) => tbl.id.equals(id))))
+        .getSingleOrNull();
+  }
 }
 
-enum QuestionType {EntryTextQuestion}
+enum QuestionType { EntryTextQuestion }

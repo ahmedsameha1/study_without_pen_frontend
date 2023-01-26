@@ -90,4 +90,39 @@ void main() {
       await questionsDao.create(question);
     });
   });
+
+  group("Getting EntryText", () {
+    test("Get a Question by id: not found", () async {
+      expect(await questionsDao.getById(id), equals(null));
+    });
+
+    test("Get a Question by id: Good case", () async {
+      var question = Question(
+          id: id,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: address);
+      await questionsDao.create(question);
+      var gotQuestion = await questionsDao.getById(id);
+      expect(gotQuestion, isNot(null));
+      expect(gotQuestion!.id, question.id);
+      expect(gotQuestion!.questionType, question.questionType);
+      expect(gotQuestion!.address, question.address);
+    });
+  });
+
+  group("Delete a Question", () {
+    test("Good case1: when not found there is no error", () async {
+      await questionsDao.remove(id);
+    });
+
+    test("Good case2", () async {
+      var question = Question(
+          id: id,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: address);
+      await questionsDao.create(question);
+      await questionsDao.remove(id);
+      expect(await questionsDao.getById(id), equals(null));
+    });
+  });
 }
