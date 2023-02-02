@@ -47,8 +47,14 @@ main() {
       expect(() async {
         await entryTextsDao.create(entryText);
       },
-          throwsA(predicate((e) =>
-              e is InvalidDataException && e.message.contains("value"))));
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("value"))));
+      entryText = EntryText(id: id, value: " ");
+      expect(() async {
+        await entryTextsDao.create(entryText);
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("value"))));
     });
 
     test(

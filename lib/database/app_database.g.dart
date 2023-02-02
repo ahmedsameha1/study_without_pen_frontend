@@ -20,8 +20,8 @@ class $EntryTextsTable extends EntryTexts
   @override
   late final GeneratedColumn<String> value = GeneratedColumn<String>(
       'value', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(
-          minTextLength: 1, maxTextLength: 2000),
+      check: () => value.trim().length.isBiggerOrEqualValue(1),
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 2000),
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));

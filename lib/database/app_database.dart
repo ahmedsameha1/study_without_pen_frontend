@@ -12,7 +12,10 @@ part 'app_database.g.dart';
 
 class EntryTexts extends Table {
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
-  TextColumn get value => text().withLength(min: 1, max: 2000).unique()();
+  TextColumn get value => text()
+      .withLength(max: 2000)
+      .check(value.trim().length.isBiggerOrEqualValue(1))
+      .unique()();
 
   @override
   Set<Column> get primaryKey => {id};
