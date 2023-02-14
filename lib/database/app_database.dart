@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart';
@@ -8,13 +9,19 @@ import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
+import 'entrys_dao.dart';
+
 part 'app_database.g.dart';
 
 class EntryTexts extends Table {
+  static const int MINIMUM_VALUE_LENGTH = 1;
+  static const int MAXIMUM_VALUE_LENGTH = 2000;
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get value => text()
-      .withLength(max: 2000)
-      .check(value.trim().length.isBiggerOrEqualValue(1))
+      .check(value
+          .trim()
+          .length
+          .isBiggerOrEqualValue(EntryTexts.MINIMUM_VALUE_LENGTH) & value.length.isSmallerOrEqualValue(EntryTexts.MAXIMUM_VALUE_LENGTH))
       .unique()();
 
   @override
@@ -35,8 +42,46 @@ class Questions extends Table {
       ];
 }
 
+class Entrys extends Table {
+  static const int ORDER_MINIMUM_VALUE = 0;
+  static const int ASKED_COUNT_MINIMUM_VALUE = 0;
+  static const int WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE = 0;
+  static const int ORDER_MAXIMUM_VALUE = 65535;
+  static const int ASKED_COUNT_MAXIMUM_VALUE = 65535;
+  static const int WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE = 65535;
+  TextColumn get id => text().clientDefault(() => const Uuid().v4())();
+  TextColumn get fieldListId => text()();
+  TextColumn get answerId => text()();
+  TextColumn get questionId => text()();
+  DateTimeColumn get creationAt =>
+      dateTime().check(creationAt.isSmallerThanValue(clock.now().toUtc()))();
+  DateTimeColumn get lastModificationAt => dateTime().check(
+      lastModificationAt.isSmallerThanValue(clock.now().toUtc()) &
+          lastModificationAt.isBiggerOrEqual(creationAt))();
+  IntColumn get order =>
+      integer().check(order.isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
+          order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE))();
+  IntColumn get rank => integer()();
+  IntColumn get askedCount => integer().check(
+      askedCount.isSmallerOrEqualValue(Entrys.ASKED_COUNT_MAXIMUM_VALUE) &
+          askedCount.isBiggerOrEqualValue(Entrys.ASKED_COUNT_MINIMUM_VALUE))();
+  IntColumn get wronglyAnsweredCount => integer().check(wronglyAnsweredCount
+          .isSmallerOrEqualValue(Entrys.WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE) &
+      wronglyAnsweredCount
+          .isBiggerOrEqualValue(Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE))();
+
+  @override
+  Set<Column> get primaryKey => {id};
+
+  @override
+  List<Set<Column<Object>>>? get uniqueKeys => [
+        {fieldListId, answerId, questionId}
+      ];
+}
+
 @DriftDatabase(
-    tables: [EntryTexts, Questions], daos: [EntryTextsDao, QuestionsDao])
+    tables: [EntryTexts, Questions, Entrys],
+    daos: [EntryTextsDao, QuestionsDao, EntrysDao])
 class AppDatabase extends _$AppDatabase {
   static const databaseFileName = "db.sqlite";
   static LazyDatabase openConnection() {

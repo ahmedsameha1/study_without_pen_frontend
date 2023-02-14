@@ -9,16 +9,20 @@ class EntryTextsDao extends DatabaseAccessor<AppDatabase>
     with _$EntryTextsDaoMixin {
   EntryTextsDao(AppDatabase appDatabase) : super(appDatabase);
 
-  Future<int> create(EntryText entryText) {
-    if (!isValid(entryText.id)) {
+  Future<int> create(EntryTextsCompanion entryTextsCompanion) {
+    if (entryTextsCompanion.id.present && !isValid(entryTextsCompanion.id.value)) {
       throw InvalidDataException("id");
     }
-    return into(entryTexts).insert(entryText);
+    return into(entryTexts).insert(entryTextsCompanion);
   }
 
   Future<EntryText?> getById(String id) {
     return (select(entryTexts)..where(((tbl) => tbl.id.equals(id))))
         .getSingleOrNull();
+  }
+
+  Future<List<EntryText>> getAll() {
+    return select(entryTexts).get();
   }
 
   Future<int> remove(String id) {

@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
@@ -26,7 +27,7 @@ void main() {
           questionType: QuestionType.EntryTextQuestion.index,
           address: address);
       expect(() async {
-        await questionsDao.create(question);
+        await questionsDao.create(question.toCompanion(true));
       },
           throwsA(predicate(
               (e) => e is InvalidDataException && e.message.contains("id"))));
@@ -42,11 +43,34 @@ void main() {
           questionType: QuestionType.EntryTextQuestion.index,
           address: const Uuid().v4());
       expect(() async {
-        await questionsDao.create(question);
-        await questionsDao.create(question1);
+        await questionsDao.create(question.toCompanion(true));
+        await questionsDao.create(question1.toCompanion(true));
       },
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("id"))));
+    });
+
+    test("Creating Question without giving an 'id'", () async {
+      var questionsCompanion = QuestionsCompanion(
+          questionType: Value(QuestionType.EntryTextQuestion.index),
+          address: Value(address));
+      await questionsDao.create(questionsCompanion);
+      List<Question> questions = await questionsDao.getAll();
+      expect(isValid(questions[0].id), true);
+    });
+
+    test(
+        "Invalid Question: questionType is invalid value",
+        () {
+      var question = Question(
+          id: id,
+          questionType: 88,
+          address: address);
+      expect(() async {
+        await questionsDao.create(question.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("questionType"))));
     });
 
     test(
@@ -57,7 +81,7 @@ void main() {
           questionType: QuestionType.EntryTextQuestion.index,
           address: "hewf");
       expect(() async {
-        await questionsDao.create(question);
+        await questionsDao.create(question.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is InvalidDataException && e.message.contains("address"))));
@@ -74,8 +98,8 @@ void main() {
           questionType: QuestionType.EntryTextQuestion.index,
           address: address);
       expect(() async {
-        await questionsDao.create(question);
-        await questionsDao.create(question1);
+        await questionsDao.create(question.toCompanion(true));
+        await questionsDao.create(question1.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException &&
@@ -87,7 +111,7 @@ void main() {
           id: id,
           questionType: QuestionType.EntryTextQuestion.index,
           address: address);
-      await questionsDao.create(question);
+      await questionsDao.create(question.toCompanion(true));
     });
   });
 
@@ -101,12 +125,42 @@ void main() {
           id: id,
           questionType: QuestionType.EntryTextQuestion.index,
           address: address);
-      await questionsDao.create(question);
+      await questionsDao.create(question.toCompanion(true));
       var gotQuestion = await questionsDao.getById(id);
       expect(gotQuestion, isNot(null));
       expect(gotQuestion!.id, question.id);
       expect(gotQuestion!.questionType, question.questionType);
       expect(gotQuestion!.address, question.address);
+    });
+
+    test("Get all Questions", () async {
+      var address2 = const Uuid().v4();
+      var address3 = const Uuid().v4();
+      var questionsCompanion1 = QuestionsCompanion(
+          questionType: Value(QuestionType.EntryTextQuestion.index),
+          address: Value(address));
+      var questionsCompanion2 = QuestionsCompanion(
+          questionType: Value(QuestionType.EntryTextQuestion.index),
+          address: Value(address2));
+      var questionsCompanion3 = QuestionsCompanion(
+          questionType: Value(QuestionType.EntryTextQuestion.index),
+          address: Value(address3));
+      await questionsDao.create(questionsCompanion1);
+      await questionsDao.create(questionsCompanion2);
+      await questionsDao.create(questionsCompanion3);
+      var questions = await questionsDao.getAll();
+      expect(questions.length, 3);
+      expect(questions[0].questionType, QuestionType.EntryTextQuestion.index);
+      expect(questions[0].address, address);
+      expect(questions[1].questionType, QuestionType.EntryTextQuestion.index);
+      expect(questions[1].address, address2);
+      expect(questions[2].questionType, QuestionType.EntryTextQuestion.index);
+      expect(questions[2].address, address3);
+    });
+
+    test("Get all EntryText: nothing found", () async {
+      var questions = await questionsDao.getAll();
+      expect(questions.length, 0);
     });
   });
 
@@ -120,7 +174,7 @@ void main() {
           id: id,
           questionType: QuestionType.EntryTextQuestion.index,
           address: address);
-      await questionsDao.create(question);
+      await questionsDao.create(question.toCompanion(true));
       await questionsDao.remove(id);
       expect(await questionsDao.getById(id), equals(null));
     });
