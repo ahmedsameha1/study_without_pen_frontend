@@ -447,6 +447,26 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
           order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
+  static const VerificationMeta _didAskedAtCurrentTestRoundMeta =
+      const VerificationMeta('didAskedAtCurrentTestRound');
+  @override
+  late final GeneratedColumn<bool> didAskedAtCurrentTestRound =
+      GeneratedColumn<bool>(
+          'did_asked_at_current_test_round', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: true,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite:
+                'CHECK ("did_asked_at_current_test_round" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }));
+  static const VerificationMeta _emulatedCreatedAtMeta =
+      const VerificationMeta('emulatedCreatedAt');
+  @override
+  late final GeneratedColumn<DateTime> emulatedCreatedAt =
+      GeneratedColumn<DateTime>('emulated_created_at', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
   static const VerificationMeta _rankMeta = const VerificationMeta('rank');
   @override
   late final GeneratedColumn<int> rank = GeneratedColumn<int>(
@@ -483,6 +503,8 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         creationAt,
         lastModificationAt,
         order,
+        didAskedAtCurrentTestRound,
+        emulatedCreatedAt,
         rank,
         askedCount,
         wronglyAnsweredCount
@@ -543,6 +565,23 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
     } else if (isInserting) {
       context.missing(_orderMeta);
     }
+    if (data.containsKey('did_asked_at_current_test_round')) {
+      context.handle(
+          _didAskedAtCurrentTestRoundMeta,
+          didAskedAtCurrentTestRound.isAcceptableOrUnknown(
+              data['did_asked_at_current_test_round']!,
+              _didAskedAtCurrentTestRoundMeta));
+    } else if (isInserting) {
+      context.missing(_didAskedAtCurrentTestRoundMeta);
+    }
+    if (data.containsKey('emulated_created_at')) {
+      context.handle(
+          _emulatedCreatedAtMeta,
+          emulatedCreatedAt.isAcceptableOrUnknown(
+              data['emulated_created_at']!, _emulatedCreatedAtMeta));
+    } else if (isInserting) {
+      context.missing(_emulatedCreatedAtMeta);
+    }
     if (data.containsKey('rank')) {
       context.handle(
           _rankMeta, rank.isAcceptableOrUnknown(data['rank']!, _rankMeta));
@@ -593,6 +632,12 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
           data['${effectivePrefix}last_modification_at'])!,
       order: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
+      didAskedAtCurrentTestRound: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}did_asked_at_current_test_round'])!,
+      emulatedCreatedAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}emulated_created_at'])!,
       rank: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}rank'])!,
       askedCount: attachedDatabase.typeMapping
@@ -616,6 +661,8 @@ class Entry extends DataClass implements Insertable<Entry> {
   final DateTime creationAt;
   final DateTime lastModificationAt;
   final int order;
+  final bool didAskedAtCurrentTestRound;
+  final DateTime emulatedCreatedAt;
   final int rank;
   final int askedCount;
   final int wronglyAnsweredCount;
@@ -627,6 +674,8 @@ class Entry extends DataClass implements Insertable<Entry> {
       required this.creationAt,
       required this.lastModificationAt,
       required this.order,
+      required this.didAskedAtCurrentTestRound,
+      required this.emulatedCreatedAt,
       required this.rank,
       required this.askedCount,
       required this.wronglyAnsweredCount});
@@ -640,6 +689,9 @@ class Entry extends DataClass implements Insertable<Entry> {
     map['creation_at'] = Variable<DateTime>(creationAt);
     map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
     map['order'] = Variable<int>(order);
+    map['did_asked_at_current_test_round'] =
+        Variable<bool>(didAskedAtCurrentTestRound);
+    map['emulated_created_at'] = Variable<DateTime>(emulatedCreatedAt);
     map['rank'] = Variable<int>(rank);
     map['asked_count'] = Variable<int>(askedCount);
     map['wrongly_answered_count'] = Variable<int>(wronglyAnsweredCount);
@@ -655,6 +707,8 @@ class Entry extends DataClass implements Insertable<Entry> {
       creationAt: Value(creationAt),
       lastModificationAt: Value(lastModificationAt),
       order: Value(order),
+      didAskedAtCurrentTestRound: Value(didAskedAtCurrentTestRound),
+      emulatedCreatedAt: Value(emulatedCreatedAt),
       rank: Value(rank),
       askedCount: Value(askedCount),
       wronglyAnsweredCount: Value(wronglyAnsweredCount),
@@ -673,6 +727,10 @@ class Entry extends DataClass implements Insertable<Entry> {
       lastModificationAt:
           serializer.fromJson<DateTime>(json['lastModificationAt']),
       order: serializer.fromJson<int>(json['order']),
+      didAskedAtCurrentTestRound:
+          serializer.fromJson<bool>(json['didAskedAtCurrentTestRound']),
+      emulatedCreatedAt:
+          serializer.fromJson<DateTime>(json['emulatedCreatedAt']),
       rank: serializer.fromJson<int>(json['rank']),
       askedCount: serializer.fromJson<int>(json['askedCount']),
       wronglyAnsweredCount:
@@ -690,6 +748,9 @@ class Entry extends DataClass implements Insertable<Entry> {
       'creationAt': serializer.toJson<DateTime>(creationAt),
       'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
       'order': serializer.toJson<int>(order),
+      'didAskedAtCurrentTestRound':
+          serializer.toJson<bool>(didAskedAtCurrentTestRound),
+      'emulatedCreatedAt': serializer.toJson<DateTime>(emulatedCreatedAt),
       'rank': serializer.toJson<int>(rank),
       'askedCount': serializer.toJson<int>(askedCount),
       'wronglyAnsweredCount': serializer.toJson<int>(wronglyAnsweredCount),
@@ -704,6 +765,8 @@ class Entry extends DataClass implements Insertable<Entry> {
           DateTime? creationAt,
           DateTime? lastModificationAt,
           int? order,
+          bool? didAskedAtCurrentTestRound,
+          DateTime? emulatedCreatedAt,
           int? rank,
           int? askedCount,
           int? wronglyAnsweredCount}) =>
@@ -715,6 +778,9 @@ class Entry extends DataClass implements Insertable<Entry> {
         creationAt: creationAt ?? this.creationAt,
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
         order: order ?? this.order,
+        didAskedAtCurrentTestRound:
+            didAskedAtCurrentTestRound ?? this.didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt ?? this.emulatedCreatedAt,
         rank: rank ?? this.rank,
         askedCount: askedCount ?? this.askedCount,
         wronglyAnsweredCount: wronglyAnsweredCount ?? this.wronglyAnsweredCount,
@@ -729,6 +795,8 @@ class Entry extends DataClass implements Insertable<Entry> {
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
           ..write('order: $order, ')
+          ..write('didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, ')
+          ..write('emulatedCreatedAt: $emulatedCreatedAt, ')
           ..write('rank: $rank, ')
           ..write('askedCount: $askedCount, ')
           ..write('wronglyAnsweredCount: $wronglyAnsweredCount')
@@ -745,6 +813,8 @@ class Entry extends DataClass implements Insertable<Entry> {
       creationAt,
       lastModificationAt,
       order,
+      didAskedAtCurrentTestRound,
+      emulatedCreatedAt,
       rank,
       askedCount,
       wronglyAnsweredCount);
@@ -759,6 +829,8 @@ class Entry extends DataClass implements Insertable<Entry> {
           other.creationAt == this.creationAt &&
           other.lastModificationAt == this.lastModificationAt &&
           other.order == this.order &&
+          other.didAskedAtCurrentTestRound == this.didAskedAtCurrentTestRound &&
+          other.emulatedCreatedAt == this.emulatedCreatedAt &&
           other.rank == this.rank &&
           other.askedCount == this.askedCount &&
           other.wronglyAnsweredCount == this.wronglyAnsweredCount);
@@ -772,6 +844,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
   final Value<DateTime> creationAt;
   final Value<DateTime> lastModificationAt;
   final Value<int> order;
+  final Value<bool> didAskedAtCurrentTestRound;
+  final Value<DateTime> emulatedCreatedAt;
   final Value<int> rank;
   final Value<int> askedCount;
   final Value<int> wronglyAnsweredCount;
@@ -783,6 +857,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     this.creationAt = const Value.absent(),
     this.lastModificationAt = const Value.absent(),
     this.order = const Value.absent(),
+    this.didAskedAtCurrentTestRound = const Value.absent(),
+    this.emulatedCreatedAt = const Value.absent(),
     this.rank = const Value.absent(),
     this.askedCount = const Value.absent(),
     this.wronglyAnsweredCount = const Value.absent(),
@@ -795,6 +871,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     required DateTime creationAt,
     required DateTime lastModificationAt,
     required int order,
+    required bool didAskedAtCurrentTestRound,
+    required DateTime emulatedCreatedAt,
     required int rank,
     required int askedCount,
     required int wronglyAnsweredCount,
@@ -804,6 +882,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
         creationAt = Value(creationAt),
         lastModificationAt = Value(lastModificationAt),
         order = Value(order),
+        didAskedAtCurrentTestRound = Value(didAskedAtCurrentTestRound),
+        emulatedCreatedAt = Value(emulatedCreatedAt),
         rank = Value(rank),
         askedCount = Value(askedCount),
         wronglyAnsweredCount = Value(wronglyAnsweredCount);
@@ -815,6 +895,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     Expression<DateTime>? creationAt,
     Expression<DateTime>? lastModificationAt,
     Expression<int>? order,
+    Expression<bool>? didAskedAtCurrentTestRound,
+    Expression<DateTime>? emulatedCreatedAt,
     Expression<int>? rank,
     Expression<int>? askedCount,
     Expression<int>? wronglyAnsweredCount,
@@ -828,6 +910,9 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
       if (lastModificationAt != null)
         'last_modification_at': lastModificationAt,
       if (order != null) 'order': order,
+      if (didAskedAtCurrentTestRound != null)
+        'did_asked_at_current_test_round': didAskedAtCurrentTestRound,
+      if (emulatedCreatedAt != null) 'emulated_created_at': emulatedCreatedAt,
       if (rank != null) 'rank': rank,
       if (askedCount != null) 'asked_count': askedCount,
       if (wronglyAnsweredCount != null)
@@ -843,6 +928,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
       Value<DateTime>? creationAt,
       Value<DateTime>? lastModificationAt,
       Value<int>? order,
+      Value<bool>? didAskedAtCurrentTestRound,
+      Value<DateTime>? emulatedCreatedAt,
       Value<int>? rank,
       Value<int>? askedCount,
       Value<int>? wronglyAnsweredCount}) {
@@ -854,6 +941,9 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
       creationAt: creationAt ?? this.creationAt,
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       order: order ?? this.order,
+      didAskedAtCurrentTestRound:
+          didAskedAtCurrentTestRound ?? this.didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt ?? this.emulatedCreatedAt,
       rank: rank ?? this.rank,
       askedCount: askedCount ?? this.askedCount,
       wronglyAnsweredCount: wronglyAnsweredCount ?? this.wronglyAnsweredCount,
@@ -885,6 +975,13 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     if (order.present) {
       map['order'] = Variable<int>(order.value);
     }
+    if (didAskedAtCurrentTestRound.present) {
+      map['did_asked_at_current_test_round'] =
+          Variable<bool>(didAskedAtCurrentTestRound.value);
+    }
+    if (emulatedCreatedAt.present) {
+      map['emulated_created_at'] = Variable<DateTime>(emulatedCreatedAt.value);
+    }
     if (rank.present) {
       map['rank'] = Variable<int>(rank.value);
     }
@@ -907,6 +1004,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
           ..write('order: $order, ')
+          ..write('didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, ')
+          ..write('emulatedCreatedAt: $emulatedCreatedAt, ')
           ..write('rank: $rank, ')
           ..write('askedCount: $askedCount, ')
           ..write('wronglyAnsweredCount: $wronglyAnsweredCount')

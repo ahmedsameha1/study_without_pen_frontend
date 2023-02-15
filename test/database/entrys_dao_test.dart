@@ -15,10 +15,12 @@ void main() {
   String questionId = const Uuid().v4();
   DateTime creationAt = DateTime.utc(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
+  DateTime emulatedCreatedAt = DateTime.utc(2022, 2, 2);
   int order = 1;
   int rank = Rank.Normal.index;
   int askedCount = 2;
   int wronglyAnsweredCount = 1;
+  bool didAskedAtCurrentTestRound = true;
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     entrysDao = EntrysDao(appDatabase);
@@ -38,6 +40,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -57,6 +61,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          emulatedCreatedAt: emulatedCreatedAt,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -68,6 +74,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          emulatedCreatedAt: emulatedCreatedAt,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -88,6 +96,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          emulatedCreatedAt: emulatedCreatedAt,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -107,6 +117,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -126,6 +138,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -146,6 +160,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -157,6 +173,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -181,9 +199,11 @@ void main() {
             creationAt: DateTime.utc(2023, 2, 2),
             lastModificationAt: lastModificationAt,
             order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
             rank: rank,
             askedCount: askedCount,
-          wronglyAnsweredCount: wronglyAnsweredCount);
+            wronglyAnsweredCount: wronglyAnsweredCount);
         expect(() async {
           await entrysDao.create(entry.toCompanion(true));
         },
@@ -202,9 +222,11 @@ void main() {
             creationAt: creationAt,
             lastModificationAt: DateTime.utc(2023, 2, 2),
             order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
             rank: rank,
             askedCount: askedCount,
-          wronglyAnsweredCount: wronglyAnsweredCount);
+            wronglyAnsweredCount: wronglyAnsweredCount);
         expect(() async {
           await entrysDao.create(entry.toCompanion(true));
         },
@@ -224,9 +246,11 @@ void main() {
             creationAt: DateTime.utc(2021, 1, 1),
             lastModificationAt: DateTime.utc(2020, 1, 1),
             order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
             rank: rank,
             askedCount: askedCount,
-          wronglyAnsweredCount: wronglyAnsweredCount);
+            wronglyAnsweredCount: wronglyAnsweredCount);
         expect(() async {
           await entrysDao.create(entry.toCompanion(true));
         },
@@ -245,6 +269,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: 65535 + 1,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -264,6 +290,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: 0 - 1,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -283,6 +311,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: 8,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -302,6 +332,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: 1,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: 65535 + 1,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -321,6 +353,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: 0 - 1,
           wronglyAnsweredCount: wronglyAnsweredCount);
@@ -340,6 +374,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: 1,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: 65535 + 1);
@@ -347,7 +383,8 @@ void main() {
         await entrysDao.create(entry.toCompanion(true));
       },
           throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("wrongly_answered_count"))));
+              e is SqliteException &&
+              e.message.contains("wrongly_answered_count"))));
     });
 
     test("Invalid Entry: wronglyAnsweredCount is smaller than 0", () async {
@@ -359,6 +396,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: 0 - 1);
@@ -366,7 +405,25 @@ void main() {
         await entrysDao.create(entry.toCompanion(true));
       },
           throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("wrongly_answered_count"))));
+              e is SqliteException &&
+              e.message.contains("wrongly_answered_count"))));
+    });
+
+    test("Good case", () async {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: true,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      await entrysDao.create(entry.toCompanion(true));
     });
   });
 }

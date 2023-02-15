@@ -19,9 +19,10 @@ class EntryTexts extends Table {
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get value => text()
       .check(value
-          .trim()
-          .length
-          .isBiggerOrEqualValue(EntryTexts.MINIMUM_VALUE_LENGTH) & value.length.isSmallerOrEqualValue(EntryTexts.MAXIMUM_VALUE_LENGTH))
+              .trim()
+              .length
+              .isBiggerOrEqualValue(EntryTexts.MINIMUM_VALUE_LENGTH) &
+          value.length.isSmallerOrEqualValue(EntryTexts.MAXIMUM_VALUE_LENGTH))
       .unique()();
 
   @override
@@ -61,6 +62,8 @@ class Entrys extends Table {
   IntColumn get order =>
       integer().check(order.isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
           order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE))();
+  BoolColumn get didAskedAtCurrentTestRound => boolean()();
+  DateTimeColumn get emulatedCreatedAt => dateTime()();
   IntColumn get rank => integer()();
   IntColumn get askedCount => integer().check(
       askedCount.isSmallerOrEqualValue(Entrys.ASKED_COUNT_MAXIMUM_VALUE) &
