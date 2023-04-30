@@ -29,6 +29,17 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     }
     return into(entrys).insert(entrysCompanion);
   }
+
+  Future<List<Entry>> getAll() {
+    return (select(entrys)
+          ..orderBy([
+            ((tbl) =>
+                OrderingTerm(expression: tbl.order, mode: OrderingMode.asc)),
+            ((tbl) => OrderingTerm(
+                expression: tbl.creationAt, mode: OrderingMode.desc)),
+          ]))
+        .get();
+  }
 }
 
 enum Rank { Normal }

@@ -199,8 +199,8 @@ void main() {
             creationAt: DateTime.utc(2023, 2, 2),
             lastModificationAt: lastModificationAt,
             order: order,
-          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
-          emulatedCreatedAt: emulatedCreatedAt,
+            didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+            emulatedCreatedAt: emulatedCreatedAt,
             rank: rank,
             askedCount: askedCount,
             wronglyAnsweredCount: wronglyAnsweredCount);
@@ -222,8 +222,8 @@ void main() {
             creationAt: creationAt,
             lastModificationAt: DateTime.utc(2023, 2, 2),
             order: order,
-          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
-          emulatedCreatedAt: emulatedCreatedAt,
+            didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+            emulatedCreatedAt: emulatedCreatedAt,
             rank: rank,
             askedCount: askedCount,
             wronglyAnsweredCount: wronglyAnsweredCount);
@@ -246,8 +246,8 @@ void main() {
             creationAt: DateTime.utc(2021, 1, 1),
             lastModificationAt: DateTime.utc(2020, 1, 1),
             order: order,
-          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
-          emulatedCreatedAt: emulatedCreatedAt,
+            didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+            emulatedCreatedAt: emulatedCreatedAt,
             rank: rank,
             askedCount: askedCount,
             wronglyAnsweredCount: wronglyAnsweredCount);
@@ -425,5 +425,133 @@ void main() {
           wronglyAnsweredCount: wronglyAnsweredCount);
       await entrysDao.create(entry.toCompanion(true));
     });
+  });
+
+  test("Get all entries in Descending order by creationAt field", () async {
+    String id2 = const Uuid().v4();
+    String id3 = const Uuid().v4();
+    String id4 = const Uuid().v4();
+    String answerId2 = const Uuid().v4();
+    String answerId3 = const Uuid().v4();
+    String answerId4 = const Uuid().v4();
+    String questionId2 = const Uuid().v4();
+    String questionId3 = const Uuid().v4();
+    String questionId4 = const Uuid().v4();
+    DateTime creationAt2 = DateTime.utc(2019, 1, 1);
+    DateTime creationAt3 = DateTime.utc(2021, 1, 1);
+    DateTime creationAt4 = DateTime.utc(2018, 1, 1);
+    DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
+    DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
+    DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+    var entry = Entry(
+        id: id,
+        fieldListId: fieldListId,
+        answerId: answerId,
+        questionId: questionId,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: 3,
+        didAskedAtCurrentTestRound: true,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount);
+    await entrysDao.create(entry.toCompanion(true));
+    entry = Entry(
+        id: id2,
+        fieldListId: fieldListId,
+        answerId: answerId2,
+        questionId: questionId2,
+        creationAt: creationAt3,
+        lastModificationAt: lastModificationAt3,
+        order: 2,
+        didAskedAtCurrentTestRound: true,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount);
+    await entrysDao.create(entry.toCompanion(true));
+    entry = Entry(
+        id: id3,
+        fieldListId: fieldListId,
+        answerId: answerId3,
+        questionId: questionId3,
+        creationAt: creationAt2,
+        lastModificationAt: lastModificationAt2,
+        order: 2,
+        didAskedAtCurrentTestRound: true,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount);
+    await entrysDao.create(entry.toCompanion(true));
+    entry = Entry(
+        id: id4,
+        fieldListId: fieldListId,
+        answerId: answerId4,
+        questionId: questionId4,
+        creationAt: creationAt4,
+        lastModificationAt: lastModificationAt4,
+        order: order,
+        didAskedAtCurrentTestRound: true,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount);
+    await entrysDao.create(entry.toCompanion(true));
+    final entries = await entrysDao.getAll();
+    expect(entries.length, 4);
+    entry = entries[0];
+    expect(entry.id, id4);
+    expect(entry.fieldListId, fieldListId);
+    expect(entry.answerId, answerId4);
+    expect(entry.questionId, questionId4);
+    expect(entry.creationAt, creationAt4);
+    expect(entry.lastModificationAt, lastModificationAt4);
+    expect(entry.order, order);
+    expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+    expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+    expect(entry.rank, rank);
+    expect(entry.askedCount, askedCount);
+    expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+    entry = entries[1];
+    expect(entry.id, id2);
+    expect(entry.fieldListId, fieldListId);
+    expect(entry.answerId, answerId2);
+    expect(entry.questionId, questionId2);
+    expect(entry.creationAt, creationAt3);
+    expect(entry.lastModificationAt, lastModificationAt3);
+    expect(entry.order, 2);
+    expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+    expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+    expect(entry.rank, rank);
+    expect(entry.askedCount, askedCount);
+    expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+    entry = entries[2];
+    expect(entry.id, id3);
+    expect(entry.fieldListId, fieldListId);
+    expect(entry.answerId, answerId3);
+    expect(entry.questionId, questionId3);
+    expect(entry.creationAt, creationAt2);
+    expect(entry.lastModificationAt, lastModificationAt2);
+    expect(entry.order, 2);
+    expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+    expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+    expect(entry.rank, rank);
+    expect(entry.askedCount, askedCount);
+    expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+    entry = entries[3];
+    expect(entry.id, id);
+    expect(entry.fieldListId, fieldListId);
+    expect(entry.answerId, answerId);
+    expect(entry.questionId, questionId);
+    expect(entry.creationAt, creationAt);
+    expect(entry.lastModificationAt, lastModificationAt);
+    expect(entry.order, 3);
+    expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+    expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+    expect(entry.rank, rank);
+    expect(entry.askedCount, askedCount);
+    expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
   });
 }
