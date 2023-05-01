@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:drift/drift.dart';
 import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 
@@ -39,6 +37,26 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
                 expression: tbl.creationAt, mode: OrderingMode.desc)),
           ]))
         .get();
+  }
+
+  Future<Entry> getById(String id) {
+    return (select(entrys)..where(((tbl) => tbl.id.equals(id)))).getSingle();
+  }
+
+  Future<bool> mutate(EntrysCompanion entrysCompanion) {
+    if (!isValid(entrysCompanion.fieldListId.value)) {
+      throw InvalidDataException("fieldListId");
+    }
+    if (!isValid(entrysCompanion.answerId.value)) {
+      throw InvalidDataException("answerId");
+    }
+    if (!isValid(entrysCompanion.questionId.value)) {
+      throw InvalidDataException("questionId");
+    }
+    if (entrysCompanion.rank.value != Rank.Normal.index) {
+      throw InvalidDataException("rank");
+    }
+    return update(entrys).replace(entrysCompanion);
   }
 }
 

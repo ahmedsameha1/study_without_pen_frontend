@@ -554,4 +554,379 @@ void main() {
     expect(entry.askedCount, askedCount);
     expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
   });
+
+  test("get entry by id", () async {
+    var entry = Entry(
+        id: id,
+        fieldListId: fieldListId,
+        answerId: answerId,
+        questionId: questionId,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount);
+    await entrysDao.create(entry.toCompanion(true));
+    final Entry gottenEntry = await entrysDao.getById(id);
+    expect(gottenEntry.id, id);
+    expect(gottenEntry.fieldListId, fieldListId);
+    expect(gottenEntry.answerId, answerId);
+    expect(gottenEntry.questionId, questionId);
+    expect(gottenEntry.creationAt, creationAt);
+    expect(gottenEntry.lastModificationAt, lastModificationAt);
+    expect(gottenEntry.order, order);
+    expect(gottenEntry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+    expect(gottenEntry.emulatedCreatedAt, emulatedCreatedAt);
+    expect(gottenEntry.rank, rank);
+    expect(gottenEntry.askedCount, askedCount);
+    expect(gottenEntry.wronglyAnsweredCount, wronglyAnsweredCount);
+  });
+
+  group("Update Entry", () {
+    setUp(() async {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      await entrysDao.create(entry.toCompanion(true));
+    });
+    test("fieldListId field should be a valid UUID v4", () {
+      var entry = Entry(
+          id: id,
+          fieldListId: "eweho",
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      expect(() async {
+        await entrysDao.mutate(entry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("fieldListId"))));
+    });
+
+    test("answerId field should be a valid UUID v4", () {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: "ewh2woe",
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      expect(() async {
+        await entrysDao.mutate(entry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("answerId"))));
+    });
+
+    test("questionId field should be a valid UUID v4", () {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: "oewhow",
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      expect(() async {
+        await entrysDao.mutate(entry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("questionId"))));
+    });
+
+    test("creationAt field should be a DateTime in the past", () {
+      withClock(Clock.fixed(DateTime.utc(2023, 1, 1)), () {
+        var entry = Entry(
+            id: id,
+            fieldListId: fieldListId,
+            answerId: answerId,
+            questionId: questionId,
+            creationAt: DateTime.utc(2024, 1, 1),
+            lastModificationAt: lastModificationAt,
+            order: order,
+            didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+            emulatedCreatedAt: emulatedCreatedAt,
+            rank: rank,
+            askedCount: askedCount,
+            wronglyAnsweredCount: wronglyAnsweredCount);
+        expect(() async {
+          await entrysDao.mutate(entry.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException && e.message.contains("creation_at"))));
+      });
+    });
+
+    test("lastModificationAt field should be a DateTime in the past", () {
+      withClock(Clock.fixed(DateTime.utc(2023, 1, 1)), () {
+        var entry = Entry(
+            id: id,
+            fieldListId: fieldListId,
+            answerId: answerId,
+            questionId: questionId,
+            creationAt: creationAt,
+            lastModificationAt: DateTime(2024, 1, 1),
+            order: order,
+            didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+            emulatedCreatedAt: emulatedCreatedAt,
+            rank: rank,
+            askedCount: askedCount,
+            wronglyAnsweredCount: wronglyAnsweredCount);
+        expect(() async {
+          await entrysDao.mutate(entry.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException &&
+                e.message.contains("last_modification_at"))));
+      });
+    });
+
+    test("Invalid update: order is greater than 65535", () {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: 65535 + 1,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      expect(() async {
+        await entrysDao.mutate(entry.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("order"))));
+    });
+
+    test("Invalid update: order is smaller than 0", () {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: 0 - 1,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      expect(() async {
+        await entrysDao.mutate(entry.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("order"))));
+    });
+
+    test("Invalid update: rank is invalid value", () {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: 7,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      expect(() async {
+        await entrysDao.mutate(entry.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is InvalidDataException && e.message.contains("rank"))));
+    });
+
+    test("Invalid update: askedCount is greater than 65535", () {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: 65535 + 1,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      expect(() async {
+        await entrysDao.mutate(entry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("asked_count"))));
+    });
+
+    test("Invalid update: order is smaller than 0", () {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: 0 - 1,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      expect(() async {
+        await entrysDao.mutate(entry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("asked_count"))));
+    });
+
+    test("Invalid update: wronglyAnsweredCount is greater than 65535", () {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: 65535 + 1);
+      expect(() async {
+        await entrysDao.mutate(entry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("wrongly_answered_count"))));
+    });
+
+    test("Invalid update: wronglyAnsweredCount is smaller than 0", () {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: 0 - 1);
+      expect(() async {
+        await entrysDao.mutate(entry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("wrongly_answered_count"))));
+    });
+
+    test("Good case 1", () async {
+      const thisOrder = 10;
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: thisOrder,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      var mutated = await entrysDao.mutate(entry.toCompanion(true));
+      expect(mutated, true);
+      var gottenEntry = await entrysDao.getById(id);
+      expect(gottenEntry.id, id);
+      expect(gottenEntry.fieldListId, fieldListId);
+      expect(gottenEntry.answerId, answerId);
+      expect(gottenEntry.questionId, questionId);
+      expect(gottenEntry.creationAt, creationAt);
+      expect(gottenEntry.lastModificationAt, lastModificationAt);
+      expect(gottenEntry.order, thisOrder);
+      expect(
+          gottenEntry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+      expect(gottenEntry.emulatedCreatedAt, emulatedCreatedAt);
+      expect(gottenEntry.rank, rank);
+      expect(gottenEntry.askedCount, askedCount);
+      expect(gottenEntry.wronglyAnsweredCount, wronglyAnsweredCount);
+    });
+
+    test("Good case 2", () async {
+      const thisOrder = 10;
+      var thisAnswerId = const Uuid().v4();
+      const thisAskedCount = 1000;
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: thisAnswerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: thisOrder,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: thisAskedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      var mutated = await entrysDao.mutate(entry.toCompanion(true));
+      expect(mutated, true);
+      var gottenEntry = await entrysDao.getById(id);
+      expect(gottenEntry.id, id);
+      expect(gottenEntry.fieldListId, fieldListId);
+      expect(gottenEntry.answerId, thisAnswerId);
+      expect(gottenEntry.questionId, questionId);
+      expect(gottenEntry.creationAt, creationAt);
+      expect(gottenEntry.lastModificationAt, lastModificationAt);
+      expect(gottenEntry.order, thisOrder);
+      expect(
+          gottenEntry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+      expect(gottenEntry.emulatedCreatedAt, emulatedCreatedAt);
+      expect(gottenEntry.rank, rank);
+      expect(gottenEntry.askedCount, thisAskedCount);
+      expect(gottenEntry.wronglyAnsweredCount, wronglyAnsweredCount);
+    });
+  });
 }
