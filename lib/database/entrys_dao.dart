@@ -1,5 +1,4 @@
 import 'package:drift/drift.dart';
-import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 
 import 'app_database.dart';
 
@@ -10,7 +9,7 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
   EntrysDao(AppDatabase appDatabase) : super(appDatabase);
 
   Future<int> create(EntrysCompanion entrysCompanion) {
-    if (!isValid(entrysCompanion.id.value)) {
+    if (entrysCompanion.id.present && !isValid(entrysCompanion.id.value)) {
       throw InvalidDataException("id");
     }
     if (!isValid(entrysCompanion.fieldListId.value)) {
@@ -39,8 +38,9 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
         .get();
   }
 
-  Future<Entry> getById(String id) {
-    return (select(entrys)..where(((tbl) => tbl.id.equals(id)))).getSingle();
+  Future<Entry?> getById(String id) {
+    return (select(entrys)..where(((tbl) => tbl.id.equals(id))))
+        .getSingleOrNull();
   }
 
   Future<bool> mutate(EntrysCompanion entrysCompanion) {
@@ -57,6 +57,10 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
       throw InvalidDataException("rank");
     }
     return update(entrys).replace(entrysCompanion);
+  }
+
+  remove(String id) {
+    return (delete(entrys)..where((tbl) => tbl.id.equals(id))).go();
   }
 }
 
