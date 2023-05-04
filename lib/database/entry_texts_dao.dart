@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:uuid/uuid.dart';
 
 part 'entry_texts_dao.g.dart';
 
@@ -27,14 +26,5 @@ class EntryTextsDao extends DatabaseAccessor<AppDatabase>
 
   Future<int> remove(String id) {
     return (delete(entryTexts)..where((tbl) => tbl.id.equals(id))).go();
-  }
-}
-
-bool isValid(String uuid) {
-  try {
-    Uuid.parse(uuid);
-    return true;
-  } catch (e) {
-    return false;
   }
 }

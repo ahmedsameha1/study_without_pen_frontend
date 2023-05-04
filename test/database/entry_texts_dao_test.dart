@@ -41,13 +41,6 @@ main() {
               (e) => e is SqliteException && e.message.contains("id"))));
     });
 
-    test("Creating EntryText without giving an 'id'", () async {
-      var entryTextsCompanion = EntryTextsCompanion(value: Value(value));
-      await entryTextsDao.create(entryTextsCompanion);
-      List<EntryText> entryTexts = await entryTextsDao.getAll();
-      expect(isValid(entryTexts[0].id), true);
-    });
-
     test(
         "Invalid EntryText: value length is less than the minimum number of characters",
         () {
@@ -90,6 +83,13 @@ main() {
     test("Good case", () async {
       var entryText = EntryText(id: id, value: value);
       await entryTextsDao.create(entryText.toCompanion(true));
+    });
+
+    test("Good case: Creating EntryText without giving an 'id'", () async {
+      var entryTextsCompanion = EntryTextsCompanion(value: Value(value));
+      await entryTextsDao.create(entryTextsCompanion);
+      List<EntryText> entryTexts = await entryTextsDao.getAll();
+      expect(isValid(entryTexts[0].id), true);
     });
   });
 

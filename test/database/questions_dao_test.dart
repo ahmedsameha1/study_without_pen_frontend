@@ -50,15 +50,6 @@ void main() {
               (e) => e is SqliteException && e.message.contains("id"))));
     });
 
-    test("Creating Question without giving an 'id'", () async {
-      var questionsCompanion = QuestionsCompanion(
-          questionType: Value(QuestionType.EntryTextQuestion.index),
-          address: Value(address));
-      await questionsDao.create(questionsCompanion);
-      List<Question> questions = await questionsDao.getAll();
-      expect(isValid(questions[0].id), true);
-    });
-
     test(
         "Invalid Question: questionType is invalid value",
         () {
@@ -112,6 +103,15 @@ void main() {
           questionType: QuestionType.EntryTextQuestion.index,
           address: address);
       await questionsDao.create(question.toCompanion(true));
+    });
+
+    test("Good case: Creating Question without giving an 'id'", () async {
+      var questionsCompanion = QuestionsCompanion(
+          questionType: Value(QuestionType.EntryTextQuestion.index),
+          address: Value(address));
+      await questionsDao.create(questionsCompanion);
+      List<Question> questions = await questionsDao.getAll();
+      expect(isValid(questions[0].id), true);
     });
   });
 

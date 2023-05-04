@@ -10,6 +10,7 @@ import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
 import 'entrys_dao.dart';
+import 'field_lists_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -82,9 +83,13 @@ class Entrys extends Table {
       ];
 }
 
+class FieldLists extends Table {
+  TextColumn get id => text().clientDefault(() => const Uuid().v4())();
+}
+
 @DriftDatabase(
-    tables: [EntryTexts, Questions, Entrys],
-    daos: [EntryTextsDao, QuestionsDao, EntrysDao])
+    tables: [EntryTexts, Questions, Entrys, FieldLists],
+    daos: [EntryTextsDao, QuestionsDao, EntrysDao, FieldListsDao])
 class AppDatabase extends _$AppDatabase {
   static const databaseFileName = "db.sqlite";
   static LazyDatabase openConnection() {
@@ -99,4 +104,13 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   int get schemaVersion => 1;
+}
+
+bool isValid(String uuid) {
+  try {
+    Uuid.parse(uuid);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }

@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
 
 import 'app_database.dart';
-import 'entry_texts_dao.dart';
 
 part 'questions_dao.g.dart';
 
