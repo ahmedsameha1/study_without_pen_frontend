@@ -30,6 +30,17 @@ void main() {
               (e) => e is InvalidDataException && e.message.contains("id"))));
     });
 
+    test("No FieldList with the same id", () async {
+      var fieldList1 = FieldList(id: id, fieldId: fieldId);
+      var fieldList2 = FieldList(id: id, fieldId: const Uuid().v4());
+      await fieldListsDao.create(fieldList1.toCompanion(true));
+      expect(() async {
+        await fieldListsDao.create(fieldList2.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("id"))));
+    });
+
     test("Invalid FieldList: fieldId is an invalid UUID v4", () async {
       var fieldList = FieldList(id: id, fieldId: "ewhw");
       expect(() async {

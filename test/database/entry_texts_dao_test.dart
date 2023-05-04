@@ -30,11 +30,11 @@ main() {
               (e) => e is InvalidDataException && e.message.contains("id"))));
     });
 
-    test("Creating EntryText with the same 'id'", () async {
+    test("No EntryText with the same 'id'", () async {
       var entryText = EntryText(id: id, value: value + "t");
       var entryText1 = EntryText(id: id, value: value);
+      await entryTextsDao.create(entryText.toCompanion(true));
       expect(() async {
-        await entryTextsDao.create(entryText.toCompanion(true));
         await entryTextsDao.create(entryText1.toCompanion(true));
       },
           throwsA(predicate(
@@ -65,8 +65,8 @@ main() {
       expect(() async {
         await entryTextsDao.create(entryText.toCompanion(true));
       },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("value"))));
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("value"))));
     });
 
     test("Creating EntryText with the same 'value'", () async {
@@ -111,7 +111,8 @@ main() {
       var entryTextsCompanion = EntryTextsCompanion(value: Value(value));
       var entryTextsCompanion2 =
           EntryTextsCompanion(value: Value(value + "x2"));
-      var entryTextsCompanion3 = EntryTextsCompanion(value: Value(value + "x3"));
+      var entryTextsCompanion3 =
+          EntryTextsCompanion(value: Value(value + "x3"));
       await entryTextsDao.create(entryTextsCompanion);
       await entryTextsDao.create(entryTextsCompanion2);
       await entryTextsDao.create(entryTextsCompanion3);

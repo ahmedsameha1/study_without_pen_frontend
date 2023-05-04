@@ -226,7 +226,7 @@ void main() {
               (e) => e is InvalidDataException && e.message.contains("id"))));
     });
 
-    test("Creating Entry with the same 'id'", () async {
+    test("No Entry with the same 'id'", () async {
       var entry = Entry(
           id: id,
           fieldListId: fieldListId,
@@ -253,8 +253,8 @@ void main() {
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
+      await entrysDao.create(entry.toCompanion(true));
       expect(() async {
-        await entrysDao.create(entry.toCompanion(true));
         await entrysDao.create(entry1.toCompanion(true));
       },
           throwsA(predicate(

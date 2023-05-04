@@ -86,6 +86,9 @@ class Entrys extends Table {
 class FieldLists extends Table {
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldId => text()();
+
+  @override
+  Set<Column> get primaryKey => {id};
 }
 
 @DriftDatabase(

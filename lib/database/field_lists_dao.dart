@@ -16,5 +16,6 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     if (!isValid(fieldListsCompanion.fieldId.value)) {
       throw InvalidDataException("fieldId");
     }
+    return into(fieldLists).insert(fieldListsCompanion);
   }
 }

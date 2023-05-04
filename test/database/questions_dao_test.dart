@@ -33,7 +33,7 @@ void main() {
               (e) => e is InvalidDataException && e.message.contains("id"))));
     });
 
-    test("Creating Question with the same 'id'", () async {
+    test("No Question with the same 'id'", () async {
       var question = Question(
           id: id,
           questionType: QuestionType.EntryTextQuestion.index,
@@ -42,26 +42,22 @@ void main() {
           id: id,
           questionType: QuestionType.EntryTextQuestion.index,
           address: const Uuid().v4());
+      await questionsDao.create(question.toCompanion(true));
       expect(() async {
-        await questionsDao.create(question.toCompanion(true));
         await questionsDao.create(question1.toCompanion(true));
       },
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("id"))));
     });
 
-    test(
-        "Invalid Question: questionType is invalid value",
-        () {
-      var question = Question(
-          id: id,
-          questionType: 88,
-          address: address);
+    test("Invalid Question: questionType is invalid value", () {
+      var question = Question(id: id, questionType: 88, address: address);
       expect(() async {
         await questionsDao.create(question.toCompanion(true));
       },
           throwsA(predicate((e) =>
-              e is InvalidDataException && e.message.contains("questionType"))));
+              e is InvalidDataException &&
+              e.message.contains("questionType"))));
     });
 
     test(
