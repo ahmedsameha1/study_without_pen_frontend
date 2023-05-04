@@ -10,6 +10,7 @@ void main() {
   late FieldListsDao fieldListsDao;
   String id = const Uuid().v4();
   String fieldId = const Uuid().v4();
+  String name = "fieldList1";
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -22,7 +23,7 @@ void main() {
 
   group("Creat a FieldList", () {
     test("Invalid FieldList: id is an invalid UUID v4", () async {
-      var fieldList = FieldList(id: "eewohow", fieldId: fieldId);
+      var fieldList = FieldList(id: "eewohow", fieldId: fieldId, name: name);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -31,8 +32,9 @@ void main() {
     });
 
     test("No FieldList with the same id", () async {
-      var fieldList1 = FieldList(id: id, fieldId: fieldId);
-      var fieldList2 = FieldList(id: id, fieldId: const Uuid().v4());
+      var fieldList1 = FieldList(id: id, fieldId: fieldId, name: name);
+      var fieldList2 =
+          FieldList(id: id, fieldId: const Uuid().v4(), name: name);
       await fieldListsDao.create(fieldList1.toCompanion(true));
       expect(() async {
         await fieldListsDao.create(fieldList2.toCompanion(true));
@@ -42,7 +44,7 @@ void main() {
     });
 
     test("Invalid FieldList: fieldId is an invalid UUID v4", () async {
-      var fieldList = FieldList(id: id, fieldId: "ewhw");
+      var fieldList = FieldList(id: id, fieldId: "ewhw", name: name);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -50,8 +52,40 @@ void main() {
               e is InvalidDataException && e.message.contains("fieldId"))));
     });
 
+    test("Invalid FieldList: name length is less than 1", () async {
+      var fieldList = FieldList(id: id, fieldId: fieldId, name: "");
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("name"))));
+    });
+
+    test(
+        "Invalid FieldList: name length is less than ${FieldLists.MINIMUM_LENGTH_OF_NAME}",
+        () async {
+      var fieldList = FieldList(id: id, fieldId: fieldId, name: " ");
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("name"))));
+    });
+
+    test(
+        "Invalid FieldList: name length is bigger than ${FieldLists.MAXIMUM_LENGTH_OF_NAME}",
+        () async {
+      var fieldList = FieldList(id: id, fieldId: fieldId, name: "j" * 65);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("name"))));
+    });
+
     test("Good case: create FieldList without 'id'", () async {
-      var fieldListCompanion = FieldListsCompanion(fieldId: Value(fieldId));
+      var fieldListCompanion =
+          FieldListsCompanion(fieldId: Value(fieldId), name: Value(name));
       await fieldListsDao.create(fieldListCompanion);
     });
   });

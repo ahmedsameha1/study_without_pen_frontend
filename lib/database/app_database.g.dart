@@ -1033,8 +1033,20 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<String> fieldId = GeneratedColumn<String>(
       'field_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  List<GeneratedColumn> get $columns => [id, fieldId];
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      check: () =>
+          name
+              .trim()
+              .length
+              .isBiggerOrEqualValue(FieldLists.MINIMUM_LENGTH_OF_NAME) &
+          name.length.isSmallerOrEqualValue(FieldLists.MAXIMUM_LENGTH_OF_NAME),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, fieldId, name];
   @override
   String get aliasedName => _alias ?? 'field_lists';
   @override
@@ -1053,6 +1065,12 @@ class $FieldListsTable extends FieldLists
     } else if (isInserting) {
       context.missing(_fieldIdMeta);
     }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
     return context;
   }
 
@@ -1066,6 +1084,8 @@ class $FieldListsTable extends FieldLists
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       fieldId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}field_id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
     );
   }
 
@@ -1078,12 +1098,15 @@ class $FieldListsTable extends FieldLists
 class FieldList extends DataClass implements Insertable<FieldList> {
   final String id;
   final String fieldId;
-  const FieldList({required this.id, required this.fieldId});
+  final String name;
+  const FieldList(
+      {required this.id, required this.fieldId, required this.name});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['field_id'] = Variable<String>(fieldId);
+    map['name'] = Variable<String>(name);
     return map;
   }
 
@@ -1091,6 +1114,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     return FieldListsCompanion(
       id: Value(id),
       fieldId: Value(fieldId),
+      name: Value(name),
     );
   }
 
@@ -1100,6 +1124,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     return FieldList(
       id: serializer.fromJson<String>(json['id']),
       fieldId: serializer.fromJson<String>(json['fieldId']),
+      name: serializer.fromJson<String>(json['name']),
     );
   }
   @override
@@ -1108,57 +1133,69 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'fieldId': serializer.toJson<String>(fieldId),
+      'name': serializer.toJson<String>(name),
     };
   }
 
-  FieldList copyWith({String? id, String? fieldId}) => FieldList(
+  FieldList copyWith({String? id, String? fieldId, String? name}) => FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
+        name: name ?? this.name,
       );
   @override
   String toString() {
     return (StringBuffer('FieldList(')
           ..write('id: $id, ')
-          ..write('fieldId: $fieldId')
+          ..write('fieldId: $fieldId, ')
+          ..write('name: $name')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, fieldId);
+  int get hashCode => Object.hash(id, fieldId, name);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FieldList &&
           other.id == this.id &&
-          other.fieldId == this.fieldId);
+          other.fieldId == this.fieldId &&
+          other.name == this.name);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<String> id;
   final Value<String> fieldId;
+  final Value<String> name;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
+    this.name = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
     required String fieldId,
-  }) : fieldId = Value(fieldId);
+    required String name,
+  })  : fieldId = Value(fieldId),
+        name = Value(name);
   static Insertable<FieldList> custom({
     Expression<String>? id,
     Expression<String>? fieldId,
+    Expression<String>? name,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (fieldId != null) 'field_id': fieldId,
+      if (name != null) 'name': name,
     });
   }
 
-  FieldListsCompanion copyWith({Value<String>? id, Value<String>? fieldId}) {
+  FieldListsCompanion copyWith(
+      {Value<String>? id, Value<String>? fieldId, Value<String>? name}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
+      name: name ?? this.name,
     );
   }
 
@@ -1171,6 +1208,9 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     if (fieldId.present) {
       map['field_id'] = Variable<String>(fieldId.value);
     }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
     return map;
   }
 
@@ -1178,7 +1218,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   String toString() {
     return (StringBuffer('FieldListsCompanion(')
           ..write('id: $id, ')
-          ..write('fieldId: $fieldId')
+          ..write('fieldId: $fieldId, ')
+          ..write('name: $name')
           ..write(')'))
         .toString();
   }

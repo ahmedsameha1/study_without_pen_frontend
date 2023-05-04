@@ -84,8 +84,15 @@ class Entrys extends Table {
 }
 
 class FieldLists extends Table {
+  static const int MINIMUM_LENGTH_OF_NAME = 1;
+  static const int MAXIMUM_LENGTH_OF_NAME = 64;
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldId => text()();
+  TextColumn get name => text().check(name
+          .trim()
+          .length
+          .isBiggerOrEqualValue(FieldLists.MINIMUM_LENGTH_OF_NAME) &
+      name.length.isSmallerOrEqualValue(FieldLists.MAXIMUM_LENGTH_OF_NAME))();
 
   @override
   Set<Column> get primaryKey => {id};
