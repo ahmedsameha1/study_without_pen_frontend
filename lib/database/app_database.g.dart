@@ -1027,8 +1027,14 @@ class $FieldListsTable extends FieldLists
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       clientDefault: () => const Uuid().v4());
+  static const VerificationMeta _fieldIdMeta =
+      const VerificationMeta('fieldId');
   @override
-  List<GeneratedColumn> get $columns => [id];
+  late final GeneratedColumn<String> fieldId = GeneratedColumn<String>(
+      'field_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, fieldId];
   @override
   String get aliasedName => _alias ?? 'field_lists';
   @override
@@ -1041,6 +1047,12 @@ class $FieldListsTable extends FieldLists
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
+    if (data.containsKey('field_id')) {
+      context.handle(_fieldIdMeta,
+          fieldId.isAcceptableOrUnknown(data['field_id']!, _fieldIdMeta));
+    } else if (isInserting) {
+      context.missing(_fieldIdMeta);
+    }
     return context;
   }
 
@@ -1052,6 +1064,8 @@ class $FieldListsTable extends FieldLists
     return FieldList(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      fieldId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}field_id'])!,
     );
   }
 
@@ -1063,17 +1077,20 @@ class $FieldListsTable extends FieldLists
 
 class FieldList extends DataClass implements Insertable<FieldList> {
   final String id;
-  const FieldList({required this.id});
+  final String fieldId;
+  const FieldList({required this.id, required this.fieldId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
+    map['field_id'] = Variable<String>(fieldId);
     return map;
   }
 
   FieldListsCompanion toCompanion(bool nullToAbsent) {
     return FieldListsCompanion(
       id: Value(id),
+      fieldId: Value(fieldId),
     );
   }
 
@@ -1082,6 +1099,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return FieldList(
       id: serializer.fromJson<String>(json['id']),
+      fieldId: serializer.fromJson<String>(json['fieldId']),
     );
   }
   @override
@@ -1089,46 +1107,58 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
+      'fieldId': serializer.toJson<String>(fieldId),
     };
   }
 
-  FieldList copyWith({String? id}) => FieldList(
+  FieldList copyWith({String? id, String? fieldId}) => FieldList(
         id: id ?? this.id,
+        fieldId: fieldId ?? this.fieldId,
       );
   @override
   String toString() {
     return (StringBuffer('FieldList(')
-          ..write('id: $id')
+          ..write('id: $id, ')
+          ..write('fieldId: $fieldId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode => Object.hash(id, fieldId);
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || (other is FieldList && other.id == this.id);
+      identical(this, other) ||
+      (other is FieldList &&
+          other.id == this.id &&
+          other.fieldId == this.fieldId);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<String> id;
+  final Value<String> fieldId;
   const FieldListsCompanion({
     this.id = const Value.absent(),
+    this.fieldId = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
-  });
+    required String fieldId,
+  }) : fieldId = Value(fieldId);
   static Insertable<FieldList> custom({
     Expression<String>? id,
+    Expression<String>? fieldId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (fieldId != null) 'field_id': fieldId,
     });
   }
 
-  FieldListsCompanion copyWith({Value<String>? id}) {
+  FieldListsCompanion copyWith({Value<String>? id, Value<String>? fieldId}) {
     return FieldListsCompanion(
       id: id ?? this.id,
+      fieldId: fieldId ?? this.fieldId,
     );
   }
 
@@ -1138,13 +1168,17 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     if (id.present) {
       map['id'] = Variable<String>(id.value);
     }
+    if (fieldId.present) {
+      map['field_id'] = Variable<String>(fieldId.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('FieldListsCompanion(')
-          ..write('id: $id')
+          ..write('id: $id, ')
+          ..write('fieldId: $fieldId')
           ..write(')'))
         .toString();
   }
