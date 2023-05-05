@@ -1045,8 +1045,16 @@ class $FieldListsTable extends FieldLists
           name.length.isSmallerOrEqualValue(FieldLists.MAXIMUM_LENGTH_OF_NAME),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
+  static const VerificationMeta _creationAtMeta =
+      const VerificationMeta('creationAt');
   @override
-  List<GeneratedColumn> get $columns => [id, fieldId, name];
+  late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
+      'creation_at', aliasedName, false,
+      check: () => creationAt.isSmallerThanValue(clock.now().toUtc()),
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, fieldId, name, creationAt];
   @override
   String get aliasedName => _alias ?? 'field_lists';
   @override
@@ -1071,6 +1079,14 @@ class $FieldListsTable extends FieldLists
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
+    if (data.containsKey('creation_at')) {
+      context.handle(
+          _creationAtMeta,
+          creationAt.isAcceptableOrUnknown(
+              data['creation_at']!, _creationAtMeta));
+    } else if (isInserting) {
+      context.missing(_creationAtMeta);
+    }
     return context;
   }
 
@@ -1086,6 +1102,8 @@ class $FieldListsTable extends FieldLists
           .read(DriftSqlType.string, data['${effectivePrefix}field_id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      creationAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
     );
   }
 
@@ -1099,14 +1117,19 @@ class FieldList extends DataClass implements Insertable<FieldList> {
   final String id;
   final String fieldId;
   final String name;
+  final DateTime creationAt;
   const FieldList(
-      {required this.id, required this.fieldId, required this.name});
+      {required this.id,
+      required this.fieldId,
+      required this.name,
+      required this.creationAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['field_id'] = Variable<String>(fieldId);
     map['name'] = Variable<String>(name);
+    map['creation_at'] = Variable<DateTime>(creationAt);
     return map;
   }
 
@@ -1115,6 +1138,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       id: Value(id),
       fieldId: Value(fieldId),
       name: Value(name),
+      creationAt: Value(creationAt),
     );
   }
 
@@ -1125,6 +1149,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       id: serializer.fromJson<String>(json['id']),
       fieldId: serializer.fromJson<String>(json['fieldId']),
       name: serializer.fromJson<String>(json['name']),
+      creationAt: serializer.fromJson<DateTime>(json['creationAt']),
     );
   }
   @override
@@ -1134,68 +1159,84 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       'id': serializer.toJson<String>(id),
       'fieldId': serializer.toJson<String>(fieldId),
       'name': serializer.toJson<String>(name),
+      'creationAt': serializer.toJson<DateTime>(creationAt),
     };
   }
 
-  FieldList copyWith({String? id, String? fieldId, String? name}) => FieldList(
+  FieldList copyWith(
+          {String? id, String? fieldId, String? name, DateTime? creationAt}) =>
+      FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
         name: name ?? this.name,
+        creationAt: creationAt ?? this.creationAt,
       );
   @override
   String toString() {
     return (StringBuffer('FieldList(')
           ..write('id: $id, ')
           ..write('fieldId: $fieldId, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('creationAt: $creationAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, fieldId, name);
+  int get hashCode => Object.hash(id, fieldId, name, creationAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is FieldList &&
           other.id == this.id &&
           other.fieldId == this.fieldId &&
-          other.name == this.name);
+          other.name == this.name &&
+          other.creationAt == this.creationAt);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<String> id;
   final Value<String> fieldId;
   final Value<String> name;
+  final Value<DateTime> creationAt;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
     this.name = const Value.absent(),
+    this.creationAt = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
     required String fieldId,
     required String name,
+    required DateTime creationAt,
   })  : fieldId = Value(fieldId),
-        name = Value(name);
+        name = Value(name),
+        creationAt = Value(creationAt);
   static Insertable<FieldList> custom({
     Expression<String>? id,
     Expression<String>? fieldId,
     Expression<String>? name,
+    Expression<DateTime>? creationAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (fieldId != null) 'field_id': fieldId,
       if (name != null) 'name': name,
+      if (creationAt != null) 'creation_at': creationAt,
     });
   }
 
   FieldListsCompanion copyWith(
-      {Value<String>? id, Value<String>? fieldId, Value<String>? name}) {
+      {Value<String>? id,
+      Value<String>? fieldId,
+      Value<String>? name,
+      Value<DateTime>? creationAt}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
       name: name ?? this.name,
+      creationAt: creationAt ?? this.creationAt,
     );
   }
 
@@ -1211,6 +1252,9 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (creationAt.present) {
+      map['creation_at'] = Variable<DateTime>(creationAt.value);
+    }
     return map;
   }
 
@@ -1219,7 +1263,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     return (StringBuffer('FieldListsCompanion(')
           ..write('id: $id, ')
           ..write('fieldId: $fieldId, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('creationAt: $creationAt')
           ..write(')'))
         .toString();
   }

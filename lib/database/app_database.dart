@@ -93,6 +93,8 @@ class FieldLists extends Table {
           .length
           .isBiggerOrEqualValue(FieldLists.MINIMUM_LENGTH_OF_NAME) &
       name.length.isSmallerOrEqualValue(FieldLists.MAXIMUM_LENGTH_OF_NAME))();
+  DateTimeColumn get creationAt =>
+      dateTime().check(creationAt.isSmallerThanValue(clock.now().toUtc()))();
 
   @override
   Set<Column> get primaryKey => {id};
