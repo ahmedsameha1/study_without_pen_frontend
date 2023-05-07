@@ -14,6 +14,7 @@ void main() {
   String name = "fieldList1";
   DateTime creationAt = DateTime.utc(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
+  String languageTag = "en-US";
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -31,7 +32,8 @@ void main() {
           fieldId: fieldId,
           name: name,
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -45,13 +47,15 @@ void main() {
           fieldId: fieldId,
           name: name,
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag);
       var fieldList2 = FieldList(
           id: id,
           fieldId: const Uuid().v4(),
           name: name,
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag);
       await fieldListsDao.create(fieldList1.toCompanion(true));
       expect(() async {
         await fieldListsDao.create(fieldList2.toCompanion(true));
@@ -66,7 +70,8 @@ void main() {
           fieldId: "ewhw",
           name: name,
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -80,7 +85,8 @@ void main() {
           fieldId: fieldId,
           name: "",
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -96,7 +102,8 @@ void main() {
           fieldId: fieldId,
           name: " ",
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -112,7 +119,8 @@ void main() {
           fieldId: fieldId,
           name: "j" * 65,
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -127,7 +135,8 @@ void main() {
             fieldId: fieldId,
             name: name,
             creationAt: DateTime.utc(2023, 1, 1),
-            lastModificationAt: lastModificationAt);
+            lastModificationAt: lastModificationAt,
+            languageTag: languageTag);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -143,7 +152,8 @@ void main() {
             fieldId: fieldId,
             name: name,
             creationAt: creationAt,
-            lastModificationAt: DateTime.utc(2022, 1, 1));
+            lastModificationAt: DateTime.utc(2022, 1, 1),
+            languageTag: languageTag);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -160,7 +170,8 @@ void main() {
             fieldId: fieldId,
             name: name,
             creationAt: creationAt,
-            lastModificationAt: DateTime.utc(2012, 1, 1));
+            lastModificationAt: DateTime.utc(2012, 1, 1),
+            languageTag: languageTag);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -172,6 +183,17 @@ void main() {
 
     test("Good case: create FieldList without 'id'", () async {
       var fieldListCompanion = FieldListsCompanion(
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          languageTag: Value(languageTag));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case2: create FieldList without languageTag", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
           fieldId: Value(fieldId),
           name: Value(name),
           creationAt: Value(creationAt),

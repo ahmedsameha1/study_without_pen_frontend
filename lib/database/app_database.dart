@@ -98,6 +98,7 @@ class FieldLists extends Table {
   DateTimeColumn get lastModificationAt => dateTime().check(
       lastModificationAt.isSmallerThanValue(clock.now().toUtc()) &
           lastModificationAt.isBiggerOrEqual(creationAt))();
+  TextColumn get languageTag => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};

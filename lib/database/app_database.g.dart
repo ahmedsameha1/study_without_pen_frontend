@@ -1063,9 +1063,15 @@ class $FieldListsTable extends FieldLists
               lastModificationAt.isBiggerOrEqual(creationAt),
           type: DriftSqlType.dateTime,
           requiredDuringInsert: true);
+  static const VerificationMeta _languageTagMeta =
+      const VerificationMeta('languageTag');
+  @override
+  late final GeneratedColumn<String> languageTag = GeneratedColumn<String>(
+      'language_tag', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, fieldId, name, creationAt, lastModificationAt];
+      [id, fieldId, name, creationAt, lastModificationAt, languageTag];
   @override
   String get aliasedName => _alias ?? 'field_lists';
   @override
@@ -1106,6 +1112,12 @@ class $FieldListsTable extends FieldLists
     } else if (isInserting) {
       context.missing(_lastModificationAtMeta);
     }
+    if (data.containsKey('language_tag')) {
+      context.handle(
+          _languageTagMeta,
+          languageTag.isAcceptableOrUnknown(
+              data['language_tag']!, _languageTagMeta));
+    }
     return context;
   }
 
@@ -1126,6 +1138,8 @@ class $FieldListsTable extends FieldLists
       lastModificationAt: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime,
           data['${effectivePrefix}last_modification_at'])!,
+      languageTag: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}language_tag']),
     );
   }
 
@@ -1141,12 +1155,14 @@ class FieldList extends DataClass implements Insertable<FieldList> {
   final String name;
   final DateTime creationAt;
   final DateTime lastModificationAt;
+  final String? languageTag;
   const FieldList(
       {required this.id,
       required this.fieldId,
       required this.name,
       required this.creationAt,
-      required this.lastModificationAt});
+      required this.lastModificationAt,
+      this.languageTag});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1155,6 +1171,9 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     map['name'] = Variable<String>(name);
     map['creation_at'] = Variable<DateTime>(creationAt);
     map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
+    if (!nullToAbsent || languageTag != null) {
+      map['language_tag'] = Variable<String>(languageTag);
+    }
     return map;
   }
 
@@ -1165,6 +1184,9 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       name: Value(name),
       creationAt: Value(creationAt),
       lastModificationAt: Value(lastModificationAt),
+      languageTag: languageTag == null && nullToAbsent
+          ? const Value.absent()
+          : Value(languageTag),
     );
   }
 
@@ -1178,6 +1200,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       creationAt: serializer.fromJson<DateTime>(json['creationAt']),
       lastModificationAt:
           serializer.fromJson<DateTime>(json['lastModificationAt']),
+      languageTag: serializer.fromJson<String?>(json['languageTag']),
     );
   }
   @override
@@ -1189,6 +1212,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       'name': serializer.toJson<String>(name),
       'creationAt': serializer.toJson<DateTime>(creationAt),
       'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
+      'languageTag': serializer.toJson<String?>(languageTag),
     };
   }
 
@@ -1197,13 +1221,15 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           String? fieldId,
           String? name,
           DateTime? creationAt,
-          DateTime? lastModificationAt}) =>
+          DateTime? lastModificationAt,
+          Value<String?> languageTag = const Value.absent()}) =>
       FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
         name: name ?? this.name,
         creationAt: creationAt ?? this.creationAt,
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+        languageTag: languageTag.present ? languageTag.value : this.languageTag,
       );
   @override
   String toString() {
@@ -1212,14 +1238,15 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           ..write('fieldId: $fieldId, ')
           ..write('name: $name, ')
           ..write('creationAt: $creationAt, ')
-          ..write('lastModificationAt: $lastModificationAt')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('languageTag: $languageTag')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, fieldId, name, creationAt, lastModificationAt);
+  int get hashCode => Object.hash(
+      id, fieldId, name, creationAt, lastModificationAt, languageTag);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1228,7 +1255,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           other.fieldId == this.fieldId &&
           other.name == this.name &&
           other.creationAt == this.creationAt &&
-          other.lastModificationAt == this.lastModificationAt);
+          other.lastModificationAt == this.lastModificationAt &&
+          other.languageTag == this.languageTag);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
@@ -1237,12 +1265,14 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<String> name;
   final Value<DateTime> creationAt;
   final Value<DateTime> lastModificationAt;
+  final Value<String?> languageTag;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
     this.name = const Value.absent(),
     this.creationAt = const Value.absent(),
     this.lastModificationAt = const Value.absent(),
+    this.languageTag = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
@@ -1250,6 +1280,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     required String name,
     required DateTime creationAt,
     required DateTime lastModificationAt,
+    this.languageTag = const Value.absent(),
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
@@ -1260,6 +1291,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     Expression<String>? name,
     Expression<DateTime>? creationAt,
     Expression<DateTime>? lastModificationAt,
+    Expression<String>? languageTag,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1268,6 +1300,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       if (creationAt != null) 'creation_at': creationAt,
       if (lastModificationAt != null)
         'last_modification_at': lastModificationAt,
+      if (languageTag != null) 'language_tag': languageTag,
     });
   }
 
@@ -1276,13 +1309,15 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       Value<String>? fieldId,
       Value<String>? name,
       Value<DateTime>? creationAt,
-      Value<DateTime>? lastModificationAt}) {
+      Value<DateTime>? lastModificationAt,
+      Value<String?>? languageTag}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
       name: name ?? this.name,
       creationAt: creationAt ?? this.creationAt,
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+      languageTag: languageTag ?? this.languageTag,
     );
   }
 
@@ -1305,6 +1340,9 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       map['last_modification_at'] =
           Variable<DateTime>(lastModificationAt.value);
     }
+    if (languageTag.present) {
+      map['language_tag'] = Variable<String>(languageTag.value);
+    }
     return map;
   }
 
@@ -1315,7 +1353,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
           ..write('fieldId: $fieldId, ')
           ..write('name: $name, ')
           ..write('creationAt: $creationAt, ')
-          ..write('lastModificationAt: $lastModificationAt')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('languageTag: $languageTag')
           ..write(')'))
         .toString();
   }
