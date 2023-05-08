@@ -16,6 +16,21 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     if (!isValid(fieldListsCompanion.fieldId.value)) {
       throw InvalidDataException("fieldId");
     }
+    if (!isValidCheckType(fieldListsCompanion.checkType.value)) {
+      throw InvalidDataException("checkType");
+    }
     return into(fieldLists).insert(fieldListsCompanion);
   }
+}
+
+enum CheckType {
+  NON_STRICT_IGNORE_CASE,
+  NON_STRICT_DO_NOT_IGNORE_CASE,
+  IGNORE_CASE,
+  DO_NOT_IGNORE_CASE,
+  MAX
+}
+
+bool isValidCheckType(int checkType) {
+  return checkType >= 0 && checkType < CheckType.MAX.index;
 }

@@ -1069,9 +1069,22 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<String> languageTag = GeneratedColumn<String>(
       'language_tag', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _checkTypeMeta =
+      const VerificationMeta('checkType');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, fieldId, name, creationAt, lastModificationAt, languageTag];
+  late final GeneratedColumn<int> checkType = GeneratedColumn<int>(
+      'check_type', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        fieldId,
+        name,
+        creationAt,
+        lastModificationAt,
+        languageTag,
+        checkType
+      ];
   @override
   String get aliasedName => _alias ?? 'field_lists';
   @override
@@ -1118,6 +1131,12 @@ class $FieldListsTable extends FieldLists
           languageTag.isAcceptableOrUnknown(
               data['language_tag']!, _languageTagMeta));
     }
+    if (data.containsKey('check_type')) {
+      context.handle(_checkTypeMeta,
+          checkType.isAcceptableOrUnknown(data['check_type']!, _checkTypeMeta));
+    } else if (isInserting) {
+      context.missing(_checkTypeMeta);
+    }
     return context;
   }
 
@@ -1140,6 +1159,8 @@ class $FieldListsTable extends FieldLists
           data['${effectivePrefix}last_modification_at'])!,
       languageTag: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}language_tag']),
+      checkType: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}check_type'])!,
     );
   }
 
@@ -1156,13 +1177,15 @@ class FieldList extends DataClass implements Insertable<FieldList> {
   final DateTime creationAt;
   final DateTime lastModificationAt;
   final String? languageTag;
+  final int checkType;
   const FieldList(
       {required this.id,
       required this.fieldId,
       required this.name,
       required this.creationAt,
       required this.lastModificationAt,
-      this.languageTag});
+      this.languageTag,
+      required this.checkType});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1174,6 +1197,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     if (!nullToAbsent || languageTag != null) {
       map['language_tag'] = Variable<String>(languageTag);
     }
+    map['check_type'] = Variable<int>(checkType);
     return map;
   }
 
@@ -1187,6 +1211,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       languageTag: languageTag == null && nullToAbsent
           ? const Value.absent()
           : Value(languageTag),
+      checkType: Value(checkType),
     );
   }
 
@@ -1201,6 +1226,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       lastModificationAt:
           serializer.fromJson<DateTime>(json['lastModificationAt']),
       languageTag: serializer.fromJson<String?>(json['languageTag']),
+      checkType: serializer.fromJson<int>(json['checkType']),
     );
   }
   @override
@@ -1213,6 +1239,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       'creationAt': serializer.toJson<DateTime>(creationAt),
       'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
       'languageTag': serializer.toJson<String?>(languageTag),
+      'checkType': serializer.toJson<int>(checkType),
     };
   }
 
@@ -1222,7 +1249,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           String? name,
           DateTime? creationAt,
           DateTime? lastModificationAt,
-          Value<String?> languageTag = const Value.absent()}) =>
+          Value<String?> languageTag = const Value.absent(),
+          int? checkType}) =>
       FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
@@ -1230,6 +1258,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
         creationAt: creationAt ?? this.creationAt,
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
         languageTag: languageTag.present ? languageTag.value : this.languageTag,
+        checkType: checkType ?? this.checkType,
       );
   @override
   String toString() {
@@ -1239,14 +1268,15 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           ..write('name: $name, ')
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
-          ..write('languageTag: $languageTag')
+          ..write('languageTag: $languageTag, ')
+          ..write('checkType: $checkType')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, fieldId, name, creationAt, lastModificationAt, languageTag);
+  int get hashCode => Object.hash(id, fieldId, name, creationAt,
+      lastModificationAt, languageTag, checkType);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1256,7 +1286,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           other.name == this.name &&
           other.creationAt == this.creationAt &&
           other.lastModificationAt == this.lastModificationAt &&
-          other.languageTag == this.languageTag);
+          other.languageTag == this.languageTag &&
+          other.checkType == this.checkType);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
@@ -1266,6 +1297,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<DateTime> creationAt;
   final Value<DateTime> lastModificationAt;
   final Value<String?> languageTag;
+  final Value<int> checkType;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
@@ -1273,6 +1305,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.creationAt = const Value.absent(),
     this.lastModificationAt = const Value.absent(),
     this.languageTag = const Value.absent(),
+    this.checkType = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
@@ -1281,10 +1314,12 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     required DateTime creationAt,
     required DateTime lastModificationAt,
     this.languageTag = const Value.absent(),
+    required int checkType,
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
-        lastModificationAt = Value(lastModificationAt);
+        lastModificationAt = Value(lastModificationAt),
+        checkType = Value(checkType);
   static Insertable<FieldList> custom({
     Expression<String>? id,
     Expression<String>? fieldId,
@@ -1292,6 +1327,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     Expression<DateTime>? creationAt,
     Expression<DateTime>? lastModificationAt,
     Expression<String>? languageTag,
+    Expression<int>? checkType,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1301,6 +1337,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       if (lastModificationAt != null)
         'last_modification_at': lastModificationAt,
       if (languageTag != null) 'language_tag': languageTag,
+      if (checkType != null) 'check_type': checkType,
     });
   }
 
@@ -1310,7 +1347,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       Value<String>? name,
       Value<DateTime>? creationAt,
       Value<DateTime>? lastModificationAt,
-      Value<String?>? languageTag}) {
+      Value<String?>? languageTag,
+      Value<int>? checkType}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
@@ -1318,6 +1356,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       creationAt: creationAt ?? this.creationAt,
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       languageTag: languageTag ?? this.languageTag,
+      checkType: checkType ?? this.checkType,
     );
   }
 
@@ -1343,6 +1382,9 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     if (languageTag.present) {
       map['language_tag'] = Variable<String>(languageTag.value);
     }
+    if (checkType.present) {
+      map['check_type'] = Variable<int>(checkType.value);
+    }
     return map;
   }
 
@@ -1354,7 +1396,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
           ..write('name: $name, ')
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
-          ..write('languageTag: $languageTag')
+          ..write('languageTag: $languageTag, ')
+          ..write('checkType: $checkType')
           ..write(')'))
         .toString();
   }

@@ -99,6 +99,7 @@ class FieldLists extends Table {
       lastModificationAt.isSmallerThanValue(clock.now().toUtc()) &
           lastModificationAt.isBiggerOrEqual(creationAt))();
   TextColumn get languageTag => text().nullable()();
+  IntColumn get checkType => integer()();
 
   @override
   Set<Column> get primaryKey => {id};

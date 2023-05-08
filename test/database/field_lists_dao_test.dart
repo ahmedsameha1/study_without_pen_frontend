@@ -15,6 +15,7 @@ void main() {
   DateTime creationAt = DateTime.utc(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
   String languageTag = "en-US";
+  int checkType = CheckType.NON_STRICT_IGNORE_CASE.index;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -33,7 +34,8 @@ void main() {
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          languageTag: languageTag);
+          languageTag: languageTag,
+          checkType: checkType);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -48,14 +50,16 @@ void main() {
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          languageTag: languageTag);
+          languageTag: languageTag,
+          checkType: checkType);
       var fieldList2 = FieldList(
           id: id,
           fieldId: const Uuid().v4(),
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          languageTag: languageTag);
+          languageTag: languageTag,
+          checkType: checkType);
       await fieldListsDao.create(fieldList1.toCompanion(true));
       expect(() async {
         await fieldListsDao.create(fieldList2.toCompanion(true));
@@ -71,7 +75,8 @@ void main() {
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          languageTag: languageTag);
+          languageTag: languageTag,
+          checkType: checkType);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -86,7 +91,8 @@ void main() {
           name: "",
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          languageTag: languageTag);
+          languageTag: languageTag,
+          checkType: checkType);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -103,7 +109,8 @@ void main() {
           name: " ",
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          languageTag: languageTag);
+          languageTag: languageTag,
+          checkType: checkType);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -120,7 +127,8 @@ void main() {
           name: "j" * 65,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          languageTag: languageTag);
+          languageTag: languageTag,
+          checkType: checkType);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -136,7 +144,8 @@ void main() {
             name: name,
             creationAt: DateTime.utc(2023, 1, 1),
             lastModificationAt: lastModificationAt,
-            languageTag: languageTag);
+            languageTag: languageTag,
+            checkType: checkType);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -153,7 +162,8 @@ void main() {
             name: name,
             creationAt: creationAt,
             lastModificationAt: DateTime.utc(2022, 1, 1),
-            languageTag: languageTag);
+            languageTag: languageTag,
+            checkType: checkType);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -171,7 +181,8 @@ void main() {
             name: name,
             creationAt: creationAt,
             lastModificationAt: DateTime.utc(2012, 1, 1),
-            languageTag: languageTag);
+            languageTag: languageTag,
+            checkType: checkType);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -181,13 +192,43 @@ void main() {
       });
     });
 
+    test("Invalid FieldList: checkType is invalid", () {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: 88);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("checkType"))));
+      fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: -88);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("checkType"))));
+    });
+
     test("Good case: create FieldList without 'id'", () async {
       var fieldListCompanion = FieldListsCompanion(
           fieldId: Value(fieldId),
           name: Value(name),
           creationAt: Value(creationAt),
           lastModificationAt: Value(lastModificationAt),
-          languageTag: Value(languageTag));
+          languageTag: Value(languageTag),
+          checkType: Value(checkType));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -197,7 +238,42 @@ void main() {
           fieldId: Value(fieldId),
           name: Value(name),
           creationAt: Value(creationAt),
-          lastModificationAt: Value(lastModificationAt));
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case3: NON_STRICT_DO_NOT_IGNORE_CASE is valid checkType",
+        () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(CheckType.NON_STRICT_DO_NOT_IGNORE_CASE.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case4: IGNORE_CASE is valid checkType", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(CheckType.IGNORE_CASE.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case5: DO_NOT_IGNORE_CASE is valid checkType", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(CheckType.DO_NOT_IGNORE_CASE.index));
       await fieldListsDao.create(fieldListCompanion);
     });
   });
