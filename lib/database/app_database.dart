@@ -100,6 +100,7 @@ class FieldLists extends Table {
           lastModificationAt.isBiggerOrEqual(creationAt))();
   TextColumn get languageTag => text().nullable()();
   IntColumn get checkType => integer()();
+  IntColumn get sortBy => integer()();
 
   @override
   Set<Column> get primaryKey => {id};

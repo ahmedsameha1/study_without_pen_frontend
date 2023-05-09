@@ -16,6 +16,7 @@ void main() {
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
   String languageTag = "en-US";
   int checkType = CheckType.NON_STRICT_IGNORE_CASE.index;
+  int sortBy = SortBy.CREATION_DATE_DESC.index;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -35,7 +36,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           languageTag: languageTag,
-          checkType: checkType);
+          checkType: checkType,
+          sortBy: sortBy);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -51,7 +53,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           languageTag: languageTag,
-          checkType: checkType);
+          checkType: checkType,
+          sortBy: sortBy);
       var fieldList2 = FieldList(
           id: id,
           fieldId: const Uuid().v4(),
@@ -59,7 +62,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           languageTag: languageTag,
-          checkType: checkType);
+          checkType: checkType,
+          sortBy: sortBy);
       await fieldListsDao.create(fieldList1.toCompanion(true));
       expect(() async {
         await fieldListsDao.create(fieldList2.toCompanion(true));
@@ -76,7 +80,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           languageTag: languageTag,
-          checkType: checkType);
+          checkType: checkType,
+          sortBy: sortBy);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -92,7 +97,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           languageTag: languageTag,
-          checkType: checkType);
+          checkType: checkType,
+          sortBy: sortBy);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -110,7 +116,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           languageTag: languageTag,
-          checkType: checkType);
+          checkType: checkType,
+          sortBy: sortBy);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -128,7 +135,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           languageTag: languageTag,
-          checkType: checkType);
+          checkType: checkType,
+          sortBy: sortBy);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -145,7 +153,8 @@ void main() {
             creationAt: DateTime.utc(2023, 1, 1),
             lastModificationAt: lastModificationAt,
             languageTag: languageTag,
-            checkType: checkType);
+            checkType: checkType,
+            sortBy: sortBy);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -163,7 +172,8 @@ void main() {
             creationAt: creationAt,
             lastModificationAt: DateTime.utc(2022, 1, 1),
             languageTag: languageTag,
-            checkType: checkType);
+            checkType: checkType,
+            sortBy: sortBy);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -182,7 +192,8 @@ void main() {
             creationAt: creationAt,
             lastModificationAt: DateTime.utc(2012, 1, 1),
             languageTag: languageTag,
-            checkType: checkType);
+            checkType: checkType,
+            sortBy: sortBy);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -200,7 +211,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           languageTag: languageTag,
-          checkType: 88);
+          checkType: 88,
+          sortBy: sortBy);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -213,7 +225,8 @@ void main() {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           languageTag: languageTag,
-          checkType: -88);
+          checkType: -88,
+          sortBy: sortBy);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -221,29 +234,61 @@ void main() {
               e is InvalidDataException && e.message.contains("checkType"))));
     });
 
-    test("Good case: create FieldList without 'id'", () async {
+    test("Invalid FieldList: sortBy is invalid", () {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: 88);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("sortBy"))));
+      fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: -88);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("sortBy"))));
+    });
+    test("Good case 1: create FieldList without 'id'", () async {
       var fieldListCompanion = FieldListsCompanion(
           fieldId: Value(fieldId),
           name: Value(name),
           creationAt: Value(creationAt),
           lastModificationAt: Value(lastModificationAt),
           languageTag: Value(languageTag),
-          checkType: Value(checkType));
+          checkType: Value(checkType),
+          sortBy: Value(sortBy));
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case2: create FieldList without languageTag", () async {
+    test("Good case 2: create FieldList without languageTag", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
           name: Value(name),
           creationAt: Value(creationAt),
           lastModificationAt: Value(lastModificationAt),
-          checkType: Value(checkType));
+          checkType: Value(checkType),
+          sortBy: Value(sortBy));
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case3: NON_STRICT_DO_NOT_IGNORE_CASE is valid checkType",
+    test("Good case 3: NON_STRICT_DO_NOT_IGNORE_CASE is valid checkType",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -251,29 +296,188 @@ void main() {
           name: Value(name),
           creationAt: Value(creationAt),
           lastModificationAt: Value(lastModificationAt),
-          checkType: Value(CheckType.NON_STRICT_DO_NOT_IGNORE_CASE.index));
+          checkType: Value(CheckType.NON_STRICT_DO_NOT_IGNORE_CASE.index),
+          sortBy: Value(sortBy));
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case4: IGNORE_CASE is valid checkType", () async {
+    test("Good case 4: IGNORE_CASE is valid checkType", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
           name: Value(name),
           creationAt: Value(creationAt),
           lastModificationAt: Value(lastModificationAt),
-          checkType: Value(CheckType.IGNORE_CASE.index));
+          checkType: Value(CheckType.IGNORE_CASE.index),
+          sortBy: Value(sortBy));
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case5: DO_NOT_IGNORE_CASE is valid checkType", () async {
+    test("Good case 5: DO_NOT_IGNORE_CASE is valid checkType", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
           name: Value(name),
           creationAt: Value(creationAt),
           lastModificationAt: Value(lastModificationAt),
-          checkType: Value(CheckType.DO_NOT_IGNORE_CASE.index));
+          checkType: Value(CheckType.DO_NOT_IGNORE_CASE.index),
+          sortBy: Value(sortBy));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 6: ANSWER_DESC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.ANSWER_DESC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 7: QUESTION_ASC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.QUESTION_ASC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 8: ANSWER_ASC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.ANSWER_ASC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 9: DATE_DESC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.DATE_DESC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 10: DATE_ASC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.DATE_ASC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 11: QUESTION_DESC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.QUESTION_DESC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 12: CREATION_DATE_ASC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.CREATION_DATE_ASC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 13: ORDER_ASC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.ORDER_ASC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 14: ORDER_DESC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.ORDER_DESC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 15: RANK_ASC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.RANK_ASC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 16: RANK_DESC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.RANK_DESC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 17: WRONGNESS_ASC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.WRONGNESS_ASC.index));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 18: WRONGNESS_DESC is a valid sortBy", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.WRONGNESS_DESC.index));
       await fieldListsDao.create(fieldListCompanion);
     });
   });

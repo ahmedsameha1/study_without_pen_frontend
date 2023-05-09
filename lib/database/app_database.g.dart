@@ -1075,6 +1075,11 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> checkType = GeneratedColumn<int>(
       'check_type', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _sortByMeta = const VerificationMeta('sortBy');
+  @override
+  late final GeneratedColumn<int> sortBy = GeneratedColumn<int>(
+      'sort_by', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1083,7 +1088,8 @@ class $FieldListsTable extends FieldLists
         creationAt,
         lastModificationAt,
         languageTag,
-        checkType
+        checkType,
+        sortBy
       ];
   @override
   String get aliasedName => _alias ?? 'field_lists';
@@ -1137,6 +1143,12 @@ class $FieldListsTable extends FieldLists
     } else if (isInserting) {
       context.missing(_checkTypeMeta);
     }
+    if (data.containsKey('sort_by')) {
+      context.handle(_sortByMeta,
+          sortBy.isAcceptableOrUnknown(data['sort_by']!, _sortByMeta));
+    } else if (isInserting) {
+      context.missing(_sortByMeta);
+    }
     return context;
   }
 
@@ -1161,6 +1173,8 @@ class $FieldListsTable extends FieldLists
           .read(DriftSqlType.string, data['${effectivePrefix}language_tag']),
       checkType: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}check_type'])!,
+      sortBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}sort_by'])!,
     );
   }
 
@@ -1178,6 +1192,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
   final DateTime lastModificationAt;
   final String? languageTag;
   final int checkType;
+  final int sortBy;
   const FieldList(
       {required this.id,
       required this.fieldId,
@@ -1185,7 +1200,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       required this.creationAt,
       required this.lastModificationAt,
       this.languageTag,
-      required this.checkType});
+      required this.checkType,
+      required this.sortBy});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1198,6 +1214,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       map['language_tag'] = Variable<String>(languageTag);
     }
     map['check_type'] = Variable<int>(checkType);
+    map['sort_by'] = Variable<int>(sortBy);
     return map;
   }
 
@@ -1212,6 +1229,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           ? const Value.absent()
           : Value(languageTag),
       checkType: Value(checkType),
+      sortBy: Value(sortBy),
     );
   }
 
@@ -1227,6 +1245,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           serializer.fromJson<DateTime>(json['lastModificationAt']),
       languageTag: serializer.fromJson<String?>(json['languageTag']),
       checkType: serializer.fromJson<int>(json['checkType']),
+      sortBy: serializer.fromJson<int>(json['sortBy']),
     );
   }
   @override
@@ -1240,6 +1259,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
       'languageTag': serializer.toJson<String?>(languageTag),
       'checkType': serializer.toJson<int>(checkType),
+      'sortBy': serializer.toJson<int>(sortBy),
     };
   }
 
@@ -1250,7 +1270,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           DateTime? creationAt,
           DateTime? lastModificationAt,
           Value<String?> languageTag = const Value.absent(),
-          int? checkType}) =>
+          int? checkType,
+          int? sortBy}) =>
       FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
@@ -1259,6 +1280,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
         languageTag: languageTag.present ? languageTag.value : this.languageTag,
         checkType: checkType ?? this.checkType,
+        sortBy: sortBy ?? this.sortBy,
       );
   @override
   String toString() {
@@ -1269,14 +1291,15 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
           ..write('languageTag: $languageTag, ')
-          ..write('checkType: $checkType')
+          ..write('checkType: $checkType, ')
+          ..write('sortBy: $sortBy')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, fieldId, name, creationAt,
-      lastModificationAt, languageTag, checkType);
+      lastModificationAt, languageTag, checkType, sortBy);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1287,7 +1310,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           other.creationAt == this.creationAt &&
           other.lastModificationAt == this.lastModificationAt &&
           other.languageTag == this.languageTag &&
-          other.checkType == this.checkType);
+          other.checkType == this.checkType &&
+          other.sortBy == this.sortBy);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
@@ -1298,6 +1322,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<DateTime> lastModificationAt;
   final Value<String?> languageTag;
   final Value<int> checkType;
+  final Value<int> sortBy;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
@@ -1306,6 +1331,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.lastModificationAt = const Value.absent(),
     this.languageTag = const Value.absent(),
     this.checkType = const Value.absent(),
+    this.sortBy = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
@@ -1315,11 +1341,13 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     required DateTime lastModificationAt,
     this.languageTag = const Value.absent(),
     required int checkType,
+    required int sortBy,
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
         lastModificationAt = Value(lastModificationAt),
-        checkType = Value(checkType);
+        checkType = Value(checkType),
+        sortBy = Value(sortBy);
   static Insertable<FieldList> custom({
     Expression<String>? id,
     Expression<String>? fieldId,
@@ -1328,6 +1356,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     Expression<DateTime>? lastModificationAt,
     Expression<String>? languageTag,
     Expression<int>? checkType,
+    Expression<int>? sortBy,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1338,6 +1367,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
         'last_modification_at': lastModificationAt,
       if (languageTag != null) 'language_tag': languageTag,
       if (checkType != null) 'check_type': checkType,
+      if (sortBy != null) 'sort_by': sortBy,
     });
   }
 
@@ -1348,7 +1378,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       Value<DateTime>? creationAt,
       Value<DateTime>? lastModificationAt,
       Value<String?>? languageTag,
-      Value<int>? checkType}) {
+      Value<int>? checkType,
+      Value<int>? sortBy}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
@@ -1357,6 +1388,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       languageTag: languageTag ?? this.languageTag,
       checkType: checkType ?? this.checkType,
+      sortBy: sortBy ?? this.sortBy,
     );
   }
 
@@ -1385,6 +1417,9 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     if (checkType.present) {
       map['check_type'] = Variable<int>(checkType.value);
     }
+    if (sortBy.present) {
+      map['sort_by'] = Variable<int>(sortBy.value);
+    }
     return map;
   }
 
@@ -1397,7 +1432,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
           ..write('languageTag: $languageTag, ')
-          ..write('checkType: $checkType')
+          ..write('checkType: $checkType, ')
+          ..write('sortBy: $sortBy')
           ..write(')'))
         .toString();
   }
