@@ -101,6 +101,7 @@ class FieldLists extends Table {
   TextColumn get languageTag => text().nullable()();
   IntColumn get checkType => integer()();
   IntColumn get sortBy => integer()();
+  BoolColumn get doesReadAnswer => boolean().withDefault(Constant(false))();
 
   @override
   Set<Column> get primaryKey => {id};
