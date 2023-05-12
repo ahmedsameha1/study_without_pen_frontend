@@ -1093,6 +1093,17 @@ class $FieldListsTable extends FieldLists
             SqlDialect.postgres: '',
           }),
           defaultValue: Constant(false));
+  static const VerificationMeta _usageCountMeta =
+      const VerificationMeta('usageCount');
+  @override
+  late final GeneratedColumn<int> usageCount = GeneratedColumn<int>(
+      'usage_count', aliasedName, false,
+      check: () =>
+          usageCount.isBiggerOrEqualValue(FieldLists.MINIMUM_USAGE_COUNT) &
+          usageCount.isSmallerOrEqualValue(FieldLists.MAXIMUM_USAGE_COUNT),
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1103,7 +1114,8 @@ class $FieldListsTable extends FieldLists
         languageTag,
         checkType,
         sortBy,
-        doesReadAnswer
+        doesReadAnswer,
+        usageCount
       ];
   @override
   String get aliasedName => _alias ?? 'field_lists';
@@ -1169,6 +1181,12 @@ class $FieldListsTable extends FieldLists
           doesReadAnswer.isAcceptableOrUnknown(
               data['does_read_answer']!, _doesReadAnswerMeta));
     }
+    if (data.containsKey('usage_count')) {
+      context.handle(
+          _usageCountMeta,
+          usageCount.isAcceptableOrUnknown(
+              data['usage_count']!, _usageCountMeta));
+    }
     return context;
   }
 
@@ -1197,6 +1215,8 @@ class $FieldListsTable extends FieldLists
           .read(DriftSqlType.int, data['${effectivePrefix}sort_by'])!,
       doesReadAnswer: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}does_read_answer'])!,
+      usageCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}usage_count'])!,
     );
   }
 
@@ -1216,6 +1236,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
   final int checkType;
   final int sortBy;
   final bool doesReadAnswer;
+  final int usageCount;
   const FieldList(
       {required this.id,
       required this.fieldId,
@@ -1225,7 +1246,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       this.languageTag,
       required this.checkType,
       required this.sortBy,
-      required this.doesReadAnswer});
+      required this.doesReadAnswer,
+      required this.usageCount});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1240,6 +1262,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     map['check_type'] = Variable<int>(checkType);
     map['sort_by'] = Variable<int>(sortBy);
     map['does_read_answer'] = Variable<bool>(doesReadAnswer);
+    map['usage_count'] = Variable<int>(usageCount);
     return map;
   }
 
@@ -1256,6 +1279,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       checkType: Value(checkType),
       sortBy: Value(sortBy),
       doesReadAnswer: Value(doesReadAnswer),
+      usageCount: Value(usageCount),
     );
   }
 
@@ -1273,6 +1297,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       checkType: serializer.fromJson<int>(json['checkType']),
       sortBy: serializer.fromJson<int>(json['sortBy']),
       doesReadAnswer: serializer.fromJson<bool>(json['doesReadAnswer']),
+      usageCount: serializer.fromJson<int>(json['usageCount']),
     );
   }
   @override
@@ -1288,6 +1313,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       'checkType': serializer.toJson<int>(checkType),
       'sortBy': serializer.toJson<int>(sortBy),
       'doesReadAnswer': serializer.toJson<bool>(doesReadAnswer),
+      'usageCount': serializer.toJson<int>(usageCount),
     };
   }
 
@@ -1300,7 +1326,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           Value<String?> languageTag = const Value.absent(),
           int? checkType,
           int? sortBy,
-          bool? doesReadAnswer}) =>
+          bool? doesReadAnswer,
+          int? usageCount}) =>
       FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
@@ -1311,6 +1338,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
         checkType: checkType ?? this.checkType,
         sortBy: sortBy ?? this.sortBy,
         doesReadAnswer: doesReadAnswer ?? this.doesReadAnswer,
+        usageCount: usageCount ?? this.usageCount,
       );
   @override
   String toString() {
@@ -1323,14 +1351,24 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           ..write('languageTag: $languageTag, ')
           ..write('checkType: $checkType, ')
           ..write('sortBy: $sortBy, ')
-          ..write('doesReadAnswer: $doesReadAnswer')
+          ..write('doesReadAnswer: $doesReadAnswer, ')
+          ..write('usageCount: $usageCount')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, fieldId, name, creationAt,
-      lastModificationAt, languageTag, checkType, sortBy, doesReadAnswer);
+  int get hashCode => Object.hash(
+      id,
+      fieldId,
+      name,
+      creationAt,
+      lastModificationAt,
+      languageTag,
+      checkType,
+      sortBy,
+      doesReadAnswer,
+      usageCount);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1343,7 +1381,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           other.languageTag == this.languageTag &&
           other.checkType == this.checkType &&
           other.sortBy == this.sortBy &&
-          other.doesReadAnswer == this.doesReadAnswer);
+          other.doesReadAnswer == this.doesReadAnswer &&
+          other.usageCount == this.usageCount);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
@@ -1356,6 +1395,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<int> checkType;
   final Value<int> sortBy;
   final Value<bool> doesReadAnswer;
+  final Value<int> usageCount;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
@@ -1366,6 +1406,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.checkType = const Value.absent(),
     this.sortBy = const Value.absent(),
     this.doesReadAnswer = const Value.absent(),
+    this.usageCount = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
@@ -1377,6 +1418,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     required int checkType,
     required int sortBy,
     this.doesReadAnswer = const Value.absent(),
+    this.usageCount = const Value.absent(),
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
@@ -1393,6 +1435,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     Expression<int>? checkType,
     Expression<int>? sortBy,
     Expression<bool>? doesReadAnswer,
+    Expression<int>? usageCount,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1405,6 +1448,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       if (checkType != null) 'check_type': checkType,
       if (sortBy != null) 'sort_by': sortBy,
       if (doesReadAnswer != null) 'does_read_answer': doesReadAnswer,
+      if (usageCount != null) 'usage_count': usageCount,
     });
   }
 
@@ -1417,7 +1461,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       Value<String?>? languageTag,
       Value<int>? checkType,
       Value<int>? sortBy,
-      Value<bool>? doesReadAnswer}) {
+      Value<bool>? doesReadAnswer,
+      Value<int>? usageCount}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
@@ -1428,6 +1473,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       checkType: checkType ?? this.checkType,
       sortBy: sortBy ?? this.sortBy,
       doesReadAnswer: doesReadAnswer ?? this.doesReadAnswer,
+      usageCount: usageCount ?? this.usageCount,
     );
   }
 
@@ -1462,6 +1508,9 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     if (doesReadAnswer.present) {
       map['does_read_answer'] = Variable<bool>(doesReadAnswer.value);
     }
+    if (usageCount.present) {
+      map['usage_count'] = Variable<int>(usageCount.value);
+    }
     return map;
   }
 
@@ -1476,7 +1525,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
           ..write('languageTag: $languageTag, ')
           ..write('checkType: $checkType, ')
           ..write('sortBy: $sortBy, ')
-          ..write('doesReadAnswer: $doesReadAnswer')
+          ..write('doesReadAnswer: $doesReadAnswer, ')
+          ..write('usageCount: $usageCount')
           ..write(')'))
         .toString();
   }

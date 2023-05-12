@@ -86,6 +86,8 @@ class Entrys extends Table {
 class FieldLists extends Table {
   static const int MINIMUM_LENGTH_OF_NAME = 1;
   static const int MAXIMUM_LENGTH_OF_NAME = 64;
+  static const int MINIMUM_USAGE_COUNT = 0;
+  static const int MAXIMUM_USAGE_COUNT = 65535;
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldId => text()();
   TextColumn get name => text().check(name
@@ -102,6 +104,9 @@ class FieldLists extends Table {
   IntColumn get checkType => integer()();
   IntColumn get sortBy => integer()();
   BoolColumn get doesReadAnswer => boolean().withDefault(Constant(false))();
+  IntColumn get usageCount => integer().withDefault(Constant(0)).check(
+      usageCount.isBiggerOrEqualValue(FieldLists.MINIMUM_USAGE_COUNT) &
+          usageCount.isSmallerOrEqualValue(FieldLists.MAXIMUM_USAGE_COUNT))();
 
   @override
   Set<Column> get primaryKey => {id};

@@ -18,6 +18,7 @@ void main() {
   int checkType = CheckType.NON_STRICT_IGNORE_CASE.index;
   int sortBy = SortBy.CREATION_DATE_DESC.index;
   bool doesReadAnswer = true;
+  int usageCount = 20;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -39,7 +40,8 @@ void main() {
           languageTag: languageTag,
           checkType: checkType,
           sortBy: sortBy,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -57,7 +59,8 @@ void main() {
           languageTag: languageTag,
           checkType: checkType,
           sortBy: sortBy,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       var fieldList2 = FieldList(
           id: id,
           fieldId: const Uuid().v4(),
@@ -67,7 +70,8 @@ void main() {
           languageTag: languageTag,
           checkType: checkType,
           sortBy: sortBy,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       await fieldListsDao.create(fieldList1.toCompanion(true));
       expect(() async {
         await fieldListsDao.create(fieldList2.toCompanion(true));
@@ -86,7 +90,8 @@ void main() {
           languageTag: languageTag,
           checkType: checkType,
           sortBy: sortBy,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -94,7 +99,9 @@ void main() {
               e is InvalidDataException && e.message.contains("fieldId"))));
     });
 
-    test("Invalid FieldList: name length is less than 1", () async {
+    test(
+        "Invalid FieldList: name length is less than ${FieldLists.MINIMUM_LENGTH_OF_NAME}",
+        () async {
       var fieldList = FieldList(
           id: id,
           fieldId: fieldId,
@@ -104,7 +111,8 @@ void main() {
           languageTag: languageTag,
           checkType: checkType,
           sortBy: sortBy,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -124,7 +132,8 @@ void main() {
           languageTag: languageTag,
           checkType: checkType,
           sortBy: sortBy,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -138,13 +147,14 @@ void main() {
       var fieldList = FieldList(
           id: id,
           fieldId: fieldId,
-          name: "j" * 65,
+          name: "j" * (FieldLists.MAXIMUM_LENGTH_OF_NAME + 1),
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           languageTag: languageTag,
           checkType: checkType,
           sortBy: sortBy,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -163,7 +173,8 @@ void main() {
             languageTag: languageTag,
             checkType: checkType,
             sortBy: sortBy,
-            doesReadAnswer: doesReadAnswer);
+            doesReadAnswer: doesReadAnswer,
+            usageCount: usageCount);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -183,7 +194,8 @@ void main() {
             languageTag: languageTag,
             checkType: checkType,
             sortBy: sortBy,
-            doesReadAnswer: doesReadAnswer);
+            doesReadAnswer: doesReadAnswer,
+            usageCount: usageCount);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -204,7 +216,8 @@ void main() {
             languageTag: languageTag,
             checkType: checkType,
             sortBy: sortBy,
-            doesReadAnswer: doesReadAnswer);
+            doesReadAnswer: doesReadAnswer,
+            usageCount: usageCount);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -224,7 +237,8 @@ void main() {
           languageTag: languageTag,
           checkType: 88,
           sortBy: sortBy,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -239,7 +253,8 @@ void main() {
           languageTag: languageTag,
           checkType: -88,
           sortBy: sortBy,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -257,7 +272,8 @@ void main() {
           languageTag: languageTag,
           checkType: checkType,
           sortBy: 88,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -272,13 +288,57 @@ void main() {
           languageTag: languageTag,
           checkType: checkType,
           sortBy: -88,
-          doesReadAnswer: doesReadAnswer);
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is InvalidDataException && e.message.contains("sortBy"))));
     });
+
+    test(
+        "Invalid FieldList: usageCount is smaller than ${FieldLists.MINIMUM_USAGE_COUNT}",
+        () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: FieldLists.MINIMUM_USAGE_COUNT - 1);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("usage_count"))));
+    });
+
+    test(
+        "Invalid FieldList: usageCount is bigger than ${FieldLists.MAXIMUM_USAGE_COUNT}",
+        () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: FieldLists.MAXIMUM_USAGE_COUNT + 1);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("usage_count"))));
+    });
+
     test("Good case 1: create FieldList without 'id'", () async {
       var fieldListCompanion = FieldListsCompanion(
           fieldId: Value(fieldId),
@@ -288,7 +348,8 @@ void main() {
           languageTag: Value(languageTag),
           checkType: Value(checkType),
           sortBy: Value(sortBy),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -301,7 +362,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(sortBy),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -315,7 +377,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(CheckType.NON_STRICT_DO_NOT_IGNORE_CASE.index),
           sortBy: Value(sortBy),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -328,7 +391,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(CheckType.IGNORE_CASE.index),
           sortBy: Value(sortBy),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -341,7 +405,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(CheckType.DO_NOT_IGNORE_CASE.index),
           sortBy: Value(sortBy),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -354,7 +419,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.ANSWER_DESC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -367,7 +433,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.QUESTION_ASC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -380,7 +447,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.ANSWER_ASC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -393,7 +461,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.DATE_DESC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -406,7 +475,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.DATE_ASC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -419,7 +489,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.QUESTION_DESC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -432,7 +503,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.CREATION_DATE_ASC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -445,7 +517,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.ORDER_ASC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -458,7 +531,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.ORDER_DESC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -471,7 +545,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.RANK_ASC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -484,7 +559,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.RANK_DESC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -497,7 +573,8 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.WRONGNESS_ASC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -510,12 +587,27 @@ void main() {
           lastModificationAt: Value(lastModificationAt),
           checkType: Value(checkType),
           sortBy: Value(SortBy.WRONGNESS_DESC.index),
-          doesReadAnswer: Value(doesReadAnswer));
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount));
 
       await fieldListsDao.create(fieldListCompanion);
     });
 
     test("Good case 19: create FieldList without doesReadAnswer", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.WRONGNESS_DESC.index),
+          usageCount: Value(usageCount));
+
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 20: create FieldList without usageCount", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
