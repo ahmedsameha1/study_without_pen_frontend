@@ -1104,6 +1104,16 @@ class $FieldListsTable extends FieldLists
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(0));
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<int> color = GeneratedColumn<int>(
+      'color', aliasedName, false,
+      check: () =>
+          color.isBiggerOrEqualValue(FieldLists.MINIMUM_COLOR) &
+          color.isSmallerOrEqualValue(FieldLists.MAXIMUM_COLOR),
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(FieldLists.MAXIMUM_COLOR));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1115,7 +1125,8 @@ class $FieldListsTable extends FieldLists
         checkType,
         sortBy,
         doesReadAnswer,
-        usageCount
+        usageCount,
+        color
       ];
   @override
   String get aliasedName => _alias ?? 'field_lists';
@@ -1187,6 +1198,10 @@ class $FieldListsTable extends FieldLists
           usageCount.isAcceptableOrUnknown(
               data['usage_count']!, _usageCountMeta));
     }
+    if (data.containsKey('color')) {
+      context.handle(
+          _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
+    }
     return context;
   }
 
@@ -1217,6 +1232,8 @@ class $FieldListsTable extends FieldLists
           .read(DriftSqlType.bool, data['${effectivePrefix}does_read_answer'])!,
       usageCount: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}usage_count'])!,
+      color: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}color'])!,
     );
   }
 
@@ -1237,6 +1254,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
   final int sortBy;
   final bool doesReadAnswer;
   final int usageCount;
+  final int color;
   const FieldList(
       {required this.id,
       required this.fieldId,
@@ -1247,7 +1265,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       required this.checkType,
       required this.sortBy,
       required this.doesReadAnswer,
-      required this.usageCount});
+      required this.usageCount,
+      required this.color});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1263,6 +1282,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     map['sort_by'] = Variable<int>(sortBy);
     map['does_read_answer'] = Variable<bool>(doesReadAnswer);
     map['usage_count'] = Variable<int>(usageCount);
+    map['color'] = Variable<int>(color);
     return map;
   }
 
@@ -1280,6 +1300,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       sortBy: Value(sortBy),
       doesReadAnswer: Value(doesReadAnswer),
       usageCount: Value(usageCount),
+      color: Value(color),
     );
   }
 
@@ -1298,6 +1319,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       sortBy: serializer.fromJson<int>(json['sortBy']),
       doesReadAnswer: serializer.fromJson<bool>(json['doesReadAnswer']),
       usageCount: serializer.fromJson<int>(json['usageCount']),
+      color: serializer.fromJson<int>(json['color']),
     );
   }
   @override
@@ -1314,6 +1336,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       'sortBy': serializer.toJson<int>(sortBy),
       'doesReadAnswer': serializer.toJson<bool>(doesReadAnswer),
       'usageCount': serializer.toJson<int>(usageCount),
+      'color': serializer.toJson<int>(color),
     };
   }
 
@@ -1327,7 +1350,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           int? checkType,
           int? sortBy,
           bool? doesReadAnswer,
-          int? usageCount}) =>
+          int? usageCount,
+          int? color}) =>
       FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
@@ -1339,6 +1363,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
         sortBy: sortBy ?? this.sortBy,
         doesReadAnswer: doesReadAnswer ?? this.doesReadAnswer,
         usageCount: usageCount ?? this.usageCount,
+        color: color ?? this.color,
       );
   @override
   String toString() {
@@ -1352,7 +1377,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           ..write('checkType: $checkType, ')
           ..write('sortBy: $sortBy, ')
           ..write('doesReadAnswer: $doesReadAnswer, ')
-          ..write('usageCount: $usageCount')
+          ..write('usageCount: $usageCount, ')
+          ..write('color: $color')
           ..write(')'))
         .toString();
   }
@@ -1368,7 +1394,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       checkType,
       sortBy,
       doesReadAnswer,
-      usageCount);
+      usageCount,
+      color);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1382,7 +1409,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           other.checkType == this.checkType &&
           other.sortBy == this.sortBy &&
           other.doesReadAnswer == this.doesReadAnswer &&
-          other.usageCount == this.usageCount);
+          other.usageCount == this.usageCount &&
+          other.color == this.color);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
@@ -1396,6 +1424,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<int> sortBy;
   final Value<bool> doesReadAnswer;
   final Value<int> usageCount;
+  final Value<int> color;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
@@ -1407,6 +1436,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.sortBy = const Value.absent(),
     this.doesReadAnswer = const Value.absent(),
     this.usageCount = const Value.absent(),
+    this.color = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
@@ -1419,6 +1449,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     required int sortBy,
     this.doesReadAnswer = const Value.absent(),
     this.usageCount = const Value.absent(),
+    this.color = const Value.absent(),
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
@@ -1436,6 +1467,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     Expression<int>? sortBy,
     Expression<bool>? doesReadAnswer,
     Expression<int>? usageCount,
+    Expression<int>? color,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1449,6 +1481,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       if (sortBy != null) 'sort_by': sortBy,
       if (doesReadAnswer != null) 'does_read_answer': doesReadAnswer,
       if (usageCount != null) 'usage_count': usageCount,
+      if (color != null) 'color': color,
     });
   }
 
@@ -1462,7 +1495,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       Value<int>? checkType,
       Value<int>? sortBy,
       Value<bool>? doesReadAnswer,
-      Value<int>? usageCount}) {
+      Value<int>? usageCount,
+      Value<int>? color}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
@@ -1474,6 +1508,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       sortBy: sortBy ?? this.sortBy,
       doesReadAnswer: doesReadAnswer ?? this.doesReadAnswer,
       usageCount: usageCount ?? this.usageCount,
+      color: color ?? this.color,
     );
   }
 
@@ -1511,6 +1546,9 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     if (usageCount.present) {
       map['usage_count'] = Variable<int>(usageCount.value);
     }
+    if (color.present) {
+      map['color'] = Variable<int>(color.value);
+    }
     return map;
   }
 
@@ -1526,7 +1564,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
           ..write('checkType: $checkType, ')
           ..write('sortBy: $sortBy, ')
           ..write('doesReadAnswer: $doesReadAnswer, ')
-          ..write('usageCount: $usageCount')
+          ..write('usageCount: $usageCount, ')
+          ..write('color: $color')
           ..write(')'))
         .toString();
   }
