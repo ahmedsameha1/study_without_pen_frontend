@@ -90,6 +90,9 @@ class FieldLists extends Table {
   static const int MAXIMUM_USAGE_COUNT = 65535;
   static const int MINIMUM_COLOR = 0;
   static const int MAXIMUM_COLOR = 0xffffffff;
+  static const int MINIMUM_EMULATION_NUMBER_OF_QUESTIONS = 0;
+  static const int MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS = 255;
+
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldId => text()();
   TextColumn get name => text().check(name
@@ -113,6 +116,11 @@ class FieldLists extends Table {
       .withDefault(Constant(FieldLists.MAXIMUM_COLOR))
       .check(color.isBiggerOrEqualValue(FieldLists.MINIMUM_COLOR) &
           color.isSmallerOrEqualValue(FieldLists.MAXIMUM_COLOR))();
+  IntColumn get emulationNumberOfQuestions => integer().nullable().check(
+      emulationNumberOfQuestions.isBiggerOrEqualValue(
+              FieldLists.MINIMUM_EMULATION_NUMBER_OF_QUESTIONS) &
+          emulationNumberOfQuestions.isSmallerOrEqualValue(
+              FieldLists.MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS))();
 
   @override
   Set<Column> get primaryKey => {id};

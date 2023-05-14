@@ -1114,6 +1114,19 @@ class $FieldListsTable extends FieldLists
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(FieldLists.MAXIMUM_COLOR));
+  static const VerificationMeta _emulationNumberOfQuestionsMeta =
+      const VerificationMeta('emulationNumberOfQuestions');
+  @override
+  late final GeneratedColumn<int> emulationNumberOfQuestions =
+      GeneratedColumn<int>(
+          'emulation_number_of_questions', aliasedName, true,
+          check: () =>
+              emulationNumberOfQuestions.isBiggerOrEqualValue(
+                  FieldLists.MINIMUM_EMULATION_NUMBER_OF_QUESTIONS) &
+              emulationNumberOfQuestions.isSmallerOrEqualValue(
+                  FieldLists.MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS),
+          type: DriftSqlType.int,
+          requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1126,7 +1139,8 @@ class $FieldListsTable extends FieldLists
         sortBy,
         doesReadAnswer,
         usageCount,
-        color
+        color,
+        emulationNumberOfQuestions
       ];
   @override
   String get aliasedName => _alias ?? 'field_lists';
@@ -1202,6 +1216,13 @@ class $FieldListsTable extends FieldLists
       context.handle(
           _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
     }
+    if (data.containsKey('emulation_number_of_questions')) {
+      context.handle(
+          _emulationNumberOfQuestionsMeta,
+          emulationNumberOfQuestions.isAcceptableOrUnknown(
+              data['emulation_number_of_questions']!,
+              _emulationNumberOfQuestionsMeta));
+    }
     return context;
   }
 
@@ -1234,6 +1255,9 @@ class $FieldListsTable extends FieldLists
           .read(DriftSqlType.int, data['${effectivePrefix}usage_count'])!,
       color: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}color'])!,
+      emulationNumberOfQuestions: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}emulation_number_of_questions']),
     );
   }
 
@@ -1255,6 +1279,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
   final bool doesReadAnswer;
   final int usageCount;
   final int color;
+  final int? emulationNumberOfQuestions;
   const FieldList(
       {required this.id,
       required this.fieldId,
@@ -1266,7 +1291,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       required this.sortBy,
       required this.doesReadAnswer,
       required this.usageCount,
-      required this.color});
+      required this.color,
+      this.emulationNumberOfQuestions});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1283,6 +1309,10 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     map['does_read_answer'] = Variable<bool>(doesReadAnswer);
     map['usage_count'] = Variable<int>(usageCount);
     map['color'] = Variable<int>(color);
+    if (!nullToAbsent || emulationNumberOfQuestions != null) {
+      map['emulation_number_of_questions'] =
+          Variable<int>(emulationNumberOfQuestions);
+    }
     return map;
   }
 
@@ -1301,6 +1331,10 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       doesReadAnswer: Value(doesReadAnswer),
       usageCount: Value(usageCount),
       color: Value(color),
+      emulationNumberOfQuestions:
+          emulationNumberOfQuestions == null && nullToAbsent
+              ? const Value.absent()
+              : Value(emulationNumberOfQuestions),
     );
   }
 
@@ -1320,6 +1354,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       doesReadAnswer: serializer.fromJson<bool>(json['doesReadAnswer']),
       usageCount: serializer.fromJson<int>(json['usageCount']),
       color: serializer.fromJson<int>(json['color']),
+      emulationNumberOfQuestions:
+          serializer.fromJson<int?>(json['emulationNumberOfQuestions']),
     );
   }
   @override
@@ -1337,6 +1373,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       'doesReadAnswer': serializer.toJson<bool>(doesReadAnswer),
       'usageCount': serializer.toJson<int>(usageCount),
       'color': serializer.toJson<int>(color),
+      'emulationNumberOfQuestions':
+          serializer.toJson<int?>(emulationNumberOfQuestions),
     };
   }
 
@@ -1351,7 +1389,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           int? sortBy,
           bool? doesReadAnswer,
           int? usageCount,
-          int? color}) =>
+          int? color,
+          Value<int?> emulationNumberOfQuestions = const Value.absent()}) =>
       FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
@@ -1364,6 +1403,9 @@ class FieldList extends DataClass implements Insertable<FieldList> {
         doesReadAnswer: doesReadAnswer ?? this.doesReadAnswer,
         usageCount: usageCount ?? this.usageCount,
         color: color ?? this.color,
+        emulationNumberOfQuestions: emulationNumberOfQuestions.present
+            ? emulationNumberOfQuestions.value
+            : this.emulationNumberOfQuestions,
       );
   @override
   String toString() {
@@ -1378,7 +1420,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           ..write('sortBy: $sortBy, ')
           ..write('doesReadAnswer: $doesReadAnswer, ')
           ..write('usageCount: $usageCount, ')
-          ..write('color: $color')
+          ..write('color: $color, ')
+          ..write('emulationNumberOfQuestions: $emulationNumberOfQuestions')
           ..write(')'))
         .toString();
   }
@@ -1395,7 +1438,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       sortBy,
       doesReadAnswer,
       usageCount,
-      color);
+      color,
+      emulationNumberOfQuestions);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1410,7 +1454,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           other.sortBy == this.sortBy &&
           other.doesReadAnswer == this.doesReadAnswer &&
           other.usageCount == this.usageCount &&
-          other.color == this.color);
+          other.color == this.color &&
+          other.emulationNumberOfQuestions == this.emulationNumberOfQuestions);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
@@ -1425,6 +1470,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<bool> doesReadAnswer;
   final Value<int> usageCount;
   final Value<int> color;
+  final Value<int?> emulationNumberOfQuestions;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
@@ -1437,6 +1483,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.doesReadAnswer = const Value.absent(),
     this.usageCount = const Value.absent(),
     this.color = const Value.absent(),
+    this.emulationNumberOfQuestions = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
@@ -1450,6 +1497,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.doesReadAnswer = const Value.absent(),
     this.usageCount = const Value.absent(),
     this.color = const Value.absent(),
+    this.emulationNumberOfQuestions = const Value.absent(),
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
@@ -1468,6 +1516,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     Expression<bool>? doesReadAnswer,
     Expression<int>? usageCount,
     Expression<int>? color,
+    Expression<int>? emulationNumberOfQuestions,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1482,6 +1531,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       if (doesReadAnswer != null) 'does_read_answer': doesReadAnswer,
       if (usageCount != null) 'usage_count': usageCount,
       if (color != null) 'color': color,
+      if (emulationNumberOfQuestions != null)
+        'emulation_number_of_questions': emulationNumberOfQuestions,
     });
   }
 
@@ -1496,7 +1547,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       Value<int>? sortBy,
       Value<bool>? doesReadAnswer,
       Value<int>? usageCount,
-      Value<int>? color}) {
+      Value<int>? color,
+      Value<int?>? emulationNumberOfQuestions}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
@@ -1509,6 +1561,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       doesReadAnswer: doesReadAnswer ?? this.doesReadAnswer,
       usageCount: usageCount ?? this.usageCount,
       color: color ?? this.color,
+      emulationNumberOfQuestions:
+          emulationNumberOfQuestions ?? this.emulationNumberOfQuestions,
     );
   }
 
@@ -1549,6 +1603,10 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     if (color.present) {
       map['color'] = Variable<int>(color.value);
     }
+    if (emulationNumberOfQuestions.present) {
+      map['emulation_number_of_questions'] =
+          Variable<int>(emulationNumberOfQuestions.value);
+    }
     return map;
   }
 
@@ -1565,7 +1623,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
           ..write('sortBy: $sortBy, ')
           ..write('doesReadAnswer: $doesReadAnswer, ')
           ..write('usageCount: $usageCount, ')
-          ..write('color: $color')
+          ..write('color: $color, ')
+          ..write('emulationNumberOfQuestions: $emulationNumberOfQuestions')
           ..write(')'))
         .toString();
   }
