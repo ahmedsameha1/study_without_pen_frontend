@@ -605,6 +605,104 @@ void main() {
               e.message.contains("emulationDays"))));
     });
 
+    test(
+        "Invalid FieldList: emulationNumberOfQuestions & emulationdays are not consistent, nil wise",
+        () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: null,
+          emulationDays: emulationDays);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains("non consistent emulation"))));
+    });
+
+    test(
+        "Invalid FieldList: emulationNumberOfQuestions & emulationdays are not consistent, nil wise",
+        () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationDays: emulationDays);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains("non consistent emulation"))));
+    });
+
+    test(
+        "Invalid FieldList: emulationNumberOfQuestions & emulationdays are not consistent, nil wise",
+        () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: null);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains("non consistent emulation"))));
+    });
+
+    test(
+        "Invalid FieldList: emulationNumberOfQuestions & emulationdays are not consistent, nil wise",
+        () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains("non consistent emulation"))));
+    });
+
     test("Good case 1: create FieldList without 'id'", () async {
       var fieldListCompanion = FieldListsCompanion(
           fieldId: Value(fieldId),

@@ -22,6 +22,12 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     if (!isValidSortBy(fieldListsCompanion.sortBy.value)) {
       throw InvalidDataException("sortBy");
     }
+    if ((fieldListsCompanion.emulationNumberOfQuestions.value == null &&
+            fieldListsCompanion.emulationDays.value != null) ||
+        (fieldListsCompanion.emulationNumberOfQuestions.value != null &&
+            fieldListsCompanion.emulationDays.value == null)) {
+      throw InvalidDataException("non consistent emulation");
+    }
     if (fieldListsCompanion.emulationDays.present &&
         fieldListsCompanion.emulationDays.value != null) {
       var regex = RegExp(r"(?=[0-6]{1,7})^0?1?2?3?4?5?6?$");
