@@ -22,6 +22,13 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     if (!isValidSortBy(fieldListsCompanion.sortBy.value)) {
       throw InvalidDataException("sortBy");
     }
+    if (fieldListsCompanion.emulationDays.present &&
+        fieldListsCompanion.emulationDays.value != null) {
+      var regex = RegExp(r"(?=[0-6]{1,7})^0?1?2?3?4?5?6?$");
+      if (!regex.hasMatch(fieldListsCompanion.emulationDays.value!)) {
+        throw InvalidDataException("emulationDays");
+      }
+    }
     return into(fieldLists).insert(fieldListsCompanion);
   }
 }

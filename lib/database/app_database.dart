@@ -121,6 +121,7 @@ class FieldLists extends Table {
               FieldLists.MINIMUM_EMULATION_NUMBER_OF_QUESTIONS) &
           emulationNumberOfQuestions.isSmallerOrEqualValue(
               FieldLists.MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS))();
+  TextColumn get emulationDays => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};
