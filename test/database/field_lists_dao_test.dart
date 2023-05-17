@@ -22,6 +22,7 @@ void main() {
   int color = 0x55554433;
   int emulationNumberOfQuestions = 0;
   String emulationDays = "01234";
+  int testsReadingQuestionLetterDuration = 200;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -47,7 +48,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -69,7 +72,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       var fieldList2 = FieldList(
           id: id,
           fieldId: const Uuid().v4(),
@@ -83,7 +88,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       await fieldListsDao.create(fieldList1.toCompanion(true));
       expect(() async {
         await fieldListsDao.create(fieldList2.toCompanion(true));
@@ -106,7 +113,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -130,7 +139,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -154,7 +165,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -178,7 +191,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -201,7 +216,9 @@ void main() {
             usageCount: usageCount,
             color: color,
             emulationNumberOfQuestions: emulationNumberOfQuestions,
-            emulationDays: emulationDays);
+            emulationDays: emulationDays,
+            testsReadingQuestionLetterDuration:
+                testsReadingQuestionLetterDuration);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -225,7 +242,9 @@ void main() {
             usageCount: usageCount,
             color: color,
             emulationNumberOfQuestions: emulationNumberOfQuestions,
-            emulationDays: emulationDays);
+            emulationDays: emulationDays,
+            testsReadingQuestionLetterDuration:
+                testsReadingQuestionLetterDuration);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -250,7 +269,9 @@ void main() {
             usageCount: usageCount,
             color: color,
             emulationNumberOfQuestions: emulationNumberOfQuestions,
-            emulationDays: emulationDays);
+            emulationDays: emulationDays,
+            testsReadingQuestionLetterDuration:
+                testsReadingQuestionLetterDuration);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -274,7 +295,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -293,7 +316,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -315,7 +340,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -334,7 +361,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -358,7 +387,9 @@ void main() {
           usageCount: FieldLists.MINIMUM_USAGE_COUNT - 1,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -382,7 +413,9 @@ void main() {
           usageCount: FieldLists.MAXIMUM_USAGE_COUNT + 1,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -405,7 +438,9 @@ void main() {
           usageCount: usageCount,
           color: FieldLists.MINIMUM_COLOR - 1,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -428,7 +463,9 @@ void main() {
           usageCount: usageCount,
           color: FieldLists.MAXIMUM_COLOR + 1,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -453,7 +490,9 @@ void main() {
           color: color,
           emulationNumberOfQuestions:
               FieldLists.MINIMUM_EMULATION_NUMBER_OF_QUESTIONS - 1,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -479,7 +518,9 @@ void main() {
           color: color,
           emulationNumberOfQuestions:
               FieldLists.MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS + 1,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -504,7 +545,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: "ewins");
+          emulationDays: "ewins",
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -524,7 +567,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: "017");
+          emulationDays: "017",
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -547,7 +592,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: "");
+          emulationDays: "",
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -571,7 +618,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: "0122");
+          emulationDays: "0122",
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -596,7 +645,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: "06122");
+          emulationDays: "06122",
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -621,7 +672,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: null,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -645,7 +698,9 @@ void main() {
           doesReadAnswer: doesReadAnswer,
           usageCount: usageCount,
           color: color,
-          emulationDays: emulationDays);
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -670,7 +725,9 @@ void main() {
           usageCount: usageCount,
           color: color,
           emulationNumberOfQuestions: emulationNumberOfQuestions,
-          emulationDays: null);
+          emulationDays: null,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -694,13 +751,42 @@ void main() {
           doesReadAnswer: doesReadAnswer,
           usageCount: usageCount,
           color: color,
-          emulationNumberOfQuestions: emulationNumberOfQuestions);
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is InvalidDataException &&
               e.message.contains("non consistent emulation"))));
+    });
+
+    test(
+        "Invalid FieldList: testsReadingQuestionLetterDuration is smaller than ${FieldLists.MINIMUM_TESTS_READING_QUESTION_LETTER_DURATION}",
+        () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              FieldLists.MINIMUM_TESTS_READING_QUESTION_LETTER_DURATION - 1);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("tests_reading_question_letter_duration"))));
     });
 
     test("Good case 1: create FieldList without 'id'", () async {
@@ -716,7 +802,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -734,7 +822,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -752,7 +842,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -769,7 +861,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -786,7 +880,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -803,7 +899,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -820,7 +918,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -837,7 +937,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -854,7 +956,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -871,7 +975,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -888,7 +994,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -905,7 +1013,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -922,7 +1032,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -939,7 +1051,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -956,7 +1070,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -973,7 +1089,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -990,7 +1108,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1007,7 +1127,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
 
       await fieldListsDao.create(fieldListCompanion);
     });
@@ -1024,7 +1146,9 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
 
       await fieldListsDao.create(fieldListCompanion);
     });
@@ -1040,7 +1164,9 @@ void main() {
           sortBy: Value(SortBy.WRONGNESS_DESC.index),
           color: Value(color),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
 
       await fieldListsDao.create(fieldListCompanion);
     });
@@ -1056,7 +1182,9 @@ void main() {
           sortBy: Value(SortBy.WRONGNESS_DESC.index),
           usageCount: Value(usageCount),
           emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
-          emulationDays: Value(emulationDays));
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
 
       await fieldListsDao.create(fieldListCompanion);
     });
@@ -1074,7 +1202,9 @@ void main() {
           sortBy: Value(SortBy.WRONGNESS_DESC.index),
           usageCount: Value(usageCount),
           color: Value(color),
-          emulationNumberOfQuestions: Value(null));
+          emulationNumberOfQuestions: Value(null),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
 
       await fieldListsDao.create(fieldListCompanion);
     });
@@ -1091,7 +1221,29 @@ void main() {
           usageCount: Value(usageCount),
           color: Value(color),
           emulationNumberOfQuestions: Value(null),
-          emulationDays: Value(null));
+          emulationDays: Value(null),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration));
+
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test(
+        "Good case 24: create FieldList when testReadingQuestionLetterDuration is null",
+        () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.WRONGNESS_DESC.index),
+          usageCount: Value(usageCount),
+          color: Value(color),
+          emulationNumberOfQuestions: Value(null),
+          emulationDays: Value(null),
+          testsReadingQuestionLetterDuration: Value(null));
 
       await fieldListsDao.create(fieldListCompanion);
     });
