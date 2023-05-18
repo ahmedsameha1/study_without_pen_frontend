@@ -1139,8 +1139,18 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> testsReadingQuestionLetterDuration =
       GeneratedColumn<int>(
           'tests_reading_question_letter_duration', aliasedName, true,
-          check: () => testsReadingQuestionLetterDuration.isBiggerOrEqualValue(
-              FieldLists.MINIMUM_TESTS_READING_QUESTION_LETTER_DURATION),
+          check: () => testsReadingQuestionLetterDuration
+              .isBiggerOrEqualValue(FieldLists.MINIMUM_TESTS_DURATIONS),
+          type: DriftSqlType.int,
+          requiredDuringInsert: false);
+  static const VerificationMeta _testsFindingAnswerDurationMeta =
+      const VerificationMeta('testsFindingAnswerDuration');
+  @override
+  late final GeneratedColumn<int> testsFindingAnswerDuration =
+      GeneratedColumn<int>(
+          'tests_finding_answer_duration', aliasedName, true,
+          check: () => testsFindingAnswerDuration
+              .isBiggerOrEqualValue(FieldLists.MINIMUM_TESTS_DURATIONS),
           type: DriftSqlType.int,
           requiredDuringInsert: false);
   @override
@@ -1158,7 +1168,8 @@ class $FieldListsTable extends FieldLists
         color,
         emulationNumberOfQuestions,
         emulationDays,
-        testsReadingQuestionLetterDuration
+        testsReadingQuestionLetterDuration,
+        testsFindingAnswerDuration
       ];
   @override
   String get aliasedName => _alias ?? 'field_lists';
@@ -1254,6 +1265,13 @@ class $FieldListsTable extends FieldLists
               data['tests_reading_question_letter_duration']!,
               _testsReadingQuestionLetterDurationMeta));
     }
+    if (data.containsKey('tests_finding_answer_duration')) {
+      context.handle(
+          _testsFindingAnswerDurationMeta,
+          testsFindingAnswerDuration.isAcceptableOrUnknown(
+              data['tests_finding_answer_duration']!,
+              _testsFindingAnswerDurationMeta));
+    }
     return context;
   }
 
@@ -1294,6 +1312,9 @@ class $FieldListsTable extends FieldLists
       testsReadingQuestionLetterDuration: attachedDatabase.typeMapping.read(
           DriftSqlType.int,
           data['${effectivePrefix}tests_reading_question_letter_duration']),
+      testsFindingAnswerDuration: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}tests_finding_answer_duration']),
     );
   }
 
@@ -1318,6 +1339,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
   final int? emulationNumberOfQuestions;
   final String? emulationDays;
   final int? testsReadingQuestionLetterDuration;
+  final int? testsFindingAnswerDuration;
   const FieldList(
       {required this.id,
       required this.fieldId,
@@ -1332,7 +1354,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       required this.color,
       this.emulationNumberOfQuestions,
       this.emulationDays,
-      this.testsReadingQuestionLetterDuration});
+      this.testsReadingQuestionLetterDuration,
+      this.testsFindingAnswerDuration});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1359,6 +1382,10 @@ class FieldList extends DataClass implements Insertable<FieldList> {
     if (!nullToAbsent || testsReadingQuestionLetterDuration != null) {
       map['tests_reading_question_letter_duration'] =
           Variable<int>(testsReadingQuestionLetterDuration);
+    }
+    if (!nullToAbsent || testsFindingAnswerDuration != null) {
+      map['tests_finding_answer_duration'] =
+          Variable<int>(testsFindingAnswerDuration);
     }
     return map;
   }
@@ -1389,6 +1416,10 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           testsReadingQuestionLetterDuration == null && nullToAbsent
               ? const Value.absent()
               : Value(testsReadingQuestionLetterDuration),
+      testsFindingAnswerDuration:
+          testsFindingAnswerDuration == null && nullToAbsent
+              ? const Value.absent()
+              : Value(testsFindingAnswerDuration),
     );
   }
 
@@ -1413,6 +1444,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       emulationDays: serializer.fromJson<String?>(json['emulationDays']),
       testsReadingQuestionLetterDuration:
           serializer.fromJson<int?>(json['testsReadingQuestionLetterDuration']),
+      testsFindingAnswerDuration:
+          serializer.fromJson<int?>(json['testsFindingAnswerDuration']),
     );
   }
   @override
@@ -1435,6 +1468,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       'emulationDays': serializer.toJson<String?>(emulationDays),
       'testsReadingQuestionLetterDuration':
           serializer.toJson<int?>(testsReadingQuestionLetterDuration),
+      'testsFindingAnswerDuration':
+          serializer.toJson<int?>(testsFindingAnswerDuration),
     };
   }
 
@@ -1452,8 +1487,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           int? color,
           Value<int?> emulationNumberOfQuestions = const Value.absent(),
           Value<String?> emulationDays = const Value.absent(),
-          Value<int?> testsReadingQuestionLetterDuration =
-              const Value.absent()}) =>
+          Value<int?> testsReadingQuestionLetterDuration = const Value.absent(),
+          Value<int?> testsFindingAnswerDuration = const Value.absent()}) =>
       FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
@@ -1475,6 +1510,9 @@ class FieldList extends DataClass implements Insertable<FieldList> {
             testsReadingQuestionLetterDuration.present
                 ? testsReadingQuestionLetterDuration.value
                 : this.testsReadingQuestionLetterDuration,
+        testsFindingAnswerDuration: testsFindingAnswerDuration.present
+            ? testsFindingAnswerDuration.value
+            : this.testsFindingAnswerDuration,
       );
   @override
   String toString() {
@@ -1493,7 +1531,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           ..write('emulationNumberOfQuestions: $emulationNumberOfQuestions, ')
           ..write('emulationDays: $emulationDays, ')
           ..write(
-              'testsReadingQuestionLetterDuration: $testsReadingQuestionLetterDuration')
+              'testsReadingQuestionLetterDuration: $testsReadingQuestionLetterDuration, ')
+          ..write('testsFindingAnswerDuration: $testsFindingAnswerDuration')
           ..write(')'))
         .toString();
   }
@@ -1513,7 +1552,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       color,
       emulationNumberOfQuestions,
       emulationDays,
-      testsReadingQuestionLetterDuration);
+      testsReadingQuestionLetterDuration,
+      testsFindingAnswerDuration);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1532,7 +1572,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           other.emulationNumberOfQuestions == this.emulationNumberOfQuestions &&
           other.emulationDays == this.emulationDays &&
           other.testsReadingQuestionLetterDuration ==
-              this.testsReadingQuestionLetterDuration);
+              this.testsReadingQuestionLetterDuration &&
+          other.testsFindingAnswerDuration == this.testsFindingAnswerDuration);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
@@ -1550,6 +1591,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<int?> emulationNumberOfQuestions;
   final Value<String?> emulationDays;
   final Value<int?> testsReadingQuestionLetterDuration;
+  final Value<int?> testsFindingAnswerDuration;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
@@ -1565,6 +1607,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.emulationNumberOfQuestions = const Value.absent(),
     this.emulationDays = const Value.absent(),
     this.testsReadingQuestionLetterDuration = const Value.absent(),
+    this.testsFindingAnswerDuration = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
@@ -1581,6 +1624,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.emulationNumberOfQuestions = const Value.absent(),
     this.emulationDays = const Value.absent(),
     this.testsReadingQuestionLetterDuration = const Value.absent(),
+    this.testsFindingAnswerDuration = const Value.absent(),
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
@@ -1602,6 +1646,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     Expression<int>? emulationNumberOfQuestions,
     Expression<String>? emulationDays,
     Expression<int>? testsReadingQuestionLetterDuration,
+    Expression<int>? testsFindingAnswerDuration,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1622,6 +1667,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       if (testsReadingQuestionLetterDuration != null)
         'tests_reading_question_letter_duration':
             testsReadingQuestionLetterDuration,
+      if (testsFindingAnswerDuration != null)
+        'tests_finding_answer_duration': testsFindingAnswerDuration,
     });
   }
 
@@ -1639,7 +1686,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       Value<int>? color,
       Value<int?>? emulationNumberOfQuestions,
       Value<String?>? emulationDays,
-      Value<int?>? testsReadingQuestionLetterDuration}) {
+      Value<int?>? testsReadingQuestionLetterDuration,
+      Value<int?>? testsFindingAnswerDuration}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
@@ -1657,6 +1705,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       emulationDays: emulationDays ?? this.emulationDays,
       testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration ??
           this.testsReadingQuestionLetterDuration,
+      testsFindingAnswerDuration:
+          testsFindingAnswerDuration ?? this.testsFindingAnswerDuration,
     );
   }
 
@@ -1708,6 +1758,10 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       map['tests_reading_question_letter_duration'] =
           Variable<int>(testsReadingQuestionLetterDuration.value);
     }
+    if (testsFindingAnswerDuration.present) {
+      map['tests_finding_answer_duration'] =
+          Variable<int>(testsFindingAnswerDuration.value);
+    }
     return map;
   }
 
@@ -1728,7 +1782,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
           ..write('emulationNumberOfQuestions: $emulationNumberOfQuestions, ')
           ..write('emulationDays: $emulationDays, ')
           ..write(
-              'testsReadingQuestionLetterDuration: $testsReadingQuestionLetterDuration')
+              'testsReadingQuestionLetterDuration: $testsReadingQuestionLetterDuration, ')
+          ..write('testsFindingAnswerDuration: $testsFindingAnswerDuration')
           ..write(')'))
         .toString();
   }

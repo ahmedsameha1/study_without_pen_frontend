@@ -92,7 +92,7 @@ class FieldLists extends Table {
   static const int MAXIMUM_COLOR = 0xffffffff;
   static const int MINIMUM_EMULATION_NUMBER_OF_QUESTIONS = 0;
   static const int MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS = 255;
-  static const int MINIMUM_TESTS_READING_QUESTION_LETTER_DURATION = 1;
+  static const int MINIMUM_TESTS_DURATIONS = 1;
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldId => text()();
@@ -123,10 +123,12 @@ class FieldLists extends Table {
           emulationNumberOfQuestions.isSmallerOrEqualValue(
               FieldLists.MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS))();
   TextColumn get emulationDays => text().nullable()();
-  IntColumn get testsReadingQuestionLetterDuration => integer()
-      .nullable()
-      .check(testsReadingQuestionLetterDuration.isBiggerOrEqualValue(
-          FieldLists.MINIMUM_TESTS_READING_QUESTION_LETTER_DURATION))();
+  IntColumn get testsReadingQuestionLetterDuration =>
+      integer().nullable().check(testsReadingQuestionLetterDuration
+          .isBiggerOrEqualValue(FieldLists.MINIMUM_TESTS_DURATIONS))();
+  IntColumn get testsFindingAnswerDuration =>
+      integer().nullable().check(testsFindingAnswerDuration
+          .isBiggerOrEqualValue(FieldLists.MINIMUM_TESTS_DURATIONS))();
 
   @override
   Set<Column> get primaryKey => {id};
