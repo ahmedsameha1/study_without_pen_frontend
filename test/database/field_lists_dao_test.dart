@@ -910,6 +910,36 @@ void main() {
               e.message.contains("tests_typing_answer_letter_duration"))));
     });
 
+    test(
+        "Invalid FieldList: testsReadingQuestionLetterDuration & testsFindingAnswerDuration & testsTypingAnswerLetterDuration is not consistant null wise",
+        () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: null);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message
+                  .contains("tests durations is not consistant null wise"))));
+    });
+
     test("Good case 1: create FieldList without 'id'", () async {
       var fieldListCompanion = FieldListsCompanion(
           fieldId: Value(fieldId),
@@ -1428,9 +1458,8 @@ void main() {
           emulationNumberOfQuestions: Value(null),
           emulationDays: Value(null),
           testsReadingQuestionLetterDuration: Value(null),
-          testsFindingAnswerDuration: Value(testsFindingAnswerDuration),
-          testsTypingAnswerLetterDuration:
-              Value(testsTypingAnswerLetterDuration));
+          testsFindingAnswerDuration: Value(null),
+          testsTypingAnswerLetterDuration: Value(null));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1451,7 +1480,7 @@ void main() {
         emulationDays: Value(null),
         testsReadingQuestionLetterDuration: Value(null),
         testsFindingAnswerDuration: Value(null),
-        testsTypingAnswerLetterDuration: Value(testsTypingAnswerLetterDuration),
+        testsTypingAnswerLetterDuration: Value(null),
       );
       await fieldListsDao.create(fieldListCompanion);
     });
