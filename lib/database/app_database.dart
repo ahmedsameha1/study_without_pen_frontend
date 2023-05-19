@@ -129,6 +129,9 @@ class FieldLists extends Table {
   IntColumn get testsFindingAnswerDuration =>
       integer().nullable().check(testsFindingAnswerDuration
           .isBiggerOrEqualValue(FieldLists.MINIMUM_TESTS_DURATIONS))();
+  IntColumn get testsTypingAnswerLetterDuration =>
+      integer().nullable().check(testsTypingAnswerLetterDuration
+          .isBiggerOrEqualValue(FieldLists.MINIMUM_TESTS_DURATIONS))();
 
   @override
   Set<Column> get primaryKey => {id};
