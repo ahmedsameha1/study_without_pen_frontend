@@ -92,7 +92,8 @@ class FieldLists extends Table {
   static const int MAXIMUM_COLOR = 0xffffffff;
   static const int MINIMUM_EMULATION_NUMBER_OF_QUESTIONS = 0;
   static const int MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS = 255;
-  static const int MINIMUM_TESTS_DURATIONS = 1;
+  static const int MINIMUM_TESTS_DURATIONS = 1; // In milliseconds
+  static const int MINIMUM_STUDY_TILL_CORRECT_DURATIONS = 1; // In milliseconds
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldId => text()();
@@ -132,6 +133,10 @@ class FieldLists extends Table {
   IntColumn get testsTypingAnswerLetterDuration =>
       integer().nullable().check(testsTypingAnswerLetterDuration
           .isBiggerOrEqualValue(FieldLists.MINIMUM_TESTS_DURATIONS))();
+  IntColumn get studyTillCorrectReadingQuestionLetterDuration => integer()
+      .nullable()
+      .check(studyTillCorrectReadingQuestionLetterDuration.isBiggerOrEqualValue(
+          FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS))();
 
   @override
   Set<Column> get primaryKey => {id};
