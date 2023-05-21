@@ -1249,6 +1249,41 @@ void main() {
                   "study_till_correct_typing_answer_letter_duration"))));
     });
 
+    test(
+        "Invalid FieldList: studyTillCorrectReadingQuestionLetterDuration & studyTillCorrectFindingAnswerDuration & studyTillCorrectTypingAnswerLetterDuration is not consistant null wise",
+        () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration: null);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains(
+                  "study till correct durations is not consistant null wise"))));
+    });
+
     test("Good case 1: create FieldList without 'id'", () async {
       var fieldListCompanion = FieldListsCompanion(
           fieldId: Value(fieldId),
@@ -1989,10 +2024,8 @@ void main() {
           testsFindingAnswerDuration: Value(null),
           testsTypingAnswerLetterDuration: Value(null),
           studyTillCorrectReadingQuestionLetterDuration: Value(null),
-          studyTillCorrectFindingAnswerDuration:
-              Value(studyTillCorrectFindingAnswerDuration),
-          studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+          studyTillCorrectFindingAnswerDuration: Value(null),
+          studyTillCorrectTypingAnswerLetterDuration: Value(null));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -2016,8 +2049,7 @@ void main() {
           testsTypingAnswerLetterDuration: Value(null),
           studyTillCorrectReadingQuestionLetterDuration: Value(null),
           studyTillCorrectFindingAnswerDuration: Value(null),
-          studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+          studyTillCorrectTypingAnswerLetterDuration: Value(null));
       await fieldListsDao.create(fieldListCompanion);
     });
 

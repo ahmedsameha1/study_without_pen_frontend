@@ -46,6 +46,24 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
                 null))) {
       throw InvalidDataException("tests durations is not consistant null wise");
     }
+    if (!((fieldListsCompanion
+                    .studyTillCorrectReadingQuestionLetterDuration.value ==
+                null &&
+            fieldListsCompanion.studyTillCorrectFindingAnswerDuration.value ==
+                null &&
+            fieldListsCompanion.studyTillCorrectTypingAnswerLetterDuration.value ==
+                null) ||
+        (fieldListsCompanion
+                    .studyTillCorrectReadingQuestionLetterDuration.value !=
+                null &&
+            fieldListsCompanion.studyTillCorrectFindingAnswerDuration.value !=
+                null &&
+            fieldListsCompanion
+                    .studyTillCorrectTypingAnswerLetterDuration.value !=
+                null))) {
+      throw InvalidDataException(
+          "study till correct durations is not consistant null wise");
+    }
     return into(fieldLists).insert(fieldListsCompanion);
   }
 }
