@@ -137,6 +137,10 @@ class FieldLists extends Table {
       .nullable()
       .check(studyTillCorrectReadingQuestionLetterDuration.isBiggerOrEqualValue(
           FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS))();
+  IntColumn get studyTillCorrectFindingAnswerDuration => integer()
+      .nullable()
+      .check(studyTillCorrectFindingAnswerDuration.isBiggerOrEqualValue(
+          FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS))();
 
   @override
   Set<Column> get primaryKey => {id};
