@@ -28,6 +28,7 @@ void main() {
   int studyTillCorrectReadingQuestionLetterDuration = 200;
   int studyTillCorrectFindingAnswerDuration = 1000;
   int studyTillCorrectTypingAnswerLetterDuration = 100;
+  int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -63,7 +64,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -95,7 +97,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       var fieldList2 = FieldList(
           id: id,
           fieldId: const Uuid().v4(),
@@ -119,7 +122,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       await fieldListsDao.create(fieldList1.toCompanion(true));
       expect(() async {
         await fieldListsDao.create(fieldList2.toCompanion(true));
@@ -152,7 +156,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -186,7 +191,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -220,7 +226,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -254,7 +261,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -287,7 +295,8 @@ void main() {
             studyTillCorrectFindingAnswerDuration:
                 studyTillCorrectFindingAnswerDuration,
             studyTillCorrectTypingAnswerLetterDuration:
-                studyTillCorrectTypingAnswerLetterDuration);
+                studyTillCorrectTypingAnswerLetterDuration,
+            testsTimeOfAnswerAction: testsTimeOfAnswerAction);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -321,7 +330,8 @@ void main() {
             studyTillCorrectFindingAnswerDuration:
                 studyTillCorrectFindingAnswerDuration,
             studyTillCorrectTypingAnswerLetterDuration:
-                studyTillCorrectTypingAnswerLetterDuration);
+                studyTillCorrectTypingAnswerLetterDuration,
+            testsTimeOfAnswerAction: testsTimeOfAnswerAction);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -356,7 +366,8 @@ void main() {
             studyTillCorrectFindingAnswerDuration:
                 studyTillCorrectFindingAnswerDuration,
             studyTillCorrectTypingAnswerLetterDuration:
-                studyTillCorrectTypingAnswerLetterDuration);
+                studyTillCorrectTypingAnswerLetterDuration,
+            testsTimeOfAnswerAction: testsTimeOfAnswerAction);
         expect(() async {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
@@ -390,7 +401,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -419,7 +431,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -451,7 +464,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -480,7 +494,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -514,7 +529,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -548,7 +564,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -581,7 +598,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -614,7 +632,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -649,7 +668,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -685,7 +705,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -720,7 +741,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -750,7 +772,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -783,7 +806,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -817,7 +841,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -852,7 +877,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -887,7 +913,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -921,7 +948,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -956,7 +984,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -990,7 +1019,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -1025,7 +1055,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -1060,7 +1091,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -1096,7 +1128,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -1131,7 +1164,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -1167,7 +1201,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -1203,7 +1238,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS - 1,
           studyTillCorrectTypingAnswerLetterDuration:
-              studyTillCorrectTypingAnswerLetterDuration);
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -1239,7 +1275,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
           studyTillCorrectTypingAnswerLetterDuration:
-              FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS - 1);
+              FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS - 1,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -1274,7 +1311,8 @@ void main() {
               studyTillCorrectReadingQuestionLetterDuration,
           studyTillCorrectFindingAnswerDuration:
               studyTillCorrectFindingAnswerDuration,
-          studyTillCorrectTypingAnswerLetterDuration: null);
+          studyTillCorrectTypingAnswerLetterDuration: null,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction);
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
@@ -1282,6 +1320,105 @@ void main() {
               e is InvalidDataException &&
               e.message.contains(
                   "study till correct durations is not consistant null wise"))));
+    });
+
+    test("Invalid FieldList: testsTimeOfAnswerAction is invalid", () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: TimeOfAnswerAction.MAX.index);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("tests_time_of_answer_action"))));
+      fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: 0 - 1);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("tests_time_of_answer_action"))));
+    });
+
+    test("Invalid FieldList: testsTimeOfAnswerAction is invalid", () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: TimeOfAnswerAction.MAX.index + 1);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("tests_time_of_answer_action"))));
     });
 
     test("Good case 1: create FieldList without 'id'", () async {
@@ -1308,7 +1445,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1337,7 +1475,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1366,7 +1505,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1394,7 +1534,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1422,7 +1563,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1450,7 +1592,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1478,7 +1621,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1506,7 +1650,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1534,7 +1679,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1562,7 +1708,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1590,7 +1737,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1618,7 +1766,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1646,7 +1795,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1674,7 +1824,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1702,7 +1853,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1730,7 +1882,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1758,7 +1911,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1786,7 +1940,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1813,7 +1968,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1839,7 +1995,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1865,7 +2022,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1893,7 +2051,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1920,7 +2079,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1947,7 +2107,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -1974,7 +2135,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -2001,7 +2163,8 @@ void main() {
           studyTillCorrectFindingAnswerDuration:
               Value(studyTillCorrectFindingAnswerDuration),
           studyTillCorrectTypingAnswerLetterDuration:
-              Value(studyTillCorrectTypingAnswerLetterDuration));
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -2025,7 +2188,8 @@ void main() {
           testsTypingAnswerLetterDuration: Value(null),
           studyTillCorrectReadingQuestionLetterDuration: Value(null),
           studyTillCorrectFindingAnswerDuration: Value(null),
-          studyTillCorrectTypingAnswerLetterDuration: Value(null));
+          studyTillCorrectTypingAnswerLetterDuration: Value(null),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -2049,7 +2213,8 @@ void main() {
           testsTypingAnswerLetterDuration: Value(null),
           studyTillCorrectReadingQuestionLetterDuration: Value(null),
           studyTillCorrectFindingAnswerDuration: Value(null),
-          studyTillCorrectTypingAnswerLetterDuration: Value(null));
+          studyTillCorrectTypingAnswerLetterDuration: Value(null),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
       await fieldListsDao.create(fieldListCompanion);
     });
 
@@ -2073,7 +2238,31 @@ void main() {
           testsTypingAnswerLetterDuration: Value(null),
           studyTillCorrectReadingQuestionLetterDuration: Value(null),
           studyTillCorrectFindingAnswerDuration: Value(null),
-          studyTillCorrectTypingAnswerLetterDuration: Value(null));
+          studyTillCorrectTypingAnswerLetterDuration: Value(null),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 30", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.WRONGNESS_DESC.index),
+          usageCount: Value(usageCount),
+          color: Value(color),
+          emulationNumberOfQuestions: Value(null),
+          emulationDays: Value(null),
+          testsReadingQuestionLetterDuration: Value(null),
+          testsFindingAnswerDuration: Value(null),
+          testsTypingAnswerLetterDuration: Value(null),
+          studyTillCorrectReadingQuestionLetterDuration: Value(null),
+          studyTillCorrectFindingAnswerDuration: Value(null),
+          studyTillCorrectTypingAnswerLetterDuration: Value(null),
+          testsTimeOfAnswerAction: Value(TimeOfAnswerAction.NOTIFY.index));
       await fieldListsDao.create(fieldListCompanion);
     });
   });

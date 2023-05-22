@@ -1200,6 +1200,17 @@ class $FieldListsTable extends FieldLists
                   FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS),
           type: DriftSqlType.int,
           requiredDuringInsert: false);
+  static const VerificationMeta _testsTimeOfAnswerActionMeta =
+      const VerificationMeta('testsTimeOfAnswerAction');
+  @override
+  late final GeneratedColumn<int> testsTimeOfAnswerAction =
+      GeneratedColumn<int>('tests_time_of_answer_action', aliasedName, false,
+          check: () =>
+              testsTimeOfAnswerAction
+                  .isSmallerThanValue(TimeOfAnswerAction.MAX.index) &
+              testsTimeOfAnswerAction.isBiggerOrEqualValue(0),
+          type: DriftSqlType.int,
+          requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1220,7 +1231,8 @@ class $FieldListsTable extends FieldLists
         testsTypingAnswerLetterDuration,
         studyTillCorrectReadingQuestionLetterDuration,
         studyTillCorrectFindingAnswerDuration,
-        studyTillCorrectTypingAnswerLetterDuration
+        studyTillCorrectTypingAnswerLetterDuration,
+        testsTimeOfAnswerAction
       ];
   @override
   String get aliasedName => _alias ?? 'field_lists';
@@ -1352,6 +1364,15 @@ class $FieldListsTable extends FieldLists
               data['study_till_correct_typing_answer_letter_duration']!,
               _studyTillCorrectTypingAnswerLetterDurationMeta));
     }
+    if (data.containsKey('tests_time_of_answer_action')) {
+      context.handle(
+          _testsTimeOfAnswerActionMeta,
+          testsTimeOfAnswerAction.isAcceptableOrUnknown(
+              data['tests_time_of_answer_action']!,
+              _testsTimeOfAnswerActionMeta));
+    } else if (isInserting) {
+      context.missing(_testsTimeOfAnswerActionMeta);
+    }
     return context;
   }
 
@@ -1410,6 +1431,9 @@ class $FieldListsTable extends FieldLists
           DriftSqlType.int,
           data[
               '${effectivePrefix}study_till_correct_typing_answer_letter_duration']),
+      testsTimeOfAnswerAction: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}tests_time_of_answer_action'])!,
     );
   }
 
@@ -1439,6 +1463,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
   final int? studyTillCorrectReadingQuestionLetterDuration;
   final int? studyTillCorrectFindingAnswerDuration;
   final int? studyTillCorrectTypingAnswerLetterDuration;
+  final int testsTimeOfAnswerAction;
   const FieldList(
       {required this.id,
       required this.fieldId,
@@ -1458,7 +1483,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       this.testsTypingAnswerLetterDuration,
       this.studyTillCorrectReadingQuestionLetterDuration,
       this.studyTillCorrectFindingAnswerDuration,
-      this.studyTillCorrectTypingAnswerLetterDuration});
+      this.studyTillCorrectTypingAnswerLetterDuration,
+      required this.testsTimeOfAnswerAction});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1507,6 +1533,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       map['study_till_correct_typing_answer_letter_duration'] =
           Variable<int>(studyTillCorrectTypingAnswerLetterDuration);
     }
+    map['tests_time_of_answer_action'] = Variable<int>(testsTimeOfAnswerAction);
     return map;
   }
 
@@ -1556,6 +1583,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           studyTillCorrectTypingAnswerLetterDuration == null && nullToAbsent
               ? const Value.absent()
               : Value(studyTillCorrectTypingAnswerLetterDuration),
+      testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction),
     );
   }
 
@@ -1590,6 +1618,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           .fromJson<int?>(json['studyTillCorrectFindingAnswerDuration']),
       studyTillCorrectTypingAnswerLetterDuration: serializer
           .fromJson<int?>(json['studyTillCorrectTypingAnswerLetterDuration']),
+      testsTimeOfAnswerAction:
+          serializer.fromJson<int>(json['testsTimeOfAnswerAction']),
     );
   }
   @override
@@ -1622,6 +1652,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           serializer.toJson<int?>(studyTillCorrectFindingAnswerDuration),
       'studyTillCorrectTypingAnswerLetterDuration':
           serializer.toJson<int?>(studyTillCorrectTypingAnswerLetterDuration),
+      'testsTimeOfAnswerAction':
+          serializer.toJson<int>(testsTimeOfAnswerAction),
     };
   }
 
@@ -1647,7 +1679,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           Value<int?> studyTillCorrectFindingAnswerDuration =
               const Value.absent(),
           Value<int?> studyTillCorrectTypingAnswerLetterDuration =
-              const Value.absent()}) =>
+              const Value.absent(),
+          int? testsTimeOfAnswerAction}) =>
       FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
@@ -1687,6 +1720,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
             studyTillCorrectTypingAnswerLetterDuration.present
                 ? studyTillCorrectTypingAnswerLetterDuration.value
                 : this.studyTillCorrectTypingAnswerLetterDuration,
+        testsTimeOfAnswerAction:
+            testsTimeOfAnswerAction ?? this.testsTimeOfAnswerAction,
       );
   @override
   String toString() {
@@ -1714,7 +1749,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           ..write(
               'studyTillCorrectFindingAnswerDuration: $studyTillCorrectFindingAnswerDuration, ')
           ..write(
-              'studyTillCorrectTypingAnswerLetterDuration: $studyTillCorrectTypingAnswerLetterDuration')
+              'studyTillCorrectTypingAnswerLetterDuration: $studyTillCorrectTypingAnswerLetterDuration, ')
+          ..write('testsTimeOfAnswerAction: $testsTimeOfAnswerAction')
           ..write(')'))
         .toString();
   }
@@ -1739,7 +1775,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       testsTypingAnswerLetterDuration,
       studyTillCorrectReadingQuestionLetterDuration,
       studyTillCorrectFindingAnswerDuration,
-      studyTillCorrectTypingAnswerLetterDuration);
+      studyTillCorrectTypingAnswerLetterDuration,
+      testsTimeOfAnswerAction);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1767,7 +1804,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           other.studyTillCorrectFindingAnswerDuration ==
               this.studyTillCorrectFindingAnswerDuration &&
           other.studyTillCorrectTypingAnswerLetterDuration ==
-              this.studyTillCorrectTypingAnswerLetterDuration);
+              this.studyTillCorrectTypingAnswerLetterDuration &&
+          other.testsTimeOfAnswerAction == this.testsTimeOfAnswerAction);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
@@ -1790,6 +1828,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<int?> studyTillCorrectReadingQuestionLetterDuration;
   final Value<int?> studyTillCorrectFindingAnswerDuration;
   final Value<int?> studyTillCorrectTypingAnswerLetterDuration;
+  final Value<int> testsTimeOfAnswerAction;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
@@ -1810,6 +1849,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.studyTillCorrectReadingQuestionLetterDuration = const Value.absent(),
     this.studyTillCorrectFindingAnswerDuration = const Value.absent(),
     this.studyTillCorrectTypingAnswerLetterDuration = const Value.absent(),
+    this.testsTimeOfAnswerAction = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
@@ -1831,12 +1871,14 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.studyTillCorrectReadingQuestionLetterDuration = const Value.absent(),
     this.studyTillCorrectFindingAnswerDuration = const Value.absent(),
     this.studyTillCorrectTypingAnswerLetterDuration = const Value.absent(),
+    required int testsTimeOfAnswerAction,
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
         lastModificationAt = Value(lastModificationAt),
         checkType = Value(checkType),
-        sortBy = Value(sortBy);
+        sortBy = Value(sortBy),
+        testsTimeOfAnswerAction = Value(testsTimeOfAnswerAction);
   static Insertable<FieldList> custom({
     Expression<String>? id,
     Expression<String>? fieldId,
@@ -1857,6 +1899,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     Expression<int>? studyTillCorrectReadingQuestionLetterDuration,
     Expression<int>? studyTillCorrectFindingAnswerDuration,
     Expression<int>? studyTillCorrectTypingAnswerLetterDuration,
+    Expression<int>? testsTimeOfAnswerAction,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1890,6 +1933,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       if (studyTillCorrectTypingAnswerLetterDuration != null)
         'study_till_correct_typing_answer_letter_duration':
             studyTillCorrectTypingAnswerLetterDuration,
+      if (testsTimeOfAnswerAction != null)
+        'tests_time_of_answer_action': testsTimeOfAnswerAction,
     });
   }
 
@@ -1912,7 +1957,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       Value<int?>? testsTypingAnswerLetterDuration,
       Value<int?>? studyTillCorrectReadingQuestionLetterDuration,
       Value<int?>? studyTillCorrectFindingAnswerDuration,
-      Value<int?>? studyTillCorrectTypingAnswerLetterDuration}) {
+      Value<int?>? studyTillCorrectTypingAnswerLetterDuration,
+      Value<int>? testsTimeOfAnswerAction}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
@@ -1943,6 +1989,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       studyTillCorrectTypingAnswerLetterDuration:
           studyTillCorrectTypingAnswerLetterDuration ??
               this.studyTillCorrectTypingAnswerLetterDuration,
+      testsTimeOfAnswerAction:
+          testsTimeOfAnswerAction ?? this.testsTimeOfAnswerAction,
     );
   }
 
@@ -2014,6 +2062,10 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       map['study_till_correct_typing_answer_letter_duration'] =
           Variable<int>(studyTillCorrectTypingAnswerLetterDuration.value);
     }
+    if (testsTimeOfAnswerAction.present) {
+      map['tests_time_of_answer_action'] =
+          Variable<int>(testsTimeOfAnswerAction.value);
+    }
     return map;
   }
 
@@ -2043,7 +2095,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
           ..write(
               'studyTillCorrectFindingAnswerDuration: $studyTillCorrectFindingAnswerDuration, ')
           ..write(
-              'studyTillCorrectTypingAnswerLetterDuration: $studyTillCorrectTypingAnswerLetterDuration')
+              'studyTillCorrectTypingAnswerLetterDuration: $studyTillCorrectTypingAnswerLetterDuration, ')
+          ..write('testsTimeOfAnswerAction: $testsTimeOfAnswerAction')
           ..write(')'))
         .toString();
   }

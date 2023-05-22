@@ -145,6 +145,9 @@ class FieldLists extends Table {
       .nullable()
       .check(studyTillCorrectTypingAnswerLetterDuration.isBiggerOrEqualValue(
           FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS))();
+  IntColumn get testsTimeOfAnswerAction => integer().check(
+      testsTimeOfAnswerAction.isSmallerThanValue(TimeOfAnswerAction.MAX.index) &
+          testsTimeOfAnswerAction.isBiggerOrEqualValue(0))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -177,3 +180,5 @@ bool isValid(String uuid) {
     return false;
   }
 }
+
+enum TimeOfAnswerAction { NEXT, NOTIFY, MAX }
