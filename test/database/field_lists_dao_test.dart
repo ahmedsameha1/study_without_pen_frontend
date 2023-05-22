@@ -407,7 +407,7 @@ void main() {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
           throwsA(predicate((e) =>
-              e is InvalidDataException && e.message.contains("checkType"))));
+              e is SqliteException && e.message.contains("check_type"))));
       fieldList = FieldList(
           id: id,
           fieldId: fieldId,
@@ -437,7 +437,7 @@ void main() {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
           throwsA(predicate((e) =>
-              e is InvalidDataException && e.message.contains("checkType"))));
+              e is SqliteException && e.message.contains("check_type"))));
     });
 
     test("Invalid FieldList: sortBy is invalid", () {
@@ -469,8 +469,8 @@ void main() {
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
-          throwsA(predicate((e) =>
-              e is InvalidDataException && e.message.contains("sortBy"))));
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("sort_by"))));
       fieldList = FieldList(
           id: id,
           fieldId: fieldId,
@@ -499,8 +499,8 @@ void main() {
       expect(() async {
         await fieldListsDao.create(fieldList.toCompanion(true));
       },
-          throwsA(predicate((e) =>
-              e is InvalidDataException && e.message.contains("sortBy"))));
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("sort_by"))));
     });
 
     test(

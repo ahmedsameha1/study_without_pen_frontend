@@ -1074,12 +1074,20 @@ class $FieldListsTable extends FieldLists
   @override
   late final GeneratedColumn<int> checkType = GeneratedColumn<int>(
       'check_type', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      check: () =>
+          checkType.isBiggerOrEqualValue(0) &
+          checkType.isSmallerThanValue(CheckType.MAX.index),
+      type: DriftSqlType.int,
+      requiredDuringInsert: true);
   static const VerificationMeta _sortByMeta = const VerificationMeta('sortBy');
   @override
   late final GeneratedColumn<int> sortBy = GeneratedColumn<int>(
       'sort_by', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      check: () =>
+          sortBy.isBiggerOrEqualValue(0) &
+          sortBy.isSmallerThanValue(SortBy.MAX.index),
+      type: DriftSqlType.int,
+      requiredDuringInsert: true);
   static const VerificationMeta _doesReadAnswerMeta =
       const VerificationMeta('doesReadAnswer');
   @override
@@ -1206,9 +1214,9 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> testsTimeOfAnswerAction =
       GeneratedColumn<int>('tests_time_of_answer_action', aliasedName, false,
           check: () =>
+              testsTimeOfAnswerAction.isBiggerOrEqualValue(0) &
               testsTimeOfAnswerAction
-                  .isSmallerThanValue(TimeOfAnswerAction.MAX.index) &
-              testsTimeOfAnswerAction.isBiggerOrEqualValue(0),
+                  .isSmallerThanValue(TimeOfAnswerAction.MAX.index),
           type: DriftSqlType.int,
           requiredDuringInsert: true);
   @override

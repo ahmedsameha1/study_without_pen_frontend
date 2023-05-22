@@ -108,8 +108,10 @@ class FieldLists extends Table {
       lastModificationAt.isSmallerThanValue(clock.now().toUtc()) &
           lastModificationAt.isBiggerOrEqual(creationAt))();
   TextColumn get languageTag => text().nullable()();
-  IntColumn get checkType => integer()();
-  IntColumn get sortBy => integer()();
+  IntColumn get checkType => integer().check(checkType.isBiggerOrEqualValue(0) &
+      checkType.isSmallerThanValue(CheckType.MAX.index))();
+  IntColumn get sortBy => integer().check(sortBy.isBiggerOrEqualValue(0) &
+      sortBy.isSmallerThanValue(SortBy.MAX.index))();
   BoolColumn get doesReadAnswer => boolean().withDefault(Constant(false))();
   IntColumn get usageCount => integer().withDefault(Constant(0)).check(
       usageCount.isBiggerOrEqualValue(FieldLists.MINIMUM_USAGE_COUNT) &
@@ -145,9 +147,10 @@ class FieldLists extends Table {
       .nullable()
       .check(studyTillCorrectTypingAnswerLetterDuration.isBiggerOrEqualValue(
           FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS))();
-  IntColumn get testsTimeOfAnswerAction => integer().check(
-      testsTimeOfAnswerAction.isSmallerThanValue(TimeOfAnswerAction.MAX.index) &
-          testsTimeOfAnswerAction.isBiggerOrEqualValue(0))();
+  IntColumn get testsTimeOfAnswerAction =>
+      integer().check(testsTimeOfAnswerAction.isBiggerOrEqualValue(0) &
+          testsTimeOfAnswerAction
+              .isSmallerThanValue(TimeOfAnswerAction.MAX.index))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -179,6 +182,32 @@ bool isValid(String uuid) {
   } catch (e) {
     return false;
   }
+}
+
+enum CheckType {
+  NON_STRICT_IGNORE_CASE,
+  NON_STRICT_DO_NOT_IGNORE_CASE,
+  IGNORE_CASE,
+  DO_NOT_IGNORE_CASE,
+  MAX
+}
+
+enum SortBy {
+  CREATION_DATE_DESC,
+  ANSWER_DESC,
+  QUESTION_ASC,
+  ANSWER_ASC,
+  DATE_DESC,
+  DATE_ASC,
+  QUESTION_DESC,
+  CREATION_DATE_ASC,
+  ORDER_ASC,
+  ORDER_DESC,
+  RANK_ASC,
+  RANK_DESC,
+  WRONGNESS_ASC,
+  WRONGNESS_DESC,
+  MAX
 }
 
 enum TimeOfAnswerAction { NEXT, NOTIFY, MAX }
