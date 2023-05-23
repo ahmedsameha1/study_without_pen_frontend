@@ -1219,6 +1219,19 @@ class $FieldListsTable extends FieldLists
                   .isSmallerThanValue(TimeOfAnswerAction.MAX.index),
           type: DriftSqlType.int,
           requiredDuringInsert: true);
+  static const VerificationMeta _doesObfuscateQuestionMeta =
+      const VerificationMeta('doesObfuscateQuestion');
+  @override
+  late final GeneratedColumn<bool> doesObfuscateQuestion =
+      GeneratedColumn<bool>('does_obfuscate_question', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("does_obfuscate_question" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }),
+          defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -1240,7 +1253,8 @@ class $FieldListsTable extends FieldLists
         studyTillCorrectReadingQuestionLetterDuration,
         studyTillCorrectFindingAnswerDuration,
         studyTillCorrectTypingAnswerLetterDuration,
-        testsTimeOfAnswerAction
+        testsTimeOfAnswerAction,
+        doesObfuscateQuestion
       ];
   @override
   String get aliasedName => _alias ?? 'field_lists';
@@ -1381,6 +1395,12 @@ class $FieldListsTable extends FieldLists
     } else if (isInserting) {
       context.missing(_testsTimeOfAnswerActionMeta);
     }
+    if (data.containsKey('does_obfuscate_question')) {
+      context.handle(
+          _doesObfuscateQuestionMeta,
+          doesObfuscateQuestion.isAcceptableOrUnknown(
+              data['does_obfuscate_question']!, _doesObfuscateQuestionMeta));
+    }
     return context;
   }
 
@@ -1442,6 +1462,9 @@ class $FieldListsTable extends FieldLists
       testsTimeOfAnswerAction: attachedDatabase.typeMapping.read(
           DriftSqlType.int,
           data['${effectivePrefix}tests_time_of_answer_action'])!,
+      doesObfuscateQuestion: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}does_obfuscate_question'])!,
     );
   }
 
@@ -1472,6 +1495,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
   final int? studyTillCorrectFindingAnswerDuration;
   final int? studyTillCorrectTypingAnswerLetterDuration;
   final int testsTimeOfAnswerAction;
+  final bool doesObfuscateQuestion;
   const FieldList(
       {required this.id,
       required this.fieldId,
@@ -1492,7 +1516,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
       this.studyTillCorrectReadingQuestionLetterDuration,
       this.studyTillCorrectFindingAnswerDuration,
       this.studyTillCorrectTypingAnswerLetterDuration,
-      required this.testsTimeOfAnswerAction});
+      required this.testsTimeOfAnswerAction,
+      required this.doesObfuscateQuestion});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1542,6 +1567,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           Variable<int>(studyTillCorrectTypingAnswerLetterDuration);
     }
     map['tests_time_of_answer_action'] = Variable<int>(testsTimeOfAnswerAction);
+    map['does_obfuscate_question'] = Variable<bool>(doesObfuscateQuestion);
     return map;
   }
 
@@ -1592,6 +1618,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
               ? const Value.absent()
               : Value(studyTillCorrectTypingAnswerLetterDuration),
       testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction),
+      doesObfuscateQuestion: Value(doesObfuscateQuestion),
     );
   }
 
@@ -1628,6 +1655,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           .fromJson<int?>(json['studyTillCorrectTypingAnswerLetterDuration']),
       testsTimeOfAnswerAction:
           serializer.fromJson<int>(json['testsTimeOfAnswerAction']),
+      doesObfuscateQuestion:
+          serializer.fromJson<bool>(json['doesObfuscateQuestion']),
     );
   }
   @override
@@ -1662,6 +1691,7 @@ class FieldList extends DataClass implements Insertable<FieldList> {
           serializer.toJson<int?>(studyTillCorrectTypingAnswerLetterDuration),
       'testsTimeOfAnswerAction':
           serializer.toJson<int>(testsTimeOfAnswerAction),
+      'doesObfuscateQuestion': serializer.toJson<bool>(doesObfuscateQuestion),
     };
   }
 
@@ -1688,7 +1718,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
               const Value.absent(),
           Value<int?> studyTillCorrectTypingAnswerLetterDuration =
               const Value.absent(),
-          int? testsTimeOfAnswerAction}) =>
+          int? testsTimeOfAnswerAction,
+          bool? doesObfuscateQuestion}) =>
       FieldList(
         id: id ?? this.id,
         fieldId: fieldId ?? this.fieldId,
@@ -1730,6 +1761,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
                 : this.studyTillCorrectTypingAnswerLetterDuration,
         testsTimeOfAnswerAction:
             testsTimeOfAnswerAction ?? this.testsTimeOfAnswerAction,
+        doesObfuscateQuestion:
+            doesObfuscateQuestion ?? this.doesObfuscateQuestion,
       );
   @override
   String toString() {
@@ -1758,33 +1791,36 @@ class FieldList extends DataClass implements Insertable<FieldList> {
               'studyTillCorrectFindingAnswerDuration: $studyTillCorrectFindingAnswerDuration, ')
           ..write(
               'studyTillCorrectTypingAnswerLetterDuration: $studyTillCorrectTypingAnswerLetterDuration, ')
-          ..write('testsTimeOfAnswerAction: $testsTimeOfAnswerAction')
+          ..write('testsTimeOfAnswerAction: $testsTimeOfAnswerAction, ')
+          ..write('doesObfuscateQuestion: $doesObfuscateQuestion')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id,
-      fieldId,
-      name,
-      creationAt,
-      lastModificationAt,
-      languageTag,
-      checkType,
-      sortBy,
-      doesReadAnswer,
-      usageCount,
-      color,
-      emulationNumberOfQuestions,
-      emulationDays,
-      testsReadingQuestionLetterDuration,
-      testsFindingAnswerDuration,
-      testsTypingAnswerLetterDuration,
-      studyTillCorrectReadingQuestionLetterDuration,
-      studyTillCorrectFindingAnswerDuration,
-      studyTillCorrectTypingAnswerLetterDuration,
-      testsTimeOfAnswerAction);
+  int get hashCode => Object.hashAll([
+        id,
+        fieldId,
+        name,
+        creationAt,
+        lastModificationAt,
+        languageTag,
+        checkType,
+        sortBy,
+        doesReadAnswer,
+        usageCount,
+        color,
+        emulationNumberOfQuestions,
+        emulationDays,
+        testsReadingQuestionLetterDuration,
+        testsFindingAnswerDuration,
+        testsTypingAnswerLetterDuration,
+        studyTillCorrectReadingQuestionLetterDuration,
+        studyTillCorrectFindingAnswerDuration,
+        studyTillCorrectTypingAnswerLetterDuration,
+        testsTimeOfAnswerAction,
+        doesObfuscateQuestion
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1813,7 +1849,8 @@ class FieldList extends DataClass implements Insertable<FieldList> {
               this.studyTillCorrectFindingAnswerDuration &&
           other.studyTillCorrectTypingAnswerLetterDuration ==
               this.studyTillCorrectTypingAnswerLetterDuration &&
-          other.testsTimeOfAnswerAction == this.testsTimeOfAnswerAction);
+          other.testsTimeOfAnswerAction == this.testsTimeOfAnswerAction &&
+          other.doesObfuscateQuestion == this.doesObfuscateQuestion);
 }
 
 class FieldListsCompanion extends UpdateCompanion<FieldList> {
@@ -1837,6 +1874,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<int?> studyTillCorrectFindingAnswerDuration;
   final Value<int?> studyTillCorrectTypingAnswerLetterDuration;
   final Value<int> testsTimeOfAnswerAction;
+  final Value<bool> doesObfuscateQuestion;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
@@ -1858,6 +1896,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.studyTillCorrectFindingAnswerDuration = const Value.absent(),
     this.studyTillCorrectTypingAnswerLetterDuration = const Value.absent(),
     this.testsTimeOfAnswerAction = const Value.absent(),
+    this.doesObfuscateQuestion = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
@@ -1880,6 +1919,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.studyTillCorrectFindingAnswerDuration = const Value.absent(),
     this.studyTillCorrectTypingAnswerLetterDuration = const Value.absent(),
     required int testsTimeOfAnswerAction,
+    this.doesObfuscateQuestion = const Value.absent(),
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
@@ -1908,6 +1948,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     Expression<int>? studyTillCorrectFindingAnswerDuration,
     Expression<int>? studyTillCorrectTypingAnswerLetterDuration,
     Expression<int>? testsTimeOfAnswerAction,
+    Expression<bool>? doesObfuscateQuestion,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1943,6 +1984,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
             studyTillCorrectTypingAnswerLetterDuration,
       if (testsTimeOfAnswerAction != null)
         'tests_time_of_answer_action': testsTimeOfAnswerAction,
+      if (doesObfuscateQuestion != null)
+        'does_obfuscate_question': doesObfuscateQuestion,
     });
   }
 
@@ -1966,7 +2009,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       Value<int?>? studyTillCorrectReadingQuestionLetterDuration,
       Value<int?>? studyTillCorrectFindingAnswerDuration,
       Value<int?>? studyTillCorrectTypingAnswerLetterDuration,
-      Value<int>? testsTimeOfAnswerAction}) {
+      Value<int>? testsTimeOfAnswerAction,
+      Value<bool>? doesObfuscateQuestion}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
@@ -1999,6 +2043,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
               this.studyTillCorrectTypingAnswerLetterDuration,
       testsTimeOfAnswerAction:
           testsTimeOfAnswerAction ?? this.testsTimeOfAnswerAction,
+      doesObfuscateQuestion:
+          doesObfuscateQuestion ?? this.doesObfuscateQuestion,
     );
   }
 
@@ -2074,6 +2120,10 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       map['tests_time_of_answer_action'] =
           Variable<int>(testsTimeOfAnswerAction.value);
     }
+    if (doesObfuscateQuestion.present) {
+      map['does_obfuscate_question'] =
+          Variable<bool>(doesObfuscateQuestion.value);
+    }
     return map;
   }
 
@@ -2104,7 +2154,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
               'studyTillCorrectFindingAnswerDuration: $studyTillCorrectFindingAnswerDuration, ')
           ..write(
               'studyTillCorrectTypingAnswerLetterDuration: $studyTillCorrectTypingAnswerLetterDuration, ')
-          ..write('testsTimeOfAnswerAction: $testsTimeOfAnswerAction')
+          ..write('testsTimeOfAnswerAction: $testsTimeOfAnswerAction, ')
+          ..write('doesObfuscateQuestion: $doesObfuscateQuestion')
           ..write(')'))
         .toString();
   }

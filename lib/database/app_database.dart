@@ -151,6 +151,8 @@ class FieldLists extends Table {
       integer().check(testsTimeOfAnswerAction.isBiggerOrEqualValue(0) &
           testsTimeOfAnswerAction
               .isSmallerThanValue(TimeOfAnswerAction.MAX.index))();
+  BoolColumn get doesObfuscateQuestion =>
+      boolean().withDefault(Constant(false))();
 
   @override
   Set<Column> get primaryKey => {id};
