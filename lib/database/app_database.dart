@@ -147,8 +147,9 @@ class FieldLists extends Table {
       .nullable()
       .check(studyTillCorrectTypingAnswerLetterDuration.isBiggerOrEqualValue(
           FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS))();
-  IntColumn get testsTimeOfAnswerAction =>
-      integer().check(testsTimeOfAnswerAction.isBiggerOrEqualValue(0) &
+  IntColumn get testsTimeOfAnswerAction => integer()
+      .withDefault(Constant(TimeOfAnswerAction.NOTIFY.index))
+      .check(testsTimeOfAnswerAction.isBiggerOrEqualValue(0) &
           testsTimeOfAnswerAction
               .isSmallerThanValue(TimeOfAnswerAction.MAX.index))();
   BoolColumn get doesObfuscateQuestion =>

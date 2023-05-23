@@ -2332,7 +2332,31 @@ void main() {
           testsTimeOfAnswerAction: Value(TimeOfAnswerAction.NOTIFY.index));
       await fieldListsDao.create(fieldListCompanion);
     });
-    test("Good case 31, doesObfuscateQuestion could be ignored", () async {
+
+    test("Good case 31, testsTimeOfAnswerAction could be ignored", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          sortBy: Value(SortBy.WRONGNESS_DESC.index),
+          usageCount: Value(usageCount),
+          color: Value(color),
+          emulationNumberOfQuestions: Value(null),
+          emulationDays: Value(null),
+          testsReadingQuestionLetterDuration: Value(null),
+          testsFindingAnswerDuration: Value(null),
+          testsTypingAnswerLetterDuration: Value(null),
+          studyTillCorrectReadingQuestionLetterDuration: Value(null),
+          studyTillCorrectFindingAnswerDuration: Value(null),
+          studyTillCorrectTypingAnswerLetterDuration: Value(null),
+          doesObfuscateQuestion: Value(doesObfuscateQuestion));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 32, doesObfuscateQuestion could be ignored", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),

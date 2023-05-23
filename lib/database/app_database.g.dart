@@ -1218,7 +1218,8 @@ class $FieldListsTable extends FieldLists
               testsTimeOfAnswerAction
                   .isSmallerThanValue(TimeOfAnswerAction.MAX.index),
           type: DriftSqlType.int,
-          requiredDuringInsert: true);
+          requiredDuringInsert: false,
+          defaultValue: Constant(TimeOfAnswerAction.NOTIFY.index));
   static const VerificationMeta _doesObfuscateQuestionMeta =
       const VerificationMeta('doesObfuscateQuestion');
   @override
@@ -1392,8 +1393,6 @@ class $FieldListsTable extends FieldLists
           testsTimeOfAnswerAction.isAcceptableOrUnknown(
               data['tests_time_of_answer_action']!,
               _testsTimeOfAnswerActionMeta));
-    } else if (isInserting) {
-      context.missing(_testsTimeOfAnswerActionMeta);
     }
     if (data.containsKey('does_obfuscate_question')) {
       context.handle(
@@ -1918,15 +1917,14 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.studyTillCorrectReadingQuestionLetterDuration = const Value.absent(),
     this.studyTillCorrectFindingAnswerDuration = const Value.absent(),
     this.studyTillCorrectTypingAnswerLetterDuration = const Value.absent(),
-    required int testsTimeOfAnswerAction,
+    this.testsTimeOfAnswerAction = const Value.absent(),
     this.doesObfuscateQuestion = const Value.absent(),
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
         lastModificationAt = Value(lastModificationAt),
         checkType = Value(checkType),
-        sortBy = Value(sortBy),
-        testsTimeOfAnswerAction = Value(testsTimeOfAnswerAction);
+        sortBy = Value(sortBy);
   static Insertable<FieldList> custom({
     Expression<String>? id,
     Expression<String>? fieldId,
