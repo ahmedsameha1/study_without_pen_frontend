@@ -54,6 +54,11 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     }
     return into(fieldLists).insert(fieldListsCompanion);
   }
+
+  Future<FieldList?> getById(String id) {
+    return (select(fieldLists)..where(((tbl) => tbl.id.equals(id))))
+        .getSingleOrNull();
+  }
 }
 
 bool isValidCheckType(int checkType) {
