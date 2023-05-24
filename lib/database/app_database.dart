@@ -110,8 +110,10 @@ class FieldLists extends Table {
   TextColumn get languageTag => text().nullable()();
   IntColumn get checkType => integer().check(checkType.isBiggerOrEqualValue(0) &
       checkType.isSmallerThanValue(CheckType.MAX.index))();
-  IntColumn get sortBy => integer().check(sortBy.isBiggerOrEqualValue(0) &
-      sortBy.isSmallerThanValue(SortBy.MAX.index))();
+  IntColumn get sortBy => integer()
+      .withDefault(Constant(SortBy.CREATION_DATE_DESC.index))
+      .check(sortBy.isBiggerOrEqualValue(0) &
+          sortBy.isSmallerThanValue(SortBy.MAX.index))();
   BoolColumn get doesReadAnswer => boolean().withDefault(Constant(false))();
   IntColumn get usageCount => integer().withDefault(Constant(0)).check(
       usageCount.isBiggerOrEqualValue(FieldLists.MINIMUM_USAGE_COUNT) &

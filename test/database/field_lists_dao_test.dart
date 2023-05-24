@@ -1858,7 +1858,36 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 19: create FieldList without doesReadAnswer", () async {
+    test("Good case 19: sortBy could be ignored", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          checkType: Value(checkType),
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount),
+          color: Value(color),
+          emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration),
+          testsFindingAnswerDuration: Value(testsFindingAnswerDuration),
+          testsTypingAnswerLetterDuration:
+              Value(testsTypingAnswerLetterDuration),
+          studyTillCorrectReadingQuestionLetterDuration:
+              Value(studyTillCorrectReadingQuestionLetterDuration),
+          studyTillCorrectFindingAnswerDuration:
+              Value(studyTillCorrectFindingAnswerDuration),
+          studyTillCorrectTypingAnswerLetterDuration:
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction),
+          doesObfuscateQuestion: Value(doesObfuscateQuestion));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 20: create FieldList without doesReadAnswer", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1887,7 +1916,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 20: create FieldList without usageCount", () async {
+    test("Good case 21: create FieldList without usageCount", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1915,7 +1944,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 21: create FieldList without color", () async {
+    test("Good case 22: create FieldList without color", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1944,7 +1973,7 @@ void main() {
     });
 
     test(
-        "Good case 22: create FieldList when emulationNumberOfQuestions is null",
+        "Good case 23: create FieldList when emulationNumberOfQuestions is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -1973,7 +2002,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 23: create FieldList when emulationDays is null", () async {
+    test("Good case 24: create FieldList when emulationDays is null", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -2003,7 +2032,7 @@ void main() {
     });
 
     test(
-        "Good case 24: create FieldList when testsReadingQuestionLetterDuration is null",
+        "Good case 25: create FieldList when testsReadingQuestionLetterDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2032,7 +2061,7 @@ void main() {
     });
 
     test(
-        "Good case 25: create FieldList when testsFindingAnswerDuration is null",
+        "Good case 26: create FieldList when testsFindingAnswerDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2061,7 +2090,7 @@ void main() {
     });
 
     test(
-        "Good case 26: create FieldList when testsTypingAnswerLetterDuration is null",
+        "Good case 27: create FieldList when testsTypingAnswerLetterDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2090,7 +2119,7 @@ void main() {
     });
 
     test(
-        "Good case 27: create FieldList when studyTillCorrectReadingQuestionLetterDuration is null",
+        "Good case 28: create FieldList when studyTillCorrectReadingQuestionLetterDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2115,7 +2144,7 @@ void main() {
     });
 
     test(
-        "Good case 28: create FieldList when studyTillCorrectFindingAnswerDuration is null",
+        "Good case 29: create FieldList when studyTillCorrectFindingAnswerDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2140,7 +2169,7 @@ void main() {
     });
 
     test(
-        "Good case 29: create FieldList when studyTillCorrectTypingAnswerLetterDuration is null",
+        "Good case 30: create FieldList when studyTillCorrectTypingAnswerLetterDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2164,7 +2193,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 30", () async {
+    test("Good case 31", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -2187,7 +2216,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 31, testsTimeOfAnswerAction could be ignored", () async {
+    test("Good case 32, testsTimeOfAnswerAction could be ignored", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -2210,7 +2239,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 32, doesObfuscateQuestion could be ignored", () async {
+    test("Good case 33, doesObfuscateQuestion could be ignored", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),

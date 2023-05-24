@@ -1087,7 +1087,8 @@ class $FieldListsTable extends FieldLists
           sortBy.isBiggerOrEqualValue(0) &
           sortBy.isSmallerThanValue(SortBy.MAX.index),
       type: DriftSqlType.int,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false,
+      defaultValue: Constant(SortBy.CREATION_DATE_DESC.index));
   static const VerificationMeta _doesReadAnswerMeta =
       const VerificationMeta('doesReadAnswer');
   @override
@@ -1312,8 +1313,6 @@ class $FieldListsTable extends FieldLists
     if (data.containsKey('sort_by')) {
       context.handle(_sortByMeta,
           sortBy.isAcceptableOrUnknown(data['sort_by']!, _sortByMeta));
-    } else if (isInserting) {
-      context.missing(_sortByMeta);
     }
     if (data.containsKey('does_read_answer')) {
       context.handle(
@@ -1905,7 +1904,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     required DateTime lastModificationAt,
     this.languageTag = const Value.absent(),
     required int checkType,
-    required int sortBy,
+    this.sortBy = const Value.absent(),
     this.doesReadAnswer = const Value.absent(),
     this.usageCount = const Value.absent(),
     this.color = const Value.absent(),
@@ -1923,8 +1922,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
         name = Value(name),
         creationAt = Value(creationAt),
         lastModificationAt = Value(lastModificationAt),
-        checkType = Value(checkType),
-        sortBy = Value(sortBy);
+        checkType = Value(checkType);
   static Insertable<FieldList> custom({
     Expression<String>? id,
     Expression<String>? fieldId,
