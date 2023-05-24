@@ -108,8 +108,10 @@ class FieldLists extends Table {
       lastModificationAt.isSmallerThanValue(clock.now().toUtc()) &
           lastModificationAt.isBiggerOrEqual(creationAt))();
   TextColumn get languageTag => text().nullable()();
-  IntColumn get checkType => integer().check(checkType.isBiggerOrEqualValue(0) &
-      checkType.isSmallerThanValue(CheckType.MAX.index))();
+  IntColumn get checkType => integer()
+      .withDefault(Constant(CheckType.NON_STRICT_IGNORE_CASE.index))
+      .check(checkType.isBiggerOrEqualValue(0) &
+          checkType.isSmallerThanValue(CheckType.MAX.index))();
   IntColumn get sortBy => integer()
       .withDefault(Constant(SortBy.CREATION_DATE_DESC.index))
       .check(sortBy.isBiggerOrEqualValue(0) &

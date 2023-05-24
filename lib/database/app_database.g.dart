@@ -1078,7 +1078,8 @@ class $FieldListsTable extends FieldLists
           checkType.isBiggerOrEqualValue(0) &
           checkType.isSmallerThanValue(CheckType.MAX.index),
       type: DriftSqlType.int,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false,
+      defaultValue: Constant(CheckType.NON_STRICT_IGNORE_CASE.index));
   static const VerificationMeta _sortByMeta = const VerificationMeta('sortBy');
   @override
   late final GeneratedColumn<int> sortBy = GeneratedColumn<int>(
@@ -1307,8 +1308,6 @@ class $FieldListsTable extends FieldLists
     if (data.containsKey('check_type')) {
       context.handle(_checkTypeMeta,
           checkType.isAcceptableOrUnknown(data['check_type']!, _checkTypeMeta));
-    } else if (isInserting) {
-      context.missing(_checkTypeMeta);
     }
     if (data.containsKey('sort_by')) {
       context.handle(_sortByMeta,
@@ -1903,7 +1902,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     required DateTime creationAt,
     required DateTime lastModificationAt,
     this.languageTag = const Value.absent(),
-    required int checkType,
+    this.checkType = const Value.absent(),
     this.sortBy = const Value.absent(),
     this.doesReadAnswer = const Value.absent(),
     this.usageCount = const Value.absent(),
@@ -1921,8 +1920,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
-        lastModificationAt = Value(lastModificationAt),
-        checkType = Value(checkType);
+        lastModificationAt = Value(lastModificationAt);
   static Insertable<FieldList> custom({
     Expression<String>? id,
     Expression<String>? fieldId,

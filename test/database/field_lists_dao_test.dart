@@ -1468,7 +1468,36 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 6: ANSWER_DESC is a valid sortBy", () async {
+    test("Good case 6: checkType could by ignored", () async {
+      var fieldListCompanion = FieldListsCompanion(
+          id: Value(id),
+          fieldId: Value(fieldId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          sortBy: Value(sortBy),
+          doesReadAnswer: Value(doesReadAnswer),
+          usageCount: Value(usageCount),
+          color: Value(color),
+          emulationNumberOfQuestions: Value(emulationNumberOfQuestions),
+          emulationDays: Value(emulationDays),
+          testsReadingQuestionLetterDuration:
+              Value(testsReadingQuestionLetterDuration),
+          testsFindingAnswerDuration: Value(testsFindingAnswerDuration),
+          testsTypingAnswerLetterDuration:
+              Value(testsTypingAnswerLetterDuration),
+          studyTillCorrectReadingQuestionLetterDuration:
+              Value(studyTillCorrectReadingQuestionLetterDuration),
+          studyTillCorrectFindingAnswerDuration:
+              Value(studyTillCorrectFindingAnswerDuration),
+          studyTillCorrectTypingAnswerLetterDuration:
+              Value(studyTillCorrectTypingAnswerLetterDuration),
+          testsTimeOfAnswerAction: Value(testsTimeOfAnswerAction),
+          doesObfuscateQuestion: Value(doesObfuscateQuestion));
+      await fieldListsDao.create(fieldListCompanion);
+    });
+
+    test("Good case 7: ANSWER_DESC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1498,7 +1527,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 7: QUESTION_ASC is a valid sortBy", () async {
+    test("Good case 8: QUESTION_ASC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1528,7 +1557,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 8: ANSWER_ASC is a valid sortBy", () async {
+    test("Good case 9: ANSWER_ASC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1558,7 +1587,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 9: DATE_DESC is a valid sortBy", () async {
+    test("Good case 10: DATE_DESC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1588,7 +1617,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 10: DATE_ASC is a valid sortBy", () async {
+    test("Good case 11: DATE_ASC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1618,7 +1647,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 11: QUESTION_DESC is a valid sortBy", () async {
+    test("Good case 12: QUESTION_DESC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1648,7 +1677,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 12: CREATION_DATE_ASC is a valid sortBy", () async {
+    test("Good case 13: CREATION_DATE_ASC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1678,7 +1707,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 13: ORDER_ASC is a valid sortBy", () async {
+    test("Good case 14: ORDER_ASC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1708,7 +1737,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 14: ORDER_DESC is a valid sortBy", () async {
+    test("Good case 15: ORDER_DESC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1738,7 +1767,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 15: RANK_ASC is a valid sortBy", () async {
+    test("Good case 16: RANK_ASC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1768,7 +1797,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 16: RANK_DESC is a valid sortBy", () async {
+    test("Good case 17: RANK_DESC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1798,7 +1827,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 17: WRONGNESS_ASC is a valid sortBy", () async {
+    test("Good case 18: WRONGNESS_ASC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1828,7 +1857,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 18: WRONGNESS_DESC is a valid sortBy", () async {
+    test("Good case 19: WRONGNESS_DESC is a valid sortBy", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1858,7 +1887,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 19: sortBy could be ignored", () async {
+    test("Good case 20: sortBy could be ignored", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1887,7 +1916,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 20: create FieldList without doesReadAnswer", () async {
+    test("Good case 21: create FieldList without doesReadAnswer", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1916,7 +1945,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 21: create FieldList without usageCount", () async {
+    test("Good case 22: create FieldList without usageCount", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1944,7 +1973,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 22: create FieldList without color", () async {
+    test("Good case 23: create FieldList without color", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -1973,7 +2002,7 @@ void main() {
     });
 
     test(
-        "Good case 23: create FieldList when emulationNumberOfQuestions is null",
+        "Good case 24: create FieldList when emulationNumberOfQuestions is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2002,7 +2031,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 24: create FieldList when emulationDays is null", () async {
+    test("Good case 25: create FieldList when emulationDays is null", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -2032,7 +2061,7 @@ void main() {
     });
 
     test(
-        "Good case 25: create FieldList when testsReadingQuestionLetterDuration is null",
+        "Good case 26: create FieldList when testsReadingQuestionLetterDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2061,7 +2090,7 @@ void main() {
     });
 
     test(
-        "Good case 26: create FieldList when testsFindingAnswerDuration is null",
+        "Good case 27: create FieldList when testsFindingAnswerDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2090,7 +2119,7 @@ void main() {
     });
 
     test(
-        "Good case 27: create FieldList when testsTypingAnswerLetterDuration is null",
+        "Good case 28: create FieldList when testsTypingAnswerLetterDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2119,7 +2148,7 @@ void main() {
     });
 
     test(
-        "Good case 28: create FieldList when studyTillCorrectReadingQuestionLetterDuration is null",
+        "Good case 29: create FieldList when studyTillCorrectReadingQuestionLetterDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2144,7 +2173,7 @@ void main() {
     });
 
     test(
-        "Good case 29: create FieldList when studyTillCorrectFindingAnswerDuration is null",
+        "Good case 30: create FieldList when studyTillCorrectFindingAnswerDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2169,7 +2198,7 @@ void main() {
     });
 
     test(
-        "Good case 30: create FieldList when studyTillCorrectTypingAnswerLetterDuration is null",
+        "Good case 31: create FieldList when studyTillCorrectTypingAnswerLetterDuration is null",
         () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
@@ -2193,7 +2222,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 31", () async {
+    test("Good case 32", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -2216,7 +2245,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 32, testsTimeOfAnswerAction could be ignored", () async {
+    test("Good case 33, testsTimeOfAnswerAction could be ignored", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
@@ -2239,7 +2268,7 @@ void main() {
       await fieldListsDao.create(fieldListCompanion);
     });
 
-    test("Good case 33, doesObfuscateQuestion could be ignored", () async {
+    test("Good case 34, doesObfuscateQuestion could be ignored", () async {
       var fieldListCompanion = FieldListsCompanion(
           id: Value(id),
           fieldId: Value(fieldId),
