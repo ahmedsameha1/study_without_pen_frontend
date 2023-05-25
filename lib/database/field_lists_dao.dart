@@ -59,6 +59,16 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     return (select(fieldLists)..where(((tbl) => tbl.id.equals(id))))
         .getSingleOrNull();
   }
+
+  Stream<List<FieldList>> watchByFieldId(String fieldId) {
+    return (select(fieldLists)
+          ..where((tbl) => tbl.fieldId.equals(fieldId))
+          ..orderBy([
+            (tbl) => OrderingTerm(
+                expression: tbl.usageCount, mode: OrderingMode.desc)
+          ]))
+        .watch();
+  }
 }
 
 bool isValidCheckType(int checkType) {
