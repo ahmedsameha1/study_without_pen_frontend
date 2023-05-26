@@ -69,6 +69,13 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
           ]))
         .watch();
   }
+
+  Future<bool> mutate(FieldListsCompanion fieldListsCompanion) {
+    if (!isValid(fieldListsCompanion.fieldId.value)) {
+      throw InvalidDataException("fieldId");
+    }
+    return update(fieldLists).replace(fieldListsCompanion);
+  }
 }
 
 bool isValidCheckType(int checkType) {
