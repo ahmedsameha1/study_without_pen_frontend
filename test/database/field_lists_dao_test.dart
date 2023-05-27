@@ -3035,5 +3035,41 @@ void main() {
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("name"))));
     });
+
+    test("Invalid update: creationAt is in the future", () {
+      withClock(Clock.fixed(DateTime.utc(2020, 1, 1)), () {
+        var fieldList = FieldList(
+            id: id,
+            fieldId: fieldId,
+            name: name,
+            creationAt: DateTime.utc(2023, 1, 1),
+            lastModificationAt: lastModificationAt,
+            languageTag: languageTag,
+            checkType: checkType,
+            sortBy: sortBy,
+            doesReadAnswer: doesReadAnswer,
+            usageCount: usageCount,
+            color: color,
+            emulationNumberOfQuestions: emulationNumberOfQuestions,
+            emulationDays: emulationDays,
+            testsReadingQuestionLetterDuration:
+                testsReadingQuestionLetterDuration,
+            testsFindingAnswerDuration: testsFindingAnswerDuration,
+            testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+            studyTillCorrectReadingQuestionLetterDuration:
+                studyTillCorrectReadingQuestionLetterDuration,
+            studyTillCorrectFindingAnswerDuration:
+                studyTillCorrectFindingAnswerDuration,
+            studyTillCorrectTypingAnswerLetterDuration:
+                studyTillCorrectTypingAnswerLetterDuration,
+            testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+            doesObfuscateQuestion: doesObfuscateQuestion);
+        expect(() async {
+          await fieldListsDao.mutate(fieldList.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException && e.message.contains("creation_at"))));
+      });
+    });
   });
 }
