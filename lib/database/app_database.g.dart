@@ -1050,17 +1050,13 @@ class $FieldListsTable extends FieldLists
   @override
   late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
       'creation_at', aliasedName, false,
-      check: () => creationAt.isSmallerThanValue(clock.now().toUtc()),
-      type: DriftSqlType.dateTime,
-      requiredDuringInsert: true);
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   static const VerificationMeta _lastModificationAtMeta =
       const VerificationMeta('lastModificationAt');
   @override
   late final GeneratedColumn<DateTime> lastModificationAt =
       GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
-          check: () =>
-              lastModificationAt.isSmallerThanValue(clock.now().toUtc()) &
-              lastModificationAt.isBiggerOrEqual(creationAt),
+          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
           type: DriftSqlType.dateTime,
           requiredDuringInsert: true);
   static const VerificationMeta _languageTagMeta =

@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 
 import 'app_database.dart';
@@ -15,6 +16,16 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     }
     if (!isValid(fieldListsCompanion.fieldId.value)) {
       throw InvalidDataException("fieldId");
+    }
+    if (fieldListsCompanion.creationAt.value
+        .toUtc()
+        .isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("creationAt");
+    }
+    if (fieldListsCompanion.lastModificationAt.value
+        .toUtc()
+        .isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("lastModificationAt");
     }
     if (fieldListsCompanion.emulationDays.present &&
         fieldListsCompanion.emulationDays.value != null) {

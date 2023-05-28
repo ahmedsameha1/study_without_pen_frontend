@@ -102,11 +102,9 @@ class FieldLists extends Table {
           .length
           .isBiggerOrEqualValue(FieldLists.MINIMUM_LENGTH_OF_NAME) &
       name.length.isSmallerOrEqualValue(FieldLists.MAXIMUM_LENGTH_OF_NAME))();
-  DateTimeColumn get creationAt =>
-      dateTime().check(creationAt.isSmallerThanValue(clock.now().toUtc()))();
-  DateTimeColumn get lastModificationAt => dateTime().check(
-      lastModificationAt.isSmallerThanValue(clock.now().toUtc()) &
-          lastModificationAt.isBiggerOrEqual(creationAt))();
+  DateTimeColumn get creationAt => dateTime()();
+  DateTimeColumn get lastModificationAt =>
+      dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
   TextColumn get languageTag => text().nullable()();
   IntColumn get checkType => integer()
       .withDefault(Constant(CheckType.NON_STRICT_IGNORE_CASE.index))

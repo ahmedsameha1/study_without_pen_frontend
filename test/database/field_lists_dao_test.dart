@@ -310,7 +310,8 @@ void main() {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
             throwsA(predicate((e) =>
-                e is SqliteException && e.message.contains("creation_at"))));
+                e is InvalidDataException &&
+                e.message.contains("creationAt"))));
       });
     });
 
@@ -346,8 +347,8 @@ void main() {
           await fieldListsDao.create(fieldList.toCompanion(true));
         },
             throwsA(predicate((e) =>
-                e is SqliteException &&
-                e.message.contains("last_modification_at"))));
+                e is InvalidDataException &&
+                e.message.contains("lastModificationAt"))));
       });
     });
 
