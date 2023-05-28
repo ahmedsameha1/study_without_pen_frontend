@@ -90,6 +90,11 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
         .isAfter(clock.now().toUtc())) {
       throw InvalidDataException("creationAt");
     }
+    if (fieldListsCompanion.lastModificationAt.value
+        .toUtc()
+        .isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("lastModificationAt");
+    }
     return update(fieldLists).replace(fieldListsCompanion);
   }
 }
