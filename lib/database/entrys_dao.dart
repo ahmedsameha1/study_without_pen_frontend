@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 
 import 'app_database.dart';
@@ -20,6 +21,14 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     }
     if (!isValid(entrysCompanion.questionId.value)) {
       throw InvalidDataException("questionId");
+    }
+    if (entrysCompanion.creationAt.value.toUtc().isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("creationAt");
+    }
+    if (entrysCompanion.lastModificationAt.value
+        .toUtc()
+        .isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("lastModificationAt");
     }
     if (entrysCompanion.rank.value != Rank.Normal.index) {
       throw InvalidDataException("rank");
@@ -52,6 +61,14 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     }
     if (!isValid(entrysCompanion.questionId.value)) {
       throw InvalidDataException("questionId");
+    }
+    if (entrysCompanion.creationAt.value.toUtc().isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("creationAt");
+    }
+    if (entrysCompanion.lastModificationAt.value
+        .toUtc()
+        .isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("lastModificationAt");
     }
     if (entrysCompanion.rank.value != Rank.Normal.index) {
       throw InvalidDataException("rank");

@@ -1,6 +1,7 @@
 import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
@@ -382,7 +383,8 @@ void main() {
           await entrysDao.create(entry.toCompanion(true));
         },
             throwsA(predicate((e) =>
-                e is SqliteException && e.message.contains("creation_at"))));
+                e is InvalidDataException &&
+                e.message.contains("creationAt"))));
       });
     });
 
@@ -405,8 +407,8 @@ void main() {
           await entrysDao.create(entry.toCompanion(true));
         },
             throwsA(predicate((e) =>
-                e is SqliteException &&
-                e.message.contains("last_modification_at"))));
+                e is InvalidDataException &&
+                e.message.contains("lastModificationAt"))));
       });
     });
 
@@ -700,13 +702,13 @@ void main() {
     });
 
     test("creationAt field should be a DateTime in the past", () {
-      withClock(Clock.fixed(DateTime.utc(2023, 1, 1)), () {
+      withClock(Clock.fixed(DateTime.utc(2020, 3, 3)), () {
         var entry = Entry(
             id: id,
             fieldListId: fieldListId,
             answerId: answerId,
             questionId: questionId,
-            creationAt: DateTime.utc(2024, 1, 1),
+            creationAt: DateTime.utc(2021, 5, 5),
             lastModificationAt: lastModificationAt,
             order: order,
             didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
@@ -718,7 +720,8 @@ void main() {
           await entrysDao.mutate(entry.toCompanion(true));
         },
             throwsA(predicate((e) =>
-                e is SqliteException && e.message.contains("creation_at"))));
+                e is InvalidDataException &&
+                e.message.contains("creationAt"))));
       });
     });
 
@@ -731,6 +734,30 @@ void main() {
             questionId: questionId,
             creationAt: creationAt,
             lastModificationAt: DateTime(2024, 1, 1),
+            order: order,
+            didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+            emulatedCreatedAt: emulatedCreatedAt,
+            rank: rank,
+            askedCount: askedCount,
+            wronglyAnsweredCount: wronglyAnsweredCount);
+        expect(() async {
+          await entrysDao.mutate(entry.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("lastModificationAt"))));
+      });
+    });
+
+    test("Invalid Entry: lastModificationAt is before creationAt", () {
+      withClock(Clock.fixed(DateTime.utc(2023, 1, 1)), () {
+        var entry = Entry(
+            id: id,
+            fieldListId: fieldListId,
+            answerId: answerId,
+            questionId: questionId,
+            creationAt: DateTime.utc(2021, 1, 1),
+            lastModificationAt: DateTime.utc(2020, 1, 1),
             order: order,
             didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
             emulatedCreatedAt: emulatedCreatedAt,

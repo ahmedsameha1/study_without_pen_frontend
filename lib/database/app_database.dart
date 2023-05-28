@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart';
@@ -55,11 +54,9 @@ class Entrys extends Table {
   TextColumn get fieldListId => text()();
   TextColumn get answerId => text()();
   TextColumn get questionId => text()();
-  DateTimeColumn get creationAt =>
-      dateTime().check(creationAt.isSmallerThanValue(clock.now().toUtc()))();
-  DateTimeColumn get lastModificationAt => dateTime().check(
-      lastModificationAt.isSmallerThanValue(clock.now().toUtc()) &
-          lastModificationAt.isBiggerOrEqual(creationAt))();
+  DateTimeColumn get creationAt => dateTime()();
+  DateTimeColumn get lastModificationAt =>
+      dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
   IntColumn get order =>
       integer().check(order.isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
           order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE))();
