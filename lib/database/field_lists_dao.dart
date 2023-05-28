@@ -85,6 +85,11 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     if (!isValid(fieldListsCompanion.fieldId.value)) {
       throw InvalidDataException("fieldId");
     }
+    if (fieldListsCompanion.creationAt.value
+        .toUtc()
+        .isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("creationAt");
+    }
     return update(fieldLists).replace(fieldListsCompanion);
   }
 }

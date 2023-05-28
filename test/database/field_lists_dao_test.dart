@@ -3069,7 +3069,8 @@ void main() {
           await fieldListsDao.mutate(fieldList.toCompanion(true));
         },
             throwsA(predicate((e) =>
-                e is SqliteException && e.message.contains("creation_at"))));
+                e is InvalidDataException &&
+                e.message.contains("creationAt"))));
       });
     });
   });
