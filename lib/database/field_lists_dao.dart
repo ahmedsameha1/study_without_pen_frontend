@@ -95,6 +95,13 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
         .isAfter(clock.now().toUtc())) {
       throw InvalidDataException("lastModificationAt");
     }
+    if (fieldListsCompanion.emulationDays.present &&
+        fieldListsCompanion.emulationDays.value != null) {
+      var regex = RegExp(r"(?=[0-6]{1,7})^0?1?2?3?4?5?6?$");
+      if (!regex.hasMatch(fieldListsCompanion.emulationDays.value!)) {
+        throw InvalidDataException("emulationDays");
+      }
+    }
     return update(fieldLists).replace(fieldListsCompanion);
   }
 }
