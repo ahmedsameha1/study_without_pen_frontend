@@ -3496,8 +3496,7 @@ void main() {
               e.message.contains("emulation_number_of_questions"))));
     });
 
-    test(
-        "Invalid update: emulationDays contains characters other than 0 to 6",
+    test("Invalid update: emulationDays contains characters other than 0 to 6",
         () async {
       var fieldList = FieldList(
           id: id,
@@ -3935,6 +3934,43 @@ void main() {
               e is SqliteException &&
               e.message.contains(
                   "study_till_correct_typing_answer_letter_duration"))));
+    });
+
+    test(
+        "Invalid update: studyTillCorrectReadingQuestionLetterDuration & studyTillCorrectFindingAnswerDuration & studyTillCorrectTypingAnswerLetterDuration is not consistant null wise",
+        () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration: null,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+          doesObfuscateQuestion: doesObfuscateQuestion);
+      expect(() async {
+        await fieldListsDao.mutate(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains(
+                  "study till correct durations is not consistant null wise"))));
     });
   });
 }
