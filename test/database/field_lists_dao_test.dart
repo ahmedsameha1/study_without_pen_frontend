@@ -3972,5 +3972,72 @@ void main() {
               e.message.contains(
                   "study till correct durations is not consistant null wise"))));
     });
+
+    test("Invalid update: testsTimeOfAnswerAction is invalid", () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: TimeOfAnswerAction.MAX.index,
+          doesObfuscateQuestion: doesObfuscateQuestion);
+      expect(() async {
+        await fieldListsDao.mutate(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("tests_time_of_answer_action"))));
+      fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: 0 - 1,
+          doesObfuscateQuestion: doesObfuscateQuestion);
+      expect(() async {
+        await fieldListsDao.mutate(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("tests_time_of_answer_action"))));
+    });
   });
 }
