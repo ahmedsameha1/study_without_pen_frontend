@@ -102,6 +102,17 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
         throw InvalidDataException("emulationDays");
       }
     }
+    if (!((fieldListsCompanion.testsReadingQuestionLetterDuration.value ==
+                null &&
+            fieldListsCompanion.testsFindingAnswerDuration.value == null &&
+            fieldListsCompanion.testsTypingAnswerLetterDuration.value ==
+                null) ||
+        (fieldListsCompanion.testsReadingQuestionLetterDuration.value != null &&
+            fieldListsCompanion.testsFindingAnswerDuration.value != null &&
+            fieldListsCompanion.testsTypingAnswerLetterDuration.value !=
+                null))) {
+      throw InvalidDataException("tests durations is not consistant null wise");
+    }
     return update(fieldLists).replace(fieldListsCompanion);
   }
 }
