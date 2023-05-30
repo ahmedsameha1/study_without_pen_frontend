@@ -4074,5 +4074,129 @@ void main() {
               e is SqliteException &&
               e.message.contains("tests_time_of_answer_action"))));
     });
+
+    test("Good case 1", () async {
+      const newUsageCount = 30;
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: newUsageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+          doesObfuscateQuestion: doesObfuscateQuestion);
+      await fieldListsDao.mutate(fieldList.toCompanion(true));
+      var gottenFieldList = await fieldListsDao.getById(id);
+      gottenFieldList = gottenFieldList!;
+      expect(gottenFieldList.id, id);
+      expect(gottenFieldList.fieldId, fieldId);
+      expect(gottenFieldList.name, name);
+      expect(gottenFieldList.creationAt, creationAt);
+      expect(gottenFieldList.lastModificationAt, lastModificationAt);
+      expect(gottenFieldList.languageTag, languageTag);
+      expect(gottenFieldList.checkType, checkType);
+      expect(gottenFieldList.sortBy, sortBy);
+      expect(gottenFieldList.doesReadAnswer, doesReadAnswer);
+      expect(gottenFieldList.usageCount, newUsageCount);
+      expect(gottenFieldList.color, color);
+      expect(gottenFieldList.emulationNumberOfQuestions,
+          emulationNumberOfQuestions);
+      expect(gottenFieldList.emulationDays, emulationDays);
+      expect(gottenFieldList.testsReadingQuestionLetterDuration,
+          testsReadingQuestionLetterDuration);
+      expect(gottenFieldList.testsFindingAnswerDuration,
+          testsFindingAnswerDuration);
+      expect(gottenFieldList.testsTypingAnswerLetterDuration,
+          testsTypingAnswerLetterDuration);
+      expect(gottenFieldList.studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration);
+      expect(gottenFieldList.studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectFindingAnswerDuration);
+      expect(gottenFieldList.studyTillCorrectTypingAnswerLetterDuration,
+          studyTillCorrectTypingAnswerLetterDuration);
+      expect(gottenFieldList.testsTimeOfAnswerAction, testsTimeOfAnswerAction);
+      expect(gottenFieldList.doesObfuscateQuestion, doesObfuscateQuestion);
+    });
+
+    test("Good case 2", () async {
+      const newName = "newName";
+      const newDoesReadAnwser = false;
+      const newTestsFindingAnswerDuration = 300;
+      var fieldList = FieldList(
+          id: id,
+          fieldId: fieldId,
+          name: newName,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: newDoesReadAnwser,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: newTestsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+          doesObfuscateQuestion: doesObfuscateQuestion);
+      await fieldListsDao.mutate(fieldList.toCompanion(true));
+      var gottenFieldList = await fieldListsDao.getById(id);
+      gottenFieldList = gottenFieldList!;
+      expect(gottenFieldList.id, id);
+      expect(gottenFieldList.fieldId, fieldId);
+      expect(gottenFieldList.name, newName);
+      expect(gottenFieldList.creationAt, creationAt);
+      expect(gottenFieldList.lastModificationAt, lastModificationAt);
+      expect(gottenFieldList.languageTag, languageTag);
+      expect(gottenFieldList.checkType, checkType);
+      expect(gottenFieldList.sortBy, sortBy);
+      expect(gottenFieldList.doesReadAnswer, newDoesReadAnwser);
+      expect(gottenFieldList.usageCount, usageCount);
+      expect(gottenFieldList.color, color);
+      expect(gottenFieldList.emulationNumberOfQuestions,
+          emulationNumberOfQuestions);
+      expect(gottenFieldList.emulationDays, emulationDays);
+      expect(gottenFieldList.testsReadingQuestionLetterDuration,
+          testsReadingQuestionLetterDuration);
+      expect(gottenFieldList.testsFindingAnswerDuration,
+          newTestsFindingAnswerDuration);
+      expect(gottenFieldList.testsTypingAnswerLetterDuration,
+          testsTypingAnswerLetterDuration);
+      expect(gottenFieldList.studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration);
+      expect(gottenFieldList.studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectFindingAnswerDuration);
+      expect(gottenFieldList.studyTillCorrectTypingAnswerLetterDuration,
+          studyTillCorrectTypingAnswerLetterDuration);
+      expect(gottenFieldList.testsTimeOfAnswerAction, testsTimeOfAnswerAction);
+      expect(gottenFieldList.doesObfuscateQuestion, doesObfuscateQuestion);
+    });
   });
 }

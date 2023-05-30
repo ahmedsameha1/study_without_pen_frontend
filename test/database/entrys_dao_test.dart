@@ -857,7 +857,7 @@ void main() {
               e is SqliteException && e.message.contains("asked_count"))));
     });
 
-    test("Invalid update: order is smaller than 0", () {
+    test("Invalid update: askedCount is smaller than 0", () {
       var entry = Entry(
           id: id,
           fieldListId: fieldListId,
