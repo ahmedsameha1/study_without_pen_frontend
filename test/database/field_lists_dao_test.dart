@@ -4199,4 +4199,36 @@ void main() {
       expect(gottenFieldList.doesObfuscateQuestion, doesObfuscateQuestion);
     });
   });
+
+  test("Delete a FieldList", () async {
+    var fieldList = FieldList(
+        id: id,
+        fieldId: fieldId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        languageTag: languageTag,
+        checkType: checkType,
+        sortBy: sortBy,
+        doesReadAnswer: doesReadAnswer,
+        usageCount: usageCount,
+        color: color,
+        emulationNumberOfQuestions: emulationNumberOfQuestions,
+        emulationDays: emulationDays,
+        testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
+        testsFindingAnswerDuration: testsFindingAnswerDuration,
+        testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+        studyTillCorrectReadingQuestionLetterDuration:
+            studyTillCorrectReadingQuestionLetterDuration,
+        studyTillCorrectFindingAnswerDuration:
+            studyTillCorrectFindingAnswerDuration,
+        studyTillCorrectTypingAnswerLetterDuration:
+            studyTillCorrectTypingAnswerLetterDuration,
+        testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+        doesObfuscateQuestion: doesObfuscateQuestion);
+    await fieldListsDao.create(fieldList.toCompanion(true));
+    await fieldListsDao.remove(id);
+    var gottenFieldList = await fieldListsDao.getById(id);
+    expect(gottenFieldList, null);
+  });
 }

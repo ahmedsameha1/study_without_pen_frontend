@@ -133,12 +133,8 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     }
     return update(fieldLists).replace(fieldListsCompanion);
   }
-}
 
-bool isValidCheckType(int checkType) {
-  return checkType >= 0 && checkType < CheckType.MAX.index;
-}
-
-bool isValidSortBy(int sortBy) {
-  return sortBy >= 0 && sortBy < SortBy.MAX.index;
+  remove(String id) {
+    return (delete(fieldLists)..where((tbl) => tbl.id.equals(id))).go();
+  }
 }
