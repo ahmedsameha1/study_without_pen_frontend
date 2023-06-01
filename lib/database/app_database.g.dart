@@ -2147,22 +2147,159 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   }
 }
 
+class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FieldsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => const Uuid().v4());
+  @override
+  List<GeneratedColumn> get $columns => [id];
+  @override
+  String get aliasedName => _alias ?? 'fields';
+  @override
+  String get actualTableName => 'fields';
+  @override
+  VerificationContext validateIntegrity(Insertable<Field> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Field map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Field(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+    );
+  }
+
+  @override
+  $FieldsTable createAlias(String alias) {
+    return $FieldsTable(attachedDatabase, alias);
+  }
+}
+
+class Field extends DataClass implements Insertable<Field> {
+  final String id;
+  const Field({required this.id});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    return map;
+  }
+
+  FieldsCompanion toCompanion(bool nullToAbsent) {
+    return FieldsCompanion(
+      id: Value(id),
+    );
+  }
+
+  factory Field.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Field(
+      id: serializer.fromJson<String>(json['id']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+    };
+  }
+
+  Field copyWith({String? id}) => Field(
+        id: id ?? this.id,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Field(')
+          ..write('id: $id')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Field && other.id == this.id);
+}
+
+class FieldsCompanion extends UpdateCompanion<Field> {
+  final Value<String> id;
+  const FieldsCompanion({
+    this.id = const Value.absent(),
+  });
+  FieldsCompanion.insert({
+    this.id = const Value.absent(),
+  });
+  static Insertable<Field> custom({
+    Expression<String>? id,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+    });
+  }
+
+  FieldsCompanion copyWith({Value<String>? id}) {
+    return FieldsCompanion(
+      id: id ?? this.id,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FieldsCompanion(')
+          ..write('id: $id')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $EntryTextsTable entryTexts = $EntryTextsTable(this);
   late final $QuestionsTable questions = $QuestionsTable(this);
   late final $EntrysTable entrys = $EntrysTable(this);
   late final $FieldListsTable fieldLists = $FieldListsTable(this);
+  late final $FieldsTable fields = $FieldsTable(this);
   late final EntryTextsDao entryTextsDao = EntryTextsDao(this as AppDatabase);
   late final QuestionsDao questionsDao = QuestionsDao(this as AppDatabase);
   late final EntrysDao entrysDao = EntrysDao(this as AppDatabase);
   late final FieldListsDao fieldListsDao = FieldListsDao(this as AppDatabase);
+  late final FieldsDao fieldsDao = FieldsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [entryTexts, questions, entrys, fieldLists];
+      [entryTexts, questions, entrys, fieldLists, fields];
   @override
   DriftDatabaseOptions get options =>
       const DriftDatabaseOptions(storeDateTimeAsText: true);
