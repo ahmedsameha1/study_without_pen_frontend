@@ -160,7 +160,13 @@ class FieldLists extends Table {
 }
 
 class Fields extends Table {
+  static const int MINIMUM_LENGTH_OF_USER_ACCOUNT_ID = 28;
+
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
+  TextColumn get userAccountId => text().check(userAccountId
+      .trim()
+      .length
+      .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID))();
 
   @override
   Set<Column> get primaryKey => {id};

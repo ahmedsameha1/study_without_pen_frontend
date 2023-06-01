@@ -9,6 +9,7 @@ void main() {
   late AppDatabase appDatabase;
   late FieldsDao fieldsDao;
   String id = const Uuid().v4();
+  String userAccountId = "j0kW7TZPcdZBHLsIUvJOFiAI8VN2";
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     fieldsDao = FieldsDao(appDatabase);
@@ -20,7 +21,7 @@ void main() {
 
   group("Create a Field", () {
     test("Invalid Field: id is an invalid UUID v4", () async {
-      var field = Field(id: "wewen");
+      var field = Field(id: "wewen", userAccountId: userAccountId);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -29,8 +30,8 @@ void main() {
     });
 
     test("No Field with the same id", () async {
-      var field1 = Field(id: id);
-      var field2 = Field(id: id);
+      var field1 = Field(id: id, userAccountId: userAccountId);
+      var field2 = Field(id: id, userAccountId: userAccountId);
       expect(() async {
         await fieldsDao.create(field1.toCompanion(true));
         await fieldsDao.create(field2.toCompanion(true));
@@ -39,8 +40,25 @@ void main() {
               (e) => e is SqliteException && e.message.contains("id"))));
     });
 
+    test("Invalid Field: userAccountId is an empty String", () {
+      var field = Field(id: id, userAccountId: "");
+      expect(() async {
+        await fieldsDao.create(field.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("user_account_id"))));
+      field = Field(
+          id: id,
+          userAccountId: " " * Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID);
+      expect(() async {
+        await fieldsDao.create(field.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("user_account_id"))));
+    });
+
     test("Good case 1: create Field without 'id'", () async {
-      var fieldCompanion = FieldsCompanion();
+      var fieldCompanion = FieldsCompanion(userAccountId: Value(userAccountId));
       await fieldsDao.create(fieldCompanion);
     });
   });

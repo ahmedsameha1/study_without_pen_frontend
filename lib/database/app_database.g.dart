@@ -2159,8 +2159,19 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       clientDefault: () => const Uuid().v4());
+  static const VerificationMeta _userAccountIdMeta =
+      const VerificationMeta('userAccountId');
   @override
-  List<GeneratedColumn> get $columns => [id];
+  late final GeneratedColumn<String> userAccountId = GeneratedColumn<String>(
+      'user_account_id', aliasedName, false,
+      check: () => userAccountId
+          .trim()
+          .length
+          .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, userAccountId];
   @override
   String get aliasedName => _alias ?? 'fields';
   @override
@@ -2173,6 +2184,14 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
+    if (data.containsKey('user_account_id')) {
+      context.handle(
+          _userAccountIdMeta,
+          userAccountId.isAcceptableOrUnknown(
+              data['user_account_id']!, _userAccountIdMeta));
+    } else if (isInserting) {
+      context.missing(_userAccountIdMeta);
+    }
     return context;
   }
 
@@ -2184,6 +2203,8 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
     return Field(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      userAccountId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}user_account_id'])!,
     );
   }
 
@@ -2195,17 +2216,20 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
 
 class Field extends DataClass implements Insertable<Field> {
   final String id;
-  const Field({required this.id});
+  final String userAccountId;
+  const Field({required this.id, required this.userAccountId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
+    map['user_account_id'] = Variable<String>(userAccountId);
     return map;
   }
 
   FieldsCompanion toCompanion(bool nullToAbsent) {
     return FieldsCompanion(
       id: Value(id),
+      userAccountId: Value(userAccountId),
     );
   }
 
@@ -2214,6 +2238,7 @@ class Field extends DataClass implements Insertable<Field> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Field(
       id: serializer.fromJson<String>(json['id']),
+      userAccountId: serializer.fromJson<String>(json['userAccountId']),
     );
   }
   @override
@@ -2221,46 +2246,58 @@ class Field extends DataClass implements Insertable<Field> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
+      'userAccountId': serializer.toJson<String>(userAccountId),
     };
   }
 
-  Field copyWith({String? id}) => Field(
+  Field copyWith({String? id, String? userAccountId}) => Field(
         id: id ?? this.id,
+        userAccountId: userAccountId ?? this.userAccountId,
       );
   @override
   String toString() {
     return (StringBuffer('Field(')
-          ..write('id: $id')
+          ..write('id: $id, ')
+          ..write('userAccountId: $userAccountId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode => Object.hash(id, userAccountId);
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || (other is Field && other.id == this.id);
+      identical(this, other) ||
+      (other is Field &&
+          other.id == this.id &&
+          other.userAccountId == this.userAccountId);
 }
 
 class FieldsCompanion extends UpdateCompanion<Field> {
   final Value<String> id;
+  final Value<String> userAccountId;
   const FieldsCompanion({
     this.id = const Value.absent(),
+    this.userAccountId = const Value.absent(),
   });
   FieldsCompanion.insert({
     this.id = const Value.absent(),
-  });
+    required String userAccountId,
+  }) : userAccountId = Value(userAccountId);
   static Insertable<Field> custom({
     Expression<String>? id,
+    Expression<String>? userAccountId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (userAccountId != null) 'user_account_id': userAccountId,
     });
   }
 
-  FieldsCompanion copyWith({Value<String>? id}) {
+  FieldsCompanion copyWith({Value<String>? id, Value<String>? userAccountId}) {
     return FieldsCompanion(
       id: id ?? this.id,
+      userAccountId: userAccountId ?? this.userAccountId,
     );
   }
 
@@ -2270,13 +2307,17 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     if (id.present) {
       map['id'] = Variable<String>(id.value);
     }
+    if (userAccountId.present) {
+      map['user_account_id'] = Variable<String>(userAccountId.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('FieldsCompanion(')
-          ..write('id: $id')
+          ..write('id: $id, ')
+          ..write('userAccountId: $userAccountId')
           ..write(')'))
         .toString();
   }
