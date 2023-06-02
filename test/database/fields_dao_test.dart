@@ -13,6 +13,7 @@ void main() {
   String userAccountId = "j0kW7TZPcdZBHLsIUvJOFiAI8VN2";
   String name = "name";
   DateTime creationAt = DateTime(2020, 1, 1);
+  DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -29,7 +30,8 @@ void main() {
           id: "wewen",
           userAccountId: userAccountId,
           name: name,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -42,12 +44,14 @@ void main() {
           id: id,
           userAccountId: userAccountId,
           name: name,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       var field2 = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await fieldsDao.create(field1.toCompanion(true));
         await fieldsDao.create(field2.toCompanion(true));
@@ -57,8 +61,12 @@ void main() {
     });
 
     test("Invalid Field: userAccountId is an empty String", () {
-      var field =
-          Field(id: id, userAccountId: "", name: name, creationAt: creationAt);
+      var field = Field(
+          id: id,
+          userAccountId: "",
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -68,7 +76,8 @@ void main() {
           id: id,
           userAccountId: " " * Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID,
           name: name,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -83,7 +92,8 @@ void main() {
           id: id,
           userAccountId: userAccountId,
           name: "",
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -93,7 +103,8 @@ void main() {
           id: id,
           userAccountId: userAccountId,
           name: " ",
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -108,7 +119,8 @@ void main() {
           id: id,
           userAccountId: userAccountId,
           name: "s" * (Fields.MAXIMUM_LENGTH_OF_NAME + 1),
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -122,7 +134,8 @@ void main() {
             id: id,
             userAccountId: userAccountId,
             name: name,
-            creationAt: DateTime(2020, 2, 2));
+            creationAt: DateTime(2020, 2, 2),
+            lastModificationAt: lastModificationAt);
         expect(() async {
           await fieldsDao.create(field.toCompanion(true));
         },
@@ -132,11 +145,46 @@ void main() {
       });
     });
 
+    test("Invalid Field: lastModificationAt is in the future", () async {
+      withClock(Clock.fixed(DateTime(2020, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: DateTime(2020, 3, 3));
+        expect(() async {
+          await fieldsDao.create(field.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("lastModificationAt"))));
+      });
+    });
+
+    test("Invalid Field: lastModificationAt is before creationAt", () async {
+      withClock(Clock.fixed(DateTime(2020, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: DateTime(2019, 3, 3));
+        expect(() async {
+          await fieldsDao.create(field.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException &&
+                e.message.contains("last_modification_at"))));
+      });
+    });
+
     test("Good case 1: create Field without 'id'", () async {
       var fieldCompanion = FieldsCompanion(
           userAccountId: Value(userAccountId),
           name: Value(name),
-          creationAt: Value(creationAt));
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt));
       await fieldsDao.create(fieldCompanion);
     });
   });

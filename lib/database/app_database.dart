@@ -173,6 +173,8 @@ class Fields extends Table {
       name.trim().length.isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_NAME) &
           name.length.isSmallerOrEqualValue(Fields.MAXIMUM_LENGTH_OF_NAME))();
   DateTimeColumn get creationAt => dateTime()();
+  DateTimeColumn get lastModificationAt =>
+      dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
 
   @override
   Set<Column> get primaryKey => {id};

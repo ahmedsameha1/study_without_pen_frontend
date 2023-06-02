@@ -14,6 +14,9 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
     if (fieldsCompanion.creationAt.value.toUtc().isAfter(clock.now())) {
       throw InvalidDataException("creationAt");
     }
+    if (fieldsCompanion.lastModificationAt.value.toUtc().isAfter(clock.now())) {
+      throw InvalidDataException("lastModificationAt");
+    }
     return into(fields).insert(fieldsCompanion);
   }
 }
