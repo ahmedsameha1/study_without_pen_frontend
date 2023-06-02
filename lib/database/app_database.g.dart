@@ -2170,8 +2170,20 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
           .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  List<GeneratedColumn> get $columns => [id, userAccountId];
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      check: () =>
+          name
+              .trim()
+              .length
+              .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_NAME) &
+          name.length.isSmallerOrEqualValue(Fields.MAXIMUM_LENGTH_OF_NAME),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, userAccountId, name];
   @override
   String get aliasedName => _alias ?? 'fields';
   @override
@@ -2192,6 +2204,12 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
     } else if (isInserting) {
       context.missing(_userAccountIdMeta);
     }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
     return context;
   }
 
@@ -2205,6 +2223,8 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       userAccountId: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}user_account_id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
     );
   }
 
@@ -2217,12 +2237,15 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
 class Field extends DataClass implements Insertable<Field> {
   final String id;
   final String userAccountId;
-  const Field({required this.id, required this.userAccountId});
+  final String name;
+  const Field(
+      {required this.id, required this.userAccountId, required this.name});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['user_account_id'] = Variable<String>(userAccountId);
+    map['name'] = Variable<String>(name);
     return map;
   }
 
@@ -2230,6 +2253,7 @@ class Field extends DataClass implements Insertable<Field> {
     return FieldsCompanion(
       id: Value(id),
       userAccountId: Value(userAccountId),
+      name: Value(name),
     );
   }
 
@@ -2239,6 +2263,7 @@ class Field extends DataClass implements Insertable<Field> {
     return Field(
       id: serializer.fromJson<String>(json['id']),
       userAccountId: serializer.fromJson<String>(json['userAccountId']),
+      name: serializer.fromJson<String>(json['name']),
     );
   }
   @override
@@ -2247,57 +2272,69 @@ class Field extends DataClass implements Insertable<Field> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'userAccountId': serializer.toJson<String>(userAccountId),
+      'name': serializer.toJson<String>(name),
     };
   }
 
-  Field copyWith({String? id, String? userAccountId}) => Field(
+  Field copyWith({String? id, String? userAccountId, String? name}) => Field(
         id: id ?? this.id,
         userAccountId: userAccountId ?? this.userAccountId,
+        name: name ?? this.name,
       );
   @override
   String toString() {
     return (StringBuffer('Field(')
           ..write('id: $id, ')
-          ..write('userAccountId: $userAccountId')
+          ..write('userAccountId: $userAccountId, ')
+          ..write('name: $name')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, userAccountId);
+  int get hashCode => Object.hash(id, userAccountId, name);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Field &&
           other.id == this.id &&
-          other.userAccountId == this.userAccountId);
+          other.userAccountId == this.userAccountId &&
+          other.name == this.name);
 }
 
 class FieldsCompanion extends UpdateCompanion<Field> {
   final Value<String> id;
   final Value<String> userAccountId;
+  final Value<String> name;
   const FieldsCompanion({
     this.id = const Value.absent(),
     this.userAccountId = const Value.absent(),
+    this.name = const Value.absent(),
   });
   FieldsCompanion.insert({
     this.id = const Value.absent(),
     required String userAccountId,
-  }) : userAccountId = Value(userAccountId);
+    required String name,
+  })  : userAccountId = Value(userAccountId),
+        name = Value(name);
   static Insertable<Field> custom({
     Expression<String>? id,
     Expression<String>? userAccountId,
+    Expression<String>? name,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (userAccountId != null) 'user_account_id': userAccountId,
+      if (name != null) 'name': name,
     });
   }
 
-  FieldsCompanion copyWith({Value<String>? id, Value<String>? userAccountId}) {
+  FieldsCompanion copyWith(
+      {Value<String>? id, Value<String>? userAccountId, Value<String>? name}) {
     return FieldsCompanion(
       id: id ?? this.id,
       userAccountId: userAccountId ?? this.userAccountId,
+      name: name ?? this.name,
     );
   }
 
@@ -2310,6 +2347,9 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     if (userAccountId.present) {
       map['user_account_id'] = Variable<String>(userAccountId.value);
     }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
     return map;
   }
 
@@ -2317,7 +2357,8 @@ class FieldsCompanion extends UpdateCompanion<Field> {
   String toString() {
     return (StringBuffer('FieldsCompanion(')
           ..write('id: $id, ')
-          ..write('userAccountId: $userAccountId')
+          ..write('userAccountId: $userAccountId, ')
+          ..write('name: $name')
           ..write(')'))
         .toString();
   }
