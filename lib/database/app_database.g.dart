@@ -2182,8 +2182,14 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
           name.length.isSmallerOrEqualValue(Fields.MAXIMUM_LENGTH_OF_NAME),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
+  static const VerificationMeta _creationAtMeta =
+      const VerificationMeta('creationAt');
   @override
-  List<GeneratedColumn> get $columns => [id, userAccountId, name];
+  late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
+      'creation_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, userAccountId, name, creationAt];
   @override
   String get aliasedName => _alias ?? 'fields';
   @override
@@ -2210,6 +2216,14 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
+    if (data.containsKey('creation_at')) {
+      context.handle(
+          _creationAtMeta,
+          creationAt.isAcceptableOrUnknown(
+              data['creation_at']!, _creationAtMeta));
+    } else if (isInserting) {
+      context.missing(_creationAtMeta);
+    }
     return context;
   }
 
@@ -2225,6 +2239,8 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
           DriftSqlType.string, data['${effectivePrefix}user_account_id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      creationAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
     );
   }
 
@@ -2238,14 +2254,19 @@ class Field extends DataClass implements Insertable<Field> {
   final String id;
   final String userAccountId;
   final String name;
+  final DateTime creationAt;
   const Field(
-      {required this.id, required this.userAccountId, required this.name});
+      {required this.id,
+      required this.userAccountId,
+      required this.name,
+      required this.creationAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['user_account_id'] = Variable<String>(userAccountId);
     map['name'] = Variable<String>(name);
+    map['creation_at'] = Variable<DateTime>(creationAt);
     return map;
   }
 
@@ -2254,6 +2275,7 @@ class Field extends DataClass implements Insertable<Field> {
       id: Value(id),
       userAccountId: Value(userAccountId),
       name: Value(name),
+      creationAt: Value(creationAt),
     );
   }
 
@@ -2264,6 +2286,7 @@ class Field extends DataClass implements Insertable<Field> {
       id: serializer.fromJson<String>(json['id']),
       userAccountId: serializer.fromJson<String>(json['userAccountId']),
       name: serializer.fromJson<String>(json['name']),
+      creationAt: serializer.fromJson<DateTime>(json['creationAt']),
     );
   }
   @override
@@ -2273,68 +2296,87 @@ class Field extends DataClass implements Insertable<Field> {
       'id': serializer.toJson<String>(id),
       'userAccountId': serializer.toJson<String>(userAccountId),
       'name': serializer.toJson<String>(name),
+      'creationAt': serializer.toJson<DateTime>(creationAt),
     };
   }
 
-  Field copyWith({String? id, String? userAccountId, String? name}) => Field(
+  Field copyWith(
+          {String? id,
+          String? userAccountId,
+          String? name,
+          DateTime? creationAt}) =>
+      Field(
         id: id ?? this.id,
         userAccountId: userAccountId ?? this.userAccountId,
         name: name ?? this.name,
+        creationAt: creationAt ?? this.creationAt,
       );
   @override
   String toString() {
     return (StringBuffer('Field(')
           ..write('id: $id, ')
           ..write('userAccountId: $userAccountId, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('creationAt: $creationAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, userAccountId, name);
+  int get hashCode => Object.hash(id, userAccountId, name, creationAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Field &&
           other.id == this.id &&
           other.userAccountId == this.userAccountId &&
-          other.name == this.name);
+          other.name == this.name &&
+          other.creationAt == this.creationAt);
 }
 
 class FieldsCompanion extends UpdateCompanion<Field> {
   final Value<String> id;
   final Value<String> userAccountId;
   final Value<String> name;
+  final Value<DateTime> creationAt;
   const FieldsCompanion({
     this.id = const Value.absent(),
     this.userAccountId = const Value.absent(),
     this.name = const Value.absent(),
+    this.creationAt = const Value.absent(),
   });
   FieldsCompanion.insert({
     this.id = const Value.absent(),
     required String userAccountId,
     required String name,
+    required DateTime creationAt,
   })  : userAccountId = Value(userAccountId),
-        name = Value(name);
+        name = Value(name),
+        creationAt = Value(creationAt);
   static Insertable<Field> custom({
     Expression<String>? id,
     Expression<String>? userAccountId,
     Expression<String>? name,
+    Expression<DateTime>? creationAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (userAccountId != null) 'user_account_id': userAccountId,
       if (name != null) 'name': name,
+      if (creationAt != null) 'creation_at': creationAt,
     });
   }
 
   FieldsCompanion copyWith(
-      {Value<String>? id, Value<String>? userAccountId, Value<String>? name}) {
+      {Value<String>? id,
+      Value<String>? userAccountId,
+      Value<String>? name,
+      Value<DateTime>? creationAt}) {
     return FieldsCompanion(
       id: id ?? this.id,
       userAccountId: userAccountId ?? this.userAccountId,
       name: name ?? this.name,
+      creationAt: creationAt ?? this.creationAt,
     );
   }
 
@@ -2350,6 +2392,9 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (creationAt.present) {
+      map['creation_at'] = Variable<DateTime>(creationAt.value);
+    }
     return map;
   }
 
@@ -2358,7 +2403,8 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     return (StringBuffer('FieldsCompanion(')
           ..write('id: $id, ')
           ..write('userAccountId: $userAccountId, ')
-          ..write('name: $name')
+          ..write('name: $name, ')
+          ..write('creationAt: $creationAt')
           ..write(')'))
         .toString();
   }

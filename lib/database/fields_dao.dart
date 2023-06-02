@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 
@@ -9,6 +10,9 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
   create(FieldsCompanion fieldsCompanion) {
     if (fieldsCompanion.id.present && !isValid(fieldsCompanion.id.value)) {
       throw InvalidDataException("id");
+    }
+    if (fieldsCompanion.creationAt.value.toUtc().isAfter(clock.now())) {
+      throw InvalidDataException("creationAt");
     }
     return into(fields).insert(fieldsCompanion);
   }

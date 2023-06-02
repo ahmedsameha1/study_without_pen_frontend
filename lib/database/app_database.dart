@@ -172,6 +172,7 @@ class Fields extends Table {
   TextColumn get name => text().check(
       name.trim().length.isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_NAME) &
           name.length.isSmallerOrEqualValue(Fields.MAXIMUM_LENGTH_OF_NAME))();
+  DateTimeColumn get creationAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {id};
