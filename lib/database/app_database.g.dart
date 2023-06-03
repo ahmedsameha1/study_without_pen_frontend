@@ -2196,9 +2196,20 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
           check: () => lastModificationAt.isBiggerOrEqual(creationAt),
           type: DriftSqlType.dateTime,
           requiredDuringInsert: true);
+  static const VerificationMeta _usageCountMeta =
+      const VerificationMeta('usageCount');
+  @override
+  late final GeneratedColumn<int> usageCount = GeneratedColumn<int>(
+      'usage_count', aliasedName, false,
+      check: () =>
+          usageCount.isBiggerOrEqualValue(Fields.MINIMUM_USAGE_COUNT) &
+          usageCount.isSmallerOrEqualValue(Fields.MAXIMUM_USAGE_COUNT),
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(Fields.DEFAULT_USAGE_COUNT));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, userAccountId, name, creationAt, lastModificationAt];
+      [id, userAccountId, name, creationAt, lastModificationAt, usageCount];
   @override
   String get aliasedName => _alias ?? 'fields';
   @override
@@ -2241,6 +2252,12 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
     } else if (isInserting) {
       context.missing(_lastModificationAtMeta);
     }
+    if (data.containsKey('usage_count')) {
+      context.handle(
+          _usageCountMeta,
+          usageCount.isAcceptableOrUnknown(
+              data['usage_count']!, _usageCountMeta));
+    }
     return context;
   }
 
@@ -2261,6 +2278,8 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
       lastModificationAt: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime,
           data['${effectivePrefix}last_modification_at'])!,
+      usageCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}usage_count'])!,
     );
   }
 
@@ -2276,12 +2295,14 @@ class Field extends DataClass implements Insertable<Field> {
   final String name;
   final DateTime creationAt;
   final DateTime lastModificationAt;
+  final int usageCount;
   const Field(
       {required this.id,
       required this.userAccountId,
       required this.name,
       required this.creationAt,
-      required this.lastModificationAt});
+      required this.lastModificationAt,
+      required this.usageCount});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2290,6 +2311,7 @@ class Field extends DataClass implements Insertable<Field> {
     map['name'] = Variable<String>(name);
     map['creation_at'] = Variable<DateTime>(creationAt);
     map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
+    map['usage_count'] = Variable<int>(usageCount);
     return map;
   }
 
@@ -2300,6 +2322,7 @@ class Field extends DataClass implements Insertable<Field> {
       name: Value(name),
       creationAt: Value(creationAt),
       lastModificationAt: Value(lastModificationAt),
+      usageCount: Value(usageCount),
     );
   }
 
@@ -2313,6 +2336,7 @@ class Field extends DataClass implements Insertable<Field> {
       creationAt: serializer.fromJson<DateTime>(json['creationAt']),
       lastModificationAt:
           serializer.fromJson<DateTime>(json['lastModificationAt']),
+      usageCount: serializer.fromJson<int>(json['usageCount']),
     );
   }
   @override
@@ -2324,6 +2348,7 @@ class Field extends DataClass implements Insertable<Field> {
       'name': serializer.toJson<String>(name),
       'creationAt': serializer.toJson<DateTime>(creationAt),
       'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
+      'usageCount': serializer.toJson<int>(usageCount),
     };
   }
 
@@ -2332,13 +2357,15 @@ class Field extends DataClass implements Insertable<Field> {
           String? userAccountId,
           String? name,
           DateTime? creationAt,
-          DateTime? lastModificationAt}) =>
+          DateTime? lastModificationAt,
+          int? usageCount}) =>
       Field(
         id: id ?? this.id,
         userAccountId: userAccountId ?? this.userAccountId,
         name: name ?? this.name,
         creationAt: creationAt ?? this.creationAt,
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+        usageCount: usageCount ?? this.usageCount,
       );
   @override
   String toString() {
@@ -2347,14 +2374,15 @@ class Field extends DataClass implements Insertable<Field> {
           ..write('userAccountId: $userAccountId, ')
           ..write('name: $name, ')
           ..write('creationAt: $creationAt, ')
-          ..write('lastModificationAt: $lastModificationAt')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('usageCount: $usageCount')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, userAccountId, name, creationAt, lastModificationAt);
+  int get hashCode => Object.hash(
+      id, userAccountId, name, creationAt, lastModificationAt, usageCount);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2363,7 +2391,8 @@ class Field extends DataClass implements Insertable<Field> {
           other.userAccountId == this.userAccountId &&
           other.name == this.name &&
           other.creationAt == this.creationAt &&
-          other.lastModificationAt == this.lastModificationAt);
+          other.lastModificationAt == this.lastModificationAt &&
+          other.usageCount == this.usageCount);
 }
 
 class FieldsCompanion extends UpdateCompanion<Field> {
@@ -2372,12 +2401,14 @@ class FieldsCompanion extends UpdateCompanion<Field> {
   final Value<String> name;
   final Value<DateTime> creationAt;
   final Value<DateTime> lastModificationAt;
+  final Value<int> usageCount;
   const FieldsCompanion({
     this.id = const Value.absent(),
     this.userAccountId = const Value.absent(),
     this.name = const Value.absent(),
     this.creationAt = const Value.absent(),
     this.lastModificationAt = const Value.absent(),
+    this.usageCount = const Value.absent(),
   });
   FieldsCompanion.insert({
     this.id = const Value.absent(),
@@ -2385,6 +2416,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     required String name,
     required DateTime creationAt,
     required DateTime lastModificationAt,
+    this.usageCount = const Value.absent(),
   })  : userAccountId = Value(userAccountId),
         name = Value(name),
         creationAt = Value(creationAt),
@@ -2395,6 +2427,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     Expression<String>? name,
     Expression<DateTime>? creationAt,
     Expression<DateTime>? lastModificationAt,
+    Expression<int>? usageCount,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2403,6 +2436,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
       if (creationAt != null) 'creation_at': creationAt,
       if (lastModificationAt != null)
         'last_modification_at': lastModificationAt,
+      if (usageCount != null) 'usage_count': usageCount,
     });
   }
 
@@ -2411,13 +2445,15 @@ class FieldsCompanion extends UpdateCompanion<Field> {
       Value<String>? userAccountId,
       Value<String>? name,
       Value<DateTime>? creationAt,
-      Value<DateTime>? lastModificationAt}) {
+      Value<DateTime>? lastModificationAt,
+      Value<int>? usageCount}) {
     return FieldsCompanion(
       id: id ?? this.id,
       userAccountId: userAccountId ?? this.userAccountId,
       name: name ?? this.name,
       creationAt: creationAt ?? this.creationAt,
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+      usageCount: usageCount ?? this.usageCount,
     );
   }
 
@@ -2440,6 +2476,9 @@ class FieldsCompanion extends UpdateCompanion<Field> {
       map['last_modification_at'] =
           Variable<DateTime>(lastModificationAt.value);
     }
+    if (usageCount.present) {
+      map['usage_count'] = Variable<int>(usageCount.value);
+    }
     return map;
   }
 
@@ -2450,7 +2489,8 @@ class FieldsCompanion extends UpdateCompanion<Field> {
           ..write('userAccountId: $userAccountId, ')
           ..write('name: $name, ')
           ..write('creationAt: $creationAt, ')
-          ..write('lastModificationAt: $lastModificationAt')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('usageCount: $usageCount')
           ..write(')'))
         .toString();
   }

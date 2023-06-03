@@ -14,6 +14,7 @@ void main() {
   String name = "name";
   DateTime creationAt = DateTime(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
+  int usageCount = 9;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -31,7 +32,8 @@ void main() {
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -45,13 +47,15 @@ void main() {
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount);
       var field2 = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount);
       expect(() async {
         await fieldsDao.create(field1.toCompanion(true));
         await fieldsDao.create(field2.toCompanion(true));
@@ -66,7 +70,8 @@ void main() {
           userAccountId: "",
           name: name,
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -77,7 +82,8 @@ void main() {
           userAccountId: " " * Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID,
           name: name,
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -93,7 +99,8 @@ void main() {
           userAccountId: userAccountId,
           name: "",
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -104,7 +111,8 @@ void main() {
           userAccountId: userAccountId,
           name: " ",
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -120,7 +128,8 @@ void main() {
           userAccountId: userAccountId,
           name: "s" * (Fields.MAXIMUM_LENGTH_OF_NAME + 1),
           creationAt: creationAt,
-          lastModificationAt: lastModificationAt);
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -135,7 +144,8 @@ void main() {
             userAccountId: userAccountId,
             name: name,
             creationAt: DateTime(2020, 2, 2),
-            lastModificationAt: lastModificationAt);
+            lastModificationAt: lastModificationAt,
+            usageCount: usageCount);
         expect(() async {
           await fieldsDao.create(field.toCompanion(true));
         },
@@ -152,7 +162,8 @@ void main() {
             userAccountId: userAccountId,
             name: name,
             creationAt: creationAt,
-            lastModificationAt: DateTime(2020, 3, 3));
+            lastModificationAt: DateTime(2020, 3, 3),
+            usageCount: usageCount);
         expect(() async {
           await fieldsDao.create(field.toCompanion(true));
         },
@@ -169,7 +180,8 @@ void main() {
             userAccountId: userAccountId,
             name: name,
             creationAt: creationAt,
-            lastModificationAt: DateTime(2019, 3, 3));
+            lastModificationAt: DateTime(2019, 3, 3),
+            usageCount: usageCount);
         expect(() async {
           await fieldsDao.create(field.toCompanion(true));
         },
@@ -179,8 +191,57 @@ void main() {
       });
     });
 
+    test(
+        "Invalid Field: usageCount is smaller than ${Fields.MINIMUM_USAGE_COUNT}",
+        () async {
+      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            usageCount: Fields.MINIMUM_USAGE_COUNT - 1);
+        expect(() async {
+          await fieldsDao.create(field.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException && e.message.contains("usage_count"))));
+      });
+    });
+
+    test(
+        "Invalid Field: usageCount is bigger than ${Fields.MAXIMUM_USAGE_COUNT}",
+        () async {
+      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            usageCount: Fields.MAXIMUM_USAGE_COUNT + 1);
+        expect(() async {
+          await fieldsDao.create(field.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException && e.message.contains("usage_count"))));
+      });
+    });
+
     test("Good case 1: create Field without 'id'", () async {
       var fieldCompanion = FieldsCompanion(
+          userAccountId: Value(userAccountId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          usageCount: Value(usageCount));
+      await fieldsDao.create(fieldCompanion);
+    });
+
+    test("Good case 2: create Field without usageCount", () async {
+      var fieldCompanion = FieldsCompanion(
+          id: Value(id),
           userAccountId: Value(userAccountId),
           name: Value(name),
           creationAt: Value(creationAt),

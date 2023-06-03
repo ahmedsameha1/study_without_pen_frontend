@@ -163,6 +163,9 @@ class Fields extends Table {
   static const int MINIMUM_LENGTH_OF_USER_ACCOUNT_ID = 28;
   static const int MINIMUM_LENGTH_OF_NAME = 1;
   static const int MAXIMUM_LENGTH_OF_NAME = 64;
+  static const int MINIMUM_USAGE_COUNT = 0;
+  static const int MAXIMUM_USAGE_COUNT = 0xffffffff;
+  static const int DEFAULT_USAGE_COUNT = 0;
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get userAccountId => text().check(userAccountId
@@ -175,6 +178,10 @@ class Fields extends Table {
   DateTimeColumn get creationAt => dateTime()();
   DateTimeColumn get lastModificationAt =>
       dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
+  IntColumn get usageCount => integer()
+      .withDefault(Constant(Fields.DEFAULT_USAGE_COUNT))
+      .check(usageCount.isBiggerOrEqualValue(Fields.MINIMUM_USAGE_COUNT) &
+          usageCount.isSmallerOrEqualValue(Fields.MAXIMUM_USAGE_COUNT))();
 
   @override
   Set<Column> get primaryKey => {id};
