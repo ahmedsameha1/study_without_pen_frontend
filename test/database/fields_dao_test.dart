@@ -15,6 +15,7 @@ void main() {
   DateTime creationAt = DateTime(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
   int usageCount = 9;
+  int color = 0xff55ee11;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -33,7 +34,8 @@ void main() {
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          usageCount: usageCount);
+          usageCount: usageCount,
+          color: color);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -48,14 +50,16 @@ void main() {
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          usageCount: usageCount);
+          usageCount: usageCount,
+          color: color);
       var field2 = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          usageCount: usageCount);
+          usageCount: usageCount,
+          color: color);
       expect(() async {
         await fieldsDao.create(field1.toCompanion(true));
         await fieldsDao.create(field2.toCompanion(true));
@@ -71,7 +75,8 @@ void main() {
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          usageCount: usageCount);
+          usageCount: usageCount,
+          color: color);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -83,7 +88,8 @@ void main() {
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          usageCount: usageCount);
+          usageCount: usageCount,
+          color: color);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -100,7 +106,8 @@ void main() {
           name: "",
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          usageCount: usageCount);
+          usageCount: usageCount,
+          color: color);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -112,7 +119,8 @@ void main() {
           name: " ",
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          usageCount: usageCount);
+          usageCount: usageCount,
+          color: color);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -129,7 +137,8 @@ void main() {
           name: "s" * (Fields.MAXIMUM_LENGTH_OF_NAME + 1),
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
-          usageCount: usageCount);
+          usageCount: usageCount,
+          color: color);
       expect(() async {
         await fieldsDao.create(field.toCompanion(true));
       },
@@ -145,7 +154,8 @@ void main() {
             name: name,
             creationAt: DateTime(2020, 2, 2),
             lastModificationAt: lastModificationAt,
-            usageCount: usageCount);
+            usageCount: usageCount,
+            color: color);
         expect(() async {
           await fieldsDao.create(field.toCompanion(true));
         },
@@ -163,7 +173,8 @@ void main() {
             name: name,
             creationAt: creationAt,
             lastModificationAt: DateTime(2020, 3, 3),
-            usageCount: usageCount);
+            usageCount: usageCount,
+            color: color);
         expect(() async {
           await fieldsDao.create(field.toCompanion(true));
         },
@@ -181,7 +192,8 @@ void main() {
             name: name,
             creationAt: creationAt,
             lastModificationAt: DateTime(2019, 3, 3),
-            usageCount: usageCount);
+            usageCount: usageCount,
+            color: color);
         expect(() async {
           await fieldsDao.create(field.toCompanion(true));
         },
@@ -201,7 +213,8 @@ void main() {
             name: name,
             creationAt: creationAt,
             lastModificationAt: lastModificationAt,
-            usageCount: Fields.MINIMUM_USAGE_COUNT - 1);
+            usageCount: Fields.MINIMUM_USAGE_COUNT - 1,
+            color: color);
         expect(() async {
           await fieldsDao.create(field.toCompanion(true));
         },
@@ -220,12 +233,51 @@ void main() {
             name: name,
             creationAt: creationAt,
             lastModificationAt: lastModificationAt,
-            usageCount: Fields.MAXIMUM_USAGE_COUNT + 1);
+            usageCount: Fields.MAXIMUM_USAGE_COUNT + 1,
+            color: color);
         expect(() async {
           await fieldsDao.create(field.toCompanion(true));
         },
             throwsA(predicate((e) =>
                 e is SqliteException && e.message.contains("usage_count"))));
+      });
+    });
+
+    test("Invalid Field: color is smaller than ${Fields.MINIMUM_COLOR}",
+        () async {
+      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            usageCount: usageCount,
+            color: Fields.MINIMUM_COLOR - 1);
+        expect(() async {
+          await fieldsDao.create(field.toCompanion(true));
+        },
+            throwsA(predicate(
+                (e) => e is SqliteException && e.message.contains("color"))));
+      });
+    });
+
+    test("Invalid Field: color is bigger than ${Fields.MAXIMUM_COLOR}",
+        () async {
+      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            usageCount: usageCount,
+            color: Fields.MAXIMUM_COLOR + 1);
+        expect(() async {
+          await fieldsDao.create(field.toCompanion(true));
+        },
+            throwsA(predicate(
+                (e) => e is SqliteException && e.message.contains("color"))));
       });
     });
 
@@ -235,7 +287,8 @@ void main() {
           name: Value(name),
           creationAt: Value(creationAt),
           lastModificationAt: Value(lastModificationAt),
-          usageCount: Value(usageCount));
+          usageCount: Value(usageCount),
+          color: Value(color));
       await fieldsDao.create(fieldCompanion);
     });
 
@@ -245,7 +298,19 @@ void main() {
           userAccountId: Value(userAccountId),
           name: Value(name),
           creationAt: Value(creationAt),
-          lastModificationAt: Value(lastModificationAt));
+          lastModificationAt: Value(lastModificationAt),
+          color: Value(color));
+      await fieldsDao.create(fieldCompanion);
+    });
+
+    test("Good case 3: create Field without color", () async {
+      var fieldCompanion = FieldsCompanion(
+          id: Value(id),
+          userAccountId: Value(userAccountId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          usageCount: Value(usageCount));
       await fieldsDao.create(fieldCompanion);
     });
   });

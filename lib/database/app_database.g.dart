@@ -2207,9 +2207,26 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(Fields.DEFAULT_USAGE_COUNT));
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, userAccountId, name, creationAt, lastModificationAt, usageCount];
+  late final GeneratedColumn<int> color = GeneratedColumn<int>(
+      'color', aliasedName, false,
+      check: () =>
+          color.isBiggerOrEqualValue(Fields.MINIMUM_COLOR) &
+          color.isSmallerOrEqualValue(Fields.MAXIMUM_COLOR),
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(Fields.DEFAULT_COLOR));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        userAccountId,
+        name,
+        creationAt,
+        lastModificationAt,
+        usageCount,
+        color
+      ];
   @override
   String get aliasedName => _alias ?? 'fields';
   @override
@@ -2258,6 +2275,10 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
           usageCount.isAcceptableOrUnknown(
               data['usage_count']!, _usageCountMeta));
     }
+    if (data.containsKey('color')) {
+      context.handle(
+          _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
+    }
     return context;
   }
 
@@ -2280,6 +2301,8 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
           data['${effectivePrefix}last_modification_at'])!,
       usageCount: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}usage_count'])!,
+      color: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}color'])!,
     );
   }
 
@@ -2296,13 +2319,15 @@ class Field extends DataClass implements Insertable<Field> {
   final DateTime creationAt;
   final DateTime lastModificationAt;
   final int usageCount;
+  final int color;
   const Field(
       {required this.id,
       required this.userAccountId,
       required this.name,
       required this.creationAt,
       required this.lastModificationAt,
-      required this.usageCount});
+      required this.usageCount,
+      required this.color});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2312,6 +2337,7 @@ class Field extends DataClass implements Insertable<Field> {
     map['creation_at'] = Variable<DateTime>(creationAt);
     map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
     map['usage_count'] = Variable<int>(usageCount);
+    map['color'] = Variable<int>(color);
     return map;
   }
 
@@ -2323,6 +2349,7 @@ class Field extends DataClass implements Insertable<Field> {
       creationAt: Value(creationAt),
       lastModificationAt: Value(lastModificationAt),
       usageCount: Value(usageCount),
+      color: Value(color),
     );
   }
 
@@ -2337,6 +2364,7 @@ class Field extends DataClass implements Insertable<Field> {
       lastModificationAt:
           serializer.fromJson<DateTime>(json['lastModificationAt']),
       usageCount: serializer.fromJson<int>(json['usageCount']),
+      color: serializer.fromJson<int>(json['color']),
     );
   }
   @override
@@ -2349,6 +2377,7 @@ class Field extends DataClass implements Insertable<Field> {
       'creationAt': serializer.toJson<DateTime>(creationAt),
       'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
       'usageCount': serializer.toJson<int>(usageCount),
+      'color': serializer.toJson<int>(color),
     };
   }
 
@@ -2358,7 +2387,8 @@ class Field extends DataClass implements Insertable<Field> {
           String? name,
           DateTime? creationAt,
           DateTime? lastModificationAt,
-          int? usageCount}) =>
+          int? usageCount,
+          int? color}) =>
       Field(
         id: id ?? this.id,
         userAccountId: userAccountId ?? this.userAccountId,
@@ -2366,6 +2396,7 @@ class Field extends DataClass implements Insertable<Field> {
         creationAt: creationAt ?? this.creationAt,
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
         usageCount: usageCount ?? this.usageCount,
+        color: color ?? this.color,
       );
   @override
   String toString() {
@@ -2375,14 +2406,15 @@ class Field extends DataClass implements Insertable<Field> {
           ..write('name: $name, ')
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
-          ..write('usageCount: $usageCount')
+          ..write('usageCount: $usageCount, ')
+          ..write('color: $color')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, userAccountId, name, creationAt, lastModificationAt, usageCount);
+  int get hashCode => Object.hash(id, userAccountId, name, creationAt,
+      lastModificationAt, usageCount, color);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2392,7 +2424,8 @@ class Field extends DataClass implements Insertable<Field> {
           other.name == this.name &&
           other.creationAt == this.creationAt &&
           other.lastModificationAt == this.lastModificationAt &&
-          other.usageCount == this.usageCount);
+          other.usageCount == this.usageCount &&
+          other.color == this.color);
 }
 
 class FieldsCompanion extends UpdateCompanion<Field> {
@@ -2402,6 +2435,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
   final Value<DateTime> creationAt;
   final Value<DateTime> lastModificationAt;
   final Value<int> usageCount;
+  final Value<int> color;
   const FieldsCompanion({
     this.id = const Value.absent(),
     this.userAccountId = const Value.absent(),
@@ -2409,6 +2443,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     this.creationAt = const Value.absent(),
     this.lastModificationAt = const Value.absent(),
     this.usageCount = const Value.absent(),
+    this.color = const Value.absent(),
   });
   FieldsCompanion.insert({
     this.id = const Value.absent(),
@@ -2417,6 +2452,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     required DateTime creationAt,
     required DateTime lastModificationAt,
     this.usageCount = const Value.absent(),
+    this.color = const Value.absent(),
   })  : userAccountId = Value(userAccountId),
         name = Value(name),
         creationAt = Value(creationAt),
@@ -2428,6 +2464,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     Expression<DateTime>? creationAt,
     Expression<DateTime>? lastModificationAt,
     Expression<int>? usageCount,
+    Expression<int>? color,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2437,6 +2474,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
       if (lastModificationAt != null)
         'last_modification_at': lastModificationAt,
       if (usageCount != null) 'usage_count': usageCount,
+      if (color != null) 'color': color,
     });
   }
 
@@ -2446,7 +2484,8 @@ class FieldsCompanion extends UpdateCompanion<Field> {
       Value<String>? name,
       Value<DateTime>? creationAt,
       Value<DateTime>? lastModificationAt,
-      Value<int>? usageCount}) {
+      Value<int>? usageCount,
+      Value<int>? color}) {
     return FieldsCompanion(
       id: id ?? this.id,
       userAccountId: userAccountId ?? this.userAccountId,
@@ -2454,6 +2493,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
       creationAt: creationAt ?? this.creationAt,
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       usageCount: usageCount ?? this.usageCount,
+      color: color ?? this.color,
     );
   }
 
@@ -2479,6 +2519,9 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     if (usageCount.present) {
       map['usage_count'] = Variable<int>(usageCount.value);
     }
+    if (color.present) {
+      map['color'] = Variable<int>(color.value);
+    }
     return map;
   }
 
@@ -2490,7 +2533,8 @@ class FieldsCompanion extends UpdateCompanion<Field> {
           ..write('name: $name, ')
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
-          ..write('usageCount: $usageCount')
+          ..write('usageCount: $usageCount, ')
+          ..write('color: $color')
           ..write(')'))
         .toString();
   }

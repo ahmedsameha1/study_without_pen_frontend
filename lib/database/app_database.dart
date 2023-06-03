@@ -166,6 +166,9 @@ class Fields extends Table {
   static const int MINIMUM_USAGE_COUNT = 0;
   static const int MAXIMUM_USAGE_COUNT = 0xffffffff;
   static const int DEFAULT_USAGE_COUNT = 0;
+  static const int MINIMUM_COLOR = 0;
+  static const int MAXIMUM_COLOR = 0xffffffff;
+  static const int DEFAULT_COLOR = 0xffffffff;
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get userAccountId => text().check(userAccountId
@@ -182,6 +185,10 @@ class Fields extends Table {
       .withDefault(Constant(Fields.DEFAULT_USAGE_COUNT))
       .check(usageCount.isBiggerOrEqualValue(Fields.MINIMUM_USAGE_COUNT) &
           usageCount.isSmallerOrEqualValue(Fields.MAXIMUM_USAGE_COUNT))();
+  IntColumn get color => integer()
+      .withDefault(Constant(Fields.DEFAULT_COLOR))
+      .check(color.isBiggerOrEqualValue(Fields.MINIMUM_COLOR) &
+          color.isSmallerOrEqualValue(Fields.MAXIMUM_COLOR))();
 
   @override
   Set<Column> get primaryKey => {id};
