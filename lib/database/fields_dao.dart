@@ -19,4 +19,9 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
     }
     return into(fields).insert(fieldsCompanion);
   }
+
+  Future<Field?> getById(String id) {
+    return (select(fields)..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
+  }
 }

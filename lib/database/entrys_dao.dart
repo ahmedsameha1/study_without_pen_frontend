@@ -48,7 +48,7 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
   }
 
   Future<Entry?> getById(String id) {
-    return (select(entrys)..where(((tbl) => tbl.id.equals(id))))
+    return (select(entrys)..where((tbl) => tbl.id.equals(id)))
         .getSingleOrNull();
   }
 

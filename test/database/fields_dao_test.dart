@@ -314,4 +314,46 @@ void main() {
       await fieldsDao.create(fieldCompanion);
     });
   });
+
+  group("Geting a specific Field by id", () {
+    test("Good case: this specific field is found", () async {
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color);
+      await fieldsDao.create(field.toCompanion(true));
+      Field? gottenField = await fieldsDao.getById(id);
+      gottenField = gottenField!;
+      expect(gottenField.id, id);
+      expect(gottenField.userAccountId, userAccountId);
+      expect(gottenField.name, name);
+      expect(gottenField.creationAt, creationAt);
+      expect(gottenField.lastModificationAt, lastModificationAt);
+      expect(gottenField.usageCount, usageCount);
+      expect(gottenField.color, color);
+    });
+
+    test("Good case: this specific field is not found", () async {
+      Field? gottenField = await fieldsDao.getById(const Uuid().v4());
+      expect(gottenField, null);
+    });
+
+    test("Test default values", () async {
+      var fieldCompanion = FieldsCompanion(
+          id: Value(id),
+          userAccountId: Value(userAccountId),
+          name: Value(name),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt));
+      await fieldsDao.create(fieldCompanion);
+      Field? gottenField = await fieldsDao.getById(id);
+      gottenField = gottenField!;
+      expect(gottenField.usageCount, Fields.DEFAULT_USAGE_COUNT);
+      expect(gottenField.color, Fields.DEFAULT_COLOR);
+    });
+  });
 }
