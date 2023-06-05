@@ -24,4 +24,14 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
     return (select(fields)..where((tbl) => tbl.id.equals(id)))
         .getSingleOrNull();
   }
+
+  Stream<List<Field>> watchByUserAccountId(String id) {
+    return (select(fields)
+          ..where((tbl) => tbl.userAccountId.equals(id))
+          ..orderBy([
+            (tbl) => OrderingTerm(
+                expression: tbl.usageCount, mode: OrderingMode.desc)
+          ]))
+        .watch();
+  }
 }

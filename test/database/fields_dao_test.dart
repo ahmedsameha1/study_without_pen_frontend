@@ -356,4 +356,158 @@ void main() {
       expect(gottenField.color, Fields.DEFAULT_COLOR);
     });
   });
+
+  test("getting all Fields for a specific user id", () async {
+    var userAccountId1 = const Uuid().v4();
+    var userAccountId2 = const Uuid().v4();
+    var userAccountId3 = const Uuid().v4();
+    var fieldId1 = const Uuid().v4();
+    var fieldId2 = const Uuid().v4();
+    var fieldId3 = const Uuid().v4();
+    var fieldId4 = const Uuid().v4();
+    var fieldId5 = const Uuid().v4();
+    var fieldId6 = const Uuid().v4();
+    var name1 = "name1";
+    var name2 = "name2";
+    var name3 = "name3";
+    var name4 = "name4";
+    var name5 = "name5";
+    var name6 = "name6";
+    DateTime creationAt1 = DateTime.utc(2020, 1, 1);
+    DateTime creationAt2 = DateTime.utc(2020, 1, 2);
+    DateTime creationAt3 = DateTime.utc(2020, 2, 1);
+    DateTime creationAt4 = DateTime.utc(2020, 2, 2);
+    DateTime creationAt5 = DateTime.utc(2020, 3, 1);
+    DateTime creationAt6 = DateTime.utc(2020, 3, 2);
+    DateTime lastModificationAt1 = DateTime.utc(2021, 1, 1);
+    DateTime lastModificationAt2 = DateTime.utc(2021, 1, 2);
+    DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
+    DateTime lastModificationAt4 = DateTime.utc(2021, 2, 2);
+    DateTime lastModificationAt5 = DateTime.utc(2021, 3, 1);
+    DateTime lastModificationAt6 = DateTime.utc(2021, 3, 2);
+    int usageCount1 = 20;
+    int usageCount2 = 30;
+    int usageCount3 = 40;
+    int usageCount4 = 50;
+    int usageCount5 = 60;
+    int usageCount6 = 70;
+    int color1 = 0x55554433;
+    int color2 = 0x55664433;
+    int color3 = 0x55774433;
+    int color4 = 0x55884433;
+    int color5 = 0x55994433;
+    int color6 = 0x55aa4433;
+    var field1 = Field(
+        id: fieldId1,
+        userAccountId: userAccountId1,
+        name: name1,
+        creationAt: creationAt1,
+        lastModificationAt: lastModificationAt1,
+        usageCount: usageCount1,
+        color: color1);
+    var field2 = Field(
+        id: fieldId2,
+        userAccountId: userAccountId2,
+        name: name2,
+        creationAt: creationAt2,
+        lastModificationAt: lastModificationAt2,
+        usageCount: usageCount2,
+        color: color2);
+    var field3 = Field(
+        id: fieldId3,
+        userAccountId: userAccountId3,
+        name: name3,
+        creationAt: creationAt3,
+        lastModificationAt: lastModificationAt3,
+        usageCount: usageCount3,
+        color: color3);
+    var field4 = Field(
+        id: fieldId4,
+        userAccountId: userAccountId1,
+        name: name4,
+        creationAt: creationAt4,
+        lastModificationAt: lastModificationAt4,
+        usageCount: usageCount4,
+        color: color4);
+    var field5 = Field(
+        id: fieldId5,
+        userAccountId: userAccountId2,
+        name: name5,
+        creationAt: creationAt5,
+        lastModificationAt: lastModificationAt5,
+        usageCount: usageCount5,
+        color: color5);
+    var field6 = Field(
+        id: fieldId6,
+        userAccountId: userAccountId1,
+        name: name6,
+        creationAt: creationAt6,
+        lastModificationAt: lastModificationAt6,
+        usageCount: usageCount6,
+        color: color6);
+    await fieldsDao.create(field1.toCompanion(true));
+    await fieldsDao.create(field2.toCompanion(true));
+    await fieldsDao.create(field3.toCompanion(true));
+    await fieldsDao.create(field4.toCompanion(true));
+    await fieldsDao.create(field5.toCompanion(true));
+    await fieldsDao.create(field6.toCompanion(true));
+    Stream<List<Field>> fieldsStream =
+        fieldsDao.watchByUserAccountId(userAccountId1);
+    List<Field> fields = await fieldsStream.first;
+    expect(fields.length, 3);
+    var gottenField = fields[0];
+    expect(gottenField.id, fieldId6);
+    expect(gottenField.userAccountId, userAccountId1);
+    expect(gottenField.name, name6);
+    expect(gottenField.creationAt, creationAt6);
+    expect(gottenField.lastModificationAt, lastModificationAt6);
+    expect(gottenField.usageCount, usageCount6);
+    expect(gottenField.color, color6);
+    gottenField = fields[1];
+    expect(gottenField.id, fieldId4);
+    expect(gottenField.userAccountId, userAccountId1);
+    expect(gottenField.name, name4);
+    expect(gottenField.creationAt, creationAt4);
+    expect(gottenField.lastModificationAt, lastModificationAt4);
+    expect(gottenField.usageCount, usageCount4);
+    expect(gottenField.color, color4);
+    gottenField = fields[2];
+    expect(gottenField.id, fieldId1);
+    expect(gottenField.userAccountId, userAccountId1);
+    expect(gottenField.name, name1);
+    expect(gottenField.creationAt, creationAt1);
+    expect(gottenField.lastModificationAt, lastModificationAt1);
+    expect(gottenField.usageCount, usageCount1);
+    expect(gottenField.color, color1);
+    fieldsStream = fieldsDao.watchByUserAccountId(userAccountId2);
+    fields = await fieldsStream.first;
+    expect(fields.length, 2);
+    gottenField = fields[0];
+    expect(gottenField.id, fieldId5);
+    expect(gottenField.userAccountId, userAccountId2);
+    expect(gottenField.name, name5);
+    expect(gottenField.creationAt, creationAt5);
+    expect(gottenField.lastModificationAt, lastModificationAt5);
+    expect(gottenField.usageCount, usageCount5);
+    expect(gottenField.color, color5);
+    gottenField = fields[1];
+    expect(gottenField.id, fieldId2);
+    expect(gottenField.userAccountId, userAccountId2);
+    expect(gottenField.name, name2);
+    expect(gottenField.creationAt, creationAt2);
+    expect(gottenField.lastModificationAt, lastModificationAt2);
+    expect(gottenField.usageCount, usageCount2);
+    expect(gottenField.color, color2);
+    fieldsStream = fieldsDao.watchByUserAccountId(userAccountId3);
+    fields = await fieldsStream.first;
+    expect(fields.length, 1);
+    gottenField = fields[0];
+    expect(gottenField.id, fieldId3);
+    expect(gottenField.userAccountId, userAccountId3);
+    expect(gottenField.name, name3);
+    expect(gottenField.creationAt, creationAt3);
+    expect(gottenField.lastModificationAt, lastModificationAt3);
+    expect(gottenField.usageCount, usageCount3);
+    expect(gottenField.color, color3);
+  });
 }
