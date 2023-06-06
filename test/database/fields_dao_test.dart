@@ -698,5 +698,41 @@ void main() {
                 e is SqliteException && e.message.contains("usage_count"))));
       });
     });
+
+    test("Invalid update: color is smaller than ${Fields.MINIMUM_COLOR}",
+        () async {
+      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            usageCount: usageCount,
+            color: Fields.MINIMUM_COLOR - 1);
+        expect(() async {
+          await fieldsDao.mutate(field.toCompanion(true));
+        },
+            throwsA(predicate(
+                (e) => e is SqliteException && e.message.contains("color"))));
+      });
+    });
+
+    test("Invalid update: color is bigger than ${Fields.MAXIMUM_COLOR}",
+        () async {
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: Fields.MAXIMUM_COLOR + 1);
+      expect(() async {
+        await fieldsDao.mutate(field.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("color"))));
+    });
   });
 }
