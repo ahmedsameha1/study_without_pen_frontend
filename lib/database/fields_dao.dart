@@ -34,4 +34,8 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
           ]))
         .watch();
   }
+
+  Future<bool> mutate(FieldsCompanion fieldsCompanion) {
+    return update(fields).replace(fieldsCompanion);
+  }
 }

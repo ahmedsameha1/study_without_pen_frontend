@@ -357,7 +357,7 @@ void main() {
     });
   });
 
-  test("getting all Fields for a specific user id", () async {
+  test("getting all Fields for a specific user account id", () async {
     var userAccountId1 = const Uuid().v4();
     var userAccountId2 = const Uuid().v4();
     var userAccountId3 = const Uuid().v4();
@@ -509,5 +509,48 @@ void main() {
     expect(gottenField.lastModificationAt, lastModificationAt3);
     expect(gottenField.usageCount, usageCount3);
     expect(gottenField.color, color3);
+  });
+
+  group("Update Field", () {
+    setUp(() async {
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color);
+      await fieldsDao.create(field.toCompanion(true));
+    });
+
+    test("Invalid update: userAccountId is an empty String", () async {
+      var field = Field(
+          id: id,
+          userAccountId: "",
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color);
+      expect(() async {
+        await fieldsDao.mutate(field.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("user_account_id"))));
+      field = Field(
+          id: id,
+          userAccountId: " " * Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color);
+      expect(() async {
+        await fieldsDao.mutate(field.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("user_account_id"))));
+    });
   });
 }
