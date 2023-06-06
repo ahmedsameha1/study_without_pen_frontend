@@ -206,79 +206,71 @@ void main() {
     test(
         "Invalid Field: usageCount is smaller than ${Fields.MINIMUM_USAGE_COUNT}",
         () async {
-      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
-        var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: lastModificationAt,
-            usageCount: Fields.MINIMUM_USAGE_COUNT - 1,
-            color: color);
-        expect(() async {
-          await fieldsDao.create(field.toCompanion(true));
-        },
-            throwsA(predicate((e) =>
-                e is SqliteException && e.message.contains("usage_count"))));
-      });
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: Fields.MINIMUM_USAGE_COUNT - 1,
+          color: color);
+      expect(() async {
+        await fieldsDao.create(field.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("usage_count"))));
     });
 
     test(
         "Invalid Field: usageCount is bigger than ${Fields.MAXIMUM_USAGE_COUNT}",
         () async {
-      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
-        var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: lastModificationAt,
-            usageCount: Fields.MAXIMUM_USAGE_COUNT + 1,
-            color: color);
-        expect(() async {
-          await fieldsDao.create(field.toCompanion(true));
-        },
-            throwsA(predicate((e) =>
-                e is SqliteException && e.message.contains("usage_count"))));
-      });
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: Fields.MAXIMUM_USAGE_COUNT + 1,
+          color: color);
+      expect(() async {
+        await fieldsDao.create(field.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("usage_count"))));
     });
 
     test("Invalid Field: color is smaller than ${Fields.MINIMUM_COLOR}",
         () async {
-      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
-        var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: lastModificationAt,
-            usageCount: usageCount,
-            color: Fields.MINIMUM_COLOR - 1);
-        expect(() async {
-          await fieldsDao.create(field.toCompanion(true));
-        },
-            throwsA(predicate(
-                (e) => e is SqliteException && e.message.contains("color"))));
-      });
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: Fields.MINIMUM_COLOR - 1);
+      expect(() async {
+        await fieldsDao.create(field.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("color"))));
     });
 
     test("Invalid Field: color is bigger than ${Fields.MAXIMUM_COLOR}",
         () async {
-      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
-        var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: lastModificationAt,
-            usageCount: usageCount,
-            color: Fields.MAXIMUM_COLOR + 1);
-        expect(() async {
-          await fieldsDao.create(field.toCompanion(true));
-        },
-            throwsA(predicate(
-                (e) => e is SqliteException && e.message.contains("color"))));
-      });
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: Fields.MAXIMUM_COLOR + 1);
+      expect(() async {
+        await fieldsDao.create(field.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("color"))));
     });
 
     test("Good case 1: create Field without 'id'", () async {
@@ -662,60 +654,54 @@ void main() {
     test(
         "Invalid update: usageCount is smaller than ${Fields.MINIMUM_USAGE_COUNT}",
         () async {
-      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
-        var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: lastModificationAt,
-            usageCount: Fields.MINIMUM_USAGE_COUNT - 1,
-            color: color);
-        expect(() async {
-          await fieldsDao.mutate(field.toCompanion(true));
-        },
-            throwsA(predicate((e) =>
-                e is SqliteException && e.message.contains("usage_count"))));
-      });
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: Fields.MINIMUM_USAGE_COUNT - 1,
+          color: color);
+      expect(() async {
+        await fieldsDao.mutate(field.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("usage_count"))));
     });
 
     test(
         "Invalid update: usageCount is bigger than ${Fields.MAXIMUM_USAGE_COUNT}",
         () async {
-      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
-        var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: lastModificationAt,
-            usageCount: Fields.MAXIMUM_USAGE_COUNT + 1,
-            color: color);
-        expect(() async {
-          await fieldsDao.mutate(field.toCompanion(true));
-        },
-            throwsA(predicate((e) =>
-                e is SqliteException && e.message.contains("usage_count"))));
-      });
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: Fields.MAXIMUM_USAGE_COUNT + 1,
+          color: color);
+      expect(() async {
+        await fieldsDao.mutate(field.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("usage_count"))));
     });
 
     test("Invalid update: color is smaller than ${Fields.MINIMUM_COLOR}",
         () async {
-      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
-        var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: lastModificationAt,
-            usageCount: usageCount,
-            color: Fields.MINIMUM_COLOR - 1);
-        expect(() async {
-          await fieldsDao.mutate(field.toCompanion(true));
-        },
-            throwsA(predicate(
-                (e) => e is SqliteException && e.message.contains("color"))));
-      });
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: Fields.MINIMUM_COLOR - 1);
+      expect(() async {
+        await fieldsDao.mutate(field.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("color"))));
     });
 
     test("Invalid update: color is bigger than ${Fields.MAXIMUM_COLOR}",
