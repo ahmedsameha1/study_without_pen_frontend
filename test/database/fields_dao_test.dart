@@ -734,5 +734,50 @@ void main() {
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("color"))));
     });
+
+    test("Good case 1", () async {
+      var newColor = 0x34567891;
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: newColor);
+      await fieldsDao.mutate(field.toCompanion(true));
+      var gottenField = await fieldsDao.getById(id);
+      gottenField = gottenField!;
+      expect(gottenField.id, id);
+      expect(gottenField.userAccountId, userAccountId);
+      expect(gottenField.name, name);
+      expect(gottenField.creationAt, creationAt);
+      expect(gottenField.lastModificationAt, lastModificationAt);
+      expect(gottenField.usageCount, usageCount);
+      expect(gottenField.color, newColor);
+    });
+
+    test("Good case 2", () async {
+      var newName = "newName";
+      var newUsageCount = 69;
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: newName,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: newUsageCount,
+          color: color);
+      await fieldsDao.mutate(field.toCompanion(true));
+      var gottenField = await fieldsDao.getById(id);
+      gottenField = gottenField!;
+      expect(gottenField.id, id);
+      expect(gottenField.userAccountId, userAccountId);
+      expect(gottenField.name, newName);
+      expect(gottenField.creationAt, creationAt);
+      expect(gottenField.lastModificationAt, lastModificationAt);
+      expect(gottenField.usageCount, newUsageCount);
+      expect(gottenField.color, color);
+    });
   });
 }
