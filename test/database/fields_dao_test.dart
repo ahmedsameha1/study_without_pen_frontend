@@ -620,5 +620,43 @@ void main() {
                 e.message.contains("creationAt"))));
       });
     });
+
+    test("Invalid update: lastModificationAt is in the future", () async {
+      withClock(Clock.fixed(DateTime(2020, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: DateTime(2020, 3, 3),
+            usageCount: usageCount,
+            color: color);
+        expect(() async {
+          await fieldsDao.mutate(field.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("lastModificationAt"))));
+      });
+    });
+
+    test("Invalid update: lastModificationAt is before creationAt", () async {
+      withClock(Clock.fixed(DateTime(2020, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: DateTime(2019, 3, 3),
+            usageCount: usageCount,
+            color: color);
+        expect(() async {
+          await fieldsDao.mutate(field.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException &&
+                e.message.contains("last_modification_at"))));
+      });
+    });
   });
 }
