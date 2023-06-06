@@ -658,5 +658,45 @@ void main() {
                 e.message.contains("last_modification_at"))));
       });
     });
+
+    test(
+        "Invalid update: usageCount is smaller than ${Fields.MINIMUM_USAGE_COUNT}",
+        () async {
+      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            usageCount: Fields.MINIMUM_USAGE_COUNT - 1,
+            color: color);
+        expect(() async {
+          await fieldsDao.mutate(field.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException && e.message.contains("usage_count"))));
+      });
+    });
+
+    test(
+        "Invalid update: usageCount is bigger than ${Fields.MAXIMUM_USAGE_COUNT}",
+        () async {
+      withClock(Clock.fixed(DateTime(2021, 2, 2)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            usageCount: Fields.MAXIMUM_USAGE_COUNT + 1,
+            color: color);
+        expect(() async {
+          await fieldsDao.mutate(field.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException && e.message.contains("usage_count"))));
+      });
+    });
   });
 }
