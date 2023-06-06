@@ -780,4 +780,19 @@ void main() {
       expect(gottenField.color, color);
     });
   });
+
+  test("Delete some Field", () async {
+    var field = Field(
+        id: id,
+        userAccountId: userAccountId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color);
+    await fieldsDao.create(field.toCompanion(true));
+    await fieldsDao.remove(id);
+    var gottenField = await fieldsDao.getById(id);
+    expect(gottenField, null);
+  });
 }
