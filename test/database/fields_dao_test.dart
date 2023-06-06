@@ -601,5 +601,24 @@ void main() {
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("name"))));
     });
+
+    test("Invalid update: creationAt is in the future", () async {
+      withClock(Clock.fixed(DateTime(2020, 1, 1)), () async {
+        var field = Field(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: DateTime(2020, 2, 2),
+            lastModificationAt: lastModificationAt,
+            usageCount: usageCount,
+            color: color);
+        expect(() async {
+          await fieldsDao.mutate(field.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("creationAt"))));
+      });
+    });
   });
 }

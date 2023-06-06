@@ -36,6 +36,9 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
   }
 
   Future<bool> mutate(FieldsCompanion fieldsCompanion) {
+    if (fieldsCompanion.creationAt.value.toUtc().isAfter(clock.now())) {
+      throw InvalidDataException("creationAt");
+    }
     return update(fields).replace(fieldsCompanion);
   }
 }
