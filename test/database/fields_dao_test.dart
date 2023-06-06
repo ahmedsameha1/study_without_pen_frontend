@@ -552,5 +552,54 @@ void main() {
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("user_account_id"))));
     });
+
+    test(
+        "Invalid update: name length is less than ${Fields.MINIMUM_LENGTH_OF_NAME}",
+        () async {
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: "",
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color);
+      expect(() async {
+        await fieldsDao.mutate(field.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("name"))));
+      field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: " ",
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color);
+      expect(() async {
+        await fieldsDao.mutate(field.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("name"))));
+    });
+
+    test(
+        "Invalid update: name length is bigger than ${Fields.MAXIMUM_LENGTH_OF_NAME}",
+        () async {
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: "s" * (Fields.MAXIMUM_LENGTH_OF_NAME + 1),
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color);
+      expect(() async {
+        await fieldsDao.mutate(field.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("name"))));
+    });
   });
 }
