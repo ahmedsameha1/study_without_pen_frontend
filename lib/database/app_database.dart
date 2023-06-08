@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
+import 'package:study_without_pen_by_flutter/database/notes_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
@@ -194,9 +195,28 @@ class Fields extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(
-    tables: [EntryTexts, Questions, Entrys, FieldLists, Fields],
-    daos: [EntryTextsDao, QuestionsDao, EntrysDao, FieldListsDao, FieldsDao])
+class Notes extends Table {
+  TextColumn get id => text().clientDefault(() => const Uuid().v4())();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(tables: [
+  EntryTexts,
+  Questions,
+  Entrys,
+  FieldLists,
+  Fields,
+  Notes
+], daos: [
+  EntryTextsDao,
+  QuestionsDao,
+  EntrysDao,
+  FieldListsDao,
+  FieldsDao,
+  NotesDao
+])
 class AppDatabase extends _$AppDatabase {
   static const databaseFileName = "db.sqlite";
   static LazyDatabase openConnection() {
