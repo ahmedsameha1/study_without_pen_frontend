@@ -2558,8 +2558,20 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
   late final GeneratedColumn<String> relationalId = GeneratedColumn<String>(
       'relational_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _texTMeta = const VerificationMeta('texT');
   @override
-  List<GeneratedColumn> get $columns => [id, relationalId];
+  late final GeneratedColumn<String> texT = GeneratedColumn<String>(
+      'tex_t', aliasedName, false,
+      check: () =>
+          texT
+              .trim()
+              .length
+              .isBiggerOrEqualValue(Notes.MINIMUM_LENGTH_OF_TEXT) &
+          texT.length.isSmallerOrEqualValue(Notes.MAXIMUM_LENGTH_OF_TEXT),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, relationalId, texT];
   @override
   String get aliasedName => _alias ?? 'notes';
   @override
@@ -2580,6 +2592,12 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
     } else if (isInserting) {
       context.missing(_relationalIdMeta);
     }
+    if (data.containsKey('tex_t')) {
+      context.handle(
+          _texTMeta, texT.isAcceptableOrUnknown(data['tex_t']!, _texTMeta));
+    } else if (isInserting) {
+      context.missing(_texTMeta);
+    }
     return context;
   }
 
@@ -2593,6 +2611,8 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       relationalId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}relational_id'])!,
+      texT: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tex_t'])!,
     );
   }
 
@@ -2605,12 +2625,15 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
 class Note extends DataClass implements Insertable<Note> {
   final String id;
   final String relationalId;
-  const Note({required this.id, required this.relationalId});
+  final String texT;
+  const Note(
+      {required this.id, required this.relationalId, required this.texT});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['relational_id'] = Variable<String>(relationalId);
+    map['tex_t'] = Variable<String>(texT);
     return map;
   }
 
@@ -2618,6 +2641,7 @@ class Note extends DataClass implements Insertable<Note> {
     return NotesCompanion(
       id: Value(id),
       relationalId: Value(relationalId),
+      texT: Value(texT),
     );
   }
 
@@ -2627,6 +2651,7 @@ class Note extends DataClass implements Insertable<Note> {
     return Note(
       id: serializer.fromJson<String>(json['id']),
       relationalId: serializer.fromJson<String>(json['relationalId']),
+      texT: serializer.fromJson<String>(json['texT']),
     );
   }
   @override
@@ -2635,57 +2660,69 @@ class Note extends DataClass implements Insertable<Note> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'relationalId': serializer.toJson<String>(relationalId),
+      'texT': serializer.toJson<String>(texT),
     };
   }
 
-  Note copyWith({String? id, String? relationalId}) => Note(
+  Note copyWith({String? id, String? relationalId, String? texT}) => Note(
         id: id ?? this.id,
         relationalId: relationalId ?? this.relationalId,
+        texT: texT ?? this.texT,
       );
   @override
   String toString() {
     return (StringBuffer('Note(')
           ..write('id: $id, ')
-          ..write('relationalId: $relationalId')
+          ..write('relationalId: $relationalId, ')
+          ..write('texT: $texT')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, relationalId);
+  int get hashCode => Object.hash(id, relationalId, texT);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Note &&
           other.id == this.id &&
-          other.relationalId == this.relationalId);
+          other.relationalId == this.relationalId &&
+          other.texT == this.texT);
 }
 
 class NotesCompanion extends UpdateCompanion<Note> {
   final Value<String> id;
   final Value<String> relationalId;
+  final Value<String> texT;
   const NotesCompanion({
     this.id = const Value.absent(),
     this.relationalId = const Value.absent(),
+    this.texT = const Value.absent(),
   });
   NotesCompanion.insert({
     this.id = const Value.absent(),
     required String relationalId,
-  }) : relationalId = Value(relationalId);
+    required String texT,
+  })  : relationalId = Value(relationalId),
+        texT = Value(texT);
   static Insertable<Note> custom({
     Expression<String>? id,
     Expression<String>? relationalId,
+    Expression<String>? texT,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (relationalId != null) 'relational_id': relationalId,
+      if (texT != null) 'tex_t': texT,
     });
   }
 
-  NotesCompanion copyWith({Value<String>? id, Value<String>? relationalId}) {
+  NotesCompanion copyWith(
+      {Value<String>? id, Value<String>? relationalId, Value<String>? texT}) {
     return NotesCompanion(
       id: id ?? this.id,
       relationalId: relationalId ?? this.relationalId,
+      texT: texT ?? this.texT,
     );
   }
 
@@ -2698,6 +2735,9 @@ class NotesCompanion extends UpdateCompanion<Note> {
     if (relationalId.present) {
       map['relational_id'] = Variable<String>(relationalId.value);
     }
+    if (texT.present) {
+      map['tex_t'] = Variable<String>(texT.value);
+    }
     return map;
   }
 
@@ -2705,7 +2745,8 @@ class NotesCompanion extends UpdateCompanion<Note> {
   String toString() {
     return (StringBuffer('NotesCompanion(')
           ..write('id: $id, ')
-          ..write('relationalId: $relationalId')
+          ..write('relationalId: $relationalId, ')
+          ..write('texT: $texT')
           ..write(')'))
         .toString();
   }

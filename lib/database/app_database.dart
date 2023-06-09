@@ -196,8 +196,14 @@ class Fields extends Table {
 }
 
 class Notes extends Table {
+  static const int MINIMUM_LENGTH_OF_TEXT = 1;
+  static const int MAXIMUM_LENGTH_OF_TEXT = 2000;
+
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get relationalId => text()();
+  TextColumn get texT => text().check(
+      texT.trim().length.isBiggerOrEqualValue(Notes.MINIMUM_LENGTH_OF_TEXT) &
+          texT.length.isSmallerOrEqualValue(Notes.MAXIMUM_LENGTH_OF_TEXT))();
 
   @override
   Set<Column> get primaryKey => {id};
