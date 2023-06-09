@@ -197,6 +197,7 @@ class Fields extends Table {
 
 class Notes extends Table {
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
+  TextColumn get relationalId => text()();
 
   @override
   Set<Column> get primaryKey => {id};
