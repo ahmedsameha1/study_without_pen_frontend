@@ -89,4 +89,21 @@ void main() {
       await notesDao.create(notesCompanion);
     });
   });
+
+  group("Getting a specific Note by id", () {
+    test("Good case: this specific Note is found", () async {
+      var note = Note(id: id, relationalId: relationalId, texT: texT);
+      await notesDao.create(note.toCompanion(true));
+      Note? gottenNote = await notesDao.getById(id);
+      gottenNote = gottenNote!;
+      expect(gottenNote.id, id);
+      expect(gottenNote.relationalId, relationalId);
+      expect(gottenNote.texT, texT);
+    });
+
+    test("Good case: this specific Note is not found", () async {
+      Note? gottenNote = await notesDao.getById(const Uuid().v4());
+      expect(gottenNote, null);
+    });
+  });
 }
