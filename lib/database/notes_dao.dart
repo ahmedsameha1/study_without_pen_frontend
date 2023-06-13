@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 
@@ -12,6 +13,9 @@ class NotesDao extends DatabaseAccessor<AppDatabase> with _$NotesDaoMixin {
     }
     if (!isValid(notesCompanion.relationalId.value)) {
       throw InvalidDataException("relationalId");
+    }
+    if (notesCompanion.creationAt.value.toUtc().isAfter(clock.now())) {
+      throw InvalidDataException("creationAt");
     }
     return into(notes).insert(notesCompanion);
   }

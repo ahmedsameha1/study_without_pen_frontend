@@ -204,6 +204,7 @@ class Notes extends Table {
   TextColumn get texT => text().check(
       texT.trim().length.isBiggerOrEqualValue(Notes.MINIMUM_LENGTH_OF_TEXT) &
           texT.length.isSmallerOrEqualValue(Notes.MAXIMUM_LENGTH_OF_TEXT))();
+  DateTimeColumn get creationAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {id};

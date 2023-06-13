@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,6 +12,7 @@ void main() {
   String id = const Uuid().v4();
   String relationalId = const Uuid().v4();
   String texT = "some note";
+  DateTime creationAt = DateTime(2020, 1, 1);
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -23,7 +25,11 @@ void main() {
 
   group("Create a note", () {
     test("Invalid note: id is an invalid UUID v4", () async {
-      var note = Note(id: "wew", relationalId: relationalId, texT: texT);
+      var note = Note(
+          id: "wew",
+          relationalId: relationalId,
+          texT: texT,
+          creationAt: creationAt);
       expect(() async {
         await notesDao.create(note.toCompanion(true));
       },
@@ -32,8 +38,16 @@ void main() {
     });
 
     test("No Notes with the same id", () async {
-      var note1 = Note(id: id, relationalId: relationalId, texT: texT);
-      var note2 = Note(id: id, relationalId: relationalId, texT: texT);
+      var note1 = Note(
+          id: id,
+          relationalId: relationalId,
+          texT: texT,
+          creationAt: creationAt);
+      var note2 = Note(
+          id: id,
+          relationalId: relationalId,
+          texT: texT,
+          creationAt: creationAt);
       expect(() async {
         await notesDao.create(note1.toCompanion(true));
         await notesDao.create(note2.toCompanion(true));
@@ -43,7 +57,8 @@ void main() {
     });
 
     test("Invalid note: relationalId is an invalid UUID v4", () async {
-      var note = Note(id: id, relationalId: "efww", texT: texT);
+      var note = Note(
+          id: id, relationalId: "efww", texT: texT, creationAt: creationAt);
       expect(() async {
         await notesDao.create(note.toCompanion(true));
       },
@@ -55,13 +70,18 @@ void main() {
     test(
         "Invalid note: text length is smaller than ${Notes.MINIMUM_LENGTH_OF_TEXT}",
         () async {
-      var note = Note(id: id, relationalId: relationalId, texT: "");
+      var note = Note(
+          id: id, relationalId: relationalId, texT: "", creationAt: creationAt);
       expect(() async {
         await notesDao.create(note.toCompanion(true));
       },
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("tex_t"))));
-      note = Note(id: id, relationalId: relationalId, texT: " ");
+      note = Note(
+          id: id,
+          relationalId: relationalId,
+          texT: " ",
+          creationAt: creationAt);
       expect(() async {
         await notesDao.create(note.toCompanion(true));
       },
@@ -75,7 +95,8 @@ void main() {
       var note = Note(
           id: id,
           relationalId: relationalId,
-          texT: "f" * (Notes.MAXIMUM_LENGTH_OF_TEXT + 1));
+          texT: "f" * (Notes.MAXIMUM_LENGTH_OF_TEXT + 1),
+          creationAt: creationAt);
       expect(() async {
         await notesDao.create(note.toCompanion(true));
       },
@@ -83,16 +104,38 @@ void main() {
               (e) => e is SqliteException && e.message.contains("tex_t"))));
     });
 
+    test("Invalid note: creationAt is in the future", () {
+      withClock(Clock.fixed(DateTime(2020, 1, 1)), () async {
+        var note = Note(
+            id: id,
+            relationalId: relationalId,
+            texT: texT,
+            creationAt: DateTime(2020, 2, 2));
+        expect(() async {
+          await notesDao.create(note.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("creationAt"))));
+      });
+    });
+
     test("Good case: create Note without 'id'", () async {
-      var notesCompanion =
-          NotesCompanion(relationalId: Value(relationalId), texT: Value(texT));
+      var notesCompanion = NotesCompanion(
+          relationalId: Value(relationalId),
+          texT: Value(texT),
+          creationAt: Value(creationAt));
       await notesDao.create(notesCompanion);
     });
   });
 
   group("Getting a specific Note by id", () {
     test("Good case: this specific Note is found", () async {
-      var note = Note(id: id, relationalId: relationalId, texT: texT);
+      var note = Note(
+          id: id,
+          relationalId: relationalId,
+          texT: texT,
+          creationAt: creationAt);
       await notesDao.create(note.toCompanion(true));
       Note? gottenNote = await notesDao.getById(id);
       gottenNote = gottenNote!;

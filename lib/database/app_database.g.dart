@@ -2570,8 +2570,14 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
           texT.length.isSmallerOrEqualValue(Notes.MAXIMUM_LENGTH_OF_TEXT),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
+  static const VerificationMeta _creationAtMeta =
+      const VerificationMeta('creationAt');
   @override
-  List<GeneratedColumn> get $columns => [id, relationalId, texT];
+  late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
+      'creation_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, relationalId, texT, creationAt];
   @override
   String get aliasedName => _alias ?? 'notes';
   @override
@@ -2598,6 +2604,14 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
     } else if (isInserting) {
       context.missing(_texTMeta);
     }
+    if (data.containsKey('creation_at')) {
+      context.handle(
+          _creationAtMeta,
+          creationAt.isAcceptableOrUnknown(
+              data['creation_at']!, _creationAtMeta));
+    } else if (isInserting) {
+      context.missing(_creationAtMeta);
+    }
     return context;
   }
 
@@ -2613,6 +2627,8 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
           .read(DriftSqlType.string, data['${effectivePrefix}relational_id'])!,
       texT: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}tex_t'])!,
+      creationAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
     );
   }
 
@@ -2626,14 +2642,19 @@ class Note extends DataClass implements Insertable<Note> {
   final String id;
   final String relationalId;
   final String texT;
+  final DateTime creationAt;
   const Note(
-      {required this.id, required this.relationalId, required this.texT});
+      {required this.id,
+      required this.relationalId,
+      required this.texT,
+      required this.creationAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['relational_id'] = Variable<String>(relationalId);
     map['tex_t'] = Variable<String>(texT);
+    map['creation_at'] = Variable<DateTime>(creationAt);
     return map;
   }
 
@@ -2642,6 +2663,7 @@ class Note extends DataClass implements Insertable<Note> {
       id: Value(id),
       relationalId: Value(relationalId),
       texT: Value(texT),
+      creationAt: Value(creationAt),
     );
   }
 
@@ -2652,6 +2674,7 @@ class Note extends DataClass implements Insertable<Note> {
       id: serializer.fromJson<String>(json['id']),
       relationalId: serializer.fromJson<String>(json['relationalId']),
       texT: serializer.fromJson<String>(json['texT']),
+      creationAt: serializer.fromJson<DateTime>(json['creationAt']),
     );
   }
   @override
@@ -2661,68 +2684,87 @@ class Note extends DataClass implements Insertable<Note> {
       'id': serializer.toJson<String>(id),
       'relationalId': serializer.toJson<String>(relationalId),
       'texT': serializer.toJson<String>(texT),
+      'creationAt': serializer.toJson<DateTime>(creationAt),
     };
   }
 
-  Note copyWith({String? id, String? relationalId, String? texT}) => Note(
+  Note copyWith(
+          {String? id,
+          String? relationalId,
+          String? texT,
+          DateTime? creationAt}) =>
+      Note(
         id: id ?? this.id,
         relationalId: relationalId ?? this.relationalId,
         texT: texT ?? this.texT,
+        creationAt: creationAt ?? this.creationAt,
       );
   @override
   String toString() {
     return (StringBuffer('Note(')
           ..write('id: $id, ')
           ..write('relationalId: $relationalId, ')
-          ..write('texT: $texT')
+          ..write('texT: $texT, ')
+          ..write('creationAt: $creationAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, relationalId, texT);
+  int get hashCode => Object.hash(id, relationalId, texT, creationAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Note &&
           other.id == this.id &&
           other.relationalId == this.relationalId &&
-          other.texT == this.texT);
+          other.texT == this.texT &&
+          other.creationAt == this.creationAt);
 }
 
 class NotesCompanion extends UpdateCompanion<Note> {
   final Value<String> id;
   final Value<String> relationalId;
   final Value<String> texT;
+  final Value<DateTime> creationAt;
   const NotesCompanion({
     this.id = const Value.absent(),
     this.relationalId = const Value.absent(),
     this.texT = const Value.absent(),
+    this.creationAt = const Value.absent(),
   });
   NotesCompanion.insert({
     this.id = const Value.absent(),
     required String relationalId,
     required String texT,
+    required DateTime creationAt,
   })  : relationalId = Value(relationalId),
-        texT = Value(texT);
+        texT = Value(texT),
+        creationAt = Value(creationAt);
   static Insertable<Note> custom({
     Expression<String>? id,
     Expression<String>? relationalId,
     Expression<String>? texT,
+    Expression<DateTime>? creationAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (relationalId != null) 'relational_id': relationalId,
       if (texT != null) 'tex_t': texT,
+      if (creationAt != null) 'creation_at': creationAt,
     });
   }
 
   NotesCompanion copyWith(
-      {Value<String>? id, Value<String>? relationalId, Value<String>? texT}) {
+      {Value<String>? id,
+      Value<String>? relationalId,
+      Value<String>? texT,
+      Value<DateTime>? creationAt}) {
     return NotesCompanion(
       id: id ?? this.id,
       relationalId: relationalId ?? this.relationalId,
       texT: texT ?? this.texT,
+      creationAt: creationAt ?? this.creationAt,
     );
   }
 
@@ -2738,6 +2780,9 @@ class NotesCompanion extends UpdateCompanion<Note> {
     if (texT.present) {
       map['tex_t'] = Variable<String>(texT.value);
     }
+    if (creationAt.present) {
+      map['creation_at'] = Variable<DateTime>(creationAt.value);
+    }
     return map;
   }
 
@@ -2746,7 +2791,8 @@ class NotesCompanion extends UpdateCompanion<Note> {
     return (StringBuffer('NotesCompanion(')
           ..write('id: $id, ')
           ..write('relationalId: $relationalId, ')
-          ..write('texT: $texT')
+          ..write('texT: $texT, ')
+          ..write('creationAt: $creationAt')
           ..write(')'))
         .toString();
   }
