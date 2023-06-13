@@ -2576,8 +2576,17 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
   late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
       'creation_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _lastModificationAtMeta =
+      const VerificationMeta('lastModificationAt');
   @override
-  List<GeneratedColumn> get $columns => [id, relationalId, texT, creationAt];
+  late final GeneratedColumn<DateTime> lastModificationAt =
+      GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
+          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, relationalId, texT, creationAt, lastModificationAt];
   @override
   String get aliasedName => _alias ?? 'notes';
   @override
@@ -2612,6 +2621,14 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
     } else if (isInserting) {
       context.missing(_creationAtMeta);
     }
+    if (data.containsKey('last_modification_at')) {
+      context.handle(
+          _lastModificationAtMeta,
+          lastModificationAt.isAcceptableOrUnknown(
+              data['last_modification_at']!, _lastModificationAtMeta));
+    } else if (isInserting) {
+      context.missing(_lastModificationAtMeta);
+    }
     return context;
   }
 
@@ -2629,6 +2646,9 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
           .read(DriftSqlType.string, data['${effectivePrefix}tex_t'])!,
       creationAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
+      lastModificationAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_modification_at'])!,
     );
   }
 
@@ -2643,11 +2663,13 @@ class Note extends DataClass implements Insertable<Note> {
   final String relationalId;
   final String texT;
   final DateTime creationAt;
+  final DateTime lastModificationAt;
   const Note(
       {required this.id,
       required this.relationalId,
       required this.texT,
-      required this.creationAt});
+      required this.creationAt,
+      required this.lastModificationAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2655,6 +2677,7 @@ class Note extends DataClass implements Insertable<Note> {
     map['relational_id'] = Variable<String>(relationalId);
     map['tex_t'] = Variable<String>(texT);
     map['creation_at'] = Variable<DateTime>(creationAt);
+    map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
     return map;
   }
 
@@ -2664,6 +2687,7 @@ class Note extends DataClass implements Insertable<Note> {
       relationalId: Value(relationalId),
       texT: Value(texT),
       creationAt: Value(creationAt),
+      lastModificationAt: Value(lastModificationAt),
     );
   }
 
@@ -2675,6 +2699,8 @@ class Note extends DataClass implements Insertable<Note> {
       relationalId: serializer.fromJson<String>(json['relationalId']),
       texT: serializer.fromJson<String>(json['texT']),
       creationAt: serializer.fromJson<DateTime>(json['creationAt']),
+      lastModificationAt:
+          serializer.fromJson<DateTime>(json['lastModificationAt']),
     );
   }
   @override
@@ -2685,6 +2711,7 @@ class Note extends DataClass implements Insertable<Note> {
       'relationalId': serializer.toJson<String>(relationalId),
       'texT': serializer.toJson<String>(texT),
       'creationAt': serializer.toJson<DateTime>(creationAt),
+      'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
     };
   }
 
@@ -2692,12 +2719,14 @@ class Note extends DataClass implements Insertable<Note> {
           {String? id,
           String? relationalId,
           String? texT,
-          DateTime? creationAt}) =>
+          DateTime? creationAt,
+          DateTime? lastModificationAt}) =>
       Note(
         id: id ?? this.id,
         relationalId: relationalId ?? this.relationalId,
         texT: texT ?? this.texT,
         creationAt: creationAt ?? this.creationAt,
+        lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       );
   @override
   String toString() {
@@ -2705,13 +2734,15 @@ class Note extends DataClass implements Insertable<Note> {
           ..write('id: $id, ')
           ..write('relationalId: $relationalId, ')
           ..write('texT: $texT, ')
-          ..write('creationAt: $creationAt')
+          ..write('creationAt: $creationAt, ')
+          ..write('lastModificationAt: $lastModificationAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, relationalId, texT, creationAt);
+  int get hashCode =>
+      Object.hash(id, relationalId, texT, creationAt, lastModificationAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2719,7 +2750,8 @@ class Note extends DataClass implements Insertable<Note> {
           other.id == this.id &&
           other.relationalId == this.relationalId &&
           other.texT == this.texT &&
-          other.creationAt == this.creationAt);
+          other.creationAt == this.creationAt &&
+          other.lastModificationAt == this.lastModificationAt);
 }
 
 class NotesCompanion extends UpdateCompanion<Note> {
@@ -2727,31 +2759,38 @@ class NotesCompanion extends UpdateCompanion<Note> {
   final Value<String> relationalId;
   final Value<String> texT;
   final Value<DateTime> creationAt;
+  final Value<DateTime> lastModificationAt;
   const NotesCompanion({
     this.id = const Value.absent(),
     this.relationalId = const Value.absent(),
     this.texT = const Value.absent(),
     this.creationAt = const Value.absent(),
+    this.lastModificationAt = const Value.absent(),
   });
   NotesCompanion.insert({
     this.id = const Value.absent(),
     required String relationalId,
     required String texT,
     required DateTime creationAt,
+    required DateTime lastModificationAt,
   })  : relationalId = Value(relationalId),
         texT = Value(texT),
-        creationAt = Value(creationAt);
+        creationAt = Value(creationAt),
+        lastModificationAt = Value(lastModificationAt);
   static Insertable<Note> custom({
     Expression<String>? id,
     Expression<String>? relationalId,
     Expression<String>? texT,
     Expression<DateTime>? creationAt,
+    Expression<DateTime>? lastModificationAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (relationalId != null) 'relational_id': relationalId,
       if (texT != null) 'tex_t': texT,
       if (creationAt != null) 'creation_at': creationAt,
+      if (lastModificationAt != null)
+        'last_modification_at': lastModificationAt,
     });
   }
 
@@ -2759,12 +2798,14 @@ class NotesCompanion extends UpdateCompanion<Note> {
       {Value<String>? id,
       Value<String>? relationalId,
       Value<String>? texT,
-      Value<DateTime>? creationAt}) {
+      Value<DateTime>? creationAt,
+      Value<DateTime>? lastModificationAt}) {
     return NotesCompanion(
       id: id ?? this.id,
       relationalId: relationalId ?? this.relationalId,
       texT: texT ?? this.texT,
       creationAt: creationAt ?? this.creationAt,
+      lastModificationAt: lastModificationAt ?? this.lastModificationAt,
     );
   }
 
@@ -2783,6 +2824,10 @@ class NotesCompanion extends UpdateCompanion<Note> {
     if (creationAt.present) {
       map['creation_at'] = Variable<DateTime>(creationAt.value);
     }
+    if (lastModificationAt.present) {
+      map['last_modification_at'] =
+          Variable<DateTime>(lastModificationAt.value);
+    }
     return map;
   }
 
@@ -2792,7 +2837,8 @@ class NotesCompanion extends UpdateCompanion<Note> {
           ..write('id: $id, ')
           ..write('relationalId: $relationalId, ')
           ..write('texT: $texT, ')
-          ..write('creationAt: $creationAt')
+          ..write('creationAt: $creationAt, ')
+          ..write('lastModificationAt: $lastModificationAt')
           ..write(')'))
         .toString();
   }

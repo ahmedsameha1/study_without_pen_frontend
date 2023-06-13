@@ -13,6 +13,7 @@ void main() {
   String relationalId = const Uuid().v4();
   String texT = "some note";
   DateTime creationAt = DateTime(2020, 1, 1);
+  DateTime lastModificationAt = DateTime(2020, 2, 2);
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -29,7 +30,8 @@ void main() {
           id: "wew",
           relationalId: relationalId,
           texT: texT,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await notesDao.create(note.toCompanion(true));
       },
@@ -42,12 +44,14 @@ void main() {
           id: id,
           relationalId: relationalId,
           texT: texT,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       var note2 = Note(
           id: id,
           relationalId: relationalId,
           texT: texT,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await notesDao.create(note1.toCompanion(true));
         await notesDao.create(note2.toCompanion(true));
@@ -58,7 +62,11 @@ void main() {
 
     test("Invalid note: relationalId is an invalid UUID v4", () async {
       var note = Note(
-          id: id, relationalId: "efww", texT: texT, creationAt: creationAt);
+          id: id,
+          relationalId: "efww",
+          texT: texT,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await notesDao.create(note.toCompanion(true));
       },
@@ -71,7 +79,11 @@ void main() {
         "Invalid note: text length is smaller than ${Notes.MINIMUM_LENGTH_OF_TEXT}",
         () async {
       var note = Note(
-          id: id, relationalId: relationalId, texT: "", creationAt: creationAt);
+          id: id,
+          relationalId: relationalId,
+          texT: "",
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await notesDao.create(note.toCompanion(true));
       },
@@ -81,7 +93,8 @@ void main() {
           id: id,
           relationalId: relationalId,
           texT: " ",
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await notesDao.create(note.toCompanion(true));
       },
@@ -96,7 +109,8 @@ void main() {
           id: id,
           relationalId: relationalId,
           texT: "f" * (Notes.MAXIMUM_LENGTH_OF_TEXT + 1),
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await notesDao.create(note.toCompanion(true));
       },
@@ -110,7 +124,8 @@ void main() {
             id: id,
             relationalId: relationalId,
             texT: texT,
-            creationAt: DateTime(2020, 2, 2));
+            creationAt: DateTime(2020, 2, 2),
+            lastModificationAt: lastModificationAt);
         expect(() async {
           await notesDao.create(note.toCompanion(true));
         },
@@ -120,11 +135,46 @@ void main() {
       });
     });
 
+    test("Invalid note: lastModificationAt is in the future", () {
+      withClock(Clock.fixed(DateTime(2021, 1, 1)), () async {
+        var note = Note(
+            id: id,
+            relationalId: relationalId,
+            texT: texT,
+            creationAt: creationAt,
+            lastModificationAt: DateTime(2022, 1, 1));
+        expect(() async {
+          await notesDao.create(note.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("lastModificationAt"))));
+      });
+    });
+
+    test("Invalid note: lastModificationAt is before creationAt", () {
+      withClock(Clock.fixed(DateTime(2021, 1, 1)), () async {
+        var note = Note(
+            id: id,
+            relationalId: relationalId,
+            texT: texT,
+            creationAt: DateTime(2020, 1, 1),
+            lastModificationAt: DateTime(2019, 1, 1));
+        expect(() async {
+          await notesDao.create(note.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException &&
+                e.message.contains("last_modification_at"))));
+      });
+    });
+
     test("Good case: create Note without 'id'", () async {
       var notesCompanion = NotesCompanion(
           relationalId: Value(relationalId),
           texT: Value(texT),
-          creationAt: Value(creationAt));
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt));
       await notesDao.create(notesCompanion);
     });
   });
@@ -135,7 +185,8 @@ void main() {
           id: id,
           relationalId: relationalId,
           texT: texT,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       await notesDao.create(note.toCompanion(true));
       Note? gottenNote = await notesDao.getById(id);
       gottenNote = gottenNote!;
