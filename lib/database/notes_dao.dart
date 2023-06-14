@@ -26,4 +26,14 @@ class NotesDao extends DatabaseAccessor<AppDatabase> with _$NotesDaoMixin {
   Future<Note?> getById(String id) {
     return (select(notes)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
+
+  Stream<List<Note>> watchByRelationalId(String relationalId) {
+    return (select(notes)
+          ..where((tbl) => tbl.relationalId.equals(relationalId))
+          ..orderBy([
+            (tbl) => OrderingTerm(
+                expression: tbl.creationAt, mode: OrderingMode.desc)
+          ]))
+        .watch();
+  }
 }

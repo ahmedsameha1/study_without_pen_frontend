@@ -200,4 +200,122 @@ void main() {
       expect(gottenNote, null);
     });
   });
+
+  test("Getting all notes by relationalId", () async {
+    var noteId1 = const Uuid().v4();
+    var noteId2 = const Uuid().v4();
+    var noteId3 = const Uuid().v4();
+    var noteId4 = const Uuid().v4();
+    var noteId5 = const Uuid().v4();
+    var noteId6 = const Uuid().v4();
+    var relationalId1 = const Uuid().v4();
+    var relationalId2 = const Uuid().v4();
+    var relationalId3 = const Uuid().v4();
+    var texT1 = "text1";
+    var texT2 = "text2";
+    var texT3 = "text3";
+    var texT4 = "text4";
+    var texT5 = "text5";
+    var texT6 = "text6";
+    DateTime creationAt1 = DateTime(2020, 1, 1);
+    DateTime creationAt2 = DateTime(2020, 2, 2);
+    DateTime creationAt3 = DateTime(2020, 3, 3);
+    DateTime creationAt4 = DateTime(2020, 4, 4);
+    DateTime creationAt5 = DateTime(2020, 5, 5);
+    DateTime creationAt6 = DateTime(2020, 6, 6);
+    DateTime lastModificationAt1 = DateTime(2021, 1, 1);
+    DateTime lastModificationAt2 = DateTime(2021, 2, 2);
+    DateTime lastModificationAt3 = DateTime(2021, 3, 3);
+    DateTime lastModificationAt4 = DateTime(2021, 4, 4);
+    DateTime lastModificationAt5 = DateTime(2021, 5, 5);
+    DateTime lastModificationAt6 = DateTime(2021, 6, 6);
+    var note1 = Note(
+        id: noteId1,
+        relationalId: relationalId1,
+        texT: texT1,
+        creationAt: creationAt1,
+        lastModificationAt: lastModificationAt1);
+    var note2 = Note(
+        id: noteId2,
+        relationalId: relationalId2,
+        texT: texT2,
+        creationAt: creationAt2,
+        lastModificationAt: lastModificationAt2);
+    var note3 = Note(
+        id: noteId3,
+        relationalId: relationalId3,
+        texT: texT3,
+        creationAt: creationAt3,
+        lastModificationAt: lastModificationAt3);
+    var note4 = Note(
+        id: noteId4,
+        relationalId: relationalId1,
+        texT: texT4,
+        creationAt: creationAt4,
+        lastModificationAt: lastModificationAt4);
+    var note5 = Note(
+        id: noteId5,
+        relationalId: relationalId2,
+        texT: texT5,
+        creationAt: creationAt5,
+        lastModificationAt: lastModificationAt5);
+    var note6 = Note(
+        id: noteId6,
+        relationalId: relationalId1,
+        texT: texT6,
+        creationAt: creationAt6,
+        lastModificationAt: lastModificationAt6);
+    await notesDao.create(note1.toCompanion(true));
+    await notesDao.create(note2.toCompanion(true));
+    await notesDao.create(note3.toCompanion(true));
+    await notesDao.create(note4.toCompanion(true));
+    await notesDao.create(note5.toCompanion(true));
+    await notesDao.create(note6.toCompanion(true));
+    Stream<List<Note>> streamNotes =
+        notesDao.watchByRelationalId(relationalId1);
+    List<Note> notes = await streamNotes.first;
+    expect(notes.length, 3);
+    var gottenNote = notes[0];
+    expect(gottenNote.id, noteId6);
+    expect(gottenNote.relationalId, relationalId1);
+    expect(gottenNote.texT, texT6);
+    expect(gottenNote.creationAt, creationAt6);
+    expect(gottenNote.lastModificationAt, lastModificationAt6);
+    gottenNote = notes[1];
+    expect(gottenNote.id, noteId4);
+    expect(gottenNote.relationalId, relationalId1);
+    expect(gottenNote.texT, texT4);
+    expect(gottenNote.creationAt, creationAt4);
+    expect(gottenNote.lastModificationAt, lastModificationAt4);
+    gottenNote = notes[2];
+    expect(gottenNote.id, noteId1);
+    expect(gottenNote.relationalId, relationalId1);
+    expect(gottenNote.texT, texT1);
+    expect(gottenNote.creationAt, creationAt1);
+    expect(gottenNote.lastModificationAt, lastModificationAt1);
+    streamNotes = notesDao.watchByRelationalId(relationalId2);
+    notes = await streamNotes.first;
+    expect(notes.length, 2);
+    gottenNote = notes[0];
+    expect(gottenNote.id, noteId5);
+    expect(gottenNote.relationalId, relationalId2);
+    expect(gottenNote.texT, texT5);
+    expect(gottenNote.creationAt, creationAt5);
+    expect(gottenNote.lastModificationAt, lastModificationAt5);
+    gottenNote = notes[1];
+    expect(gottenNote.id, noteId2);
+    expect(gottenNote.relationalId, relationalId2);
+    expect(gottenNote.texT, texT2);
+    expect(gottenNote.creationAt, creationAt2);
+    expect(gottenNote.lastModificationAt, lastModificationAt2);
+    streamNotes = notesDao.watchByRelationalId(relationalId3);
+    notes = await streamNotes.first;
+    expect(notes.length, 1);
+    gottenNote = notes[0];
+    expect(gottenNote.id, noteId3);
+    expect(gottenNote.relationalId, relationalId3);
+    expect(gottenNote.texT, texT3);
+    expect(gottenNote.creationAt, creationAt3);
+    expect(gottenNote.lastModificationAt, lastModificationAt3);
+  });
 }
