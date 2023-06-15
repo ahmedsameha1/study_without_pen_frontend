@@ -193,6 +193,8 @@ void main() {
       expect(gottenNote.id, id);
       expect(gottenNote.relationalId, relationalId);
       expect(gottenNote.texT, texT);
+      expect(gottenNote.creationAt, creationAt);
+      expect(gottenNote.lastModificationAt, lastModificationAt);
     });
 
     test("Good case: this specific Note is not found", () async {
@@ -437,6 +439,43 @@ void main() {
                 e is SqliteException &&
                 e.message.contains("last_modification_at"))));
       });
+    });
+
+    test("Good case 1", () async {
+      var newRelationalId = const Uuid().v4();
+      var note = Note(
+          id: id,
+          relationalId: newRelationalId,
+          texT: texT,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      await notesDao.mutate(note.toCompanion(true));
+      Note? gottenNote = await notesDao.getById(id);
+      gottenNote = gottenNote!;
+      expect(gottenNote.id, id);
+      expect(gottenNote.relationalId, newRelationalId);
+      expect(gottenNote.texT, texT);
+      expect(gottenNote.creationAt, creationAt);
+      expect(gottenNote.lastModificationAt, lastModificationAt);
+    });
+
+    test("Good case 2", () async {
+      const newText = "wofwoef";
+      var newLastModificationAt = lastModificationAt.add(Duration(days: 13));
+      var note = Note(
+          id: id,
+          relationalId: relationalId,
+          texT: newText,
+          creationAt: creationAt,
+          lastModificationAt: newLastModificationAt);
+      await notesDao.mutate(note.toCompanion(true));
+      Note? gottenNote = await notesDao.getById(id);
+      gottenNote = gottenNote!;
+      expect(gottenNote.id, id);
+      expect(gottenNote.relationalId, relationalId);
+      expect(gottenNote.texT, newText);
+      expect(gottenNote.creationAt, creationAt);
+      expect(gottenNote.lastModificationAt, newLastModificationAt);
     });
   });
 }
