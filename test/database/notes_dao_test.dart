@@ -387,5 +387,22 @@ void main() {
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("tex_t"))));
     });
+
+    test("Invalid update: creationAt is in the future", () {
+      withClock(Clock.fixed(DateTime(2020, 1, 1)), () async {
+        var note = Note(
+            id: id,
+            relationalId: relationalId,
+            texT: texT,
+            creationAt: DateTime(2020, 2, 2),
+            lastModificationAt: lastModificationAt);
+        expect(() async {
+          await notesDao.mutate(note.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("creationAt"))));
+      });
+    });
   });
 }
