@@ -404,5 +404,39 @@ void main() {
                 e.message.contains("creationAt"))));
       });
     });
+
+    test("Invalid update: lastModificationAt is in the future", () {
+      withClock(Clock.fixed(DateTime(2021, 1, 1)), () async {
+        var note = Note(
+            id: id,
+            relationalId: relationalId,
+            texT: texT,
+            creationAt: creationAt,
+            lastModificationAt: DateTime(2022, 1, 1));
+        expect(() async {
+          await notesDao.mutate(note.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("lastModificationAt"))));
+      });
+    });
+
+    test("Invalid update: lastModificationAt is before creationAt", () {
+      withClock(Clock.fixed(DateTime(2021, 1, 1)), () async {
+        var note = Note(
+            id: id,
+            relationalId: relationalId,
+            texT: texT,
+            creationAt: DateTime(2020, 1, 1),
+            lastModificationAt: DateTime(2019, 1, 1));
+        expect(() async {
+          await notesDao.mutate(note.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException &&
+                e.message.contains("last_modification_at"))));
+      });
+    });
   });
 }

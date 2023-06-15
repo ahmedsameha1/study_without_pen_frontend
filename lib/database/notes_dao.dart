@@ -44,6 +44,9 @@ class NotesDao extends DatabaseAccessor<AppDatabase> with _$NotesDaoMixin {
     if (notesCompanion.creationAt.value.toUtc().isAfter(clock.now())) {
       throw InvalidDataException("creationAt");
     }
+    if (notesCompanion.lastModificationAt.value.toUtc().isAfter(clock.now())) {
+      throw InvalidDataException("lastModificationAt");
+    }
     return update(notes).replace(notesCompanion);
   }
 }
