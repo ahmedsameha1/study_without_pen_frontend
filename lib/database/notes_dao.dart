@@ -41,5 +41,6 @@ class NotesDao extends DatabaseAccessor<AppDatabase> with _$NotesDaoMixin {
     if (!isValid(notesCompanion.relationalId.value)) {
       throw InvalidDataException("relationalId");
     }
+    return update(notes).replace(notesCompanion);
   }
 }

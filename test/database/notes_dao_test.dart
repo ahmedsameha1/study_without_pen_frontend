@@ -344,5 +344,48 @@ void main() {
               e is InvalidDataException &&
               e.message.contains("relationalId"))));
     });
+
+    test(
+        "Invalid update: text length is smaller than ${Notes.MINIMUM_LENGTH_OF_TEXT}",
+        () async {
+      var note = Note(
+          id: id,
+          relationalId: relationalId,
+          texT: "",
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await notesDao.mutate(note.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("tex_t"))));
+      note = Note(
+          id: id,
+          relationalId: relationalId,
+          texT: " ",
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await notesDao.mutate(note.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("tex_t"))));
+    });
+
+    test(
+        "Invalid update: text length is bigger than ${Notes.MAXIMUM_LENGTH_OF_TEXT}",
+        () async {
+      var note = Note(
+          id: id,
+          relationalId: relationalId,
+          texT: "f" * (Notes.MAXIMUM_LENGTH_OF_TEXT + 1),
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await notesDao.mutate(note.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("tex_t"))));
+    });
   });
 }
