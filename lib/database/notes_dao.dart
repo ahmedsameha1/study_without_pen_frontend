@@ -49,4 +49,8 @@ class NotesDao extends DatabaseAccessor<AppDatabase> with _$NotesDaoMixin {
     }
     return update(notes).replace(notesCompanion);
   }
+
+  remove(String id) {
+    return (delete(notes)..where((tbl) => tbl.id.equals(id))).go();
+  }
 }

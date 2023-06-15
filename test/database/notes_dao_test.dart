@@ -478,4 +478,17 @@ void main() {
       expect(gottenNote.lastModificationAt, newLastModificationAt);
     });
   });
+
+  test("Delete some Note", () async {
+    var note = Note(
+        id: id,
+        relationalId: relationalId,
+        texT: texT,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt);
+    await notesDao.create(note.toCompanion(true));
+    await notesDao.remove(id);
+    var gottenNote = await notesDao.getById(id);
+    expect(gottenNote, null);
+  });
 }
