@@ -318,4 +318,31 @@ void main() {
     expect(gottenNote.creationAt, creationAt3);
     expect(gottenNote.lastModificationAt, lastModificationAt3);
   });
+
+  group("Update a Note", () {
+    setUp(() async {
+      var note = Note(
+          id: id,
+          relationalId: relationalId,
+          texT: texT,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      await notesDao.create(note.toCompanion(true));
+    });
+
+    test("Invalid update: relationalId is an invalid UUID v4", () async {
+      var note = Note(
+          id: id,
+          relationalId: "ehowf",
+          texT: texT,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await notesDao.mutate(note.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains("relationalId"))));
+    });
+  });
 }
