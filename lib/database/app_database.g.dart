@@ -2844,6 +2844,143 @@ class NotesCompanion extends UpdateCompanion<Note> {
   }
 }
 
+class $FullyRandomTestsTable extends FullyRandomTests
+    with TableInfo<$FullyRandomTestsTable, FullyRandomTest> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FullyRandomTestsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id];
+  @override
+  String get aliasedName => _alias ?? 'fully_random_tests';
+  @override
+  String get actualTableName => 'fully_random_tests';
+  @override
+  VerificationContext validateIntegrity(Insertable<FullyRandomTest> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  FullyRandomTest map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FullyRandomTest(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+    );
+  }
+
+  @override
+  $FullyRandomTestsTable createAlias(String alias) {
+    return $FullyRandomTestsTable(attachedDatabase, alias);
+  }
+}
+
+class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
+  final String id;
+  const FullyRandomTest({required this.id});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    return map;
+  }
+
+  FullyRandomTestsCompanion toCompanion(bool nullToAbsent) {
+    return FullyRandomTestsCompanion(
+      id: Value(id),
+    );
+  }
+
+  factory FullyRandomTest.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FullyRandomTest(
+      id: serializer.fromJson<String>(json['id']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+    };
+  }
+
+  FullyRandomTest copyWith({String? id}) => FullyRandomTest(
+        id: id ?? this.id,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('FullyRandomTest(')
+          ..write('id: $id')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FullyRandomTest && other.id == this.id);
+}
+
+class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
+  final Value<String> id;
+  const FullyRandomTestsCompanion({
+    this.id = const Value.absent(),
+  });
+  FullyRandomTestsCompanion.insert({
+    required String id,
+  }) : id = Value(id);
+  static Insertable<FullyRandomTest> custom({
+    Expression<String>? id,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+    });
+  }
+
+  FullyRandomTestsCompanion copyWith({Value<String>? id}) {
+    return FullyRandomTestsCompanion(
+      id: id ?? this.id,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FullyRandomTestsCompanion(')
+          ..write('id: $id')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $EntryTextsTable entryTexts = $EntryTextsTable(this);
@@ -2852,18 +2989,29 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FieldListsTable fieldLists = $FieldListsTable(this);
   late final $FieldsTable fields = $FieldsTable(this);
   late final $NotesTable notes = $NotesTable(this);
+  late final $FullyRandomTestsTable fullyRandomTests =
+      $FullyRandomTestsTable(this);
   late final EntryTextsDao entryTextsDao = EntryTextsDao(this as AppDatabase);
   late final QuestionsDao questionsDao = QuestionsDao(this as AppDatabase);
   late final EntrysDao entrysDao = EntrysDao(this as AppDatabase);
   late final FieldListsDao fieldListsDao = FieldListsDao(this as AppDatabase);
   late final FieldsDao fieldsDao = FieldsDao(this as AppDatabase);
   late final NotesDao notesDao = NotesDao(this as AppDatabase);
+  late final FullyRandomTestsDao fullyRandomTestsDao =
+      FullyRandomTestsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [entryTexts, questions, entrys, fieldLists, fields, notes];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        entryTexts,
+        questions,
+        entrys,
+        fieldLists,
+        fields,
+        notes,
+        fullyRandomTests
+      ];
   @override
   DriftDatabaseOptions get options =>
       const DriftDatabaseOptions(storeDateTimeAsText: true);

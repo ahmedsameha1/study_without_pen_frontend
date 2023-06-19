@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
+import 'package:study_without_pen_by_flutter/database/fully_random_tests_dao.dart';
 import 'package:study_without_pen_by_flutter/database/notes_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
@@ -212,20 +213,26 @@ class Notes extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class FullyRandomTests extends Table {
+  TextColumn get id => text()();
+}
+
 @DriftDatabase(tables: [
   EntryTexts,
   Questions,
   Entrys,
   FieldLists,
   Fields,
-  Notes
+  Notes,
+  FullyRandomTests
 ], daos: [
   EntryTextsDao,
   QuestionsDao,
   EntrysDao,
   FieldListsDao,
   FieldsDao,
-  NotesDao
+  NotesDao,
+  FullyRandomTestsDao
 ])
 class AppDatabase extends _$AppDatabase {
   static const databaseFileName = "db.sqlite";
