@@ -8,8 +8,10 @@ class FullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
     with _$FullyRandomTestsDaoMixin {
   FullyRandomTestsDao(AppDatabase appDatabase) : super(appDatabase);
   create(FullyRandomTestsCompanion fullyRandomTestsCompanion) {
-    if (!isValid(fullyRandomTestsCompanion.id.value)) {
+    if (fullyRandomTestsCompanion.id.present &&
+        !isValid(fullyRandomTestsCompanion.id.value)) {
       throw InvalidDataException("id");
     }
+    return into(fullyRandomTests).insert(fullyRandomTestsCompanion);
   }
 }

@@ -214,7 +214,10 @@ class Notes extends Table {
 }
 
 class FullyRandomTests extends Table {
-  TextColumn get id => text()();
+  TextColumn get id => text().clientDefault(() => const Uuid().v4())();
+
+  @override
+  Set<Column> get primaryKey => {id};
 }
 
 @DriftDatabase(tables: [

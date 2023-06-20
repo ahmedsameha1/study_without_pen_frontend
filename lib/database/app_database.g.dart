@@ -2854,7 +2854,9 @@ class $FullyRandomTestsTable extends FullyRandomTests
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
       'id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => const Uuid().v4());
   @override
   List<GeneratedColumn> get $columns => [id];
   @override
@@ -2868,14 +2870,12 @@ class $FullyRandomTestsTable extends FullyRandomTests
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   FullyRandomTest map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -2947,8 +2947,8 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     this.id = const Value.absent(),
   });
   FullyRandomTestsCompanion.insert({
-    required String id,
-  }) : id = Value(id);
+    this.id = const Value.absent(),
+  });
   static Insertable<FullyRandomTest> custom({
     Expression<String>? id,
   }) {
