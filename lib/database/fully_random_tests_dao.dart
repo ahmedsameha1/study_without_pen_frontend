@@ -12,6 +12,9 @@ class FullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
         !isValid(fullyRandomTestsCompanion.id.value)) {
       throw InvalidDataException("id");
     }
+    if (!isValid(fullyRandomTestsCompanion.fieldListId.value)) {
+      throw InvalidDataException("fieldListId");
+    }
     return into(fullyRandomTests).insert(fullyRandomTestsCompanion);
   }
 }

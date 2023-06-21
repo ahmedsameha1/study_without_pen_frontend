@@ -2857,8 +2857,14 @@ class $FullyRandomTestsTable extends FullyRandomTests
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       clientDefault: () => const Uuid().v4());
+  static const VerificationMeta _fieldListIdMeta =
+      const VerificationMeta('fieldListId');
   @override
-  List<GeneratedColumn> get $columns => [id];
+  late final GeneratedColumn<String> fieldListId = GeneratedColumn<String>(
+      'field_list_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [id, fieldListId];
   @override
   String get aliasedName => _alias ?? 'fully_random_tests';
   @override
@@ -2871,6 +2877,14 @@ class $FullyRandomTestsTable extends FullyRandomTests
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
+    if (data.containsKey('field_list_id')) {
+      context.handle(
+          _fieldListIdMeta,
+          fieldListId.isAcceptableOrUnknown(
+              data['field_list_id']!, _fieldListIdMeta));
+    } else if (isInserting) {
+      context.missing(_fieldListIdMeta);
+    }
     return context;
   }
 
@@ -2882,6 +2896,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
     return FullyRandomTest(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      fieldListId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}field_list_id'])!,
     );
   }
 
@@ -2893,17 +2909,20 @@ class $FullyRandomTestsTable extends FullyRandomTests
 
 class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
   final String id;
-  const FullyRandomTest({required this.id});
+  final String fieldListId;
+  const FullyRandomTest({required this.id, required this.fieldListId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
+    map['field_list_id'] = Variable<String>(fieldListId);
     return map;
   }
 
   FullyRandomTestsCompanion toCompanion(bool nullToAbsent) {
     return FullyRandomTestsCompanion(
       id: Value(id),
+      fieldListId: Value(fieldListId),
     );
   }
 
@@ -2912,6 +2931,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return FullyRandomTest(
       id: serializer.fromJson<String>(json['id']),
+      fieldListId: serializer.fromJson<String>(json['fieldListId']),
     );
   }
   @override
@@ -2919,47 +2939,60 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
+      'fieldListId': serializer.toJson<String>(fieldListId),
     };
   }
 
-  FullyRandomTest copyWith({String? id}) => FullyRandomTest(
+  FullyRandomTest copyWith({String? id, String? fieldListId}) =>
+      FullyRandomTest(
         id: id ?? this.id,
+        fieldListId: fieldListId ?? this.fieldListId,
       );
   @override
   String toString() {
     return (StringBuffer('FullyRandomTest(')
-          ..write('id: $id')
+          ..write('id: $id, ')
+          ..write('fieldListId: $fieldListId')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => id.hashCode;
+  int get hashCode => Object.hash(id, fieldListId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is FullyRandomTest && other.id == this.id);
+      (other is FullyRandomTest &&
+          other.id == this.id &&
+          other.fieldListId == this.fieldListId);
 }
 
 class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
   final Value<String> id;
+  final Value<String> fieldListId;
   const FullyRandomTestsCompanion({
     this.id = const Value.absent(),
+    this.fieldListId = const Value.absent(),
   });
   FullyRandomTestsCompanion.insert({
     this.id = const Value.absent(),
-  });
+    required String fieldListId,
+  }) : fieldListId = Value(fieldListId);
   static Insertable<FullyRandomTest> custom({
     Expression<String>? id,
+    Expression<String>? fieldListId,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (fieldListId != null) 'field_list_id': fieldListId,
     });
   }
 
-  FullyRandomTestsCompanion copyWith({Value<String>? id}) {
+  FullyRandomTestsCompanion copyWith(
+      {Value<String>? id, Value<String>? fieldListId}) {
     return FullyRandomTestsCompanion(
       id: id ?? this.id,
+      fieldListId: fieldListId ?? this.fieldListId,
     );
   }
 
@@ -2969,13 +3002,17 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     if (id.present) {
       map['id'] = Variable<String>(id.value);
     }
+    if (fieldListId.present) {
+      map['field_list_id'] = Variable<String>(fieldListId.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('FullyRandomTestsCompanion(')
-          ..write('id: $id')
+          ..write('id: $id, ')
+          ..write('fieldListId: $fieldListId')
           ..write(')'))
         .toString();
   }

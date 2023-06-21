@@ -215,6 +215,7 @@ class Notes extends Table {
 
 class FullyRandomTests extends Table {
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
+  TextColumn get fieldListId => text()();
 
   @override
   Set<Column> get primaryKey => {id};

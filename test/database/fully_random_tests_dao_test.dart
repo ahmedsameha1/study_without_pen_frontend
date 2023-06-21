@@ -9,6 +9,8 @@ void main() {
   late AppDatabase appDatabase;
   late FullyRandomTestsDao fullyRandomTestsDao;
   String id = Uuid().v4();
+  String fieldListId = Uuid().v4();
+
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     fullyRandomTestsDao = FullyRandomTestsDao(appDatabase);
@@ -18,9 +20,10 @@ void main() {
     await appDatabase.close();
   });
 
-  group("Create a FullyRandomTests", () {
-    test("Invalid FullyRandomTests: id is an invalid UUID v4", () {
-      var fullyRandomTest = FullyRandomTest(id: "owhoweh");
+  group("Create a FullyRandomTest", () {
+    test("Invalid FullyRandomTest: id is an invalid UUID v4", () {
+      var fullyRandomTest =
+          FullyRandomTest(id: "owhoweh", fieldListId: fieldListId);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -29,8 +32,8 @@ void main() {
     });
 
     test("No FullyRandomTests with the same id", () async {
-      var fullyRandomTest1 = FullyRandomTest(id: id);
-      var fullyRandomTest2 = FullyRandomTest(id: id);
+      var fullyRandomTest1 = FullyRandomTest(id: id, fieldListId: fieldListId);
+      var fullyRandomTest2 = FullyRandomTest(id: id, fieldListId: fieldListId);
       await fullyRandomTestsDao.create(fullyRandomTest1.toCompanion(true));
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest2.toCompanion(true));
@@ -39,8 +42,18 @@ void main() {
               (e) => e is SqliteException && e.message.contains("id"))));
     });
 
+    test("Invalid FullyRandomTest: fieldListId is an invalid UUID v4", () {
+      var fullyRandomTest = FullyRandomTest(id: id, fieldListId: "ewfewofh");
+      expect(() async {
+        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("fieldListId"))));
+    });
+
     test("Good case: create FullyRandomTest without 'id'", () async {
-      var fullyRandomTestsCompanion = FullyRandomTestsCompanion();
+      var fullyRandomTestsCompanion =
+          FullyRandomTestsCompanion(fieldListId: Value(fieldListId));
       await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
     });
   });
