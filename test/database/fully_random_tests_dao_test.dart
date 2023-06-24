@@ -11,6 +11,7 @@ void main() {
   String id = Uuid().v4();
   String fieldListId = Uuid().v4();
   int currentQuestionCounter = 5;
+  int triesNumber = 2;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -26,7 +27,8 @@ void main() {
       var fullyRandomTest = FullyRandomTest(
           id: "owhoweh",
           fieldListId: fieldListId,
-          currentQuestionCounter: currentQuestionCounter);
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -38,11 +40,13 @@ void main() {
       var fullyRandomTest1 = FullyRandomTest(
           id: id,
           fieldListId: fieldListId,
-          currentQuestionCounter: currentQuestionCounter);
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber);
       var fullyRandomTest2 = FullyRandomTest(
           id: id,
           fieldListId: fieldListId,
-          currentQuestionCounter: currentQuestionCounter);
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber);
       await fullyRandomTestsDao.create(fullyRandomTest1.toCompanion(true));
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest2.toCompanion(true));
@@ -55,7 +59,8 @@ void main() {
       var fullyRandomTest = FullyRandomTest(
           id: id,
           fieldListId: "ewfewofh",
-          currentQuestionCounter: currentQuestionCounter);
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -70,7 +75,8 @@ void main() {
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter:
-              FullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER - 1);
+              FullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER - 1,
+          triesNumber: triesNumber);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -86,7 +92,8 @@ void main() {
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter:
-              FullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER + 1);
+              FullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER + 1,
+          triesNumber: triesNumber);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -95,10 +102,41 @@ void main() {
               e.message.contains("current_question_counter"))));
     });
 
+    test(
+        "Invalid FullyRandomTest: triesNumber is smaller than ${FullyRandomTests.MINIMUM_TRIES_NUMBER}",
+        () {
+      var fullyRandomTest = FullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: FullyRandomTests.MINIMUM_TRIES_NUMBER - 1);
+      expect(() async {
+        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("tries_number"))));
+    });
+
+    test(
+        "Invalid FullyRandomTest: triesNumber is bigger than ${FullyRandomTests.MAXIMUM_TRIES_NUMBER}",
+        () {
+      var fullyRandomTest = FullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: FullyRandomTests.MAXIMUM_TRIES_NUMBER + 1);
+      expect(() async {
+        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("tries_number"))));
+    });
+
     test("Good case: create FullyRandomTest without 'id'", () async {
       var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
           fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter));
+          currentQuestionCounter: Value(currentQuestionCounter),
+          triesNumber: Value(triesNumber));
       await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
     });
   });

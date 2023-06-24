@@ -216,6 +216,8 @@ class Notes extends Table {
 class FullyRandomTests extends Table {
   static const int MINIMUM_CURRENT_QUESTION_COUNTER = 0;
   static const int MAXIMUM_CURRENT_QUESTION_COUNTER = 0xffffffff;
+  static const int MINIMUM_TRIES_NUMBER = 0;
+  static const int MAXIMUM_TRIES_NUMBER = 0xff;
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldListId => text()();
@@ -224,6 +226,10 @@ class FullyRandomTests extends Table {
               FullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER) &
           currentQuestionCounter.isSmallerOrEqualValue(
               FullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER))();
+  IntColumn get triesNumber => integer().check(
+      triesNumber.isBiggerOrEqualValue(FullyRandomTests.MINIMUM_TRIES_NUMBER) &
+          triesNumber
+              .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_NUMBER))();
 
   @override
   Set<Column> get primaryKey => {id};
