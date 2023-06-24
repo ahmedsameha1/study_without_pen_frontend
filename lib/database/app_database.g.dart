@@ -2887,9 +2887,21 @@ class $FullyRandomTestsTable extends FullyRandomTests
               .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_NUMBER),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
+  static const VerificationMeta _triesCounterMeta =
+      const VerificationMeta('triesCounter');
+  @override
+  late final GeneratedColumn<int> triesCounter = GeneratedColumn<int>(
+      'tries_counter', aliasedName, false,
+      check: () =>
+          triesCounter
+              .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_TRIES_COUNTER) &
+          triesCounter
+              .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_COUNTER),
+      type: DriftSqlType.int,
+      requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, fieldListId, currentQuestionCounter, triesNumber];
+      [id, fieldListId, currentQuestionCounter, triesNumber, triesCounter];
   @override
   String get aliasedName => _alias ?? 'fully_random_tests';
   @override
@@ -2926,6 +2938,14 @@ class $FullyRandomTestsTable extends FullyRandomTests
     } else if (isInserting) {
       context.missing(_triesNumberMeta);
     }
+    if (data.containsKey('tries_counter')) {
+      context.handle(
+          _triesCounterMeta,
+          triesCounter.isAcceptableOrUnknown(
+              data['tries_counter']!, _triesCounterMeta));
+    } else if (isInserting) {
+      context.missing(_triesCounterMeta);
+    }
     return context;
   }
 
@@ -2944,6 +2964,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
           data['${effectivePrefix}current_question_counter'])!,
       triesNumber: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}tries_number'])!,
+      triesCounter: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}tries_counter'])!,
     );
   }
 
@@ -2958,11 +2980,13 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
   final String fieldListId;
   final int currentQuestionCounter;
   final int triesNumber;
+  final int triesCounter;
   const FullyRandomTest(
       {required this.id,
       required this.fieldListId,
       required this.currentQuestionCounter,
-      required this.triesNumber});
+      required this.triesNumber,
+      required this.triesCounter});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2970,6 +2994,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
     map['field_list_id'] = Variable<String>(fieldListId);
     map['current_question_counter'] = Variable<int>(currentQuestionCounter);
     map['tries_number'] = Variable<int>(triesNumber);
+    map['tries_counter'] = Variable<int>(triesCounter);
     return map;
   }
 
@@ -2979,6 +3004,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       fieldListId: Value(fieldListId),
       currentQuestionCounter: Value(currentQuestionCounter),
       triesNumber: Value(triesNumber),
+      triesCounter: Value(triesCounter),
     );
   }
 
@@ -2991,6 +3017,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       currentQuestionCounter:
           serializer.fromJson<int>(json['currentQuestionCounter']),
       triesNumber: serializer.fromJson<int>(json['triesNumber']),
+      triesCounter: serializer.fromJson<int>(json['triesCounter']),
     );
   }
   @override
@@ -3001,6 +3028,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       'fieldListId': serializer.toJson<String>(fieldListId),
       'currentQuestionCounter': serializer.toJson<int>(currentQuestionCounter),
       'triesNumber': serializer.toJson<int>(triesNumber),
+      'triesCounter': serializer.toJson<int>(triesCounter),
     };
   }
 
@@ -3008,13 +3036,15 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           {String? id,
           String? fieldListId,
           int? currentQuestionCounter,
-          int? triesNumber}) =>
+          int? triesNumber,
+          int? triesCounter}) =>
       FullyRandomTest(
         id: id ?? this.id,
         fieldListId: fieldListId ?? this.fieldListId,
         currentQuestionCounter:
             currentQuestionCounter ?? this.currentQuestionCounter,
         triesNumber: triesNumber ?? this.triesNumber,
+        triesCounter: triesCounter ?? this.triesCounter,
       );
   @override
   String toString() {
@@ -3022,14 +3052,15 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           ..write('id: $id, ')
           ..write('fieldListId: $fieldListId, ')
           ..write('currentQuestionCounter: $currentQuestionCounter, ')
-          ..write('triesNumber: $triesNumber')
+          ..write('triesNumber: $triesNumber, ')
+          ..write('triesCounter: $triesCounter')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, fieldListId, currentQuestionCounter, triesNumber);
+  int get hashCode => Object.hash(
+      id, fieldListId, currentQuestionCounter, triesNumber, triesCounter);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3037,7 +3068,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           other.id == this.id &&
           other.fieldListId == this.fieldListId &&
           other.currentQuestionCounter == this.currentQuestionCounter &&
-          other.triesNumber == this.triesNumber);
+          other.triesNumber == this.triesNumber &&
+          other.triesCounter == this.triesCounter);
 }
 
 class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
@@ -3045,25 +3077,30 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
   final Value<String> fieldListId;
   final Value<int> currentQuestionCounter;
   final Value<int> triesNumber;
+  final Value<int> triesCounter;
   const FullyRandomTestsCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
     this.currentQuestionCounter = const Value.absent(),
     this.triesNumber = const Value.absent(),
+    this.triesCounter = const Value.absent(),
   });
   FullyRandomTestsCompanion.insert({
     this.id = const Value.absent(),
     required String fieldListId,
     required int currentQuestionCounter,
     required int triesNumber,
+    required int triesCounter,
   })  : fieldListId = Value(fieldListId),
         currentQuestionCounter = Value(currentQuestionCounter),
-        triesNumber = Value(triesNumber);
+        triesNumber = Value(triesNumber),
+        triesCounter = Value(triesCounter);
   static Insertable<FullyRandomTest> custom({
     Expression<String>? id,
     Expression<String>? fieldListId,
     Expression<int>? currentQuestionCounter,
     Expression<int>? triesNumber,
+    Expression<int>? triesCounter,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3071,6 +3108,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
       if (currentQuestionCounter != null)
         'current_question_counter': currentQuestionCounter,
       if (triesNumber != null) 'tries_number': triesNumber,
+      if (triesCounter != null) 'tries_counter': triesCounter,
     });
   }
 
@@ -3078,13 +3116,15 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
       {Value<String>? id,
       Value<String>? fieldListId,
       Value<int>? currentQuestionCounter,
-      Value<int>? triesNumber}) {
+      Value<int>? triesNumber,
+      Value<int>? triesCounter}) {
     return FullyRandomTestsCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
       currentQuestionCounter:
           currentQuestionCounter ?? this.currentQuestionCounter,
       triesNumber: triesNumber ?? this.triesNumber,
+      triesCounter: triesCounter ?? this.triesCounter,
     );
   }
 
@@ -3104,6 +3144,9 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     if (triesNumber.present) {
       map['tries_number'] = Variable<int>(triesNumber.value);
     }
+    if (triesCounter.present) {
+      map['tries_counter'] = Variable<int>(triesCounter.value);
+    }
     return map;
   }
 
@@ -3113,7 +3156,8 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
           ..write('id: $id, ')
           ..write('fieldListId: $fieldListId, ')
           ..write('currentQuestionCounter: $currentQuestionCounter, ')
-          ..write('triesNumber: $triesNumber')
+          ..write('triesNumber: $triesNumber, ')
+          ..write('triesCounter: $triesCounter')
           ..write(')'))
         .toString();
   }
