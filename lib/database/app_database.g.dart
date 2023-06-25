@@ -2908,6 +2908,19 @@ class $FullyRandomTestsTable extends FullyRandomTests
           .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_ELAPSED_TIME),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
+  static const VerificationMeta _isCompletedMeta =
+      const VerificationMeta('isCompleted');
+  @override
+  late final GeneratedColumn<bool> isCompleted =
+      GeneratedColumn<bool>('is_completed', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: false,
+          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
+            SqlDialect.sqlite: 'CHECK ("is_completed" IN (0, 1))',
+            SqlDialect.mysql: '',
+            SqlDialect.postgres: '',
+          }),
+          defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -2915,7 +2928,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
         currentQuestionCounter,
         triesNumber,
         triesCounter,
-        elapsedTime
+        elapsedTime,
+        isCompleted
       ];
   @override
   String get aliasedName => _alias ?? 'fully_random_tests';
@@ -2969,6 +2983,12 @@ class $FullyRandomTestsTable extends FullyRandomTests
     } else if (isInserting) {
       context.missing(_elapsedTimeMeta);
     }
+    if (data.containsKey('is_completed')) {
+      context.handle(
+          _isCompletedMeta,
+          isCompleted.isAcceptableOrUnknown(
+              data['is_completed']!, _isCompletedMeta));
+    }
     return context;
   }
 
@@ -2991,6 +3011,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
           .read(DriftSqlType.int, data['${effectivePrefix}tries_counter'])!,
       elapsedTime: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}elapsed_time'])!,
+      isCompleted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_completed'])!,
     );
   }
 
@@ -3007,13 +3029,15 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
   final int triesNumber;
   final int triesCounter;
   final int elapsedTime;
+  final bool isCompleted;
   const FullyRandomTest(
       {required this.id,
       required this.fieldListId,
       required this.currentQuestionCounter,
       required this.triesNumber,
       required this.triesCounter,
-      required this.elapsedTime});
+      required this.elapsedTime,
+      required this.isCompleted});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3023,6 +3047,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
     map['tries_number'] = Variable<int>(triesNumber);
     map['tries_counter'] = Variable<int>(triesCounter);
     map['elapsed_time'] = Variable<int>(elapsedTime);
+    map['is_completed'] = Variable<bool>(isCompleted);
     return map;
   }
 
@@ -3034,6 +3059,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       triesNumber: Value(triesNumber),
       triesCounter: Value(triesCounter),
       elapsedTime: Value(elapsedTime),
+      isCompleted: Value(isCompleted),
     );
   }
 
@@ -3048,6 +3074,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       triesNumber: serializer.fromJson<int>(json['triesNumber']),
       triesCounter: serializer.fromJson<int>(json['triesCounter']),
       elapsedTime: serializer.fromJson<int>(json['elapsedTime']),
+      isCompleted: serializer.fromJson<bool>(json['isCompleted']),
     );
   }
   @override
@@ -3060,6 +3087,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       'triesNumber': serializer.toJson<int>(triesNumber),
       'triesCounter': serializer.toJson<int>(triesCounter),
       'elapsedTime': serializer.toJson<int>(elapsedTime),
+      'isCompleted': serializer.toJson<bool>(isCompleted),
     };
   }
 
@@ -3069,7 +3097,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           int? currentQuestionCounter,
           int? triesNumber,
           int? triesCounter,
-          int? elapsedTime}) =>
+          int? elapsedTime,
+          bool? isCompleted}) =>
       FullyRandomTest(
         id: id ?? this.id,
         fieldListId: fieldListId ?? this.fieldListId,
@@ -3078,6 +3107,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
         triesNumber: triesNumber ?? this.triesNumber,
         triesCounter: triesCounter ?? this.triesCounter,
         elapsedTime: elapsedTime ?? this.elapsedTime,
+        isCompleted: isCompleted ?? this.isCompleted,
       );
   @override
   String toString() {
@@ -3087,14 +3117,15 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           ..write('currentQuestionCounter: $currentQuestionCounter, ')
           ..write('triesNumber: $triesNumber, ')
           ..write('triesCounter: $triesCounter, ')
-          ..write('elapsedTime: $elapsedTime')
+          ..write('elapsedTime: $elapsedTime, ')
+          ..write('isCompleted: $isCompleted')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(id, fieldListId, currentQuestionCounter,
-      triesNumber, triesCounter, elapsedTime);
+      triesNumber, triesCounter, elapsedTime, isCompleted);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3104,7 +3135,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           other.currentQuestionCounter == this.currentQuestionCounter &&
           other.triesNumber == this.triesNumber &&
           other.triesCounter == this.triesCounter &&
-          other.elapsedTime == this.elapsedTime);
+          other.elapsedTime == this.elapsedTime &&
+          other.isCompleted == this.isCompleted);
 }
 
 class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
@@ -3114,6 +3146,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
   final Value<int> triesNumber;
   final Value<int> triesCounter;
   final Value<int> elapsedTime;
+  final Value<bool> isCompleted;
   const FullyRandomTestsCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
@@ -3121,6 +3154,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     this.triesNumber = const Value.absent(),
     this.triesCounter = const Value.absent(),
     this.elapsedTime = const Value.absent(),
+    this.isCompleted = const Value.absent(),
   });
   FullyRandomTestsCompanion.insert({
     this.id = const Value.absent(),
@@ -3129,6 +3163,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     required int triesNumber,
     required int triesCounter,
     required int elapsedTime,
+    this.isCompleted = const Value.absent(),
   })  : fieldListId = Value(fieldListId),
         currentQuestionCounter = Value(currentQuestionCounter),
         triesNumber = Value(triesNumber),
@@ -3141,6 +3176,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     Expression<int>? triesNumber,
     Expression<int>? triesCounter,
     Expression<int>? elapsedTime,
+    Expression<bool>? isCompleted,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3150,6 +3186,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
       if (triesNumber != null) 'tries_number': triesNumber,
       if (triesCounter != null) 'tries_counter': triesCounter,
       if (elapsedTime != null) 'elapsed_time': elapsedTime,
+      if (isCompleted != null) 'is_completed': isCompleted,
     });
   }
 
@@ -3159,7 +3196,8 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
       Value<int>? currentQuestionCounter,
       Value<int>? triesNumber,
       Value<int>? triesCounter,
-      Value<int>? elapsedTime}) {
+      Value<int>? elapsedTime,
+      Value<bool>? isCompleted}) {
     return FullyRandomTestsCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
@@ -3168,6 +3206,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
       triesNumber: triesNumber ?? this.triesNumber,
       triesCounter: triesCounter ?? this.triesCounter,
       elapsedTime: elapsedTime ?? this.elapsedTime,
+      isCompleted: isCompleted ?? this.isCompleted,
     );
   }
 
@@ -3193,6 +3232,9 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     if (elapsedTime.present) {
       map['elapsed_time'] = Variable<int>(elapsedTime.value);
     }
+    if (isCompleted.present) {
+      map['is_completed'] = Variable<bool>(isCompleted.value);
+    }
     return map;
   }
 
@@ -3204,7 +3246,8 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
           ..write('currentQuestionCounter: $currentQuestionCounter, ')
           ..write('triesNumber: $triesNumber, ')
           ..write('triesCounter: $triesCounter, ')
-          ..write('elapsedTime: $elapsedTime')
+          ..write('elapsedTime: $elapsedTime, ')
+          ..write('isCompleted: $isCompleted')
           ..write(')'))
         .toString();
   }

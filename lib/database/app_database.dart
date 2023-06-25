@@ -239,6 +239,7 @@ class FullyRandomTests extends Table {
           .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_COUNTER))();
   IntColumn get elapsedTime => integer().check(elapsedTime
       .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_ELAPSED_TIME))();
+  BoolColumn get isCompleted => boolean().withDefault(Constant(false))();
 
   @override
   Set<Column> get primaryKey => {id};

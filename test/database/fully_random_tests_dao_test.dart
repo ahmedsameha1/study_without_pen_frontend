@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:path/path.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_tests_dao.dart';
 import 'package:uuid/uuid.dart';
@@ -14,6 +15,7 @@ void main() {
   int triesNumber = 2;
   int triesCounter = 1;
   int elapsedTime = 6000;
+  bool isCompleted = true;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -32,7 +34,8 @@ void main() {
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
-          elapsedTime: elapsedTime);
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -47,14 +50,16 @@ void main() {
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
-          elapsedTime: elapsedTime);
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted);
       var fullyRandomTest2 = FullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
-          elapsedTime: elapsedTime);
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted);
       await fullyRandomTestsDao.create(fullyRandomTest1.toCompanion(true));
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest2.toCompanion(true));
@@ -70,7 +75,8 @@ void main() {
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
-          elapsedTime: elapsedTime);
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -88,7 +94,8 @@ void main() {
               FullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER - 1,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
-          elapsedTime: elapsedTime);
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -107,7 +114,8 @@ void main() {
               FullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER + 1,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
-          elapsedTime: elapsedTime);
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -125,7 +133,8 @@ void main() {
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: FullyRandomTests.MINIMUM_TRIES_NUMBER - 1,
           triesCounter: triesCounter,
-          elapsedTime: elapsedTime);
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -142,7 +151,8 @@ void main() {
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: FullyRandomTests.MAXIMUM_TRIES_NUMBER + 1,
           triesCounter: triesCounter,
-          elapsedTime: elapsedTime);
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -159,7 +169,8 @@ void main() {
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
           triesCounter: FullyRandomTests.MINIMUM_TRIES_COUNTER - 1,
-          elapsedTime: elapsedTime);
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -176,7 +187,8 @@ void main() {
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
           triesCounter: FullyRandomTests.MAXIMUM_TRIES_COUNTER + 1,
-          elapsedTime: elapsedTime);
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -193,7 +205,8 @@ void main() {
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
-          elapsedTime: FullyRandomTests.MINIMUM_ELAPSED_TIME - 1);
+          elapsedTime: FullyRandomTests.MINIMUM_ELAPSED_TIME - 1,
+          isCompleted: isCompleted);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -203,6 +216,18 @@ void main() {
 
     test("Good case: create FullyRandomTest without 'id'", () async {
       var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
+          fieldListId: Value(fieldListId),
+          currentQuestionCounter: Value(currentQuestionCounter),
+          triesNumber: Value(triesNumber),
+          triesCounter: Value(triesCounter),
+          elapsedTime: Value(elapsedTime),
+          isCompleted: Value(isCompleted));
+      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
+    });
+
+    test("Good case 2: create FullyRandomTest without isCompleted", () async {
+      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
+          id: Value(id),
           fieldListId: Value(fieldListId),
           currentQuestionCounter: Value(currentQuestionCounter),
           triesNumber: Value(triesNumber),
