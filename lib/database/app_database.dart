@@ -220,6 +220,7 @@ class FullyRandomTests extends Table {
   static const int MAXIMUM_TRIES_NUMBER = 0xff;
   static const int MINIMUM_TRIES_COUNTER = 0;
   static const int MAXIMUM_TRIES_COUNTER = 0xff;
+  static const int MINIMUM_ELAPSED_TIME = 1; // in milliseconds
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldListId => text()();
@@ -236,6 +237,8 @@ class FullyRandomTests extends Table {
           .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_TRIES_COUNTER) &
       triesCounter
           .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_COUNTER))();
+  IntColumn get elapsedTime => integer().check(elapsedTime
+      .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_ELAPSED_TIME))();
 
   @override
   Set<Column> get primaryKey => {id};
