@@ -2898,7 +2898,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
           triesCounter
               .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_COUNTER),
       type: DriftSqlType.int,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
   static const VerificationMeta _elapsedTimeMeta =
       const VerificationMeta('elapsedTime');
   @override
@@ -2986,8 +2987,6 @@ class $FullyRandomTestsTable extends FullyRandomTests
           _triesCounterMeta,
           triesCounter.isAcceptableOrUnknown(
               data['tries_counter']!, _triesCounterMeta));
-    } else if (isInserting) {
-      context.missing(_triesCounterMeta);
     }
     if (data.containsKey('elapsed_time')) {
       context.handle(
@@ -3207,14 +3206,13 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     required String fieldListId,
     required int currentQuestionCounter,
     required int triesNumber,
-    required int triesCounter,
+    this.triesCounter = const Value.absent(),
     required int elapsedTime,
     this.isCompleted = const Value.absent(),
     this.lastCheckedAnswerResult = const Value.absent(),
   })  : fieldListId = Value(fieldListId),
         currentQuestionCounter = Value(currentQuestionCounter),
         triesNumber = Value(triesNumber),
-        triesCounter = Value(triesCounter),
         elapsedTime = Value(elapsedTime);
   static Insertable<FullyRandomTest> custom({
     Expression<String>? id,

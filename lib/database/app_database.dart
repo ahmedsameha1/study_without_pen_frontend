@@ -233,7 +233,7 @@ class FullyRandomTests extends Table {
       triesNumber.isBiggerOrEqualValue(FullyRandomTests.MINIMUM_TRIES_NUMBER) &
           triesNumber
               .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_NUMBER))();
-  IntColumn get triesCounter => integer().check(triesCounter
+  IntColumn get triesCounter => integer().withDefault(Constant(0)).check(triesCounter
           .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_TRIES_COUNTER) &
       triesCounter
           .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_COUNTER))();

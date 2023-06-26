@@ -237,7 +237,19 @@ void main() {
       await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
     });
 
-    test("Good case 2: create FullyRandomTest without isCompleted", () async {
+    test("Good case 2: create FullyRandomTest without triesCounter", () async {
+      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
+          id: Value(id),
+          fieldListId: Value(fieldListId),
+          currentQuestionCounter: Value(currentQuestionCounter),
+          triesNumber: Value(triesNumber),
+          elapsedTime: Value(elapsedTime),
+          isCompleted: Value(isCompleted),
+          lastCheckedAnswerResult: Value(lastCheckedAnswerResult));
+      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
+    });
+
+    test("Good case 3: create FullyRandomTest without isCompleted", () async {
       var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
           id: Value(id),
           fieldListId: Value(fieldListId),
@@ -249,7 +261,7 @@ void main() {
       await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
     });
 
-    test("Good case 3: create FullyRandomTest without lastCheckedAnswerResult",
+    test("Good case 4: create FullyRandomTest without lastCheckedAnswerResult",
         () async {
       var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
           id: Value(id),
