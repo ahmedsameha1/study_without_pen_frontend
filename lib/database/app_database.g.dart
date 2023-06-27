@@ -2948,6 +2948,19 @@ class $FullyRandomTestsTable extends FullyRandomTests
             SqlDialect.postgres: '',
           }),
           defaultValue: Constant(true));
+  static const VerificationMeta _currentHintCounterMeta =
+      const VerificationMeta('currentHintCounter');
+  @override
+  late final GeneratedColumn<int> currentHintCounter = GeneratedColumn<int>(
+      'current_hint_counter', aliasedName, false,
+      check: () =>
+          currentHintCounter.isBiggerOrEqualValue(
+              FullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER) &
+          currentHintCounter.isSmallerOrEqualValue(
+              FullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER),
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -2958,7 +2971,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
         elapsedTime,
         isCompleted,
         lastCheckedAnswerResult,
-        shouldCheckAnAnswer
+        shouldCheckAnAnswer,
+        currentHintCounter
       ];
   @override
   String get aliasedName => _alias ?? 'fully_random_tests';
@@ -3029,6 +3043,12 @@ class $FullyRandomTestsTable extends FullyRandomTests
           shouldCheckAnAnswer.isAcceptableOrUnknown(
               data['should_check_an_answer']!, _shouldCheckAnAnswerMeta));
     }
+    if (data.containsKey('current_hint_counter')) {
+      context.handle(
+          _currentHintCounterMeta,
+          currentHintCounter.isAcceptableOrUnknown(
+              data['current_hint_counter']!, _currentHintCounterMeta));
+    }
     return context;
   }
 
@@ -3058,6 +3078,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
           data['${effectivePrefix}last_checked_answer_result'])!,
       shouldCheckAnAnswer: attachedDatabase.typeMapping.read(
           DriftSqlType.bool, data['${effectivePrefix}should_check_an_answer'])!,
+      currentHintCounter: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}current_hint_counter'])!,
     );
   }
 
@@ -3077,6 +3099,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
   final bool isCompleted;
   final bool lastCheckedAnswerResult;
   final bool shouldCheckAnAnswer;
+  final int currentHintCounter;
   const FullyRandomTest(
       {required this.id,
       required this.fieldListId,
@@ -3086,7 +3109,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       required this.elapsedTime,
       required this.isCompleted,
       required this.lastCheckedAnswerResult,
-      required this.shouldCheckAnAnswer});
+      required this.shouldCheckAnAnswer,
+      required this.currentHintCounter});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3099,6 +3123,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
     map['is_completed'] = Variable<bool>(isCompleted);
     map['last_checked_answer_result'] = Variable<bool>(lastCheckedAnswerResult);
     map['should_check_an_answer'] = Variable<bool>(shouldCheckAnAnswer);
+    map['current_hint_counter'] = Variable<int>(currentHintCounter);
     return map;
   }
 
@@ -3113,6 +3138,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       isCompleted: Value(isCompleted),
       lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
       shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
+      currentHintCounter: Value(currentHintCounter),
     );
   }
 
@@ -3132,6 +3158,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           serializer.fromJson<bool>(json['lastCheckedAnswerResult']),
       shouldCheckAnAnswer:
           serializer.fromJson<bool>(json['shouldCheckAnAnswer']),
+      currentHintCounter: serializer.fromJson<int>(json['currentHintCounter']),
     );
   }
   @override
@@ -3148,6 +3175,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       'lastCheckedAnswerResult':
           serializer.toJson<bool>(lastCheckedAnswerResult),
       'shouldCheckAnAnswer': serializer.toJson<bool>(shouldCheckAnAnswer),
+      'currentHintCounter': serializer.toJson<int>(currentHintCounter),
     };
   }
 
@@ -3160,7 +3188,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           int? elapsedTime,
           bool? isCompleted,
           bool? lastCheckedAnswerResult,
-          bool? shouldCheckAnAnswer}) =>
+          bool? shouldCheckAnAnswer,
+          int? currentHintCounter}) =>
       FullyRandomTest(
         id: id ?? this.id,
         fieldListId: fieldListId ?? this.fieldListId,
@@ -3173,6 +3202,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
         lastCheckedAnswerResult:
             lastCheckedAnswerResult ?? this.lastCheckedAnswerResult,
         shouldCheckAnAnswer: shouldCheckAnAnswer ?? this.shouldCheckAnAnswer,
+        currentHintCounter: currentHintCounter ?? this.currentHintCounter,
       );
   @override
   String toString() {
@@ -3185,7 +3215,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           ..write('elapsedTime: $elapsedTime, ')
           ..write('isCompleted: $isCompleted, ')
           ..write('lastCheckedAnswerResult: $lastCheckedAnswerResult, ')
-          ..write('shouldCheckAnAnswer: $shouldCheckAnAnswer')
+          ..write('shouldCheckAnAnswer: $shouldCheckAnAnswer, ')
+          ..write('currentHintCounter: $currentHintCounter')
           ..write(')'))
         .toString();
   }
@@ -3200,7 +3231,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       elapsedTime,
       isCompleted,
       lastCheckedAnswerResult,
-      shouldCheckAnAnswer);
+      shouldCheckAnAnswer,
+      currentHintCounter);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3213,7 +3245,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           other.elapsedTime == this.elapsedTime &&
           other.isCompleted == this.isCompleted &&
           other.lastCheckedAnswerResult == this.lastCheckedAnswerResult &&
-          other.shouldCheckAnAnswer == this.shouldCheckAnAnswer);
+          other.shouldCheckAnAnswer == this.shouldCheckAnAnswer &&
+          other.currentHintCounter == this.currentHintCounter);
 }
 
 class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
@@ -3226,6 +3259,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
   final Value<bool> isCompleted;
   final Value<bool> lastCheckedAnswerResult;
   final Value<bool> shouldCheckAnAnswer;
+  final Value<int> currentHintCounter;
   const FullyRandomTestsCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
@@ -3236,6 +3270,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     this.isCompleted = const Value.absent(),
     this.lastCheckedAnswerResult = const Value.absent(),
     this.shouldCheckAnAnswer = const Value.absent(),
+    this.currentHintCounter = const Value.absent(),
   });
   FullyRandomTestsCompanion.insert({
     this.id = const Value.absent(),
@@ -3247,6 +3282,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     this.isCompleted = const Value.absent(),
     this.lastCheckedAnswerResult = const Value.absent(),
     this.shouldCheckAnAnswer = const Value.absent(),
+    this.currentHintCounter = const Value.absent(),
   })  : fieldListId = Value(fieldListId),
         currentQuestionCounter = Value(currentQuestionCounter),
         triesNumber = Value(triesNumber),
@@ -3261,6 +3297,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     Expression<bool>? isCompleted,
     Expression<bool>? lastCheckedAnswerResult,
     Expression<bool>? shouldCheckAnAnswer,
+    Expression<int>? currentHintCounter,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3275,6 +3312,8 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
         'last_checked_answer_result': lastCheckedAnswerResult,
       if (shouldCheckAnAnswer != null)
         'should_check_an_answer': shouldCheckAnAnswer,
+      if (currentHintCounter != null)
+        'current_hint_counter': currentHintCounter,
     });
   }
 
@@ -3287,7 +3326,8 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
       Value<int>? elapsedTime,
       Value<bool>? isCompleted,
       Value<bool>? lastCheckedAnswerResult,
-      Value<bool>? shouldCheckAnAnswer}) {
+      Value<bool>? shouldCheckAnAnswer,
+      Value<int>? currentHintCounter}) {
     return FullyRandomTestsCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
@@ -3300,6 +3340,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
       lastCheckedAnswerResult:
           lastCheckedAnswerResult ?? this.lastCheckedAnswerResult,
       shouldCheckAnAnswer: shouldCheckAnAnswer ?? this.shouldCheckAnAnswer,
+      currentHintCounter: currentHintCounter ?? this.currentHintCounter,
     );
   }
 
@@ -3335,6 +3376,9 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     if (shouldCheckAnAnswer.present) {
       map['should_check_an_answer'] = Variable<bool>(shouldCheckAnAnswer.value);
     }
+    if (currentHintCounter.present) {
+      map['current_hint_counter'] = Variable<int>(currentHintCounter.value);
+    }
     return map;
   }
 
@@ -3349,7 +3393,8 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
           ..write('elapsedTime: $elapsedTime, ')
           ..write('isCompleted: $isCompleted, ')
           ..write('lastCheckedAnswerResult: $lastCheckedAnswerResult, ')
-          ..write('shouldCheckAnAnswer: $shouldCheckAnAnswer')
+          ..write('shouldCheckAnAnswer: $shouldCheckAnAnswer, ')
+          ..write('currentHintCounter: $currentHintCounter')
           ..write(')'))
         .toString();
   }

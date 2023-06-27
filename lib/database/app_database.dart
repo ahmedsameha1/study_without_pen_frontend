@@ -221,6 +221,8 @@ class FullyRandomTests extends Table {
   static const int MINIMUM_TRIES_COUNTER = 0;
   static const int MAXIMUM_TRIES_COUNTER = 0xff;
   static const int MINIMUM_ELAPSED_TIME = 1; // in milliseconds
+  static const int MINIMUM_CURRENT_HINT_COUNTER = 0;
+  static const int MAXIMUM_CURRENT_HINT_COUNTER = 0xff;
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldListId => text()();
@@ -244,6 +246,11 @@ class FullyRandomTests extends Table {
   BoolColumn get lastCheckedAnswerResult =>
       boolean().withDefault(Constant(false))();
   BoolColumn get shouldCheckAnAnswer => boolean().withDefault(Constant(true))();
+  IntColumn get currentHintCounter => integer().withDefault(Constant(0)).check(
+      currentHintCounter.isBiggerOrEqualValue(
+              FullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER) &
+          currentHintCounter.isSmallerOrEqualValue(
+              FullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER))();
 
   @override
   Set<Column> get primaryKey => {id};
