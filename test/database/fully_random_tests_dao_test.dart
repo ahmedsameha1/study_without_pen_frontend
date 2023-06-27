@@ -16,6 +16,7 @@ void main() {
   int elapsedTime = 6000;
   bool isCompleted = true;
   bool lastCheckedAnswerResult = true;
+  bool shouldCheckAnAnswer = true;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -36,7 +37,8 @@ void main() {
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -53,7 +55,8 @@ void main() {
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       var fullyRandomTest2 = FullyRandomTest(
           id: id,
           fieldListId: fieldListId,
@@ -62,7 +65,8 @@ void main() {
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       await fullyRandomTestsDao.create(fullyRandomTest1.toCompanion(true));
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest2.toCompanion(true));
@@ -80,7 +84,8 @@ void main() {
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -100,7 +105,8 @@ void main() {
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -121,7 +127,8 @@ void main() {
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -141,7 +148,8 @@ void main() {
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -160,7 +168,8 @@ void main() {
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -179,7 +188,8 @@ void main() {
           triesCounter: FullyRandomTests.MINIMUM_TRIES_COUNTER - 1,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -198,7 +208,8 @@ void main() {
           triesCounter: FullyRandomTests.MAXIMUM_TRIES_COUNTER + 1,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -217,7 +228,8 @@ void main() {
           triesCounter: triesCounter,
           elapsedTime: FullyRandomTests.MINIMUM_ELAPSED_TIME - 1,
           isCompleted: isCompleted,
-          lastCheckedAnswerResult: lastCheckedAnswerResult);
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer);
       expect(() async {
         await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
       },
@@ -233,7 +245,8 @@ void main() {
           triesCounter: Value(triesCounter),
           elapsedTime: Value(elapsedTime),
           isCompleted: Value(isCompleted),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult));
+          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+          shouldCheckAnAnswer: Value(shouldCheckAnAnswer));
       await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
     });
 
@@ -245,7 +258,8 @@ void main() {
           triesNumber: Value(triesNumber),
           elapsedTime: Value(elapsedTime),
           isCompleted: Value(isCompleted),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult));
+          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+          shouldCheckAnAnswer: Value(shouldCheckAnAnswer));
       await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
     });
 
@@ -257,7 +271,8 @@ void main() {
           triesNumber: Value(triesNumber),
           triesCounter: Value(triesCounter),
           elapsedTime: Value(elapsedTime),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult));
+          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+          shouldCheckAnAnswer: Value(shouldCheckAnAnswer));
       await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
     });
 
@@ -270,7 +285,22 @@ void main() {
           triesNumber: Value(triesNumber),
           triesCounter: Value(triesCounter),
           elapsedTime: Value(elapsedTime),
-          isCompleted: Value(isCompleted));
+          isCompleted: Value(isCompleted),
+          shouldCheckAnAnswer: Value(shouldCheckAnAnswer));
+      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
+    });
+
+    test("Good case 5: create FullyRandomTest without shouldCheckAnAnswer",
+        () async {
+      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
+          id: Value(id),
+          fieldListId: Value(fieldListId),
+          currentQuestionCounter: Value(currentQuestionCounter),
+          triesNumber: Value(triesNumber),
+          triesCounter: Value(triesCounter),
+          elapsedTime: Value(elapsedTime),
+          isCompleted: Value(isCompleted),
+          lastCheckedAnswerResult: Value(lastCheckedAnswerResult));
       await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
     });
   });

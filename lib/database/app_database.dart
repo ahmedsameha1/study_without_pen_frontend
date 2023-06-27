@@ -233,15 +233,17 @@ class FullyRandomTests extends Table {
       triesNumber.isBiggerOrEqualValue(FullyRandomTests.MINIMUM_TRIES_NUMBER) &
           triesNumber
               .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_NUMBER))();
-  IntColumn get triesCounter => integer().withDefault(Constant(0)).check(triesCounter
-          .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_TRIES_COUNTER) &
-      triesCounter
-          .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_COUNTER))();
+  IntColumn get triesCounter =>
+      integer().withDefault(Constant(0)).check(triesCounter
+              .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_TRIES_COUNTER) &
+          triesCounter
+              .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_COUNTER))();
   IntColumn get elapsedTime => integer().check(elapsedTime
       .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_ELAPSED_TIME))();
   BoolColumn get isCompleted => boolean().withDefault(Constant(false))();
   BoolColumn get lastCheckedAnswerResult =>
       boolean().withDefault(Constant(false))();
+  BoolColumn get shouldCheckAnAnswer => boolean().withDefault(Constant(true))();
 
   @override
   Set<Column> get primaryKey => {id};
