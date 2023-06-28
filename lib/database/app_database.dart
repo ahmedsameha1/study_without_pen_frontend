@@ -223,6 +223,8 @@ class FullyRandomTests extends Table {
   static const int MINIMUM_ELAPSED_TIME = 1; // in milliseconds
   static const int MINIMUM_CURRENT_HINT_COUNTER = 0;
   static const int MAXIMUM_CURRENT_HINT_COUNTER = 0xff;
+  static const int MINIMUM_WRONG_ANSWER_COUNTER = 0;
+  static const int MAXIMUM_WRONG_ANSWER_COUNTER = 0xffffffff;
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldListId => text()();
@@ -251,6 +253,11 @@ class FullyRandomTests extends Table {
               FullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER) &
           currentHintCounter.isSmallerOrEqualValue(
               FullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER))();
+  IntColumn get wrongAnswerCounter => integer().withDefault(Constant(0)).check(
+      wrongAnswerCounter.isBiggerOrEqualValue(
+              FullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER) &
+          wrongAnswerCounter.isSmallerOrEqualValue(
+              FullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER))();
 
   @override
   Set<Column> get primaryKey => {id};
