@@ -225,6 +225,7 @@ class FullyRandomTests extends Table {
   static const int MAXIMUM_CURRENT_HINT_COUNTER = 0xff;
   static const int MINIMUM_WRONG_ANSWER_COUNTER = 0;
   static const int MAXIMUM_WRONG_ANSWER_COUNTER = 0xffffffff;
+  static const int MINIMUM_LAST_ANSWER = 1;
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldListId => text()();
@@ -258,6 +259,10 @@ class FullyRandomTests extends Table {
               FullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER) &
           wrongAnswerCounter.isSmallerOrEqualValue(
               FullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER))();
+  TextColumn get lastAnswer => text().nullable().check(lastAnswer
+      .trim()
+      .length
+      .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_LAST_ANSWER))();
 
   @override
   Set<Column> get primaryKey => {id};

@@ -2974,6 +2974,17 @@ class $FullyRandomTestsTable extends FullyRandomTests
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(0));
+  static const VerificationMeta _lastAnswerMeta =
+      const VerificationMeta('lastAnswer');
+  @override
+  late final GeneratedColumn<String> lastAnswer = GeneratedColumn<String>(
+      'last_answer', aliasedName, true,
+      check: () => lastAnswer
+          .trim()
+          .length
+          .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_LAST_ANSWER),
+      type: DriftSqlType.string,
+      requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -2986,7 +2997,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
         lastCheckedAnswerResult,
         shouldCheckAnAnswer,
         currentHintCounter,
-        wrongAnswerCounter
+        wrongAnswerCounter,
+        lastAnswer
       ];
   @override
   String get aliasedName => _alias ?? 'fully_random_tests';
@@ -3069,6 +3081,12 @@ class $FullyRandomTestsTable extends FullyRandomTests
           wrongAnswerCounter.isAcceptableOrUnknown(
               data['wrong_answer_counter']!, _wrongAnswerCounterMeta));
     }
+    if (data.containsKey('last_answer')) {
+      context.handle(
+          _lastAnswerMeta,
+          lastAnswer.isAcceptableOrUnknown(
+              data['last_answer']!, _lastAnswerMeta));
+    }
     return context;
   }
 
@@ -3102,6 +3120,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
           DriftSqlType.int, data['${effectivePrefix}current_hint_counter'])!,
       wrongAnswerCounter: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}wrong_answer_counter'])!,
+      lastAnswer: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}last_answer']),
     );
   }
 
@@ -3123,6 +3143,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
   final bool shouldCheckAnAnswer;
   final int currentHintCounter;
   final int wrongAnswerCounter;
+  final String? lastAnswer;
   const FullyRandomTest(
       {required this.id,
       required this.fieldListId,
@@ -3134,7 +3155,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       required this.lastCheckedAnswerResult,
       required this.shouldCheckAnAnswer,
       required this.currentHintCounter,
-      required this.wrongAnswerCounter});
+      required this.wrongAnswerCounter,
+      this.lastAnswer});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3149,6 +3171,9 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
     map['should_check_an_answer'] = Variable<bool>(shouldCheckAnAnswer);
     map['current_hint_counter'] = Variable<int>(currentHintCounter);
     map['wrong_answer_counter'] = Variable<int>(wrongAnswerCounter);
+    if (!nullToAbsent || lastAnswer != null) {
+      map['last_answer'] = Variable<String>(lastAnswer);
+    }
     return map;
   }
 
@@ -3165,6 +3190,9 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
       currentHintCounter: Value(currentHintCounter),
       wrongAnswerCounter: Value(wrongAnswerCounter),
+      lastAnswer: lastAnswer == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastAnswer),
     );
   }
 
@@ -3186,6 +3214,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           serializer.fromJson<bool>(json['shouldCheckAnAnswer']),
       currentHintCounter: serializer.fromJson<int>(json['currentHintCounter']),
       wrongAnswerCounter: serializer.fromJson<int>(json['wrongAnswerCounter']),
+      lastAnswer: serializer.fromJson<String?>(json['lastAnswer']),
     );
   }
   @override
@@ -3204,6 +3233,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       'shouldCheckAnAnswer': serializer.toJson<bool>(shouldCheckAnAnswer),
       'currentHintCounter': serializer.toJson<int>(currentHintCounter),
       'wrongAnswerCounter': serializer.toJson<int>(wrongAnswerCounter),
+      'lastAnswer': serializer.toJson<String?>(lastAnswer),
     };
   }
 
@@ -3218,7 +3248,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           bool? lastCheckedAnswerResult,
           bool? shouldCheckAnAnswer,
           int? currentHintCounter,
-          int? wrongAnswerCounter}) =>
+          int? wrongAnswerCounter,
+          Value<String?> lastAnswer = const Value.absent()}) =>
       FullyRandomTest(
         id: id ?? this.id,
         fieldListId: fieldListId ?? this.fieldListId,
@@ -3233,6 +3264,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
         shouldCheckAnAnswer: shouldCheckAnAnswer ?? this.shouldCheckAnAnswer,
         currentHintCounter: currentHintCounter ?? this.currentHintCounter,
         wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
+        lastAnswer: lastAnswer.present ? lastAnswer.value : this.lastAnswer,
       );
   @override
   String toString() {
@@ -3247,7 +3279,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           ..write('lastCheckedAnswerResult: $lastCheckedAnswerResult, ')
           ..write('shouldCheckAnAnswer: $shouldCheckAnAnswer, ')
           ..write('currentHintCounter: $currentHintCounter, ')
-          ..write('wrongAnswerCounter: $wrongAnswerCounter')
+          ..write('wrongAnswerCounter: $wrongAnswerCounter, ')
+          ..write('lastAnswer: $lastAnswer')
           ..write(')'))
         .toString();
   }
@@ -3264,7 +3297,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       lastCheckedAnswerResult,
       shouldCheckAnAnswer,
       currentHintCounter,
-      wrongAnswerCounter);
+      wrongAnswerCounter,
+      lastAnswer);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3279,7 +3313,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           other.lastCheckedAnswerResult == this.lastCheckedAnswerResult &&
           other.shouldCheckAnAnswer == this.shouldCheckAnAnswer &&
           other.currentHintCounter == this.currentHintCounter &&
-          other.wrongAnswerCounter == this.wrongAnswerCounter);
+          other.wrongAnswerCounter == this.wrongAnswerCounter &&
+          other.lastAnswer == this.lastAnswer);
 }
 
 class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
@@ -3294,6 +3329,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
   final Value<bool> shouldCheckAnAnswer;
   final Value<int> currentHintCounter;
   final Value<int> wrongAnswerCounter;
+  final Value<String?> lastAnswer;
   const FullyRandomTestsCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
@@ -3306,6 +3342,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     this.shouldCheckAnAnswer = const Value.absent(),
     this.currentHintCounter = const Value.absent(),
     this.wrongAnswerCounter = const Value.absent(),
+    this.lastAnswer = const Value.absent(),
   });
   FullyRandomTestsCompanion.insert({
     this.id = const Value.absent(),
@@ -3319,6 +3356,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     this.shouldCheckAnAnswer = const Value.absent(),
     this.currentHintCounter = const Value.absent(),
     this.wrongAnswerCounter = const Value.absent(),
+    this.lastAnswer = const Value.absent(),
   })  : fieldListId = Value(fieldListId),
         currentQuestionCounter = Value(currentQuestionCounter),
         triesNumber = Value(triesNumber),
@@ -3335,6 +3373,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     Expression<bool>? shouldCheckAnAnswer,
     Expression<int>? currentHintCounter,
     Expression<int>? wrongAnswerCounter,
+    Expression<String>? lastAnswer,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3353,6 +3392,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
         'current_hint_counter': currentHintCounter,
       if (wrongAnswerCounter != null)
         'wrong_answer_counter': wrongAnswerCounter,
+      if (lastAnswer != null) 'last_answer': lastAnswer,
     });
   }
 
@@ -3367,7 +3407,8 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
       Value<bool>? lastCheckedAnswerResult,
       Value<bool>? shouldCheckAnAnswer,
       Value<int>? currentHintCounter,
-      Value<int>? wrongAnswerCounter}) {
+      Value<int>? wrongAnswerCounter,
+      Value<String?>? lastAnswer}) {
     return FullyRandomTestsCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
@@ -3382,6 +3423,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
       shouldCheckAnAnswer: shouldCheckAnAnswer ?? this.shouldCheckAnAnswer,
       currentHintCounter: currentHintCounter ?? this.currentHintCounter,
       wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
+      lastAnswer: lastAnswer ?? this.lastAnswer,
     );
   }
 
@@ -3423,6 +3465,9 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     if (wrongAnswerCounter.present) {
       map['wrong_answer_counter'] = Variable<int>(wrongAnswerCounter.value);
     }
+    if (lastAnswer.present) {
+      map['last_answer'] = Variable<String>(lastAnswer.value);
+    }
     return map;
   }
 
@@ -3439,7 +3484,8 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
           ..write('lastCheckedAnswerResult: $lastCheckedAnswerResult, ')
           ..write('shouldCheckAnAnswer: $shouldCheckAnAnswer, ')
           ..write('currentHintCounter: $currentHintCounter, ')
-          ..write('wrongAnswerCounter: $wrongAnswerCounter')
+          ..write('wrongAnswerCounter: $wrongAnswerCounter, ')
+          ..write('lastAnswer: $lastAnswer')
           ..write(')'))
         .toString();
   }
