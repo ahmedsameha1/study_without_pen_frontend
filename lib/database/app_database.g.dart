@@ -2844,12 +2844,14 @@ class NotesCompanion extends UpdateCompanion<Note> {
   }
 }
 
-class $FullyRandomTestsTable extends FullyRandomTests
-    with TableInfo<$FullyRandomTestsTable, FullyRandomTest> {
+class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
+    with
+        TableInfo<$UncompletedFullyRandomTestsTable,
+            UncompletedFullyRandomTest> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $FullyRandomTestsTable(this.attachedDatabase, [this._alias]);
+  $UncompletedFullyRandomTestsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -2870,9 +2872,9 @@ class $FullyRandomTestsTable extends FullyRandomTests
       'current_question_counter', aliasedName, false,
       check: () =>
           currentQuestionCounter.isBiggerOrEqualValue(
-              FullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER) &
+              UncompletedFullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER) &
           currentQuestionCounter.isSmallerOrEqualValue(
-              FullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER),
+              UncompletedFullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
   static const VerificationMeta _triesNumberMeta =
@@ -2881,10 +2883,10 @@ class $FullyRandomTestsTable extends FullyRandomTests
   late final GeneratedColumn<int> triesNumber = GeneratedColumn<int>(
       'tries_number', aliasedName, false,
       check: () =>
-          triesNumber
-              .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_TRIES_NUMBER) &
-          triesNumber
-              .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_NUMBER),
+          triesNumber.isBiggerOrEqualValue(
+              UncompletedFullyRandomTests.MINIMUM_TRIES_NUMBER) &
+          triesNumber.isSmallerOrEqualValue(
+              UncompletedFullyRandomTests.MAXIMUM_TRIES_NUMBER),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
   static const VerificationMeta _triesCounterMeta =
@@ -2893,10 +2895,10 @@ class $FullyRandomTestsTable extends FullyRandomTests
   late final GeneratedColumn<int> triesCounter = GeneratedColumn<int>(
       'tries_counter', aliasedName, false,
       check: () =>
-          triesCounter
-              .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_TRIES_COUNTER) &
-          triesCounter
-              .isSmallerOrEqualValue(FullyRandomTests.MAXIMUM_TRIES_COUNTER),
+          triesCounter.isBiggerOrEqualValue(
+              UncompletedFullyRandomTests.MINIMUM_TRIES_COUNTER) &
+          triesCounter.isSmallerOrEqualValue(
+              UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(0));
@@ -2905,8 +2907,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
   @override
   late final GeneratedColumn<int> elapsedTime = GeneratedColumn<int>(
       'elapsed_time', aliasedName, false,
-      check: () => elapsedTime
-          .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_ELAPSED_TIME),
+      check: () => elapsedTime.isBiggerOrEqualValue(
+          UncompletedFullyRandomTests.MINIMUM_ELAPSED_TIME),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
   static const VerificationMeta _isCompletedMeta =
@@ -2955,9 +2957,9 @@ class $FullyRandomTestsTable extends FullyRandomTests
       'current_hint_counter', aliasedName, false,
       check: () =>
           currentHintCounter.isBiggerOrEqualValue(
-              FullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER) &
+              UncompletedFullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER) &
           currentHintCounter.isSmallerOrEqualValue(
-              FullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER),
+              UncompletedFullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(0));
@@ -2968,9 +2970,9 @@ class $FullyRandomTestsTable extends FullyRandomTests
       'wrong_answer_counter', aliasedName, false,
       check: () =>
           wrongAnswerCounter.isBiggerOrEqualValue(
-              FullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER) &
+              UncompletedFullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER) &
           wrongAnswerCounter.isSmallerOrEqualValue(
-              FullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER),
+              UncompletedFullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(0));
@@ -2979,10 +2981,8 @@ class $FullyRandomTestsTable extends FullyRandomTests
   @override
   late final GeneratedColumn<String> lastAnswer = GeneratedColumn<String>(
       'last_answer', aliasedName, true,
-      check: () => lastAnswer
-          .trim()
-          .length
-          .isBiggerOrEqualValue(FullyRandomTests.MINIMUM_LAST_ANSWER),
+      check: () => lastAnswer.trim().length.isBiggerOrEqualValue(
+          UncompletedFullyRandomTests.MINIMUM_LAST_ANSWER),
       type: DriftSqlType.string,
       requiredDuringInsert: false);
   @override
@@ -3001,11 +3001,12 @@ class $FullyRandomTestsTable extends FullyRandomTests
         lastAnswer
       ];
   @override
-  String get aliasedName => _alias ?? 'fully_random_tests';
+  String get aliasedName => _alias ?? 'uncompleted_fully_random_tests';
   @override
-  String get actualTableName => 'fully_random_tests';
+  String get actualTableName => 'uncompleted_fully_random_tests';
   @override
-  VerificationContext validateIntegrity(Insertable<FullyRandomTest> instance,
+  VerificationContext validateIntegrity(
+      Insertable<UncompletedFullyRandomTest> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -3093,9 +3094,10 @@ class $FullyRandomTestsTable extends FullyRandomTests
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  FullyRandomTest map(Map<String, dynamic> data, {String? tablePrefix}) {
+  UncompletedFullyRandomTest map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return FullyRandomTest(
+    return UncompletedFullyRandomTest(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       fieldListId: attachedDatabase.typeMapping
@@ -3126,12 +3128,13 @@ class $FullyRandomTestsTable extends FullyRandomTests
   }
 
   @override
-  $FullyRandomTestsTable createAlias(String alias) {
-    return $FullyRandomTestsTable(attachedDatabase, alias);
+  $UncompletedFullyRandomTestsTable createAlias(String alias) {
+    return $UncompletedFullyRandomTestsTable(attachedDatabase, alias);
   }
 }
 
-class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
+class UncompletedFullyRandomTest extends DataClass
+    implements Insertable<UncompletedFullyRandomTest> {
   final String id;
   final String fieldListId;
   final int currentQuestionCounter;
@@ -3144,7 +3147,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
   final int currentHintCounter;
   final int wrongAnswerCounter;
   final String? lastAnswer;
-  const FullyRandomTest(
+  const UncompletedFullyRandomTest(
       {required this.id,
       required this.fieldListId,
       required this.currentQuestionCounter,
@@ -3177,8 +3180,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
     return map;
   }
 
-  FullyRandomTestsCompanion toCompanion(bool nullToAbsent) {
-    return FullyRandomTestsCompanion(
+  UncompletedFullyRandomTestsCompanion toCompanion(bool nullToAbsent) {
+    return UncompletedFullyRandomTestsCompanion(
       id: Value(id),
       fieldListId: Value(fieldListId),
       currentQuestionCounter: Value(currentQuestionCounter),
@@ -3196,10 +3199,10 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
     );
   }
 
-  factory FullyRandomTest.fromJson(Map<String, dynamic> json,
+  factory UncompletedFullyRandomTest.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return FullyRandomTest(
+    return UncompletedFullyRandomTest(
       id: serializer.fromJson<String>(json['id']),
       fieldListId: serializer.fromJson<String>(json['fieldListId']),
       currentQuestionCounter:
@@ -3237,7 +3240,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
     };
   }
 
-  FullyRandomTest copyWith(
+  UncompletedFullyRandomTest copyWith(
           {String? id,
           String? fieldListId,
           int? currentQuestionCounter,
@@ -3250,7 +3253,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           int? currentHintCounter,
           int? wrongAnswerCounter,
           Value<String?> lastAnswer = const Value.absent()}) =>
-      FullyRandomTest(
+      UncompletedFullyRandomTest(
         id: id ?? this.id,
         fieldListId: fieldListId ?? this.fieldListId,
         currentQuestionCounter:
@@ -3268,7 +3271,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
       );
   @override
   String toString() {
-    return (StringBuffer('FullyRandomTest(')
+    return (StringBuffer('UncompletedFullyRandomTest(')
           ..write('id: $id, ')
           ..write('fieldListId: $fieldListId, ')
           ..write('currentQuestionCounter: $currentQuestionCounter, ')
@@ -3302,7 +3305,7 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is FullyRandomTest &&
+      (other is UncompletedFullyRandomTest &&
           other.id == this.id &&
           other.fieldListId == this.fieldListId &&
           other.currentQuestionCounter == this.currentQuestionCounter &&
@@ -3317,7 +3320,8 @@ class FullyRandomTest extends DataClass implements Insertable<FullyRandomTest> {
           other.lastAnswer == this.lastAnswer);
 }
 
-class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
+class UncompletedFullyRandomTestsCompanion
+    extends UpdateCompanion<UncompletedFullyRandomTest> {
   final Value<String> id;
   final Value<String> fieldListId;
   final Value<int> currentQuestionCounter;
@@ -3330,7 +3334,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
   final Value<int> currentHintCounter;
   final Value<int> wrongAnswerCounter;
   final Value<String?> lastAnswer;
-  const FullyRandomTestsCompanion({
+  const UncompletedFullyRandomTestsCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
     this.currentQuestionCounter = const Value.absent(),
@@ -3344,7 +3348,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     this.wrongAnswerCounter = const Value.absent(),
     this.lastAnswer = const Value.absent(),
   });
-  FullyRandomTestsCompanion.insert({
+  UncompletedFullyRandomTestsCompanion.insert({
     this.id = const Value.absent(),
     required String fieldListId,
     required int currentQuestionCounter,
@@ -3361,7 +3365,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
         currentQuestionCounter = Value(currentQuestionCounter),
         triesNumber = Value(triesNumber),
         elapsedTime = Value(elapsedTime);
-  static Insertable<FullyRandomTest> custom({
+  static Insertable<UncompletedFullyRandomTest> custom({
     Expression<String>? id,
     Expression<String>? fieldListId,
     Expression<int>? currentQuestionCounter,
@@ -3396,7 +3400,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
     });
   }
 
-  FullyRandomTestsCompanion copyWith(
+  UncompletedFullyRandomTestsCompanion copyWith(
       {Value<String>? id,
       Value<String>? fieldListId,
       Value<int>? currentQuestionCounter,
@@ -3409,7 +3413,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
       Value<int>? currentHintCounter,
       Value<int>? wrongAnswerCounter,
       Value<String?>? lastAnswer}) {
-    return FullyRandomTestsCompanion(
+    return UncompletedFullyRandomTestsCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
       currentQuestionCounter:
@@ -3473,7 +3477,7 @@ class FullyRandomTestsCompanion extends UpdateCompanion<FullyRandomTest> {
 
   @override
   String toString() {
-    return (StringBuffer('FullyRandomTestsCompanion(')
+    return (StringBuffer('UncompletedFullyRandomTestsCompanion(')
           ..write('id: $id, ')
           ..write('fieldListId: $fieldListId, ')
           ..write('currentQuestionCounter: $currentQuestionCounter, ')
@@ -3499,16 +3503,16 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FieldListsTable fieldLists = $FieldListsTable(this);
   late final $FieldsTable fields = $FieldsTable(this);
   late final $NotesTable notes = $NotesTable(this);
-  late final $FullyRandomTestsTable fullyRandomTests =
-      $FullyRandomTestsTable(this);
+  late final $UncompletedFullyRandomTestsTable uncompletedFullyRandomTests =
+      $UncompletedFullyRandomTestsTable(this);
   late final EntryTextsDao entryTextsDao = EntryTextsDao(this as AppDatabase);
   late final QuestionsDao questionsDao = QuestionsDao(this as AppDatabase);
   late final EntrysDao entrysDao = EntrysDao(this as AppDatabase);
   late final FieldListsDao fieldListsDao = FieldListsDao(this as AppDatabase);
   late final FieldsDao fieldsDao = FieldsDao(this as AppDatabase);
   late final NotesDao notesDao = NotesDao(this as AppDatabase);
-  late final FullyRandomTestsDao fullyRandomTestsDao =
-      FullyRandomTestsDao(this as AppDatabase);
+  late final UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao =
+      UncompletedFullyRandomTestsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3520,7 +3524,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         fieldLists,
         fields,
         notes,
-        fullyRandomTests
+        uncompletedFullyRandomTests
       ];
   @override
   DriftDatabaseOptions get options =>

@@ -2,12 +2,12 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/database/fully_random_tests_dao.dart';
+import 'package:study_without_pen_by_flutter/database/uncompleted_fully_random_tests_dao.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
   late AppDatabase appDatabase;
-  late FullyRandomTestsDao fullyRandomTestsDao;
+  late UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao;
   String id = Uuid().v4();
   String fieldListId = Uuid().v4();
   int currentQuestionCounter = 5;
@@ -23,16 +23,16 @@ void main() {
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
-    fullyRandomTestsDao = FullyRandomTestsDao(appDatabase);
+    uncompletedFullyRandomTestsDao = UncompletedFullyRandomTestsDao(appDatabase);
   });
 
   tearDown(() async {
     await appDatabase.close();
   });
 
-  group("Create a FullyRandomTest", () {
-    test("Invalid FullyRandomTest: id is an invalid UUID v4", () {
-      var fullyRandomTest = FullyRandomTest(
+  group("Create a UncompletedFullyRandomTest", () {
+    test("Invalid UncompletedFullyRandomTest: id is an invalid UUID v4", () {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: "owhoweh",
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
@@ -46,14 +46,15 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate(
               (e) => e is InvalidDataException && e.message.contains("id"))));
     });
 
-    test("No FullyRandomTests with the same id", () async {
-      var fullyRandomTest1 = FullyRandomTest(
+    test("No UncompletedFullyRandomTests with the same id", () async {
+      var uncompletedFullyRandomTest1 = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
@@ -66,7 +67,7 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
-      var fullyRandomTest2 = FullyRandomTest(
+      var uncompletedFullyRandomTest2 = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
@@ -79,16 +80,17 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
-      await fullyRandomTestsDao.create(fullyRandomTest1.toCompanion(true));
+      await uncompletedFullyRandomTestsDao.create(uncompletedFullyRandomTest1.toCompanion(true));
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest2.toCompanion(true));
+        await uncompletedFullyRandomTestsDao.create(uncompletedFullyRandomTest2.toCompanion(true));
       },
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("id"))));
     });
 
-    test("Invalid FullyRandomTest: fieldListId is an invalid UUID v4", () {
-      var fullyRandomTest = FullyRandomTest(
+    test("Invalid UncompletedFullyRandomTest: fieldListId is an invalid UUID v4",
+        () {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: "ewfewofh",
           currentQuestionCounter: currentQuestionCounter,
@@ -102,20 +104,21 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is InvalidDataException && e.message.contains("fieldListId"))));
     });
 
     test(
-        "Invalid FullyRandomTest: currentQuestionCounter is smaller than ${FullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER}",
+        "Invalid UncompletedFullyRandomTest: currentQuestionCounter is smaller than ${UncompletedFullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter:
-              FullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER - 1,
+              UncompletedFullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER - 1,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
@@ -126,7 +129,8 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException &&
@@ -134,13 +138,13 @@ void main() {
     });
 
     test(
-        "Invalid FullyRandomTest: currentQuestionCounter is bigger than ${FullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER}",
+        "Invalid UncompletedFullyRandomTest: currentQuestionCounter is bigger than ${UncompletedFullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter:
-              FullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER + 1,
+              UncompletedFullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER + 1,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
@@ -151,7 +155,8 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException &&
@@ -159,13 +164,13 @@ void main() {
     });
 
     test(
-        "Invalid FullyRandomTest: triesNumber is smaller than ${FullyRandomTests.MINIMUM_TRIES_NUMBER}",
+        "Invalid UncompletedFullyRandomTest: triesNumber is smaller than ${UncompletedFullyRandomTests.MINIMUM_TRIES_NUMBER}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
-          triesNumber: FullyRandomTests.MINIMUM_TRIES_NUMBER - 1,
+          triesNumber: UncompletedFullyRandomTests.MINIMUM_TRIES_NUMBER - 1,
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
@@ -175,20 +180,21 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("tries_number"))));
     });
 
     test(
-        "Invalid FullyRandomTest: triesNumber is bigger than ${FullyRandomTests.MAXIMUM_TRIES_NUMBER}",
+        "Invalid UncompletedFullyRandomTest: triesNumber is bigger than ${UncompletedFullyRandomTests.MAXIMUM_TRIES_NUMBER}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
-          triesNumber: FullyRandomTests.MAXIMUM_TRIES_NUMBER + 1,
+          triesNumber: UncompletedFullyRandomTests.MAXIMUM_TRIES_NUMBER + 1,
           triesCounter: triesCounter,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
@@ -198,21 +204,22 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("tries_number"))));
     });
 
     test(
-        "Invalid FullyRandomTest: triesCounter is smaller than ${FullyRandomTests.MINIMUM_TRIES_COUNTER}",
+        "Invalid UncompletedFullyRandomTest: triesCounter is smaller than ${UncompletedFullyRandomTests.MINIMUM_TRIES_COUNTER}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
-          triesCounter: FullyRandomTests.MINIMUM_TRIES_COUNTER - 1,
+          triesCounter: UncompletedFullyRandomTests.MINIMUM_TRIES_COUNTER - 1,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
           lastCheckedAnswerResult: lastCheckedAnswerResult,
@@ -221,21 +228,22 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("tries_counter"))));
     });
 
     test(
-        "Invalid FullyRandomTest: triesCounter is bigger than ${FullyRandomTests.MAXIMUM_TRIES_COUNTER}",
+        "Invalid UncompletedFullyRandomTest: triesCounter is bigger than ${UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
-          triesCounter: FullyRandomTests.MAXIMUM_TRIES_COUNTER + 1,
+          triesCounter: UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER + 1,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
           lastCheckedAnswerResult: lastCheckedAnswerResult,
@@ -244,22 +252,23 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("tries_counter"))));
     });
 
     test(
-        "Invalid FullyRandomTest: elapsedTime is smaller than ${FullyRandomTests.MINIMUM_ELAPSED_TIME}",
+        "Invalid UncompletedFullyRandomTest: elapsedTime is smaller than ${UncompletedFullyRandomTests.MINIMUM_ELAPSED_TIME}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
-          elapsedTime: FullyRandomTests.MINIMUM_ELAPSED_TIME - 1,
+          elapsedTime: UncompletedFullyRandomTests.MINIMUM_ELAPSED_TIME - 1,
           isCompleted: isCompleted,
           lastCheckedAnswerResult: lastCheckedAnswerResult,
           shouldCheckAnAnswer: shouldCheckAnAnswer,
@@ -267,16 +276,17 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("elapsed_time"))));
     });
 
     test(
-        "Invalid FullyRandomTest: currentHintCounter is smaller than ${FullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER}",
+        "Invalid UncompletedFullyRandomTest: currentHintCounter is smaller than ${UncompletedFullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
@@ -286,11 +296,13 @@ void main() {
           isCompleted: isCompleted,
           lastCheckedAnswerResult: lastCheckedAnswerResult,
           shouldCheckAnAnswer: shouldCheckAnAnswer,
-          currentHintCounter: FullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER - 1,
+          currentHintCounter:
+              UncompletedFullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER - 1,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException &&
@@ -298,9 +310,9 @@ void main() {
     });
 
     test(
-        "Invalid FullyRandomTest: currentHintCounter is bigger than ${FullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER}",
+        "Invalid UncompletedFullyRandomTest: currentHintCounter is bigger than ${UncompletedFullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
@@ -310,11 +322,13 @@ void main() {
           isCompleted: isCompleted,
           lastCheckedAnswerResult: lastCheckedAnswerResult,
           shouldCheckAnAnswer: shouldCheckAnAnswer,
-          currentHintCounter: FullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER + 1,
+          currentHintCounter:
+              UncompletedFullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER + 1,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException &&
@@ -322,9 +336,9 @@ void main() {
     });
 
     test(
-        "Invalid FullyRandomTest: wrongAnswerCounter is smaller than ${FullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER}",
+        "Invalid UncompletedFullyRandomTest: wrongAnswerCounter is smaller than ${UncompletedFullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
@@ -335,10 +349,12 @@ void main() {
           lastCheckedAnswerResult: lastCheckedAnswerResult,
           shouldCheckAnAnswer: shouldCheckAnAnswer,
           currentHintCounter: currentHintCounter,
-          wrongAnswerCounter: FullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER - 1,
+          wrongAnswerCounter:
+              UncompletedFullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER - 1,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException &&
@@ -346,9 +362,9 @@ void main() {
     });
 
     test(
-        "Invalid FullyRandomTest: wrongAnswerCounter is bigger than ${FullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER}",
+        "Invalid UncompletedFullyRandomTest: wrongAnswerCounter is bigger than ${UncompletedFullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER}",
         () {
-      var fullyRandomTest = FullyRandomTest(
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
@@ -359,18 +375,20 @@ void main() {
           lastCheckedAnswerResult: lastCheckedAnswerResult,
           shouldCheckAnAnswer: shouldCheckAnAnswer,
           currentHintCounter: currentHintCounter,
-          wrongAnswerCounter: FullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER + 1,
+          wrongAnswerCounter:
+              UncompletedFullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER + 1,
           lastAnswer: lastAnswer);
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException &&
               e.message.contains("wrong_answer_counter"))));
     });
 
-    test("Invalid FullyRandomTest: lastAnswer is empty", () async {
-      var fullyRandomTest = FullyRandomTest(
+    test("Invalid UncompletedFullyRandomTest: lastAnswer is empty", () async {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
@@ -384,11 +402,12 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: "");
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("last_answer"))));
-      fullyRandomTest = FullyRandomTest(
+      uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
@@ -402,14 +421,15 @@ void main() {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: " ");
       expect(() async {
-        await fullyRandomTestsDao.create(fullyRandomTest.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("last_answer"))));
     });
 
-    test("Good case: create FullyRandomTest without 'id'", () async {
-      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
+    test("Good case: create UncompletedFullyRandomTest without 'id'", () async {
+      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
           fieldListId: Value(fieldListId),
           currentQuestionCounter: Value(currentQuestionCounter),
           triesNumber: Value(triesNumber),
@@ -421,44 +441,47 @@ void main() {
           currentHintCounter: Value(currentHintCounter),
           wrongAnswerCounter: Value(wrongAnswerCounter),
           lastAnswer: Value(lastAnswer));
-      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
+      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
     });
 
-    test("Good case 2: create FullyRandomTest without triesCounter", () async {
-      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
-          id: Value(id),
-          fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter),
-          triesNumber: Value(triesNumber),
-          elapsedTime: Value(elapsedTime),
-          isCompleted: Value(isCompleted),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
-          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
-          currentHintCounter: Value(currentHintCounter),
-          wrongAnswerCounter: Value(wrongAnswerCounter),
-          lastAnswer: Value(lastAnswer));
-      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
-    });
-
-    test("Good case 3: create FullyRandomTest without isCompleted", () async {
-      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
-          id: Value(id),
-          fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter),
-          triesNumber: Value(triesNumber),
-          triesCounter: Value(triesCounter),
-          elapsedTime: Value(elapsedTime),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
-          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
-          currentHintCounter: Value(currentHintCounter),
-          wrongAnswerCounter: Value(wrongAnswerCounter),
-          lastAnswer: Value(lastAnswer));
-      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
-    });
-
-    test("Good case 4: create FullyRandomTest without lastCheckedAnswerResult",
+    test("Good case 2: create UncompletedFullyRandomTest without triesCounter",
         () async {
-      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
+      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
+          id: Value(id),
+          fieldListId: Value(fieldListId),
+          currentQuestionCounter: Value(currentQuestionCounter),
+          triesNumber: Value(triesNumber),
+          elapsedTime: Value(elapsedTime),
+          isCompleted: Value(isCompleted),
+          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
+          currentHintCounter: Value(currentHintCounter),
+          wrongAnswerCounter: Value(wrongAnswerCounter),
+          lastAnswer: Value(lastAnswer));
+      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
+    });
+
+    test("Good case 3: create UncompletedFullyRandomTest without isCompleted",
+        () async {
+      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
+          id: Value(id),
+          fieldListId: Value(fieldListId),
+          currentQuestionCounter: Value(currentQuestionCounter),
+          triesNumber: Value(triesNumber),
+          triesCounter: Value(triesCounter),
+          elapsedTime: Value(elapsedTime),
+          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
+          currentHintCounter: Value(currentHintCounter),
+          wrongAnswerCounter: Value(wrongAnswerCounter),
+          lastAnswer: Value(lastAnswer));
+      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
+    });
+
+    test(
+        "Good case 4: create UncompletedFullyRandomTest without lastCheckedAnswerResult",
+        () async {
+      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
           id: Value(id),
           fieldListId: Value(fieldListId),
           currentQuestionCounter: Value(currentQuestionCounter),
@@ -470,12 +493,13 @@ void main() {
           currentHintCounter: Value(currentHintCounter),
           wrongAnswerCounter: Value(wrongAnswerCounter),
           lastAnswer: Value(lastAnswer));
-      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
+      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
     });
 
-    test("Good case 5: create FullyRandomTest without shouldCheckAnAnswer",
+    test(
+        "Good case 5: create UncompletedFullyRandomTest without shouldCheckAnAnswer",
         () async {
-      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
+      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
           id: Value(id),
           fieldListId: Value(fieldListId),
           currentQuestionCounter: Value(currentQuestionCounter),
@@ -487,12 +511,12 @@ void main() {
           currentHintCounter: Value(currentHintCounter),
           wrongAnswerCounter: Value(wrongAnswerCounter),
           lastAnswer: Value(lastAnswer));
-      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
+      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
     });
 
-    test("Good case 6: create FullyRandomTest without currentHintCounter",
+    test("Good case 6: create UncompletedFullyRandomTest without currentHintCounter",
         () async {
-      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
+      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
           id: Value(id),
           fieldListId: Value(fieldListId),
           currentQuestionCounter: Value(currentQuestionCounter),
@@ -504,12 +528,12 @@ void main() {
           shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
           wrongAnswerCounter: Value(wrongAnswerCounter),
           lastAnswer: Value(lastAnswer));
-      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
+      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
     });
 
-    test("Good case 6: create FullyRandomTest without wrongAnswerCounter",
+    test("Good case 6: create UncompletedFullyRandomTest without wrongAnswerCounter",
         () async {
-      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
+      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
           id: Value(id),
           fieldListId: Value(fieldListId),
           currentQuestionCounter: Value(currentQuestionCounter),
@@ -521,11 +545,12 @@ void main() {
           shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
           currentHintCounter: Value(currentHintCounter),
           lastAnswer: Value(lastAnswer));
-      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
+      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
     });
 
-    test("Good case 7: create FullyRandomTest without lastAnswer", () async {
-      var fullyRandomTestsCompanion = FullyRandomTestsCompanion(
+    test("Good case 7: create UncompletedFullyRandomTest without lastAnswer",
+        () async {
+      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
           id: Value(id),
           fieldListId: Value(fieldListId),
           currentQuestionCounter: Value(currentQuestionCounter),
@@ -537,7 +562,7 @@ void main() {
           shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
           currentHintCounter: Value(currentHintCounter),
           wrongAnswerCounter: Value(wrongAnswerCounter));
-      await fullyRandomTestsDao.create(fullyRandomTestsCompanion);
+      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
     });
   });
 }
