@@ -7,7 +7,7 @@ part "uncompleted_fully_random_tests_dao.g.dart";
 class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
     with _$UncompletedFullyRandomTestsDaoMixin {
   UncompletedFullyRandomTestsDao(AppDatabase appDatabase) : super(appDatabase);
-  create(UncompletedFullyRandomTestsCompanion uncompletedFullyRandomTestsCompanion) {
+  Future<int> create(UncompletedFullyRandomTestsCompanion uncompletedFullyRandomTestsCompanion) {
     if (uncompletedFullyRandomTestsCompanion.id.present &&
         !isValid(uncompletedFullyRandomTestsCompanion.id.value)) {
       throw InvalidDataException("id");
