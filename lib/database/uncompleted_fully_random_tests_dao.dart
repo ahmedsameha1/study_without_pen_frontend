@@ -7,7 +7,9 @@ part "uncompleted_fully_random_tests_dao.g.dart";
 class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
     with _$UncompletedFullyRandomTestsDaoMixin {
   UncompletedFullyRandomTestsDao(AppDatabase appDatabase) : super(appDatabase);
-  Future<int> create(UncompletedFullyRandomTestsCompanion uncompletedFullyRandomTestsCompanion) {
+  Future<int> create(
+      UncompletedFullyRandomTestsCompanion
+          uncompletedFullyRandomTestsCompanion) {
     if (uncompletedFullyRandomTestsCompanion.id.present &&
         !isValid(uncompletedFullyRandomTestsCompanion.id.value)) {
       throw InvalidDataException("id");
@@ -15,6 +17,13 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
     if (!isValid(uncompletedFullyRandomTestsCompanion.fieldListId.value)) {
       throw InvalidDataException("fieldListId");
     }
-    return into(uncompletedFullyRandomTests).insert(uncompletedFullyRandomTestsCompanion);
+    return into(uncompletedFullyRandomTests)
+        .insert(uncompletedFullyRandomTestsCompanion);
+  }
+
+  Future<UncompletedFullyRandomTest?> getById(String id) {
+    return (select(uncompletedFullyRandomTests)
+          ..where((tbl) => tbl.id.equals(id)))
+        .getSingleOrNull();
   }
 }

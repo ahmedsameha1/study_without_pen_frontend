@@ -23,7 +23,8 @@ void main() {
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
-    uncompletedFullyRandomTestsDao = UncompletedFullyRandomTestsDao(appDatabase);
+    uncompletedFullyRandomTestsDao =
+        UncompletedFullyRandomTestsDao(appDatabase);
   });
 
   tearDown(() async {
@@ -80,15 +81,18 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
-      await uncompletedFullyRandomTestsDao.create(uncompletedFullyRandomTest1.toCompanion(true));
+      await uncompletedFullyRandomTestsDao
+          .create(uncompletedFullyRandomTest1.toCompanion(true));
       expect(() async {
-        await uncompletedFullyRandomTestsDao.create(uncompletedFullyRandomTest2.toCompanion(true));
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest2.toCompanion(true));
       },
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("id"))));
     });
 
-    test("Invalid UncompletedFullyRandomTest: fieldListId is an invalid UUID v4",
+    test(
+        "Invalid UncompletedFullyRandomTest: fieldListId is an invalid UUID v4",
         () {
       var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
           id: id,
@@ -429,140 +433,231 @@ void main() {
     });
 
     test("Good case: create UncompletedFullyRandomTest without 'id'", () async {
-      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
-          fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter),
-          triesNumber: Value(triesNumber),
-          triesCounter: Value(triesCounter),
-          elapsedTime: Value(elapsedTime),
-          isCompleted: Value(isCompleted),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
-          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
-          currentHintCounter: Value(currentHintCounter),
-          wrongAnswerCounter: Value(wrongAnswerCounter),
-          lastAnswer: Value(lastAnswer));
-      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
+      var uncompletedFullyRandomTestsCompanion =
+          UncompletedFullyRandomTestsCompanion(
+              fieldListId: Value(fieldListId),
+              currentQuestionCounter: Value(currentQuestionCounter),
+              triesNumber: Value(triesNumber),
+              triesCounter: Value(triesCounter),
+              elapsedTime: Value(elapsedTime),
+              isCompleted: Value(isCompleted),
+              lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+              shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
+              currentHintCounter: Value(currentHintCounter),
+              wrongAnswerCounter: Value(wrongAnswerCounter),
+              lastAnswer: Value(lastAnswer));
+      await uncompletedFullyRandomTestsDao
+          .create((uncompletedFullyRandomTestsCompanion));
     });
 
     test("Good case 2: create UncompletedFullyRandomTest without triesCounter",
         () async {
-      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
-          id: Value(id),
-          fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter),
-          triesNumber: Value(triesNumber),
-          elapsedTime: Value(elapsedTime),
-          isCompleted: Value(isCompleted),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
-          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
-          currentHintCounter: Value(currentHintCounter),
-          wrongAnswerCounter: Value(wrongAnswerCounter),
-          lastAnswer: Value(lastAnswer));
-      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
+      var uncompletedFullyRandomTestsCompanion =
+          UncompletedFullyRandomTestsCompanion(
+              id: Value(id),
+              fieldListId: Value(fieldListId),
+              currentQuestionCounter: Value(currentQuestionCounter),
+              triesNumber: Value(triesNumber),
+              elapsedTime: Value(elapsedTime),
+              isCompleted: Value(isCompleted),
+              lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+              shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
+              currentHintCounter: Value(currentHintCounter),
+              wrongAnswerCounter: Value(wrongAnswerCounter),
+              lastAnswer: Value(lastAnswer));
+      await uncompletedFullyRandomTestsDao
+          .create((uncompletedFullyRandomTestsCompanion));
     });
 
     test("Good case 3: create UncompletedFullyRandomTest without isCompleted",
         () async {
-      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
-          id: Value(id),
-          fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter),
-          triesNumber: Value(triesNumber),
-          triesCounter: Value(triesCounter),
-          elapsedTime: Value(elapsedTime),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
-          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
-          currentHintCounter: Value(currentHintCounter),
-          wrongAnswerCounter: Value(wrongAnswerCounter),
-          lastAnswer: Value(lastAnswer));
-      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
+      var uncompletedFullyRandomTestsCompanion =
+          UncompletedFullyRandomTestsCompanion(
+              id: Value(id),
+              fieldListId: Value(fieldListId),
+              currentQuestionCounter: Value(currentQuestionCounter),
+              triesNumber: Value(triesNumber),
+              triesCounter: Value(triesCounter),
+              elapsedTime: Value(elapsedTime),
+              lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+              shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
+              currentHintCounter: Value(currentHintCounter),
+              wrongAnswerCounter: Value(wrongAnswerCounter),
+              lastAnswer: Value(lastAnswer));
+      await uncompletedFullyRandomTestsDao
+          .create((uncompletedFullyRandomTestsCompanion));
     });
 
     test(
         "Good case 4: create UncompletedFullyRandomTest without lastCheckedAnswerResult",
         () async {
-      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
-          id: Value(id),
-          fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter),
-          triesNumber: Value(triesNumber),
-          triesCounter: Value(triesCounter),
-          elapsedTime: Value(elapsedTime),
-          isCompleted: Value(isCompleted),
-          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
-          currentHintCounter: Value(currentHintCounter),
-          wrongAnswerCounter: Value(wrongAnswerCounter),
-          lastAnswer: Value(lastAnswer));
-      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
+      var uncompletedFullyRandomTestsCompanion =
+          UncompletedFullyRandomTestsCompanion(
+              id: Value(id),
+              fieldListId: Value(fieldListId),
+              currentQuestionCounter: Value(currentQuestionCounter),
+              triesNumber: Value(triesNumber),
+              triesCounter: Value(triesCounter),
+              elapsedTime: Value(elapsedTime),
+              isCompleted: Value(isCompleted),
+              shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
+              currentHintCounter: Value(currentHintCounter),
+              wrongAnswerCounter: Value(wrongAnswerCounter),
+              lastAnswer: Value(lastAnswer));
+      await uncompletedFullyRandomTestsDao
+          .create((uncompletedFullyRandomTestsCompanion));
     });
 
     test(
         "Good case 5: create UncompletedFullyRandomTest without shouldCheckAnAnswer",
         () async {
-      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
-          id: Value(id),
-          fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter),
-          triesNumber: Value(triesNumber),
-          triesCounter: Value(triesCounter),
-          elapsedTime: Value(elapsedTime),
-          isCompleted: Value(isCompleted),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
-          currentHintCounter: Value(currentHintCounter),
-          wrongAnswerCounter: Value(wrongAnswerCounter),
-          lastAnswer: Value(lastAnswer));
-      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
+      var uncompletedFullyRandomTestsCompanion =
+          UncompletedFullyRandomTestsCompanion(
+              id: Value(id),
+              fieldListId: Value(fieldListId),
+              currentQuestionCounter: Value(currentQuestionCounter),
+              triesNumber: Value(triesNumber),
+              triesCounter: Value(triesCounter),
+              elapsedTime: Value(elapsedTime),
+              isCompleted: Value(isCompleted),
+              lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+              currentHintCounter: Value(currentHintCounter),
+              wrongAnswerCounter: Value(wrongAnswerCounter),
+              lastAnswer: Value(lastAnswer));
+      await uncompletedFullyRandomTestsDao
+          .create((uncompletedFullyRandomTestsCompanion));
     });
 
-    test("Good case 6: create UncompletedFullyRandomTest without currentHintCounter",
+    test(
+        "Good case 6: create UncompletedFullyRandomTest without currentHintCounter",
         () async {
-      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
-          id: Value(id),
-          fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter),
-          triesNumber: Value(triesNumber),
-          triesCounter: Value(triesCounter),
-          elapsedTime: Value(elapsedTime),
-          isCompleted: Value(isCompleted),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
-          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
-          wrongAnswerCounter: Value(wrongAnswerCounter),
-          lastAnswer: Value(lastAnswer));
-      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
+      var uncompletedFullyRandomTestsCompanion =
+          UncompletedFullyRandomTestsCompanion(
+              id: Value(id),
+              fieldListId: Value(fieldListId),
+              currentQuestionCounter: Value(currentQuestionCounter),
+              triesNumber: Value(triesNumber),
+              triesCounter: Value(triesCounter),
+              elapsedTime: Value(elapsedTime),
+              isCompleted: Value(isCompleted),
+              lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+              shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
+              wrongAnswerCounter: Value(wrongAnswerCounter),
+              lastAnswer: Value(lastAnswer));
+      await uncompletedFullyRandomTestsDao
+          .create((uncompletedFullyRandomTestsCompanion));
     });
 
-    test("Good case 6: create UncompletedFullyRandomTest without wrongAnswerCounter",
+    test(
+        "Good case 6: create UncompletedFullyRandomTest without wrongAnswerCounter",
         () async {
-      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
-          id: Value(id),
-          fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter),
-          triesNumber: Value(triesNumber),
-          triesCounter: Value(triesCounter),
-          elapsedTime: Value(elapsedTime),
-          isCompleted: Value(isCompleted),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
-          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
-          currentHintCounter: Value(currentHintCounter),
-          lastAnswer: Value(lastAnswer));
-      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
+      var uncompletedFullyRandomTestsCompanion =
+          UncompletedFullyRandomTestsCompanion(
+              id: Value(id),
+              fieldListId: Value(fieldListId),
+              currentQuestionCounter: Value(currentQuestionCounter),
+              triesNumber: Value(triesNumber),
+              triesCounter: Value(triesCounter),
+              elapsedTime: Value(elapsedTime),
+              isCompleted: Value(isCompleted),
+              lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+              shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
+              currentHintCounter: Value(currentHintCounter),
+              lastAnswer: Value(lastAnswer));
+      await uncompletedFullyRandomTestsDao
+          .create((uncompletedFullyRandomTestsCompanion));
     });
 
     test("Good case 7: create UncompletedFullyRandomTest without lastAnswer",
         () async {
-      var uncompletedFullyRandomTestsCompanion = UncompletedFullyRandomTestsCompanion(
-          id: Value(id),
-          fieldListId: Value(fieldListId),
-          currentQuestionCounter: Value(currentQuestionCounter),
-          triesNumber: Value(triesNumber),
-          triesCounter: Value(triesCounter),
-          elapsedTime: Value(elapsedTime),
-          isCompleted: Value(isCompleted),
-          lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
-          shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
-          currentHintCounter: Value(currentHintCounter),
-          wrongAnswerCounter: Value(wrongAnswerCounter));
-      await uncompletedFullyRandomTestsDao.create((uncompletedFullyRandomTestsCompanion));
+      var uncompletedFullyRandomTestsCompanion =
+          UncompletedFullyRandomTestsCompanion(
+              id: Value(id),
+              fieldListId: Value(fieldListId),
+              currentQuestionCounter: Value(currentQuestionCounter),
+              triesNumber: Value(triesNumber),
+              triesCounter: Value(triesCounter),
+              elapsedTime: Value(elapsedTime),
+              isCompleted: Value(isCompleted),
+              lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
+              shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
+              currentHintCounter: Value(currentHintCounter),
+              wrongAnswerCounter: Value(wrongAnswerCounter));
+      await uncompletedFullyRandomTestsDao
+          .create((uncompletedFullyRandomTestsCompanion));
+    });
+  });
+
+  group("Getting UncompletedFullyRandomTest by id", () {
+    var id2 = const Uuid().v4();
+    setUp(() async {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesCounter,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: lastAnswer);
+      await uncompletedFullyRandomTestsDao
+          .create(uncompletedFullyRandomTest.toCompanion(true));
+    });
+
+    test("Good case: UncompletedFullyRandomTest is found", () async {
+      UncompletedFullyRandomTest? gottenUncompletedFullyRandomTest =
+          await uncompletedFullyRandomTestsDao.getById(id);
+      gottenUncompletedFullyRandomTest = gottenUncompletedFullyRandomTest!;
+      expect(id, gottenUncompletedFullyRandomTest.id);
+      expect(fieldListId, gottenUncompletedFullyRandomTest.fieldListId);
+      expect(currentQuestionCounter,
+          gottenUncompletedFullyRandomTest.currentQuestionCounter);
+      expect(triesNumber, gottenUncompletedFullyRandomTest.triesNumber);
+      expect(triesCounter, gottenUncompletedFullyRandomTest.triesCounter);
+      expect(elapsedTime, gottenUncompletedFullyRandomTest.elapsedTime);
+      expect(isCompleted, gottenUncompletedFullyRandomTest.isCompleted);
+      expect(lastCheckedAnswerResult,
+          gottenUncompletedFullyRandomTest.lastCheckedAnswerResult);
+      expect(shouldCheckAnAnswer,
+          gottenUncompletedFullyRandomTest.shouldCheckAnAnswer);
+      expect(currentHintCounter,
+          gottenUncompletedFullyRandomTest.currentHintCounter);
+      expect(wrongAnswerCounter,
+          gottenUncompletedFullyRandomTest.wrongAnswerCounter);
+      expect(lastAnswer, gottenUncompletedFullyRandomTest.lastAnswer);
+    });
+
+    test("Good case: UncompletedFullyRandomTest is not found", () async {
+      UncompletedFullyRandomTest? gottenUncompletedFullyRandomTest =
+          await uncompletedFullyRandomTestsDao.getById(const Uuid().v4());
+      expect(gottenUncompletedFullyRandomTest, null);
+    });
+
+    test("Test default values", () async {
+      var uncompletedFullyRandomTestsCompanion =
+          UncompletedFullyRandomTestsCompanion(
+        id: Value(id2),
+        fieldListId: Value(fieldListId),
+        currentQuestionCounter: Value(currentQuestionCounter),
+        triesNumber: Value(triesNumber),
+        elapsedTime: Value(elapsedTime),
+      );
+      await uncompletedFullyRandomTestsDao
+          .create(uncompletedFullyRandomTestsCompanion);
+      UncompletedFullyRandomTest? gottenUncompletedFullyRandomTest =
+          await uncompletedFullyRandomTestsDao.getById(id2);
+      gottenUncompletedFullyRandomTest = gottenUncompletedFullyRandomTest!;
+      expect(gottenUncompletedFullyRandomTest.triesCounter, 0);
+      expect(gottenUncompletedFullyRandomTest.isCompleted, false);
+      expect(gottenUncompletedFullyRandomTest.lastCheckedAnswerResult, false);
+      expect(gottenUncompletedFullyRandomTest.shouldCheckAnAnswer, true);
+      expect(gottenUncompletedFullyRandomTest.currentHintCounter, 0);
+      expect(gottenUncompletedFullyRandomTest.wrongAnswerCounter, 0);
+      expect(gottenUncompletedFullyRandomTest.lastAnswer, null);
     });
   });
 }
