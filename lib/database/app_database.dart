@@ -263,6 +263,7 @@ class UncompletedFullyRandomTests extends Table {
       .trim()
       .length
       .isBiggerOrEqualValue(UncompletedFullyRandomTests.MINIMUM_LAST_ANSWER))();
+  DateTimeColumn get creationAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {id};

@@ -31,6 +31,7 @@ void main() {
     int currentHintCounter = 0;
     int wrongAnswerCounter = 3;
     String lastAnswer = "wefw";
+  DateTime creationAt = DateTime.utc(2020, 1, 1);
     test("Invalid FullyRandomTest: invalid UncompletedFullyRandomTest", () {
       expect(() async {
         await fullyRandomTestsDao.create(
@@ -45,7 +46,8 @@ void main() {
             shouldCheckAnAnswer: shouldCheckAnAnswer,
             currentHintCounter: currentHintCounter,
             wrongAnswerCounter: wrongAnswerCounter,
-            lastAnswer: lastAnswer);
+            lastAnswer: lastAnswer,
+           creationAt: creationAt );
       },
           throwsA(predicate(
               (e) => e is InvalidDataException && e.message.contains("id"))));

@@ -16,7 +16,8 @@ class FullyRandomTestsDao {
       required bool shouldCheckAnAnswer,
       required int currentHintCounter,
       required int wrongAnswerCounter,
-      required String lastAnswer}) async {
+      required String lastAnswer,
+      required DateTime creationAt}) async {
     await appDatabase.transaction(() async {
       UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao =
           UncompletedFullyRandomTestsDao(appDatabase);
@@ -32,7 +33,8 @@ class FullyRandomTestsDao {
           shouldCheckAnAnswer: shouldCheckAnAnswer,
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
-          lastAnswer: lastAnswer);
+          lastAnswer: lastAnswer,
+          creationAt: creationAt);
       await uncompletedFullyRandomTestsDao
           .create(uncompletedFullyRandomTest.toCompanion(true));
       return Future.value(null);

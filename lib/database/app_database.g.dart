@@ -2985,6 +2985,12 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
           UncompletedFullyRandomTests.MINIMUM_LAST_ANSWER),
       type: DriftSqlType.string,
       requiredDuringInsert: false);
+  static const VerificationMeta _creationAtMeta =
+      const VerificationMeta('creationAt');
+  @override
+  late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
+      'creation_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -2998,7 +3004,8 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
         shouldCheckAnAnswer,
         currentHintCounter,
         wrongAnswerCounter,
-        lastAnswer
+        lastAnswer,
+        creationAt
       ];
   @override
   String get aliasedName => _alias ?? 'uncompleted_fully_random_tests';
@@ -3088,6 +3095,14 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
           lastAnswer.isAcceptableOrUnknown(
               data['last_answer']!, _lastAnswerMeta));
     }
+    if (data.containsKey('creation_at')) {
+      context.handle(
+          _creationAtMeta,
+          creationAt.isAcceptableOrUnknown(
+              data['creation_at']!, _creationAtMeta));
+    } else if (isInserting) {
+      context.missing(_creationAtMeta);
+    }
     return context;
   }
 
@@ -3124,6 +3139,8 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
           DriftSqlType.int, data['${effectivePrefix}wrong_answer_counter'])!,
       lastAnswer: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}last_answer']),
+      creationAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
     );
   }
 
@@ -3147,6 +3164,7 @@ class UncompletedFullyRandomTest extends DataClass
   final int currentHintCounter;
   final int wrongAnswerCounter;
   final String? lastAnswer;
+  final DateTime creationAt;
   const UncompletedFullyRandomTest(
       {required this.id,
       required this.fieldListId,
@@ -3159,7 +3177,8 @@ class UncompletedFullyRandomTest extends DataClass
       required this.shouldCheckAnAnswer,
       required this.currentHintCounter,
       required this.wrongAnswerCounter,
-      this.lastAnswer});
+      this.lastAnswer,
+      required this.creationAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3177,6 +3196,7 @@ class UncompletedFullyRandomTest extends DataClass
     if (!nullToAbsent || lastAnswer != null) {
       map['last_answer'] = Variable<String>(lastAnswer);
     }
+    map['creation_at'] = Variable<DateTime>(creationAt);
     return map;
   }
 
@@ -3196,6 +3216,7 @@ class UncompletedFullyRandomTest extends DataClass
       lastAnswer: lastAnswer == null && nullToAbsent
           ? const Value.absent()
           : Value(lastAnswer),
+      creationAt: Value(creationAt),
     );
   }
 
@@ -3218,6 +3239,7 @@ class UncompletedFullyRandomTest extends DataClass
       currentHintCounter: serializer.fromJson<int>(json['currentHintCounter']),
       wrongAnswerCounter: serializer.fromJson<int>(json['wrongAnswerCounter']),
       lastAnswer: serializer.fromJson<String?>(json['lastAnswer']),
+      creationAt: serializer.fromJson<DateTime>(json['creationAt']),
     );
   }
   @override
@@ -3237,6 +3259,7 @@ class UncompletedFullyRandomTest extends DataClass
       'currentHintCounter': serializer.toJson<int>(currentHintCounter),
       'wrongAnswerCounter': serializer.toJson<int>(wrongAnswerCounter),
       'lastAnswer': serializer.toJson<String?>(lastAnswer),
+      'creationAt': serializer.toJson<DateTime>(creationAt),
     };
   }
 
@@ -3252,7 +3275,8 @@ class UncompletedFullyRandomTest extends DataClass
           bool? shouldCheckAnAnswer,
           int? currentHintCounter,
           int? wrongAnswerCounter,
-          Value<String?> lastAnswer = const Value.absent()}) =>
+          Value<String?> lastAnswer = const Value.absent(),
+          DateTime? creationAt}) =>
       UncompletedFullyRandomTest(
         id: id ?? this.id,
         fieldListId: fieldListId ?? this.fieldListId,
@@ -3268,6 +3292,7 @@ class UncompletedFullyRandomTest extends DataClass
         currentHintCounter: currentHintCounter ?? this.currentHintCounter,
         wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
         lastAnswer: lastAnswer.present ? lastAnswer.value : this.lastAnswer,
+        creationAt: creationAt ?? this.creationAt,
       );
   @override
   String toString() {
@@ -3283,7 +3308,8 @@ class UncompletedFullyRandomTest extends DataClass
           ..write('shouldCheckAnAnswer: $shouldCheckAnAnswer, ')
           ..write('currentHintCounter: $currentHintCounter, ')
           ..write('wrongAnswerCounter: $wrongAnswerCounter, ')
-          ..write('lastAnswer: $lastAnswer')
+          ..write('lastAnswer: $lastAnswer, ')
+          ..write('creationAt: $creationAt')
           ..write(')'))
         .toString();
   }
@@ -3301,7 +3327,8 @@ class UncompletedFullyRandomTest extends DataClass
       shouldCheckAnAnswer,
       currentHintCounter,
       wrongAnswerCounter,
-      lastAnswer);
+      lastAnswer,
+      creationAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3317,7 +3344,8 @@ class UncompletedFullyRandomTest extends DataClass
           other.shouldCheckAnAnswer == this.shouldCheckAnAnswer &&
           other.currentHintCounter == this.currentHintCounter &&
           other.wrongAnswerCounter == this.wrongAnswerCounter &&
-          other.lastAnswer == this.lastAnswer);
+          other.lastAnswer == this.lastAnswer &&
+          other.creationAt == this.creationAt);
 }
 
 class UncompletedFullyRandomTestsCompanion
@@ -3334,6 +3362,7 @@ class UncompletedFullyRandomTestsCompanion
   final Value<int> currentHintCounter;
   final Value<int> wrongAnswerCounter;
   final Value<String?> lastAnswer;
+  final Value<DateTime> creationAt;
   const UncompletedFullyRandomTestsCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
@@ -3347,6 +3376,7 @@ class UncompletedFullyRandomTestsCompanion
     this.currentHintCounter = const Value.absent(),
     this.wrongAnswerCounter = const Value.absent(),
     this.lastAnswer = const Value.absent(),
+    this.creationAt = const Value.absent(),
   });
   UncompletedFullyRandomTestsCompanion.insert({
     this.id = const Value.absent(),
@@ -3361,10 +3391,12 @@ class UncompletedFullyRandomTestsCompanion
     this.currentHintCounter = const Value.absent(),
     this.wrongAnswerCounter = const Value.absent(),
     this.lastAnswer = const Value.absent(),
+    required DateTime creationAt,
   })  : fieldListId = Value(fieldListId),
         currentQuestionCounter = Value(currentQuestionCounter),
         triesNumber = Value(triesNumber),
-        elapsedTime = Value(elapsedTime);
+        elapsedTime = Value(elapsedTime),
+        creationAt = Value(creationAt);
   static Insertable<UncompletedFullyRandomTest> custom({
     Expression<String>? id,
     Expression<String>? fieldListId,
@@ -3378,6 +3410,7 @@ class UncompletedFullyRandomTestsCompanion
     Expression<int>? currentHintCounter,
     Expression<int>? wrongAnswerCounter,
     Expression<String>? lastAnswer,
+    Expression<DateTime>? creationAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3397,6 +3430,7 @@ class UncompletedFullyRandomTestsCompanion
       if (wrongAnswerCounter != null)
         'wrong_answer_counter': wrongAnswerCounter,
       if (lastAnswer != null) 'last_answer': lastAnswer,
+      if (creationAt != null) 'creation_at': creationAt,
     });
   }
 
@@ -3412,7 +3446,8 @@ class UncompletedFullyRandomTestsCompanion
       Value<bool>? shouldCheckAnAnswer,
       Value<int>? currentHintCounter,
       Value<int>? wrongAnswerCounter,
-      Value<String?>? lastAnswer}) {
+      Value<String?>? lastAnswer,
+      Value<DateTime>? creationAt}) {
     return UncompletedFullyRandomTestsCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
@@ -3428,6 +3463,7 @@ class UncompletedFullyRandomTestsCompanion
       currentHintCounter: currentHintCounter ?? this.currentHintCounter,
       wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
       lastAnswer: lastAnswer ?? this.lastAnswer,
+      creationAt: creationAt ?? this.creationAt,
     );
   }
 
@@ -3472,6 +3508,9 @@ class UncompletedFullyRandomTestsCompanion
     if (lastAnswer.present) {
       map['last_answer'] = Variable<String>(lastAnswer.value);
     }
+    if (creationAt.present) {
+      map['creation_at'] = Variable<DateTime>(creationAt.value);
+    }
     return map;
   }
 
@@ -3489,7 +3528,8 @@ class UncompletedFullyRandomTestsCompanion
           ..write('shouldCheckAnAnswer: $shouldCheckAnAnswer, ')
           ..write('currentHintCounter: $currentHintCounter, ')
           ..write('wrongAnswerCounter: $wrongAnswerCounter, ')
-          ..write('lastAnswer: $lastAnswer')
+          ..write('lastAnswer: $lastAnswer, ')
+          ..write('creationAt: $creationAt')
           ..write(')'))
         .toString();
   }

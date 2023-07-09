@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 
@@ -16,6 +17,11 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
     }
     if (!isValid(uncompletedFullyRandomTestsCompanion.fieldListId.value)) {
       throw InvalidDataException("fieldListId");
+    }
+    if (uncompletedFullyRandomTestsCompanion.creationAt.value
+        .toUtc()
+        .isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("creationAt");
     }
     return into(uncompletedFullyRandomTests)
         .insert(uncompletedFullyRandomTestsCompanion);
