@@ -9,10 +9,13 @@ import 'package:uuid/uuid.dart';
 void main() {
   late AppDatabase appDatabase;
   late FullyRandomTestsDao fullyRandomTestsDao;
+  late UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     fullyRandomTestsDao = FullyRandomTestsDao(appDatabase);
+    uncompletedFullyRandomTestsDao =
+        UncompletedFullyRandomTestsDao(appDatabase);
   });
 
   tearDown(() async {
@@ -53,6 +56,31 @@ void main() {
       },
           throwsA(predicate(
               (e) => e is InvalidDataException && e.message.contains("id"))));
+    });
+
+    test(
+        "Invalid FullyRandomTest: invalid UncompletedFullyRandomTest is not created in the database",
+        () async {
+      try {
+        await fullyRandomTestsDao.create(
+            id: "wefwe",
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: wrongAnswerCounter,
+            lastAnswer: lastAnswer,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt);
+      } on InvalidDataException {}
+      var gotten =
+          await uncompletedFullyRandomTestsDao.getByFieldListId(fieldListId);
+      expect(gotten.length, 0);
     });
   });
 }

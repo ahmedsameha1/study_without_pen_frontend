@@ -37,4 +37,19 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
           ..where((tbl) => tbl.id.equals(id)))
         .getSingleOrNull();
   }
+
+  Future<List<UncompletedFullyRandomTest>> getByFieldListId(
+      String fieldListId) {
+    return (select(uncompletedFullyRandomTests)
+          ..where(
+            (tbl) => tbl.fieldListId.equals(fieldListId),
+          )
+          ..orderBy([
+            (tbl) => OrderingTerm(
+                expression: tbl.isCompleted, mode: OrderingMode.asc),
+            (tbl) => OrderingTerm(
+                expression: tbl.lastModificationAt, mode: OrderingMode.desc)
+          ]))
+        .get();
+  }
 }
