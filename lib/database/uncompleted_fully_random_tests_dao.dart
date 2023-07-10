@@ -23,6 +23,11 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
         .isAfter(clock.now().toUtc())) {
       throw InvalidDataException("creationAt");
     }
+    if (uncompletedFullyRandomTestsCompanion.lastModificationAt.value
+        .toUtc()
+        .isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("lastModificationAt");
+    }
     return into(uncompletedFullyRandomTests)
         .insert(uncompletedFullyRandomTestsCompanion);
   }

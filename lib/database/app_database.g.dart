@@ -2991,6 +2991,14 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
   late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
       'creation_at', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _lastModificationAtMeta =
+      const VerificationMeta('lastModificationAt');
+  @override
+  late final GeneratedColumn<DateTime> lastModificationAt =
+      GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
+          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
@@ -3005,7 +3013,8 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
         currentHintCounter,
         wrongAnswerCounter,
         lastAnswer,
-        creationAt
+        creationAt,
+        lastModificationAt
       ];
   @override
   String get aliasedName => _alias ?? 'uncompleted_fully_random_tests';
@@ -3103,6 +3112,14 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
     } else if (isInserting) {
       context.missing(_creationAtMeta);
     }
+    if (data.containsKey('last_modification_at')) {
+      context.handle(
+          _lastModificationAtMeta,
+          lastModificationAt.isAcceptableOrUnknown(
+              data['last_modification_at']!, _lastModificationAtMeta));
+    } else if (isInserting) {
+      context.missing(_lastModificationAtMeta);
+    }
     return context;
   }
 
@@ -3141,6 +3158,9 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
           .read(DriftSqlType.string, data['${effectivePrefix}last_answer']),
       creationAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
+      lastModificationAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_modification_at'])!,
     );
   }
 
@@ -3165,6 +3185,7 @@ class UncompletedFullyRandomTest extends DataClass
   final int wrongAnswerCounter;
   final String? lastAnswer;
   final DateTime creationAt;
+  final DateTime lastModificationAt;
   const UncompletedFullyRandomTest(
       {required this.id,
       required this.fieldListId,
@@ -3178,7 +3199,8 @@ class UncompletedFullyRandomTest extends DataClass
       required this.currentHintCounter,
       required this.wrongAnswerCounter,
       this.lastAnswer,
-      required this.creationAt});
+      required this.creationAt,
+      required this.lastModificationAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3197,6 +3219,7 @@ class UncompletedFullyRandomTest extends DataClass
       map['last_answer'] = Variable<String>(lastAnswer);
     }
     map['creation_at'] = Variable<DateTime>(creationAt);
+    map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
     return map;
   }
 
@@ -3217,6 +3240,7 @@ class UncompletedFullyRandomTest extends DataClass
           ? const Value.absent()
           : Value(lastAnswer),
       creationAt: Value(creationAt),
+      lastModificationAt: Value(lastModificationAt),
     );
   }
 
@@ -3240,6 +3264,8 @@ class UncompletedFullyRandomTest extends DataClass
       wrongAnswerCounter: serializer.fromJson<int>(json['wrongAnswerCounter']),
       lastAnswer: serializer.fromJson<String?>(json['lastAnswer']),
       creationAt: serializer.fromJson<DateTime>(json['creationAt']),
+      lastModificationAt:
+          serializer.fromJson<DateTime>(json['lastModificationAt']),
     );
   }
   @override
@@ -3260,6 +3286,7 @@ class UncompletedFullyRandomTest extends DataClass
       'wrongAnswerCounter': serializer.toJson<int>(wrongAnswerCounter),
       'lastAnswer': serializer.toJson<String?>(lastAnswer),
       'creationAt': serializer.toJson<DateTime>(creationAt),
+      'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
     };
   }
 
@@ -3276,7 +3303,8 @@ class UncompletedFullyRandomTest extends DataClass
           int? currentHintCounter,
           int? wrongAnswerCounter,
           Value<String?> lastAnswer = const Value.absent(),
-          DateTime? creationAt}) =>
+          DateTime? creationAt,
+          DateTime? lastModificationAt}) =>
       UncompletedFullyRandomTest(
         id: id ?? this.id,
         fieldListId: fieldListId ?? this.fieldListId,
@@ -3293,6 +3321,7 @@ class UncompletedFullyRandomTest extends DataClass
         wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
         lastAnswer: lastAnswer.present ? lastAnswer.value : this.lastAnswer,
         creationAt: creationAt ?? this.creationAt,
+        lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       );
   @override
   String toString() {
@@ -3309,7 +3338,8 @@ class UncompletedFullyRandomTest extends DataClass
           ..write('currentHintCounter: $currentHintCounter, ')
           ..write('wrongAnswerCounter: $wrongAnswerCounter, ')
           ..write('lastAnswer: $lastAnswer, ')
-          ..write('creationAt: $creationAt')
+          ..write('creationAt: $creationAt, ')
+          ..write('lastModificationAt: $lastModificationAt')
           ..write(')'))
         .toString();
   }
@@ -3328,7 +3358,8 @@ class UncompletedFullyRandomTest extends DataClass
       currentHintCounter,
       wrongAnswerCounter,
       lastAnswer,
-      creationAt);
+      creationAt,
+      lastModificationAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3345,7 +3376,8 @@ class UncompletedFullyRandomTest extends DataClass
           other.currentHintCounter == this.currentHintCounter &&
           other.wrongAnswerCounter == this.wrongAnswerCounter &&
           other.lastAnswer == this.lastAnswer &&
-          other.creationAt == this.creationAt);
+          other.creationAt == this.creationAt &&
+          other.lastModificationAt == this.lastModificationAt);
 }
 
 class UncompletedFullyRandomTestsCompanion
@@ -3363,6 +3395,7 @@ class UncompletedFullyRandomTestsCompanion
   final Value<int> wrongAnswerCounter;
   final Value<String?> lastAnswer;
   final Value<DateTime> creationAt;
+  final Value<DateTime> lastModificationAt;
   const UncompletedFullyRandomTestsCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
@@ -3377,6 +3410,7 @@ class UncompletedFullyRandomTestsCompanion
     this.wrongAnswerCounter = const Value.absent(),
     this.lastAnswer = const Value.absent(),
     this.creationAt = const Value.absent(),
+    this.lastModificationAt = const Value.absent(),
   });
   UncompletedFullyRandomTestsCompanion.insert({
     this.id = const Value.absent(),
@@ -3392,11 +3426,13 @@ class UncompletedFullyRandomTestsCompanion
     this.wrongAnswerCounter = const Value.absent(),
     this.lastAnswer = const Value.absent(),
     required DateTime creationAt,
+    required DateTime lastModificationAt,
   })  : fieldListId = Value(fieldListId),
         currentQuestionCounter = Value(currentQuestionCounter),
         triesNumber = Value(triesNumber),
         elapsedTime = Value(elapsedTime),
-        creationAt = Value(creationAt);
+        creationAt = Value(creationAt),
+        lastModificationAt = Value(lastModificationAt);
   static Insertable<UncompletedFullyRandomTest> custom({
     Expression<String>? id,
     Expression<String>? fieldListId,
@@ -3411,6 +3447,7 @@ class UncompletedFullyRandomTestsCompanion
     Expression<int>? wrongAnswerCounter,
     Expression<String>? lastAnswer,
     Expression<DateTime>? creationAt,
+    Expression<DateTime>? lastModificationAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3431,6 +3468,8 @@ class UncompletedFullyRandomTestsCompanion
         'wrong_answer_counter': wrongAnswerCounter,
       if (lastAnswer != null) 'last_answer': lastAnswer,
       if (creationAt != null) 'creation_at': creationAt,
+      if (lastModificationAt != null)
+        'last_modification_at': lastModificationAt,
     });
   }
 
@@ -3447,7 +3486,8 @@ class UncompletedFullyRandomTestsCompanion
       Value<int>? currentHintCounter,
       Value<int>? wrongAnswerCounter,
       Value<String?>? lastAnswer,
-      Value<DateTime>? creationAt}) {
+      Value<DateTime>? creationAt,
+      Value<DateTime>? lastModificationAt}) {
     return UncompletedFullyRandomTestsCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
@@ -3464,6 +3504,7 @@ class UncompletedFullyRandomTestsCompanion
       wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
       lastAnswer: lastAnswer ?? this.lastAnswer,
       creationAt: creationAt ?? this.creationAt,
+      lastModificationAt: lastModificationAt ?? this.lastModificationAt,
     );
   }
 
@@ -3511,6 +3552,10 @@ class UncompletedFullyRandomTestsCompanion
     if (creationAt.present) {
       map['creation_at'] = Variable<DateTime>(creationAt.value);
     }
+    if (lastModificationAt.present) {
+      map['last_modification_at'] =
+          Variable<DateTime>(lastModificationAt.value);
+    }
     return map;
   }
 
@@ -3529,7 +3574,8 @@ class UncompletedFullyRandomTestsCompanion
           ..write('currentHintCounter: $currentHintCounter, ')
           ..write('wrongAnswerCounter: $wrongAnswerCounter, ')
           ..write('lastAnswer: $lastAnswer, ')
-          ..write('creationAt: $creationAt')
+          ..write('creationAt: $creationAt, ')
+          ..write('lastModificationAt: $lastModificationAt')
           ..write(')'))
         .toString();
   }

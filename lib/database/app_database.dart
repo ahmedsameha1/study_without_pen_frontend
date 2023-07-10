@@ -264,6 +264,8 @@ class UncompletedFullyRandomTests extends Table {
       .length
       .isBiggerOrEqualValue(UncompletedFullyRandomTests.MINIMUM_LAST_ANSWER))();
   DateTimeColumn get creationAt => dateTime()();
+  DateTimeColumn get lastModificationAt =>
+      dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
 
   @override
   Set<Column> get primaryKey => {id};

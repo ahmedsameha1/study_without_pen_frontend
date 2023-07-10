@@ -22,6 +22,7 @@ void main() {
   int wrongAnswerCounter = 3;
   String lastAnswer = "wefw";
   DateTime creationAt = DateTime.utc(2020, 1, 1);
+  DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -48,7 +49,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -71,7 +73,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       var uncompletedFullyRandomTest2 = UncompletedFullyRandomTest(
           id: id,
           fieldListId: fieldListId,
@@ -85,7 +88,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       await uncompletedFullyRandomTestsDao
           .create(uncompletedFullyRandomTest1.toCompanion(true));
       expect(() async {
@@ -112,7 +116,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -138,7 +143,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -165,7 +171,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -191,7 +198,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -216,7 +224,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -241,7 +250,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -266,7 +276,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -291,7 +302,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -317,7 +329,8 @@ void main() {
               UncompletedFullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER - 1,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -344,7 +357,8 @@ void main() {
               UncompletedFullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER + 1,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -371,7 +385,8 @@ void main() {
           wrongAnswerCounter:
               UncompletedFullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER - 1,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -398,7 +413,8 @@ void main() {
           wrongAnswerCounter:
               UncompletedFullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER + 1,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -422,7 +438,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: "",
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -442,7 +459,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: " ",
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       expect(() async {
         await uncompletedFullyRandomTestsDao
             .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -466,7 +484,8 @@ void main() {
             currentHintCounter: currentHintCounter,
             wrongAnswerCounter: wrongAnswerCounter,
             lastAnswer: lastAnswer,
-            creationAt: DateTime.utc(2023, 1, 1));
+            creationAt: DateTime.utc(2023, 1, 1),
+          lastModificationAt: lastModificationAt);
         expect(() async {
           await uncompletedFullyRandomTestsDao
               .create(uncompletedFullyRandomTest.toCompanion(true));
@@ -474,6 +493,60 @@ void main() {
             throwsA(predicate((e) =>
                 e is InvalidDataException &&
                 e.message.contains("creationAt"))));
+      });
+    });
+
+    test("Invalid UncompletedFullyRandomTest: lastModificationAt is in the future", () {
+      withClock(Clock.fixed(DateTime.utc(2020, 1, 1)), () {
+        var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: wrongAnswerCounter,
+            lastAnswer: lastAnswer,
+            creationAt: creationAt,
+            lastModificationAt: DateTime.utc(2023, 1, 1));
+        expect(() async {
+          await uncompletedFullyRandomTestsDao
+              .create(uncompletedFullyRandomTest.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("lastModificationAt"))));
+      });
+    });
+
+    test("Invalid UncompletedFullyRandomTest: lastModificationAt is before creationAt", () {
+      withClock(Clock.fixed(DateTime.utc(2020, 1, 1)), () {
+        var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: wrongAnswerCounter,
+            lastAnswer: lastAnswer,
+            creationAt: creationAt,
+            lastModificationAt: DateTime.utc(2013, 1, 1));
+        expect(() async {
+          await uncompletedFullyRandomTestsDao
+              .create(uncompletedFullyRandomTest.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException &&
+                e.message.contains("last_modification_at"))));
       });
     });
 
@@ -491,7 +564,8 @@ void main() {
               currentHintCounter: Value(currentHintCounter),
               wrongAnswerCounter: Value(wrongAnswerCounter),
               lastAnswer: Value(lastAnswer),
-              creationAt: Value(creationAt));
+              creationAt: Value(creationAt),
+              lastModificationAt: Value(lastModificationAt));
       await uncompletedFullyRandomTestsDao
           .create((uncompletedFullyRandomTestsCompanion));
     });
@@ -511,7 +585,8 @@ void main() {
               currentHintCounter: Value(currentHintCounter),
               wrongAnswerCounter: Value(wrongAnswerCounter),
               lastAnswer: Value(lastAnswer),
-              creationAt: Value(creationAt));
+              creationAt: Value(creationAt), 
+              lastModificationAt: Value(lastModificationAt));
       await uncompletedFullyRandomTestsDao
           .create((uncompletedFullyRandomTestsCompanion));
     });
@@ -531,7 +606,8 @@ void main() {
               currentHintCounter: Value(currentHintCounter),
               wrongAnswerCounter: Value(wrongAnswerCounter),
               lastAnswer: Value(lastAnswer),
-              creationAt: Value(creationAt));
+              creationAt: Value(creationAt), 
+              lastModificationAt: Value(lastModificationAt));
       await uncompletedFullyRandomTestsDao
           .create((uncompletedFullyRandomTestsCompanion));
     });
@@ -552,7 +628,8 @@ void main() {
               currentHintCounter: Value(currentHintCounter),
               wrongAnswerCounter: Value(wrongAnswerCounter),
               lastAnswer: Value(lastAnswer),
-              creationAt: Value(creationAt));
+              creationAt: Value(creationAt), 
+              lastModificationAt: Value(lastModificationAt));
       await uncompletedFullyRandomTestsDao
           .create((uncompletedFullyRandomTestsCompanion));
     });
@@ -573,7 +650,8 @@ void main() {
               currentHintCounter: Value(currentHintCounter),
               wrongAnswerCounter: Value(wrongAnswerCounter),
               lastAnswer: Value(lastAnswer),
-              creationAt: Value(creationAt));
+              creationAt: Value(creationAt), 
+              lastModificationAt: Value(lastModificationAt));
       await uncompletedFullyRandomTestsDao
           .create((uncompletedFullyRandomTestsCompanion));
     });
@@ -594,7 +672,8 @@ void main() {
               shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
               wrongAnswerCounter: Value(wrongAnswerCounter),
               lastAnswer: Value(lastAnswer),
-              creationAt: Value(creationAt));
+              creationAt: Value(creationAt), 
+              lastModificationAt: Value(lastModificationAt));
       await uncompletedFullyRandomTestsDao
           .create((uncompletedFullyRandomTestsCompanion));
     });
@@ -615,7 +694,8 @@ void main() {
               shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
               currentHintCounter: Value(currentHintCounter),
               lastAnswer: Value(lastAnswer),
-              creationAt: Value(creationAt));
+              creationAt: Value(creationAt), 
+              lastModificationAt: Value(lastModificationAt));
       await uncompletedFullyRandomTestsDao
           .create((uncompletedFullyRandomTestsCompanion));
     });
@@ -635,7 +715,8 @@ void main() {
               shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
               currentHintCounter: Value(currentHintCounter),
               wrongAnswerCounter: Value(wrongAnswerCounter),
-              creationAt: Value(creationAt));
+              creationAt: Value(creationAt), 
+              lastModificationAt: Value(lastModificationAt));
       await uncompletedFullyRandomTestsDao
           .create((uncompletedFullyRandomTestsCompanion));
     });
@@ -657,7 +738,8 @@ void main() {
           currentHintCounter: currentHintCounter,
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer,
-          creationAt: creationAt);
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
       await uncompletedFullyRandomTestsDao
           .create(uncompletedFullyRandomTest.toCompanion(true));
     });
@@ -684,6 +766,7 @@ void main() {
           gottenUncompletedFullyRandomTest.wrongAnswerCounter);
       expect(lastAnswer, gottenUncompletedFullyRandomTest.lastAnswer);
       expect(creationAt, gottenUncompletedFullyRandomTest.creationAt);
+      expect(lastModificationAt, gottenUncompletedFullyRandomTest.lastModificationAt);
     });
 
     test("Good case: UncompletedFullyRandomTest is not found", () async {
@@ -700,7 +783,8 @@ void main() {
               currentQuestionCounter: Value(currentQuestionCounter),
               triesNumber: Value(triesNumber),
               elapsedTime: Value(elapsedTime),
-              creationAt: Value(creationAt));
+              creationAt: Value(creationAt),
+              lastModificationAt: Value(lastModificationAt));
       await uncompletedFullyRandomTestsDao
           .create(uncompletedFullyRandomTestsCompanion);
       UncompletedFullyRandomTest? gottenUncompletedFullyRandomTest =
