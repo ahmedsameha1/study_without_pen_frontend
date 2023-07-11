@@ -52,4 +52,13 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
           ]))
         .get();
   }
+
+  Future mutate(
+      UncompletedFullyRandomTestsCompanion
+          uncompletedFullyRandomTestsCompanion) {
+    return (update(uncompletedFullyRandomTests)
+          ..where((tbl) =>
+              tbl.id.equals(uncompletedFullyRandomTestsCompanion.id.value)))
+        .write(uncompletedFullyRandomTestsCompanion);
+  }
 }
