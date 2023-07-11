@@ -1234,5 +1234,57 @@ void main() {
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("tries_number"))));
     });
+
+    test(
+        "Invalid update: triesCounter is smaller than ${UncompletedFullyRandomTests.MINIMUM_TRIES_COUNTER}",
+        () {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: UncompletedFullyRandomTests.MINIMUM_TRIES_COUNTER - 1,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: lastAnswer,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await uncompletedFullyRandomTestsDao
+            .mutate(uncompletedFullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("tries_counter"))));
+    });
+
+    test(
+        "Invalid update: triesCounter is bigger than ${UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER}",
+        () {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER + 1,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: lastAnswer,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await uncompletedFullyRandomTestsDao
+            .mutate(uncompletedFullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("tries_counter"))));
+    });
   });
 }
