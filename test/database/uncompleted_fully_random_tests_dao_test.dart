@@ -1312,5 +1312,33 @@ void main() {
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("elapsed_time"))));
     });
+
+    test(
+        "Invalid update: currentHintCounter is smaller than ${UncompletedFullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER}",
+        () {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesCounter,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter:
+              UncompletedFullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER - 1,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: lastAnswer,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await uncompletedFullyRandomTestsDao
+            .mutate(uncompletedFullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("current_hint_counter"))));
+    });
   });
 }
