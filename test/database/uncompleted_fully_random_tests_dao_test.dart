@@ -1441,5 +1441,32 @@ void main() {
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("last_answer"))));
     });
+
+    test("Invalid update: creationAt is in the future", () {
+      withClock(Clock.fixed(DateTime.utc(2020, 1, 1)), () {
+        var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: wrongAnswerCounter,
+            lastAnswer: lastAnswer,
+            creationAt: DateTime.utc(2023, 1, 1),
+            lastModificationAt: lastModificationAt);
+        expect(() async {
+          await uncompletedFullyRandomTestsDao
+              .mutate(uncompletedFullyRandomTest.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("creationAt"))));
+      });
+    });
   });
 }

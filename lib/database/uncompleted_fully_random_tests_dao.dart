@@ -56,6 +56,11 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
   Future mutate(
       UncompletedFullyRandomTestsCompanion
           uncompletedFullyRandomTestsCompanion) {
+    if (uncompletedFullyRandomTestsCompanion.creationAt.value
+        .toUtc()
+        .isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("creationAt");
+    }
     return (update(uncompletedFullyRandomTests)
           ..where((tbl) =>
               tbl.id.equals(uncompletedFullyRandomTestsCompanion.id.value)))
