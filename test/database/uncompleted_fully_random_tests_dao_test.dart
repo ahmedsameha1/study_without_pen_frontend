@@ -1468,5 +1468,59 @@ void main() {
                 e.message.contains("creationAt"))));
       });
     });
+
+    test("Invalid update: lastModificationAt is in the future", () {
+      withClock(Clock.fixed(DateTime.utc(2020, 1, 1)), () {
+        var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: wrongAnswerCounter,
+            lastAnswer: lastAnswer,
+            creationAt: creationAt,
+            lastModificationAt: DateTime.utc(2023, 1, 1));
+        expect(() async {
+          await uncompletedFullyRandomTestsDao
+              .mutate(uncompletedFullyRandomTest.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is InvalidDataException &&
+                e.message.contains("lastModificationAt"))));
+      });
+    });
+
+    test("Invalid update: lastModificationAt is before creationAt", () {
+      withClock(Clock.fixed(DateTime.utc(2020, 1, 1)), () {
+        var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: wrongAnswerCounter,
+            lastAnswer: lastAnswer,
+            creationAt: creationAt,
+            lastModificationAt: DateTime.utc(2013, 1, 1));
+        expect(() async {
+          await uncompletedFullyRandomTestsDao
+              .mutate(uncompletedFullyRandomTest.toCompanion(true));
+        },
+            throwsA(predicate((e) =>
+                e is SqliteException &&
+                e.message.contains("last_modification_at"))));
+      });
+    });
   });
 }

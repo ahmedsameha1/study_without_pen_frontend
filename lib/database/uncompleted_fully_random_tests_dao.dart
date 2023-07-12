@@ -61,6 +61,11 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
         .isAfter(clock.now().toUtc())) {
       throw InvalidDataException("creationAt");
     }
+    if (uncompletedFullyRandomTestsCompanion.lastModificationAt.value
+        .toUtc()
+        .isAfter(clock.now().toUtc())) {
+      throw InvalidDataException("lastModificationAt");
+    }
     return (update(uncompletedFullyRandomTests)
           ..where((tbl) =>
               tbl.id.equals(uncompletedFullyRandomTestsCompanion.id.value)))
