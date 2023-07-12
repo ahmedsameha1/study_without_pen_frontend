@@ -1340,5 +1340,61 @@ void main() {
               e is SqliteException &&
               e.message.contains("current_hint_counter"))));
     });
+
+    test(
+        "Invalid update: wrongAnswerCounter is smaller than ${UncompletedFullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER}",
+        () {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesCounter,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter:
+              UncompletedFullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER - 1,
+          lastAnswer: lastAnswer,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await uncompletedFullyRandomTestsDao
+            .mutate(uncompletedFullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("wrong_answer_counter"))));
+    });
+
+    test(
+        "Invalid update: wrongAnswerCounter is bigger than ${UncompletedFullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER}",
+        () {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesCounter,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter:
+              UncompletedFullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER + 1,
+          lastAnswer: lastAnswer,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await uncompletedFullyRandomTestsDao
+            .mutate(uncompletedFullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("wrong_answer_counter"))));
+    });
   });
 }
