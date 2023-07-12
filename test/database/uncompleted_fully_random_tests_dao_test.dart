@@ -1396,5 +1396,50 @@ void main() {
               e is SqliteException &&
               e.message.contains("wrong_answer_counter"))));
     });
+
+    test("Invalid update: lastAnswer is empty", () async {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesCounter,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: "",
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await uncompletedFullyRandomTestsDao
+            .mutate(uncompletedFullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("last_answer"))));
+      uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesCounter,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: " ",
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await uncompletedFullyRandomTestsDao
+            .mutate(uncompletedFullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("last_answer"))));
+    });
   });
 }
