@@ -1127,6 +1127,32 @@ void main() {
           .create(uncompletedFullyRandomTest.toCompanion(true));
     });
 
+    test("invalid update: trying to update fieldListId", () async {
+      final newFieldListId = const Uuid().v4();
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: newFieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesCounter,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: lastAnswer,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await uncompletedFullyRandomTestsDao
+            .mutate(uncompletedFullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains("Updating fieldListId"))));
+    });
+
     test(
         "Invalid update: currentQuestionCounter is smaller than ${UncompletedFullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER}",
         () {

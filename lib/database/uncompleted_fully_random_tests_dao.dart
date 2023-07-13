@@ -55,7 +55,7 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
 
   Future mutate(
       UncompletedFullyRandomTestsCompanion
-          uncompletedFullyRandomTestsCompanion) {
+          uncompletedFullyRandomTestsCompanion) async {
     if (uncompletedFullyRandomTestsCompanion.creationAt.value
         .toUtc()
         .isAfter(clock.now().toUtc())) {
@@ -65,6 +65,11 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
         .toUtc()
         .isAfter(clock.now().toUtc())) {
       throw InvalidDataException("lastModificationAt");
+    }
+    var gotten = await getById(uncompletedFullyRandomTestsCompanion.id.value);
+    if (gotten != null &&
+        (gotten.fieldListId != uncompletedFullyRandomTestsCompanion.fieldListId.value)) {
+      throw InvalidDataException("Updating fieldListId");
     }
     return (update(uncompletedFullyRandomTests)
           ..where((tbl) =>
