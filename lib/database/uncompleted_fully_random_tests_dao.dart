@@ -53,7 +53,7 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
         .get();
   }
 
-  Future mutate(
+  Future<bool> mutate(
       UncompletedFullyRandomTestsCompanion
           uncompletedFullyRandomTestsCompanion) async {
     if (uncompletedFullyRandomTestsCompanion.creationAt.value
@@ -68,12 +68,11 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
     }
     var gotten = await getById(uncompletedFullyRandomTestsCompanion.id.value);
     if (gotten != null &&
-        (gotten.fieldListId != uncompletedFullyRandomTestsCompanion.fieldListId.value)) {
+        (gotten.fieldListId !=
+            uncompletedFullyRandomTestsCompanion.fieldListId.value)) {
       throw InvalidDataException("Updating fieldListId");
     }
-    return (update(uncompletedFullyRandomTests)
-          ..where((tbl) =>
-              tbl.id.equals(uncompletedFullyRandomTestsCompanion.id.value)))
-        .write(uncompletedFullyRandomTestsCompanion);
+    return update(uncompletedFullyRandomTests)
+        .replace(uncompletedFullyRandomTestsCompanion);
   }
 }

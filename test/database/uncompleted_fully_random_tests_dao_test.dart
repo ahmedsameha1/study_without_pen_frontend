@@ -1548,5 +1548,48 @@ void main() {
                 e.message.contains("last_modification_at"))));
       });
     });
+
+    test("good case:", () async {
+      final newCurrentQuestionCounter = currentQuestionCounter + 1;
+      final newTriesCounter = triesCounter + 1;
+      final newElapsedTime = elapsedTime + 100;
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: newCurrentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: newTriesCounter,
+          elapsedTime: newElapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: lastAnswer,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      await uncompletedFullyRandomTestsDao
+          .mutate(uncompletedFullyRandomTest.toCompanion(true));
+      var gottenUncompletedFullyRandomTest =
+          await uncompletedFullyRandomTestsDao.getById(id);
+      gottenUncompletedFullyRandomTest = gottenUncompletedFullyRandomTest!;
+      expect(uncompletedFullyRandomTest.id, id);
+      expect(uncompletedFullyRandomTest.fieldListId, fieldListId);
+      expect(uncompletedFullyRandomTest.currentQuestionCounter,
+          newCurrentQuestionCounter);
+      expect(uncompletedFullyRandomTest.triesNumber, triesNumber);
+      expect(uncompletedFullyRandomTest.triesCounter, newTriesCounter);
+      expect(uncompletedFullyRandomTest.elapsedTime, newElapsedTime);
+      expect(uncompletedFullyRandomTest.isCompleted, isCompleted);
+      expect(uncompletedFullyRandomTest.lastCheckedAnswerResult,
+          lastCheckedAnswerResult);
+      expect(
+          uncompletedFullyRandomTest.shouldCheckAnAnswer, shouldCheckAnAnswer);
+      expect(uncompletedFullyRandomTest.currentHintCounter, currentHintCounter);
+      expect(uncompletedFullyRandomTest.wrongAnswerCounter, wrongAnswerCounter);
+      expect(uncompletedFullyRandomTest.lastAnswer, lastAnswer);
+      expect(uncompletedFullyRandomTest.creationAt, creationAt);
+      expect(uncompletedFullyRandomTest.lastModificationAt, lastModificationAt);
+    });
   });
 }
