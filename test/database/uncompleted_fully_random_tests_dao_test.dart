@@ -1592,4 +1592,27 @@ void main() {
       expect(uncompletedFullyRandomTest.lastModificationAt, lastModificationAt);
     });
   });
+  test("Delete UncompletedFullyRandomTest", () async {
+    var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+        id: id,
+        fieldListId: fieldListId,
+        currentQuestionCounter: currentQuestionCounter,
+        triesNumber: triesNumber,
+        triesCounter: triesCounter,
+        elapsedTime: elapsedTime,
+        isCompleted: isCompleted,
+        lastCheckedAnswerResult: lastCheckedAnswerResult,
+        shouldCheckAnAnswer: shouldCheckAnAnswer,
+        currentHintCounter: currentHintCounter,
+        wrongAnswerCounter: wrongAnswerCounter,
+        lastAnswer: lastAnswer,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt);
+    await uncompletedFullyRandomTestsDao
+        .create(uncompletedFullyRandomTest.toCompanion(true));
+    await uncompletedFullyRandomTestsDao.remove(id);
+    var gottenUncompletedFullyRandomTest =
+        await uncompletedFullyRandomTestsDao.getById(id);
+    expect(gottenUncompletedFullyRandomTest, null);
+  });
 }

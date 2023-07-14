@@ -75,4 +75,12 @@ class UncompletedFullyRandomTestsDao extends DatabaseAccessor<AppDatabase>
     return update(uncompletedFullyRandomTests)
         .replace(uncompletedFullyRandomTestsCompanion);
   }
+
+  Future<int> remove(String id) {
+    return (delete(uncompletedFullyRandomTests)
+          ..where(
+            (tbl) => tbl.id.equals(id),
+          ))
+        .go();
+  }
 }
