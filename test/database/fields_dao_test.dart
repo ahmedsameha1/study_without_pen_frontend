@@ -516,35 +516,6 @@ void main() {
       await fieldsDao.create(field.toCompanion(true));
     });
 
-    test("Invalid update: userAccountId is an empty String", () async {
-      var field = Field(
-          id: id,
-          userAccountId: "",
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.mutate(field.toCompanion(true));
-      },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("user_account_id"))));
-      field = Field(
-          id: id,
-          userAccountId: " " * Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.mutate(field.toCompanion(true));
-      },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("user_account_id"))));
-    });
-
     test(
         "Invalid update: name length is less than ${Fields.MINIMUM_LENGTH_OF_NAME}",
         () async {
@@ -719,6 +690,24 @@ void main() {
       },
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("color"))));
+    });
+
+    test("Invalid update: trying to update userAccountId", () async {
+      final newUserAccoutId = const Uuid().v4();
+      var field = Field(
+          id: id,
+          userAccountId: newUserAccoutId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color);
+      expect(() async {
+        await fieldsDao.mutate(field.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains("Updating userAccountId"))));
     });
 
     test("Good case 1", () async {
