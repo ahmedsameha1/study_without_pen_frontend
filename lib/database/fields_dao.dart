@@ -35,12 +35,17 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
         .watch();
   }
 
-  Future<bool> mutate(FieldsCompanion fieldsCompanion) {
+  Future<bool> mutate(FieldsCompanion fieldsCompanion) async {
     if (fieldsCompanion.creationAt.value.toUtc().isAfter(clock.now())) {
       throw InvalidDataException("creationAt");
     }
     if (fieldsCompanion.lastModificationAt.value.toUtc().isAfter(clock.now())) {
       throw InvalidDataException("lastModificationAt");
+    }
+    final gotten = await getById(fieldsCompanion.id.value);
+    if (gotten != null &&
+        (gotten.userAccountId != fieldsCompanion.userAccountId.value)) {
+      throw InvalidDataException("Updating userAccountId");
     }
     return update(fields).replace(fieldsCompanion);
   }
