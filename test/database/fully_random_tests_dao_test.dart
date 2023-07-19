@@ -23,6 +23,7 @@ void main() {
   });
 
   group("Create a FullyRandomTest", () {
+    String id = Uuid().v4();
     String fieldListId = Uuid().v4();
     int currentQuestionCounter = 5;
     int triesNumber = 2;
@@ -56,6 +57,29 @@ void main() {
       },
           throwsA(predicate(
               (e) => e is InvalidDataException && e.message.contains("id"))));
+    });
+
+    test("Invalid FullyRandomTest: there is no entries in the fieldlist",
+        () async {
+      expect(() async {
+        await fullyRandomTestsDao.create(
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: wrongAnswerCounter,
+            lastAnswer: lastAnswer,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt);
+      },
+          throwsA(predicate(
+              (e) => e is InvalidDataException && e.message.contains("FieldList has no entries"))));
     });
 
     test(

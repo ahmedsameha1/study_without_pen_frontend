@@ -1,4 +1,6 @@
+import 'package:drift/drift.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/uncompleted_fully_random_tests_dao.dart';
 
 class FullyRandomTestsDao {
@@ -20,6 +22,7 @@ class FullyRandomTestsDao {
       required DateTime creationAt,
       required DateTime lastModificationAt}) async {
     await appDatabase.transaction(() async {
+      EntrysDao entrysDao = EntrysDao(appDatabase);
       UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao =
           UncompletedFullyRandomTestsDao(appDatabase);
       var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
@@ -39,6 +42,10 @@ class FullyRandomTestsDao {
           lastModificationAt: lastModificationAt);
       await uncompletedFullyRandomTestsDao
           .create(uncompletedFullyRandomTest.toCompanion(true));
+      final entries = await entrysDao.getByFieldListId(fieldListId);
+      if (entries.length < 1) {
+        throw InvalidDataException("FieldList has no entries");
+      }
       return Future.value(null);
     });
   }
