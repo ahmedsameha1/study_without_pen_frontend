@@ -47,6 +47,18 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
         .get();
   }
 
+  Future<List<Entry>> getByFieldListId(String fieldListId) {
+    return (select(entrys)
+          ..where((tbl) => tbl.fieldListId.equals(fieldListId))
+          ..orderBy([
+            ((tbl) =>
+                OrderingTerm(expression: tbl.order, mode: OrderingMode.asc)),
+            ((tbl) =>
+                OrderingTerm(expression: tbl.creationAt, mode: OrderingMode.desc)),
+          ]))
+        .get();
+  }
+
   Future<Entry?> getById(String id) {
     return (select(entrys)..where((tbl) => tbl.id.equals(id)))
         .getSingleOrNull();

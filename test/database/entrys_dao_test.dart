@@ -69,6 +69,131 @@ void main() {
     });
   });
 
+  group("Get entries by fieldlist", () {
+    test("At least one entry is found in the fieldList", () async {
+      String id1 = const Uuid().v4();
+      String id2 = const Uuid().v4();
+      String id3 = const Uuid().v4();
+      String id4 = const Uuid().v4();
+      String fieldListId1 = const Uuid().v4();
+      String fieldListId2 = const Uuid().v4();
+      String answerId2 = const Uuid().v4();
+      String answerId3 = const Uuid().v4();
+      String answerId4 = const Uuid().v4();
+      String questionId2 = const Uuid().v4();
+      String questionId3 = const Uuid().v4();
+      String questionId4 = const Uuid().v4();
+      DateTime creationAt2 = DateTime.utc(2019, 1, 1);
+      DateTime creationAt3 = DateTime.utc(2021, 1, 1);
+      DateTime creationAt4 = DateTime.utc(2018, 1, 1);
+      DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
+      DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
+      DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+      var entry = Entry(
+          id: id1,
+          fieldListId: fieldListId1,
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: 3,
+          didAskedAtCurrentTestRound: true,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      await entrysDao.create(entry.toCompanion(true));
+      entry = Entry(
+          id: id2,
+          fieldListId: fieldListId2,
+          answerId: answerId2,
+          questionId: questionId2,
+          creationAt: creationAt3,
+          lastModificationAt: lastModificationAt3,
+          order: 2,
+          didAskedAtCurrentTestRound: true,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      await entrysDao.create(entry.toCompanion(true));
+      entry = Entry(
+          id: id3,
+          fieldListId: fieldListId1,
+          answerId: answerId3,
+          questionId: questionId3,
+          creationAt: creationAt2,
+          lastModificationAt: lastModificationAt2,
+          order: 2,
+          didAskedAtCurrentTestRound: true,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      await entrysDao.create(entry.toCompanion(true));
+      entry = Entry(
+          id: id4,
+          fieldListId: fieldListId1,
+          answerId: answerId4,
+          questionId: questionId4,
+          creationAt: creationAt4,
+          lastModificationAt: lastModificationAt4,
+          order: 2,
+          didAskedAtCurrentTestRound: true,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      await entrysDao.create(entry.toCompanion(true));
+      List<Entry> entries = await entrysDao.getByFieldListId(fieldListId1);
+      expect(entries.length, 3);
+      entry = entries[0];
+      expect(entry.id, id3);
+      expect(entry.fieldListId, fieldListId1);
+      expect(entry.answerId, answerId3);
+      expect(entry.questionId, questionId3);
+      expect(entry.creationAt, creationAt2);
+      expect(entry.lastModificationAt, lastModificationAt2);
+      expect(entry.order, 2);
+      expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+      expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+      expect(entry.rank, rank);
+      expect(entry.askedCount, askedCount);
+      expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+      entry = entries[1];
+      expect(entry.id, id4);
+      expect(entry.fieldListId, fieldListId1);
+      expect(entry.answerId, answerId4);
+      expect(entry.questionId, questionId4);
+      expect(entry.creationAt, creationAt4);
+      expect(entry.lastModificationAt, lastModificationAt4);
+      expect(entry.order, 2);
+      expect(entry.didAskedAtCurrentTestRound, true);
+      expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+      expect(entry.rank, rank);
+      expect(entry.askedCount, askedCount);
+      expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+      entry = entries[2];
+      expect(entry.id, id1);
+      expect(entry.fieldListId, fieldListId1);
+      expect(entry.answerId, answerId);
+      expect(entry.questionId, questionId);
+      expect(entry.creationAt, creationAt);
+      expect(entry.lastModificationAt, lastModificationAt);
+      expect(entry.order, 3);
+      expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+      expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+      expect(entry.rank, rank);
+      expect(entry.askedCount, askedCount);
+      expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+    });
+
+    test("Good case: no entry is found in the fieldList", () async {
+      var entries = await entrysDao.getByFieldListId(const Uuid().v4());
+      expect(entries.length, 0);
+    });
+  });
+
   group("Get all entries", () {
     test("Get all entries in Descending order by creationAt field", () async {
       String id2 = const Uuid().v4();
