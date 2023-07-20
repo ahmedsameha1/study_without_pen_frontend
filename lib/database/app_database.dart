@@ -242,7 +242,8 @@ class UncompletedFullyRandomTests extends Table {
       triesCounter.isBiggerOrEqualValue(
               UncompletedFullyRandomTests.MINIMUM_TRIES_COUNTER) &
           triesCounter.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER))();
+              UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER) &
+              triesCounter.isSmallerThan(triesNumber))();
   IntColumn get elapsedTime => integer().check(elapsedTime.isBiggerOrEqualValue(
       UncompletedFullyRandomTests.MINIMUM_ELAPSED_TIME))();
   BoolColumn get isCompleted => boolean().withDefault(Constant(false))();

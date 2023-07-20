@@ -12,7 +12,7 @@ void main() {
   String id = Uuid().v4();
   String fieldListId = Uuid().v4();
   int currentQuestionCounter = 5;
-  int triesNumber = 2;
+  int triesNumber = 3;
   int triesCounter = 1;
   int elapsedTime = 6000;
   bool isCompleted = true;
@@ -269,6 +269,53 @@ void main() {
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
           triesCounter: UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER + 1,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: lastAnswer,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("tries_counter"))));
+    });
+
+    test(
+        "Invalid UncompletedFullyRandomTest: triesCounter is bigger than or equal to tries number",
+        () {
+      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesNumber,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: lastAnswer,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await uncompletedFullyRandomTestsDao
+            .create(uncompletedFullyRandomTest.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("tries_counter"))));
+      uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+          id: id,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesNumber + 1,
           elapsedTime: elapsedTime,
           isCompleted: isCompleted,
           lastCheckedAnswerResult: lastCheckedAnswerResult,

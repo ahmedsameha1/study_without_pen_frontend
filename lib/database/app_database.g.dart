@@ -2898,7 +2898,8 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
           triesCounter.isBiggerOrEqualValue(
               UncompletedFullyRandomTests.MINIMUM_TRIES_COUNTER) &
           triesCounter.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER),
+              UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER) &
+          triesCounter.isSmallerThan(triesNumber),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(0));
