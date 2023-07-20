@@ -4,10 +4,12 @@ import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/uncompleted_fully_random_tests_dao.dart';
 
 class FullyRandomTestsDao {
+  static const int MINIMUM_QUESTIONS_NUMBER = 1;
   AppDatabase appDatabase;
   FullyRandomTestsDao(this.appDatabase);
   Future<void> create(
-      {required String id,
+      {required int questionsNumber,
+      required String id,
       required String fieldListId,
       required int currentQuestionCounter,
       required int triesNumber,
@@ -43,6 +45,9 @@ class FullyRandomTestsDao {
       await uncompletedFullyRandomTestsDao
           .create(uncompletedFullyRandomTest.toCompanion(true));
       final entries = await entrysDao.getByFieldListId(fieldListId);
+      if (questionsNumber < MINIMUM_QUESTIONS_NUMBER) {
+        throw InvalidDataException("questionsNumber");
+      }
       if (entries.length < 1) {
         throw InvalidDataException("FieldList has no entries");
       }
