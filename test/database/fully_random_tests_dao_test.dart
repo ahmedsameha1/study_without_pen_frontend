@@ -39,6 +39,29 @@ void main() {
     DateTime creationAt = DateTime.utc(2020, 1, 1);
     DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
 
+    test("Invalid FullyRandomTest: invalid UncompletedFullyRandomTest", () {
+      expect(() async {
+        await fullyRandomTestsDao.create(
+            questionsNumber: questionsNumber,
+            id: "wefwe",
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: wrongAnswerCounter,
+            lastAnswer: lastAnswer,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt);
+      },
+          throwsA(predicate(
+              (e) => e is InvalidDataException && e.message.contains("id"))));
+    });
+
     test(
         "Invalid FullyRandomTest: questionsNumber is less than ${FullyRandomTestsDao.MINIMUM_QUESTIONS_NUMBER}",
         () {
@@ -65,30 +88,8 @@ void main() {
               e.message.contains("questionsNumber"))));
     });
 
-    test("Invalid FullyRandomTest: invalid UncompletedFullyRandomTest", () {
-      expect(() async {
-        await fullyRandomTestsDao.create(
-            questionsNumber: questionsNumber,
-            id: "wefwe",
-            fieldListId: fieldListId,
-            currentQuestionCounter: currentQuestionCounter,
-            triesNumber: triesNumber,
-            triesCounter: triesCounter,
-            elapsedTime: elapsedTime,
-            isCompleted: isCompleted,
-            lastCheckedAnswerResult: lastCheckedAnswerResult,
-            shouldCheckAnAnswer: shouldCheckAnAnswer,
-            currentHintCounter: currentHintCounter,
-            wrongAnswerCounter: wrongAnswerCounter,
-            lastAnswer: lastAnswer,
-            creationAt: creationAt,
-            lastModificationAt: lastModificationAt);
-      },
-          throwsA(predicate(
-              (e) => e is InvalidDataException && e.message.contains("id"))));
-    });
-
-    test("Invalid FullyRandomTest: there is no entries in the fieldlist",
+    test(
+        "Invalid FullyRandomTest: the number of entries in fieldlist is less than questions number",
         () async {
       expect(() async {
         await fullyRandomTestsDao.create(
@@ -110,7 +111,8 @@ void main() {
       },
           throwsA(predicate((e) =>
               e is InvalidDataException &&
-              e.message.contains("FieldList has no entries"))));
+              e.message.contains(
+                  "number of entries in fieldlist is less than questions number"))));
     });
 
     test(

@@ -25,6 +25,9 @@ class FullyRandomTestsDao {
       required DateTime lastModificationAt}) async {
     await appDatabase.transaction(() async {
       EntrysDao entrysDao = EntrysDao(appDatabase);
+      if (questionsNumber < MINIMUM_QUESTIONS_NUMBER) {
+        throw InvalidDataException("questionsNumber");
+      }
       UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao =
           UncompletedFullyRandomTestsDao(appDatabase);
       var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
@@ -45,11 +48,9 @@ class FullyRandomTestsDao {
       await uncompletedFullyRandomTestsDao
           .create(uncompletedFullyRandomTest.toCompanion(true));
       final entries = await entrysDao.getByFieldListId(fieldListId);
-      if (questionsNumber < MINIMUM_QUESTIONS_NUMBER) {
-        throw InvalidDataException("questionsNumber");
-      }
-      if (entries.length < 1) {
-        throw InvalidDataException("FieldList has no entries");
+      if (entries.length < questionsNumber) {
+        throw InvalidDataException(
+            "number of entries in fieldlist is less than questions number");
       }
       return Future.value(null);
     });
