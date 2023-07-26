@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
+import 'package:study_without_pen_by_flutter/database/session_entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/uncompleted_fully_random_tests_dao.dart';
 import 'package:study_without_pen_by_flutter/database/notes_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
@@ -243,7 +244,7 @@ class UncompletedFullyRandomTests extends Table {
               UncompletedFullyRandomTests.MINIMUM_TRIES_COUNTER) &
           triesCounter.isSmallerOrEqualValue(
               UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER) &
-              triesCounter.isSmallerThan(triesNumber))();
+          triesCounter.isSmallerThan(triesNumber))();
   IntColumn get elapsedTime => integer().check(elapsedTime.isBiggerOrEqualValue(
       UncompletedFullyRandomTests.MINIMUM_ELAPSED_TIME))();
   BoolColumn get isCompleted => boolean().withDefault(Constant(false))();
@@ -272,6 +273,14 @@ class UncompletedFullyRandomTests extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class SessionEntrys extends Table {
+  TextColumn get sessionId => text()();
+  TextColumn get entryId => text()();
+
+  @override
+  Set<Column> get primaryKey => {sessionId, entryId};
+}
+
 @DriftDatabase(tables: [
   EntryTexts,
   Questions,
@@ -279,7 +288,8 @@ class UncompletedFullyRandomTests extends Table {
   FieldLists,
   Fields,
   Notes,
-  UncompletedFullyRandomTests
+  UncompletedFullyRandomTests,
+  SessionEntrys
 ], daos: [
   EntryTextsDao,
   QuestionsDao,
@@ -287,7 +297,8 @@ class UncompletedFullyRandomTests extends Table {
   FieldListsDao,
   FieldsDao,
   NotesDao,
-  UncompletedFullyRandomTestsDao
+  UncompletedFullyRandomTestsDao,
+  SessionEntrysDao
 ])
 class AppDatabase extends _$AppDatabase {
   static const databaseFileName = "db.sqlite";
