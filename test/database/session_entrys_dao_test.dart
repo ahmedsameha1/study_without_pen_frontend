@@ -38,5 +38,18 @@ void main() {
           throwsA(predicate((e) =>
               e is InvalidDataException && e.message.contains("entryId"))));
     });
+
+    test("No more one SesstionEntry with the same sessionId and entryId",
+        () async {
+      final sessionEntry = SessionEntry(sessionId: sessionId, entryId: entryId);
+      await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+      expect(() async {
+        await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("entry_id") &&
+              e.message.contains("session_id"))));
+    });
   });
 }
