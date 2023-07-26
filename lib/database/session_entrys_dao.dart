@@ -11,6 +11,9 @@ class SessionEntrysDao extends DatabaseAccessor<AppDatabase>
     if (!isValid(sessionEntrysCompanion.sessionId.value)) {
       throw InvalidDataException("sessionId");
     }
+    if (!isValid(sessionEntrysCompanion.entryId.value)) {
+      throw InvalidDataException("entryId");
+    }
     return Future.value(1);
   }
 }

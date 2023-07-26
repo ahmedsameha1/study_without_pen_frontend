@@ -9,6 +9,7 @@ void main() {
   late AppDatabase appDatabase;
   late SessionEntrysDao sessionEntrysDao;
   final entryId = Uuid().v4();
+  final sessionId = Uuid().v4();
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     sessionEntrysDao = SessionEntrysDao(appDatabase);
@@ -26,6 +27,16 @@ void main() {
       },
           throwsA(predicate((e) =>
               e is InvalidDataException && e.message.contains("sessionId"))));
+    });
+
+    test("Invalid SessionEntry: entryId is an invalid UUID v4", () async {
+      final sessionEntry =
+          SessionEntry(sessionId: sessionId, entryId: "ehfwofj");
+      expect(() async {
+        await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("entryId"))));
     });
   });
 }
