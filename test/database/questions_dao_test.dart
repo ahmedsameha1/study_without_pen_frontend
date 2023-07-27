@@ -2,7 +2,6 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
@@ -123,10 +122,11 @@ void main() {
           address: address);
       await questionsDao.create(question.toCompanion(true));
       var gotQuestion = await questionsDao.getById(id);
+      gotQuestion = gotQuestion!;
       expect(gotQuestion, isNot(null));
-      expect(gotQuestion!.id, question.id);
-      expect(gotQuestion!.questionType, question.questionType);
-      expect(gotQuestion!.address, question.address);
+      expect(gotQuestion.id, question.id);
+      expect(gotQuestion.questionType, question.questionType);
+      expect(gotQuestion.address, question.address);
     });
 
     test("Get all Questions", () async {

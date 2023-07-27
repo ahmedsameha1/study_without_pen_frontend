@@ -52,4 +52,15 @@ void main() {
               e.message.contains("session_id"))));
     });
   });
+
+  test("Delete SessionEntry", () async {
+    final sessionEntry = SessionEntry(sessionId: sessionId, entryId: entryId);
+    await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+    await sessionEntrysDao.remove(sessionId, entryId);
+    final result = await (appDatabase.select(appDatabase.sessionEntrys)
+          ..where((tbl) =>
+              tbl.sessionId.equals(sessionId) & tbl.entryId.equals(entryId)))
+        .getSingleOrNull();
+    expect(result, null);
+  });
 }

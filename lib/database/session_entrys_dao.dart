@@ -16,4 +16,11 @@ class SessionEntrysDao extends DatabaseAccessor<AppDatabase>
     }
     return into(sessionEntrys).insert(sessionEntrysCompanion);
   }
+
+  Future<int> remove(String sessionId, String entryId) {
+    return (delete(sessionEntrys)
+          ..where((tbl) =>
+              tbl.sessionId.equals(sessionId) & tbl.entryId.equals(entryId)))
+        .go();
+  }
 }
