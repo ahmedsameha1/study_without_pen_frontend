@@ -5,18 +5,18 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: "0c80aeab9bc807ab10022cd3b2f4cf2ecdf231949dc1ddd9442406a003f19201"
+      sha256: ae92f5d747aee634b87f89d9946000c2de774be1d6ac3e58268224348cd0101a
       url: "https://pub.dev"
     source: hosted
-    version: "52.0.0"
+    version: "61.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: cd8ee83568a77f3ae6b913a36093a1c9b1264e7cb7f834d9ddd2311dade9c1f4
+      sha256: ea3d8652bda62982addfd92fdc2d0214e5f82e43325104990d4f4c4a2a313562
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.0"
+    version: "5.13.0"
   analyzer_plugin:
     dependency: transitive
     description:
@@ -205,18 +205,18 @@ packages:
     dependency: "direct main"
     description:
       name: drift
-      sha256: b8465fb684bae76ac98e102d831625bff32c0e802db38d9edff0fe338d915fd4
+      sha256: "01e7237766b3404f08489ed0dc531a2fa5f5a42d7fa7787da6cc0a10e8d2632f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.2"
+    version: "2.10.0"
   drift_dev:
     dependency: "direct dev"
     description:
       name: drift_dev
-      sha256: b237a939e9b4c55178187dacc78075e34184a0d6a3b2a7672fecc80a36dcf8f4
+      sha256: "407eb1f149332238c567f06cc89b6aaee848de00d9031c76dc372dc16d993bca"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.1"
+    version: "2.10.0"
   fake_async:
     dependency: transitive
     description:
@@ -524,10 +524,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: db6350456720a4088a364bbe02052d43056a5ffbd4816fe9d28310dcfbe0dc05
+      sha256: db65233e6b99e99b2548932f55a987961bc06d82a31a0665451fa0b4fff4c3fb
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.1"
+    version: "2.1.0"
   sqlite3_flutter_libs:
     dependency: "direct main"
     description:
@@ -540,10 +540,10 @@ packages:
     dependency: transitive
     description:
       name: sqlparser
-      sha256: "2740266bc5b200a71b52296b05985fd9b79cab41f510620d2f42dffab5875123"
+      sha256: "9611f46d30a4e8286e54d17a1b5182d132512dc6fc3da90c45ad8ec2828a58b1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.26.1"
+    version: "0.30.3"
   stack_trace:
     dependency: transitive
     description:
@@ -665,5 +665,5 @@ packages:
     source: hosted
     version: "3.1.1"
 sdks:
-  dart: ">=3.0.0-0 <4.0.0"
+  dart: ">=3.0.0 <4.0.0"
   flutter: ">=3.0.0"

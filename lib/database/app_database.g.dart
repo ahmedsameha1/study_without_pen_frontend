@@ -131,28 +131,35 @@ class EntryText extends DataClass implements Insertable<EntryText> {
 class EntryTextsCompanion extends UpdateCompanion<EntryText> {
   final Value<String> id;
   final Value<String> value;
+  final Value<int> rowid;
   const EntryTextsCompanion({
     this.id = const Value.absent(),
     this.value = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   EntryTextsCompanion.insert({
     this.id = const Value.absent(),
     required String value,
+    this.rowid = const Value.absent(),
   }) : value = Value(value);
   static Insertable<EntryText> custom({
     Expression<String>? id,
     Expression<String>? value,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (value != null) 'value': value,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
-  EntryTextsCompanion copyWith({Value<String>? id, Value<String>? value}) {
+  EntryTextsCompanion copyWith(
+      {Value<String>? id, Value<String>? value, Value<int>? rowid}) {
     return EntryTextsCompanion(
       id: id ?? this.id,
       value: value ?? this.value,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -165,6 +172,9 @@ class EntryTextsCompanion extends UpdateCompanion<EntryText> {
     if (value.present) {
       map['value'] = Variable<String>(value.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -172,7 +182,8 @@ class EntryTextsCompanion extends UpdateCompanion<EntryText> {
   String toString() {
     return (StringBuffer('EntryTextsCompanion(')
           ..write('id: $id, ')
-          ..write('value: $value')
+          ..write('value: $value, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -332,35 +343,44 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
   final Value<String> id;
   final Value<int> questionType;
   final Value<String> address;
+  final Value<int> rowid;
   const QuestionsCompanion({
     this.id = const Value.absent(),
     this.questionType = const Value.absent(),
     this.address = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   QuestionsCompanion.insert({
     this.id = const Value.absent(),
     required int questionType,
     required String address,
+    this.rowid = const Value.absent(),
   })  : questionType = Value(questionType),
         address = Value(address);
   static Insertable<Question> custom({
     Expression<String>? id,
     Expression<int>? questionType,
     Expression<String>? address,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (questionType != null) 'question_type': questionType,
       if (address != null) 'address': address,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   QuestionsCompanion copyWith(
-      {Value<String>? id, Value<int>? questionType, Value<String>? address}) {
+      {Value<String>? id,
+      Value<int>? questionType,
+      Value<String>? address,
+      Value<int>? rowid}) {
     return QuestionsCompanion(
       id: id ?? this.id,
       questionType: questionType ?? this.questionType,
       address: address ?? this.address,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -376,6 +396,9 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
     if (address.present) {
       map['address'] = Variable<String>(address.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -384,7 +407,8 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
     return (StringBuffer('QuestionsCompanion(')
           ..write('id: $id, ')
           ..write('questionType: $questionType, ')
-          ..write('address: $address')
+          ..write('address: $address, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -845,6 +869,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
   final Value<int> rank;
   final Value<int> askedCount;
   final Value<int> wronglyAnsweredCount;
+  final Value<int> rowid;
   const EntrysCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
@@ -858,6 +883,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     this.rank = const Value.absent(),
     this.askedCount = const Value.absent(),
     this.wronglyAnsweredCount = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   EntrysCompanion.insert({
     this.id = const Value.absent(),
@@ -872,6 +898,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     required int rank,
     required int askedCount,
     required int wronglyAnsweredCount,
+    this.rowid = const Value.absent(),
   })  : fieldListId = Value(fieldListId),
         answerId = Value(answerId),
         questionId = Value(questionId),
@@ -896,6 +923,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     Expression<int>? rank,
     Expression<int>? askedCount,
     Expression<int>? wronglyAnsweredCount,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -913,6 +941,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
       if (askedCount != null) 'asked_count': askedCount,
       if (wronglyAnsweredCount != null)
         'wrongly_answered_count': wronglyAnsweredCount,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -928,7 +957,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
       Value<DateTime>? emulatedCreatedAt,
       Value<int>? rank,
       Value<int>? askedCount,
-      Value<int>? wronglyAnsweredCount}) {
+      Value<int>? wronglyAnsweredCount,
+      Value<int>? rowid}) {
     return EntrysCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
@@ -943,6 +973,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
       rank: rank ?? this.rank,
       askedCount: askedCount ?? this.askedCount,
       wronglyAnsweredCount: wronglyAnsweredCount ?? this.wronglyAnsweredCount,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -987,6 +1018,9 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     if (wronglyAnsweredCount.present) {
       map['wrongly_answered_count'] = Variable<int>(wronglyAnsweredCount.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -1004,7 +1038,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
           ..write('emulatedCreatedAt: $emulatedCreatedAt, ')
           ..write('rank: $rank, ')
           ..write('askedCount: $askedCount, ')
-          ..write('wronglyAnsweredCount: $wronglyAnsweredCount')
+          ..write('wronglyAnsweredCount: $wronglyAnsweredCount, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -1864,6 +1899,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
   final Value<int?> studyTillCorrectTypingAnswerLetterDuration;
   final Value<int> testsTimeOfAnswerAction;
   final Value<bool> doesObfuscateQuestion;
+  final Value<int> rowid;
   const FieldListsCompanion({
     this.id = const Value.absent(),
     this.fieldId = const Value.absent(),
@@ -1886,6 +1922,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.studyTillCorrectTypingAnswerLetterDuration = const Value.absent(),
     this.testsTimeOfAnswerAction = const Value.absent(),
     this.doesObfuscateQuestion = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   FieldListsCompanion.insert({
     this.id = const Value.absent(),
@@ -1909,6 +1946,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     this.studyTillCorrectTypingAnswerLetterDuration = const Value.absent(),
     this.testsTimeOfAnswerAction = const Value.absent(),
     this.doesObfuscateQuestion = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : fieldId = Value(fieldId),
         name = Value(name),
         creationAt = Value(creationAt),
@@ -1935,6 +1973,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
     Expression<int>? studyTillCorrectTypingAnswerLetterDuration,
     Expression<int>? testsTimeOfAnswerAction,
     Expression<bool>? doesObfuscateQuestion,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1972,6 +2011,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
         'tests_time_of_answer_action': testsTimeOfAnswerAction,
       if (doesObfuscateQuestion != null)
         'does_obfuscate_question': doesObfuscateQuestion,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -1996,7 +2036,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       Value<int?>? studyTillCorrectFindingAnswerDuration,
       Value<int?>? studyTillCorrectTypingAnswerLetterDuration,
       Value<int>? testsTimeOfAnswerAction,
-      Value<bool>? doesObfuscateQuestion}) {
+      Value<bool>? doesObfuscateQuestion,
+      Value<int>? rowid}) {
     return FieldListsCompanion(
       id: id ?? this.id,
       fieldId: fieldId ?? this.fieldId,
@@ -2031,6 +2072,7 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
           testsTimeOfAnswerAction ?? this.testsTimeOfAnswerAction,
       doesObfuscateQuestion:
           doesObfuscateQuestion ?? this.doesObfuscateQuestion,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -2110,6 +2152,9 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
       map['does_obfuscate_question'] =
           Variable<bool>(doesObfuscateQuestion.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -2141,7 +2186,8 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
           ..write(
               'studyTillCorrectTypingAnswerLetterDuration: $studyTillCorrectTypingAnswerLetterDuration, ')
           ..write('testsTimeOfAnswerAction: $testsTimeOfAnswerAction, ')
-          ..write('doesObfuscateQuestion: $doesObfuscateQuestion')
+          ..write('doesObfuscateQuestion: $doesObfuscateQuestion, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -2436,6 +2482,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
   final Value<DateTime> lastModificationAt;
   final Value<int> usageCount;
   final Value<int> color;
+  final Value<int> rowid;
   const FieldsCompanion({
     this.id = const Value.absent(),
     this.userAccountId = const Value.absent(),
@@ -2444,6 +2491,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     this.lastModificationAt = const Value.absent(),
     this.usageCount = const Value.absent(),
     this.color = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   FieldsCompanion.insert({
     this.id = const Value.absent(),
@@ -2453,6 +2501,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     required DateTime lastModificationAt,
     this.usageCount = const Value.absent(),
     this.color = const Value.absent(),
+    this.rowid = const Value.absent(),
   })  : userAccountId = Value(userAccountId),
         name = Value(name),
         creationAt = Value(creationAt),
@@ -2465,6 +2514,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     Expression<DateTime>? lastModificationAt,
     Expression<int>? usageCount,
     Expression<int>? color,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2475,6 +2525,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
         'last_modification_at': lastModificationAt,
       if (usageCount != null) 'usage_count': usageCount,
       if (color != null) 'color': color,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -2485,7 +2536,8 @@ class FieldsCompanion extends UpdateCompanion<Field> {
       Value<DateTime>? creationAt,
       Value<DateTime>? lastModificationAt,
       Value<int>? usageCount,
-      Value<int>? color}) {
+      Value<int>? color,
+      Value<int>? rowid}) {
     return FieldsCompanion(
       id: id ?? this.id,
       userAccountId: userAccountId ?? this.userAccountId,
@@ -2494,6 +2546,7 @@ class FieldsCompanion extends UpdateCompanion<Field> {
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       usageCount: usageCount ?? this.usageCount,
       color: color ?? this.color,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -2522,6 +2575,9 @@ class FieldsCompanion extends UpdateCompanion<Field> {
     if (color.present) {
       map['color'] = Variable<int>(color.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -2534,7 +2590,8 @@ class FieldsCompanion extends UpdateCompanion<Field> {
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
           ..write('usageCount: $usageCount, ')
-          ..write('color: $color')
+          ..write('color: $color, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -2760,12 +2817,14 @@ class NotesCompanion extends UpdateCompanion<Note> {
   final Value<String> texT;
   final Value<DateTime> creationAt;
   final Value<DateTime> lastModificationAt;
+  final Value<int> rowid;
   const NotesCompanion({
     this.id = const Value.absent(),
     this.relationalId = const Value.absent(),
     this.texT = const Value.absent(),
     this.creationAt = const Value.absent(),
     this.lastModificationAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   NotesCompanion.insert({
     this.id = const Value.absent(),
@@ -2773,6 +2832,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
     required String texT,
     required DateTime creationAt,
     required DateTime lastModificationAt,
+    this.rowid = const Value.absent(),
   })  : relationalId = Value(relationalId),
         texT = Value(texT),
         creationAt = Value(creationAt),
@@ -2783,6 +2843,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
     Expression<String>? texT,
     Expression<DateTime>? creationAt,
     Expression<DateTime>? lastModificationAt,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -2791,6 +2852,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
       if (creationAt != null) 'creation_at': creationAt,
       if (lastModificationAt != null)
         'last_modification_at': lastModificationAt,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -2799,13 +2861,15 @@ class NotesCompanion extends UpdateCompanion<Note> {
       Value<String>? relationalId,
       Value<String>? texT,
       Value<DateTime>? creationAt,
-      Value<DateTime>? lastModificationAt}) {
+      Value<DateTime>? lastModificationAt,
+      Value<int>? rowid}) {
     return NotesCompanion(
       id: id ?? this.id,
       relationalId: relationalId ?? this.relationalId,
       texT: texT ?? this.texT,
       creationAt: creationAt ?? this.creationAt,
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -2828,6 +2892,9 @@ class NotesCompanion extends UpdateCompanion<Note> {
       map['last_modification_at'] =
           Variable<DateTime>(lastModificationAt.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -2838,7 +2905,8 @@ class NotesCompanion extends UpdateCompanion<Note> {
           ..write('relationalId: $relationalId, ')
           ..write('texT: $texT, ')
           ..write('creationAt: $creationAt, ')
-          ..write('lastModificationAt: $lastModificationAt')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -3397,6 +3465,7 @@ class UncompletedFullyRandomTestsCompanion
   final Value<String?> lastAnswer;
   final Value<DateTime> creationAt;
   final Value<DateTime> lastModificationAt;
+  final Value<int> rowid;
   const UncompletedFullyRandomTestsCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
@@ -3412,6 +3481,7 @@ class UncompletedFullyRandomTestsCompanion
     this.lastAnswer = const Value.absent(),
     this.creationAt = const Value.absent(),
     this.lastModificationAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   UncompletedFullyRandomTestsCompanion.insert({
     this.id = const Value.absent(),
@@ -3428,6 +3498,7 @@ class UncompletedFullyRandomTestsCompanion
     this.lastAnswer = const Value.absent(),
     required DateTime creationAt,
     required DateTime lastModificationAt,
+    this.rowid = const Value.absent(),
   })  : fieldListId = Value(fieldListId),
         currentQuestionCounter = Value(currentQuestionCounter),
         triesNumber = Value(triesNumber),
@@ -3449,6 +3520,7 @@ class UncompletedFullyRandomTestsCompanion
     Expression<String>? lastAnswer,
     Expression<DateTime>? creationAt,
     Expression<DateTime>? lastModificationAt,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -3471,6 +3543,7 @@ class UncompletedFullyRandomTestsCompanion
       if (creationAt != null) 'creation_at': creationAt,
       if (lastModificationAt != null)
         'last_modification_at': lastModificationAt,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -3488,7 +3561,8 @@ class UncompletedFullyRandomTestsCompanion
       Value<int>? wrongAnswerCounter,
       Value<String?>? lastAnswer,
       Value<DateTime>? creationAt,
-      Value<DateTime>? lastModificationAt}) {
+      Value<DateTime>? lastModificationAt,
+      Value<int>? rowid}) {
     return UncompletedFullyRandomTestsCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
@@ -3506,6 +3580,7 @@ class UncompletedFullyRandomTestsCompanion
       lastAnswer: lastAnswer ?? this.lastAnswer,
       creationAt: creationAt ?? this.creationAt,
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -3557,6 +3632,9 @@ class UncompletedFullyRandomTestsCompanion
       map['last_modification_at'] =
           Variable<DateTime>(lastModificationAt.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -3576,7 +3654,8 @@ class UncompletedFullyRandomTestsCompanion
           ..write('wrongAnswerCounter: $wrongAnswerCounter, ')
           ..write('lastAnswer: $lastAnswer, ')
           ..write('creationAt: $creationAt, ')
-          ..write('lastModificationAt: $lastModificationAt')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -3593,7 +3672,10 @@ class $SessionEntrysTable extends SessionEntrys
   @override
   late final GeneratedColumn<String> sessionId = GeneratedColumn<String>(
       'session_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES uncompleted_fully_random_tests (id)'));
   static const VerificationMeta _entryIdMeta =
       const VerificationMeta('entryId');
   @override
@@ -3707,30 +3789,36 @@ class SessionEntry extends DataClass implements Insertable<SessionEntry> {
 class SessionEntrysCompanion extends UpdateCompanion<SessionEntry> {
   final Value<String> sessionId;
   final Value<String> entryId;
+  final Value<int> rowid;
   const SessionEntrysCompanion({
     this.sessionId = const Value.absent(),
     this.entryId = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   SessionEntrysCompanion.insert({
     required String sessionId,
     required String entryId,
+    this.rowid = const Value.absent(),
   })  : sessionId = Value(sessionId),
         entryId = Value(entryId);
   static Insertable<SessionEntry> custom({
     Expression<String>? sessionId,
     Expression<String>? entryId,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (sessionId != null) 'session_id': sessionId,
       if (entryId != null) 'entry_id': entryId,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   SessionEntrysCompanion copyWith(
-      {Value<String>? sessionId, Value<String>? entryId}) {
+      {Value<String>? sessionId, Value<String>? entryId, Value<int>? rowid}) {
     return SessionEntrysCompanion(
       sessionId: sessionId ?? this.sessionId,
       entryId: entryId ?? this.entryId,
+      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -3743,6 +3831,9 @@ class SessionEntrysCompanion extends UpdateCompanion<SessionEntry> {
     if (entryId.present) {
       map['entry_id'] = Variable<String>(entryId.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
@@ -3750,7 +3841,8 @@ class SessionEntrysCompanion extends UpdateCompanion<SessionEntry> {
   String toString() {
     return (StringBuffer('SessionEntrysCompanion(')
           ..write('sessionId: $sessionId, ')
-          ..write('entryId: $entryId')
+          ..write('entryId: $entryId, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }

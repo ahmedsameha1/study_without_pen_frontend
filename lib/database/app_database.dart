@@ -274,7 +274,8 @@ class UncompletedFullyRandomTests extends Table {
 }
 
 class SessionEntrys extends Table {
-  TextColumn get sessionId => text()();
+  TextColumn get sessionId =>
+      text().references(UncompletedFullyRandomTests, #id)();
   TextColumn get entryId => text()();
 
   @override
@@ -314,6 +315,13 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(beforeOpen: (details) async {
+      await customStatement("PRAGMA foreign_keys = ON");
+    });
+  }
 }
 
 bool isValid(String uuid) {
