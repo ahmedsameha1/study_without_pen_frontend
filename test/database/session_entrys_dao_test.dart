@@ -1,6 +1,7 @@
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/session_entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/uncompleted_fully_random_tests_dao.dart';
+import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
 import 'package:uuid/uuid.dart';
@@ -10,6 +11,7 @@ void main() {
   late AppDatabase appDatabase;
   late SessionEntrysDao sessionEntrysDao;
   late UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao;
+  late EntrysDao entrysDao;
   final entryId = Uuid().v4();
   final sessionId = Uuid().v4();
   String fieldListId = Uuid().v4();
@@ -25,12 +27,21 @@ void main() {
   String lastAnswer = "wefw";
   DateTime creationAt = DateTime.utc(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
+  String answerId = const Uuid().v4();
+  String questionId = const Uuid().v4();
+  DateTime emulatedCreatedAt = DateTime.utc(2022, 2, 2);
+  int order = 1;
+  int rank = Rank.Normal.index;
+  int askedCount = 2;
+  int wronglyAnsweredCount = 1;
+  bool didAskedAtCurrentTestRound = true;
 
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
     sessionEntrysDao = SessionEntrysDao(appDatabase);
     uncompletedFullyRandomTestsDao =
         UncompletedFullyRandomTestsDao(appDatabase);
+    entrysDao = EntrysDao(appDatabase);
     var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
         id: sessionId,
         fieldListId: fieldListId,
@@ -48,6 +59,20 @@ void main() {
         lastModificationAt: lastModificationAt);
     await uncompletedFullyRandomTestsDao
         .create(uncompletedFullyRandomTest.toCompanion(true));
+    var entry = Entry(
+        id: entryId,
+        fieldListId: fieldListId,
+        answerId: answerId,
+        questionId: questionId,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount);
+    await entrysDao.create(entry.toCompanion(true));
   });
 
   tearDown(() async {
@@ -82,6 +107,16 @@ void main() {
       },
           throwsA(predicate((e) =>
               e is InvalidDataException && e.message.contains("entryId"))));
+    });
+
+    test("Invalid SessionEntry: entryId doesn't exist", () async {
+      final sessionEntry =
+          SessionEntry(sessionId: sessionId, entryId: const Uuid().v4());
+      expect(() async {
+        await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("FOREIGN KEY"))));
     });
 
     test("No more one SesstionEntry with the same sessionId and entryId",

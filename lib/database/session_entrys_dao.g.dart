@@ -6,5 +6,6 @@ part of 'session_entrys_dao.dart';
 mixin _$SessionEntrysDaoMixin on DatabaseAccessor<AppDatabase> {
   $UncompletedFullyRandomTestsTable get uncompletedFullyRandomTests =>
       attachedDatabase.uncompletedFullyRandomTests;
+  $EntrysTable get entrys => attachedDatabase.entrys;
   $SessionEntrysTable get sessionEntrys => attachedDatabase.sessionEntrys;
 }

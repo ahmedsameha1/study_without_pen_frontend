@@ -276,7 +276,7 @@ class UncompletedFullyRandomTests extends Table {
 class SessionEntrys extends Table {
   TextColumn get sessionId =>
       text().references(UncompletedFullyRandomTests, #id)();
-  TextColumn get entryId => text()();
+  TextColumn get entryId => text().references(Entrys, #id)();
 
   @override
   Set<Column> get primaryKey => {sessionId, entryId};

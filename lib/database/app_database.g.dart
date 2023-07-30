@@ -3681,7 +3681,10 @@ class $SessionEntrysTable extends SessionEntrys
   @override
   late final GeneratedColumn<String> entryId = GeneratedColumn<String>(
       'entry_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES entrys (id)'));
   @override
   List<GeneratedColumn> get $columns => [sessionId, entryId];
   @override
