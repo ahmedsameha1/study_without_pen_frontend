@@ -4,8 +4,7 @@ import 'app_database.dart';
 
 @immutable
 class FullyRandomTest {
-  //final UncompletedFullyRandomTest uncompletedFullyRandomTest;
-  FullyRandomTest(UncompletedFullyRandomTest uncompletedFullyRandomTest) {
-
-  }
+  final UncompletedFullyRandomTest uncompletedFullyRandomTest;
+  final Set<String> entries;
+  FullyRandomTest(this.uncompletedFullyRandomTest, this.entries);
 }
