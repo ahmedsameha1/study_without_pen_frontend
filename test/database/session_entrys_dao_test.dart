@@ -83,7 +83,8 @@ void main() {
               e is InvalidDataException && e.message.contains("sessionId"))));
     });
 
-    test("Invalid SessionEntry: sessionId doesn't exist", () async {
+    test("Invalid SessionEntry: sessionId doesn't exist in sessions table",
+        () async {
       final sessionEntry =
           SessionEntry(sessionId: const Uuid().v4(), entryId: entryId);
       expect(() async {
@@ -103,7 +104,8 @@ void main() {
               e is InvalidDataException && e.message.contains("entryId"))));
     });
 
-    test("Invalid SessionEntry: entryId doesn't exist", () async {
+    test("Invalid SessionEntry: entryId doesn't exist in entrys table",
+        () async {
       final sessionEntry =
           SessionEntry(sessionId: sessionId, entryId: const Uuid().v4());
       expect(() async {

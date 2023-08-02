@@ -3751,6 +3751,159 @@ class SessionEntrysCompanion extends UpdateCompanion<SessionEntry> {
   }
 }
 
+class $TestSessionsTable extends TestSessions
+    with TableInfo<$TestSessionsTable, TestSession> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TestSessionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _sessionIdMeta =
+      const VerificationMeta('sessionId');
+  @override
+  late final GeneratedColumn<String> sessionId = GeneratedColumn<String>(
+      'session_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES sessions (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [sessionId];
+  @override
+  String get aliasedName => _alias ?? 'test_sessions';
+  @override
+  String get actualTableName => 'test_sessions';
+  @override
+  VerificationContext validateIntegrity(Insertable<TestSession> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('session_id')) {
+      context.handle(_sessionIdMeta,
+          sessionId.isAcceptableOrUnknown(data['session_id']!, _sessionIdMeta));
+    } else if (isInserting) {
+      context.missing(_sessionIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {sessionId};
+  @override
+  TestSession map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TestSession(
+      sessionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}session_id'])!,
+    );
+  }
+
+  @override
+  $TestSessionsTable createAlias(String alias) {
+    return $TestSessionsTable(attachedDatabase, alias);
+  }
+}
+
+class TestSession extends DataClass implements Insertable<TestSession> {
+  final String sessionId;
+  const TestSession({required this.sessionId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['session_id'] = Variable<String>(sessionId);
+    return map;
+  }
+
+  TestSessionsCompanion toCompanion(bool nullToAbsent) {
+    return TestSessionsCompanion(
+      sessionId: Value(sessionId),
+    );
+  }
+
+  factory TestSession.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TestSession(
+      sessionId: serializer.fromJson<String>(json['sessionId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'sessionId': serializer.toJson<String>(sessionId),
+    };
+  }
+
+  TestSession copyWith({String? sessionId}) => TestSession(
+        sessionId: sessionId ?? this.sessionId,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TestSession(')
+          ..write('sessionId: $sessionId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => sessionId.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TestSession && other.sessionId == this.sessionId);
+}
+
+class TestSessionsCompanion extends UpdateCompanion<TestSession> {
+  final Value<String> sessionId;
+  final Value<int> rowid;
+  const TestSessionsCompanion({
+    this.sessionId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TestSessionsCompanion.insert({
+    required String sessionId,
+    this.rowid = const Value.absent(),
+  }) : sessionId = Value(sessionId);
+  static Insertable<TestSession> custom({
+    Expression<String>? sessionId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (sessionId != null) 'session_id': sessionId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TestSessionsCompanion copyWith(
+      {Value<String>? sessionId, Value<int>? rowid}) {
+    return TestSessionsCompanion(
+      sessionId: sessionId ?? this.sessionId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (sessionId.present) {
+      map['session_id'] = Variable<String>(sessionId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TestSessionsCompanion(')
+          ..write('sessionId: $sessionId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $EntryTextsTable entryTexts = $EntryTextsTable(this);
@@ -3761,6 +3914,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $NotesTable notes = $NotesTable(this);
   late final $SessionsTable sessions = $SessionsTable(this);
   late final $SessionEntrysTable sessionEntrys = $SessionEntrysTable(this);
+  late final $TestSessionsTable testSessions = $TestSessionsTable(this);
   late final EntryTextsDao entryTextsDao = EntryTextsDao(this as AppDatabase);
   late final QuestionsDao questionsDao = QuestionsDao(this as AppDatabase);
   late final EntrysDao entrysDao = EntrysDao(this as AppDatabase);
@@ -3770,6 +3924,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final SessionsDao sessionsDao = SessionsDao(this as AppDatabase);
   late final SessionEntrysDao sessionEntrysDao =
       SessionEntrysDao(this as AppDatabase);
+  late final TestSessionsDao testSessionsDao =
+      TestSessionsDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3782,7 +3938,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         fields,
         notes,
         sessions,
-        sessionEntrys
+        sessionEntrys,
+        testSessions
       ];
   @override
   DriftDatabaseOptions get options =>
