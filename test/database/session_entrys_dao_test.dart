@@ -1,6 +1,6 @@
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/session_entrys_dao.dart';
-import 'package:study_without_pen_by_flutter/database/uncompleted_fully_random_tests_dao.dart';
+import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/native.dart';
@@ -10,7 +10,7 @@ import 'package:drift/drift.dart';
 void main() {
   late AppDatabase appDatabase;
   late SessionEntrysDao sessionEntrysDao;
-  late UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao;
+  late SessionsDao sessionsDao;
   late EntrysDao entrysDao;
   final entryId = Uuid().v4();
   final sessionId = Uuid().v4();
@@ -23,8 +23,6 @@ void main() {
   bool lastCheckedAnswerResult = true;
   bool shouldCheckAnAnswer = true;
   int currentHintCounter = 0;
-  int wrongAnswerCounter = 3;
-  String lastAnswer = "wefw";
   DateTime creationAt = DateTime.utc(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
   String answerId = const Uuid().v4();
@@ -39,10 +37,9 @@ void main() {
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
     sessionEntrysDao = SessionEntrysDao(appDatabase);
-    uncompletedFullyRandomTestsDao =
-        UncompletedFullyRandomTestsDao(appDatabase);
+    sessionsDao = SessionsDao(appDatabase);
     entrysDao = EntrysDao(appDatabase);
-    var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+    var session = Session(
         id: sessionId,
         fieldListId: fieldListId,
         currentQuestionCounter: currentQuestionCounter,
@@ -53,12 +50,9 @@ void main() {
         lastCheckedAnswerResult: lastCheckedAnswerResult,
         shouldCheckAnAnswer: shouldCheckAnAnswer,
         currentHintCounter: currentHintCounter,
-        wrongAnswerCounter: wrongAnswerCounter,
-        lastAnswer: lastAnswer,
         creationAt: creationAt,
         lastModificationAt: lastModificationAt);
-    await uncompletedFullyRandomTestsDao
-        .create(uncompletedFullyRandomTest.toCompanion(true));
+    await sessionsDao.create(session.toCompanion(true));
     var entry = Entry(
         id: entryId,
         fieldListId: fieldListId,

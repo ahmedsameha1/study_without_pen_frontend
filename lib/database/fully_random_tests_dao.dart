@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_test.dart';
-import 'package:study_without_pen_by_flutter/database/uncompleted_fully_random_tests_dao.dart';
+import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 
 import 'session_entrys_dao.dart';
 
@@ -36,9 +36,8 @@ class FullyRandomTestsDao {
       if (questionsNumber < MINIMUM_QUESTIONS_NUMBER) {
         throw InvalidDataException("questionsNumber");
       }
-      UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao =
-          UncompletedFullyRandomTestsDao(appDatabase);
-      var uncompletedFullyRandomTest = UncompletedFullyRandomTest(
+      SessionsDao sessionsDao = SessionsDao(appDatabase);
+      var session = Session(
           id: id,
           fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
@@ -49,12 +48,9 @@ class FullyRandomTestsDao {
           lastCheckedAnswerResult: lastCheckedAnswerResult,
           shouldCheckAnAnswer: shouldCheckAnAnswer,
           currentHintCounter: currentHintCounter,
-          wrongAnswerCounter: wrongAnswerCounter,
-          lastAnswer: lastAnswer,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt);
-      await uncompletedFullyRandomTestsDao
-          .create(uncompletedFullyRandomTest.toCompanion(true));
+      await sessionsDao.create(session.toCompanion(true));
       final entries = await entrysDao.getByFieldListId(fieldListId);
       if (entries.length < questionsNumber) {
         throw InvalidDataException(
@@ -71,11 +67,9 @@ class FullyRandomTestsDao {
   }
 
   Future<FullyRandomTest?> getById(String id) {
-    final uncompletedFullyRandomTestStream =
-        (appDatabase.select(appDatabase.uncompletedFullyRandomTests)
-              ..where((tbl) => tbl.id.equals(id)))
-            .watchSingle();
-    //uncompleted = uncompleted!;
+    final sessionStream = (appDatabase.select(appDatabase.sessions)
+          ..where((tbl) => tbl.id.equals(id)))
+        .watchSingle();
     final sessionEntryStream = (appDatabase.select(appDatabase.sessionEntrys)
           ..where((tbl) => tbl.sessionId.equals(id)))
         .watch()
@@ -85,32 +79,9 @@ class FullyRandomTestsDao {
       }).toSet();
     });
 
-    return Rx.combineLatest2(
-        uncompletedFullyRandomTestStream, sessionEntryStream,
-        (UncompletedFullyRandomTest uncompletedFullyRandomTest,
-            Set<String> entries) {
-      return FullyRandomTest(uncompletedFullyRandomTest, entries);
+    return Rx.combineLatest2(sessionStream, sessionEntryStream,
+        (Session session, Set<String> entries) {
+      return FullyRandomTest(session, entries);
     }).first;
-/*
-    final query =
-        appDatabase.select(appDatabase.uncompletedFullyRandomTests).join([
-      leftOuterJoin(
-          appDatabase.sessionEntrys,
-          appDatabase.sessionEntrys.sessionId
-              .equalsExp(appDatabase.uncompletedFullyRandomTests.id))
-    ]);
-
-    query.watch().map((rows) {
-      return rows.map((row) {
-        row.readTableOrNull(appDatabase.sessionEntrys).entryId
-        return FullyRandomTest(
-          row.readTable(appDatabase.uncompletedFullyRandomTests),
-          //Set.from(row.readTableOrNull(appDatabase.sessionEntrys).entryId),
-        );
-      }).toList();
-    });
-
-    return FullyRandomTest(uncompleted, {});
-    */
   }
 }

@@ -3,7 +3,6 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
-import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:uuid/uuid.dart';
 
 main() {
@@ -102,9 +101,10 @@ main() {
       var entryText = EntryText(id: id, value: value);
       await entryTextsDao.create(entryText.toCompanion(true));
       var gettedEntryText = await entryTextsDao.getById(id);
+      gettedEntryText = gettedEntryText!;
       expect(gettedEntryText, isNot(null));
-      expect(gettedEntryText!.id, entryText.id);
-      expect(gettedEntryText!.value, entryText.value);
+      expect(gettedEntryText.id, entryText.id);
+      expect(gettedEntryText.value, entryText.value);
     });
 
     test("Get all EntryText", () async {

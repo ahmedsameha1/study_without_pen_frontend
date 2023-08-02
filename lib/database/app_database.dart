@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
 import 'package:study_without_pen_by_flutter/database/session_entrys_dao.dart';
-import 'package:study_without_pen_by_flutter/database/uncompleted_fully_random_tests_dao.dart';
+import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 import 'package:study_without_pen_by_flutter/database/notes_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
@@ -214,7 +214,7 @@ class Notes extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-class UncompletedFullyRandomTests extends Table {
+class Sessions extends Table {
   static const int MINIMUM_CURRENT_QUESTION_COUNTER = 0;
   static const int MAXIMUM_CURRENT_QUESTION_COUNTER = 0xffffffff;
   static const int MINIMUM_TRIES_NUMBER = 0;
@@ -230,41 +230,39 @@ class UncompletedFullyRandomTests extends Table {
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldListId => text()();
-  IntColumn get currentQuestionCounter =>
-      integer().check(currentQuestionCounter.isBiggerOrEqualValue(
-              UncompletedFullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER) &
-          currentQuestionCounter.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER))();
-  IntColumn get triesNumber => integer().check(triesNumber.isBiggerOrEqualValue(
-          UncompletedFullyRandomTests.MINIMUM_TRIES_NUMBER) &
-      triesNumber.isSmallerOrEqualValue(
-          UncompletedFullyRandomTests.MAXIMUM_TRIES_NUMBER))();
+  IntColumn get currentQuestionCounter => integer().check(currentQuestionCounter
+          .isBiggerOrEqualValue(Sessions.MINIMUM_CURRENT_QUESTION_COUNTER) &
+      currentQuestionCounter
+          .isSmallerOrEqualValue(Sessions.MAXIMUM_CURRENT_QUESTION_COUNTER))();
+  IntColumn get triesNumber => integer().check(
+      triesNumber.isBiggerOrEqualValue(Sessions.MINIMUM_TRIES_NUMBER) &
+          triesNumber.isSmallerOrEqualValue(Sessions.MAXIMUM_TRIES_NUMBER))();
   IntColumn get triesCounter => integer().withDefault(Constant(0)).check(
-      triesCounter.isBiggerOrEqualValue(
-              UncompletedFullyRandomTests.MINIMUM_TRIES_COUNTER) &
-          triesCounter.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER) &
+      triesCounter.isBiggerOrEqualValue(Sessions.MINIMUM_TRIES_COUNTER) &
+          triesCounter.isSmallerOrEqualValue(Sessions.MAXIMUM_TRIES_COUNTER) &
           triesCounter.isSmallerThan(triesNumber))();
-  IntColumn get elapsedTime => integer().check(elapsedTime.isBiggerOrEqualValue(
-      UncompletedFullyRandomTests.MINIMUM_ELAPSED_TIME))();
+  IntColumn get elapsedTime => integer()
+      .check(elapsedTime.isBiggerOrEqualValue(Sessions.MINIMUM_ELAPSED_TIME))();
   BoolColumn get isCompleted => boolean().withDefault(Constant(false))();
   BoolColumn get lastCheckedAnswerResult =>
       boolean().withDefault(Constant(false))();
   BoolColumn get shouldCheckAnAnswer => boolean().withDefault(Constant(true))();
-  IntColumn get currentHintCounter => integer().withDefault(Constant(0)).check(
-      currentHintCounter.isBiggerOrEqualValue(
-              UncompletedFullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER) &
-          currentHintCounter.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER))();
+  IntColumn get currentHintCounter =>
+      integer().withDefault(Constant(0)).check(currentHintCounter
+              .isBiggerOrEqualValue(Sessions.MINIMUM_CURRENT_HINT_COUNTER) &
+          currentHintCounter
+              .isSmallerOrEqualValue(Sessions.MAXIMUM_CURRENT_HINT_COUNTER))();
+  /*
   IntColumn get wrongAnswerCounter => integer().withDefault(Constant(0)).check(
       wrongAnswerCounter.isBiggerOrEqualValue(
-              UncompletedFullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER) &
+              Sessions.MINIMUM_WRONG_ANSWER_COUNTER) &
           wrongAnswerCounter.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER))();
+              Sessions.MAXIMUM_WRONG_ANSWER_COUNTER))();
   TextColumn get lastAnswer => text().nullable().check(lastAnswer
       .trim()
       .length
-      .isBiggerOrEqualValue(UncompletedFullyRandomTests.MINIMUM_LAST_ANSWER))();
+      .isBiggerOrEqualValue(Sessions.MINIMUM_LAST_ANSWER))();
+              */
   DateTimeColumn get creationAt => dateTime()();
   DateTimeColumn get lastModificationAt =>
       dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
@@ -274,8 +272,7 @@ class UncompletedFullyRandomTests extends Table {
 }
 
 class SessionEntrys extends Table {
-  TextColumn get sessionId =>
-      text().references(UncompletedFullyRandomTests, #id)();
+  TextColumn get sessionId => text().references(Sessions, #id)();
   TextColumn get entryId => text().references(Entrys, #id)();
 
   @override
@@ -289,7 +286,7 @@ class SessionEntrys extends Table {
   FieldLists,
   Fields,
   Notes,
-  UncompletedFullyRandomTests,
+  Sessions,
   SessionEntrys
 ], daos: [
   EntryTextsDao,
@@ -298,7 +295,7 @@ class SessionEntrys extends Table {
   FieldListsDao,
   FieldsDao,
   NotesDao,
-  UncompletedFullyRandomTestsDao,
+  SessionsDao,
   SessionEntrysDao
 ])
 class AppDatabase extends _$AppDatabase {

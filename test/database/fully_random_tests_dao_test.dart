@@ -5,13 +5,13 @@ import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_test.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_tests_dao.dart';
-import 'package:study_without_pen_by_flutter/database/uncompleted_fully_random_tests_dao.dart';
+import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
   late AppDatabase appDatabase;
   late FullyRandomTestsDao fullyRandomTestsDao;
-  late UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao;
+  late SessionsDao sessionsDao;
   late EntrysDao entrysDao;
   String id = Uuid().v4();
   String fieldListId = Uuid().v4();
@@ -32,8 +32,7 @@ void main() {
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     fullyRandomTestsDao = FullyRandomTestsDao(appDatabase);
-    uncompletedFullyRandomTestsDao =
-        UncompletedFullyRandomTestsDao(appDatabase);
+    sessionsDao = SessionsDao(appDatabase);
     entrysDao = EntrysDao(appDatabase);
   });
 
@@ -42,7 +41,7 @@ void main() {
   });
 
   group("Create a FullyRandomTest", () {
-    test("Invalid FullyRandomTest: invalid UncompletedFullyRandomTest", () {
+    test("Invalid FullyRandomTest: invalid Session", () {
       expect(() async {
         await fullyRandomTestsDao.create(
             questionsNumber: questionsNumber,
@@ -122,7 +121,7 @@ void main() {
     });
 
     test(
-        "Invalid FullyRandomTest: invalid UncompletedFullyRandomTest is not created in the database",
+        "Invalid FullyRandomTest: invalid Session is not created in the database",
         () async {
       try {
         await fullyRandomTestsDao.create(
@@ -143,8 +142,7 @@ void main() {
             lastModificationAt: lastModificationAt,
             seed: 1);
       } on InvalidDataException {}
-      var gotten =
-          await uncompletedFullyRandomTestsDao.getByFieldListId(fieldListId);
+      var gotten = await sessionsDao.getByFieldListId(fieldListId);
       expect(gotten.length, 0);
     });
   });
@@ -253,31 +251,20 @@ void main() {
           seed: 1);
       FullyRandomTest? fullyRandomTest = await fullyRandomTestsDao.getById(id);
       fullyRandomTest = fullyRandomTest!;
-      expect(fullyRandomTest.uncompletedFullyRandomTest.id, id);
-      expect(
-          fullyRandomTest.uncompletedFullyRandomTest.fieldListId, fieldListId1);
-      expect(fullyRandomTest.uncompletedFullyRandomTest.currentQuestionCounter,
+      expect(fullyRandomTest.session.id, id);
+      expect(fullyRandomTest.session.fieldListId, fieldListId1);
+      expect(fullyRandomTest.session.currentQuestionCounter,
           currentQuestionCounter);
-      expect(
-          fullyRandomTest.uncompletedFullyRandomTest.triesNumber, triesNumber);
-      expect(fullyRandomTest.uncompletedFullyRandomTest.triesCounter,
-          triesCounter);
-      expect(
-          fullyRandomTest.uncompletedFullyRandomTest.elapsedTime, elapsedTime);
-      expect(
-          fullyRandomTest.uncompletedFullyRandomTest.isCompleted, isCompleted);
-      expect(fullyRandomTest.uncompletedFullyRandomTest.lastCheckedAnswerResult,
+      expect(fullyRandomTest.session.triesNumber, triesNumber);
+      expect(fullyRandomTest.session.triesCounter, triesCounter);
+      expect(fullyRandomTest.session.elapsedTime, elapsedTime);
+      expect(fullyRandomTest.session.isCompleted, isCompleted);
+      expect(fullyRandomTest.session.lastCheckedAnswerResult,
           lastCheckedAnswerResult);
-      expect(fullyRandomTest.uncompletedFullyRandomTest.shouldCheckAnAnswer,
-          shouldCheckAnAnswer);
-      expect(fullyRandomTest.uncompletedFullyRandomTest.currentHintCounter,
-          currentHintCounter);
-      expect(fullyRandomTest.uncompletedFullyRandomTest.wrongAnswerCounter,
-          wrongAnswerCounter);
-      expect(fullyRandomTest.uncompletedFullyRandomTest.lastAnswer, lastAnswer);
-      expect(fullyRandomTest.uncompletedFullyRandomTest.creationAt, creationAt);
-      expect(fullyRandomTest.uncompletedFullyRandomTest.lastModificationAt,
-          lastModificationAt);
+      expect(fullyRandomTest.session.shouldCheckAnAnswer, shouldCheckAnAnswer);
+      expect(fullyRandomTest.session.currentHintCounter, currentHintCounter);
+      expect(fullyRandomTest.session.creationAt, creationAt);
+      expect(fullyRandomTest.session.lastModificationAt, lastModificationAt);
       expect(fullyRandomTest.entries, {id1, id2});
     });
   });

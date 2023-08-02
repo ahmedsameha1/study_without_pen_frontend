@@ -2912,14 +2912,11 @@ class NotesCompanion extends UpdateCompanion<Note> {
   }
 }
 
-class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
-    with
-        TableInfo<$UncompletedFullyRandomTestsTable,
-            UncompletedFullyRandomTest> {
+class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $UncompletedFullyRandomTestsTable(this.attachedDatabase, [this._alias]);
+  $SessionsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -2939,10 +2936,10 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
   late final GeneratedColumn<int> currentQuestionCounter = GeneratedColumn<int>(
       'current_question_counter', aliasedName, false,
       check: () =>
-          currentQuestionCounter.isBiggerOrEqualValue(
-              UncompletedFullyRandomTests.MINIMUM_CURRENT_QUESTION_COUNTER) &
-          currentQuestionCounter.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_CURRENT_QUESTION_COUNTER),
+          currentQuestionCounter
+              .isBiggerOrEqualValue(Sessions.MINIMUM_CURRENT_QUESTION_COUNTER) &
+          currentQuestionCounter
+              .isSmallerOrEqualValue(Sessions.MAXIMUM_CURRENT_QUESTION_COUNTER),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
   static const VerificationMeta _triesNumberMeta =
@@ -2951,10 +2948,8 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
   late final GeneratedColumn<int> triesNumber = GeneratedColumn<int>(
       'tries_number', aliasedName, false,
       check: () =>
-          triesNumber.isBiggerOrEqualValue(
-              UncompletedFullyRandomTests.MINIMUM_TRIES_NUMBER) &
-          triesNumber.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_TRIES_NUMBER),
+          triesNumber.isBiggerOrEqualValue(Sessions.MINIMUM_TRIES_NUMBER) &
+          triesNumber.isSmallerOrEqualValue(Sessions.MAXIMUM_TRIES_NUMBER),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
   static const VerificationMeta _triesCounterMeta =
@@ -2963,10 +2958,8 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
   late final GeneratedColumn<int> triesCounter = GeneratedColumn<int>(
       'tries_counter', aliasedName, false,
       check: () =>
-          triesCounter.isBiggerOrEqualValue(
-              UncompletedFullyRandomTests.MINIMUM_TRIES_COUNTER) &
-          triesCounter.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_TRIES_COUNTER) &
+          triesCounter.isBiggerOrEqualValue(Sessions.MINIMUM_TRIES_COUNTER) &
+          triesCounter.isSmallerOrEqualValue(Sessions.MAXIMUM_TRIES_COUNTER) &
           triesCounter.isSmallerThan(triesNumber),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
@@ -2976,8 +2969,8 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
   @override
   late final GeneratedColumn<int> elapsedTime = GeneratedColumn<int>(
       'elapsed_time', aliasedName, false,
-      check: () => elapsedTime.isBiggerOrEqualValue(
-          UncompletedFullyRandomTests.MINIMUM_ELAPSED_TIME),
+      check: () =>
+          elapsedTime.isBiggerOrEqualValue(Sessions.MINIMUM_ELAPSED_TIME),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
   static const VerificationMeta _isCompletedMeta =
@@ -3025,35 +3018,13 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
   late final GeneratedColumn<int> currentHintCounter = GeneratedColumn<int>(
       'current_hint_counter', aliasedName, false,
       check: () =>
-          currentHintCounter.isBiggerOrEqualValue(
-              UncompletedFullyRandomTests.MINIMUM_CURRENT_HINT_COUNTER) &
-          currentHintCounter.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_CURRENT_HINT_COUNTER),
+          currentHintCounter
+              .isBiggerOrEqualValue(Sessions.MINIMUM_CURRENT_HINT_COUNTER) &
+          currentHintCounter
+              .isSmallerOrEqualValue(Sessions.MAXIMUM_CURRENT_HINT_COUNTER),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(0));
-  static const VerificationMeta _wrongAnswerCounterMeta =
-      const VerificationMeta('wrongAnswerCounter');
-  @override
-  late final GeneratedColumn<int> wrongAnswerCounter = GeneratedColumn<int>(
-      'wrong_answer_counter', aliasedName, false,
-      check: () =>
-          wrongAnswerCounter.isBiggerOrEqualValue(
-              UncompletedFullyRandomTests.MINIMUM_WRONG_ANSWER_COUNTER) &
-          wrongAnswerCounter.isSmallerOrEqualValue(
-              UncompletedFullyRandomTests.MAXIMUM_WRONG_ANSWER_COUNTER),
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: Constant(0));
-  static const VerificationMeta _lastAnswerMeta =
-      const VerificationMeta('lastAnswer');
-  @override
-  late final GeneratedColumn<String> lastAnswer = GeneratedColumn<String>(
-      'last_answer', aliasedName, true,
-      check: () => lastAnswer.trim().length.isBiggerOrEqualValue(
-          UncompletedFullyRandomTests.MINIMUM_LAST_ANSWER),
-      type: DriftSqlType.string,
-      requiredDuringInsert: false);
   static const VerificationMeta _creationAtMeta =
       const VerificationMeta('creationAt');
   @override
@@ -3080,18 +3051,15 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
         lastCheckedAnswerResult,
         shouldCheckAnAnswer,
         currentHintCounter,
-        wrongAnswerCounter,
-        lastAnswer,
         creationAt,
         lastModificationAt
       ];
   @override
-  String get aliasedName => _alias ?? 'uncompleted_fully_random_tests';
+  String get aliasedName => _alias ?? 'sessions';
   @override
-  String get actualTableName => 'uncompleted_fully_random_tests';
+  String get actualTableName => 'sessions';
   @override
-  VerificationContext validateIntegrity(
-      Insertable<UncompletedFullyRandomTest> instance,
+  VerificationContext validateIntegrity(Insertable<Session> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -3161,18 +3129,6 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
           currentHintCounter.isAcceptableOrUnknown(
               data['current_hint_counter']!, _currentHintCounterMeta));
     }
-    if (data.containsKey('wrong_answer_counter')) {
-      context.handle(
-          _wrongAnswerCounterMeta,
-          wrongAnswerCounter.isAcceptableOrUnknown(
-              data['wrong_answer_counter']!, _wrongAnswerCounterMeta));
-    }
-    if (data.containsKey('last_answer')) {
-      context.handle(
-          _lastAnswerMeta,
-          lastAnswer.isAcceptableOrUnknown(
-              data['last_answer']!, _lastAnswerMeta));
-    }
     if (data.containsKey('creation_at')) {
       context.handle(
           _creationAtMeta,
@@ -3195,10 +3151,9 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  UncompletedFullyRandomTest map(Map<String, dynamic> data,
-      {String? tablePrefix}) {
+  Session map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return UncompletedFullyRandomTest(
+    return Session(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       fieldListId: attachedDatabase.typeMapping
@@ -3221,10 +3176,6 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
           DriftSqlType.bool, data['${effectivePrefix}should_check_an_answer'])!,
       currentHintCounter: attachedDatabase.typeMapping.read(
           DriftSqlType.int, data['${effectivePrefix}current_hint_counter'])!,
-      wrongAnswerCounter: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}wrong_answer_counter'])!,
-      lastAnswer: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}last_answer']),
       creationAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
       lastModificationAt: attachedDatabase.typeMapping.read(
@@ -3234,13 +3185,12 @@ class $UncompletedFullyRandomTestsTable extends UncompletedFullyRandomTests
   }
 
   @override
-  $UncompletedFullyRandomTestsTable createAlias(String alias) {
-    return $UncompletedFullyRandomTestsTable(attachedDatabase, alias);
+  $SessionsTable createAlias(String alias) {
+    return $SessionsTable(attachedDatabase, alias);
   }
 }
 
-class UncompletedFullyRandomTest extends DataClass
-    implements Insertable<UncompletedFullyRandomTest> {
+class Session extends DataClass implements Insertable<Session> {
   final String id;
   final String fieldListId;
   final int currentQuestionCounter;
@@ -3251,11 +3201,9 @@ class UncompletedFullyRandomTest extends DataClass
   final bool lastCheckedAnswerResult;
   final bool shouldCheckAnAnswer;
   final int currentHintCounter;
-  final int wrongAnswerCounter;
-  final String? lastAnswer;
   final DateTime creationAt;
   final DateTime lastModificationAt;
-  const UncompletedFullyRandomTest(
+  const Session(
       {required this.id,
       required this.fieldListId,
       required this.currentQuestionCounter,
@@ -3266,8 +3214,6 @@ class UncompletedFullyRandomTest extends DataClass
       required this.lastCheckedAnswerResult,
       required this.shouldCheckAnAnswer,
       required this.currentHintCounter,
-      required this.wrongAnswerCounter,
-      this.lastAnswer,
       required this.creationAt,
       required this.lastModificationAt});
   @override
@@ -3283,17 +3229,13 @@ class UncompletedFullyRandomTest extends DataClass
     map['last_checked_answer_result'] = Variable<bool>(lastCheckedAnswerResult);
     map['should_check_an_answer'] = Variable<bool>(shouldCheckAnAnswer);
     map['current_hint_counter'] = Variable<int>(currentHintCounter);
-    map['wrong_answer_counter'] = Variable<int>(wrongAnswerCounter);
-    if (!nullToAbsent || lastAnswer != null) {
-      map['last_answer'] = Variable<String>(lastAnswer);
-    }
     map['creation_at'] = Variable<DateTime>(creationAt);
     map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
     return map;
   }
 
-  UncompletedFullyRandomTestsCompanion toCompanion(bool nullToAbsent) {
-    return UncompletedFullyRandomTestsCompanion(
+  SessionsCompanion toCompanion(bool nullToAbsent) {
+    return SessionsCompanion(
       id: Value(id),
       fieldListId: Value(fieldListId),
       currentQuestionCounter: Value(currentQuestionCounter),
@@ -3304,19 +3246,15 @@ class UncompletedFullyRandomTest extends DataClass
       lastCheckedAnswerResult: Value(lastCheckedAnswerResult),
       shouldCheckAnAnswer: Value(shouldCheckAnAnswer),
       currentHintCounter: Value(currentHintCounter),
-      wrongAnswerCounter: Value(wrongAnswerCounter),
-      lastAnswer: lastAnswer == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastAnswer),
       creationAt: Value(creationAt),
       lastModificationAt: Value(lastModificationAt),
     );
   }
 
-  factory UncompletedFullyRandomTest.fromJson(Map<String, dynamic> json,
+  factory Session.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return UncompletedFullyRandomTest(
+    return Session(
       id: serializer.fromJson<String>(json['id']),
       fieldListId: serializer.fromJson<String>(json['fieldListId']),
       currentQuestionCounter:
@@ -3330,8 +3268,6 @@ class UncompletedFullyRandomTest extends DataClass
       shouldCheckAnAnswer:
           serializer.fromJson<bool>(json['shouldCheckAnAnswer']),
       currentHintCounter: serializer.fromJson<int>(json['currentHintCounter']),
-      wrongAnswerCounter: serializer.fromJson<int>(json['wrongAnswerCounter']),
-      lastAnswer: serializer.fromJson<String?>(json['lastAnswer']),
       creationAt: serializer.fromJson<DateTime>(json['creationAt']),
       lastModificationAt:
           serializer.fromJson<DateTime>(json['lastModificationAt']),
@@ -3352,14 +3288,12 @@ class UncompletedFullyRandomTest extends DataClass
           serializer.toJson<bool>(lastCheckedAnswerResult),
       'shouldCheckAnAnswer': serializer.toJson<bool>(shouldCheckAnAnswer),
       'currentHintCounter': serializer.toJson<int>(currentHintCounter),
-      'wrongAnswerCounter': serializer.toJson<int>(wrongAnswerCounter),
-      'lastAnswer': serializer.toJson<String?>(lastAnswer),
       'creationAt': serializer.toJson<DateTime>(creationAt),
       'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
     };
   }
 
-  UncompletedFullyRandomTest copyWith(
+  Session copyWith(
           {String? id,
           String? fieldListId,
           int? currentQuestionCounter,
@@ -3370,11 +3304,9 @@ class UncompletedFullyRandomTest extends DataClass
           bool? lastCheckedAnswerResult,
           bool? shouldCheckAnAnswer,
           int? currentHintCounter,
-          int? wrongAnswerCounter,
-          Value<String?> lastAnswer = const Value.absent(),
           DateTime? creationAt,
           DateTime? lastModificationAt}) =>
-      UncompletedFullyRandomTest(
+      Session(
         id: id ?? this.id,
         fieldListId: fieldListId ?? this.fieldListId,
         currentQuestionCounter:
@@ -3387,14 +3319,12 @@ class UncompletedFullyRandomTest extends DataClass
             lastCheckedAnswerResult ?? this.lastCheckedAnswerResult,
         shouldCheckAnAnswer: shouldCheckAnAnswer ?? this.shouldCheckAnAnswer,
         currentHintCounter: currentHintCounter ?? this.currentHintCounter,
-        wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
-        lastAnswer: lastAnswer.present ? lastAnswer.value : this.lastAnswer,
         creationAt: creationAt ?? this.creationAt,
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       );
   @override
   String toString() {
-    return (StringBuffer('UncompletedFullyRandomTest(')
+    return (StringBuffer('Session(')
           ..write('id: $id, ')
           ..write('fieldListId: $fieldListId, ')
           ..write('currentQuestionCounter: $currentQuestionCounter, ')
@@ -3405,8 +3335,6 @@ class UncompletedFullyRandomTest extends DataClass
           ..write('lastCheckedAnswerResult: $lastCheckedAnswerResult, ')
           ..write('shouldCheckAnAnswer: $shouldCheckAnAnswer, ')
           ..write('currentHintCounter: $currentHintCounter, ')
-          ..write('wrongAnswerCounter: $wrongAnswerCounter, ')
-          ..write('lastAnswer: $lastAnswer, ')
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt')
           ..write(')'))
@@ -3425,14 +3353,12 @@ class UncompletedFullyRandomTest extends DataClass
       lastCheckedAnswerResult,
       shouldCheckAnAnswer,
       currentHintCounter,
-      wrongAnswerCounter,
-      lastAnswer,
       creationAt,
       lastModificationAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is UncompletedFullyRandomTest &&
+      (other is Session &&
           other.id == this.id &&
           other.fieldListId == this.fieldListId &&
           other.currentQuestionCounter == this.currentQuestionCounter &&
@@ -3443,14 +3369,11 @@ class UncompletedFullyRandomTest extends DataClass
           other.lastCheckedAnswerResult == this.lastCheckedAnswerResult &&
           other.shouldCheckAnAnswer == this.shouldCheckAnAnswer &&
           other.currentHintCounter == this.currentHintCounter &&
-          other.wrongAnswerCounter == this.wrongAnswerCounter &&
-          other.lastAnswer == this.lastAnswer &&
           other.creationAt == this.creationAt &&
           other.lastModificationAt == this.lastModificationAt);
 }
 
-class UncompletedFullyRandomTestsCompanion
-    extends UpdateCompanion<UncompletedFullyRandomTest> {
+class SessionsCompanion extends UpdateCompanion<Session> {
   final Value<String> id;
   final Value<String> fieldListId;
   final Value<int> currentQuestionCounter;
@@ -3461,12 +3384,10 @@ class UncompletedFullyRandomTestsCompanion
   final Value<bool> lastCheckedAnswerResult;
   final Value<bool> shouldCheckAnAnswer;
   final Value<int> currentHintCounter;
-  final Value<int> wrongAnswerCounter;
-  final Value<String?> lastAnswer;
   final Value<DateTime> creationAt;
   final Value<DateTime> lastModificationAt;
   final Value<int> rowid;
-  const UncompletedFullyRandomTestsCompanion({
+  const SessionsCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
     this.currentQuestionCounter = const Value.absent(),
@@ -3477,13 +3398,11 @@ class UncompletedFullyRandomTestsCompanion
     this.lastCheckedAnswerResult = const Value.absent(),
     this.shouldCheckAnAnswer = const Value.absent(),
     this.currentHintCounter = const Value.absent(),
-    this.wrongAnswerCounter = const Value.absent(),
-    this.lastAnswer = const Value.absent(),
     this.creationAt = const Value.absent(),
     this.lastModificationAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  UncompletedFullyRandomTestsCompanion.insert({
+  SessionsCompanion.insert({
     this.id = const Value.absent(),
     required String fieldListId,
     required int currentQuestionCounter,
@@ -3494,8 +3413,6 @@ class UncompletedFullyRandomTestsCompanion
     this.lastCheckedAnswerResult = const Value.absent(),
     this.shouldCheckAnAnswer = const Value.absent(),
     this.currentHintCounter = const Value.absent(),
-    this.wrongAnswerCounter = const Value.absent(),
-    this.lastAnswer = const Value.absent(),
     required DateTime creationAt,
     required DateTime lastModificationAt,
     this.rowid = const Value.absent(),
@@ -3505,7 +3422,7 @@ class UncompletedFullyRandomTestsCompanion
         elapsedTime = Value(elapsedTime),
         creationAt = Value(creationAt),
         lastModificationAt = Value(lastModificationAt);
-  static Insertable<UncompletedFullyRandomTest> custom({
+  static Insertable<Session> custom({
     Expression<String>? id,
     Expression<String>? fieldListId,
     Expression<int>? currentQuestionCounter,
@@ -3516,8 +3433,6 @@ class UncompletedFullyRandomTestsCompanion
     Expression<bool>? lastCheckedAnswerResult,
     Expression<bool>? shouldCheckAnAnswer,
     Expression<int>? currentHintCounter,
-    Expression<int>? wrongAnswerCounter,
-    Expression<String>? lastAnswer,
     Expression<DateTime>? creationAt,
     Expression<DateTime>? lastModificationAt,
     Expression<int>? rowid,
@@ -3537,9 +3452,6 @@ class UncompletedFullyRandomTestsCompanion
         'should_check_an_answer': shouldCheckAnAnswer,
       if (currentHintCounter != null)
         'current_hint_counter': currentHintCounter,
-      if (wrongAnswerCounter != null)
-        'wrong_answer_counter': wrongAnswerCounter,
-      if (lastAnswer != null) 'last_answer': lastAnswer,
       if (creationAt != null) 'creation_at': creationAt,
       if (lastModificationAt != null)
         'last_modification_at': lastModificationAt,
@@ -3547,7 +3459,7 @@ class UncompletedFullyRandomTestsCompanion
     });
   }
 
-  UncompletedFullyRandomTestsCompanion copyWith(
+  SessionsCompanion copyWith(
       {Value<String>? id,
       Value<String>? fieldListId,
       Value<int>? currentQuestionCounter,
@@ -3558,12 +3470,10 @@ class UncompletedFullyRandomTestsCompanion
       Value<bool>? lastCheckedAnswerResult,
       Value<bool>? shouldCheckAnAnswer,
       Value<int>? currentHintCounter,
-      Value<int>? wrongAnswerCounter,
-      Value<String?>? lastAnswer,
       Value<DateTime>? creationAt,
       Value<DateTime>? lastModificationAt,
       Value<int>? rowid}) {
-    return UncompletedFullyRandomTestsCompanion(
+    return SessionsCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
       currentQuestionCounter:
@@ -3576,8 +3486,6 @@ class UncompletedFullyRandomTestsCompanion
           lastCheckedAnswerResult ?? this.lastCheckedAnswerResult,
       shouldCheckAnAnswer: shouldCheckAnAnswer ?? this.shouldCheckAnAnswer,
       currentHintCounter: currentHintCounter ?? this.currentHintCounter,
-      wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
-      lastAnswer: lastAnswer ?? this.lastAnswer,
       creationAt: creationAt ?? this.creationAt,
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       rowid: rowid ?? this.rowid,
@@ -3619,12 +3527,6 @@ class UncompletedFullyRandomTestsCompanion
     if (currentHintCounter.present) {
       map['current_hint_counter'] = Variable<int>(currentHintCounter.value);
     }
-    if (wrongAnswerCounter.present) {
-      map['wrong_answer_counter'] = Variable<int>(wrongAnswerCounter.value);
-    }
-    if (lastAnswer.present) {
-      map['last_answer'] = Variable<String>(lastAnswer.value);
-    }
     if (creationAt.present) {
       map['creation_at'] = Variable<DateTime>(creationAt.value);
     }
@@ -3640,7 +3542,7 @@ class UncompletedFullyRandomTestsCompanion
 
   @override
   String toString() {
-    return (StringBuffer('UncompletedFullyRandomTestsCompanion(')
+    return (StringBuffer('SessionsCompanion(')
           ..write('id: $id, ')
           ..write('fieldListId: $fieldListId, ')
           ..write('currentQuestionCounter: $currentQuestionCounter, ')
@@ -3651,8 +3553,6 @@ class UncompletedFullyRandomTestsCompanion
           ..write('lastCheckedAnswerResult: $lastCheckedAnswerResult, ')
           ..write('shouldCheckAnAnswer: $shouldCheckAnAnswer, ')
           ..write('currentHintCounter: $currentHintCounter, ')
-          ..write('wrongAnswerCounter: $wrongAnswerCounter, ')
-          ..write('lastAnswer: $lastAnswer, ')
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
           ..write('rowid: $rowid')
@@ -3674,8 +3574,8 @@ class $SessionEntrysTable extends SessionEntrys
       'session_id', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES uncompleted_fully_random_tests (id)'));
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES sessions (id)'));
   static const VerificationMeta _entryIdMeta =
       const VerificationMeta('entryId');
   @override
@@ -3859,8 +3759,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FieldListsTable fieldLists = $FieldListsTable(this);
   late final $FieldsTable fields = $FieldsTable(this);
   late final $NotesTable notes = $NotesTable(this);
-  late final $UncompletedFullyRandomTestsTable uncompletedFullyRandomTests =
-      $UncompletedFullyRandomTestsTable(this);
+  late final $SessionsTable sessions = $SessionsTable(this);
   late final $SessionEntrysTable sessionEntrys = $SessionEntrysTable(this);
   late final EntryTextsDao entryTextsDao = EntryTextsDao(this as AppDatabase);
   late final QuestionsDao questionsDao = QuestionsDao(this as AppDatabase);
@@ -3868,8 +3767,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final FieldListsDao fieldListsDao = FieldListsDao(this as AppDatabase);
   late final FieldsDao fieldsDao = FieldsDao(this as AppDatabase);
   late final NotesDao notesDao = NotesDao(this as AppDatabase);
-  late final UncompletedFullyRandomTestsDao uncompletedFullyRandomTestsDao =
-      UncompletedFullyRandomTestsDao(this as AppDatabase);
+  late final SessionsDao sessionsDao = SessionsDao(this as AppDatabase);
   late final SessionEntrysDao sessionEntrysDao =
       SessionEntrysDao(this as AppDatabase);
   @override
@@ -3883,7 +3781,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         fieldLists,
         fields,
         notes,
-        uncompletedFullyRandomTests,
+        sessions,
         sessionEntrys
       ];
   @override
