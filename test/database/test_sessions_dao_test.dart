@@ -111,5 +111,26 @@ void main() {
               e is SqliteException &&
               e.message.contains("wrong_answer_counter"))));
     });
+
+    test("Invalid Session: lastAnswer is empty", () async {
+      var testSession = TestSession(
+          sessionId: sessionId,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: "");
+      expect(() async {
+        await testSessionsDao.create(testSession.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("last_answer"))));
+      testSession = TestSession(
+          sessionId: sessionId,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: " ");
+      expect(() async {
+        await testSessionsDao.create(testSession.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("last_answer"))));
+    });
   });
 }
