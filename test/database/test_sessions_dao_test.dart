@@ -13,6 +13,7 @@ void main() {
   final sessionId = Uuid().v4();
   String fieldListId = Uuid().v4();
   int currentQuestionCounter = 5;
+  int wrongAnswerCounter = 1;
   int triesNumber = 3;
   int triesCounter = 1;
   int elapsedTime = 6000;
@@ -49,7 +50,8 @@ void main() {
 
   group("Create a TestSession", () {
     test("Invalid TestSession: sessionId is an invalid UUID v4", () {
-      final testSession = TestSession(sessionId: "wefbhwe");
+      final testSession = TestSession(
+          sessionId: "wefbhwe", wrongAnswerCounter: wrongAnswerCounter);
       expect(() async {
         await testSessionsDao.create(testSession.toCompanion(true));
       },
@@ -58,7 +60,8 @@ void main() {
     });
 
     test("Invalid TestSession: sessionId doesn't exist in sessions table", () {
-      final testSession = TestSession(sessionId: const Uuid().v4());
+      final testSession = TestSession(
+          sessionId: const Uuid().v4(), wrongAnswerCounter: wrongAnswerCounter);
       expect(() async {
         await testSessionsDao.create(testSession.toCompanion(true));
       },
@@ -69,14 +72,44 @@ void main() {
     test(
         "Invalid TestSession: No more than one TestSession with the same sessionId",
         () async {
-      final testSession1 = TestSession(sessionId: sessionId);
-      final testSession2 = TestSession(sessionId: sessionId);
+      final testSession1 = TestSession(
+          sessionId: sessionId, wrongAnswerCounter: wrongAnswerCounter);
+      final testSession2 = TestSession(
+          sessionId: sessionId, wrongAnswerCounter: wrongAnswerCounter);
       await testSessionsDao.create(testSession1.toCompanion(true));
       expect(() async {
         await testSessionsDao.create(testSession2.toCompanion(true));
       },
           throwsA(predicate((e) =>
               e is SqliteException && e.message.contains("session_id"))));
+    });
+
+    test(
+        "Invalid Session: wrongAnswerCounter is smaller than ${TestSessions.MINIMUM_WRONG_ANSWER_COUNTER}",
+        () {
+      final testSession = TestSession(
+          sessionId: sessionId,
+          wrongAnswerCounter: TestSessions.MINIMUM_WRONG_ANSWER_COUNTER - 1);
+      expect(() async {
+        await testSessionsDao.create(testSession.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("wrong_answer_counter"))));
+    });
+
+    test(
+        "Invalid Session: wrongAnswerCounter is bigger than ${TestSessions.MAXIMUM_WRONG_ANSWER_COUNTER}",
+        () {
+      final testSession = TestSession(
+          sessionId: sessionId,
+          wrongAnswerCounter: TestSessions.MAXIMUM_WRONG_ANSWER_COUNTER + 1);
+      expect(() async {
+        await testSessionsDao.create(testSession.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("wrong_answer_counter"))));
     });
   });
 }

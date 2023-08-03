@@ -3766,8 +3766,20 @@ class $TestSessionsTable extends TestSessions
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES sessions (id)'));
+  static const VerificationMeta _wrongAnswerCounterMeta =
+      const VerificationMeta('wrongAnswerCounter');
   @override
-  List<GeneratedColumn> get $columns => [sessionId];
+  late final GeneratedColumn<int> wrongAnswerCounter = GeneratedColumn<int>(
+      'wrong_answer_counter', aliasedName, false,
+      check: () =>
+          wrongAnswerCounter
+              .isBiggerOrEqualValue(TestSessions.MINIMUM_WRONG_ANSWER_COUNTER) &
+          wrongAnswerCounter
+              .isSmallerOrEqualValue(TestSessions.MAXIMUM_WRONG_ANSWER_COUNTER),
+      type: DriftSqlType.int,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [sessionId, wrongAnswerCounter];
   @override
   String get aliasedName => _alias ?? 'test_sessions';
   @override
@@ -3783,6 +3795,14 @@ class $TestSessionsTable extends TestSessions
     } else if (isInserting) {
       context.missing(_sessionIdMeta);
     }
+    if (data.containsKey('wrong_answer_counter')) {
+      context.handle(
+          _wrongAnswerCounterMeta,
+          wrongAnswerCounter.isAcceptableOrUnknown(
+              data['wrong_answer_counter']!, _wrongAnswerCounterMeta));
+    } else if (isInserting) {
+      context.missing(_wrongAnswerCounterMeta);
+    }
     return context;
   }
 
@@ -3794,6 +3814,8 @@ class $TestSessionsTable extends TestSessions
     return TestSession(
       sessionId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}session_id'])!,
+      wrongAnswerCounter: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}wrong_answer_counter'])!,
     );
   }
 
@@ -3805,17 +3827,21 @@ class $TestSessionsTable extends TestSessions
 
 class TestSession extends DataClass implements Insertable<TestSession> {
   final String sessionId;
-  const TestSession({required this.sessionId});
+  final int wrongAnswerCounter;
+  const TestSession(
+      {required this.sessionId, required this.wrongAnswerCounter});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['session_id'] = Variable<String>(sessionId);
+    map['wrong_answer_counter'] = Variable<int>(wrongAnswerCounter);
     return map;
   }
 
   TestSessionsCompanion toCompanion(bool nullToAbsent) {
     return TestSessionsCompanion(
       sessionId: Value(sessionId),
+      wrongAnswerCounter: Value(wrongAnswerCounter),
     );
   }
 
@@ -3824,6 +3850,7 @@ class TestSession extends DataClass implements Insertable<TestSession> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TestSession(
       sessionId: serializer.fromJson<String>(json['sessionId']),
+      wrongAnswerCounter: serializer.fromJson<int>(json['wrongAnswerCounter']),
     );
   }
   @override
@@ -3831,53 +3858,69 @@ class TestSession extends DataClass implements Insertable<TestSession> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'sessionId': serializer.toJson<String>(sessionId),
+      'wrongAnswerCounter': serializer.toJson<int>(wrongAnswerCounter),
     };
   }
 
-  TestSession copyWith({String? sessionId}) => TestSession(
+  TestSession copyWith({String? sessionId, int? wrongAnswerCounter}) =>
+      TestSession(
         sessionId: sessionId ?? this.sessionId,
+        wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
       );
   @override
   String toString() {
     return (StringBuffer('TestSession(')
-          ..write('sessionId: $sessionId')
+          ..write('sessionId: $sessionId, ')
+          ..write('wrongAnswerCounter: $wrongAnswerCounter')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => sessionId.hashCode;
+  int get hashCode => Object.hash(sessionId, wrongAnswerCounter);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is TestSession && other.sessionId == this.sessionId);
+      (other is TestSession &&
+          other.sessionId == this.sessionId &&
+          other.wrongAnswerCounter == this.wrongAnswerCounter);
 }
 
 class TestSessionsCompanion extends UpdateCompanion<TestSession> {
   final Value<String> sessionId;
+  final Value<int> wrongAnswerCounter;
   final Value<int> rowid;
   const TestSessionsCompanion({
     this.sessionId = const Value.absent(),
+    this.wrongAnswerCounter = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TestSessionsCompanion.insert({
     required String sessionId,
+    required int wrongAnswerCounter,
     this.rowid = const Value.absent(),
-  }) : sessionId = Value(sessionId);
+  })  : sessionId = Value(sessionId),
+        wrongAnswerCounter = Value(wrongAnswerCounter);
   static Insertable<TestSession> custom({
     Expression<String>? sessionId,
+    Expression<int>? wrongAnswerCounter,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (sessionId != null) 'session_id': sessionId,
+      if (wrongAnswerCounter != null)
+        'wrong_answer_counter': wrongAnswerCounter,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   TestSessionsCompanion copyWith(
-      {Value<String>? sessionId, Value<int>? rowid}) {
+      {Value<String>? sessionId,
+      Value<int>? wrongAnswerCounter,
+      Value<int>? rowid}) {
     return TestSessionsCompanion(
       sessionId: sessionId ?? this.sessionId,
+      wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -3887,6 +3930,9 @@ class TestSessionsCompanion extends UpdateCompanion<TestSession> {
     final map = <String, Expression>{};
     if (sessionId.present) {
       map['session_id'] = Variable<String>(sessionId.value);
+    }
+    if (wrongAnswerCounter.present) {
+      map['wrong_answer_counter'] = Variable<int>(wrongAnswerCounter.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -3898,6 +3944,7 @@ class TestSessionsCompanion extends UpdateCompanion<TestSession> {
   String toString() {
     return (StringBuffer('TestSessionsCompanion(')
           ..write('sessionId: $sessionId, ')
+          ..write('wrongAnswerCounter: $wrongAnswerCounter, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

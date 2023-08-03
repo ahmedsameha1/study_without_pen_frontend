@@ -225,8 +225,6 @@ class Sessions extends Table {
   static const int MINIMUM_ELAPSED_TIME = 1; // in milliseconds
   static const int MINIMUM_CURRENT_HINT_COUNTER = 0;
   static const int MAXIMUM_CURRENT_HINT_COUNTER = 0xff;
-  static const int MINIMUM_WRONG_ANSWER_COUNTER = 0;
-  static const int MAXIMUM_WRONG_ANSWER_COUNTER = 0xffffffff;
   static const int MINIMUM_LAST_ANSWER = 1;
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
@@ -254,11 +252,6 @@ class Sessions extends Table {
           currentHintCounter
               .isSmallerOrEqualValue(Sessions.MAXIMUM_CURRENT_HINT_COUNTER))();
   /*
-  IntColumn get wrongAnswerCounter => integer().withDefault(Constant(0)).check(
-      wrongAnswerCounter.isBiggerOrEqualValue(
-              Sessions.MINIMUM_WRONG_ANSWER_COUNTER) &
-          wrongAnswerCounter.isSmallerOrEqualValue(
-              Sessions.MAXIMUM_WRONG_ANSWER_COUNTER))();
   TextColumn get lastAnswer => text().nullable().check(lastAnswer
       .trim()
       .length
@@ -281,7 +274,13 @@ class SessionEntrys extends Table {
 }
 
 class TestSessions extends Table {
+  static const int MINIMUM_WRONG_ANSWER_COUNTER = 0;
+  static const int MAXIMUM_WRONG_ANSWER_COUNTER = 0xffffffff;
   TextColumn get sessionId => text().references(Sessions, #id)();
+  IntColumn get wrongAnswerCounter => integer().check(wrongAnswerCounter
+          .isBiggerOrEqualValue(TestSessions.MINIMUM_WRONG_ANSWER_COUNTER) &
+      wrongAnswerCounter
+          .isSmallerOrEqualValue(TestSessions.MAXIMUM_WRONG_ANSWER_COUNTER))();
 
   @override
   Set<Column> get primaryKey => {sessionId};
