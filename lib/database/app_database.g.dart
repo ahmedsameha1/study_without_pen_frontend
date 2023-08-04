@@ -3777,7 +3777,8 @@ class $TestSessionsTable extends TestSessions
           wrongAnswerCounter
               .isSmallerOrEqualValue(TestSessions.MAXIMUM_WRONG_ANSWER_COUNTER),
       type: DriftSqlType.int,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false,
+      defaultValue: Constant(0));
   static const VerificationMeta _lastAnswerMeta =
       const VerificationMeta('lastAnswer');
   @override
@@ -3812,8 +3813,6 @@ class $TestSessionsTable extends TestSessions
           _wrongAnswerCounterMeta,
           wrongAnswerCounter.isAcceptableOrUnknown(
               data['wrong_answer_counter']!, _wrongAnswerCounterMeta));
-    } else if (isInserting) {
-      context.missing(_wrongAnswerCounterMeta);
     }
     if (data.containsKey('last_answer')) {
       context.handle(
@@ -3936,11 +3935,10 @@ class TestSessionsCompanion extends UpdateCompanion<TestSession> {
   });
   TestSessionsCompanion.insert({
     required String sessionId,
-    required int wrongAnswerCounter,
+    this.wrongAnswerCounter = const Value.absent(),
     this.lastAnswer = const Value.absent(),
     this.rowid = const Value.absent(),
-  })  : sessionId = Value(sessionId),
-        wrongAnswerCounter = Value(wrongAnswerCounter);
+  }) : sessionId = Value(sessionId);
   static Insertable<TestSession> custom({
     Expression<String>? sessionId,
     Expression<int>? wrongAnswerCounter,

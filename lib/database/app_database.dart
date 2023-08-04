@@ -272,10 +272,11 @@ class TestSessions extends Table {
   static const int MINIMUM_LAST_ANSWER = 1;
 
   TextColumn get sessionId => text().references(Sessions, #id)();
-  IntColumn get wrongAnswerCounter => integer().check(wrongAnswerCounter
-          .isBiggerOrEqualValue(TestSessions.MINIMUM_WRONG_ANSWER_COUNTER) &
-      wrongAnswerCounter
-          .isSmallerOrEqualValue(TestSessions.MAXIMUM_WRONG_ANSWER_COUNTER))();
+  IntColumn get wrongAnswerCounter =>
+      integer().withDefault(Constant(0)).check(wrongAnswerCounter
+              .isBiggerOrEqualValue(TestSessions.MINIMUM_WRONG_ANSWER_COUNTER) &
+          wrongAnswerCounter.isSmallerOrEqualValue(
+              TestSessions.MAXIMUM_WRONG_ANSWER_COUNTER))();
   TextColumn get lastAnswer => text().nullable().check(lastAnswer
       .trim()
       .length
