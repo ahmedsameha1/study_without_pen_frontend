@@ -81,6 +81,9 @@ class FullyRandomTestsDao {
     final sessionStream = (appDatabase.select(appDatabase.sessions)
           ..where((tbl) => tbl.id.equals(id)))
         .watchSingle();
+    final testSessionStream = (appDatabase.select(appDatabase.testSessions)
+          ..where((tbl) => tbl.sessionId.equals(id)))
+        .watchSingle();
     final sessionEntryStream = (appDatabase.select(appDatabase.sessionEntrys)
           ..where((tbl) => tbl.sessionId.equals(id)))
         .watch()
@@ -90,9 +93,10 @@ class FullyRandomTestsDao {
       }).toSet();
     });
 
-    return Rx.combineLatest2(sessionStream, sessionEntryStream,
-        (Session session, Set<String> entries) {
-      return FullyRandomTest(session, entries);
+    return Rx.combineLatest3(
+        sessionStream, testSessionStream, sessionEntryStream,
+        (Session session, TestSession testSession, Set<String> entries) {
+      return FullyRandomTest(session, testSession, entries);
     }).first;
   }
 }

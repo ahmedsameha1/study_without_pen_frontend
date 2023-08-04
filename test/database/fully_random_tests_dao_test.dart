@@ -341,6 +341,9 @@ void main() {
       expect(fullyRandomTest.session.currentHintCounter, currentHintCounter);
       expect(fullyRandomTest.session.creationAt, creationAt);
       expect(fullyRandomTest.session.lastModificationAt, lastModificationAt);
+      expect(
+          fullyRandomTest.testSession.wrongAnswerCounter, wrongAnswerCounter);
+      expect(fullyRandomTest.testSession.lastAnswer, lastAnswer);
       expect(fullyRandomTest.entries, {id1, id2});
     });
   });
