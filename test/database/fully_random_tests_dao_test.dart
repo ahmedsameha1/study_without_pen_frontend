@@ -24,7 +24,7 @@ void main() {
   bool lastCheckedAnswerResult = true;
   bool shouldCheckAnAnswer = true;
   int currentHintCounter = 0;
-  int wrongAnswerCounter = 3;
+  int wrongAnswerCounter = 1;
   String lastAnswer = "wefw";
   DateTime creationAt = DateTime.utc(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
@@ -65,6 +65,82 @@ void main() {
               (e) => e is InvalidDataException && e.message.contains("id"))));
     });
 
+    test("Invalid FullyRandomTest: invalid TestSession", () {
+      expect(() async {
+        await fullyRandomTestsDao.create(
+            questionsNumber: questionsNumber,
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: -1,
+            lastAnswer: lastAnswer,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            seed: 1);
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException &&
+              e.message.contains("wrong_answer_counter"))));
+    });
+
+    test(
+        "Invalid FullyRandomTest: wrongAnswerCounter is bigger than or equal questionsNumber",
+        () {
+      expect(() async {
+        await fullyRandomTestsDao.create(
+            questionsNumber: questionsNumber,
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: 2,
+            lastAnswer: lastAnswer,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            seed: 1);
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains(
+                  "wrongAnswerCounter is bigger than or equal questionsNumber"))));
+
+      expect(() async {
+        await fullyRandomTestsDao.create(
+            questionsNumber: questionsNumber,
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            wrongAnswerCounter: 3,
+            lastAnswer: lastAnswer,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            seed: 1);
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message.contains(
+                  "wrongAnswerCounter is bigger than or equal questionsNumber"))));
+    });
     test(
         "Invalid FullyRandomTest: questionsNumber is less than ${FullyRandomTestsDao.MINIMUM_QUESTIONS_NUMBER}",
         () {

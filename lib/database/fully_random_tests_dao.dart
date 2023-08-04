@@ -8,6 +8,7 @@ import 'package:study_without_pen_by_flutter/database/fully_random_test.dart';
 import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 
 import 'session_entrys_dao.dart';
+import 'test_sessions_dao.dart';
 
 class FullyRandomTestsDao {
   static const int MINIMUM_QUESTIONS_NUMBER = 1;
@@ -33,8 +34,13 @@ class FullyRandomTestsDao {
     return appDatabase.transaction(() async {
       EntrysDao entrysDao = EntrysDao(appDatabase);
       SessionEntrysDao sessionEntrysDao = SessionEntrysDao(appDatabase);
+      TestSessionsDao testSessionsDao = TestSessionsDao(appDatabase);
       if (questionsNumber < MINIMUM_QUESTIONS_NUMBER) {
         throw InvalidDataException("questionsNumber");
+      }
+      if (questionsNumber <= wrongAnswerCounter) {
+        throw InvalidDataException(
+            "wrongAnswerCounter is bigger than or equal questionsNumber");
       }
       SessionsDao sessionsDao = SessionsDao(appDatabase);
       var session = Session(
@@ -51,6 +57,11 @@ class FullyRandomTestsDao {
           creationAt: creationAt,
           lastModificationAt: lastModificationAt);
       await sessionsDao.create(session.toCompanion(true));
+      final testSession = TestSession(
+          sessionId: id,
+          wrongAnswerCounter: wrongAnswerCounter,
+          lastAnswer: lastAnswer);
+      await testSessionsDao.create(testSession.toCompanion(true));
       final entries = await entrysDao.getByFieldListId(fieldListId);
       if (entries.length < questionsNumber) {
         throw InvalidDataException(
