@@ -3,12 +3,16 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
+import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
   late AppDatabase appDatabase;
   late EntrysDao entrysDao;
+  late QuestionsDao questionsDao;
+  late EntryTextsDao entryTextsDao;
   String id = const Uuid().v4();
   String fieldListId = const Uuid().v4();
   String answerId = const Uuid().v4();
@@ -24,6 +28,8 @@ void main() {
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     entrysDao = EntrysDao(appDatabase);
+    questionsDao = QuestionsDao(appDatabase);
+    entryTextsDao = EntryTextsDao(appDatabase);
   });
 
   tearDown(() async {
@@ -1135,5 +1141,39 @@ void main() {
     await entrysDao.remove(entry.id);
     var gottenEntry = await entrysDao.getById(id);
     expect(gottenEntry, null);
+  });
+
+  group("Get hints", () {
+    test("no hints", () async {
+      final questionEntryTextId = const Uuid().v4();
+      final answerEntryTextId = const Uuid().v4();
+      EntryText questionEntryText =
+          EntryText(id: questionEntryTextId, value: "hello");
+      EntryText answerEntryText = EntryText(id: answerEntryTextId, value: "hi");
+      Question question = Question(
+          id: questionId,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: questionEntryTextId);
+      entryTextsDao.create(questionEntryText.toCompanion(true));
+      entryTextsDao.create(answerEntryText.toCompanion(true));
+      questionsDao.create(question.toCompanion(true));
+      final entry = Entry(
+          id: id,
+          questionId: question.id,
+          answerId: answerEntryText.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      entrysDao.create(entry.toCompanion(true));
+      Stream<List<String>?> hintsStream = entrysDao.getHintsByEntryId(id);
+      List<String>? hints = await hintsStream.single;
+      expect(hints, null);
+    });
   });
 }

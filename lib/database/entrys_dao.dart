@@ -53,8 +53,8 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
           ..orderBy([
             ((tbl) =>
                 OrderingTerm(expression: tbl.order, mode: OrderingMode.asc)),
-            ((tbl) =>
-                OrderingTerm(expression: tbl.creationAt, mode: OrderingMode.desc)),
+            ((tbl) => OrderingTerm(
+                expression: tbl.creationAt, mode: OrderingMode.desc)),
           ]))
         .get();
   }
@@ -90,6 +90,10 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
 
   remove(String id) {
     return (delete(entrys)..where((tbl) => tbl.id.equals(id))).go();
+  }
+
+  Stream<List<String>?> getHintsByEntryId(String entryId) {
+    return Stream.value(null);
   }
 }
 
