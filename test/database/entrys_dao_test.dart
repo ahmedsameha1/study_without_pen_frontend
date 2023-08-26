@@ -1171,9 +1171,117 @@ void main() {
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
       entrysDao.create(entry.toCompanion(true));
-      Stream<List<String>?> hintsStream = entrysDao.getHintsByEntryId(id);
-      List<String>? hints = await hintsStream.single;
+      Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(id);
+      List<String>? hints = await hintsFuture;
       expect(hints, null);
+    });
+
+    test("one hint for lenght of the answer", () async {
+      final entryId1 = const Uuid().v4();
+      final entryId2 = const Uuid().v4();
+      final questionEntryTextId = const Uuid().v4();
+      final answerEntryTextId1 = const Uuid().v4();
+      final answerEntryTextId2 = const Uuid().v4();
+      EntryText questionEntryText =
+          EntryText(id: questionEntryTextId, value: "hello");
+      EntryText answerEntryText1 =
+          EntryText(id: answerEntryTextId1, value: "b" * 65);
+      EntryText answerEntryText2 =
+          EntryText(id: answerEntryTextId2, value: "b" * 100);
+      Question question = Question(
+          id: questionId,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: questionEntryTextId);
+      entryTextsDao.create(questionEntryText.toCompanion(true));
+      entryTextsDao.create(answerEntryText1.toCompanion(true));
+      entryTextsDao.create(answerEntryText2.toCompanion(true));
+      questionsDao.create(question.toCompanion(true));
+      final entry1 = Entry(
+          id: entryId1,
+          questionId: question.id,
+          answerId: answerEntryText1.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry2 = Entry(
+          id: entryId2,
+          questionId: question.id,
+          answerId: answerEntryText2.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      entrysDao.create(entry1.toCompanion(true));
+      entrysDao.create(entry2.toCompanion(true));
+      Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
+      List<String>? hints = await hintsFuture;
+      expect(hints!.length, 1);
+      expect(hints[0], "length: 65");
+    });
+
+    test("one hint for lenght of the answer /2", () async {
+      final entryId1 = const Uuid().v4();
+      final entryId2 = const Uuid().v4();
+      final questionEntryTextId = const Uuid().v4();
+      final answerEntryTextId1 = const Uuid().v4();
+      final answerEntryTextId2 = const Uuid().v4();
+      EntryText questionEntryText =
+          EntryText(id: questionEntryTextId, value: "hello");
+      EntryText answerEntryText1 =
+          EntryText(id: answerEntryTextId1, value: "b" * 65);
+      EntryText answerEntryText2 =
+          EntryText(id: answerEntryTextId2, value: "b" * 100);
+      Question question = Question(
+          id: questionId,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: questionEntryTextId);
+      entryTextsDao.create(questionEntryText.toCompanion(true));
+      entryTextsDao.create(answerEntryText1.toCompanion(true));
+      entryTextsDao.create(answerEntryText2.toCompanion(true));
+      questionsDao.create(question.toCompanion(true));
+      final entry1 = Entry(
+          id: entryId1,
+          questionId: question.id,
+          answerId: answerEntryText1.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry2 = Entry(
+          id: entryId2,
+          questionId: question.id,
+          answerId: answerEntryText2.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      entrysDao.create(entry1.toCompanion(true));
+      entrysDao.create(entry2.toCompanion(true));
+      Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId2);
+      List<String>? hints = await hintsFuture;
+      expect(hints!.length, 1);
+      expect(hints[0], "length: 100");
     });
   });
 }

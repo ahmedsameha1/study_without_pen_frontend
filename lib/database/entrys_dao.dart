@@ -92,8 +92,31 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     return (delete(entrys)..where((tbl) => tbl.id.equals(id))).go();
   }
 
-  Stream<List<String>?> getHintsByEntryId(String entryId) {
-    return Stream.value(null);
+  Future<List<String>?> getHintsByEntryId(String entryId) async {
+    final otherEntrys = alias(entrys, "otherEntrys");
+    final query = select(entrys).join([
+      innerJoin(
+          otherEntrys, otherEntrys.questionId.equalsExp(entrys.questionId)),
+      innerJoin(attachedDatabase.entryTexts,
+          attachedDatabase.entryTexts.id.equalsExp(otherEntrys.answerId))
+    ])
+      ..where(entrys.id.equals(entryId));
+    final result = await query.get();
+    if (result.length == 1) {
+      return Future.value(null);
+    }
+    var thisAnswer;
+    var otherAnswers = [];
+
+    result.forEach((row) {
+      if (row.readTable(otherEntrys).id == entryId) {
+        thisAnswer = row.readTable(attachedDatabase.entryTexts).value;
+      } else {
+        otherAnswers.add(row.readTable(attachedDatabase.entryTexts).value);
+      }
+    });
+    final hints = ["length: ${thisAnswer.length}"];
+    return hints;
   }
 }
 
