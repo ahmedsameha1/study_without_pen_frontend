@@ -107,7 +107,6 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     }
     var thisAnswer;
     var otherAnswers = [];
-
     result.forEach((row) {
       if (row.readTable(otherEntrys).id == entryId) {
         thisAnswer = row.readTable(attachedDatabase.entryTexts).value;
@@ -115,7 +114,54 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
         otherAnswers.add(row.readTable(attachedDatabase.entryTexts).value);
       }
     });
-    final hints = ["length: ${thisAnswer.length}"];
+    final hints = ["Length: ${thisAnswer.length}"];
+    final thisAnswerLength = thisAnswer.length;
+    final otherLengthAnswers = [];
+    final sameLengthAnswers = [];
+    for (var other in otherAnswers) {
+      final otherLength = other.length;
+      if (thisAnswerLength == otherLength) {
+        sameLengthAnswers.add(other);
+      } else {
+        otherLengthAnswers.add(other);
+      }
+    }
+    if (otherLengthAnswers.length == otherAnswers.length) {
+      return hints;
+    } else {
+      final diffsWithSameLength = <int>[];
+      for (var i = 0; i < thisAnswerLength; i++) {
+        diffsWithSameLength.add(0);
+        final thisLetter = thisAnswer[i];
+        for (var k in sameLengthAnswers) {
+          if (k.length > i) {
+            if (thisLetter != k[i]) {
+              diffsWithSameLength[i]++;
+            }
+          } else {
+            diffsWithSameLength[i]++;
+          }
+        }
+      }
+      print(diffsWithSameLength);
+      var accumelate = 0;
+      outerloop:
+      for (var k = sameLengthAnswers.length; k > 0; k--) {
+        var alldiff = diffsWithSameLength.indexOf(k);
+        if (alldiff == -1) {
+          continue;
+        } else {
+          do {
+            hints.add("Letter: ${alldiff + 1} is '${thisAnswer[alldiff]}'");
+            accumelate += k;
+            if (accumelate >= sameLengthAnswers.length) {
+              break outerloop;
+            }
+            alldiff = diffsWithSameLength.indexOf(k, alldiff + 1);
+          } while (alldiff != -1);
+        }
+      }
+    }
     return hints;
   }
 }

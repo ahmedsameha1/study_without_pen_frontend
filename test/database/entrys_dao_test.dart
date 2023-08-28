@@ -1185,7 +1185,7 @@ void main() {
       EntryText questionEntryText =
           EntryText(id: questionEntryTextId, value: "hello");
       EntryText answerEntryText1 =
-          EntryText(id: answerEntryTextId1, value: "b" * 65);
+          EntryText(id: answerEntryTextId1, value: "b" * 80);
       EntryText answerEntryText2 =
           EntryText(id: answerEntryTextId2, value: "b" * 100);
       Question question = Question(
@@ -1227,21 +1227,25 @@ void main() {
       Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
       List<String>? hints = await hintsFuture;
       expect(hints!.length, 1);
-      expect(hints[0], "length: 65");
+      expect(hints[0], "Length: 80");
     });
 
-    test("one hint for lenght of the answer /2", () async {
+    test("two hints, one for lenght of the answer", () async {
       final entryId1 = const Uuid().v4();
       final entryId2 = const Uuid().v4();
+      final entryId3 = const Uuid().v4();
       final questionEntryTextId = const Uuid().v4();
       final answerEntryTextId1 = const Uuid().v4();
       final answerEntryTextId2 = const Uuid().v4();
+      final answerEntryTextId3 = const Uuid().v4();
       EntryText questionEntryText =
           EntryText(id: questionEntryTextId, value: "hello");
       EntryText answerEntryText1 =
-          EntryText(id: answerEntryTextId1, value: "b" * 65);
+          EntryText(id: answerEntryTextId1, value: "b" * 80);
       EntryText answerEntryText2 =
           EntryText(id: answerEntryTextId2, value: "b" * 100);
+      EntryText answerEntryText3 =
+          EntryText(id: answerEntryTextId3, value: ("b" * 79) + "h");
       Question question = Question(
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
@@ -1249,6 +1253,7 @@ void main() {
       entryTextsDao.create(questionEntryText.toCompanion(true));
       entryTextsDao.create(answerEntryText1.toCompanion(true));
       entryTextsDao.create(answerEntryText2.toCompanion(true));
+      entryTextsDao.create(answerEntryText3.toCompanion(true));
       questionsDao.create(question.toCompanion(true));
       final entry1 = Entry(
           id: entryId1,
@@ -1276,12 +1281,440 @@ void main() {
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry3 = Entry(
+          id: entryId3,
+          questionId: question.id,
+          answerId: answerEntryText3.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
       entrysDao.create(entry1.toCompanion(true));
       entrysDao.create(entry2.toCompanion(true));
-      Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId2);
+      entrysDao.create(entry3.toCompanion(true));
+      Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
       List<String>? hints = await hintsFuture;
-      expect(hints!.length, 1);
-      expect(hints[0], "length: 100");
+      expect(hints!.length, 2);
+      expect(hints[0], "Length: 80");
+      expect(hints[1], "Letter: 80 is 'b'");
+    });
+
+    test("two hints, one for lenght of the answer /2", () async {
+      final entryId1 = const Uuid().v4();
+      final entryId2 = const Uuid().v4();
+      final entryId3 = const Uuid().v4();
+      final questionEntryTextId = const Uuid().v4();
+      final answerEntryTextId1 = const Uuid().v4();
+      final answerEntryTextId2 = const Uuid().v4();
+      final answerEntryTextId3 = const Uuid().v4();
+      EntryText questionEntryText =
+          EntryText(id: questionEntryTextId, value: "hello");
+      EntryText answerEntryText1 =
+          EntryText(id: answerEntryTextId1, value: "b" * 80);
+      EntryText answerEntryText2 =
+          EntryText(id: answerEntryTextId2, value: "b" * 100);
+      EntryText answerEntryText3 =
+          EntryText(id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 29) + "h");
+      Question question = Question(
+          id: questionId,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: questionEntryTextId);
+      entryTextsDao.create(questionEntryText.toCompanion(true));
+      entryTextsDao.create(answerEntryText1.toCompanion(true));
+      entryTextsDao.create(answerEntryText2.toCompanion(true));
+      entryTextsDao.create(answerEntryText3.toCompanion(true));
+      questionsDao.create(question.toCompanion(true));
+      final entry1 = Entry(
+          id: entryId1,
+          questionId: question.id,
+          answerId: answerEntryText1.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry2 = Entry(
+          id: entryId2,
+          questionId: question.id,
+          answerId: answerEntryText2.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry3 = Entry(
+          id: entryId3,
+          questionId: question.id,
+          answerId: answerEntryText3.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      entrysDao.create(entry1.toCompanion(true));
+      entrysDao.create(entry2.toCompanion(true));
+      entrysDao.create(entry3.toCompanion(true));
+      Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
+      List<String>? hints = await hintsFuture;
+      expect(hints!.length, 2);
+      expect(hints[0], "Length: 80");
+      expect(hints[1], "Letter: 50 is 'b'");
+    });
+
+    test("two hints, one for lenght of the answer /3", () async {
+      final entryId1 = const Uuid().v4();
+      final entryId2 = const Uuid().v4();
+      final entryId3 = const Uuid().v4();
+      final entryId4 = const Uuid().v4();
+      final questionEntryTextId = const Uuid().v4();
+      final answerEntryTextId1 = const Uuid().v4();
+      final answerEntryTextId2 = const Uuid().v4();
+      final answerEntryTextId3 = const Uuid().v4();
+      final answerEntryTextId4 = const Uuid().v4();
+      EntryText questionEntryText =
+          EntryText(id: questionEntryTextId, value: "hello");
+      EntryText answerEntryText1 =
+          EntryText(id: answerEntryTextId1, value: "b" * 80);
+      EntryText answerEntryText2 =
+          EntryText(id: answerEntryTextId2, value: "b" * 100);
+      EntryText answerEntryText3 =
+          EntryText(id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 30));
+      EntryText answerEntryText4 =
+          EntryText(id: answerEntryTextId4, value: ("b" * 50) + ("b" * 29) + "h");
+      Question question = Question(
+          id: questionId,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: questionEntryTextId);
+      entryTextsDao.create(questionEntryText.toCompanion(true));
+      entryTextsDao.create(answerEntryText1.toCompanion(true));
+      entryTextsDao.create(answerEntryText2.toCompanion(true));
+      entryTextsDao.create(answerEntryText3.toCompanion(true));
+      entryTextsDao.create(answerEntryText4.toCompanion(true));
+      questionsDao.create(question.toCompanion(true));
+      final entry1 = Entry(
+          id: entryId1,
+          questionId: question.id,
+          answerId: answerEntryText1.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry2 = Entry(
+          id: entryId2,
+          questionId: question.id,
+          answerId: answerEntryText2.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry3 = Entry(
+          id: entryId3,
+          questionId: question.id,
+          answerId: answerEntryText3.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry4 = Entry(
+          id: entryId4,
+          questionId: question.id,
+          answerId: answerEntryText4.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      entrysDao.create(entry1.toCompanion(true));
+      entrysDao.create(entry2.toCompanion(true));
+      entrysDao.create(entry3.toCompanion(true));
+      entrysDao.create(entry4.toCompanion(true));
+      Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
+      List<String>? hints = await hintsFuture;
+      expect(hints!.length, 3);
+      expect(hints[0], "Length: 80");
+      expect(hints[1], "Letter: 50 is 'b'");
+      expect(hints[2], "Letter: 80 is 'b'");
+    });
+
+    test("two hints, one for lenght of the answer /4", () async {
+      final entryId1 = const Uuid().v4();
+      final entryId2 = const Uuid().v4();
+      final entryId3 = const Uuid().v4();
+      final entryId4 = const Uuid().v4();
+      final entryId5 = const Uuid().v4();
+      final questionEntryTextId = const Uuid().v4();
+      final answerEntryTextId1 = const Uuid().v4();
+      final answerEntryTextId2 = const Uuid().v4();
+      final answerEntryTextId3 = const Uuid().v4();
+      final answerEntryTextId4 = const Uuid().v4();
+      final answerEntryTextId5 = const Uuid().v4();
+      EntryText questionEntryText =
+          EntryText(id: questionEntryTextId, value: "hello");
+      EntryText answerEntryText1 =
+          EntryText(id: answerEntryTextId1, value: "b" * 80);
+      EntryText answerEntryText2 =
+          EntryText(id: answerEntryTextId2, value: "b" * 100);
+      EntryText answerEntryText3 =
+          EntryText(id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 30));
+      EntryText answerEntryText4 =
+          EntryText(id: answerEntryTextId4, value: ("b" * 49) + "h" + ("b" * 29) + "h");
+      EntryText answerEntryText5 =
+          EntryText(id: answerEntryTextId5, value: ("b" * 50) + ("b" * 29) + "h");
+      Question question = Question(
+          id: questionId,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: questionEntryTextId);
+      entryTextsDao.create(questionEntryText.toCompanion(true));
+      entryTextsDao.create(answerEntryText1.toCompanion(true));
+      entryTextsDao.create(answerEntryText2.toCompanion(true));
+      entryTextsDao.create(answerEntryText3.toCompanion(true));
+      entryTextsDao.create(answerEntryText4.toCompanion(true));
+      entryTextsDao.create(answerEntryText5.toCompanion(true));
+      questionsDao.create(question.toCompanion(true));
+      final entry1 = Entry(
+          id: entryId1,
+          questionId: question.id,
+          answerId: answerEntryText1.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry2 = Entry(
+          id: entryId2,
+          questionId: question.id,
+          answerId: answerEntryText2.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry3 = Entry(
+          id: entryId3,
+          questionId: question.id,
+          answerId: answerEntryText3.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry4 = Entry(
+          id: entryId4,
+          questionId: question.id,
+          answerId: answerEntryText4.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry5 = Entry(
+          id: entryId5,
+          questionId: question.id,
+          answerId: answerEntryText5.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      entrysDao.create(entry1.toCompanion(true));
+      entrysDao.create(entry2.toCompanion(true));
+      entrysDao.create(entry3.toCompanion(true));
+      entrysDao.create(entry4.toCompanion(true));
+      entrysDao.create(entry5.toCompanion(true));
+      Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
+      List<String>? hints = await hintsFuture;
+      expect(hints!.length, 3);
+      expect(hints[0], "Length: 80");
+      expect(hints[1], "Letter: 50 is 'b'");
+      expect(hints[2], "Letter: 80 is 'b'");
+    });
+
+    test("two hints, one for lenght of the answer /5", () async {
+      final entryId1 = const Uuid().v4();
+      final entryId2 = const Uuid().v4();
+      final entryId3 = const Uuid().v4();
+      final entryId4 = const Uuid().v4();
+      final entryId5 = const Uuid().v4();
+      final entryId6 = const Uuid().v4();
+      final questionEntryTextId = const Uuid().v4();
+      final answerEntryTextId1 = const Uuid().v4();
+      final answerEntryTextId2 = const Uuid().v4();
+      final answerEntryTextId3 = const Uuid().v4();
+      final answerEntryTextId4 = const Uuid().v4();
+      final answerEntryTextId5 = const Uuid().v4();
+      final answerEntryTextId6 = const Uuid().v4();
+      EntryText questionEntryText =
+          EntryText(id: questionEntryTextId, value: "hello");
+      EntryText answerEntryText1 =
+          EntryText(id: answerEntryTextId1, value: "b" * 80);
+      EntryText answerEntryText2 =
+          EntryText(id: answerEntryTextId2, value: "b" * 100);
+      EntryText answerEntryText3 =
+          EntryText(id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 30));
+      EntryText answerEntryText4 =
+          EntryText(id: answerEntryTextId4, value: ("b" * 49) + "h" + ("b" * 29) + "h");
+      EntryText answerEntryText5 =
+          EntryText(id: answerEntryTextId5, value: ("b" * 50) + ("b" * 29) + "h");
+      EntryText answerEntryText6 =
+          EntryText(id: answerEntryTextId6, value: "n" + ("b" * 79));
+      Question question = Question(
+          id: questionId,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: questionEntryTextId);
+      entryTextsDao.create(questionEntryText.toCompanion(true));
+      entryTextsDao.create(answerEntryText1.toCompanion(true));
+      entryTextsDao.create(answerEntryText2.toCompanion(true));
+      entryTextsDao.create(answerEntryText3.toCompanion(true));
+      entryTextsDao.create(answerEntryText4.toCompanion(true));
+      entryTextsDao.create(answerEntryText5.toCompanion(true));
+      entryTextsDao.create(answerEntryText6.toCompanion(true));
+      questionsDao.create(question.toCompanion(true));
+      final entry1 = Entry(
+          id: entryId1,
+          questionId: question.id,
+          answerId: answerEntryText1.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry2 = Entry(
+          id: entryId2,
+          questionId: question.id,
+          answerId: answerEntryText2.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry3 = Entry(
+          id: entryId3,
+          questionId: question.id,
+          answerId: answerEntryText3.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry4 = Entry(
+          id: entryId4,
+          questionId: question.id,
+          answerId: answerEntryText4.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry5 = Entry(
+          id: entryId5,
+          questionId: question.id,
+          answerId: answerEntryText5.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      final entry6 = Entry(
+          id: entryId6,
+          questionId: question.id,
+          answerId: answerEntryText6.id,
+          fieldListId: fieldListId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      entrysDao.create(entry1.toCompanion(true));
+      entrysDao.create(entry2.toCompanion(true));
+      entrysDao.create(entry3.toCompanion(true));
+      entrysDao.create(entry4.toCompanion(true));
+      entrysDao.create(entry5.toCompanion(true));
+      entrysDao.create(entry6.toCompanion(true));
+      Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
+      List<String>? hints = await hintsFuture;
+      expect(hints!.length, 3);
+      expect(hints[0], "Length: 80");
+      expect(hints[1], "Letter: 50 is 'b'");
+      expect(hints[2], "Letter: 80 is 'b'");
     });
   });
 }
