@@ -129,36 +129,16 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     if (otherLengthAnswers.length == otherAnswers.length) {
       return hints;
     } else {
-      final diffsWithSameLength = <int>[];
-      for (var i = 0; i < thisAnswerLength; i++) {
-        diffsWithSameLength.add(0);
-        final thisLetter = thisAnswer[i];
-        for (var k in sameLengthAnswers) {
-          if (k.length > i) {
-            if (thisLetter != k[i]) {
-              diffsWithSameLength[i]++;
-            }
-          } else {
-            diffsWithSameLength[i]++;
+      for (var k in sameLengthAnswers) {
+        var hint = "";
+        for (var i = 0; i < thisAnswerLength; i++) {
+          if (thisAnswer[i] != k[i]) {
+            hint = "Letter: ${i + 1} is '${thisAnswer[i]}'";
+            break;
           }
         }
-      }
-      print(diffsWithSameLength);
-      var accumelate = 0;
-      outerloop:
-      for (var k = sameLengthAnswers.length; k > 0; k--) {
-        var alldiff = diffsWithSameLength.indexOf(k);
-        if (alldiff == -1) {
-          continue;
-        } else {
-          do {
-            hints.add("Letter: ${alldiff + 1} is '${thisAnswer[alldiff]}'");
-            accumelate += k;
-            if (accumelate >= sameLengthAnswers.length) {
-              break outerloop;
-            }
-            alldiff = diffsWithSameLength.indexOf(k, alldiff + 1);
-          } while (alldiff != -1);
+        if (!hints.contains(hint)) {
+          hints.add(hint);
         }
       }
     }

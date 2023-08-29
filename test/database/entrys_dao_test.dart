@@ -1318,8 +1318,8 @@ void main() {
           EntryText(id: answerEntryTextId1, value: "b" * 80);
       EntryText answerEntryText2 =
           EntryText(id: answerEntryTextId2, value: "b" * 100);
-      EntryText answerEntryText3 =
-          EntryText(id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 29) + "h");
+      EntryText answerEntryText3 = EntryText(
+          id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 29) + "h");
       Question question = Question(
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
@@ -1378,7 +1378,7 @@ void main() {
       expect(hints[1], "Letter: 50 is 'b'");
     });
 
-    test("two hints, one for lenght of the answer /3", () async {
+    test("three hints, one for lenght of the answer", () async {
       final entryId1 = const Uuid().v4();
       final entryId2 = const Uuid().v4();
       final entryId3 = const Uuid().v4();
@@ -1394,10 +1394,10 @@ void main() {
           EntryText(id: answerEntryTextId1, value: "b" * 80);
       EntryText answerEntryText2 =
           EntryText(id: answerEntryTextId2, value: "b" * 100);
-      EntryText answerEntryText3 =
-          EntryText(id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 30));
-      EntryText answerEntryText4 =
-          EntryText(id: answerEntryTextId4, value: ("b" * 50) + ("b" * 29) + "h");
+      EntryText answerEntryText3 = EntryText(
+          id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 30));
+      EntryText answerEntryText4 = EntryText(
+          id: answerEntryTextId4, value: ("b" * 50) + ("b" * 29) + "h");
       Question question = Question(
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
@@ -1472,7 +1472,7 @@ void main() {
       expect(hints[2], "Letter: 80 is 'b'");
     });
 
-    test("two hints, one for lenght of the answer /4", () async {
+    test("three hints, one for lenght of the answer /2", () async {
       final entryId1 = const Uuid().v4();
       final entryId2 = const Uuid().v4();
       final entryId3 = const Uuid().v4();
@@ -1490,12 +1490,12 @@ void main() {
           EntryText(id: answerEntryTextId1, value: "b" * 80);
       EntryText answerEntryText2 =
           EntryText(id: answerEntryTextId2, value: "b" * 100);
-      EntryText answerEntryText3 =
-          EntryText(id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 30));
-      EntryText answerEntryText4 =
-          EntryText(id: answerEntryTextId4, value: ("b" * 49) + "h" + ("b" * 29) + "h");
-      EntryText answerEntryText5 =
-          EntryText(id: answerEntryTextId5, value: ("b" * 50) + ("b" * 29) + "h");
+      EntryText answerEntryText3 = EntryText(
+          id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 30));
+      EntryText answerEntryText4 = EntryText(
+          id: answerEntryTextId4, value: ("b" * 49) + "h" + ("b" * 29) + "h");
+      EntryText answerEntryText5 = EntryText(
+          id: answerEntryTextId5, value: ("b" * 50) + ("b" * 29) + "h");
       Question question = Question(
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
@@ -1585,7 +1585,7 @@ void main() {
       expect(hints[2], "Letter: 80 is 'b'");
     });
 
-    test("two hints, one for lenght of the answer /5", () async {
+    test("four hints, one for lenght of the answer", () async {
       final entryId1 = const Uuid().v4();
       final entryId2 = const Uuid().v4();
       final entryId3 = const Uuid().v4();
@@ -1605,12 +1605,12 @@ void main() {
           EntryText(id: answerEntryTextId1, value: "b" * 80);
       EntryText answerEntryText2 =
           EntryText(id: answerEntryTextId2, value: "b" * 100);
-      EntryText answerEntryText3 =
-          EntryText(id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 30));
-      EntryText answerEntryText4 =
-          EntryText(id: answerEntryTextId4, value: ("b" * 49) + "h" + ("b" * 29) + "h");
-      EntryText answerEntryText5 =
-          EntryText(id: answerEntryTextId5, value: ("b" * 50) + ("b" * 29) + "h");
+      EntryText answerEntryText3 = EntryText(
+          id: answerEntryTextId3, value: ("b" * 49) + "h" + ("b" * 30));
+      EntryText answerEntryText4 = EntryText(
+          id: answerEntryTextId4, value: ("b" * 49) + "h" + ("b" * 29) + "h");
+      EntryText answerEntryText5 = EntryText(
+          id: answerEntryTextId5, value: ("b" * 50) + ("b" * 29) + "h");
       EntryText answerEntryText6 =
           EntryText(id: answerEntryTextId6, value: "n" + ("b" * 79));
       Question question = Question(
@@ -1711,10 +1711,11 @@ void main() {
       entrysDao.create(entry6.toCompanion(true));
       Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
       List<String>? hints = await hintsFuture;
-      expect(hints!.length, 3);
+      expect(hints!.length, 4);
       expect(hints[0], "Length: 80");
       expect(hints[1], "Letter: 50 is 'b'");
       expect(hints[2], "Letter: 80 is 'b'");
+      expect(hints[3], "Letter: 1 is 'b'");
     });
   });
 }
