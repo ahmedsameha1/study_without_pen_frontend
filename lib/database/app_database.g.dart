@@ -475,12 +475,8 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
           'did_asked_at_current_test_round', aliasedName, false,
           type: DriftSqlType.bool,
           requiredDuringInsert: true,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite:
-                'CHECK ("did_asked_at_current_test_round" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }));
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("did_asked_at_current_test_round" IN (0, 1))'));
   static const VerificationMeta _emulatedCreatedAtMeta =
       const VerificationMeta('emulatedCreatedAt');
   @override
@@ -1120,16 +1116,13 @@ class $FieldListsTable extends FieldLists
   static const VerificationMeta _doesReadAnswerMeta =
       const VerificationMeta('doesReadAnswer');
   @override
-  late final GeneratedColumn<bool> doesReadAnswer =
-      GeneratedColumn<bool>('does_read_answer', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("does_read_answer" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: Constant(false));
+  late final GeneratedColumn<bool> doesReadAnswer = GeneratedColumn<bool>(
+      'does_read_answer', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("does_read_answer" IN (0, 1))'),
+      defaultValue: Constant(false));
   static const VerificationMeta _usageCountMeta =
       const VerificationMeta('usageCount');
   @override
@@ -1256,11 +1249,8 @@ class $FieldListsTable extends FieldLists
       GeneratedColumn<bool>('does_obfuscate_question', aliasedName, false,
           type: DriftSqlType.bool,
           requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("does_obfuscate_question" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("does_obfuscate_question" IN (0, 1))'),
           defaultValue: Constant(false));
   @override
   List<GeneratedColumn> get $columns => [
@@ -2976,16 +2966,13 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
   static const VerificationMeta _isCompletedMeta =
       const VerificationMeta('isCompleted');
   @override
-  late final GeneratedColumn<bool> isCompleted =
-      GeneratedColumn<bool>('is_completed', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("is_completed" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: Constant(false));
+  late final GeneratedColumn<bool> isCompleted = GeneratedColumn<bool>(
+      'is_completed', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_completed" IN (0, 1))'),
+      defaultValue: Constant(false));
   static const VerificationMeta _lastCheckedAnswerResultMeta =
       const VerificationMeta('lastCheckedAnswerResult');
   @override
@@ -2993,25 +2980,19 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
       GeneratedColumn<bool>('last_checked_answer_result', aliasedName, false,
           type: DriftSqlType.bool,
           requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("last_checked_answer_result" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("last_checked_answer_result" IN (0, 1))'),
           defaultValue: Constant(false));
   static const VerificationMeta _shouldCheckAnAnswerMeta =
       const VerificationMeta('shouldCheckAnAnswer');
   @override
-  late final GeneratedColumn<bool> shouldCheckAnAnswer =
-      GeneratedColumn<bool>('should_check_an_answer', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("should_check_an_answer" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: Constant(true));
+  late final GeneratedColumn<bool> shouldCheckAnAnswer = GeneratedColumn<bool>(
+      'should_check_an_answer', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("should_check_an_answer" IN (0, 1))'),
+      defaultValue: Constant(true));
   static const VerificationMeta _currentHintCounterMeta =
       const VerificationMeta('currentHintCounter');
   @override
@@ -3997,6 +3978,193 @@ class TestSessionsCompanion extends UpdateCompanion<TestSession> {
   }
 }
 
+class $WrongAnswersTable extends WrongAnswers
+    with TableInfo<$WrongAnswersTable, WrongAnswer> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WrongAnswersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _sessionIdMeta =
+      const VerificationMeta('sessionId');
+  @override
+  late final GeneratedColumn<String> sessionId = GeneratedColumn<String>(
+      'session_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES sessions (id)'));
+  static const VerificationMeta _entryIdMeta =
+      const VerificationMeta('entryId');
+  @override
+  late final GeneratedColumn<String> entryId = GeneratedColumn<String>(
+      'entry_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [sessionId, entryId];
+  @override
+  String get aliasedName => _alias ?? 'wrong_answers';
+  @override
+  String get actualTableName => 'wrong_answers';
+  @override
+  VerificationContext validateIntegrity(Insertable<WrongAnswer> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('session_id')) {
+      context.handle(_sessionIdMeta,
+          sessionId.isAcceptableOrUnknown(data['session_id']!, _sessionIdMeta));
+    } else if (isInserting) {
+      context.missing(_sessionIdMeta);
+    }
+    if (data.containsKey('entry_id')) {
+      context.handle(_entryIdMeta,
+          entryId.isAcceptableOrUnknown(data['entry_id']!, _entryIdMeta));
+    } else if (isInserting) {
+      context.missing(_entryIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {sessionId, entryId};
+  @override
+  WrongAnswer map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WrongAnswer(
+      sessionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}session_id'])!,
+      entryId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}entry_id'])!,
+    );
+  }
+
+  @override
+  $WrongAnswersTable createAlias(String alias) {
+    return $WrongAnswersTable(attachedDatabase, alias);
+  }
+}
+
+class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
+  final String sessionId;
+  final String entryId;
+  const WrongAnswer({required this.sessionId, required this.entryId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['session_id'] = Variable<String>(sessionId);
+    map['entry_id'] = Variable<String>(entryId);
+    return map;
+  }
+
+  WrongAnswersCompanion toCompanion(bool nullToAbsent) {
+    return WrongAnswersCompanion(
+      sessionId: Value(sessionId),
+      entryId: Value(entryId),
+    );
+  }
+
+  factory WrongAnswer.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WrongAnswer(
+      sessionId: serializer.fromJson<String>(json['sessionId']),
+      entryId: serializer.fromJson<String>(json['entryId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'sessionId': serializer.toJson<String>(sessionId),
+      'entryId': serializer.toJson<String>(entryId),
+    };
+  }
+
+  WrongAnswer copyWith({String? sessionId, String? entryId}) => WrongAnswer(
+        sessionId: sessionId ?? this.sessionId,
+        entryId: entryId ?? this.entryId,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('WrongAnswer(')
+          ..write('sessionId: $sessionId, ')
+          ..write('entryId: $entryId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(sessionId, entryId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WrongAnswer &&
+          other.sessionId == this.sessionId &&
+          other.entryId == this.entryId);
+}
+
+class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
+  final Value<String> sessionId;
+  final Value<String> entryId;
+  final Value<int> rowid;
+  const WrongAnswersCompanion({
+    this.sessionId = const Value.absent(),
+    this.entryId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WrongAnswersCompanion.insert({
+    required String sessionId,
+    required String entryId,
+    this.rowid = const Value.absent(),
+  })  : sessionId = Value(sessionId),
+        entryId = Value(entryId);
+  static Insertable<WrongAnswer> custom({
+    Expression<String>? sessionId,
+    Expression<String>? entryId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (sessionId != null) 'session_id': sessionId,
+      if (entryId != null) 'entry_id': entryId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WrongAnswersCompanion copyWith(
+      {Value<String>? sessionId, Value<String>? entryId, Value<int>? rowid}) {
+    return WrongAnswersCompanion(
+      sessionId: sessionId ?? this.sessionId,
+      entryId: entryId ?? this.entryId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (sessionId.present) {
+      map['session_id'] = Variable<String>(sessionId.value);
+    }
+    if (entryId.present) {
+      map['entry_id'] = Variable<String>(entryId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WrongAnswersCompanion(')
+          ..write('sessionId: $sessionId, ')
+          ..write('entryId: $entryId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $EntryTextsTable entryTexts = $EntryTextsTable(this);
@@ -4008,6 +4176,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SessionsTable sessions = $SessionsTable(this);
   late final $SessionEntrysTable sessionEntrys = $SessionEntrysTable(this);
   late final $TestSessionsTable testSessions = $TestSessionsTable(this);
+  late final $WrongAnswersTable wrongAnswers = $WrongAnswersTable(this);
   late final EntryTextsDao entryTextsDao = EntryTextsDao(this as AppDatabase);
   late final QuestionsDao questionsDao = QuestionsDao(this as AppDatabase);
   late final EntrysDao entrysDao = EntrysDao(this as AppDatabase);
@@ -4019,6 +4188,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       SessionEntrysDao(this as AppDatabase);
   late final TestSessionsDao testSessionsDao =
       TestSessionsDao(this as AppDatabase);
+  late final WrongAnswersDao wrongAnswersDao =
+      WrongAnswersDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4032,7 +4203,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         notes,
         sessions,
         sessionEntrys,
-        testSessions
+        testSessions,
+        wrongAnswers
       ];
   @override
   DriftDatabaseOptions get options =>

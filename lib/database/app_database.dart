@@ -15,6 +15,7 @@ import 'package:uuid/uuid.dart';
 import 'entrys_dao.dart';
 import 'field_lists_dao.dart';
 import 'test_sessions_dao.dart';
+import 'wrong_answers_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -286,6 +287,14 @@ class TestSessions extends Table {
   Set<Column> get primaryKey => {sessionId};
 }
 
+class WrongAnswers extends Table {
+  TextColumn get sessionId => text().references(Sessions, #id)();
+  TextColumn get entryId => text()();
+
+  @override
+  Set<Column> get primaryKey => {sessionId, entryId};
+}
+
 @DriftDatabase(tables: [
   EntryTexts,
   Questions,
@@ -296,6 +305,7 @@ class TestSessions extends Table {
   Sessions,
   SessionEntrys,
   TestSessions,
+  WrongAnswers,
 ], daos: [
   EntryTextsDao,
   QuestionsDao,
@@ -306,6 +316,7 @@ class TestSessions extends Table {
   SessionsDao,
   SessionEntrysDao,
   TestSessionsDao,
+  WrongAnswersDao,
 ])
 class AppDatabase extends _$AppDatabase {
   static const databaseFileName = "db.sqlite";
