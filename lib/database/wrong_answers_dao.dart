@@ -11,6 +11,9 @@ class WrongAnswersDao extends DatabaseAccessor<AppDatabase>
     if (!isValid(wrongAnswersCompanion.sessionId.value)) {
       throw InvalidDataException("sessionId");
     }
+    if (!isValid(wrongAnswersCompanion.entryId.value)) {
+      throw InvalidDataException("entryId");
+    }
     return into(wrongAnswers).insert(wrongAnswersCompanion);
   }
 }

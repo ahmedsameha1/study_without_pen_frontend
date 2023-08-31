@@ -289,7 +289,7 @@ class TestSessions extends Table {
 
 class WrongAnswers extends Table {
   TextColumn get sessionId => text().references(Sessions, #id)();
-  TextColumn get entryId => text()();
+  TextColumn get entryId => text().references(Entrys, #id)();
 
   @override
   Set<Column> get primaryKey => {sessionId, entryId};
