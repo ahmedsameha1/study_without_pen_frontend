@@ -288,8 +288,14 @@ class TestSessions extends Table {
 }
 
 class WrongAnswers extends Table {
+  static const int MINIMUM_VALUE_LENGTH = 1;
+
   TextColumn get sessionId => text().references(Sessions, #id)();
   TextColumn get entryId => text().references(Entrys, #id)();
+  TextColumn get value => text().check(value
+      .trim()
+      .length
+      .isBiggerOrEqualValue(WrongAnswers.MINIMUM_VALUE_LENGTH))();
 
   @override
   Set<Column> get primaryKey => {sessionId, entryId};

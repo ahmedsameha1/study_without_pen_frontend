@@ -4002,8 +4002,18 @@ class $WrongAnswersTable extends WrongAnswers
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES entrys (id)'));
+  static const VerificationMeta _valueMeta = const VerificationMeta('value');
   @override
-  List<GeneratedColumn> get $columns => [sessionId, entryId];
+  late final GeneratedColumn<String> value = GeneratedColumn<String>(
+      'value', aliasedName, false,
+      check: () => value
+          .trim()
+          .length
+          .isBiggerOrEqualValue(WrongAnswers.MINIMUM_VALUE_LENGTH),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [sessionId, entryId, value];
   @override
   String get aliasedName => _alias ?? 'wrong_answers';
   @override
@@ -4025,6 +4035,12 @@ class $WrongAnswersTable extends WrongAnswers
     } else if (isInserting) {
       context.missing(_entryIdMeta);
     }
+    if (data.containsKey('value')) {
+      context.handle(
+          _valueMeta, value.isAcceptableOrUnknown(data['value']!, _valueMeta));
+    } else if (isInserting) {
+      context.missing(_valueMeta);
+    }
     return context;
   }
 
@@ -4038,6 +4054,8 @@ class $WrongAnswersTable extends WrongAnswers
           .read(DriftSqlType.string, data['${effectivePrefix}session_id'])!,
       entryId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}entry_id'])!,
+      value: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}value'])!,
     );
   }
 
@@ -4050,12 +4068,15 @@ class $WrongAnswersTable extends WrongAnswers
 class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
   final String sessionId;
   final String entryId;
-  const WrongAnswer({required this.sessionId, required this.entryId});
+  final String value;
+  const WrongAnswer(
+      {required this.sessionId, required this.entryId, required this.value});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['session_id'] = Variable<String>(sessionId);
     map['entry_id'] = Variable<String>(entryId);
+    map['value'] = Variable<String>(value);
     return map;
   }
 
@@ -4063,6 +4084,7 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
     return WrongAnswersCompanion(
       sessionId: Value(sessionId),
       entryId: Value(entryId),
+      value: Value(value),
     );
   }
 
@@ -4072,6 +4094,7 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
     return WrongAnswer(
       sessionId: serializer.fromJson<String>(json['sessionId']),
       entryId: serializer.fromJson<String>(json['entryId']),
+      value: serializer.fromJson<String>(json['value']),
     );
   }
   @override
@@ -4080,64 +4103,79 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
     return <String, dynamic>{
       'sessionId': serializer.toJson<String>(sessionId),
       'entryId': serializer.toJson<String>(entryId),
+      'value': serializer.toJson<String>(value),
     };
   }
 
-  WrongAnswer copyWith({String? sessionId, String? entryId}) => WrongAnswer(
+  WrongAnswer copyWith({String? sessionId, String? entryId, String? value}) =>
+      WrongAnswer(
         sessionId: sessionId ?? this.sessionId,
         entryId: entryId ?? this.entryId,
+        value: value ?? this.value,
       );
   @override
   String toString() {
     return (StringBuffer('WrongAnswer(')
           ..write('sessionId: $sessionId, ')
-          ..write('entryId: $entryId')
+          ..write('entryId: $entryId, ')
+          ..write('value: $value')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(sessionId, entryId);
+  int get hashCode => Object.hash(sessionId, entryId, value);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is WrongAnswer &&
           other.sessionId == this.sessionId &&
-          other.entryId == this.entryId);
+          other.entryId == this.entryId &&
+          other.value == this.value);
 }
 
 class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
   final Value<String> sessionId;
   final Value<String> entryId;
+  final Value<String> value;
   final Value<int> rowid;
   const WrongAnswersCompanion({
     this.sessionId = const Value.absent(),
     this.entryId = const Value.absent(),
+    this.value = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   WrongAnswersCompanion.insert({
     required String sessionId,
     required String entryId,
+    required String value,
     this.rowid = const Value.absent(),
   })  : sessionId = Value(sessionId),
-        entryId = Value(entryId);
+        entryId = Value(entryId),
+        value = Value(value);
   static Insertable<WrongAnswer> custom({
     Expression<String>? sessionId,
     Expression<String>? entryId,
+    Expression<String>? value,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (sessionId != null) 'session_id': sessionId,
       if (entryId != null) 'entry_id': entryId,
+      if (value != null) 'value': value,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   WrongAnswersCompanion copyWith(
-      {Value<String>? sessionId, Value<String>? entryId, Value<int>? rowid}) {
+      {Value<String>? sessionId,
+      Value<String>? entryId,
+      Value<String>? value,
+      Value<int>? rowid}) {
     return WrongAnswersCompanion(
       sessionId: sessionId ?? this.sessionId,
       entryId: entryId ?? this.entryId,
+      value: value ?? this.value,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -4151,6 +4189,9 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
     if (entryId.present) {
       map['entry_id'] = Variable<String>(entryId.value);
     }
+    if (value.present) {
+      map['value'] = Variable<String>(value.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -4162,6 +4203,7 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
     return (StringBuffer('WrongAnswersCompanion(')
           ..write('sessionId: $sessionId, ')
           ..write('entryId: $entryId, ')
+          ..write('value: $value, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
