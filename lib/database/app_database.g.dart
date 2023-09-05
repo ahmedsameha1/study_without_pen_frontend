@@ -3984,6 +3984,13 @@ class $WrongAnswersTable extends WrongAnswers
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $WrongAnswersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => const Uuid().v4());
   static const VerificationMeta _sessionIdMeta =
       const VerificationMeta('sessionId');
   @override
@@ -4013,7 +4020,7 @@ class $WrongAnswersTable extends WrongAnswers
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [sessionId, entryId, value];
+  List<GeneratedColumn> get $columns => [id, sessionId, entryId, value];
   @override
   String get aliasedName => _alias ?? 'wrong_answers';
   @override
@@ -4023,6 +4030,9 @@ class $WrongAnswersTable extends WrongAnswers
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
     if (data.containsKey('session_id')) {
       context.handle(_sessionIdMeta,
           sessionId.isAcceptableOrUnknown(data['session_id']!, _sessionIdMeta));
@@ -4045,11 +4055,13 @@ class $WrongAnswersTable extends WrongAnswers
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {sessionId, entryId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   WrongAnswer map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return WrongAnswer(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       sessionId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}session_id'])!,
       entryId: attachedDatabase.typeMapping
@@ -4066,14 +4078,19 @@ class $WrongAnswersTable extends WrongAnswers
 }
 
 class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
+  final String id;
   final String sessionId;
   final String entryId;
   final String value;
   const WrongAnswer(
-      {required this.sessionId, required this.entryId, required this.value});
+      {required this.id,
+      required this.sessionId,
+      required this.entryId,
+      required this.value});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
     map['session_id'] = Variable<String>(sessionId);
     map['entry_id'] = Variable<String>(entryId);
     map['value'] = Variable<String>(value);
@@ -4082,6 +4099,7 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
 
   WrongAnswersCompanion toCompanion(bool nullToAbsent) {
     return WrongAnswersCompanion(
+      id: Value(id),
       sessionId: Value(sessionId),
       entryId: Value(entryId),
       value: Value(value),
@@ -4092,6 +4110,7 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return WrongAnswer(
+      id: serializer.fromJson<String>(json['id']),
       sessionId: serializer.fromJson<String>(json['sessionId']),
       entryId: serializer.fromJson<String>(json['entryId']),
       value: serializer.fromJson<String>(json['value']),
@@ -4101,14 +4120,17 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
       'sessionId': serializer.toJson<String>(sessionId),
       'entryId': serializer.toJson<String>(entryId),
       'value': serializer.toJson<String>(value),
     };
   }
 
-  WrongAnswer copyWith({String? sessionId, String? entryId, String? value}) =>
+  WrongAnswer copyWith(
+          {String? id, String? sessionId, String? entryId, String? value}) =>
       WrongAnswer(
+        id: id ?? this.id,
         sessionId: sessionId ?? this.sessionId,
         entryId: entryId ?? this.entryId,
         value: value ?? this.value,
@@ -4116,6 +4138,7 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
   @override
   String toString() {
     return (StringBuffer('WrongAnswer(')
+          ..write('id: $id, ')
           ..write('sessionId: $sessionId, ')
           ..write('entryId: $entryId, ')
           ..write('value: $value')
@@ -4124,28 +4147,32 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
   }
 
   @override
-  int get hashCode => Object.hash(sessionId, entryId, value);
+  int get hashCode => Object.hash(id, sessionId, entryId, value);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is WrongAnswer &&
+          other.id == this.id &&
           other.sessionId == this.sessionId &&
           other.entryId == this.entryId &&
           other.value == this.value);
 }
 
 class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
+  final Value<String> id;
   final Value<String> sessionId;
   final Value<String> entryId;
   final Value<String> value;
   final Value<int> rowid;
   const WrongAnswersCompanion({
+    this.id = const Value.absent(),
     this.sessionId = const Value.absent(),
     this.entryId = const Value.absent(),
     this.value = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   WrongAnswersCompanion.insert({
+    this.id = const Value.absent(),
     required String sessionId,
     required String entryId,
     required String value,
@@ -4154,12 +4181,14 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
         entryId = Value(entryId),
         value = Value(value);
   static Insertable<WrongAnswer> custom({
+    Expression<String>? id,
     Expression<String>? sessionId,
     Expression<String>? entryId,
     Expression<String>? value,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
       if (sessionId != null) 'session_id': sessionId,
       if (entryId != null) 'entry_id': entryId,
       if (value != null) 'value': value,
@@ -4168,11 +4197,13 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
   }
 
   WrongAnswersCompanion copyWith(
-      {Value<String>? sessionId,
+      {Value<String>? id,
+      Value<String>? sessionId,
       Value<String>? entryId,
       Value<String>? value,
       Value<int>? rowid}) {
     return WrongAnswersCompanion(
+      id: id ?? this.id,
       sessionId: sessionId ?? this.sessionId,
       entryId: entryId ?? this.entryId,
       value: value ?? this.value,
@@ -4183,6 +4214,9 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
     if (sessionId.present) {
       map['session_id'] = Variable<String>(sessionId.value);
     }
@@ -4201,6 +4235,7 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
   @override
   String toString() {
     return (StringBuffer('WrongAnswersCompanion(')
+          ..write('id: $id, ')
           ..write('sessionId: $sessionId, ')
           ..write('entryId: $entryId, ')
           ..write('value: $value, ')

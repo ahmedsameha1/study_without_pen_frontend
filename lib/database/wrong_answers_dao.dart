@@ -8,6 +8,10 @@ class WrongAnswersDao extends DatabaseAccessor<AppDatabase>
     with _$WrongAnswersDaoMixin {
   WrongAnswersDao(AppDatabase appDatabase) : super(appDatabase);
   Future<int> create(WrongAnswersCompanion wrongAnswersCompanion) {
+    if (wrongAnswersCompanion.id.present &&
+        !isValid(wrongAnswersCompanion.id.value)) {
+      throw InvalidDataException("id");
+    }
     if (!isValid(wrongAnswersCompanion.sessionId.value)) {
       throw InvalidDataException("sessionId");
     }

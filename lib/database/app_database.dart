@@ -290,6 +290,7 @@ class TestSessions extends Table {
 class WrongAnswers extends Table {
   static const int MINIMUM_VALUE_LENGTH = 1;
 
+  TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get sessionId => text().references(Sessions, #id)();
   TextColumn get entryId => text().references(Entrys, #id)();
   TextColumn get value => text().check(value
@@ -298,7 +299,7 @@ class WrongAnswers extends Table {
       .isBiggerOrEqualValue(WrongAnswers.MINIMUM_VALUE_LENGTH))();
 
   @override
-  Set<Column> get primaryKey => {sessionId, entryId};
+  Set<Column> get primaryKey => {id};
 }
 
 @DriftDatabase(tables: [

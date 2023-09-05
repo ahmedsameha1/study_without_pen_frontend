@@ -12,6 +12,7 @@ void main() {
   late WrongAnswersDao wrongAnswersDao;
   late SessionsDao sessionsDao;
   late EntrysDao entrysDao;
+  String id = const Uuid().v4();
   String entryId = const Uuid().v4();
   String sessionId = const Uuid().v4();
   String value = "wrong answer";
@@ -75,9 +76,30 @@ void main() {
   });
 
   group("Create wrongAnswer", () {
+    test("Invalid wrongAnswer: id is invalid UUID v4", () {
+      final wrongAnswer = WrongAnswer(
+          id: "efweh", sessionId: sessionId, entryId: entryId, value: value);
+      expect(() async {
+        await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is InvalidDataException && e.message.contains("id"))));
+    });
+
+    test("No two or more wrongAnswers with the same id", () async {
+      final wrongAnswer = WrongAnswer(
+          id: id, sessionId: sessionId, entryId: entryId, value: value);
+      await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
+      expect(() async {
+        await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("wrong_answers.id"))));
+    });
+
     test("Invalid wrongAnswer: sessionId is invalid UUID v4", () {
-      final wrongAnswer =
-          WrongAnswer(sessionId: "owfbhwe", entryId: entryId, value: value);
+      final wrongAnswer = WrongAnswer(
+          id: id, sessionId: "owfbhwe", entryId: entryId, value: value);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
@@ -87,7 +109,7 @@ void main() {
 
     test("Invalid wrongAnswer: sessionId doesn't exist in sessions table", () {
       final wrongAnswer = WrongAnswer(
-          sessionId: const Uuid().v4(), entryId: entryId, value: value);
+          id: id, sessionId: const Uuid().v4(), entryId: entryId, value: value);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
@@ -96,8 +118,8 @@ void main() {
     });
 
     test("Invalid wrongAnswer: entryId is invalid UUID v4", () {
-      final wrongAnswer =
-          WrongAnswer(sessionId: sessionId, entryId: "efbw", value: value);
+      final wrongAnswer = WrongAnswer(
+          id: id, sessionId: sessionId, entryId: "efbw", value: value);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
@@ -107,7 +129,10 @@ void main() {
 
     test("Invalid wrongAnswer: entryId doesn't exist in sessions table", () {
       final wrongAnswer = WrongAnswer(
-          sessionId: sessionId, entryId: const Uuid().v4(), value: value);
+          id: id,
+          sessionId: sessionId,
+          entryId: const Uuid().v4(),
+          value: value);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
@@ -116,20 +141,28 @@ void main() {
     });
 
     test("Invalid wrongAnswer: value is an empty String", () {
-      var wrongAnswer =
-          WrongAnswer(sessionId: sessionId, entryId: entryId, value: "");
+      var wrongAnswer = WrongAnswer(
+          id: id, sessionId: sessionId, entryId: entryId, value: "");
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("value"))));
-      wrongAnswer =
-          WrongAnswer(sessionId: sessionId, entryId: entryId, value: " ");
+      wrongAnswer = WrongAnswer(
+          id: id, sessionId: sessionId, entryId: entryId, value: " ");
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("value"))));
+    });
+
+    test("Good case: not provide id", () async {
+      var wrongAnswerCompanion = WrongAnswersCompanion(
+          sessionId: Value(sessionId),
+          entryId: Value(entryId),
+          value: Value("wefhweo"));
+      await wrongAnswersDao.create(wrongAnswerCompanion);
     });
   });
 }
