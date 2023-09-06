@@ -414,633 +414,6 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
   }
 }
 
-class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $EntrysTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      clientDefault: () => const Uuid().v4());
-  static const VerificationMeta _fieldListIdMeta =
-      const VerificationMeta('fieldListId');
-  @override
-  late final GeneratedColumn<String> fieldListId = GeneratedColumn<String>(
-      'field_list_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _answerIdMeta =
-      const VerificationMeta('answerId');
-  @override
-  late final GeneratedColumn<String> answerId = GeneratedColumn<String>(
-      'answer_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _questionIdMeta =
-      const VerificationMeta('questionId');
-  @override
-  late final GeneratedColumn<String> questionId = GeneratedColumn<String>(
-      'question_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _creationAtMeta =
-      const VerificationMeta('creationAt');
-  @override
-  late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
-      'creation_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _lastModificationAtMeta =
-      const VerificationMeta('lastModificationAt');
-  @override
-  late final GeneratedColumn<DateTime> lastModificationAt =
-      GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
-          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
-          type: DriftSqlType.dateTime,
-          requiredDuringInsert: true);
-  static const VerificationMeta _orderMeta = const VerificationMeta('order');
-  @override
-  late final GeneratedColumn<int> order = GeneratedColumn<int>(
-      'order', aliasedName, false,
-      check: () =>
-          order.isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
-          order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
-      type: DriftSqlType.int,
-      requiredDuringInsert: true);
-  static const VerificationMeta _didAskedAtCurrentTestRoundMeta =
-      const VerificationMeta('didAskedAtCurrentTestRound');
-  @override
-  late final GeneratedColumn<bool> didAskedAtCurrentTestRound =
-      GeneratedColumn<bool>(
-          'did_asked_at_current_test_round', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: true,
-          defaultConstraints: GeneratedColumn.constraintIsAlways(
-              'CHECK ("did_asked_at_current_test_round" IN (0, 1))'));
-  static const VerificationMeta _emulatedCreatedAtMeta =
-      const VerificationMeta('emulatedCreatedAt');
-  @override
-  late final GeneratedColumn<DateTime> emulatedCreatedAt =
-      GeneratedColumn<DateTime>('emulated_created_at', aliasedName, false,
-          type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _rankMeta = const VerificationMeta('rank');
-  @override
-  late final GeneratedColumn<int> rank = GeneratedColumn<int>(
-      'rank', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _askedCountMeta =
-      const VerificationMeta('askedCount');
-  @override
-  late final GeneratedColumn<int> askedCount = GeneratedColumn<int>(
-      'asked_count', aliasedName, false,
-      check: () =>
-          askedCount.isSmallerOrEqualValue(Entrys.ASKED_COUNT_MAXIMUM_VALUE) &
-          askedCount.isBiggerOrEqualValue(Entrys.ASKED_COUNT_MINIMUM_VALUE),
-      type: DriftSqlType.int,
-      requiredDuringInsert: true);
-  static const VerificationMeta _wronglyAnsweredCountMeta =
-      const VerificationMeta('wronglyAnsweredCount');
-  @override
-  late final GeneratedColumn<int> wronglyAnsweredCount = GeneratedColumn<int>(
-      'wrongly_answered_count', aliasedName, false,
-      check: () =>
-          wronglyAnsweredCount.isSmallerOrEqualValue(
-              Entrys.WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE) &
-          wronglyAnsweredCount.isBiggerOrEqualValue(
-              Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE),
-      type: DriftSqlType.int,
-      requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        fieldListId,
-        answerId,
-        questionId,
-        creationAt,
-        lastModificationAt,
-        order,
-        didAskedAtCurrentTestRound,
-        emulatedCreatedAt,
-        rank,
-        askedCount,
-        wronglyAnsweredCount
-      ];
-  @override
-  String get aliasedName => _alias ?? 'entrys';
-  @override
-  String get actualTableName => 'entrys';
-  @override
-  VerificationContext validateIntegrity(Insertable<Entry> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('field_list_id')) {
-      context.handle(
-          _fieldListIdMeta,
-          fieldListId.isAcceptableOrUnknown(
-              data['field_list_id']!, _fieldListIdMeta));
-    } else if (isInserting) {
-      context.missing(_fieldListIdMeta);
-    }
-    if (data.containsKey('answer_id')) {
-      context.handle(_answerIdMeta,
-          answerId.isAcceptableOrUnknown(data['answer_id']!, _answerIdMeta));
-    } else if (isInserting) {
-      context.missing(_answerIdMeta);
-    }
-    if (data.containsKey('question_id')) {
-      context.handle(
-          _questionIdMeta,
-          questionId.isAcceptableOrUnknown(
-              data['question_id']!, _questionIdMeta));
-    } else if (isInserting) {
-      context.missing(_questionIdMeta);
-    }
-    if (data.containsKey('creation_at')) {
-      context.handle(
-          _creationAtMeta,
-          creationAt.isAcceptableOrUnknown(
-              data['creation_at']!, _creationAtMeta));
-    } else if (isInserting) {
-      context.missing(_creationAtMeta);
-    }
-    if (data.containsKey('last_modification_at')) {
-      context.handle(
-          _lastModificationAtMeta,
-          lastModificationAt.isAcceptableOrUnknown(
-              data['last_modification_at']!, _lastModificationAtMeta));
-    } else if (isInserting) {
-      context.missing(_lastModificationAtMeta);
-    }
-    if (data.containsKey('order')) {
-      context.handle(
-          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
-    } else if (isInserting) {
-      context.missing(_orderMeta);
-    }
-    if (data.containsKey('did_asked_at_current_test_round')) {
-      context.handle(
-          _didAskedAtCurrentTestRoundMeta,
-          didAskedAtCurrentTestRound.isAcceptableOrUnknown(
-              data['did_asked_at_current_test_round']!,
-              _didAskedAtCurrentTestRoundMeta));
-    } else if (isInserting) {
-      context.missing(_didAskedAtCurrentTestRoundMeta);
-    }
-    if (data.containsKey('emulated_created_at')) {
-      context.handle(
-          _emulatedCreatedAtMeta,
-          emulatedCreatedAt.isAcceptableOrUnknown(
-              data['emulated_created_at']!, _emulatedCreatedAtMeta));
-    } else if (isInserting) {
-      context.missing(_emulatedCreatedAtMeta);
-    }
-    if (data.containsKey('rank')) {
-      context.handle(
-          _rankMeta, rank.isAcceptableOrUnknown(data['rank']!, _rankMeta));
-    } else if (isInserting) {
-      context.missing(_rankMeta);
-    }
-    if (data.containsKey('asked_count')) {
-      context.handle(
-          _askedCountMeta,
-          askedCount.isAcceptableOrUnknown(
-              data['asked_count']!, _askedCountMeta));
-    } else if (isInserting) {
-      context.missing(_askedCountMeta);
-    }
-    if (data.containsKey('wrongly_answered_count')) {
-      context.handle(
-          _wronglyAnsweredCountMeta,
-          wronglyAnsweredCount.isAcceptableOrUnknown(
-              data['wrongly_answered_count']!, _wronglyAnsweredCountMeta));
-    } else if (isInserting) {
-      context.missing(_wronglyAnsweredCountMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  List<Set<GeneratedColumn>> get uniqueKeys => [
-        {fieldListId, answerId, questionId},
-      ];
-  @override
-  Entry map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Entry(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      fieldListId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}field_list_id'])!,
-      answerId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}answer_id'])!,
-      questionId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}question_id'])!,
-      creationAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
-      lastModificationAt: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime,
-          data['${effectivePrefix}last_modification_at'])!,
-      order: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
-      didAskedAtCurrentTestRound: attachedDatabase.typeMapping.read(
-          DriftSqlType.bool,
-          data['${effectivePrefix}did_asked_at_current_test_round'])!,
-      emulatedCreatedAt: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime,
-          data['${effectivePrefix}emulated_created_at'])!,
-      rank: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}rank'])!,
-      askedCount: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}asked_count'])!,
-      wronglyAnsweredCount: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}wrongly_answered_count'])!,
-    );
-  }
-
-  @override
-  $EntrysTable createAlias(String alias) {
-    return $EntrysTable(attachedDatabase, alias);
-  }
-}
-
-class Entry extends DataClass implements Insertable<Entry> {
-  final String id;
-  final String fieldListId;
-  final String answerId;
-  final String questionId;
-  final DateTime creationAt;
-  final DateTime lastModificationAt;
-  final int order;
-  final bool didAskedAtCurrentTestRound;
-  final DateTime emulatedCreatedAt;
-  final int rank;
-  final int askedCount;
-  final int wronglyAnsweredCount;
-  const Entry(
-      {required this.id,
-      required this.fieldListId,
-      required this.answerId,
-      required this.questionId,
-      required this.creationAt,
-      required this.lastModificationAt,
-      required this.order,
-      required this.didAskedAtCurrentTestRound,
-      required this.emulatedCreatedAt,
-      required this.rank,
-      required this.askedCount,
-      required this.wronglyAnsweredCount});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['field_list_id'] = Variable<String>(fieldListId);
-    map['answer_id'] = Variable<String>(answerId);
-    map['question_id'] = Variable<String>(questionId);
-    map['creation_at'] = Variable<DateTime>(creationAt);
-    map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
-    map['order'] = Variable<int>(order);
-    map['did_asked_at_current_test_round'] =
-        Variable<bool>(didAskedAtCurrentTestRound);
-    map['emulated_created_at'] = Variable<DateTime>(emulatedCreatedAt);
-    map['rank'] = Variable<int>(rank);
-    map['asked_count'] = Variable<int>(askedCount);
-    map['wrongly_answered_count'] = Variable<int>(wronglyAnsweredCount);
-    return map;
-  }
-
-  EntrysCompanion toCompanion(bool nullToAbsent) {
-    return EntrysCompanion(
-      id: Value(id),
-      fieldListId: Value(fieldListId),
-      answerId: Value(answerId),
-      questionId: Value(questionId),
-      creationAt: Value(creationAt),
-      lastModificationAt: Value(lastModificationAt),
-      order: Value(order),
-      didAskedAtCurrentTestRound: Value(didAskedAtCurrentTestRound),
-      emulatedCreatedAt: Value(emulatedCreatedAt),
-      rank: Value(rank),
-      askedCount: Value(askedCount),
-      wronglyAnsweredCount: Value(wronglyAnsweredCount),
-    );
-  }
-
-  factory Entry.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Entry(
-      id: serializer.fromJson<String>(json['id']),
-      fieldListId: serializer.fromJson<String>(json['fieldListId']),
-      answerId: serializer.fromJson<String>(json['answerId']),
-      questionId: serializer.fromJson<String>(json['questionId']),
-      creationAt: serializer.fromJson<DateTime>(json['creationAt']),
-      lastModificationAt:
-          serializer.fromJson<DateTime>(json['lastModificationAt']),
-      order: serializer.fromJson<int>(json['order']),
-      didAskedAtCurrentTestRound:
-          serializer.fromJson<bool>(json['didAskedAtCurrentTestRound']),
-      emulatedCreatedAt:
-          serializer.fromJson<DateTime>(json['emulatedCreatedAt']),
-      rank: serializer.fromJson<int>(json['rank']),
-      askedCount: serializer.fromJson<int>(json['askedCount']),
-      wronglyAnsweredCount:
-          serializer.fromJson<int>(json['wronglyAnsweredCount']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'fieldListId': serializer.toJson<String>(fieldListId),
-      'answerId': serializer.toJson<String>(answerId),
-      'questionId': serializer.toJson<String>(questionId),
-      'creationAt': serializer.toJson<DateTime>(creationAt),
-      'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
-      'order': serializer.toJson<int>(order),
-      'didAskedAtCurrentTestRound':
-          serializer.toJson<bool>(didAskedAtCurrentTestRound),
-      'emulatedCreatedAt': serializer.toJson<DateTime>(emulatedCreatedAt),
-      'rank': serializer.toJson<int>(rank),
-      'askedCount': serializer.toJson<int>(askedCount),
-      'wronglyAnsweredCount': serializer.toJson<int>(wronglyAnsweredCount),
-    };
-  }
-
-  Entry copyWith(
-          {String? id,
-          String? fieldListId,
-          String? answerId,
-          String? questionId,
-          DateTime? creationAt,
-          DateTime? lastModificationAt,
-          int? order,
-          bool? didAskedAtCurrentTestRound,
-          DateTime? emulatedCreatedAt,
-          int? rank,
-          int? askedCount,
-          int? wronglyAnsweredCount}) =>
-      Entry(
-        id: id ?? this.id,
-        fieldListId: fieldListId ?? this.fieldListId,
-        answerId: answerId ?? this.answerId,
-        questionId: questionId ?? this.questionId,
-        creationAt: creationAt ?? this.creationAt,
-        lastModificationAt: lastModificationAt ?? this.lastModificationAt,
-        order: order ?? this.order,
-        didAskedAtCurrentTestRound:
-            didAskedAtCurrentTestRound ?? this.didAskedAtCurrentTestRound,
-        emulatedCreatedAt: emulatedCreatedAt ?? this.emulatedCreatedAt,
-        rank: rank ?? this.rank,
-        askedCount: askedCount ?? this.askedCount,
-        wronglyAnsweredCount: wronglyAnsweredCount ?? this.wronglyAnsweredCount,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('Entry(')
-          ..write('id: $id, ')
-          ..write('fieldListId: $fieldListId, ')
-          ..write('answerId: $answerId, ')
-          ..write('questionId: $questionId, ')
-          ..write('creationAt: $creationAt, ')
-          ..write('lastModificationAt: $lastModificationAt, ')
-          ..write('order: $order, ')
-          ..write('didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, ')
-          ..write('emulatedCreatedAt: $emulatedCreatedAt, ')
-          ..write('rank: $rank, ')
-          ..write('askedCount: $askedCount, ')
-          ..write('wronglyAnsweredCount: $wronglyAnsweredCount')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      id,
-      fieldListId,
-      answerId,
-      questionId,
-      creationAt,
-      lastModificationAt,
-      order,
-      didAskedAtCurrentTestRound,
-      emulatedCreatedAt,
-      rank,
-      askedCount,
-      wronglyAnsweredCount);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Entry &&
-          other.id == this.id &&
-          other.fieldListId == this.fieldListId &&
-          other.answerId == this.answerId &&
-          other.questionId == this.questionId &&
-          other.creationAt == this.creationAt &&
-          other.lastModificationAt == this.lastModificationAt &&
-          other.order == this.order &&
-          other.didAskedAtCurrentTestRound == this.didAskedAtCurrentTestRound &&
-          other.emulatedCreatedAt == this.emulatedCreatedAt &&
-          other.rank == this.rank &&
-          other.askedCount == this.askedCount &&
-          other.wronglyAnsweredCount == this.wronglyAnsweredCount);
-}
-
-class EntrysCompanion extends UpdateCompanion<Entry> {
-  final Value<String> id;
-  final Value<String> fieldListId;
-  final Value<String> answerId;
-  final Value<String> questionId;
-  final Value<DateTime> creationAt;
-  final Value<DateTime> lastModificationAt;
-  final Value<int> order;
-  final Value<bool> didAskedAtCurrentTestRound;
-  final Value<DateTime> emulatedCreatedAt;
-  final Value<int> rank;
-  final Value<int> askedCount;
-  final Value<int> wronglyAnsweredCount;
-  final Value<int> rowid;
-  const EntrysCompanion({
-    this.id = const Value.absent(),
-    this.fieldListId = const Value.absent(),
-    this.answerId = const Value.absent(),
-    this.questionId = const Value.absent(),
-    this.creationAt = const Value.absent(),
-    this.lastModificationAt = const Value.absent(),
-    this.order = const Value.absent(),
-    this.didAskedAtCurrentTestRound = const Value.absent(),
-    this.emulatedCreatedAt = const Value.absent(),
-    this.rank = const Value.absent(),
-    this.askedCount = const Value.absent(),
-    this.wronglyAnsweredCount = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  EntrysCompanion.insert({
-    this.id = const Value.absent(),
-    required String fieldListId,
-    required String answerId,
-    required String questionId,
-    required DateTime creationAt,
-    required DateTime lastModificationAt,
-    required int order,
-    required bool didAskedAtCurrentTestRound,
-    required DateTime emulatedCreatedAt,
-    required int rank,
-    required int askedCount,
-    required int wronglyAnsweredCount,
-    this.rowid = const Value.absent(),
-  })  : fieldListId = Value(fieldListId),
-        answerId = Value(answerId),
-        questionId = Value(questionId),
-        creationAt = Value(creationAt),
-        lastModificationAt = Value(lastModificationAt),
-        order = Value(order),
-        didAskedAtCurrentTestRound = Value(didAskedAtCurrentTestRound),
-        emulatedCreatedAt = Value(emulatedCreatedAt),
-        rank = Value(rank),
-        askedCount = Value(askedCount),
-        wronglyAnsweredCount = Value(wronglyAnsweredCount);
-  static Insertable<Entry> custom({
-    Expression<String>? id,
-    Expression<String>? fieldListId,
-    Expression<String>? answerId,
-    Expression<String>? questionId,
-    Expression<DateTime>? creationAt,
-    Expression<DateTime>? lastModificationAt,
-    Expression<int>? order,
-    Expression<bool>? didAskedAtCurrentTestRound,
-    Expression<DateTime>? emulatedCreatedAt,
-    Expression<int>? rank,
-    Expression<int>? askedCount,
-    Expression<int>? wronglyAnsweredCount,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (fieldListId != null) 'field_list_id': fieldListId,
-      if (answerId != null) 'answer_id': answerId,
-      if (questionId != null) 'question_id': questionId,
-      if (creationAt != null) 'creation_at': creationAt,
-      if (lastModificationAt != null)
-        'last_modification_at': lastModificationAt,
-      if (order != null) 'order': order,
-      if (didAskedAtCurrentTestRound != null)
-        'did_asked_at_current_test_round': didAskedAtCurrentTestRound,
-      if (emulatedCreatedAt != null) 'emulated_created_at': emulatedCreatedAt,
-      if (rank != null) 'rank': rank,
-      if (askedCount != null) 'asked_count': askedCount,
-      if (wronglyAnsweredCount != null)
-        'wrongly_answered_count': wronglyAnsweredCount,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  EntrysCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? fieldListId,
-      Value<String>? answerId,
-      Value<String>? questionId,
-      Value<DateTime>? creationAt,
-      Value<DateTime>? lastModificationAt,
-      Value<int>? order,
-      Value<bool>? didAskedAtCurrentTestRound,
-      Value<DateTime>? emulatedCreatedAt,
-      Value<int>? rank,
-      Value<int>? askedCount,
-      Value<int>? wronglyAnsweredCount,
-      Value<int>? rowid}) {
-    return EntrysCompanion(
-      id: id ?? this.id,
-      fieldListId: fieldListId ?? this.fieldListId,
-      answerId: answerId ?? this.answerId,
-      questionId: questionId ?? this.questionId,
-      creationAt: creationAt ?? this.creationAt,
-      lastModificationAt: lastModificationAt ?? this.lastModificationAt,
-      order: order ?? this.order,
-      didAskedAtCurrentTestRound:
-          didAskedAtCurrentTestRound ?? this.didAskedAtCurrentTestRound,
-      emulatedCreatedAt: emulatedCreatedAt ?? this.emulatedCreatedAt,
-      rank: rank ?? this.rank,
-      askedCount: askedCount ?? this.askedCount,
-      wronglyAnsweredCount: wronglyAnsweredCount ?? this.wronglyAnsweredCount,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (fieldListId.present) {
-      map['field_list_id'] = Variable<String>(fieldListId.value);
-    }
-    if (answerId.present) {
-      map['answer_id'] = Variable<String>(answerId.value);
-    }
-    if (questionId.present) {
-      map['question_id'] = Variable<String>(questionId.value);
-    }
-    if (creationAt.present) {
-      map['creation_at'] = Variable<DateTime>(creationAt.value);
-    }
-    if (lastModificationAt.present) {
-      map['last_modification_at'] =
-          Variable<DateTime>(lastModificationAt.value);
-    }
-    if (order.present) {
-      map['order'] = Variable<int>(order.value);
-    }
-    if (didAskedAtCurrentTestRound.present) {
-      map['did_asked_at_current_test_round'] =
-          Variable<bool>(didAskedAtCurrentTestRound.value);
-    }
-    if (emulatedCreatedAt.present) {
-      map['emulated_created_at'] = Variable<DateTime>(emulatedCreatedAt.value);
-    }
-    if (rank.present) {
-      map['rank'] = Variable<int>(rank.value);
-    }
-    if (askedCount.present) {
-      map['asked_count'] = Variable<int>(askedCount.value);
-    }
-    if (wronglyAnsweredCount.present) {
-      map['wrongly_answered_count'] = Variable<int>(wronglyAnsweredCount.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('EntrysCompanion(')
-          ..write('id: $id, ')
-          ..write('fieldListId: $fieldListId, ')
-          ..write('answerId: $answerId, ')
-          ..write('questionId: $questionId, ')
-          ..write('creationAt: $creationAt, ')
-          ..write('lastModificationAt: $lastModificationAt, ')
-          ..write('order: $order, ')
-          ..write('didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, ')
-          ..write('emulatedCreatedAt: $emulatedCreatedAt, ')
-          ..write('rank: $rank, ')
-          ..write('askedCount: $askedCount, ')
-          ..write('wronglyAnsweredCount: $wronglyAnsweredCount, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $FieldListsTable extends FieldLists
     with TableInfo<$FieldListsTable, FieldList> {
   @override
@@ -2177,6 +1550,636 @@ class FieldListsCompanion extends UpdateCompanion<FieldList> {
               'studyTillCorrectTypingAnswerLetterDuration: $studyTillCorrectTypingAnswerLetterDuration, ')
           ..write('testsTimeOfAnswerAction: $testsTimeOfAnswerAction, ')
           ..write('doesObfuscateQuestion: $doesObfuscateQuestion, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $EntrysTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => const Uuid().v4());
+  static const VerificationMeta _fieldListIdMeta =
+      const VerificationMeta('fieldListId');
+  @override
+  late final GeneratedColumn<String> fieldListId = GeneratedColumn<String>(
+      'field_list_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES field_lists (id)'));
+  static const VerificationMeta _answerIdMeta =
+      const VerificationMeta('answerId');
+  @override
+  late final GeneratedColumn<String> answerId = GeneratedColumn<String>(
+      'answer_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _questionIdMeta =
+      const VerificationMeta('questionId');
+  @override
+  late final GeneratedColumn<String> questionId = GeneratedColumn<String>(
+      'question_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _creationAtMeta =
+      const VerificationMeta('creationAt');
+  @override
+  late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
+      'creation_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _lastModificationAtMeta =
+      const VerificationMeta('lastModificationAt');
+  @override
+  late final GeneratedColumn<DateTime> lastModificationAt =
+      GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
+          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: true);
+  static const VerificationMeta _orderMeta = const VerificationMeta('order');
+  @override
+  late final GeneratedColumn<int> order = GeneratedColumn<int>(
+      'order', aliasedName, false,
+      check: () =>
+          order.isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
+          order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
+      type: DriftSqlType.int,
+      requiredDuringInsert: true);
+  static const VerificationMeta _didAskedAtCurrentTestRoundMeta =
+      const VerificationMeta('didAskedAtCurrentTestRound');
+  @override
+  late final GeneratedColumn<bool> didAskedAtCurrentTestRound =
+      GeneratedColumn<bool>(
+          'did_asked_at_current_test_round', aliasedName, false,
+          type: DriftSqlType.bool,
+          requiredDuringInsert: true,
+          defaultConstraints: GeneratedColumn.constraintIsAlways(
+              'CHECK ("did_asked_at_current_test_round" IN (0, 1))'));
+  static const VerificationMeta _emulatedCreatedAtMeta =
+      const VerificationMeta('emulatedCreatedAt');
+  @override
+  late final GeneratedColumn<DateTime> emulatedCreatedAt =
+      GeneratedColumn<DateTime>('emulated_created_at', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _rankMeta = const VerificationMeta('rank');
+  @override
+  late final GeneratedColumn<int> rank = GeneratedColumn<int>(
+      'rank', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _askedCountMeta =
+      const VerificationMeta('askedCount');
+  @override
+  late final GeneratedColumn<int> askedCount = GeneratedColumn<int>(
+      'asked_count', aliasedName, false,
+      check: () =>
+          askedCount.isSmallerOrEqualValue(Entrys.ASKED_COUNT_MAXIMUM_VALUE) &
+          askedCount.isBiggerOrEqualValue(Entrys.ASKED_COUNT_MINIMUM_VALUE),
+      type: DriftSqlType.int,
+      requiredDuringInsert: true);
+  static const VerificationMeta _wronglyAnsweredCountMeta =
+      const VerificationMeta('wronglyAnsweredCount');
+  @override
+  late final GeneratedColumn<int> wronglyAnsweredCount = GeneratedColumn<int>(
+      'wrongly_answered_count', aliasedName, false,
+      check: () =>
+          wronglyAnsweredCount.isSmallerOrEqualValue(
+              Entrys.WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE) &
+          wronglyAnsweredCount.isBiggerOrEqualValue(
+              Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE),
+      type: DriftSqlType.int,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        fieldListId,
+        answerId,
+        questionId,
+        creationAt,
+        lastModificationAt,
+        order,
+        didAskedAtCurrentTestRound,
+        emulatedCreatedAt,
+        rank,
+        askedCount,
+        wronglyAnsweredCount
+      ];
+  @override
+  String get aliasedName => _alias ?? 'entrys';
+  @override
+  String get actualTableName => 'entrys';
+  @override
+  VerificationContext validateIntegrity(Insertable<Entry> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('field_list_id')) {
+      context.handle(
+          _fieldListIdMeta,
+          fieldListId.isAcceptableOrUnknown(
+              data['field_list_id']!, _fieldListIdMeta));
+    } else if (isInserting) {
+      context.missing(_fieldListIdMeta);
+    }
+    if (data.containsKey('answer_id')) {
+      context.handle(_answerIdMeta,
+          answerId.isAcceptableOrUnknown(data['answer_id']!, _answerIdMeta));
+    } else if (isInserting) {
+      context.missing(_answerIdMeta);
+    }
+    if (data.containsKey('question_id')) {
+      context.handle(
+          _questionIdMeta,
+          questionId.isAcceptableOrUnknown(
+              data['question_id']!, _questionIdMeta));
+    } else if (isInserting) {
+      context.missing(_questionIdMeta);
+    }
+    if (data.containsKey('creation_at')) {
+      context.handle(
+          _creationAtMeta,
+          creationAt.isAcceptableOrUnknown(
+              data['creation_at']!, _creationAtMeta));
+    } else if (isInserting) {
+      context.missing(_creationAtMeta);
+    }
+    if (data.containsKey('last_modification_at')) {
+      context.handle(
+          _lastModificationAtMeta,
+          lastModificationAt.isAcceptableOrUnknown(
+              data['last_modification_at']!, _lastModificationAtMeta));
+    } else if (isInserting) {
+      context.missing(_lastModificationAtMeta);
+    }
+    if (data.containsKey('order')) {
+      context.handle(
+          _orderMeta, order.isAcceptableOrUnknown(data['order']!, _orderMeta));
+    } else if (isInserting) {
+      context.missing(_orderMeta);
+    }
+    if (data.containsKey('did_asked_at_current_test_round')) {
+      context.handle(
+          _didAskedAtCurrentTestRoundMeta,
+          didAskedAtCurrentTestRound.isAcceptableOrUnknown(
+              data['did_asked_at_current_test_round']!,
+              _didAskedAtCurrentTestRoundMeta));
+    } else if (isInserting) {
+      context.missing(_didAskedAtCurrentTestRoundMeta);
+    }
+    if (data.containsKey('emulated_created_at')) {
+      context.handle(
+          _emulatedCreatedAtMeta,
+          emulatedCreatedAt.isAcceptableOrUnknown(
+              data['emulated_created_at']!, _emulatedCreatedAtMeta));
+    } else if (isInserting) {
+      context.missing(_emulatedCreatedAtMeta);
+    }
+    if (data.containsKey('rank')) {
+      context.handle(
+          _rankMeta, rank.isAcceptableOrUnknown(data['rank']!, _rankMeta));
+    } else if (isInserting) {
+      context.missing(_rankMeta);
+    }
+    if (data.containsKey('asked_count')) {
+      context.handle(
+          _askedCountMeta,
+          askedCount.isAcceptableOrUnknown(
+              data['asked_count']!, _askedCountMeta));
+    } else if (isInserting) {
+      context.missing(_askedCountMeta);
+    }
+    if (data.containsKey('wrongly_answered_count')) {
+      context.handle(
+          _wronglyAnsweredCountMeta,
+          wronglyAnsweredCount.isAcceptableOrUnknown(
+              data['wrongly_answered_count']!, _wronglyAnsweredCountMeta));
+    } else if (isInserting) {
+      context.missing(_wronglyAnsweredCountMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+        {fieldListId, answerId, questionId},
+      ];
+  @override
+  Entry map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Entry(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      fieldListId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}field_list_id'])!,
+      answerId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}answer_id'])!,
+      questionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}question_id'])!,
+      creationAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
+      lastModificationAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_modification_at'])!,
+      order: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}order'])!,
+      didAskedAtCurrentTestRound: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool,
+          data['${effectivePrefix}did_asked_at_current_test_round'])!,
+      emulatedCreatedAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}emulated_created_at'])!,
+      rank: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}rank'])!,
+      askedCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}asked_count'])!,
+      wronglyAnsweredCount: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}wrongly_answered_count'])!,
+    );
+  }
+
+  @override
+  $EntrysTable createAlias(String alias) {
+    return $EntrysTable(attachedDatabase, alias);
+  }
+}
+
+class Entry extends DataClass implements Insertable<Entry> {
+  final String id;
+  final String fieldListId;
+  final String answerId;
+  final String questionId;
+  final DateTime creationAt;
+  final DateTime lastModificationAt;
+  final int order;
+  final bool didAskedAtCurrentTestRound;
+  final DateTime emulatedCreatedAt;
+  final int rank;
+  final int askedCount;
+  final int wronglyAnsweredCount;
+  const Entry(
+      {required this.id,
+      required this.fieldListId,
+      required this.answerId,
+      required this.questionId,
+      required this.creationAt,
+      required this.lastModificationAt,
+      required this.order,
+      required this.didAskedAtCurrentTestRound,
+      required this.emulatedCreatedAt,
+      required this.rank,
+      required this.askedCount,
+      required this.wronglyAnsweredCount});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['field_list_id'] = Variable<String>(fieldListId);
+    map['answer_id'] = Variable<String>(answerId);
+    map['question_id'] = Variable<String>(questionId);
+    map['creation_at'] = Variable<DateTime>(creationAt);
+    map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
+    map['order'] = Variable<int>(order);
+    map['did_asked_at_current_test_round'] =
+        Variable<bool>(didAskedAtCurrentTestRound);
+    map['emulated_created_at'] = Variable<DateTime>(emulatedCreatedAt);
+    map['rank'] = Variable<int>(rank);
+    map['asked_count'] = Variable<int>(askedCount);
+    map['wrongly_answered_count'] = Variable<int>(wronglyAnsweredCount);
+    return map;
+  }
+
+  EntrysCompanion toCompanion(bool nullToAbsent) {
+    return EntrysCompanion(
+      id: Value(id),
+      fieldListId: Value(fieldListId),
+      answerId: Value(answerId),
+      questionId: Value(questionId),
+      creationAt: Value(creationAt),
+      lastModificationAt: Value(lastModificationAt),
+      order: Value(order),
+      didAskedAtCurrentTestRound: Value(didAskedAtCurrentTestRound),
+      emulatedCreatedAt: Value(emulatedCreatedAt),
+      rank: Value(rank),
+      askedCount: Value(askedCount),
+      wronglyAnsweredCount: Value(wronglyAnsweredCount),
+    );
+  }
+
+  factory Entry.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Entry(
+      id: serializer.fromJson<String>(json['id']),
+      fieldListId: serializer.fromJson<String>(json['fieldListId']),
+      answerId: serializer.fromJson<String>(json['answerId']),
+      questionId: serializer.fromJson<String>(json['questionId']),
+      creationAt: serializer.fromJson<DateTime>(json['creationAt']),
+      lastModificationAt:
+          serializer.fromJson<DateTime>(json['lastModificationAt']),
+      order: serializer.fromJson<int>(json['order']),
+      didAskedAtCurrentTestRound:
+          serializer.fromJson<bool>(json['didAskedAtCurrentTestRound']),
+      emulatedCreatedAt:
+          serializer.fromJson<DateTime>(json['emulatedCreatedAt']),
+      rank: serializer.fromJson<int>(json['rank']),
+      askedCount: serializer.fromJson<int>(json['askedCount']),
+      wronglyAnsweredCount:
+          serializer.fromJson<int>(json['wronglyAnsweredCount']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'fieldListId': serializer.toJson<String>(fieldListId),
+      'answerId': serializer.toJson<String>(answerId),
+      'questionId': serializer.toJson<String>(questionId),
+      'creationAt': serializer.toJson<DateTime>(creationAt),
+      'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
+      'order': serializer.toJson<int>(order),
+      'didAskedAtCurrentTestRound':
+          serializer.toJson<bool>(didAskedAtCurrentTestRound),
+      'emulatedCreatedAt': serializer.toJson<DateTime>(emulatedCreatedAt),
+      'rank': serializer.toJson<int>(rank),
+      'askedCount': serializer.toJson<int>(askedCount),
+      'wronglyAnsweredCount': serializer.toJson<int>(wronglyAnsweredCount),
+    };
+  }
+
+  Entry copyWith(
+          {String? id,
+          String? fieldListId,
+          String? answerId,
+          String? questionId,
+          DateTime? creationAt,
+          DateTime? lastModificationAt,
+          int? order,
+          bool? didAskedAtCurrentTestRound,
+          DateTime? emulatedCreatedAt,
+          int? rank,
+          int? askedCount,
+          int? wronglyAnsweredCount}) =>
+      Entry(
+        id: id ?? this.id,
+        fieldListId: fieldListId ?? this.fieldListId,
+        answerId: answerId ?? this.answerId,
+        questionId: questionId ?? this.questionId,
+        creationAt: creationAt ?? this.creationAt,
+        lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+        order: order ?? this.order,
+        didAskedAtCurrentTestRound:
+            didAskedAtCurrentTestRound ?? this.didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt ?? this.emulatedCreatedAt,
+        rank: rank ?? this.rank,
+        askedCount: askedCount ?? this.askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount ?? this.wronglyAnsweredCount,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Entry(')
+          ..write('id: $id, ')
+          ..write('fieldListId: $fieldListId, ')
+          ..write('answerId: $answerId, ')
+          ..write('questionId: $questionId, ')
+          ..write('creationAt: $creationAt, ')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('order: $order, ')
+          ..write('didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, ')
+          ..write('emulatedCreatedAt: $emulatedCreatedAt, ')
+          ..write('rank: $rank, ')
+          ..write('askedCount: $askedCount, ')
+          ..write('wronglyAnsweredCount: $wronglyAnsweredCount')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      fieldListId,
+      answerId,
+      questionId,
+      creationAt,
+      lastModificationAt,
+      order,
+      didAskedAtCurrentTestRound,
+      emulatedCreatedAt,
+      rank,
+      askedCount,
+      wronglyAnsweredCount);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Entry &&
+          other.id == this.id &&
+          other.fieldListId == this.fieldListId &&
+          other.answerId == this.answerId &&
+          other.questionId == this.questionId &&
+          other.creationAt == this.creationAt &&
+          other.lastModificationAt == this.lastModificationAt &&
+          other.order == this.order &&
+          other.didAskedAtCurrentTestRound == this.didAskedAtCurrentTestRound &&
+          other.emulatedCreatedAt == this.emulatedCreatedAt &&
+          other.rank == this.rank &&
+          other.askedCount == this.askedCount &&
+          other.wronglyAnsweredCount == this.wronglyAnsweredCount);
+}
+
+class EntrysCompanion extends UpdateCompanion<Entry> {
+  final Value<String> id;
+  final Value<String> fieldListId;
+  final Value<String> answerId;
+  final Value<String> questionId;
+  final Value<DateTime> creationAt;
+  final Value<DateTime> lastModificationAt;
+  final Value<int> order;
+  final Value<bool> didAskedAtCurrentTestRound;
+  final Value<DateTime> emulatedCreatedAt;
+  final Value<int> rank;
+  final Value<int> askedCount;
+  final Value<int> wronglyAnsweredCount;
+  final Value<int> rowid;
+  const EntrysCompanion({
+    this.id = const Value.absent(),
+    this.fieldListId = const Value.absent(),
+    this.answerId = const Value.absent(),
+    this.questionId = const Value.absent(),
+    this.creationAt = const Value.absent(),
+    this.lastModificationAt = const Value.absent(),
+    this.order = const Value.absent(),
+    this.didAskedAtCurrentTestRound = const Value.absent(),
+    this.emulatedCreatedAt = const Value.absent(),
+    this.rank = const Value.absent(),
+    this.askedCount = const Value.absent(),
+    this.wronglyAnsweredCount = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  EntrysCompanion.insert({
+    this.id = const Value.absent(),
+    required String fieldListId,
+    required String answerId,
+    required String questionId,
+    required DateTime creationAt,
+    required DateTime lastModificationAt,
+    required int order,
+    required bool didAskedAtCurrentTestRound,
+    required DateTime emulatedCreatedAt,
+    required int rank,
+    required int askedCount,
+    required int wronglyAnsweredCount,
+    this.rowid = const Value.absent(),
+  })  : fieldListId = Value(fieldListId),
+        answerId = Value(answerId),
+        questionId = Value(questionId),
+        creationAt = Value(creationAt),
+        lastModificationAt = Value(lastModificationAt),
+        order = Value(order),
+        didAskedAtCurrentTestRound = Value(didAskedAtCurrentTestRound),
+        emulatedCreatedAt = Value(emulatedCreatedAt),
+        rank = Value(rank),
+        askedCount = Value(askedCount),
+        wronglyAnsweredCount = Value(wronglyAnsweredCount);
+  static Insertable<Entry> custom({
+    Expression<String>? id,
+    Expression<String>? fieldListId,
+    Expression<String>? answerId,
+    Expression<String>? questionId,
+    Expression<DateTime>? creationAt,
+    Expression<DateTime>? lastModificationAt,
+    Expression<int>? order,
+    Expression<bool>? didAskedAtCurrentTestRound,
+    Expression<DateTime>? emulatedCreatedAt,
+    Expression<int>? rank,
+    Expression<int>? askedCount,
+    Expression<int>? wronglyAnsweredCount,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (fieldListId != null) 'field_list_id': fieldListId,
+      if (answerId != null) 'answer_id': answerId,
+      if (questionId != null) 'question_id': questionId,
+      if (creationAt != null) 'creation_at': creationAt,
+      if (lastModificationAt != null)
+        'last_modification_at': lastModificationAt,
+      if (order != null) 'order': order,
+      if (didAskedAtCurrentTestRound != null)
+        'did_asked_at_current_test_round': didAskedAtCurrentTestRound,
+      if (emulatedCreatedAt != null) 'emulated_created_at': emulatedCreatedAt,
+      if (rank != null) 'rank': rank,
+      if (askedCount != null) 'asked_count': askedCount,
+      if (wronglyAnsweredCount != null)
+        'wrongly_answered_count': wronglyAnsweredCount,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  EntrysCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? fieldListId,
+      Value<String>? answerId,
+      Value<String>? questionId,
+      Value<DateTime>? creationAt,
+      Value<DateTime>? lastModificationAt,
+      Value<int>? order,
+      Value<bool>? didAskedAtCurrentTestRound,
+      Value<DateTime>? emulatedCreatedAt,
+      Value<int>? rank,
+      Value<int>? askedCount,
+      Value<int>? wronglyAnsweredCount,
+      Value<int>? rowid}) {
+    return EntrysCompanion(
+      id: id ?? this.id,
+      fieldListId: fieldListId ?? this.fieldListId,
+      answerId: answerId ?? this.answerId,
+      questionId: questionId ?? this.questionId,
+      creationAt: creationAt ?? this.creationAt,
+      lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+      order: order ?? this.order,
+      didAskedAtCurrentTestRound:
+          didAskedAtCurrentTestRound ?? this.didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt ?? this.emulatedCreatedAt,
+      rank: rank ?? this.rank,
+      askedCount: askedCount ?? this.askedCount,
+      wronglyAnsweredCount: wronglyAnsweredCount ?? this.wronglyAnsweredCount,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (fieldListId.present) {
+      map['field_list_id'] = Variable<String>(fieldListId.value);
+    }
+    if (answerId.present) {
+      map['answer_id'] = Variable<String>(answerId.value);
+    }
+    if (questionId.present) {
+      map['question_id'] = Variable<String>(questionId.value);
+    }
+    if (creationAt.present) {
+      map['creation_at'] = Variable<DateTime>(creationAt.value);
+    }
+    if (lastModificationAt.present) {
+      map['last_modification_at'] =
+          Variable<DateTime>(lastModificationAt.value);
+    }
+    if (order.present) {
+      map['order'] = Variable<int>(order.value);
+    }
+    if (didAskedAtCurrentTestRound.present) {
+      map['did_asked_at_current_test_round'] =
+          Variable<bool>(didAskedAtCurrentTestRound.value);
+    }
+    if (emulatedCreatedAt.present) {
+      map['emulated_created_at'] = Variable<DateTime>(emulatedCreatedAt.value);
+    }
+    if (rank.present) {
+      map['rank'] = Variable<int>(rank.value);
+    }
+    if (askedCount.present) {
+      map['asked_count'] = Variable<int>(askedCount.value);
+    }
+    if (wronglyAnsweredCount.present) {
+      map['wrongly_answered_count'] = Variable<int>(wronglyAnsweredCount.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EntrysCompanion(')
+          ..write('id: $id, ')
+          ..write('fieldListId: $fieldListId, ')
+          ..write('answerId: $answerId, ')
+          ..write('questionId: $questionId, ')
+          ..write('creationAt: $creationAt, ')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('order: $order, ')
+          ..write('didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, ')
+          ..write('emulatedCreatedAt: $emulatedCreatedAt, ')
+          ..write('rank: $rank, ')
+          ..write('askedCount: $askedCount, ')
+          ..write('wronglyAnsweredCount: $wronglyAnsweredCount, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -4249,8 +4252,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $EntryTextsTable entryTexts = $EntryTextsTable(this);
   late final $QuestionsTable questions = $QuestionsTable(this);
-  late final $EntrysTable entrys = $EntrysTable(this);
   late final $FieldListsTable fieldLists = $FieldListsTable(this);
+  late final $EntrysTable entrys = $EntrysTable(this);
   late final $FieldsTable fields = $FieldsTable(this);
   late final $NotesTable notes = $NotesTable(this);
   late final $SessionsTable sessions = $SessionsTable(this);
@@ -4277,8 +4280,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         entryTexts,
         questions,
-        entrys,
         fieldLists,
+        entrys,
         fields,
         notes,
         sessions,

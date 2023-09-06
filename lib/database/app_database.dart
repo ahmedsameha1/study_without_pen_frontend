@@ -57,7 +57,7 @@ class Entrys extends Table {
   static const int ASKED_COUNT_MAXIMUM_VALUE = 65535;
   static const int WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE = 65535;
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
-  TextColumn get fieldListId => text()();
+  TextColumn get fieldListId => text().references(FieldLists, #id)();
   TextColumn get answerId => text()();
   TextColumn get questionId => text()();
   DateTimeColumn get creationAt => dateTime()();

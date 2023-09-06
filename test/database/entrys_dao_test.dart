@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
+import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,6 +14,7 @@ void main() {
   late EntrysDao entrysDao;
   late QuestionsDao questionsDao;
   late EntryTextsDao entryTextsDao;
+  late FieldListsDao fieldListsDao;
   String id = const Uuid().v4();
   String fieldListId = const Uuid().v4();
   String answerId = const Uuid().v4();
@@ -25,11 +27,58 @@ void main() {
   int askedCount = 2;
   int wronglyAnsweredCount = 1;
   bool didAskedAtCurrentTestRound = true;
-  setUp(() {
+  String fieldId = const Uuid().v4();
+  String name = "fieldList1";
+  DateTime creationAt1 = DateTime.utc(2019, 1, 1);
+  DateTime lastModificationAt1 = DateTime.utc(2019, 2, 2);
+  String languageTag = "en-US";
+  int checkType = CheckType.NON_STRICT_IGNORE_CASE.index;
+  int sortBy = SortBy.CREATION_DATE_DESC.index;
+  bool doesReadAnswer = true;
+  int usageCount = 20;
+  int color = 0x55554433;
+  int emulationNumberOfQuestions = 0;
+  String emulationDays = "01234";
+  int testsReadingQuestionLetterDuration = 200;
+  int testsFindingAnswerDuration = 1000;
+  int testsTypingAnswerLetterDuration = 100;
+  int studyTillCorrectReadingQuestionLetterDuration = 200;
+  int studyTillCorrectFindingAnswerDuration = 1000;
+  int studyTillCorrectTypingAnswerLetterDuration = 100;
+  int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
+  bool doesObfuscateQuestion = true;
+  setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
     entrysDao = EntrysDao(appDatabase);
     questionsDao = QuestionsDao(appDatabase);
     entryTextsDao = EntryTextsDao(appDatabase);
+    fieldListsDao = FieldListsDao(appDatabase);
+    var fieldList = FieldList(
+        id: fieldListId,
+        fieldId: fieldId,
+        name: name,
+        creationAt: creationAt1,
+        lastModificationAt: lastModificationAt1,
+        languageTag: languageTag,
+        checkType: checkType,
+        sortBy: sortBy,
+        doesReadAnswer: doesReadAnswer,
+        usageCount: usageCount,
+        color: color,
+        emulationNumberOfQuestions: emulationNumberOfQuestions,
+        emulationDays: emulationDays,
+        testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
+        testsFindingAnswerDuration: testsFindingAnswerDuration,
+        testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+        studyTillCorrectReadingQuestionLetterDuration:
+            studyTillCorrectReadingQuestionLetterDuration,
+        studyTillCorrectFindingAnswerDuration:
+            studyTillCorrectFindingAnswerDuration,
+        studyTillCorrectTypingAnswerLetterDuration:
+            studyTillCorrectTypingAnswerLetterDuration,
+        testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+        doesObfuscateQuestion: doesObfuscateQuestion);
+    await fieldListsDao.create(fieldList.toCompanion(true));
   });
 
   tearDown(() async {
@@ -81,7 +130,6 @@ void main() {
       String id2 = const Uuid().v4();
       String id3 = const Uuid().v4();
       String id4 = const Uuid().v4();
-      String fieldListId1 = const Uuid().v4();
       String fieldListId2 = const Uuid().v4();
       String answerId2 = const Uuid().v4();
       String answerId3 = const Uuid().v4();
@@ -95,9 +143,36 @@ void main() {
       DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
       DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
       DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+      var fieldList = FieldList(
+          id: fieldListId2,
+          fieldId: fieldId,
+          name: name + "f",
+          creationAt: creationAt1.add(Duration(days: 10)),
+          lastModificationAt: lastModificationAt1.add(Duration(days: 20)),
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+          doesObfuscateQuestion: doesObfuscateQuestion);
+      await fieldListsDao.create(fieldList.toCompanion(true));
       var entry = Entry(
           id: id1,
-          fieldListId: fieldListId1,
+          fieldListId: fieldListId,
           answerId: answerId,
           questionId: questionId,
           creationAt: creationAt,
@@ -125,7 +200,7 @@ void main() {
       await entrysDao.create(entry.toCompanion(true));
       entry = Entry(
           id: id3,
-          fieldListId: fieldListId1,
+          fieldListId: fieldListId,
           answerId: answerId3,
           questionId: questionId3,
           creationAt: creationAt2,
@@ -139,7 +214,7 @@ void main() {
       await entrysDao.create(entry.toCompanion(true));
       entry = Entry(
           id: id4,
-          fieldListId: fieldListId1,
+          fieldListId: fieldListId,
           answerId: answerId4,
           questionId: questionId4,
           creationAt: creationAt4,
@@ -151,11 +226,11 @@ void main() {
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
       await entrysDao.create(entry.toCompanion(true));
-      List<Entry> entries = await entrysDao.getByFieldListId(fieldListId1);
+      List<Entry> entries = await entrysDao.getByFieldListId(fieldListId);
       expect(entries.length, 3);
       entry = entries[0];
       expect(entry.id, id3);
-      expect(entry.fieldListId, fieldListId1);
+      expect(entry.fieldListId, fieldListId);
       expect(entry.answerId, answerId3);
       expect(entry.questionId, questionId3);
       expect(entry.creationAt, creationAt2);
@@ -168,7 +243,7 @@ void main() {
       expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
       entry = entries[1];
       expect(entry.id, id4);
-      expect(entry.fieldListId, fieldListId1);
+      expect(entry.fieldListId, fieldListId);
       expect(entry.answerId, answerId4);
       expect(entry.questionId, questionId4);
       expect(entry.creationAt, creationAt4);
@@ -181,7 +256,7 @@ void main() {
       expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
       entry = entries[2];
       expect(entry.id, id1);
-      expect(entry.fieldListId, fieldListId1);
+      expect(entry.fieldListId, fieldListId);
       expect(entry.answerId, answerId);
       expect(entry.questionId, questionId);
       expect(entry.creationAt, creationAt);
@@ -411,6 +486,28 @@ void main() {
       },
           throwsA(predicate((e) =>
               e is InvalidDataException && e.message.contains("fieldListId"))));
+    });
+
+    test("Invalid Entry: fieldListId doesn't exist in FieldLists table",
+        () async {
+      var entry = Entry(
+          id: id,
+          fieldListId: const Uuid().v4(),
+          answerId: answerId,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          emulatedCreatedAt: emulatedCreatedAt,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      expect(() async {
+        await entrysDao.create(entry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("FOREIGN KEY"))));
     });
 
     test("Invalid Entry: answerId is an invalid UUID v4", () async {

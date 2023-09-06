@@ -3,6 +3,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
+import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
 import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 import 'package:study_without_pen_by_flutter/database/wrong_answers_dao.dart';
 import 'package:uuid/uuid.dart';
@@ -12,6 +13,7 @@ void main() {
   late WrongAnswersDao wrongAnswersDao;
   late SessionsDao sessionsDao;
   late EntrysDao entrysDao;
+  late FieldListsDao fieldListsDao;
   String id = const Uuid().v4();
   String entryId = const Uuid().v4();
   String sessionId = const Uuid().v4();
@@ -35,12 +37,57 @@ void main() {
   int askedCount = 2;
   int wronglyAnsweredCount = 1;
   bool didAskedAtCurrentTestRound = true;
+  String fieldId = const Uuid().v4();
+  String name = "fieldList1";
+  String languageTag = "en-US";
+  int checkType = CheckType.NON_STRICT_IGNORE_CASE.index;
+  int sortBy = SortBy.CREATION_DATE_DESC.index;
+  bool doesReadAnswer = true;
+  int usageCount = 20;
+  int color = 0x55554433;
+  int emulationNumberOfQuestions = 0;
+  String emulationDays = "01234";
+  int testsReadingQuestionLetterDuration = 200;
+  int testsFindingAnswerDuration = 1000;
+  int testsTypingAnswerLetterDuration = 100;
+  int studyTillCorrectReadingQuestionLetterDuration = 200;
+  int studyTillCorrectFindingAnswerDuration = 1000;
+  int studyTillCorrectTypingAnswerLetterDuration = 100;
+  int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
+  bool doesObfuscateQuestion = true;
 
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
     wrongAnswersDao = WrongAnswersDao(appDatabase);
     sessionsDao = SessionsDao(appDatabase);
     entrysDao = EntrysDao(appDatabase);
+    fieldListsDao = FieldListsDao(appDatabase);
+    var fieldList = FieldList(
+        id: fieldListId,
+        fieldId: fieldId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        languageTag: languageTag,
+        checkType: checkType,
+        sortBy: sortBy,
+        doesReadAnswer: doesReadAnswer,
+        usageCount: usageCount,
+        color: color,
+        emulationNumberOfQuestions: emulationNumberOfQuestions,
+        emulationDays: emulationDays,
+        testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
+        testsFindingAnswerDuration: testsFindingAnswerDuration,
+        testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+        studyTillCorrectReadingQuestionLetterDuration:
+            studyTillCorrectReadingQuestionLetterDuration,
+        studyTillCorrectFindingAnswerDuration:
+            studyTillCorrectFindingAnswerDuration,
+        studyTillCorrectTypingAnswerLetterDuration:
+            studyTillCorrectTypingAnswerLetterDuration,
+        testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+        doesObfuscateQuestion: doesObfuscateQuestion);
+    await fieldListsDao.create(fieldList.toCompanion(true));
     var session = Session(
         id: sessionId,
         fieldListId: fieldListId,

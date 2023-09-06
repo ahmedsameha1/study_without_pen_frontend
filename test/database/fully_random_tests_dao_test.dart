@@ -3,6 +3,7 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
+import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_test.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_tests_dao.dart';
 import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
@@ -13,6 +14,7 @@ void main() {
   late FullyRandomTestsDao fullyRandomTestsDao;
   late SessionsDao sessionsDao;
   late EntrysDao entrysDao;
+  late FieldListsDao fieldListsDao;
   String id = Uuid().v4();
   String fieldListId = Uuid().v4();
   int currentQuestionCounter = 5;
@@ -28,12 +30,58 @@ void main() {
   String lastAnswer = "wefw";
   DateTime creationAt = DateTime.utc(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
+  String name = "fieldList1";
+  DateTime creationAt1 = DateTime.utc(2019, 1, 1);
+  DateTime lastModificationAt1 = DateTime.utc(2019, 2, 2);
+  String languageTag = "en-US";
+  int checkType = CheckType.NON_STRICT_IGNORE_CASE.index;
+  int sortBy = SortBy.CREATION_DATE_DESC.index;
+  bool doesReadAnswer = true;
+  int usageCount = 20;
+  int color = 0x55554433;
+  int emulationNumberOfQuestions = 0;
+  String emulationDays = "01234";
+  int testsReadingQuestionLetterDuration = 200;
+  int testsFindingAnswerDuration = 1000;
+  int testsTypingAnswerLetterDuration = 100;
+  int studyTillCorrectReadingQuestionLetterDuration = 200;
+  int studyTillCorrectFindingAnswerDuration = 1000;
+  int studyTillCorrectTypingAnswerLetterDuration = 100;
+  int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
+  bool doesObfuscateQuestion = true;
 
-  setUp(() {
+  setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
     fullyRandomTestsDao = FullyRandomTestsDao(appDatabase);
     sessionsDao = SessionsDao(appDatabase);
     entrysDao = EntrysDao(appDatabase);
+    fieldListsDao = FieldListsDao(appDatabase);
+    var fieldList = FieldList(
+        id: fieldListId,
+        fieldId: const Uuid().v4(),
+        name: name,
+        creationAt: creationAt1,
+        lastModificationAt: lastModificationAt1,
+        languageTag: languageTag,
+        checkType: checkType,
+        sortBy: sortBy,
+        doesReadAnswer: doesReadAnswer,
+        usageCount: usageCount,
+        color: color,
+        emulationNumberOfQuestions: emulationNumberOfQuestions,
+        emulationDays: emulationDays,
+        testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
+        testsFindingAnswerDuration: testsFindingAnswerDuration,
+        testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+        studyTillCorrectReadingQuestionLetterDuration:
+            studyTillCorrectReadingQuestionLetterDuration,
+        studyTillCorrectFindingAnswerDuration:
+            studyTillCorrectFindingAnswerDuration,
+        studyTillCorrectTypingAnswerLetterDuration:
+            studyTillCorrectTypingAnswerLetterDuration,
+        testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+        doesObfuscateQuestion: doesObfuscateQuestion);
+    await fieldListsDao.create(fieldList.toCompanion(true));
   });
 
   tearDown(() async {
@@ -228,7 +276,6 @@ void main() {
     String id2 = const Uuid().v4();
     String id3 = const Uuid().v4();
     String id4 = const Uuid().v4();
-    String fieldListId1 = const Uuid().v4();
     String fieldListId2 = const Uuid().v4();
     String answerId1 = const Uuid().v4();
     String answerId2 = const Uuid().v4();
@@ -249,9 +296,36 @@ void main() {
     int wronglyAnsweredCount = 1;
     DateTime emulatedCreatedAt = DateTime.utc(2022, 2, 2);
     setUp(() async {
+      var fieldList = FieldList(
+          id: fieldListId2,
+          fieldId: const Uuid().v4(),
+          name: name + "f",
+          creationAt: creationAt1.add(Duration(days: 10)),
+          lastModificationAt: lastModificationAt1.add(Duration(days: 20)),
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+          doesObfuscateQuestion: doesObfuscateQuestion);
+      await fieldListsDao.create(fieldList.toCompanion(true));
       var entry = Entry(
           id: id1,
-          fieldListId: fieldListId1,
+          fieldListId: fieldListId,
           answerId: answerId1,
           questionId: questionId1,
           creationAt: creationAt,
@@ -265,7 +339,7 @@ void main() {
       await entrysDao.create(entry.toCompanion(true));
       entry = Entry(
           id: id2,
-          fieldListId: fieldListId1,
+          fieldListId: fieldListId,
           answerId: answerId2,
           questionId: questionId2,
           creationAt: creationAt3,
@@ -279,7 +353,7 @@ void main() {
       await entrysDao.create(entry.toCompanion(true));
       entry = Entry(
           id: id3,
-          fieldListId: fieldListId1,
+          fieldListId: fieldListId,
           answerId: answerId3,
           questionId: questionId3,
           creationAt: creationAt2,
@@ -311,7 +385,7 @@ void main() {
       await fullyRandomTestsDao.create(
           questionsNumber: questionsNumber,
           id: id,
-          fieldListId: fieldListId1,
+          fieldListId: fieldListId,
           currentQuestionCounter: currentQuestionCounter,
           triesNumber: triesNumber,
           triesCounter: triesCounter,
@@ -328,7 +402,7 @@ void main() {
       FullyRandomTest? fullyRandomTest = await fullyRandomTestsDao.getById(id);
       fullyRandomTest = fullyRandomTest!;
       expect(fullyRandomTest.session.id, id);
-      expect(fullyRandomTest.session.fieldListId, fieldListId1);
+      expect(fullyRandomTest.session.fieldListId, fieldListId);
       expect(fullyRandomTest.session.currentQuestionCounter,
           currentQuestionCounter);
       expect(fullyRandomTest.session.triesNumber, triesNumber);
