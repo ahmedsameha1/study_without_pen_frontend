@@ -53,6 +53,8 @@ void main() {
     questionsDao = QuestionsDao(appDatabase);
     entryTextsDao = EntryTextsDao(appDatabase);
     fieldListsDao = FieldListsDao(appDatabase);
+    EntryText answer = EntryText(id: answerId, value: "answer");
+    await entryTextsDao.create(answer.toCompanion(true));
     var fieldList = FieldList(
         id: fieldListId,
         fieldId: fieldId,
@@ -143,6 +145,12 @@ void main() {
       DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
       DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
       DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+      final answer2 = EntryText(id: answerId2, value: "answer2");
+      await entryTextsDao.create(answer2.toCompanion(true));
+      final answer3 = EntryText(id: answerId3, value: "answer3");
+      await entryTextsDao.create(answer3.toCompanion(true));
+      final answer4 = EntryText(id: answerId4, value: "answer4");
+      await entryTextsDao.create(answer4.toCompanion(true));
       var fieldList = FieldList(
           id: fieldListId2,
           fieldId: fieldId,
@@ -292,6 +300,12 @@ void main() {
       DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
       DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
       DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+      final answer2 = EntryText(id: answerId2, value: "answer2");
+      await entryTextsDao.create(answer2.toCompanion(true));
+      final answer3 = EntryText(id: answerId3, value: "answer3");
+      await entryTextsDao.create(answer3.toCompanion(true));
+      final answer4 = EntryText(id: answerId4, value: "answer4");
+      await entryTextsDao.create(answer4.toCompanion(true));
       var entry = Entry(
           id: id,
           fieldListId: fieldListId,
@@ -529,6 +543,27 @@ void main() {
       },
           throwsA(predicate((e) =>
               e is InvalidDataException && e.message.contains("answerId"))));
+    });
+
+    test("Invalid Entry: answerId doesn't exist in EntryTexts table", () async {
+      var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answerId: const Uuid().v4(),
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      expect(() async {
+        await entrysDao.create(entry.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("FOREIGN KEY"))));
     });
 
     test("Invalid Entry: questionId is an invalid UUID v4", () async {
@@ -1187,6 +1222,8 @@ void main() {
       const thisOrder = 10;
       var thisAnswerId = const Uuid().v4();
       const thisAskedCount = 1000;
+      final thisAnswer = EntryText(id: thisAnswerId, value: "thisAnswer");
+      await entryTextsDao.create(thisAnswer.toCompanion(true));
       var entry = Entry(
           id: id,
           fieldListId: fieldListId,
@@ -1251,9 +1288,9 @@ void main() {
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
           address: questionEntryTextId);
-      entryTextsDao.create(questionEntryText.toCompanion(true));
-      entryTextsDao.create(answerEntryText.toCompanion(true));
-      questionsDao.create(question.toCompanion(true));
+      await entryTextsDao.create(questionEntryText.toCompanion(true));
+      await entryTextsDao.create(answerEntryText.toCompanion(true));
+      await questionsDao.create(question.toCompanion(true));
       final entry = Entry(
           id: id,
           questionId: question.id,
@@ -1267,7 +1304,7 @@ void main() {
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
-      entrysDao.create(entry.toCompanion(true));
+      await entrysDao.create(entry.toCompanion(true));
       Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(id);
       List<String>? hints = await hintsFuture;
       expect(hints, null);
@@ -1289,10 +1326,10 @@ void main() {
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
           address: questionEntryTextId);
-      entryTextsDao.create(questionEntryText.toCompanion(true));
-      entryTextsDao.create(answerEntryText1.toCompanion(true));
-      entryTextsDao.create(answerEntryText2.toCompanion(true));
-      questionsDao.create(question.toCompanion(true));
+      await entryTextsDao.create(questionEntryText.toCompanion(true));
+      await entryTextsDao.create(answerEntryText1.toCompanion(true));
+      await entryTextsDao.create(answerEntryText2.toCompanion(true));
+      await questionsDao.create(question.toCompanion(true));
       final entry1 = Entry(
           id: entryId1,
           questionId: question.id,
@@ -1319,8 +1356,8 @@ void main() {
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
-      entrysDao.create(entry1.toCompanion(true));
-      entrysDao.create(entry2.toCompanion(true));
+      await entrysDao.create(entry1.toCompanion(true));
+      await entrysDao.create(entry2.toCompanion(true));
       Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
       List<String>? hints = await hintsFuture;
       expect(hints!.length, 1);
@@ -1347,11 +1384,11 @@ void main() {
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
           address: questionEntryTextId);
-      entryTextsDao.create(questionEntryText.toCompanion(true));
-      entryTextsDao.create(answerEntryText1.toCompanion(true));
-      entryTextsDao.create(answerEntryText2.toCompanion(true));
-      entryTextsDao.create(answerEntryText3.toCompanion(true));
-      questionsDao.create(question.toCompanion(true));
+      await entryTextsDao.create(questionEntryText.toCompanion(true));
+      await entryTextsDao.create(answerEntryText1.toCompanion(true));
+      await entryTextsDao.create(answerEntryText2.toCompanion(true));
+      await entryTextsDao.create(answerEntryText3.toCompanion(true));
+      await questionsDao.create(question.toCompanion(true));
       final entry1 = Entry(
           id: entryId1,
           questionId: question.id,
@@ -1391,9 +1428,9 @@ void main() {
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
-      entrysDao.create(entry1.toCompanion(true));
-      entrysDao.create(entry2.toCompanion(true));
-      entrysDao.create(entry3.toCompanion(true));
+      await entrysDao.create(entry1.toCompanion(true));
+      await entrysDao.create(entry2.toCompanion(true));
+      await entrysDao.create(entry3.toCompanion(true));
       Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
       List<String>? hints = await hintsFuture;
       expect(hints!.length, 2);
@@ -1421,11 +1458,11 @@ void main() {
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
           address: questionEntryTextId);
-      entryTextsDao.create(questionEntryText.toCompanion(true));
-      entryTextsDao.create(answerEntryText1.toCompanion(true));
-      entryTextsDao.create(answerEntryText2.toCompanion(true));
-      entryTextsDao.create(answerEntryText3.toCompanion(true));
-      questionsDao.create(question.toCompanion(true));
+      await entryTextsDao.create(questionEntryText.toCompanion(true));
+      await entryTextsDao.create(answerEntryText1.toCompanion(true));
+      await entryTextsDao.create(answerEntryText2.toCompanion(true));
+      await entryTextsDao.create(answerEntryText3.toCompanion(true));
+      await questionsDao.create(question.toCompanion(true));
       final entry1 = Entry(
           id: entryId1,
           questionId: question.id,
@@ -1465,9 +1502,9 @@ void main() {
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
-      entrysDao.create(entry1.toCompanion(true));
-      entrysDao.create(entry2.toCompanion(true));
-      entrysDao.create(entry3.toCompanion(true));
+      await entrysDao.create(entry1.toCompanion(true));
+      await entrysDao.create(entry2.toCompanion(true));
+      await entrysDao.create(entry3.toCompanion(true));
       Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
       List<String>? hints = await hintsFuture;
       expect(hints!.length, 2);
@@ -1499,12 +1536,12 @@ void main() {
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
           address: questionEntryTextId);
-      entryTextsDao.create(questionEntryText.toCompanion(true));
-      entryTextsDao.create(answerEntryText1.toCompanion(true));
-      entryTextsDao.create(answerEntryText2.toCompanion(true));
-      entryTextsDao.create(answerEntryText3.toCompanion(true));
-      entryTextsDao.create(answerEntryText4.toCompanion(true));
-      questionsDao.create(question.toCompanion(true));
+      await entryTextsDao.create(questionEntryText.toCompanion(true));
+      await entryTextsDao.create(answerEntryText1.toCompanion(true));
+      await entryTextsDao.create(answerEntryText2.toCompanion(true));
+      await entryTextsDao.create(answerEntryText3.toCompanion(true));
+      await entryTextsDao.create(answerEntryText4.toCompanion(true));
+      await questionsDao.create(question.toCompanion(true));
       final entry1 = Entry(
           id: entryId1,
           questionId: question.id,
@@ -1557,10 +1594,10 @@ void main() {
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
-      entrysDao.create(entry1.toCompanion(true));
-      entrysDao.create(entry2.toCompanion(true));
-      entrysDao.create(entry3.toCompanion(true));
-      entrysDao.create(entry4.toCompanion(true));
+      await entrysDao.create(entry1.toCompanion(true));
+      await entrysDao.create(entry2.toCompanion(true));
+      await entrysDao.create(entry3.toCompanion(true));
+      await entrysDao.create(entry4.toCompanion(true));
       Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
       List<String>? hints = await hintsFuture;
       expect(hints!.length, 3);
@@ -1597,13 +1634,13 @@ void main() {
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
           address: questionEntryTextId);
-      entryTextsDao.create(questionEntryText.toCompanion(true));
-      entryTextsDao.create(answerEntryText1.toCompanion(true));
-      entryTextsDao.create(answerEntryText2.toCompanion(true));
-      entryTextsDao.create(answerEntryText3.toCompanion(true));
-      entryTextsDao.create(answerEntryText4.toCompanion(true));
-      entryTextsDao.create(answerEntryText5.toCompanion(true));
-      questionsDao.create(question.toCompanion(true));
+      await entryTextsDao.create(questionEntryText.toCompanion(true));
+      await entryTextsDao.create(answerEntryText1.toCompanion(true));
+      await entryTextsDao.create(answerEntryText2.toCompanion(true));
+      await entryTextsDao.create(answerEntryText3.toCompanion(true));
+      await entryTextsDao.create(answerEntryText4.toCompanion(true));
+      await entryTextsDao.create(answerEntryText5.toCompanion(true));
+      await questionsDao.create(question.toCompanion(true));
       final entry1 = Entry(
           id: entryId1,
           questionId: question.id,
@@ -1669,11 +1706,11 @@ void main() {
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
-      entrysDao.create(entry1.toCompanion(true));
-      entrysDao.create(entry2.toCompanion(true));
-      entrysDao.create(entry3.toCompanion(true));
-      entrysDao.create(entry4.toCompanion(true));
-      entrysDao.create(entry5.toCompanion(true));
+      await entrysDao.create(entry1.toCompanion(true));
+      await entrysDao.create(entry2.toCompanion(true));
+      await entrysDao.create(entry3.toCompanion(true));
+      await entrysDao.create(entry4.toCompanion(true));
+      await entrysDao.create(entry5.toCompanion(true));
       Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
       List<String>? hints = await hintsFuture;
       expect(hints!.length, 3);
@@ -1714,14 +1751,14 @@ void main() {
           id: questionId,
           questionType: QuestionType.EntryTextQuestion.index,
           address: questionEntryTextId);
-      entryTextsDao.create(questionEntryText.toCompanion(true));
-      entryTextsDao.create(answerEntryText1.toCompanion(true));
-      entryTextsDao.create(answerEntryText2.toCompanion(true));
-      entryTextsDao.create(answerEntryText3.toCompanion(true));
-      entryTextsDao.create(answerEntryText4.toCompanion(true));
-      entryTextsDao.create(answerEntryText5.toCompanion(true));
-      entryTextsDao.create(answerEntryText6.toCompanion(true));
-      questionsDao.create(question.toCompanion(true));
+      await entryTextsDao.create(questionEntryText.toCompanion(true));
+      await entryTextsDao.create(answerEntryText1.toCompanion(true));
+      await entryTextsDao.create(answerEntryText2.toCompanion(true));
+      await entryTextsDao.create(answerEntryText3.toCompanion(true));
+      await entryTextsDao.create(answerEntryText4.toCompanion(true));
+      await entryTextsDao.create(answerEntryText5.toCompanion(true));
+      await entryTextsDao.create(answerEntryText6.toCompanion(true));
+      await questionsDao.create(question.toCompanion(true));
       final entry1 = Entry(
           id: entryId1,
           questionId: question.id,
@@ -1800,12 +1837,12 @@ void main() {
           rank: rank,
           askedCount: askedCount,
           wronglyAnsweredCount: wronglyAnsweredCount);
-      entrysDao.create(entry1.toCompanion(true));
-      entrysDao.create(entry2.toCompanion(true));
-      entrysDao.create(entry3.toCompanion(true));
-      entrysDao.create(entry4.toCompanion(true));
-      entrysDao.create(entry5.toCompanion(true));
-      entrysDao.create(entry6.toCompanion(true));
+      await entrysDao.create(entry1.toCompanion(true));
+      await entrysDao.create(entry2.toCompanion(true));
+      await entrysDao.create(entry3.toCompanion(true));
+      await entrysDao.create(entry4.toCompanion(true));
+      await entrysDao.create(entry5.toCompanion(true));
+      await entrysDao.create(entry6.toCompanion(true));
       Future<List<String>?> hintsFuture = entrysDao.getHintsByEntryId(entryId1);
       List<String>? hints = await hintsFuture;
       expect(hints!.length, 4);

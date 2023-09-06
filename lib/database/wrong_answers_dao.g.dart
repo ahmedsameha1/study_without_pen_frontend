@@ -6,6 +6,7 @@ part of 'wrong_answers_dao.dart';
 mixin _$WrongAnswersDaoMixin on DatabaseAccessor<AppDatabase> {
   $SessionsTable get sessions => attachedDatabase.sessions;
   $FieldListsTable get fieldLists => attachedDatabase.fieldLists;
+  $EntryTextsTable get entryTexts => attachedDatabase.entryTexts;
   $EntrysTable get entrys => attachedDatabase.entrys;
   $WrongAnswersTable get wrongAnswers => attachedDatabase.wrongAnswers;
 }

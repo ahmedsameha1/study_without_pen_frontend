@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_test.dart';
@@ -15,8 +16,9 @@ void main() {
   late SessionsDao sessionsDao;
   late EntrysDao entrysDao;
   late FieldListsDao fieldListsDao;
+  late EntryTextsDao entryTextsDao;
   String id = Uuid().v4();
-  String fieldListId = Uuid().v4();
+  String fieldListId = const Uuid().v4();
   int currentQuestionCounter = 5;
   int questionsNumber = 2;
   int triesNumber = 2;
@@ -56,6 +58,7 @@ void main() {
     sessionsDao = SessionsDao(appDatabase);
     entrysDao = EntrysDao(appDatabase);
     fieldListsDao = FieldListsDao(appDatabase);
+    entryTextsDao = EntryTextsDao(appDatabase);
     var fieldList = FieldList(
         id: fieldListId,
         fieldId: const Uuid().v4(),
@@ -323,6 +326,14 @@ void main() {
           testsTimeOfAnswerAction: testsTimeOfAnswerAction,
           doesObfuscateQuestion: doesObfuscateQuestion);
       await fieldListsDao.create(fieldList.toCompanion(true));
+      final answer1 = EntryText(id: answerId1, value: "answer1");
+      await entryTextsDao.create(answer1.toCompanion(true));
+      final answer2 = EntryText(id: answerId2, value: "answer2");
+      await entryTextsDao.create(answer2.toCompanion(true));
+      final answer3 = EntryText(id: answerId3, value: "answer3");
+      await entryTextsDao.create(answer3.toCompanion(true));
+      final answer4 = EntryText(id: answerId4, value: "answer4");
+      await entryTextsDao.create(answer4.toCompanion(true));
       var entry = Entry(
           id: id1,
           fieldListId: fieldListId,

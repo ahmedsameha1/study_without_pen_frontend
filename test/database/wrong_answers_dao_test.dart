@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
 import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
@@ -14,6 +15,7 @@ void main() {
   late SessionsDao sessionsDao;
   late EntrysDao entrysDao;
   late FieldListsDao fieldListsDao;
+  late EntryTextsDao entryTextsDao;
   String id = const Uuid().v4();
   String entryId = const Uuid().v4();
   String sessionId = const Uuid().v4();
@@ -62,6 +64,9 @@ void main() {
     sessionsDao = SessionsDao(appDatabase);
     entrysDao = EntrysDao(appDatabase);
     fieldListsDao = FieldListsDao(appDatabase);
+    entryTextsDao = EntryTextsDao(appDatabase);
+    final answer = EntryText(id: answerId, value: "answer");
+    await entryTextsDao.create(answer.toCompanion(true));
     var fieldList = FieldList(
         id: fieldListId,
         fieldId: fieldId,

@@ -1582,7 +1582,10 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
   @override
   late final GeneratedColumn<String> answerId = GeneratedColumn<String>(
       'answer_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES entry_texts (id)'));
   static const VerificationMeta _questionIdMeta =
       const VerificationMeta('questionId');
   @override
