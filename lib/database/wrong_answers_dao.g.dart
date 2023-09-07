@@ -7,6 +7,7 @@ mixin _$WrongAnswersDaoMixin on DatabaseAccessor<AppDatabase> {
   $SessionsTable get sessions => attachedDatabase.sessions;
   $FieldListsTable get fieldLists => attachedDatabase.fieldLists;
   $EntryTextsTable get entryTexts => attachedDatabase.entryTexts;
+  $QuestionsTable get questions => attachedDatabase.questions;
   $EntrysTable get entrys => attachedDatabase.entrys;
   $WrongAnswersTable get wrongAnswers => attachedDatabase.wrongAnswers;
 }

@@ -59,7 +59,7 @@ class Entrys extends Table {
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldListId => text().references(FieldLists, #id)();
   TextColumn get answerId => text().references(EntryTexts, #id)();
-  TextColumn get questionId => text()();
+  TextColumn get questionId => text().references(Questions, #id)();
   DateTimeColumn get creationAt => dateTime()();
   DateTimeColumn get lastModificationAt =>
       dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();

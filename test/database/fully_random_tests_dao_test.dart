@@ -7,6 +7,7 @@ import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_test.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_tests_dao.dart';
+import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,8 +18,10 @@ void main() {
   late EntrysDao entrysDao;
   late FieldListsDao fieldListsDao;
   late EntryTextsDao entryTextsDao;
+  late QuestionsDao questionsDao;
   String id = Uuid().v4();
   String fieldListId = const Uuid().v4();
+  String questionId = const Uuid().v4();
   int currentQuestionCounter = 5;
   int questionsNumber = 2;
   int triesNumber = 2;
@@ -51,6 +54,10 @@ void main() {
   int studyTillCorrectTypingAnswerLetterDuration = 100;
   int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
   bool doesObfuscateQuestion = true;
+  Question question = Question(
+      id: questionId,
+      questionType: QuestionType.EntryTextQuestion.index,
+      address: const Uuid().v4());
 
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -59,6 +66,8 @@ void main() {
     entrysDao = EntrysDao(appDatabase);
     fieldListsDao = FieldListsDao(appDatabase);
     entryTextsDao = EntryTextsDao(appDatabase);
+    questionsDao = QuestionsDao(appDatabase);
+    await questionsDao.create(question.toCompanion(true));
     var fieldList = FieldList(
         id: fieldListId,
         fieldId: const Uuid().v4(),
@@ -284,7 +293,6 @@ void main() {
     String answerId2 = const Uuid().v4();
     String answerId3 = const Uuid().v4();
     String answerId4 = const Uuid().v4();
-    String questionId1 = const Uuid().v4();
     String questionId2 = const Uuid().v4();
     String questionId3 = const Uuid().v4();
     String questionId4 = const Uuid().v4();
@@ -334,11 +342,26 @@ void main() {
       await entryTextsDao.create(answer3.toCompanion(true));
       final answer4 = EntryText(id: answerId4, value: "answer4");
       await entryTextsDao.create(answer4.toCompanion(true));
+      Question question2 = Question(
+          id: questionId2,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: const Uuid().v4());
+      Question question3 = Question(
+          id: questionId3,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: const Uuid().v4());
+      Question question4 = Question(
+          id: questionId4,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: const Uuid().v4());
+      await questionsDao.create(question2.toCompanion(true));
+      await questionsDao.create(question3.toCompanion(true));
+      await questionsDao.create(question4.toCompanion(true));
       var entry = Entry(
           id: id1,
           fieldListId: fieldListId,
           answerId: answerId1,
-          questionId: questionId1,
+          questionId: questionId,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           order: 3,

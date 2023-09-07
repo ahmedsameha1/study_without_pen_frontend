@@ -1,6 +1,7 @@
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
+import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:study_without_pen_by_flutter/database/session_entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
@@ -16,6 +17,7 @@ void main() {
   late EntrysDao entrysDao;
   late FieldListsDao fieldListsDao;
   late EntryTextsDao entryTextsDao;
+  late QuestionsDao questionsDao;
   final entryId = Uuid().v4();
   final sessionId = Uuid().v4();
   String fieldListId = Uuid().v4();
@@ -56,6 +58,10 @@ void main() {
   int studyTillCorrectTypingAnswerLetterDuration = 100;
   int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
   bool doesObfuscateQuestion = true;
+  Question question = Question(
+      id: questionId,
+      questionType: QuestionType.EntryTextQuestion.index,
+      address: const Uuid().v4());
 
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -64,8 +70,10 @@ void main() {
     entrysDao = EntrysDao(appDatabase);
     fieldListsDao = FieldListsDao(appDatabase);
     entryTextsDao = EntryTextsDao(appDatabase);
+    questionsDao = QuestionsDao(appDatabase);
     final answer = EntryText(id: answerId, value: "answer");
     await entryTextsDao.create(answer.toCompanion(true));
+    await questionsDao.create(question.toCompanion(true));
     var fieldList = FieldList(
         id: fieldListId,
         fieldId: const Uuid().v4(),

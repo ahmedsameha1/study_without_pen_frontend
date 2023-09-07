@@ -7,6 +7,7 @@ mixin _$SessionEntrysDaoMixin on DatabaseAccessor<AppDatabase> {
   $SessionsTable get sessions => attachedDatabase.sessions;
   $FieldListsTable get fieldLists => attachedDatabase.fieldLists;
   $EntryTextsTable get entryTexts => attachedDatabase.entryTexts;
+  $QuestionsTable get questions => attachedDatabase.questions;
   $EntrysTable get entrys => attachedDatabase.entrys;
   $SessionEntrysTable get sessionEntrys => attachedDatabase.sessionEntrys;
 }
