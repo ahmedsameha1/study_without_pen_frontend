@@ -99,7 +99,7 @@ class FieldLists extends Table {
   static const int MINIMUM_STUDY_TILL_CORRECT_DURATIONS = 1; // In milliseconds
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
-  TextColumn get fieldId => text()();
+  TextColumn get fieldId => text().references(Fields, #id)();
   TextColumn get name => text().check(name
           .trim()
           .length

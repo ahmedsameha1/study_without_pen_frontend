@@ -6,6 +6,7 @@ import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
+import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,6 +15,7 @@ void main() {
   late EntrysDao entrysDao;
   late QuestionsDao questionsDao;
   late EntryTextsDao entryTextsDao;
+  late FieldsDao fieldsDao;
   late FieldListsDao fieldListsDao;
   String id = const Uuid().v4();
   String fieldListId = const Uuid().v4();
@@ -47,6 +49,12 @@ void main() {
   int studyTillCorrectTypingAnswerLetterDuration = 100;
   int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
   bool doesObfuscateQuestion = true;
+  String userAccountId = "j0kW7TZPcdZBHLsIUvJOFiAI8VN2";
+  String name1 = "name";
+  DateTime creationAt2 = DateTime(2018, 1, 1);
+  DateTime lastModificationAt2 = DateTime.utc(2018, 2, 2);
+  int usageCount1 = 9;
+  int color1 = 0xff55ee11;
   Question question = Question(
       id: questionId,
       questionType: QuestionType.EntryTextQuestion.index,
@@ -56,10 +64,20 @@ void main() {
     entrysDao = EntrysDao(appDatabase);
     questionsDao = QuestionsDao(appDatabase);
     entryTextsDao = EntryTextsDao(appDatabase);
+    fieldsDao = FieldsDao(appDatabase);
     fieldListsDao = FieldListsDao(appDatabase);
     EntryText answer = EntryText(id: answerId, value: "answer");
     await entryTextsDao.create(answer.toCompanion(true));
     await questionsDao.create(question.toCompanion(true));
+    var field = Field(
+        id: fieldId,
+        userAccountId: userAccountId,
+        name: name1,
+        creationAt: creationAt2,
+        lastModificationAt: lastModificationAt2,
+        usageCount: usageCount1,
+        color: color1);
+    await fieldsDao.create(field.toCompanion(true));
     var fieldList = FieldList(
         id: fieldListId,
         fieldId: fieldId,

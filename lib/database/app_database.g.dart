@@ -414,6 +414,410 @@ class QuestionsCompanion extends UpdateCompanion<Question> {
   }
 }
 
+class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FieldsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => const Uuid().v4());
+  static const VerificationMeta _userAccountIdMeta =
+      const VerificationMeta('userAccountId');
+  @override
+  late final GeneratedColumn<String> userAccountId = GeneratedColumn<String>(
+      'user_account_id', aliasedName, false,
+      check: () => userAccountId
+          .trim()
+          .length
+          .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      check: () =>
+          name
+              .trim()
+              .length
+              .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_NAME) &
+          name.length.isSmallerOrEqualValue(Fields.MAXIMUM_LENGTH_OF_NAME),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _creationAtMeta =
+      const VerificationMeta('creationAt');
+  @override
+  late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
+      'creation_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _lastModificationAtMeta =
+      const VerificationMeta('lastModificationAt');
+  @override
+  late final GeneratedColumn<DateTime> lastModificationAt =
+      GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
+          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: true);
+  static const VerificationMeta _usageCountMeta =
+      const VerificationMeta('usageCount');
+  @override
+  late final GeneratedColumn<int> usageCount = GeneratedColumn<int>(
+      'usage_count', aliasedName, false,
+      check: () =>
+          usageCount.isBiggerOrEqualValue(Fields.MINIMUM_USAGE_COUNT) &
+          usageCount.isSmallerOrEqualValue(Fields.MAXIMUM_USAGE_COUNT),
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(Fields.DEFAULT_USAGE_COUNT));
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<int> color = GeneratedColumn<int>(
+      'color', aliasedName, false,
+      check: () =>
+          color.isBiggerOrEqualValue(Fields.MINIMUM_COLOR) &
+          color.isSmallerOrEqualValue(Fields.MAXIMUM_COLOR),
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: Constant(Fields.DEFAULT_COLOR));
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        userAccountId,
+        name,
+        creationAt,
+        lastModificationAt,
+        usageCount,
+        color
+      ];
+  @override
+  String get aliasedName => _alias ?? 'fields';
+  @override
+  String get actualTableName => 'fields';
+  @override
+  VerificationContext validateIntegrity(Insertable<Field> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_account_id')) {
+      context.handle(
+          _userAccountIdMeta,
+          userAccountId.isAcceptableOrUnknown(
+              data['user_account_id']!, _userAccountIdMeta));
+    } else if (isInserting) {
+      context.missing(_userAccountIdMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('creation_at')) {
+      context.handle(
+          _creationAtMeta,
+          creationAt.isAcceptableOrUnknown(
+              data['creation_at']!, _creationAtMeta));
+    } else if (isInserting) {
+      context.missing(_creationAtMeta);
+    }
+    if (data.containsKey('last_modification_at')) {
+      context.handle(
+          _lastModificationAtMeta,
+          lastModificationAt.isAcceptableOrUnknown(
+              data['last_modification_at']!, _lastModificationAtMeta));
+    } else if (isInserting) {
+      context.missing(_lastModificationAtMeta);
+    }
+    if (data.containsKey('usage_count')) {
+      context.handle(
+          _usageCountMeta,
+          usageCount.isAcceptableOrUnknown(
+              data['usage_count']!, _usageCountMeta));
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+          _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Field map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Field(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      userAccountId: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}user_account_id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      creationAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
+      lastModificationAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_modification_at'])!,
+      usageCount: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}usage_count'])!,
+      color: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}color'])!,
+    );
+  }
+
+  @override
+  $FieldsTable createAlias(String alias) {
+    return $FieldsTable(attachedDatabase, alias);
+  }
+}
+
+class Field extends DataClass implements Insertable<Field> {
+  final String id;
+  final String userAccountId;
+  final String name;
+  final DateTime creationAt;
+  final DateTime lastModificationAt;
+  final int usageCount;
+  final int color;
+  const Field(
+      {required this.id,
+      required this.userAccountId,
+      required this.name,
+      required this.creationAt,
+      required this.lastModificationAt,
+      required this.usageCount,
+      required this.color});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['user_account_id'] = Variable<String>(userAccountId);
+    map['name'] = Variable<String>(name);
+    map['creation_at'] = Variable<DateTime>(creationAt);
+    map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
+    map['usage_count'] = Variable<int>(usageCount);
+    map['color'] = Variable<int>(color);
+    return map;
+  }
+
+  FieldsCompanion toCompanion(bool nullToAbsent) {
+    return FieldsCompanion(
+      id: Value(id),
+      userAccountId: Value(userAccountId),
+      name: Value(name),
+      creationAt: Value(creationAt),
+      lastModificationAt: Value(lastModificationAt),
+      usageCount: Value(usageCount),
+      color: Value(color),
+    );
+  }
+
+  factory Field.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Field(
+      id: serializer.fromJson<String>(json['id']),
+      userAccountId: serializer.fromJson<String>(json['userAccountId']),
+      name: serializer.fromJson<String>(json['name']),
+      creationAt: serializer.fromJson<DateTime>(json['creationAt']),
+      lastModificationAt:
+          serializer.fromJson<DateTime>(json['lastModificationAt']),
+      usageCount: serializer.fromJson<int>(json['usageCount']),
+      color: serializer.fromJson<int>(json['color']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'userAccountId': serializer.toJson<String>(userAccountId),
+      'name': serializer.toJson<String>(name),
+      'creationAt': serializer.toJson<DateTime>(creationAt),
+      'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
+      'usageCount': serializer.toJson<int>(usageCount),
+      'color': serializer.toJson<int>(color),
+    };
+  }
+
+  Field copyWith(
+          {String? id,
+          String? userAccountId,
+          String? name,
+          DateTime? creationAt,
+          DateTime? lastModificationAt,
+          int? usageCount,
+          int? color}) =>
+      Field(
+        id: id ?? this.id,
+        userAccountId: userAccountId ?? this.userAccountId,
+        name: name ?? this.name,
+        creationAt: creationAt ?? this.creationAt,
+        lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+        usageCount: usageCount ?? this.usageCount,
+        color: color ?? this.color,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Field(')
+          ..write('id: $id, ')
+          ..write('userAccountId: $userAccountId, ')
+          ..write('name: $name, ')
+          ..write('creationAt: $creationAt, ')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('usageCount: $usageCount, ')
+          ..write('color: $color')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, userAccountId, name, creationAt,
+      lastModificationAt, usageCount, color);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Field &&
+          other.id == this.id &&
+          other.userAccountId == this.userAccountId &&
+          other.name == this.name &&
+          other.creationAt == this.creationAt &&
+          other.lastModificationAt == this.lastModificationAt &&
+          other.usageCount == this.usageCount &&
+          other.color == this.color);
+}
+
+class FieldsCompanion extends UpdateCompanion<Field> {
+  final Value<String> id;
+  final Value<String> userAccountId;
+  final Value<String> name;
+  final Value<DateTime> creationAt;
+  final Value<DateTime> lastModificationAt;
+  final Value<int> usageCount;
+  final Value<int> color;
+  final Value<int> rowid;
+  const FieldsCompanion({
+    this.id = const Value.absent(),
+    this.userAccountId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.creationAt = const Value.absent(),
+    this.lastModificationAt = const Value.absent(),
+    this.usageCount = const Value.absent(),
+    this.color = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FieldsCompanion.insert({
+    this.id = const Value.absent(),
+    required String userAccountId,
+    required String name,
+    required DateTime creationAt,
+    required DateTime lastModificationAt,
+    this.usageCount = const Value.absent(),
+    this.color = const Value.absent(),
+    this.rowid = const Value.absent(),
+  })  : userAccountId = Value(userAccountId),
+        name = Value(name),
+        creationAt = Value(creationAt),
+        lastModificationAt = Value(lastModificationAt);
+  static Insertable<Field> custom({
+    Expression<String>? id,
+    Expression<String>? userAccountId,
+    Expression<String>? name,
+    Expression<DateTime>? creationAt,
+    Expression<DateTime>? lastModificationAt,
+    Expression<int>? usageCount,
+    Expression<int>? color,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userAccountId != null) 'user_account_id': userAccountId,
+      if (name != null) 'name': name,
+      if (creationAt != null) 'creation_at': creationAt,
+      if (lastModificationAt != null)
+        'last_modification_at': lastModificationAt,
+      if (usageCount != null) 'usage_count': usageCount,
+      if (color != null) 'color': color,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FieldsCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? userAccountId,
+      Value<String>? name,
+      Value<DateTime>? creationAt,
+      Value<DateTime>? lastModificationAt,
+      Value<int>? usageCount,
+      Value<int>? color,
+      Value<int>? rowid}) {
+    return FieldsCompanion(
+      id: id ?? this.id,
+      userAccountId: userAccountId ?? this.userAccountId,
+      name: name ?? this.name,
+      creationAt: creationAt ?? this.creationAt,
+      lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+      usageCount: usageCount ?? this.usageCount,
+      color: color ?? this.color,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (userAccountId.present) {
+      map['user_account_id'] = Variable<String>(userAccountId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (creationAt.present) {
+      map['creation_at'] = Variable<DateTime>(creationAt.value);
+    }
+    if (lastModificationAt.present) {
+      map['last_modification_at'] =
+          Variable<DateTime>(lastModificationAt.value);
+    }
+    if (usageCount.present) {
+      map['usage_count'] = Variable<int>(usageCount.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<int>(color.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FieldsCompanion(')
+          ..write('id: $id, ')
+          ..write('userAccountId: $userAccountId, ')
+          ..write('name: $name, ')
+          ..write('creationAt: $creationAt, ')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('usageCount: $usageCount, ')
+          ..write('color: $color, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $FieldListsTable extends FieldLists
     with TableInfo<$FieldListsTable, FieldList> {
   @override
@@ -432,7 +836,10 @@ class $FieldListsTable extends FieldLists
   @override
   late final GeneratedColumn<String> fieldId = GeneratedColumn<String>(
       'field_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES fields (id)'));
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -2192,410 +2599,6 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
   }
 }
 
-class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $FieldsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-      'id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: false,
-      clientDefault: () => const Uuid().v4());
-  static const VerificationMeta _userAccountIdMeta =
-      const VerificationMeta('userAccountId');
-  @override
-  late final GeneratedColumn<String> userAccountId = GeneratedColumn<String>(
-      'user_account_id', aliasedName, false,
-      check: () => userAccountId
-          .trim()
-          .length
-          .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      check: () =>
-          name
-              .trim()
-              .length
-              .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_NAME) &
-          name.length.isSmallerOrEqualValue(Fields.MAXIMUM_LENGTH_OF_NAME),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  static const VerificationMeta _creationAtMeta =
-      const VerificationMeta('creationAt');
-  @override
-  late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
-      'creation_at', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _lastModificationAtMeta =
-      const VerificationMeta('lastModificationAt');
-  @override
-  late final GeneratedColumn<DateTime> lastModificationAt =
-      GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
-          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
-          type: DriftSqlType.dateTime,
-          requiredDuringInsert: true);
-  static const VerificationMeta _usageCountMeta =
-      const VerificationMeta('usageCount');
-  @override
-  late final GeneratedColumn<int> usageCount = GeneratedColumn<int>(
-      'usage_count', aliasedName, false,
-      check: () =>
-          usageCount.isBiggerOrEqualValue(Fields.MINIMUM_USAGE_COUNT) &
-          usageCount.isSmallerOrEqualValue(Fields.MAXIMUM_USAGE_COUNT),
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: Constant(Fields.DEFAULT_USAGE_COUNT));
-  static const VerificationMeta _colorMeta = const VerificationMeta('color');
-  @override
-  late final GeneratedColumn<int> color = GeneratedColumn<int>(
-      'color', aliasedName, false,
-      check: () =>
-          color.isBiggerOrEqualValue(Fields.MINIMUM_COLOR) &
-          color.isSmallerOrEqualValue(Fields.MAXIMUM_COLOR),
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultValue: Constant(Fields.DEFAULT_COLOR));
-  @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        userAccountId,
-        name,
-        creationAt,
-        lastModificationAt,
-        usageCount,
-        color
-      ];
-  @override
-  String get aliasedName => _alias ?? 'fields';
-  @override
-  String get actualTableName => 'fields';
-  @override
-  VerificationContext validateIntegrity(Insertable<Field> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('user_account_id')) {
-      context.handle(
-          _userAccountIdMeta,
-          userAccountId.isAcceptableOrUnknown(
-              data['user_account_id']!, _userAccountIdMeta));
-    } else if (isInserting) {
-      context.missing(_userAccountIdMeta);
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('creation_at')) {
-      context.handle(
-          _creationAtMeta,
-          creationAt.isAcceptableOrUnknown(
-              data['creation_at']!, _creationAtMeta));
-    } else if (isInserting) {
-      context.missing(_creationAtMeta);
-    }
-    if (data.containsKey('last_modification_at')) {
-      context.handle(
-          _lastModificationAtMeta,
-          lastModificationAt.isAcceptableOrUnknown(
-              data['last_modification_at']!, _lastModificationAtMeta));
-    } else if (isInserting) {
-      context.missing(_lastModificationAtMeta);
-    }
-    if (data.containsKey('usage_count')) {
-      context.handle(
-          _usageCountMeta,
-          usageCount.isAcceptableOrUnknown(
-              data['usage_count']!, _usageCountMeta));
-    }
-    if (data.containsKey('color')) {
-      context.handle(
-          _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Field map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Field(
-      id: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      userAccountId: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}user_account_id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      creationAt: attachedDatabase.typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
-      lastModificationAt: attachedDatabase.typeMapping.read(
-          DriftSqlType.dateTime,
-          data['${effectivePrefix}last_modification_at'])!,
-      usageCount: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}usage_count'])!,
-      color: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}color'])!,
-    );
-  }
-
-  @override
-  $FieldsTable createAlias(String alias) {
-    return $FieldsTable(attachedDatabase, alias);
-  }
-}
-
-class Field extends DataClass implements Insertable<Field> {
-  final String id;
-  final String userAccountId;
-  final String name;
-  final DateTime creationAt;
-  final DateTime lastModificationAt;
-  final int usageCount;
-  final int color;
-  const Field(
-      {required this.id,
-      required this.userAccountId,
-      required this.name,
-      required this.creationAt,
-      required this.lastModificationAt,
-      required this.usageCount,
-      required this.color});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['user_account_id'] = Variable<String>(userAccountId);
-    map['name'] = Variable<String>(name);
-    map['creation_at'] = Variable<DateTime>(creationAt);
-    map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
-    map['usage_count'] = Variable<int>(usageCount);
-    map['color'] = Variable<int>(color);
-    return map;
-  }
-
-  FieldsCompanion toCompanion(bool nullToAbsent) {
-    return FieldsCompanion(
-      id: Value(id),
-      userAccountId: Value(userAccountId),
-      name: Value(name),
-      creationAt: Value(creationAt),
-      lastModificationAt: Value(lastModificationAt),
-      usageCount: Value(usageCount),
-      color: Value(color),
-    );
-  }
-
-  factory Field.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Field(
-      id: serializer.fromJson<String>(json['id']),
-      userAccountId: serializer.fromJson<String>(json['userAccountId']),
-      name: serializer.fromJson<String>(json['name']),
-      creationAt: serializer.fromJson<DateTime>(json['creationAt']),
-      lastModificationAt:
-          serializer.fromJson<DateTime>(json['lastModificationAt']),
-      usageCount: serializer.fromJson<int>(json['usageCount']),
-      color: serializer.fromJson<int>(json['color']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'userAccountId': serializer.toJson<String>(userAccountId),
-      'name': serializer.toJson<String>(name),
-      'creationAt': serializer.toJson<DateTime>(creationAt),
-      'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
-      'usageCount': serializer.toJson<int>(usageCount),
-      'color': serializer.toJson<int>(color),
-    };
-  }
-
-  Field copyWith(
-          {String? id,
-          String? userAccountId,
-          String? name,
-          DateTime? creationAt,
-          DateTime? lastModificationAt,
-          int? usageCount,
-          int? color}) =>
-      Field(
-        id: id ?? this.id,
-        userAccountId: userAccountId ?? this.userAccountId,
-        name: name ?? this.name,
-        creationAt: creationAt ?? this.creationAt,
-        lastModificationAt: lastModificationAt ?? this.lastModificationAt,
-        usageCount: usageCount ?? this.usageCount,
-        color: color ?? this.color,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('Field(')
-          ..write('id: $id, ')
-          ..write('userAccountId: $userAccountId, ')
-          ..write('name: $name, ')
-          ..write('creationAt: $creationAt, ')
-          ..write('lastModificationAt: $lastModificationAt, ')
-          ..write('usageCount: $usageCount, ')
-          ..write('color: $color')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, userAccountId, name, creationAt,
-      lastModificationAt, usageCount, color);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Field &&
-          other.id == this.id &&
-          other.userAccountId == this.userAccountId &&
-          other.name == this.name &&
-          other.creationAt == this.creationAt &&
-          other.lastModificationAt == this.lastModificationAt &&
-          other.usageCount == this.usageCount &&
-          other.color == this.color);
-}
-
-class FieldsCompanion extends UpdateCompanion<Field> {
-  final Value<String> id;
-  final Value<String> userAccountId;
-  final Value<String> name;
-  final Value<DateTime> creationAt;
-  final Value<DateTime> lastModificationAt;
-  final Value<int> usageCount;
-  final Value<int> color;
-  final Value<int> rowid;
-  const FieldsCompanion({
-    this.id = const Value.absent(),
-    this.userAccountId = const Value.absent(),
-    this.name = const Value.absent(),
-    this.creationAt = const Value.absent(),
-    this.lastModificationAt = const Value.absent(),
-    this.usageCount = const Value.absent(),
-    this.color = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  FieldsCompanion.insert({
-    this.id = const Value.absent(),
-    required String userAccountId,
-    required String name,
-    required DateTime creationAt,
-    required DateTime lastModificationAt,
-    this.usageCount = const Value.absent(),
-    this.color = const Value.absent(),
-    this.rowid = const Value.absent(),
-  })  : userAccountId = Value(userAccountId),
-        name = Value(name),
-        creationAt = Value(creationAt),
-        lastModificationAt = Value(lastModificationAt);
-  static Insertable<Field> custom({
-    Expression<String>? id,
-    Expression<String>? userAccountId,
-    Expression<String>? name,
-    Expression<DateTime>? creationAt,
-    Expression<DateTime>? lastModificationAt,
-    Expression<int>? usageCount,
-    Expression<int>? color,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (userAccountId != null) 'user_account_id': userAccountId,
-      if (name != null) 'name': name,
-      if (creationAt != null) 'creation_at': creationAt,
-      if (lastModificationAt != null)
-        'last_modification_at': lastModificationAt,
-      if (usageCount != null) 'usage_count': usageCount,
-      if (color != null) 'color': color,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  FieldsCompanion copyWith(
-      {Value<String>? id,
-      Value<String>? userAccountId,
-      Value<String>? name,
-      Value<DateTime>? creationAt,
-      Value<DateTime>? lastModificationAt,
-      Value<int>? usageCount,
-      Value<int>? color,
-      Value<int>? rowid}) {
-    return FieldsCompanion(
-      id: id ?? this.id,
-      userAccountId: userAccountId ?? this.userAccountId,
-      name: name ?? this.name,
-      creationAt: creationAt ?? this.creationAt,
-      lastModificationAt: lastModificationAt ?? this.lastModificationAt,
-      usageCount: usageCount ?? this.usageCount,
-      color: color ?? this.color,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (userAccountId.present) {
-      map['user_account_id'] = Variable<String>(userAccountId.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (creationAt.present) {
-      map['creation_at'] = Variable<DateTime>(creationAt.value);
-    }
-    if (lastModificationAt.present) {
-      map['last_modification_at'] =
-          Variable<DateTime>(lastModificationAt.value);
-    }
-    if (usageCount.present) {
-      map['usage_count'] = Variable<int>(usageCount.value);
-    }
-    if (color.present) {
-      map['color'] = Variable<int>(color.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('FieldsCompanion(')
-          ..write('id: $id, ')
-          ..write('userAccountId: $userAccountId, ')
-          ..write('name: $name, ')
-          ..write('creationAt: $creationAt, ')
-          ..write('lastModificationAt: $lastModificationAt, ')
-          ..write('usageCount: $usageCount, ')
-          ..write('color: $color, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -4258,9 +4261,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $EntryTextsTable entryTexts = $EntryTextsTable(this);
   late final $QuestionsTable questions = $QuestionsTable(this);
+  late final $FieldsTable fields = $FieldsTable(this);
   late final $FieldListsTable fieldLists = $FieldListsTable(this);
   late final $EntrysTable entrys = $EntrysTable(this);
-  late final $FieldsTable fields = $FieldsTable(this);
   late final $NotesTable notes = $NotesTable(this);
   late final $SessionsTable sessions = $SessionsTable(this);
   late final $SessionEntrysTable sessionEntrys = $SessionEntrysTable(this);
@@ -4286,9 +4289,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         entryTexts,
         questions,
+        fields,
         fieldLists,
         entrys,
-        fields,
         notes,
         sessions,
         sessionEntrys,

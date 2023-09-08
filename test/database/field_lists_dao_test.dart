@@ -4,11 +4,13 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
+import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
   late AppDatabase appDatabase;
   late FieldListsDao fieldListsDao;
+  late FieldsDao fieldsDao;
   String id = const Uuid().v4();
   String fieldId = const Uuid().v4();
   String name = "fieldList1";
@@ -30,10 +32,26 @@ void main() {
   int studyTillCorrectTypingAnswerLetterDuration = 100;
   int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
   bool doesObfuscateQuestion = true;
+  String userAccountId = "j0kW7TZPcdZBHLsIUvJOFiAI8VN2";
+  String name1 = "name";
+  DateTime creationAt1 = DateTime(2019, 1, 1);
+  DateTime lastModificationAt1 = DateTime.utc(2019, 2, 2);
+  int usageCount1 = 9;
+  int color1 = 0xff55ee11;
 
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     fieldListsDao = FieldListsDao(appDatabase);
+    fieldsDao = FieldsDao(appDatabase);
+    var field = Field(
+        id: fieldId,
+        userAccountId: userAccountId,
+        name: name1,
+        creationAt: creationAt1,
+        lastModificationAt: lastModificationAt1,
+        usageCount: usageCount1,
+        color: color1);
+    fieldsDao.create(field.toCompanion(true));
   });
 
   tearDown(() async {
@@ -168,6 +186,40 @@ void main() {
       },
           throwsA(predicate((e) =>
               e is InvalidDataException && e.message.contains("fieldId"))));
+    });
+
+    test("Invalid FieldList: fieldId doesn't exist in Fields table", () async {
+      var fieldList = FieldList(
+          id: id,
+          fieldId: const Uuid().v4(),
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          languageTag: languageTag,
+          checkType: checkType,
+          sortBy: sortBy,
+          doesReadAnswer: doesReadAnswer,
+          usageCount: usageCount,
+          color: color,
+          emulationNumberOfQuestions: emulationNumberOfQuestions,
+          emulationDays: emulationDays,
+          testsReadingQuestionLetterDuration:
+              testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+          doesObfuscateQuestion: doesObfuscateQuestion);
+      expect(() async {
+        await fieldListsDao.create(fieldList.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("FOREIGN KEY"))));
     });
 
     test(
@@ -2393,7 +2445,6 @@ void main() {
 
   group("Getting all FieldLists by fieldId", () {
     test("Six FieldLists on two fields", () async {
-      var fieldId1 = const Uuid().v4();
       var fieldId2 = const Uuid().v4();
       var fieldId3 = const Uuid().v4();
       var fieldListId1 = const Uuid().v4();
@@ -2516,9 +2567,27 @@ void main() {
       bool doesObfuscateQuestion4 = false;
       bool doesObfuscateQuestion5 = false;
       bool doesObfuscateQuestion6 = false;
+      var field2 = Field(
+          id: fieldId2,
+          userAccountId: userAccountId,
+          name: name1 + "2",
+          creationAt: creationAt1,
+          lastModificationAt: lastModificationAt1,
+          usageCount: usageCount1 + 1,
+          color: color1);
+      fieldsDao.create(field2.toCompanion(true));
+      var field3 = Field(
+          id: fieldId3,
+          userAccountId: userAccountId,
+          name: name1 + "3",
+          creationAt: creationAt1,
+          lastModificationAt: lastModificationAt1,
+          usageCount: usageCount1 + 2,
+          color: color1);
+      fieldsDao.create(field3.toCompanion(true));
       var fieldList1 = FieldList(
           id: fieldListId1,
-          fieldId: fieldId1,
+          fieldId: fieldId,
           name: name1,
           creationAt: creationAt1,
           lastModificationAt: lastModificationAt1,
@@ -2596,7 +2665,7 @@ void main() {
           doesObfuscateQuestion: doesObfuscateQuestion3);
       var fieldList4 = FieldList(
           id: fieldListId4,
-          fieldId: fieldId1,
+          fieldId: fieldId,
           name: name4,
           creationAt: creationAt4,
           lastModificationAt: lastModificationAt4,
@@ -2648,7 +2717,7 @@ void main() {
           doesObfuscateQuestion: doesObfuscateQuestion5);
       var fieldList6 = FieldList(
           id: fieldListId6,
-          fieldId: fieldId1,
+          fieldId: fieldId,
           name: name6,
           creationAt: creationAt6,
           lastModificationAt: lastModificationAt6,
@@ -2678,12 +2747,12 @@ void main() {
       await fieldListsDao.create(fieldList4.toCompanion(true));
       await fieldListsDao.create(fieldList5.toCompanion(true));
       await fieldListsDao.create(fieldList6.toCompanion(true));
-      var listFieldStream = fieldListsDao.watchByFieldId(fieldId1);
+      var listFieldStream = fieldListsDao.watchByFieldId(fieldId);
       var listFieldlist = await listFieldStream.first;
       expect(listFieldlist.length, 3);
       var gottenFieldList = listFieldlist[0];
       expect(gottenFieldList.id, fieldListId6);
-      expect(gottenFieldList.fieldId, fieldId1);
+      expect(gottenFieldList.fieldId, fieldId);
       expect(gottenFieldList.name, name6);
       expect(gottenFieldList.creationAt, creationAt6);
       expect(gottenFieldList.lastModificationAt, lastModificationAt6);
@@ -2712,7 +2781,7 @@ void main() {
       expect(gottenFieldList.doesObfuscateQuestion, doesObfuscateQuestion6);
       gottenFieldList = listFieldlist[1];
       expect(gottenFieldList.id, fieldListId4);
-      expect(gottenFieldList.fieldId, fieldId1);
+      expect(gottenFieldList.fieldId, fieldId);
       expect(gottenFieldList.name, name4);
       expect(gottenFieldList.creationAt, creationAt4);
       expect(gottenFieldList.lastModificationAt, lastModificationAt4);
@@ -2741,7 +2810,7 @@ void main() {
       expect(gottenFieldList.doesObfuscateQuestion, doesObfuscateQuestion4);
       gottenFieldList = listFieldlist[2];
       expect(gottenFieldList.id, fieldListId1);
-      expect(gottenFieldList.fieldId, fieldId1);
+      expect(gottenFieldList.fieldId, fieldId);
       expect(gottenFieldList.name, name1);
       expect(gottenFieldList.creationAt, creationAt1);
       expect(gottenFieldList.lastModificationAt, lastModificationAt1);

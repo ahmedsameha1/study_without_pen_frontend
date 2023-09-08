@@ -5,6 +5,7 @@ import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
+import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_test.dart';
 import 'package:study_without_pen_by_flutter/database/fully_random_tests_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
@@ -16,10 +17,12 @@ void main() {
   late FullyRandomTestsDao fullyRandomTestsDao;
   late SessionsDao sessionsDao;
   late EntrysDao entrysDao;
+  late FieldsDao fieldsDao;
   late FieldListsDao fieldListsDao;
   late EntryTextsDao entryTextsDao;
   late QuestionsDao questionsDao;
   String id = Uuid().v4();
+  String fieldId = const Uuid().v4();
   String fieldListId = const Uuid().v4();
   String questionId = const Uuid().v4();
   int currentQuestionCounter = 5;
@@ -53,6 +56,12 @@ void main() {
   int studyTillCorrectFindingAnswerDuration = 1000;
   int studyTillCorrectTypingAnswerLetterDuration = 100;
   int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
+  String userAccountId = "j0kW7TZPcdZBHLsIUvJOFiAI8VN2";
+  String name1 = "name";
+  DateTime creationAt2 = DateTime(2018, 1, 1);
+  DateTime lastModificationAt2 = DateTime.utc(2018, 2, 2);
+  int usageCount1 = 9;
+  int color1 = 0xff55ee11;
   bool doesObfuscateQuestion = true;
   Question question = Question(
       id: questionId,
@@ -64,13 +73,23 @@ void main() {
     fullyRandomTestsDao = FullyRandomTestsDao(appDatabase);
     sessionsDao = SessionsDao(appDatabase);
     entrysDao = EntrysDao(appDatabase);
+    fieldsDao = FieldsDao(appDatabase);
     fieldListsDao = FieldListsDao(appDatabase);
     entryTextsDao = EntryTextsDao(appDatabase);
     questionsDao = QuestionsDao(appDatabase);
     await questionsDao.create(question.toCompanion(true));
+    var field = Field(
+        id: fieldId,
+        userAccountId: userAccountId,
+        name: name1 + "2",
+        creationAt: creationAt2,
+        lastModificationAt: lastModificationAt2,
+        usageCount: usageCount1,
+        color: color1);
+    fieldsDao.create(field.toCompanion(true));
     var fieldList = FieldList(
         id: fieldListId,
-        fieldId: const Uuid().v4(),
+        fieldId: fieldId,
         name: name,
         creationAt: creationAt1,
         lastModificationAt: lastModificationAt1,
@@ -309,7 +328,7 @@ void main() {
     setUp(() async {
       var fieldList = FieldList(
           id: fieldListId2,
-          fieldId: const Uuid().v4(),
+          fieldId: fieldId,
           name: name + "f",
           creationAt: creationAt1.add(Duration(days: 10)),
           lastModificationAt: lastModificationAt1.add(Duration(days: 20)),
