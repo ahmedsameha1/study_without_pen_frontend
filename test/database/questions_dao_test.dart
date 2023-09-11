@@ -2,17 +2,23 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
   late AppDatabase appDatabase;
   late QuestionsDao questionsDao;
+  late EntryTextsDao entryTextsDao;
   String id = const Uuid().v4();
   String address = const Uuid().v4();
+
   setUp(() {
     appDatabase = AppDatabase(NativeDatabase.memory());
     questionsDao = QuestionsDao(appDatabase);
+    entryTextsDao = EntryTextsDao(appDatabase);
+    final entryTextQuestion = EntryText(id: address, value: "text");
+    entryTextsDao.create(entryTextQuestion.toCompanion(true));
   });
 
   tearDown(() async {
@@ -33,6 +39,9 @@ void main() {
     });
 
     test("No Question with the same 'id'", () async {
+      final address2 = const Uuid().v4();
+      final entryTextQuestion2 = EntryText(id: address2, value: "text2");
+      entryTextsDao.create(entryTextQuestion2.toCompanion(true));
       var question = Question(
           id: id,
           questionType: QuestionType.EntryTextQuestion.index,
@@ -40,7 +49,7 @@ void main() {
       var question1 = Question(
           id: id,
           questionType: QuestionType.EntryTextQuestion.index,
-          address: const Uuid().v4());
+          address: address2);
       await questionsDao.create(question.toCompanion(true));
       expect(() async {
         await questionsDao.create(question1.toCompanion(true));
@@ -67,6 +76,21 @@ void main() {
           questionType: QuestionType.EntryTextQuestion.index,
           address: "hewf");
       expect(() async {
+        await questionsDao.create(question.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException && e.message.contains("address"))));
+    });
+
+    test(
+        "Invalid Question: address doesn't exist in EntryTexts table, when questionType is EntryTextQuestion",
+        () {
+      var question = Question(
+          id: id,
+          questionType: QuestionType.EntryTextQuestion.index,
+          address: address);
+      expect(() async {
+        await entryTextsDao.remove(address);
         await questionsDao.create(question.toCompanion(true));
       },
           throwsA(predicate((e) =>
@@ -130,8 +154,12 @@ void main() {
     });
 
     test("Get all Questions", () async {
-      var address2 = const Uuid().v4();
-      var address3 = const Uuid().v4();
+      final address2 = const Uuid().v4();
+      final address3 = const Uuid().v4();
+      final entryTextQuestion2 = EntryText(id: address2, value: "text2");
+      final entryTextQuestion3 = EntryText(id: address3, value: "text3");
+      await entryTextsDao.create(entryTextQuestion2.toCompanion(true));
+      await entryTextsDao.create(entryTextQuestion3.toCompanion(true));
       var questionsCompanion1 = QuestionsCompanion(
           questionType: Value(QuestionType.EntryTextQuestion.index),
           address: Value(address));

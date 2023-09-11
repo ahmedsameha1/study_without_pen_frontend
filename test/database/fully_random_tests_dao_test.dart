@@ -63,10 +63,12 @@ void main() {
   int usageCount1 = 9;
   int color1 = 0xff55ee11;
   bool doesObfuscateQuestion = true;
+  String questionAddress = const Uuid().v4();
+  final entryTextQuestion = EntryText(id: questionAddress, value: "text");
   Question question = Question(
       id: questionId,
       questionType: QuestionType.EntryTextQuestion.index,
-      address: const Uuid().v4());
+      address: questionAddress);
 
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -77,6 +79,7 @@ void main() {
     fieldListsDao = FieldListsDao(appDatabase);
     entryTextsDao = EntryTextsDao(appDatabase);
     questionsDao = QuestionsDao(appDatabase);
+    await entryTextsDao.create(entryTextQuestion.toCompanion(true));
     await questionsDao.create(question.toCompanion(true));
     var field = Field(
         id: fieldId,
@@ -361,18 +364,30 @@ void main() {
       await entryTextsDao.create(answer3.toCompanion(true));
       final answer4 = EntryText(id: answerId4, value: "answer4");
       await entryTextsDao.create(answer4.toCompanion(true));
+      String questionAddress2 = const Uuid().v4();
+      final entryTextQuestion2 =
+          EntryText(id: questionAddress2, value: "text2");
+      String questionAddress3 = const Uuid().v4();
+      final entryTextQuestion3 =
+          EntryText(id: questionAddress3, value: "text3");
+      String questionAddress4 = const Uuid().v4();
+      final entryTextQuestion4 =
+          EntryText(id: questionAddress4, value: "text4");
+      await entryTextsDao.create(entryTextQuestion2.toCompanion(true));
+      await entryTextsDao.create(entryTextQuestion3.toCompanion(true));
+      await entryTextsDao.create(entryTextQuestion4.toCompanion(true));
       Question question2 = Question(
           id: questionId2,
           questionType: QuestionType.EntryTextQuestion.index,
-          address: const Uuid().v4());
+          address: questionAddress2);
       Question question3 = Question(
           id: questionId3,
           questionType: QuestionType.EntryTextQuestion.index,
-          address: const Uuid().v4());
+          address: questionAddress3);
       Question question4 = Question(
           id: questionId4,
           questionType: QuestionType.EntryTextQuestion.index,
-          address: const Uuid().v4());
+          address: questionAddress4);
       await questionsDao.create(question2.toCompanion(true));
       await questionsDao.create(question3.toCompanion(true));
       await questionsDao.create(question4.toCompanion(true));

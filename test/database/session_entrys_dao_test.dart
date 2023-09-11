@@ -67,10 +67,12 @@ void main() {
   DateTime lastModificationAt2 = DateTime.utc(2018, 2, 2);
   int usageCount1 = 9;
   int color1 = 0xff55ee11;
+  String questionAddress = const Uuid().v4();
+  final entryTextQuestion = EntryText(id: questionAddress, value: "text");
   Question question = Question(
       id: questionId,
       questionType: QuestionType.EntryTextQuestion.index,
-      address: const Uuid().v4());
+      address: questionAddress);
 
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -83,6 +85,7 @@ void main() {
     questionsDao = QuestionsDao(appDatabase);
     final answer = EntryText(id: answerId, value: "answer");
     await entryTextsDao.create(answer.toCompanion(true));
+    await entryTextsDao.create(entryTextQuestion.toCompanion(true));
     await questionsDao.create(question.toCompanion(true));
     var field = Field(
         id: fieldId,

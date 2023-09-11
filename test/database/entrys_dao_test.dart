@@ -55,10 +55,12 @@ void main() {
   DateTime lastModificationAt2 = DateTime.utc(2018, 2, 2);
   int usageCount1 = 9;
   int color1 = 0xff55ee11;
+  String questionAddress = const Uuid().v4();
+  final entryTextQuestion = EntryText(id: questionAddress, value: "text");
   Question question = Question(
       id: questionId,
       questionType: QuestionType.EntryTextQuestion.index,
-      address: const Uuid().v4());
+      address: questionAddress);
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
     entrysDao = EntrysDao(appDatabase);
@@ -67,6 +69,7 @@ void main() {
     fieldsDao = FieldsDao(appDatabase);
     fieldListsDao = FieldListsDao(appDatabase);
     EntryText answer = EntryText(id: answerId, value: "answer");
+    await entryTextsDao.create(entryTextQuestion.toCompanion(true));
     await entryTextsDao.create(answer.toCompanion(true));
     await questionsDao.create(question.toCompanion(true));
     var field = Field(
@@ -201,18 +204,30 @@ void main() {
           testsTimeOfAnswerAction: testsTimeOfAnswerAction,
           doesObfuscateQuestion: doesObfuscateQuestion);
       await fieldListsDao.create(fieldList.toCompanion(true));
+      String questionAddress2 = const Uuid().v4();
+      final entryTextQuestion2 =
+          EntryText(id: questionAddress2, value: "text2");
+      String questionAddress3 = const Uuid().v4();
+      final entryTextQuestion3 =
+          EntryText(id: questionAddress3, value: "text3");
+      String questionAddress4 = const Uuid().v4();
+      final entryTextQuestion4 =
+          EntryText(id: questionAddress4, value: "text4");
+      await entryTextsDao.create(entryTextQuestion2.toCompanion(true));
+      await entryTextsDao.create(entryTextQuestion3.toCompanion(true));
+      await entryTextsDao.create(entryTextQuestion4.toCompanion(true));
       Question question2 = Question(
           id: questionId2,
           questionType: QuestionType.EntryTextQuestion.index,
-          address: const Uuid().v4());
+          address: questionAddress2);
       Question question3 = Question(
           id: questionId3,
           questionType: QuestionType.EntryTextQuestion.index,
-          address: const Uuid().v4());
+          address: questionAddress3);
       Question question4 = Question(
           id: questionId4,
           questionType: QuestionType.EntryTextQuestion.index,
-          address: const Uuid().v4());
+          address: questionAddress4);
       await questionsDao.create(question2.toCompanion(true));
       await questionsDao.create(question3.toCompanion(true));
       await questionsDao.create(question4.toCompanion(true));
@@ -338,24 +353,36 @@ void main() {
       DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
       DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
       DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+      String questionAddress2 = const Uuid().v4();
+      final entryTextQuestion2 =
+          EntryText(id: questionAddress2, value: "text2");
+      String questionAddress3 = const Uuid().v4();
+      final entryTextQuestion3 =
+          EntryText(id: questionAddress3, value: "text3");
+      String questionAddress4 = const Uuid().v4();
+      final entryTextQuestion4 =
+          EntryText(id: questionAddress4, value: "text4");
       final answer2 = EntryText(id: answerId2, value: "answer2");
       await entryTextsDao.create(answer2.toCompanion(true));
       final answer3 = EntryText(id: answerId3, value: "answer3");
       await entryTextsDao.create(answer3.toCompanion(true));
       final answer4 = EntryText(id: answerId4, value: "answer4");
       await entryTextsDao.create(answer4.toCompanion(true));
+      await entryTextsDao.create(entryTextQuestion2.toCompanion(true));
+      await entryTextsDao.create(entryTextQuestion3.toCompanion(true));
+      await entryTextsDao.create(entryTextQuestion4.toCompanion(true));
       Question question2 = Question(
           id: questionId2,
           questionType: QuestionType.EntryTextQuestion.index,
-          address: const Uuid().v4());
+          address: questionAddress2);
       Question question3 = Question(
           id: questionId3,
           questionType: QuestionType.EntryTextQuestion.index,
-          address: const Uuid().v4());
+          address: questionAddress3);
       Question question4 = Question(
           id: questionId4,
           questionType: QuestionType.EntryTextQuestion.index,
-          address: const Uuid().v4());
+          address: questionAddress4);
       await questionsDao.create(question2.toCompanion(true));
       await questionsDao.create(question3.toCompanion(true));
       await questionsDao.create(question4.toCompanion(true));
@@ -1771,15 +1798,12 @@ void main() {
       final entryId4 = const Uuid().v4();
       final entryId5 = const Uuid().v4();
       final entryId6 = const Uuid().v4();
-      final questionEntryTextId = const Uuid().v4();
       final answerEntryTextId1 = const Uuid().v4();
       final answerEntryTextId2 = const Uuid().v4();
       final answerEntryTextId3 = const Uuid().v4();
       final answerEntryTextId4 = const Uuid().v4();
       final answerEntryTextId5 = const Uuid().v4();
       final answerEntryTextId6 = const Uuid().v4();
-      EntryText questionEntryText =
-          EntryText(id: questionEntryTextId, value: "hello");
       EntryText answerEntryText1 =
           EntryText(id: answerEntryTextId1, value: "b" * 80);
       EntryText answerEntryText2 =
@@ -1792,7 +1816,6 @@ void main() {
           id: answerEntryTextId5, value: ("b" * 50) + ("b" * 29) + "h");
       EntryText answerEntryText6 =
           EntryText(id: answerEntryTextId6, value: "n" + ("b" * 79));
-      await entryTextsDao.create(questionEntryText.toCompanion(true));
       await entryTextsDao.create(answerEntryText1.toCompanion(true));
       await entryTextsDao.create(answerEntryText2.toCompanion(true));
       await entryTextsDao.create(answerEntryText3.toCompanion(true));
