@@ -228,7 +228,7 @@ class Sessions extends Table {
   static const int MAXIMUM_CURRENT_HINT_COUNTER = 0xff;
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
-  TextColumn get fieldListId => text()();
+  TextColumn get fieldListId => text().references(FieldLists, #id)();
   IntColumn get currentQuestionCounter => integer().check(currentQuestionCounter
           .isBiggerOrEqualValue(Sessions.MINIMUM_CURRENT_QUESTION_COUNTER) &
       currentQuestionCounter

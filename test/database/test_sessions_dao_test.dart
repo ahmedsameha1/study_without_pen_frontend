@@ -2,6 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
+import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
 import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 import 'package:study_without_pen_by_flutter/database/test_sessions_dao.dart';
 import 'package:uuid/uuid.dart';
@@ -10,8 +12,13 @@ void main() {
   late AppDatabase appDatabase;
   late TestSessionsDao testSessionsDao;
   late SessionsDao sessionsDao;
-  final sessionId = Uuid().v4();
-  String fieldListId = Uuid().v4();
+  late FieldsDao fieldsDao;
+  late FieldListsDao fieldListsDao;
+  String fieldId = const Uuid().v4();
+  final sessionId = const Uuid().v4();
+  String fieldListId = const Uuid().v4();
+  String fieldName = "fieldName";
+  String fieldListName = "fieldListName";
   int currentQuestionCounter = 5;
   int wrongAnswerCounter = 1;
   int triesNumber = 3;
@@ -24,11 +31,66 @@ void main() {
   DateTime creationAt = DateTime.utc(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
   String lastAnswer = "efh";
-
+  String languageTag = "en-US";
+  int checkType = CheckType.NON_STRICT_IGNORE_CASE.index;
+  int sortBy = SortBy.CREATION_DATE_DESC.index;
+  bool doesReadAnswer = true;
+  int usageCount = 20;
+  int color = 0x55554433;
+  int emulationNumberOfQuestions = 0;
+  String emulationDays = "01234";
+  int testsReadingQuestionLetterDuration = 200;
+  int testsFindingAnswerDuration = 1000;
+  int testsTypingAnswerLetterDuration = 100;
+  int studyTillCorrectReadingQuestionLetterDuration = 200;
+  int studyTillCorrectFindingAnswerDuration = 1000;
+  int studyTillCorrectTypingAnswerLetterDuration = 100;
+  int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
+  bool doesObfuscateQuestion = true;
+  String userAccountId = "j0kW7TZPcdZBHLsIUvJOFiAI8VN2";
+  DateTime creationAt1 = DateTime(2019, 1, 1);
+  DateTime lastModificationAt1 = DateTime.utc(2019, 2, 2);
+  int usageCount1 = 9;
+  int color1 = 0xff347b88;
+  var field = Field(
+      id: fieldId,
+      userAccountId: userAccountId,
+      name: fieldName,
+      creationAt: creationAt1,
+      lastModificationAt: lastModificationAt1,
+      usageCount: usageCount1,
+      color: color1);
+  var fieldList = FieldList(
+      id: fieldListId,
+      fieldId: fieldId,
+      name: fieldListName,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      languageTag: languageTag,
+      checkType: checkType,
+      sortBy: sortBy,
+      doesReadAnswer: doesReadAnswer,
+      usageCount: usageCount,
+      color: color,
+      emulationNumberOfQuestions: emulationNumberOfQuestions,
+      emulationDays: emulationDays,
+      testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
+      testsFindingAnswerDuration: testsFindingAnswerDuration,
+      testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+      studyTillCorrectReadingQuestionLetterDuration:
+          studyTillCorrectReadingQuestionLetterDuration,
+      studyTillCorrectFindingAnswerDuration:
+          studyTillCorrectFindingAnswerDuration,
+      studyTillCorrectTypingAnswerLetterDuration:
+          studyTillCorrectTypingAnswerLetterDuration,
+      testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+      doesObfuscateQuestion: doesObfuscateQuestion);
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
     testSessionsDao = TestSessionsDao(appDatabase);
     sessionsDao = SessionsDao(appDatabase);
+    fieldsDao = FieldsDao(appDatabase);
+    fieldListsDao = FieldListsDao(appDatabase);
     var session = Session(
         id: sessionId,
         fieldListId: fieldListId,
@@ -42,6 +104,8 @@ void main() {
         currentHintCounter: currentHintCounter,
         creationAt: creationAt,
         lastModificationAt: lastModificationAt);
+    await fieldsDao.create(field.toCompanion(true));
+    await fieldListsDao.create(fieldList.toCompanion(true));
     await sessionsDao.create(session.toCompanion(true));
   });
 

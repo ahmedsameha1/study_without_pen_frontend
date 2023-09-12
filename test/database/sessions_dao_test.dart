@@ -3,14 +3,21 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
+import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
 import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 import 'package:uuid/uuid.dart';
 
 void main() {
   late AppDatabase appDatabase;
   late SessionsDao sessionsDao;
-  String id = Uuid().v4();
-  String fieldListId = Uuid().v4();
+  late FieldsDao fieldsDao;
+  late FieldListsDao fieldListsDao;
+  String id = const Uuid().v4();
+  String fieldId = const Uuid().v4();
+  String fieldListId = const Uuid().v4();
+  String fieldListName = "fieldlist1";
+  String fieldName = "field1";
   int currentQuestionCounter = 5;
   int triesNumber = 3;
   int triesCounter = 1;
@@ -21,10 +28,67 @@ void main() {
   int currentHintCounter = 0;
   DateTime creationAt = DateTime.utc(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
-
-  setUp(() {
+  String languageTag = "en-US";
+  int checkType = CheckType.NON_STRICT_IGNORE_CASE.index;
+  int sortBy = SortBy.CREATION_DATE_DESC.index;
+  bool doesReadAnswer = true;
+  int usageCount = 20;
+  int color = 0x55554433;
+  int emulationNumberOfQuestions = 0;
+  String emulationDays = "01234";
+  int testsReadingQuestionLetterDuration = 200;
+  int testsFindingAnswerDuration = 1000;
+  int testsTypingAnswerLetterDuration = 100;
+  int studyTillCorrectReadingQuestionLetterDuration = 200;
+  int studyTillCorrectFindingAnswerDuration = 1000;
+  int studyTillCorrectTypingAnswerLetterDuration = 100;
+  int testsTimeOfAnswerAction = TimeOfAnswerAction.NEXT.index;
+  bool doesObfuscateQuestion = true;
+  String userAccountId = "j0kW7TZPcdZBHLsIUvJOFiAI8VN2";
+  DateTime creationAt1 = DateTime(2019, 1, 1);
+  DateTime lastModificationAt1 = DateTime.utc(2019, 2, 2);
+  int usageCount1 = 9;
+  int color1 = 0xff55ee11;
+  var field = Field(
+      id: fieldId,
+      userAccountId: userAccountId,
+      name: fieldName,
+      creationAt: creationAt1,
+      lastModificationAt: lastModificationAt1,
+      usageCount: usageCount1,
+      color: color1);
+  var fieldList = FieldList(
+      id: fieldListId,
+      fieldId: fieldId,
+      name: fieldListName,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      languageTag: languageTag,
+      checkType: checkType,
+      sortBy: sortBy,
+      doesReadAnswer: doesReadAnswer,
+      usageCount: usageCount,
+      color: color,
+      emulationNumberOfQuestions: emulationNumberOfQuestions,
+      emulationDays: emulationDays,
+      testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
+      testsFindingAnswerDuration: testsFindingAnswerDuration,
+      testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+      studyTillCorrectReadingQuestionLetterDuration:
+          studyTillCorrectReadingQuestionLetterDuration,
+      studyTillCorrectFindingAnswerDuration:
+          studyTillCorrectFindingAnswerDuration,
+      studyTillCorrectTypingAnswerLetterDuration:
+          studyTillCorrectTypingAnswerLetterDuration,
+      testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+      doesObfuscateQuestion: doesObfuscateQuestion);
+  setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
     sessionsDao = SessionsDao(appDatabase);
+    fieldsDao = FieldsDao(appDatabase);
+    fieldListsDao = FieldListsDao(appDatabase);
+    await fieldsDao.create(field.toCompanion(true));
+    await fieldListsDao.create(fieldList.toCompanion(true));
   });
 
   tearDown(() async {
@@ -107,6 +171,27 @@ void main() {
       },
           throwsA(predicate((e) =>
               e is InvalidDataException && e.message.contains("fieldListId"))));
+    });
+
+    test("Invalid Session: fieldListId doesn't exist in FieldLists table", () {
+      var session = Session(
+          id: id,
+          fieldListId: const Uuid().v4(),
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesCounter,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      expect(() async {
+        await sessionsDao.create(session.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is SqliteException && e.message.contains("FOREIGN KEY"))));
     });
 
     test(
@@ -633,7 +718,6 @@ void main() {
     final id4 = const Uuid().v4();
     final id5 = const Uuid().v4();
     final id6 = const Uuid().v4();
-    final fieldListId1 = const Uuid().v4();
     final fieldListId2 = const Uuid().v4();
     final fieldListId3 = const Uuid().v4();
     final currentQuestionCounter1 = 1;
@@ -696,9 +780,61 @@ void main() {
     final lastModificationAt4 = DateTime.utc(2021, 4, 4);
     final lastModificationAt5 = DateTime.utc(2021, 5, 5);
     final lastModificationAt6 = DateTime.utc(2021, 6, 6);
+    var fieldList2 = FieldList(
+        id: fieldListId2,
+        fieldId: fieldId,
+        name: fieldListName + "f",
+        creationAt: creationAt1.add(Duration(days: 10)),
+        lastModificationAt: lastModificationAt1.add(Duration(days: 20)),
+        languageTag: languageTag,
+        checkType: checkType,
+        sortBy: sortBy,
+        doesReadAnswer: doesReadAnswer,
+        usageCount: usageCount,
+        color: color,
+        emulationNumberOfQuestions: emulationNumberOfQuestions,
+        emulationDays: emulationDays,
+        testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
+        testsFindingAnswerDuration: testsFindingAnswerDuration,
+        testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+        studyTillCorrectReadingQuestionLetterDuration:
+            studyTillCorrectReadingQuestionLetterDuration,
+        studyTillCorrectFindingAnswerDuration:
+            studyTillCorrectFindingAnswerDuration,
+        studyTillCorrectTypingAnswerLetterDuration:
+            studyTillCorrectTypingAnswerLetterDuration,
+        testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+        doesObfuscateQuestion: doesObfuscateQuestion);
+    await fieldListsDao.create(fieldList2.toCompanion(true));
+    var fieldList3 = FieldList(
+        id: fieldListId3,
+        fieldId: fieldId,
+        name: fieldListName + "y",
+        creationAt: creationAt1.add(Duration(days: 20)),
+        lastModificationAt: lastModificationAt1.add(Duration(days: 30)),
+        languageTag: languageTag,
+        checkType: checkType,
+        sortBy: sortBy,
+        doesReadAnswer: doesReadAnswer,
+        usageCount: usageCount,
+        color: color,
+        emulationNumberOfQuestions: emulationNumberOfQuestions,
+        emulationDays: emulationDays,
+        testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
+        testsFindingAnswerDuration: testsFindingAnswerDuration,
+        testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+        studyTillCorrectReadingQuestionLetterDuration:
+            studyTillCorrectReadingQuestionLetterDuration,
+        studyTillCorrectFindingAnswerDuration:
+            studyTillCorrectFindingAnswerDuration,
+        studyTillCorrectTypingAnswerLetterDuration:
+            studyTillCorrectTypingAnswerLetterDuration,
+        testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+        doesObfuscateQuestion: doesObfuscateQuestion);
+    await fieldListsDao.create(fieldList3.toCompanion(true));
     var session1 = Session(
         id: id1,
-        fieldListId: fieldListId1,
+        fieldListId: fieldListId,
         currentQuestionCounter: currentQuestionCounter1,
         triesNumber: triesNumber1,
         triesCounter: triesCounter1,
@@ -737,7 +873,7 @@ void main() {
         lastModificationAt: lastModificationAt3);
     var session4 = Session(
         id: id4,
-        fieldListId: fieldListId1,
+        fieldListId: fieldListId,
         currentQuestionCounter: currentQuestionCounter4,
         triesNumber: triesNumber4,
         triesCounter: triesCounter4,
@@ -763,7 +899,7 @@ void main() {
         lastModificationAt: lastModificationAt5);
     var session6 = Session(
         id: id6,
-        fieldListId: fieldListId1,
+        fieldListId: fieldListId,
         currentQuestionCounter: currentQuestionCounter6,
         triesNumber: triesNumber6,
         triesCounter: triesCounter6,
@@ -780,11 +916,11 @@ void main() {
     await sessionsDao.create(session4.toCompanion(true));
     await sessionsDao.create(session5.toCompanion(true));
     await sessionsDao.create(session6.toCompanion(true));
-    var sessions = await sessionsDao.getByFieldListId(fieldListId1);
+    var sessions = await sessionsDao.getByFieldListId(fieldListId);
     expect(sessions.length, 3);
     var session = sessions[0];
     expect(session.id, id6);
-    expect(session.fieldListId, fieldListId1);
+    expect(session.fieldListId, fieldListId);
     expect(session.currentQuestionCounter, currentQuestionCounter6);
     expect(session.triesNumber, triesNumber6);
     expect(session.triesCounter, triesCounter6);
@@ -797,7 +933,7 @@ void main() {
     expect(session.lastModificationAt, lastModificationAt6);
     session = sessions[1];
     expect(session.id, id4);
-    expect(session.fieldListId, fieldListId1);
+    expect(session.fieldListId, fieldListId);
     expect(session.currentHintCounter, currentHintCounter4);
     expect(session.triesNumber, triesNumber4);
     expect(session.triesCounter, triesCounter4);
@@ -810,7 +946,7 @@ void main() {
     expect(session.lastModificationAt, lastModificationAt4);
     session = sessions[2];
     expect(session.id, id1);
-    expect(session.fieldListId, fieldListId1);
+    expect(session.fieldListId, fieldListId);
     expect(session.currentQuestionCounter, currentQuestionCounter1);
     expect(session.triesNumber, triesNumber1);
     expect(session.triesCounter, triesCounter1);

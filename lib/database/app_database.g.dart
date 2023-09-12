@@ -2931,7 +2931,10 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
   @override
   late final GeneratedColumn<String> fieldListId = GeneratedColumn<String>(
       'field_list_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES field_lists (id)'));
   static const VerificationMeta _currentQuestionCounterMeta =
       const VerificationMeta('currentQuestionCounter');
   @override
