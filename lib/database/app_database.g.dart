@@ -2599,11 +2599,12 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
   }
 }
 
-class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
+class $FieldNotesTable extends FieldNotes
+    with TableInfo<$FieldNotesTable, FieldNote> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $NotesTable(this.attachedDatabase, [this._alias]);
+  $FieldNotesTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<String> id = GeneratedColumn<String>(
@@ -2611,12 +2612,15 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       clientDefault: () => const Uuid().v4());
-  static const VerificationMeta _relationalIdMeta =
-      const VerificationMeta('relationalId');
+  static const VerificationMeta _fieldIdMeta =
+      const VerificationMeta('fieldId');
   @override
-  late final GeneratedColumn<String> relationalId = GeneratedColumn<String>(
-      'relational_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+  late final GeneratedColumn<String> fieldId = GeneratedColumn<String>(
+      'field_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES fields (id)'));
   static const VerificationMeta _texTMeta = const VerificationMeta('texT');
   @override
   late final GeneratedColumn<String> texT = GeneratedColumn<String>(
@@ -2625,8 +2629,8 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
           texT
               .trim()
               .length
-              .isBiggerOrEqualValue(Notes.MINIMUM_LENGTH_OF_TEXT) &
-          texT.length.isSmallerOrEqualValue(Notes.MAXIMUM_LENGTH_OF_TEXT),
+              .isBiggerOrEqualValue(FieldNotes.MINIMUM_LENGTH_OF_TEXT) &
+          texT.length.isSmallerOrEqualValue(FieldNotes.MAXIMUM_LENGTH_OF_TEXT),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   static const VerificationMeta _creationAtMeta =
@@ -2645,26 +2649,24 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
           requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, relationalId, texT, creationAt, lastModificationAt];
+      [id, fieldId, texT, creationAt, lastModificationAt];
   @override
-  String get aliasedName => _alias ?? 'notes';
+  String get aliasedName => _alias ?? 'field_notes';
   @override
-  String get actualTableName => 'notes';
+  String get actualTableName => 'field_notes';
   @override
-  VerificationContext validateIntegrity(Insertable<Note> instance,
+  VerificationContext validateIntegrity(Insertable<FieldNote> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('relational_id')) {
-      context.handle(
-          _relationalIdMeta,
-          relationalId.isAcceptableOrUnknown(
-              data['relational_id']!, _relationalIdMeta));
+    if (data.containsKey('field_id')) {
+      context.handle(_fieldIdMeta,
+          fieldId.isAcceptableOrUnknown(data['field_id']!, _fieldIdMeta));
     } else if (isInserting) {
-      context.missing(_relationalIdMeta);
+      context.missing(_fieldIdMeta);
     }
     if (data.containsKey('tex_t')) {
       context.handle(
@@ -2694,13 +2696,13 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Note map(Map<String, dynamic> data, {String? tablePrefix}) {
+  FieldNote map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Note(
+    return FieldNote(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
-      relationalId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}relational_id'])!,
+      fieldId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}field_id'])!,
       texT: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}tex_t'])!,
       creationAt: attachedDatabase.typeMapping
@@ -2712,20 +2714,20 @@ class $NotesTable extends Notes with TableInfo<$NotesTable, Note> {
   }
 
   @override
-  $NotesTable createAlias(String alias) {
-    return $NotesTable(attachedDatabase, alias);
+  $FieldNotesTable createAlias(String alias) {
+    return $FieldNotesTable(attachedDatabase, alias);
   }
 }
 
-class Note extends DataClass implements Insertable<Note> {
+class FieldNote extends DataClass implements Insertable<FieldNote> {
   final String id;
-  final String relationalId;
+  final String fieldId;
   final String texT;
   final DateTime creationAt;
   final DateTime lastModificationAt;
-  const Note(
+  const FieldNote(
       {required this.id,
-      required this.relationalId,
+      required this.fieldId,
       required this.texT,
       required this.creationAt,
       required this.lastModificationAt});
@@ -2733,29 +2735,29 @@ class Note extends DataClass implements Insertable<Note> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
-    map['relational_id'] = Variable<String>(relationalId);
+    map['field_id'] = Variable<String>(fieldId);
     map['tex_t'] = Variable<String>(texT);
     map['creation_at'] = Variable<DateTime>(creationAt);
     map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
     return map;
   }
 
-  NotesCompanion toCompanion(bool nullToAbsent) {
-    return NotesCompanion(
+  FieldNotesCompanion toCompanion(bool nullToAbsent) {
+    return FieldNotesCompanion(
       id: Value(id),
-      relationalId: Value(relationalId),
+      fieldId: Value(fieldId),
       texT: Value(texT),
       creationAt: Value(creationAt),
       lastModificationAt: Value(lastModificationAt),
     );
   }
 
-  factory Note.fromJson(Map<String, dynamic> json,
+  factory FieldNote.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Note(
+    return FieldNote(
       id: serializer.fromJson<String>(json['id']),
-      relationalId: serializer.fromJson<String>(json['relationalId']),
+      fieldId: serializer.fromJson<String>(json['fieldId']),
       texT: serializer.fromJson<String>(json['texT']),
       creationAt: serializer.fromJson<DateTime>(json['creationAt']),
       lastModificationAt:
@@ -2767,31 +2769,31 @@ class Note extends DataClass implements Insertable<Note> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
-      'relationalId': serializer.toJson<String>(relationalId),
+      'fieldId': serializer.toJson<String>(fieldId),
       'texT': serializer.toJson<String>(texT),
       'creationAt': serializer.toJson<DateTime>(creationAt),
       'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
     };
   }
 
-  Note copyWith(
+  FieldNote copyWith(
           {String? id,
-          String? relationalId,
+          String? fieldId,
           String? texT,
           DateTime? creationAt,
           DateTime? lastModificationAt}) =>
-      Note(
+      FieldNote(
         id: id ?? this.id,
-        relationalId: relationalId ?? this.relationalId,
+        fieldId: fieldId ?? this.fieldId,
         texT: texT ?? this.texT,
         creationAt: creationAt ?? this.creationAt,
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       );
   @override
   String toString() {
-    return (StringBuffer('Note(')
+    return (StringBuffer('FieldNote(')
           ..write('id: $id, ')
-          ..write('relationalId: $relationalId, ')
+          ..write('fieldId: $fieldId, ')
           ..write('texT: $texT, ')
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt')
@@ -2801,47 +2803,47 @@ class Note extends DataClass implements Insertable<Note> {
 
   @override
   int get hashCode =>
-      Object.hash(id, relationalId, texT, creationAt, lastModificationAt);
+      Object.hash(id, fieldId, texT, creationAt, lastModificationAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Note &&
+      (other is FieldNote &&
           other.id == this.id &&
-          other.relationalId == this.relationalId &&
+          other.fieldId == this.fieldId &&
           other.texT == this.texT &&
           other.creationAt == this.creationAt &&
           other.lastModificationAt == this.lastModificationAt);
 }
 
-class NotesCompanion extends UpdateCompanion<Note> {
+class FieldNotesCompanion extends UpdateCompanion<FieldNote> {
   final Value<String> id;
-  final Value<String> relationalId;
+  final Value<String> fieldId;
   final Value<String> texT;
   final Value<DateTime> creationAt;
   final Value<DateTime> lastModificationAt;
   final Value<int> rowid;
-  const NotesCompanion({
+  const FieldNotesCompanion({
     this.id = const Value.absent(),
-    this.relationalId = const Value.absent(),
+    this.fieldId = const Value.absent(),
     this.texT = const Value.absent(),
     this.creationAt = const Value.absent(),
     this.lastModificationAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  NotesCompanion.insert({
+  FieldNotesCompanion.insert({
     this.id = const Value.absent(),
-    required String relationalId,
+    required String fieldId,
     required String texT,
     required DateTime creationAt,
     required DateTime lastModificationAt,
     this.rowid = const Value.absent(),
-  })  : relationalId = Value(relationalId),
+  })  : fieldId = Value(fieldId),
         texT = Value(texT),
         creationAt = Value(creationAt),
         lastModificationAt = Value(lastModificationAt);
-  static Insertable<Note> custom({
+  static Insertable<FieldNote> custom({
     Expression<String>? id,
-    Expression<String>? relationalId,
+    Expression<String>? fieldId,
     Expression<String>? texT,
     Expression<DateTime>? creationAt,
     Expression<DateTime>? lastModificationAt,
@@ -2849,7 +2851,7 @@ class NotesCompanion extends UpdateCompanion<Note> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (relationalId != null) 'relational_id': relationalId,
+      if (fieldId != null) 'field_id': fieldId,
       if (texT != null) 'tex_t': texT,
       if (creationAt != null) 'creation_at': creationAt,
       if (lastModificationAt != null)
@@ -2858,16 +2860,16 @@ class NotesCompanion extends UpdateCompanion<Note> {
     });
   }
 
-  NotesCompanion copyWith(
+  FieldNotesCompanion copyWith(
       {Value<String>? id,
-      Value<String>? relationalId,
+      Value<String>? fieldId,
       Value<String>? texT,
       Value<DateTime>? creationAt,
       Value<DateTime>? lastModificationAt,
       Value<int>? rowid}) {
-    return NotesCompanion(
+    return FieldNotesCompanion(
       id: id ?? this.id,
-      relationalId: relationalId ?? this.relationalId,
+      fieldId: fieldId ?? this.fieldId,
       texT: texT ?? this.texT,
       creationAt: creationAt ?? this.creationAt,
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
@@ -2881,8 +2883,8 @@ class NotesCompanion extends UpdateCompanion<Note> {
     if (id.present) {
       map['id'] = Variable<String>(id.value);
     }
-    if (relationalId.present) {
-      map['relational_id'] = Variable<String>(relationalId.value);
+    if (fieldId.present) {
+      map['field_id'] = Variable<String>(fieldId.value);
     }
     if (texT.present) {
       map['tex_t'] = Variable<String>(texT.value);
@@ -2902,9 +2904,9 @@ class NotesCompanion extends UpdateCompanion<Note> {
 
   @override
   String toString() {
-    return (StringBuffer('NotesCompanion(')
+    return (StringBuffer('FieldNotesCompanion(')
           ..write('id: $id, ')
-          ..write('relationalId: $relationalId, ')
+          ..write('fieldId: $fieldId, ')
           ..write('texT: $texT, ')
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
@@ -4267,7 +4269,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FieldsTable fields = $FieldsTable(this);
   late final $FieldListsTable fieldLists = $FieldListsTable(this);
   late final $EntrysTable entrys = $EntrysTable(this);
-  late final $NotesTable notes = $NotesTable(this);
+  late final $FieldNotesTable fieldNotes = $FieldNotesTable(this);
   late final $SessionsTable sessions = $SessionsTable(this);
   late final $SessionEntrysTable sessionEntrys = $SessionEntrysTable(this);
   late final $TestSessionsTable testSessions = $TestSessionsTable(this);
@@ -4277,7 +4279,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final EntrysDao entrysDao = EntrysDao(this as AppDatabase);
   late final FieldListsDao fieldListsDao = FieldListsDao(this as AppDatabase);
   late final FieldsDao fieldsDao = FieldsDao(this as AppDatabase);
-  late final NotesDao notesDao = NotesDao(this as AppDatabase);
+  late final FieldNotesDao fieldNotesDao = FieldNotesDao(this as AppDatabase);
   late final SessionsDao sessionsDao = SessionsDao(this as AppDatabase);
   late final SessionEntrysDao sessionEntrysDao =
       SessionEntrysDao(this as AppDatabase);
@@ -4295,7 +4297,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         fields,
         fieldLists,
         entrys,
-        notes,
+        fieldNotes,
         sessions,
         sessionEntrys,
         testSessions,

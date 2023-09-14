@@ -8,7 +8,7 @@ import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
 import 'package:study_without_pen_by_flutter/database/session_entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
-import 'package:study_without_pen_by_flutter/database/notes_dao.dart';
+import 'package:study_without_pen_by_flutter/database/field_notes_dao.dart';
 import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
@@ -199,15 +199,17 @@ class Fields extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-class Notes extends Table {
+class FieldNotes extends Table {
   static const int MINIMUM_LENGTH_OF_TEXT = 1;
   static const int MAXIMUM_LENGTH_OF_TEXT = 2000;
 
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
-  TextColumn get relationalId => text()();
-  TextColumn get texT => text().check(
-      texT.trim().length.isBiggerOrEqualValue(Notes.MINIMUM_LENGTH_OF_TEXT) &
-          texT.length.isSmallerOrEqualValue(Notes.MAXIMUM_LENGTH_OF_TEXT))();
+  TextColumn get fieldId => text().references(Fields, #id)();
+  TextColumn get texT => text().check(texT
+          .trim()
+          .length
+          .isBiggerOrEqualValue(FieldNotes.MINIMUM_LENGTH_OF_TEXT) &
+      texT.length.isSmallerOrEqualValue(FieldNotes.MAXIMUM_LENGTH_OF_TEXT))();
   DateTimeColumn get creationAt => dateTime()();
   DateTimeColumn get lastModificationAt =>
       dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
@@ -308,7 +310,7 @@ class WrongAnswers extends Table {
   Entrys,
   FieldLists,
   Fields,
-  Notes,
+  FieldNotes,
   Sessions,
   SessionEntrys,
   TestSessions,
@@ -319,7 +321,7 @@ class WrongAnswers extends Table {
   EntrysDao,
   FieldListsDao,
   FieldsDao,
-  NotesDao,
+  FieldNotesDao,
   SessionsDao,
   SessionEntrysDao,
   TestSessionsDao,
