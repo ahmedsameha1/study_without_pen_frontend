@@ -2916,6 +2916,326 @@ class FieldNotesCompanion extends UpdateCompanion<FieldNote> {
   }
 }
 
+class $FieldListNotesTable extends FieldListNotes
+    with TableInfo<$FieldListNotesTable, FieldListNote> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FieldListNotesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+      'id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => const Uuid().v4());
+  static const VerificationMeta _fieldListIdMeta =
+      const VerificationMeta('fieldListId');
+  @override
+  late final GeneratedColumn<String> fieldListId = GeneratedColumn<String>(
+      'field_list_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES field_lists (id)'));
+  static const VerificationMeta _texTMeta = const VerificationMeta('texT');
+  @override
+  late final GeneratedColumn<String> texT = GeneratedColumn<String>(
+      'tex_t', aliasedName, false,
+      check: () =>
+          texT
+              .trim()
+              .length
+              .isBiggerOrEqualValue(FieldListNotes.MINIMUM_LENGTH_OF_TEXT) &
+          texT.length
+              .isSmallerOrEqualValue(FieldListNotes.MAXIMUM_LENGTH_OF_TEXT),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _creationAtMeta =
+      const VerificationMeta('creationAt');
+  @override
+  late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
+      'creation_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _lastModificationAtMeta =
+      const VerificationMeta('lastModificationAt');
+  @override
+  late final GeneratedColumn<DateTime> lastModificationAt =
+      GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
+          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          type: DriftSqlType.dateTime,
+          requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, fieldListId, texT, creationAt, lastModificationAt];
+  @override
+  String get aliasedName => _alias ?? 'field_list_notes';
+  @override
+  String get actualTableName => 'field_list_notes';
+  @override
+  VerificationContext validateIntegrity(Insertable<FieldListNote> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('field_list_id')) {
+      context.handle(
+          _fieldListIdMeta,
+          fieldListId.isAcceptableOrUnknown(
+              data['field_list_id']!, _fieldListIdMeta));
+    } else if (isInserting) {
+      context.missing(_fieldListIdMeta);
+    }
+    if (data.containsKey('tex_t')) {
+      context.handle(
+          _texTMeta, texT.isAcceptableOrUnknown(data['tex_t']!, _texTMeta));
+    } else if (isInserting) {
+      context.missing(_texTMeta);
+    }
+    if (data.containsKey('creation_at')) {
+      context.handle(
+          _creationAtMeta,
+          creationAt.isAcceptableOrUnknown(
+              data['creation_at']!, _creationAtMeta));
+    } else if (isInserting) {
+      context.missing(_creationAtMeta);
+    }
+    if (data.containsKey('last_modification_at')) {
+      context.handle(
+          _lastModificationAtMeta,
+          lastModificationAt.isAcceptableOrUnknown(
+              data['last_modification_at']!, _lastModificationAtMeta));
+    } else if (isInserting) {
+      context.missing(_lastModificationAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FieldListNote map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FieldListNote(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
+      fieldListId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}field_list_id'])!,
+      texT: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tex_t'])!,
+      creationAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
+      lastModificationAt: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_modification_at'])!,
+    );
+  }
+
+  @override
+  $FieldListNotesTable createAlias(String alias) {
+    return $FieldListNotesTable(attachedDatabase, alias);
+  }
+}
+
+class FieldListNote extends DataClass implements Insertable<FieldListNote> {
+  final String id;
+  final String fieldListId;
+  final String texT;
+  final DateTime creationAt;
+  final DateTime lastModificationAt;
+  const FieldListNote(
+      {required this.id,
+      required this.fieldListId,
+      required this.texT,
+      required this.creationAt,
+      required this.lastModificationAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['field_list_id'] = Variable<String>(fieldListId);
+    map['tex_t'] = Variable<String>(texT);
+    map['creation_at'] = Variable<DateTime>(creationAt);
+    map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
+    return map;
+  }
+
+  FieldListNotesCompanion toCompanion(bool nullToAbsent) {
+    return FieldListNotesCompanion(
+      id: Value(id),
+      fieldListId: Value(fieldListId),
+      texT: Value(texT),
+      creationAt: Value(creationAt),
+      lastModificationAt: Value(lastModificationAt),
+    );
+  }
+
+  factory FieldListNote.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FieldListNote(
+      id: serializer.fromJson<String>(json['id']),
+      fieldListId: serializer.fromJson<String>(json['fieldListId']),
+      texT: serializer.fromJson<String>(json['texT']),
+      creationAt: serializer.fromJson<DateTime>(json['creationAt']),
+      lastModificationAt:
+          serializer.fromJson<DateTime>(json['lastModificationAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'fieldListId': serializer.toJson<String>(fieldListId),
+      'texT': serializer.toJson<String>(texT),
+      'creationAt': serializer.toJson<DateTime>(creationAt),
+      'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
+    };
+  }
+
+  FieldListNote copyWith(
+          {String? id,
+          String? fieldListId,
+          String? texT,
+          DateTime? creationAt,
+          DateTime? lastModificationAt}) =>
+      FieldListNote(
+        id: id ?? this.id,
+        fieldListId: fieldListId ?? this.fieldListId,
+        texT: texT ?? this.texT,
+        creationAt: creationAt ?? this.creationAt,
+        lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('FieldListNote(')
+          ..write('id: $id, ')
+          ..write('fieldListId: $fieldListId, ')
+          ..write('texT: $texT, ')
+          ..write('creationAt: $creationAt, ')
+          ..write('lastModificationAt: $lastModificationAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, fieldListId, texT, creationAt, lastModificationAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FieldListNote &&
+          other.id == this.id &&
+          other.fieldListId == this.fieldListId &&
+          other.texT == this.texT &&
+          other.creationAt == this.creationAt &&
+          other.lastModificationAt == this.lastModificationAt);
+}
+
+class FieldListNotesCompanion extends UpdateCompanion<FieldListNote> {
+  final Value<String> id;
+  final Value<String> fieldListId;
+  final Value<String> texT;
+  final Value<DateTime> creationAt;
+  final Value<DateTime> lastModificationAt;
+  final Value<int> rowid;
+  const FieldListNotesCompanion({
+    this.id = const Value.absent(),
+    this.fieldListId = const Value.absent(),
+    this.texT = const Value.absent(),
+    this.creationAt = const Value.absent(),
+    this.lastModificationAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FieldListNotesCompanion.insert({
+    this.id = const Value.absent(),
+    required String fieldListId,
+    required String texT,
+    required DateTime creationAt,
+    required DateTime lastModificationAt,
+    this.rowid = const Value.absent(),
+  })  : fieldListId = Value(fieldListId),
+        texT = Value(texT),
+        creationAt = Value(creationAt),
+        lastModificationAt = Value(lastModificationAt);
+  static Insertable<FieldListNote> custom({
+    Expression<String>? id,
+    Expression<String>? fieldListId,
+    Expression<String>? texT,
+    Expression<DateTime>? creationAt,
+    Expression<DateTime>? lastModificationAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (fieldListId != null) 'field_list_id': fieldListId,
+      if (texT != null) 'tex_t': texT,
+      if (creationAt != null) 'creation_at': creationAt,
+      if (lastModificationAt != null)
+        'last_modification_at': lastModificationAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FieldListNotesCompanion copyWith(
+      {Value<String>? id,
+      Value<String>? fieldListId,
+      Value<String>? texT,
+      Value<DateTime>? creationAt,
+      Value<DateTime>? lastModificationAt,
+      Value<int>? rowid}) {
+    return FieldListNotesCompanion(
+      id: id ?? this.id,
+      fieldListId: fieldListId ?? this.fieldListId,
+      texT: texT ?? this.texT,
+      creationAt: creationAt ?? this.creationAt,
+      lastModificationAt: lastModificationAt ?? this.lastModificationAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (fieldListId.present) {
+      map['field_list_id'] = Variable<String>(fieldListId.value);
+    }
+    if (texT.present) {
+      map['tex_t'] = Variable<String>(texT.value);
+    }
+    if (creationAt.present) {
+      map['creation_at'] = Variable<DateTime>(creationAt.value);
+    }
+    if (lastModificationAt.present) {
+      map['last_modification_at'] =
+          Variable<DateTime>(lastModificationAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FieldListNotesCompanion(')
+          ..write('id: $id, ')
+          ..write('fieldListId: $fieldListId, ')
+          ..write('texT: $texT, ')
+          ..write('creationAt: $creationAt, ')
+          ..write('lastModificationAt: $lastModificationAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -4270,6 +4590,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $FieldListsTable fieldLists = $FieldListsTable(this);
   late final $EntrysTable entrys = $EntrysTable(this);
   late final $FieldNotesTable fieldNotes = $FieldNotesTable(this);
+  late final $FieldListNotesTable fieldListNotes = $FieldListNotesTable(this);
   late final $SessionsTable sessions = $SessionsTable(this);
   late final $SessionEntrysTable sessionEntrys = $SessionEntrysTable(this);
   late final $TestSessionsTable testSessions = $TestSessionsTable(this);
@@ -4280,6 +4601,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final FieldListsDao fieldListsDao = FieldListsDao(this as AppDatabase);
   late final FieldsDao fieldsDao = FieldsDao(this as AppDatabase);
   late final FieldNotesDao fieldNotesDao = FieldNotesDao(this as AppDatabase);
+  late final FieldListNotesDao fieldListNotesDao =
+      FieldListNotesDao(this as AppDatabase);
   late final SessionsDao sessionsDao = SessionsDao(this as AppDatabase);
   late final SessionEntrysDao sessionEntrysDao =
       SessionEntrysDao(this as AppDatabase);
@@ -4298,6 +4621,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         fieldLists,
         entrys,
         fieldNotes,
+        fieldListNotes,
         sessions,
         sessionEntrys,
         testSessions,

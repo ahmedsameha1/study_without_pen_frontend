@@ -306,8 +306,7 @@ void main() {
     await fieldNotesDao.create(fieldNote4.toCompanion(true));
     await fieldNotesDao.create(fieldNote5.toCompanion(true));
     await fieldNotesDao.create(fieldNote6.toCompanion(true));
-    Stream<List<FieldNote>> streamNotes =
-        fieldNotesDao.watchByRelationalId(fieldId);
+    Stream<List<FieldNote>> streamNotes = fieldNotesDao.watchByFieldId(fieldId);
     List<FieldNote> fieldNotes = await streamNotes.first;
     expect(fieldNotes.length, 3);
     var gottenNote = fieldNotes[0];
@@ -328,7 +327,7 @@ void main() {
     expect(gottenNote.texT, texT1);
     expect(gottenNote.creationAt, creationAt1);
     expect(gottenNote.lastModificationAt, lastModificationAt1);
-    streamNotes = fieldNotesDao.watchByRelationalId(fieldId2);
+    streamNotes = fieldNotesDao.watchByFieldId(fieldId2);
     fieldNotes = await streamNotes.first;
     expect(fieldNotes.length, 2);
     gottenNote = fieldNotes[0];
@@ -343,7 +342,7 @@ void main() {
     expect(gottenNote.texT, texT2);
     expect(gottenNote.creationAt, creationAt2);
     expect(gottenNote.lastModificationAt, lastModificationAt2);
-    streamNotes = fieldNotesDao.watchByRelationalId(fieldId3);
+    streamNotes = fieldNotesDao.watchByFieldId(fieldId3);
     fieldNotes = await streamNotes.first;
     expect(fieldNotes.length, 1);
     gottenNote = fieldNotes[0];

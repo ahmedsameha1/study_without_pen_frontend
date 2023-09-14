@@ -13,6 +13,7 @@ import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:uuid/uuid.dart';
 
 import 'entrys_dao.dart';
+import 'field_list_notes_dao.dart';
 import 'field_lists_dao.dart';
 import 'test_sessions_dao.dart';
 import 'wrong_answers_dao.dart';
@@ -218,6 +219,26 @@ class FieldNotes extends Table {
   Set<Column> get primaryKey => {id};
 }
 
+class FieldListNotes extends Table {
+  static const int MINIMUM_LENGTH_OF_TEXT = 1;
+  static const int MAXIMUM_LENGTH_OF_TEXT = 2000;
+
+  TextColumn get id => text().clientDefault(() => const Uuid().v4())();
+  TextColumn get fieldListId => text().references(FieldLists, #id)();
+  TextColumn get texT => text().check(texT
+          .trim()
+          .length
+          .isBiggerOrEqualValue(FieldListNotes.MINIMUM_LENGTH_OF_TEXT) &
+      texT.length
+          .isSmallerOrEqualValue(FieldListNotes.MAXIMUM_LENGTH_OF_TEXT))();
+  DateTimeColumn get creationAt => dateTime()();
+  DateTimeColumn get lastModificationAt =>
+      dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
 class Sessions extends Table {
   static const int MINIMUM_CURRENT_QUESTION_COUNTER = 0;
   static const int MAXIMUM_CURRENT_QUESTION_COUNTER = 0xffffffff;
@@ -311,6 +332,7 @@ class WrongAnswers extends Table {
   FieldLists,
   Fields,
   FieldNotes,
+  FieldListNotes,
   Sessions,
   SessionEntrys,
   TestSessions,
@@ -322,6 +344,7 @@ class WrongAnswers extends Table {
   FieldListsDao,
   FieldsDao,
   FieldNotesDao,
+  FieldListNotesDao,
   SessionsDao,
   SessionEntrysDao,
   TestSessionsDao,
