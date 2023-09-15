@@ -146,6 +146,31 @@ void main() {
               (e) => e is SqliteException && e.message.contains("name"))));
     });
 
+    test("Invalid Field: userAccountId & name aren't unique", () async {
+      var field = Field(
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color);
+      var field2 = Field(
+          id: const Uuid().v4(),
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color);
+      await fieldsDao.create(field.toCompanion(true));
+      expect(() async {
+        await fieldsDao.create(field2.toCompanion(true));
+      },
+          throwsA(predicate(
+              (e) => e is SqliteException && e.message.contains("UNIQUE"))));
+    });
+
     test("Invalid Field: creationAt is in the future", () async {
       withClock(Clock.fixed(DateTime(2020, 1, 1)), () async {
         var field = Field(

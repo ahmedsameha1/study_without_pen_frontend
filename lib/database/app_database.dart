@@ -198,6 +198,11 @@ class Fields extends Table {
 
   @override
   Set<Column> get primaryKey => {id};
+
+  @override
+  List<Set<Column<Object>>>? get uniqueKeys => [
+        {userAccountId, name}
+      ];
 }
 
 class FieldNotes extends Table {

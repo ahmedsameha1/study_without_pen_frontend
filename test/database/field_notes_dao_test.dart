@@ -14,10 +14,10 @@ void main() {
   String id = const Uuid().v4();
   String fieldId = const Uuid().v4();
   String texT = "some fieldNote";
+  String fieldName = "field name";
   DateTime creationAt = DateTime(2020, 1, 1);
   DateTime lastModificationAt = DateTime(2020, 2, 2);
   String userAccountId = "j0kW7TZPcdZBHLsIUvJOFiAI8VN2";
-  String name1 = "name";
   DateTime creationAt1 = DateTime(2019, 1, 1);
   DateTime lastModificationAt1 = DateTime.utc(2019, 2, 2);
   int usageCount1 = 9;
@@ -25,7 +25,7 @@ void main() {
   var field = Field(
       id: fieldId,
       userAccountId: userAccountId,
-      name: name1,
+      name: fieldName,
       creationAt: creationAt1,
       lastModificationAt: lastModificationAt1,
       usageCount: usageCount1,
@@ -249,7 +249,7 @@ void main() {
     var field2 = Field(
         id: fieldId2,
         userAccountId: userAccountId,
-        name: name1 + "y",
+        name: fieldName + "y",
         creationAt: creationAt1.add(Duration(days: 7)),
         lastModificationAt: lastModificationAt1.add(Duration(days: 8)),
         usageCount: 5,
@@ -258,7 +258,7 @@ void main() {
     var field3 = Field(
         id: fieldId3,
         userAccountId: userAccountId,
-        name: name1 + "t",
+        name: fieldName + "t",
         creationAt: creationAt1.add(Duration(days: 2)),
         lastModificationAt: lastModificationAt1.add(Duration(days: 3)),
         usageCount: 5,
@@ -491,7 +491,7 @@ void main() {
       var field1 = Field(
           id: fieldId1,
           userAccountId: userAccountId,
-          name: name1,
+          name: fieldName + "c",
           creationAt: creationAt1.add(Duration(days: 2)),
           lastModificationAt: lastModificationAt1.add(Duration(days: 3)),
           usageCount: 5,

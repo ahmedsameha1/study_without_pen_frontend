@@ -552,6 +552,10 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+        {userAccountId, name},
+      ];
+  @override
   Field map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Field(
