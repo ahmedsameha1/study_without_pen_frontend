@@ -163,6 +163,11 @@ class FieldLists extends Table {
 
   @override
   Set<Column> get primaryKey => {id};
+
+  @override
+  List<Set<Column<Object>>>? get uniqueKeys => [
+        {fieldId, name}
+      ];
 }
 
 class Fields extends Table {
