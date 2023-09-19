@@ -4364,8 +4364,15 @@ class $WrongAnswersTable extends WrongAnswers
           .isBiggerOrEqualValue(WrongAnswers.MINIMUM_VALUE_LENGTH),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
+  static const VerificationMeta _creationAtMeta =
+      const VerificationMeta('creationAt');
   @override
-  List<GeneratedColumn> get $columns => [id, sessionId, entryId, value];
+  late final GeneratedColumn<DateTime> creationAt = GeneratedColumn<DateTime>(
+      'creation_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, sessionId, entryId, value, creationAt];
   @override
   String get aliasedName => _alias ?? 'wrong_answers';
   @override
@@ -4396,6 +4403,14 @@ class $WrongAnswersTable extends WrongAnswers
     } else if (isInserting) {
       context.missing(_valueMeta);
     }
+    if (data.containsKey('creation_at')) {
+      context.handle(
+          _creationAtMeta,
+          creationAt.isAcceptableOrUnknown(
+              data['creation_at']!, _creationAtMeta));
+    } else if (isInserting) {
+      context.missing(_creationAtMeta);
+    }
     return context;
   }
 
@@ -4413,6 +4428,8 @@ class $WrongAnswersTable extends WrongAnswers
           .read(DriftSqlType.string, data['${effectivePrefix}entry_id'])!,
       value: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}value'])!,
+      creationAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}creation_at'])!,
     );
   }
 
@@ -4427,11 +4444,13 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
   final String sessionId;
   final String entryId;
   final String value;
+  final DateTime creationAt;
   const WrongAnswer(
       {required this.id,
       required this.sessionId,
       required this.entryId,
-      required this.value});
+      required this.value,
+      required this.creationAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -4439,6 +4458,7 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
     map['session_id'] = Variable<String>(sessionId);
     map['entry_id'] = Variable<String>(entryId);
     map['value'] = Variable<String>(value);
+    map['creation_at'] = Variable<DateTime>(creationAt);
     return map;
   }
 
@@ -4448,6 +4468,7 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
       sessionId: Value(sessionId),
       entryId: Value(entryId),
       value: Value(value),
+      creationAt: Value(creationAt),
     );
   }
 
@@ -4459,6 +4480,7 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
       sessionId: serializer.fromJson<String>(json['sessionId']),
       entryId: serializer.fromJson<String>(json['entryId']),
       value: serializer.fromJson<String>(json['value']),
+      creationAt: serializer.fromJson<DateTime>(json['creationAt']),
     );
   }
   @override
@@ -4469,16 +4491,22 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
       'sessionId': serializer.toJson<String>(sessionId),
       'entryId': serializer.toJson<String>(entryId),
       'value': serializer.toJson<String>(value),
+      'creationAt': serializer.toJson<DateTime>(creationAt),
     };
   }
 
   WrongAnswer copyWith(
-          {String? id, String? sessionId, String? entryId, String? value}) =>
+          {String? id,
+          String? sessionId,
+          String? entryId,
+          String? value,
+          DateTime? creationAt}) =>
       WrongAnswer(
         id: id ?? this.id,
         sessionId: sessionId ?? this.sessionId,
         entryId: entryId ?? this.entryId,
         value: value ?? this.value,
+        creationAt: creationAt ?? this.creationAt,
       );
   @override
   String toString() {
@@ -4486,13 +4514,14 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
           ..write('id: $id, ')
           ..write('sessionId: $sessionId, ')
           ..write('entryId: $entryId, ')
-          ..write('value: $value')
+          ..write('value: $value, ')
+          ..write('creationAt: $creationAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, sessionId, entryId, value);
+  int get hashCode => Object.hash(id, sessionId, entryId, value, creationAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4500,7 +4529,8 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
           other.id == this.id &&
           other.sessionId == this.sessionId &&
           other.entryId == this.entryId &&
-          other.value == this.value);
+          other.value == this.value &&
+          other.creationAt == this.creationAt);
 }
 
 class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
@@ -4508,12 +4538,14 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
   final Value<String> sessionId;
   final Value<String> entryId;
   final Value<String> value;
+  final Value<DateTime> creationAt;
   final Value<int> rowid;
   const WrongAnswersCompanion({
     this.id = const Value.absent(),
     this.sessionId = const Value.absent(),
     this.entryId = const Value.absent(),
     this.value = const Value.absent(),
+    this.creationAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   WrongAnswersCompanion.insert({
@@ -4521,15 +4553,18 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
     required String sessionId,
     required String entryId,
     required String value,
+    required DateTime creationAt,
     this.rowid = const Value.absent(),
   })  : sessionId = Value(sessionId),
         entryId = Value(entryId),
-        value = Value(value);
+        value = Value(value),
+        creationAt = Value(creationAt);
   static Insertable<WrongAnswer> custom({
     Expression<String>? id,
     Expression<String>? sessionId,
     Expression<String>? entryId,
     Expression<String>? value,
+    Expression<DateTime>? creationAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -4537,6 +4572,7 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
       if (sessionId != null) 'session_id': sessionId,
       if (entryId != null) 'entry_id': entryId,
       if (value != null) 'value': value,
+      if (creationAt != null) 'creation_at': creationAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -4546,12 +4582,14 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
       Value<String>? sessionId,
       Value<String>? entryId,
       Value<String>? value,
+      Value<DateTime>? creationAt,
       Value<int>? rowid}) {
     return WrongAnswersCompanion(
       id: id ?? this.id,
       sessionId: sessionId ?? this.sessionId,
       entryId: entryId ?? this.entryId,
       value: value ?? this.value,
+      creationAt: creationAt ?? this.creationAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -4571,6 +4609,9 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
     if (value.present) {
       map['value'] = Variable<String>(value.value);
     }
+    if (creationAt.present) {
+      map['creation_at'] = Variable<DateTime>(creationAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -4584,6 +4625,7 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
           ..write('sessionId: $sessionId, ')
           ..write('entryId: $entryId, ')
           ..write('value: $value, ')
+          ..write('creationAt: $creationAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();

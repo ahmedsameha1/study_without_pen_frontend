@@ -330,6 +330,7 @@ class WrongAnswers extends Table {
       .trim()
       .length
       .isBiggerOrEqualValue(WrongAnswers.MINIMUM_VALUE_LENGTH))();
+  DateTimeColumn get creationAt => dateTime()();
 
   @override
   Set<Column> get primaryKey => {id};

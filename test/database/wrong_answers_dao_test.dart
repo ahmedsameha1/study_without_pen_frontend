@@ -159,7 +159,11 @@ void main() {
   group("Create wrongAnswer", () {
     test("Invalid wrongAnswer: id is invalid UUID v4", () {
       final wrongAnswer = WrongAnswer(
-          id: "efweh", sessionId: sessionId, entryId: entryId, value: value);
+          id: "efweh",
+          sessionId: sessionId,
+          entryId: entryId,
+          value: value,
+          creationAt: creationAt);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
@@ -169,7 +173,11 @@ void main() {
 
     test("No two or more wrongAnswers with the same id", () async {
       final wrongAnswer = WrongAnswer(
-          id: id, sessionId: sessionId, entryId: entryId, value: value);
+          id: id,
+          sessionId: sessionId,
+          entryId: entryId,
+          value: value,
+          creationAt: creationAt);
       await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
@@ -180,7 +188,11 @@ void main() {
 
     test("Invalid wrongAnswer: sessionId is invalid UUID v4", () {
       final wrongAnswer = WrongAnswer(
-          id: id, sessionId: "owfbhwe", entryId: entryId, value: value);
+          id: id,
+          sessionId: "owfbhwe",
+          entryId: entryId,
+          value: value,
+          creationAt: creationAt);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
@@ -190,7 +202,11 @@ void main() {
 
     test("Invalid wrongAnswer: sessionId doesn't exist in sessions table", () {
       final wrongAnswer = WrongAnswer(
-          id: id, sessionId: const Uuid().v4(), entryId: entryId, value: value);
+          id: id,
+          sessionId: const Uuid().v4(),
+          entryId: entryId,
+          value: value,
+          creationAt: creationAt);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
@@ -200,7 +216,11 @@ void main() {
 
     test("Invalid wrongAnswer: entryId is invalid UUID v4", () {
       final wrongAnswer = WrongAnswer(
-          id: id, sessionId: sessionId, entryId: "efbw", value: value);
+          id: id,
+          sessionId: sessionId,
+          entryId: "efbw",
+          value: value,
+          creationAt: creationAt);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
@@ -213,7 +233,8 @@ void main() {
           id: id,
           sessionId: sessionId,
           entryId: const Uuid().v4(),
-          value: value);
+          value: value,
+          creationAt: creationAt);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
@@ -223,14 +244,22 @@ void main() {
 
     test("Invalid wrongAnswer: value is an empty String", () {
       var wrongAnswer = WrongAnswer(
-          id: id, sessionId: sessionId, entryId: entryId, value: "");
+          id: id,
+          sessionId: sessionId,
+          entryId: entryId,
+          value: "",
+          creationAt: creationAt);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
           throwsA(predicate(
               (e) => e is SqliteException && e.message.contains("value"))));
       wrongAnswer = WrongAnswer(
-          id: id, sessionId: sessionId, entryId: entryId, value: " ");
+          id: id,
+          sessionId: sessionId,
+          entryId: entryId,
+          value: " ",
+          creationAt: creationAt);
       expect(() async {
         await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
       },
@@ -238,11 +267,28 @@ void main() {
               (e) => e is SqliteException && e.message.contains("value"))));
     });
 
+    test("Invalid wrongAnswer: value is an empty String", () {
+      var wrongAnswer = WrongAnswer(
+          id: id,
+          sessionId: sessionId,
+          entryId: entryId,
+          value: value,
+          creationAt: DateTime(2019, 1, 1));
+      expect(() async {
+        await wrongAnswersDao.create(wrongAnswer.toCompanion(true));
+      },
+          throwsA(predicate((e) =>
+              e is InvalidDataException &&
+              e.message
+                  .contains("creationAt is before the session creationAt"))));
+    });
+
     test("Good case: not provide id", () async {
       var wrongAnswerCompanion = WrongAnswersCompanion(
           sessionId: Value(sessionId),
           entryId: Value(entryId),
-          value: Value("wefhweo"));
+          value: Value("wefhweo"),
+          creationAt: Value(creationAt));
       await wrongAnswersDao.create(wrongAnswerCompanion);
     });
   });
