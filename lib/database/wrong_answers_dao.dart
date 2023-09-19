@@ -42,4 +42,11 @@ class WrongAnswersDao extends DatabaseAccessor<AppDatabase>
           ]))
         .get();
   }
+
+  Future<int> removeBySessionIdAndEntryId(String sessionId, String entryId) {
+    return (delete(wrongAnswers)
+          ..where((tbl) =>
+              tbl.sessionId.equals(sessionId) & tbl.entryId.equals(entryId)))
+        .go();
+  }
 }

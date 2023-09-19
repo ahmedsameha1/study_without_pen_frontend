@@ -433,4 +433,93 @@ void main() {
       expect(wrongAnswers.length, 0);
     });
   });
+
+  test("Delete by sessionId and entryId", () async {
+    final id2 = const Uuid().v4();
+    final id3 = const Uuid().v4();
+    final id4 = const Uuid().v4();
+    final id5 = const Uuid().v4();
+    final sessionId1 = const Uuid().v4();
+    final entryId1 = const Uuid().v4();
+    final answerId1 = const Uuid().v4();
+    final answer1 = EntryText(id: answerId1, value: "answer1");
+    await entryTextsDao.create(answer1.toCompanion(true));
+    Session session1 = Session(
+        id: sessionId1,
+        fieldListId: fieldListId,
+        currentQuestionCounter: currentQuestionCounter,
+        triesNumber: triesNumber,
+        triesCounter: triesCounter,
+        elapsedTime: elapsedTime,
+        isCompleted: isCompleted,
+        lastCheckedAnswerResult: lastCheckedAnswerResult,
+        shouldCheckAnAnswer: shouldCheckAnAnswer,
+        currentHintCounter: currentHintCounter,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt);
+    await sessionsDao.create(session1.toCompanion(true));
+    Entry entry1 = Entry(
+        id: entryId1,
+        fieldListId: fieldListId,
+        answerId: answerId1,
+        questionId: questionId,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount);
+    await entrysDao.create(entry1.toCompanion(true));
+    final wrongAnswerCreationAt1 = DateTime(2020, 3, 3);
+    final wrongAnswerCreationAt2 = DateTime(2020, 4, 4);
+    final wrongAnswerCreationAt3 = DateTime(2020, 5, 5);
+    final wrongAnswerCreationAt4 = DateTime(2020, 6, 6);
+    final wrongAnswerCreationAt5 = DateTime(2020, 7, 7);
+    var wrongAnswer1 = WrongAnswer(
+        id: id,
+        sessionId: sessionId,
+        entryId: entryId,
+        value: value,
+        creationAt: wrongAnswerCreationAt1);
+    var wrongAnswer2 = WrongAnswer(
+        id: id2,
+        sessionId: sessionId1,
+        entryId: entryId,
+        value: value,
+        creationAt: wrongAnswerCreationAt2);
+    var wrongAnswer3 = WrongAnswer(
+        id: id3,
+        sessionId: sessionId,
+        entryId: entryId,
+        value: value,
+        creationAt: wrongAnswerCreationAt3);
+    var wrongAnswer4 = WrongAnswer(
+        id: id4,
+        sessionId: sessionId,
+        entryId: entryId,
+        value: value,
+        creationAt: wrongAnswerCreationAt4);
+    var wrongAnswer5 = WrongAnswer(
+        id: id5,
+        sessionId: sessionId,
+        entryId: entryId1,
+        value: value,
+        creationAt: wrongAnswerCreationAt5);
+    await wrongAnswersDao.create(wrongAnswer4.toCompanion(true));
+    await wrongAnswersDao.create(wrongAnswer2.toCompanion(true));
+    await wrongAnswersDao.create(wrongAnswer5.toCompanion(true));
+    await wrongAnswersDao.create(wrongAnswer3.toCompanion(true));
+    await wrongAnswersDao.create(wrongAnswer1.toCompanion(true));
+    await wrongAnswersDao.removeBySessionIdAndEntryId(sessionId, entryId);
+    List<WrongAnswer> wrongAnswers =
+        await wrongAnswersDao.getBySessionIdAndEntryId(sessionId, entryId);
+    expect(wrongAnswers.length, 0);
+    wrongAnswers =
+        await wrongAnswersDao.getBySessionIdAndEntryId(sessionId1, entryId);
+    expect(wrongAnswers.length, 1);
+    await wrongAnswersDao.getBySessionIdAndEntryId(sessionId, entryId1);
+    expect(wrongAnswers.length, 1);
+  });
 }
