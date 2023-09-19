@@ -30,4 +30,16 @@ class WrongAnswersDao extends DatabaseAccessor<AppDatabase>
     }
     return into(wrongAnswers).insert(wrongAnswersCompanion);
   }
+
+  Future<List<WrongAnswer>> getBySessionIdAndEntryId(
+      String sessionId, String entryId) {
+    return (select(wrongAnswers)
+          ..where((tbl) =>
+              tbl.sessionId.equals(sessionId) & tbl.entryId.equals(entryId))
+          ..orderBy([
+            (tbl) => OrderingTerm(
+                expression: tbl.creationAt, mode: OrderingMode.asc),
+          ]))
+        .get();
+  }
 }

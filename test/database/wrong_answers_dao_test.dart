@@ -68,12 +68,71 @@ void main() {
   int usageCount1 = 9;
   int color1 = 0xff55ee11;
   String questionAddress = const Uuid().v4();
+  final answer = EntryText(id: answerId, value: "answer");
   final entryTextQuestion = EntryText(id: questionAddress, value: "text");
   Question question = Question(
       id: questionId,
       questionType: QuestionType.EntryTextQuestion.index,
       address: questionAddress);
-
+  Field field = Field(
+      id: fieldId,
+      userAccountId: userAccountId,
+      name: name1,
+      creationAt: creationAt2,
+      lastModificationAt: lastModificationAt2,
+      usageCount: usageCount1,
+      color: color1);
+  FieldList fieldList = FieldList(
+      id: fieldListId,
+      fieldId: fieldId,
+      name: name,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      languageTag: languageTag,
+      checkType: checkType,
+      sortBy: sortBy,
+      doesReadAnswer: doesReadAnswer,
+      usageCount: usageCount,
+      color: color,
+      emulationNumberOfQuestions: emulationNumberOfQuestions,
+      emulationDays: emulationDays,
+      testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
+      testsFindingAnswerDuration: testsFindingAnswerDuration,
+      testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+      studyTillCorrectReadingQuestionLetterDuration:
+          studyTillCorrectReadingQuestionLetterDuration,
+      studyTillCorrectFindingAnswerDuration:
+          studyTillCorrectFindingAnswerDuration,
+      studyTillCorrectTypingAnswerLetterDuration:
+          studyTillCorrectTypingAnswerLetterDuration,
+      testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+      doesObfuscateQuestion: doesObfuscateQuestion);
+  Session session = Session(
+      id: sessionId,
+      fieldListId: fieldListId,
+      currentQuestionCounter: currentQuestionCounter,
+      triesNumber: triesNumber,
+      triesCounter: triesCounter,
+      elapsedTime: elapsedTime,
+      isCompleted: isCompleted,
+      lastCheckedAnswerResult: lastCheckedAnswerResult,
+      shouldCheckAnAnswer: shouldCheckAnAnswer,
+      currentHintCounter: currentHintCounter,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt);
+  Entry entry = Entry(
+      id: entryId,
+      fieldListId: fieldListId,
+      answerId: answerId,
+      questionId: questionId,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      order: order,
+      didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt,
+      rank: rank,
+      askedCount: askedCount,
+      wronglyAnsweredCount: wronglyAnsweredCount);
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
     wrongAnswersDao = WrongAnswersDao(appDatabase);
@@ -83,72 +142,12 @@ void main() {
     fieldListsDao = FieldListsDao(appDatabase);
     entryTextsDao = EntryTextsDao(appDatabase);
     questionsDao = QuestionsDao(appDatabase);
-    final answer = EntryText(id: answerId, value: "answer");
     await entryTextsDao.create(answer.toCompanion(true));
     await entryTextsDao.create(entryTextQuestion.toCompanion(true));
     await questionsDao.create(question.toCompanion(true));
-    var field = Field(
-        id: fieldId,
-        userAccountId: userAccountId,
-        name: name1,
-        creationAt: creationAt2,
-        lastModificationAt: lastModificationAt2,
-        usageCount: usageCount1,
-        color: color1);
     await fieldsDao.create(field.toCompanion(true));
-    var fieldList = FieldList(
-        id: fieldListId,
-        fieldId: fieldId,
-        name: name,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt,
-        languageTag: languageTag,
-        checkType: checkType,
-        sortBy: sortBy,
-        doesReadAnswer: doesReadAnswer,
-        usageCount: usageCount,
-        color: color,
-        emulationNumberOfQuestions: emulationNumberOfQuestions,
-        emulationDays: emulationDays,
-        testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
-        testsFindingAnswerDuration: testsFindingAnswerDuration,
-        testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
-        studyTillCorrectReadingQuestionLetterDuration:
-            studyTillCorrectReadingQuestionLetterDuration,
-        studyTillCorrectFindingAnswerDuration:
-            studyTillCorrectFindingAnswerDuration,
-        studyTillCorrectTypingAnswerLetterDuration:
-            studyTillCorrectTypingAnswerLetterDuration,
-        testsTimeOfAnswerAction: testsTimeOfAnswerAction,
-        doesObfuscateQuestion: doesObfuscateQuestion);
     await fieldListsDao.create(fieldList.toCompanion(true));
-    var session = Session(
-        id: sessionId,
-        fieldListId: fieldListId,
-        currentQuestionCounter: currentQuestionCounter,
-        triesNumber: triesNumber,
-        triesCounter: triesCounter,
-        elapsedTime: elapsedTime,
-        isCompleted: isCompleted,
-        lastCheckedAnswerResult: lastCheckedAnswerResult,
-        shouldCheckAnAnswer: shouldCheckAnAnswer,
-        currentHintCounter: currentHintCounter,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt);
     await sessionsDao.create(session.toCompanion(true));
-    var entry = Entry(
-        id: entryId,
-        fieldListId: fieldListId,
-        answerId: answerId,
-        questionId: questionId,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt,
-        order: order,
-        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
-        emulatedCreatedAt: emulatedCreatedAt,
-        rank: rank,
-        askedCount: askedCount,
-        wronglyAnsweredCount: wronglyAnsweredCount);
     await entrysDao.create(entry.toCompanion(true));
   });
 
@@ -290,6 +289,148 @@ void main() {
           value: Value("wefhweo"),
           creationAt: Value(creationAt));
       await wrongAnswersDao.create(wrongAnswerCompanion);
+    });
+  });
+
+  group("Get by sessionId & entryId", () {
+    test("There is at least one wrong answer", () async {
+      final id2 = const Uuid().v4();
+      final id3 = const Uuid().v4();
+      final id4 = const Uuid().v4();
+      final id5 = const Uuid().v4();
+      final sessionId1 = const Uuid().v4();
+      final entryId1 = const Uuid().v4();
+      final answerId1 = const Uuid().v4();
+      final answer1 = EntryText(id: answerId1, value: "answer1");
+      await entryTextsDao.create(answer1.toCompanion(true));
+      Session session1 = Session(
+          id: sessionId1,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesCounter,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      await sessionsDao.create(session1.toCompanion(true));
+      Entry entry1 = Entry(
+          id: entryId1,
+          fieldListId: fieldListId,
+          answerId: answerId1,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      await entrysDao.create(entry1.toCompanion(true));
+      final wrongAnswerCreationAt1 = DateTime(2020, 3, 3);
+      final wrongAnswerCreationAt2 = DateTime(2020, 4, 4);
+      final wrongAnswerCreationAt3 = DateTime(2020, 5, 5);
+      final wrongAnswerCreationAt4 = DateTime(2020, 6, 6);
+      final wrongAnswerCreationAt5 = DateTime(2020, 7, 7);
+      var wrongAnswer1 = WrongAnswer(
+          id: id,
+          sessionId: sessionId,
+          entryId: entryId,
+          value: value,
+          creationAt: wrongAnswerCreationAt1);
+      var wrongAnswer2 = WrongAnswer(
+          id: id2,
+          sessionId: sessionId1,
+          entryId: entryId,
+          value: value,
+          creationAt: wrongAnswerCreationAt2);
+      var wrongAnswer3 = WrongAnswer(
+          id: id3,
+          sessionId: sessionId,
+          entryId: entryId,
+          value: value,
+          creationAt: wrongAnswerCreationAt3);
+      var wrongAnswer4 = WrongAnswer(
+          id: id4,
+          sessionId: sessionId,
+          entryId: entryId,
+          value: value,
+          creationAt: wrongAnswerCreationAt4);
+      var wrongAnswer5 = WrongAnswer(
+          id: id5,
+          sessionId: sessionId,
+          entryId: entryId1,
+          value: value,
+          creationAt: wrongAnswerCreationAt5);
+      await wrongAnswersDao.create(wrongAnswer4.toCompanion(true));
+      await wrongAnswersDao.create(wrongAnswer2.toCompanion(true));
+      await wrongAnswersDao.create(wrongAnswer5.toCompanion(true));
+      await wrongAnswersDao.create(wrongAnswer3.toCompanion(true));
+      await wrongAnswersDao.create(wrongAnswer1.toCompanion(true));
+      List<WrongAnswer> wrongAnswers =
+          await wrongAnswersDao.getBySessionIdAndEntryId(sessionId, entryId);
+      expect(wrongAnswers.length, 3);
+      var gottenWrongAnser = wrongAnswers[0];
+      expect(gottenWrongAnser.id, wrongAnswer1.id);
+      expect(gottenWrongAnser.sessionId, wrongAnswer1.sessionId);
+      expect(gottenWrongAnser.entryId, wrongAnswer1.entryId);
+      expect(gottenWrongAnser.value, wrongAnswer1.value);
+      expect(gottenWrongAnser.creationAt, wrongAnswer1.creationAt);
+      gottenWrongAnser = wrongAnswers[1];
+      expect(gottenWrongAnser.id, wrongAnswer3.id);
+      expect(gottenWrongAnser.sessionId, wrongAnswer3.sessionId);
+      expect(gottenWrongAnser.entryId, wrongAnswer3.entryId);
+      expect(gottenWrongAnser.value, wrongAnswer3.value);
+      expect(gottenWrongAnser.creationAt, wrongAnswer3.creationAt);
+      gottenWrongAnser = wrongAnswers[2];
+      expect(gottenWrongAnser.id, wrongAnswer4.id);
+      expect(gottenWrongAnser.sessionId, wrongAnswer4.sessionId);
+      expect(gottenWrongAnser.entryId, wrongAnswer4.entryId);
+      expect(gottenWrongAnser.value, wrongAnswer4.value);
+      expect(gottenWrongAnser.creationAt, wrongAnswer4.creationAt);
+    });
+
+    test("There is no wrong answer", () async {
+      final answerId1 = const Uuid().v4();
+      final answer1 = EntryText(id: answerId1, value: "answer1");
+      await entryTextsDao.create(answer1.toCompanion(true));
+      final sessionId1 = const Uuid().v4();
+      final entryId1 = const Uuid().v4();
+      Session session1 = Session(
+          id: sessionId1,
+          fieldListId: fieldListId,
+          currentQuestionCounter: currentQuestionCounter,
+          triesNumber: triesNumber,
+          triesCounter: triesCounter,
+          elapsedTime: elapsedTime,
+          isCompleted: isCompleted,
+          lastCheckedAnswerResult: lastCheckedAnswerResult,
+          shouldCheckAnAnswer: shouldCheckAnAnswer,
+          currentHintCounter: currentHintCounter,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt);
+      await sessionsDao.create(session1.toCompanion(true));
+      Entry entry1 = Entry(
+          id: entryId1,
+          fieldListId: fieldListId,
+          answerId: answerId1,
+          questionId: questionId,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount);
+      await entrysDao.create(entry1.toCompanion(true));
+      List<WrongAnswer> wrongAnswers =
+          await wrongAnswersDao.getBySessionIdAndEntryId(sessionId1, entryId1);
+      expect(wrongAnswers.length, 0);
     });
   });
 }
