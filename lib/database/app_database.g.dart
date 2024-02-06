@@ -32,9 +32,10 @@ class $EntryTextsTable extends EntryTexts
   @override
   List<GeneratedColumn> get $columns => [id, value];
   @override
-  String get aliasedName => _alias ?? 'entry_texts';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'entry_texts';
+  String get actualTableName => $name;
+  static const String $name = 'entry_texts';
   @override
   VerificationContext validateIntegrity(Insertable<EntryText> instance,
       {bool isInserting = false}) {
@@ -217,9 +218,10 @@ class $QuestionsTable extends Questions
   @override
   List<GeneratedColumn> get $columns => [id, questionType, address];
   @override
-  String get aliasedName => _alias ?? 'questions';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'questions';
+  String get actualTableName => $name;
+  static const String $name = 'questions';
   @override
   VerificationContext validateIntegrity(Insertable<Question> instance,
       {bool isInserting = false}) {
@@ -495,9 +497,10 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
         color
       ];
   @override
-  String get aliasedName => _alias ?? 'fields';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'fields';
+  String get actualTableName => $name;
+  static const String $name = 'fields';
   @override
   VerificationContext validateIntegrity(Insertable<Field> instance,
       {bool isInserting = false}) {
@@ -1061,9 +1064,10 @@ class $FieldListsTable extends FieldLists
         doesObfuscateQuestion
       ];
   @override
-  String get aliasedName => _alias ?? 'field_lists';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'field_lists';
+  String get actualTableName => $name;
+  static const String $name = 'field_lists';
   @override
   VerificationContext validateIntegrity(Insertable<FieldList> instance,
       {bool isInserting = false}) {
@@ -2092,9 +2096,10 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         wronglyAnsweredCount
       ];
   @override
-  String get aliasedName => _alias ?? 'entrys';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'entrys';
+  String get actualTableName => $name;
+  static const String $name = 'entrys';
   @override
   VerificationContext validateIntegrity(Insertable<Entry> instance,
       {bool isInserting = false}) {
@@ -2659,9 +2664,10 @@ class $FieldNotesTable extends FieldNotes
   List<GeneratedColumn> get $columns =>
       [id, fieldId, texT, creationAt, lastModificationAt];
   @override
-  String get aliasedName => _alias ?? 'field_notes';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'field_notes';
+  String get actualTableName => $name;
+  static const String $name = 'field_notes';
   @override
   VerificationContext validateIntegrity(Insertable<FieldNote> instance,
       {bool isInserting = false}) {
@@ -2977,9 +2983,10 @@ class $FieldListNotesTable extends FieldListNotes
   List<GeneratedColumn> get $columns =>
       [id, fieldListId, texT, creationAt, lastModificationAt];
   @override
-  String get aliasedName => _alias ?? 'field_list_notes';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'field_list_notes';
+  String get actualTableName => $name;
+  static const String $name = 'field_list_notes';
   @override
   VerificationContext validateIntegrity(Insertable<FieldListNote> instance,
       {bool isInserting = false}) {
@@ -3381,9 +3388,10 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
         lastModificationAt
       ];
   @override
-  String get aliasedName => _alias ?? 'sessions';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'sessions';
+  String get actualTableName => $name;
+  static const String $name = 'sessions';
   @override
   VerificationContext validateIntegrity(Insertable<Session> instance,
       {bool isInserting = false}) {
@@ -3914,9 +3922,10 @@ class $SessionEntrysTable extends SessionEntrys
   @override
   List<GeneratedColumn> get $columns => [sessionId, entryId];
   @override
-  String get aliasedName => _alias ?? 'session_entrys';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'session_entrys';
+  String get actualTableName => $name;
+  static const String $name = 'session_entrys';
   @override
   VerificationContext validateIntegrity(Insertable<SessionEntry> instance,
       {bool isInserting = false}) {
@@ -4120,9 +4129,10 @@ class $TestSessionsTable extends TestSessions
   List<GeneratedColumn> get $columns =>
       [sessionId, wrongAnswerCounter, lastAnswer];
   @override
-  String get aliasedName => _alias ?? 'test_sessions';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'test_sessions';
+  String get actualTableName => $name;
+  static const String $name = 'test_sessions';
   @override
   VerificationContext validateIntegrity(Insertable<TestSession> instance,
       {bool isInserting = false}) {
@@ -4374,9 +4384,10 @@ class $WrongAnswersTable extends WrongAnswers
   List<GeneratedColumn> get $columns =>
       [id, sessionId, entryId, value, creationAt];
   @override
-  String get aliasedName => _alias ?? 'wrong_answers';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'wrong_answers';
+  String get actualTableName => $name;
+  static const String $name = 'wrong_answers';
   @override
   VerificationContext validateIntegrity(Insertable<WrongAnswer> instance,
       {bool isInserting = false}) {
