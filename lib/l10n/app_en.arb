@@ -1,0 +1,35 @@
+{
+  "materialAppTitle": "PenInBin!",
+  "nonso_register": "Register",
+  "nonso_signInUp": "Sign In/Up",
+  "nonso_email": "Email",
+  "nonso_next": "Next",
+  "nonso_cancel": "Cancel",
+  "nonso_invalidEmail": "This an invalid email",
+  "nonso_refresh": "Refresh account",
+  "nonso_verifyEmailAddress": "Check your email inbox to verify your email address",
+  "nonso_signOut": "Sign out",
+  "nonso_resendVerificationEmail": "Resend verification email",
+  "nonso_name": "Name",
+  "nonso_password": "Password",
+  "nonso_confirmPassword": "Confirm Password",
+  "nonso_nameValidationError": "Enter your name",
+  "nonso_failed": "Failure: {exceptionCode}",
+  "@nonso_failed": {
+      "placeholders": {
+          "exceptionCode": {
+              "type": "String"
+          }
+      }
+  },
+  "nonso_success": "Success: Check your email to verify your email address",
+  "nonso_passwordValidationError": "Password needs to be at least {passwordMinimumLength} characters",
+  "@nonso_passwordValidationError": {
+      "placeholders": {
+          "passwordMinimumLength": {
+              "type": "int"
+          }
+      }
+  },
+  "nonso_confirmPasswordValidationError": "This doesn't match the above password"
+}
