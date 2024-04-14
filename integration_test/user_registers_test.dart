@@ -65,6 +65,27 @@ Future<void> main() async {
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
         });
+
+        testWidgets(
+            "Entering invalid password in the password TextFormField on the Register widget",
+            (WidgetTester widgetTester) async {
+          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          final registerButton = find.byType(ElevatedButton).at(0);
+          await widgetTester.tap(registerButton);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Register), findsOneWidget);
+          final passwordTextFormFieldFinder = find.byType(TextFormField).at(2);
+          final invalidPasswordTextFinder = find.descendant(
+              of: passwordTextFormFieldFinder,
+              matching: find.text("Password needs to be at least 8 characters"));
+          await widgetTester.enterText(passwordTextFormFieldFinder, "f");
+          final aTextFormFieldFinder = find.byType(TextFormField).at(0);
+          await widgetTester.tap(aTextFormFieldFinder);
+          await widgetTester.pumpAndSettle();
+          expect(invalidPasswordTextFinder, findsOneWidget);
+        });
       });
     });
   });
