@@ -44,6 +44,27 @@ Future<void> main() async {
           await widgetTester.pumpAndSettle();
           expect(invalidNameTextFinder, findsOneWidget);
         });
+
+        testWidgets(
+            "Entering invalid email in the email TextFormField on the Register widget",
+            (WidgetTester widgetTester) async {
+          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          final registerButton = find.byType(ElevatedButton).at(0);
+          await widgetTester.tap(registerButton);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Register), findsOneWidget);
+          final emailTextFormFieldFinder = find.byType(TextFormField).at(1);
+          final invalidEmailTextFinder = find.descendant(
+              of: emailTextFormFieldFinder,
+              matching: find.text("This an invalid email"));
+          await widgetTester.enterText(emailTextFormFieldFinder, "f");
+          final aTextFormFieldFinder = find.byType(TextFormField).at(0);
+          await widgetTester.tap(aTextFormFieldFinder);
+          await widgetTester.pumpAndSettle();
+          expect(invalidEmailTextFinder, findsOneWidget);
+        });
       });
     });
   });
