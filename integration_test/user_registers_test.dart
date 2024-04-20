@@ -79,12 +79,40 @@ Future<void> main() async {
           final passwordTextFormFieldFinder = find.byType(TextFormField).at(2);
           final invalidPasswordTextFinder = find.descendant(
               of: passwordTextFormFieldFinder,
-              matching: find.text("Password needs to be at least 8 characters"));
+              matching:
+                  find.text("Password needs to be at least 8 characters"));
           await widgetTester.enterText(passwordTextFormFieldFinder, "f");
           final aTextFormFieldFinder = find.byType(TextFormField).at(0);
           await widgetTester.tap(aTextFormFieldFinder);
           await widgetTester.pumpAndSettle();
           expect(invalidPasswordTextFinder, findsOneWidget);
+        });
+
+        testWidgets(
+            """Entering a password that doesn't match the password in the password TextFormField
+               in the confirm password TextFormField on the Register widget""",
+            (WidgetTester widgetTester) async {
+          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          final registerButton = find.byType(ElevatedButton).at(0);
+          await widgetTester.tap(registerButton);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Register), findsOneWidget);
+          final passwordTextFormFieldFinder = find.byType(TextFormField).at(2);
+          final confirmPasswordTextFormFieldFinder =
+              find.byType(TextFormField).at(3);
+          final invalidConfirmPasswordTextFinder = find.descendant(
+              of: confirmPasswordTextFormFieldFinder,
+              matching:
+                  find.text("This doesn't match the given password"));
+          await widgetTester.enterText(passwordTextFormFieldFinder, "56&*ptYn");
+          await widgetTester.enterText(
+              confirmPasswordTextFormFieldFinder, "ewh32eh3wq4tfg");
+          final aTextFormFieldFinder = find.byType(TextFormField).at(0);
+          await widgetTester.tap(aTextFormFieldFinder);
+          await widgetTester.pumpAndSettle();
+          expect(invalidConfirmPasswordTextFinder, findsOneWidget);
         });
       });
     });
