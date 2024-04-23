@@ -38,11 +38,18 @@ Future<void> main() async {
           final invalidNameTextFinder = find.descendant(
               of: nameTextFormFieldFinder,
               matching: find.text("Enter your name"));
-          await widgetTester.enterText(nameTextFormFieldFinder, "");
-          final aTextFormFieldFinder = find.byType(TextFormField).at(1);
-          await widgetTester.tap(aTextFormFieldFinder);
+          await widgetTester.enterText(nameTextFormFieldFinder, " ");
           await widgetTester.pumpAndSettle();
           expect(invalidNameTextFinder, findsOneWidget);
+          await widgetTester.enterText(nameTextFormFieldFinder, "~");
+          await widgetTester.pumpAndSettle();
+          expect(invalidNameTextFinder, findsOneWidget);
+          await widgetTester.enterText(nameTextFormFieldFinder, "t");
+          await widgetTester.pumpAndSettle();
+          expect(invalidNameTextFinder, findsNothing);
+          await widgetTester.enterText(nameTextFormFieldFinder, "س");
+          await widgetTester.pumpAndSettle();
+          expect(invalidNameTextFinder, findsNothing);
         });
 
         testWidgets(
