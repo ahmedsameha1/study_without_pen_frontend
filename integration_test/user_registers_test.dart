@@ -67,10 +67,17 @@ Future<void> main() async {
               of: emailTextFormFieldFinder,
               matching: find.text("This an invalid email"));
           await widgetTester.enterText(emailTextFormFieldFinder, "f");
-          final aTextFormFieldFinder = find.byType(TextFormField).at(0);
-          await widgetTester.tap(aTextFormFieldFinder);
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
+          await widgetTester.enterText(emailTextFormFieldFinder, "f@");
+          await widgetTester.pumpAndSettle();
+          expect(invalidEmailTextFinder, findsOneWidget);
+          await widgetTester.enterText(emailTextFormFieldFinder, "test@test.com");
+          await widgetTester.pumpAndSettle();
+          expect(invalidEmailTextFinder, findsNothing);
+          await widgetTester.enterText(emailTextFormFieldFinder, "test@شبكة.com");
+          await widgetTester.pumpAndSettle();
+          expect(invalidEmailTextFinder, findsNothing);
         });
 
         testWidgets(
