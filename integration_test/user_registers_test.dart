@@ -72,10 +72,12 @@ Future<void> main() async {
           await widgetTester.enterText(emailTextFormFieldFinder, "f@");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
-          await widgetTester.enterText(emailTextFormFieldFinder, "test@test.com");
+          await widgetTester.enterText(
+              emailTextFormFieldFinder, "test@test.com");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
-          await widgetTester.enterText(emailTextFormFieldFinder, "test@شبكة.com");
+          await widgetTester.enterText(
+              emailTextFormFieldFinder, "test@شبكة.com");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
         });
@@ -96,10 +98,12 @@ Future<void> main() async {
               matching:
                   find.text("Password needs to be at least 8 characters"));
           await widgetTester.enterText(passwordTextFormFieldFinder, "f");
-          final aTextFormFieldFinder = find.byType(TextFormField).at(0);
-          await widgetTester.tap(aTextFormFieldFinder);
           await widgetTester.pumpAndSettle();
           expect(invalidPasswordTextFinder, findsOneWidget);
+          await widgetTester.enterText(
+              passwordTextFormFieldFinder, "f92hgvhwe[]");
+          await widgetTester.pumpAndSettle();
+          expect(invalidPasswordTextFinder, findsNothing);
         });
 
         testWidgets(
@@ -118,8 +122,7 @@ Future<void> main() async {
               find.byType(TextFormField).at(3);
           final invalidConfirmPasswordTextFinder = find.descendant(
               of: confirmPasswordTextFormFieldFinder,
-              matching:
-                  find.text("This doesn't match the given password"));
+              matching: find.text("This doesn't match the given password"));
           await widgetTester.enterText(passwordTextFormFieldFinder, "56&*ptYn");
           await widgetTester.enterText(
               confirmPasswordTextFormFieldFinder, "ewh32eh3wq4tfg");
