@@ -126,10 +126,12 @@ Future<void> main() async {
           await widgetTester.enterText(passwordTextFormFieldFinder, "56&*ptYn");
           await widgetTester.enterText(
               confirmPasswordTextFormFieldFinder, "ewh32eh3wq4tfg");
-          final aTextFormFieldFinder = find.byType(TextFormField).at(0);
-          await widgetTester.tap(aTextFormFieldFinder);
           await widgetTester.pumpAndSettle();
           expect(invalidConfirmPasswordTextFinder, findsOneWidget);
+          await widgetTester.enterText(
+              confirmPasswordTextFormFieldFinder, "56&*ptYn");
+          await widgetTester.pumpAndSettle();
+          expect(invalidConfirmPasswordTextFinder, findsNothing);
         });
       });
     });
