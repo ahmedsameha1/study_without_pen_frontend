@@ -181,6 +181,56 @@ Future<void> main() async {
           await widgetTester.pumpAndSettle();
           expect(exitCode, 0);
         });
+
+        testWidgets("""Pressing the cancel button returns
+            the user to the AuthOptions page:
+            there no input in the input fields""",
+            (WidgetTester widgetTester) async {
+          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          final registerButton =
+              find.widgetWithText(ElevatedButton, "Register");
+          await widgetTester.tap(registerButton);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Register), findsOneWidget);
+          final cancelButtonFinder =
+              find.widgetWithText(ElevatedButton, "Cancel");
+          await widgetTester.tap(cancelButtonFinder);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+        });
+
+        testWidgets("""Pressing the cancel button returns
+            the user to the AuthOptions page:
+            there some input in the input fields""",
+            (WidgetTester widgetTester) async {
+          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          final registerButton =
+              find.widgetWithText(ElevatedButton, "Register");
+          await widgetTester.tap(registerButton);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Register), findsOneWidget);
+          final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
+          final emailTextFormFieldFinder = find.byType(TextFormField).at(1);
+          final passwordTextFormFieldFinder = find.byType(TextFormField).at(2);
+          final confirmPasswordTextFormFieldFinder =
+              find.byType(TextFormField).at(3);
+          await widgetTester.enterText(nameTextFormFieldFinder, "foo");
+          await widgetTester.enterText(
+              emailTextFormFieldFinder, "test@test.com");
+          await widgetTester.enterText(
+              passwordTextFormFieldFinder, "fhwoefhq[w4]");
+          await widgetTester.enterText(
+              confirmPasswordTextFormFieldFinder, "fhwoefhq[w4]");
+          final cancelButtonFinder =
+              find.widgetWithText(ElevatedButton, "Cancel");
+          await widgetTester.tap(cancelButtonFinder);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+        });
       });
     });
   });
