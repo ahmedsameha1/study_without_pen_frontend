@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -132,6 +134,52 @@ Future<void> main() async {
               confirmPasswordTextFormFieldFinder, "56&*ptYn");
           await widgetTester.pumpAndSettle();
           expect(invalidConfirmPasswordTextFinder, findsNothing);
+        });
+
+        testWidgets("""Pressing the system back button exits the app:
+            there is nothing in the input fields""",
+            (WidgetTester widgetTester) async {
+          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          final registerButton = find.byType(ElevatedButton).at(0);
+          await widgetTester.tap(registerButton);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Register), findsOneWidget);
+          final dynamic widgetsAppState =
+              widgetTester.state(find.byType(WidgetsApp));
+          await widgetsAppState.didPopRoute();
+          await widgetTester.pumpAndSettle();
+          expect(exitCode, 0);
+        });
+
+        testWidgets("""Pressing the system back button exits the app:
+            there some input in the input fields""",
+            (WidgetTester widgetTester) async {
+          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          final registerButton = find.byType(ElevatedButton).at(0);
+          await widgetTester.tap(registerButton);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Register), findsOneWidget);
+          final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
+          final emailTextFormFieldFinder = find.byType(TextFormField).at(1);
+          final passwordTextFormFieldFinder = find.byType(TextFormField).at(2);
+          final confirmPasswordTextFormFieldFinder =
+              find.byType(TextFormField).at(3);
+          await widgetTester.enterText(nameTextFormFieldFinder, "foo");
+          await widgetTester.enterText(
+              emailTextFormFieldFinder, "test@test.com");
+          await widgetTester.enterText(
+              passwordTextFormFieldFinder, "fhwoefhq[w4]");
+          await widgetTester.enterText(
+              confirmPasswordTextFormFieldFinder, "fhwoefhq[w4]");
+          final dynamic widgetsAppState =
+              widgetTester.state(find.byType(WidgetsApp));
+          await widgetsAppState.didPopRoute();
+          await widgetTester.pumpAndSettle();
+          expect(exitCode, 0);
         });
       });
     });
