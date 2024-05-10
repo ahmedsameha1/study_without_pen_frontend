@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -52,7 +53,7 @@ Future<void> main() async {
           await widgetTester.enterText(nameTextFormFieldFinder, "س");
           await widgetTester.pumpAndSettle();
           expect(invalidNameTextFinder, findsNothing);
-        });
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets(
             "Entering invalid email in the email TextFormField on the Register widget",
@@ -82,7 +83,7 @@ Future<void> main() async {
               emailTextFormFieldFinder, "test@شبكة.com");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
-        });
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets(
             "Entering invalid password in the password TextFormField on the Register widget",
@@ -106,7 +107,7 @@ Future<void> main() async {
               passwordTextFormFieldFinder, "f92hgvhwe[]");
           await widgetTester.pumpAndSettle();
           expect(invalidPasswordTextFinder, findsNothing);
-        });
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets(
             """Entering a password that doesn't match the password in the password TextFormField
@@ -134,7 +135,7 @@ Future<void> main() async {
               confirmPasswordTextFormFieldFinder, "56&*ptYn");
           await widgetTester.pumpAndSettle();
           expect(invalidConfirmPasswordTextFinder, findsNothing);
-        });
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the system back button exits the app:
             there is nothing in the input fields""",
@@ -151,7 +152,7 @@ Future<void> main() async {
           await widgetsAppState.didPopRoute();
           await widgetTester.pumpAndSettle();
           expect(exitCode, 0);
-        });
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the system back button exits the app:
             there some input in the input fields""",
@@ -180,7 +181,7 @@ Future<void> main() async {
           await widgetsAppState.didPopRoute();
           await widgetTester.pumpAndSettle();
           expect(exitCode, 0);
-        });
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the cancel button returns
             the user to the AuthOptions page:
@@ -199,7 +200,7 @@ Future<void> main() async {
           await widgetTester.tap(cancelButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-        });
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the cancel button returns
             the user to the AuthOptions page:
@@ -230,7 +231,60 @@ Future<void> main() async {
           await widgetTester.tap(cancelButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-        });
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+        testWidgets("""Pressing the next button while
+            there some input in the input fields: good case""",
+            (WidgetTester widgetTester) async {
+          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          final registerButton =
+              find.widgetWithText(ElevatedButton, "Register");
+          await widgetTester.tap(registerButton);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Register), findsOneWidget);
+          final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
+          final emailTextFormFieldFinder = find.byType(TextFormField).at(1);
+          final passwordTextFormFieldFinder = find.byType(TextFormField).at(2);
+          final confirmPasswordTextFormFieldFinder =
+              find.byType(TextFormField).at(3);
+          await widgetTester.enterText(nameTextFormFieldFinder, "foo");
+          await widgetTester.enterText(
+              emailTextFormFieldFinder, "test33@test.com");
+          await widgetTester.enterText(
+              passwordTextFormFieldFinder, "fhwoefhq[w4]");
+          await widgetTester.enterText(
+              confirmPasswordTextFormFieldFinder, "fhwoefhq[w4]");
+          final nextButtonFinder = find.widgetWithText(ElevatedButton, "Next");
+          await widgetTester.tap(nextButtonFinder);
+          await widgetTester.pumpAndSettle(Durations.long1);
+          final snackBarFinder = find.byType(SnackBar);
+          final snakBarTextFinder = find.descendant(
+              of: snackBarFinder,
+              matching: find.text(
+                  "Success: Check your email to verify your email address"));
+          expect(snackBarFinder, findsOneWidget);
+          expect(snakBarTextFinder, findsOneWidget);
+          expect(find.byType(Locked), findsOneWidget);
+          var response = await http.get(Uri.parse(
+              "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+          if (response.statusCode == 200) {
+            Map<String, dynamic> data = jsonDecode(response.body);
+            List<dynamic> oobCodes = data["oobCodes"];
+            response = await http.get(Uri.parse((data["oobCodes"]
+                    [oobCodes.length - 1]["oobLink"])
+                .replaceFirst("127.0.0.1", "10.0.2.2")));
+            if (response.statusCode != 200) {
+              fail("problem");
+            }
+          } else {
+            fail("problem");
+          }
+          await widgetTester.tap(find.byType(ElevatedButton).at(0));
+          await widgetTester.pumpAndSettle();
+          expect(find.byKey(Key("hi")), findsOneWidget);
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
       });
     });
   });

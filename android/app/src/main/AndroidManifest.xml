@@ -2,7 +2,8 @@
     package="com.ahmedsameha1.peninbin">
    <application
         android:label="study_without_pen_by_flutter"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:networkSecurityConfig="@xml/network_security_config">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
