@@ -234,7 +234,59 @@ Future<void> main() async {
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the next button while
-            there some input in the input fields: good case""",
+            there some input in the input fields: failure case""",
+            (WidgetTester widgetTester) async {
+          var response = await http.post(
+              Uri.parse(
+                  "http://10.0.2.2:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${DefaultFirebaseOptions.currentPlatform.apiKey}"),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+              },
+              body: jsonEncode(<String, dynamic>{
+                "email": "test@test.com",
+                "password": "gweruigwiba",
+                "returnSecureToken": true
+              }));
+          if (response.statusCode == 200) {
+            await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+            await widgetTester.pumpAndSettle();
+            expect(find.byType(AuthOptions), findsOneWidget);
+            final registerButton =
+                find.widgetWithText(ElevatedButton, "Register");
+            await widgetTester.tap(registerButton);
+            await widgetTester.pumpAndSettle();
+            expect(find.byType(Register), findsOneWidget);
+            final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
+            final emailTextFormFieldFinder = find.byType(TextFormField).at(1);
+            final passwordTextFormFieldFinder =
+                find.byType(TextFormField).at(2);
+            final confirmPasswordTextFormFieldFinder =
+                find.byType(TextFormField).at(3);
+            await widgetTester.enterText(nameTextFormFieldFinder, "foo");
+            await widgetTester.enterText(
+                emailTextFormFieldFinder, "test@test.com");
+            await widgetTester.enterText(
+                passwordTextFormFieldFinder, "fhwoefhq[w4]");
+            await widgetTester.enterText(
+                confirmPasswordTextFormFieldFinder, "fhwoefhq[w4]");
+            final nextButtonFinder =
+                find.widgetWithText(ElevatedButton, "Next");
+            await widgetTester.tap(nextButtonFinder);
+            await widgetTester.pumpAndSettle(Durations.long1);
+            final snackBarFinder = find.byType(SnackBar);
+            final snakBarTextFinder = find.descendant(
+                of: snackBarFinder,
+                matching: find.text("Failure: email-already-in-use"));
+            expect(snackBarFinder, findsOneWidget);
+            expect(snakBarTextFinder, findsOneWidget);
+            expect(find.byType(Register), findsOneWidget);
+          } else {
+            fail("cannot create user ${response.statusCode}, ${response.body}");
+          }
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+        testWidgets("""Pressing the next button while
+            there some input in the input fields: success case""",
             (WidgetTester widgetTester) async {
           await widgetTester.pumpWidget(App(FirebaseAuth.instance));
           await widgetTester.pumpAndSettle();
