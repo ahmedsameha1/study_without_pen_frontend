@@ -27,14 +27,15 @@ Future<void> main() async {
     });
     group("Android", () {
       group("English", () {
+        final registerButtonFinder =
+            find.widgetWithText(ElevatedButton, "Register");
         testWidgets(
             "Entering invalid name in the name TextFormField on the Register widget",
             (WidgetTester widgetTester) async {
           await widgetTester.pumpWidget(App(FirebaseAuth.instance));
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-          final registerButton = find.byType(ElevatedButton).at(0);
-          await widgetTester.tap(registerButton);
+          await widgetTester.tap(registerButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Register), findsOneWidget);
           final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
@@ -61,8 +62,7 @@ Future<void> main() async {
           await widgetTester.pumpWidget(App(FirebaseAuth.instance));
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-          final registerButton = find.byType(ElevatedButton).at(0);
-          await widgetTester.tap(registerButton);
+          await widgetTester.tap(registerButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Register), findsOneWidget);
           final emailTextFormFieldFinder = find.byType(TextFormField).at(1);
@@ -91,8 +91,7 @@ Future<void> main() async {
           await widgetTester.pumpWidget(App(FirebaseAuth.instance));
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-          final registerButton = find.byType(ElevatedButton).at(0);
-          await widgetTester.tap(registerButton);
+          await widgetTester.tap(registerButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Register), findsOneWidget);
           final passwordTextFormFieldFinder = find.byType(TextFormField).at(2);
@@ -116,8 +115,7 @@ Future<void> main() async {
           await widgetTester.pumpWidget(App(FirebaseAuth.instance));
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-          final registerButton = find.byType(ElevatedButton).at(0);
-          await widgetTester.tap(registerButton);
+          await widgetTester.tap(registerButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Register), findsOneWidget);
           final passwordTextFormFieldFinder = find.byType(TextFormField).at(2);
@@ -143,8 +141,7 @@ Future<void> main() async {
           await widgetTester.pumpWidget(App(FirebaseAuth.instance));
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-          final registerButton = find.byType(ElevatedButton).at(0);
-          await widgetTester.tap(registerButton);
+          await widgetTester.tap(registerButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Register), findsOneWidget);
           final dynamic widgetsAppState =
@@ -160,8 +157,7 @@ Future<void> main() async {
           await widgetTester.pumpWidget(App(FirebaseAuth.instance));
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-          final registerButton = find.byType(ElevatedButton).at(0);
-          await widgetTester.tap(registerButton);
+          await widgetTester.tap(registerButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Register), findsOneWidget);
           final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
@@ -190,9 +186,7 @@ Future<void> main() async {
           await widgetTester.pumpWidget(App(FirebaseAuth.instance));
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-          final registerButton =
-              find.widgetWithText(ElevatedButton, "Register");
-          await widgetTester.tap(registerButton);
+          await widgetTester.tap(registerButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Register), findsOneWidget);
           final cancelButtonFinder =
@@ -209,9 +203,7 @@ Future<void> main() async {
           await widgetTester.pumpWidget(App(FirebaseAuth.instance));
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-          final registerButton =
-              find.widgetWithText(ElevatedButton, "Register");
-          await widgetTester.tap(registerButton);
+          await widgetTester.tap(registerButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Register), findsOneWidget);
           final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
@@ -251,9 +243,7 @@ Future<void> main() async {
             await widgetTester.pumpWidget(App(FirebaseAuth.instance));
             await widgetTester.pumpAndSettle();
             expect(find.byType(AuthOptions), findsOneWidget);
-            final registerButton =
-                find.widgetWithText(ElevatedButton, "Register");
-            await widgetTester.tap(registerButton);
+            await widgetTester.tap(registerButtonFinder);
             await widgetTester.pumpAndSettle();
             expect(find.byType(Register), findsOneWidget);
             final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
@@ -269,9 +259,7 @@ Future<void> main() async {
                 passwordTextFormFieldFinder, "fhwoefhq[w4]");
             await widgetTester.enterText(
                 confirmPasswordTextFormFieldFinder, "fhwoefhq[w4]");
-            final nextButtonFinder =
-                find.widgetWithText(ElevatedButton, "Next");
-            await widgetTester.tap(nextButtonFinder);
+            await widgetTester.tap(registerButtonFinder);
             await widgetTester.pumpAndSettle(Durations.long1);
             final snackBarFinder = find.byType(SnackBar);
             final snakBarTextFinder = find.descendant(
@@ -291,9 +279,7 @@ Future<void> main() async {
           await widgetTester.pumpWidget(App(FirebaseAuth.instance));
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
-          final registerButton =
-              find.widgetWithText(ElevatedButton, "Register");
-          await widgetTester.tap(registerButton);
+          await widgetTester.tap(registerButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Register), findsOneWidget);
           final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
@@ -308,8 +294,7 @@ Future<void> main() async {
               passwordTextFormFieldFinder, "fhwoefhq[w4]");
           await widgetTester.enterText(
               confirmPasswordTextFormFieldFinder, "fhwoefhq[w4]");
-          final nextButtonFinder = find.widgetWithText(ElevatedButton, "Next");
-          await widgetTester.tap(nextButtonFinder);
+          await widgetTester.tap(registerButtonFinder);
           await widgetTester.pumpAndSettle(Durations.long1);
           final snackBarFinder = find.byType(SnackBar);
           final snakBarTextFinder = find.descendant(
@@ -333,7 +318,9 @@ Future<void> main() async {
           } else {
             fail("problem");
           }
-          await widgetTester.tap(find.byType(ElevatedButton).at(0));
+          final refreshAccountButton =
+              find.widgetWithText(ElevatedButton, "Refresh account");
+          await widgetTester.tap(refreshAccountButton);
           await widgetTester.pumpAndSettle();
           expect(find.byKey(Key("hi")), findsOneWidget);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
