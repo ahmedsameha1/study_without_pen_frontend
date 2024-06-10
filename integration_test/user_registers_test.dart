@@ -7,24 +7,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:nonso/nonso.dart';
-import 'package:study_without_pen_by_flutter/common/widget/app_widget.dart';
 import 'package:study_without_pen_by_flutter/firebase_options.dart';
+import 'package:study_without_pen_by_flutter/main.dart' as app;
 import 'package:http/http.dart' as http;
 
-Future<void> main() async {
+void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  setUpAll(() async {
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
-    await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-  });
-
   group("User registers his account", () {
+    setUpAll(() async {
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
+      await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+    });
+
     tearDownAll(() async {
       await http.delete(Uri.parse(
           "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/accounts"));
+      await FirebaseAuth.instance.signOut();
     });
+
     group("Android", () {
       group("English", () {
         final registerButtonFinder =
@@ -32,7 +34,7 @@ Future<void> main() async {
         testWidgets(
             "Entering invalid name in the name TextFormField on the Register widget",
             (WidgetTester widgetTester) async {
-          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await app.main();
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -59,7 +61,7 @@ Future<void> main() async {
         testWidgets(
             "Entering invalid email in the email TextFormField on the Register widget",
             (WidgetTester widgetTester) async {
-          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await app.main();
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -88,7 +90,7 @@ Future<void> main() async {
         testWidgets(
             "Entering invalid password in the password TextFormField on the Register widget",
             (WidgetTester widgetTester) async {
-          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await app.main();
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -112,7 +114,7 @@ Future<void> main() async {
             """Entering a password that doesn't match the password in the password TextFormField
                in the confirm password TextFormField on the Register widget""",
             (WidgetTester widgetTester) async {
-          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await app.main();
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -138,7 +140,7 @@ Future<void> main() async {
         testWidgets("""Pressing the system back button exits the app:
             there is nothing in the input fields""",
             (WidgetTester widgetTester) async {
-          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await app.main();
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -154,7 +156,7 @@ Future<void> main() async {
         testWidgets("""Pressing the system back button exits the app:
             there some input in the input fields""",
             (WidgetTester widgetTester) async {
-          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await app.main();
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -183,7 +185,7 @@ Future<void> main() async {
             the user to the AuthOptions page:
             there no input in the input fields""",
             (WidgetTester widgetTester) async {
-          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await app.main();
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -200,7 +202,7 @@ Future<void> main() async {
             the user to the AuthOptions page:
             there some input in the input fields""",
             (WidgetTester widgetTester) async {
-          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await app.main();
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -233,6 +235,7 @@ Future<void> main() async {
                   "http://10.0.2.2:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${DefaultFirebaseOptions.currentPlatform.apiKey}"),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8',
+                'Charset': 'utf-8'
               },
               body: jsonEncode(<String, dynamic>{
                 "email": "test@test.com",
@@ -240,7 +243,7 @@ Future<void> main() async {
                 "returnSecureToken": true
               }));
           if (response.statusCode == 200) {
-            await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+            await app.main();
             await widgetTester.pumpAndSettle();
             expect(find.byType(AuthOptions), findsOneWidget);
             await widgetTester.tap(registerButtonFinder);
@@ -276,7 +279,7 @@ Future<void> main() async {
         testWidgets("""Pressing the next button while
             there some input in the input fields: success case""",
             (WidgetTester widgetTester) async {
-          await widgetTester.pumpWidget(App(FirebaseAuth.instance));
+          await app.main();
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
