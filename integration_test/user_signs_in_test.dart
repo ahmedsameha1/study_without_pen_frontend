@@ -70,6 +70,29 @@ void main() {
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+        testWidgets(
+            "Entering invalid password in the password TextFormField on the Password widget",
+            (WidgetTester widgetTester) async {
+          await app.main();
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          await widgetTester.tap(signInButtonFinder);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Password), findsOneWidget);
+          final passwordTextFormFieldFinder = find.byType(TextFormField).at(1);
+          final invalidEmailTextFinder = find.descendant(
+              of: passwordTextFormFieldFinder,
+              matching:
+                  find.text("Password needs to be at least 8 characters"));
+          await widgetTester.enterText(passwordTextFormFieldFinder, "f");
+          await widgetTester.pumpAndSettle();
+          expect(invalidEmailTextFinder, findsOneWidget);
+          await widgetTester.enterText(
+              passwordTextFormFieldFinder, "test@شبكة.com");
+          await widgetTester.pumpAndSettle();
+          expect(invalidEmailTextFinder, findsNothing);
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
       });
     });
   });
