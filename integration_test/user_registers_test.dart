@@ -227,7 +227,7 @@ void main() {
           expect(find.byType(AuthOptions), findsOneWidget);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
-        testWidgets("""Pressing the next button while
+        testWidgets("""Pressing the register button while
             there some input in the input fields: failure case""",
             (WidgetTester widgetTester) async {
           var response = await http.post(
@@ -276,7 +276,7 @@ void main() {
           }
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
-        testWidgets("""Pressing the next button while
+        testWidgets("""Pressing the register button while
             there some input in the input fields: success case""",
             (WidgetTester widgetTester) async {
           await app.main();

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -93,6 +94,38 @@ void main() {
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+        testWidgets("""Pressing the system back button exits the app""",
+            (WidgetTester widgetTester) async {
+          await app.main();
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          await widgetTester.tap(signInButtonFinder);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Password), findsOneWidget);
+          final dynamic widgetsAppState =
+              widgetTester.state(find.byType(WidgetsApp));
+          await widgetsAppState.didPopRoute();
+          await widgetTester.pumpAndSettle();
+          expect(exitCode, 0);
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+        testWidgets("""Pressing the cancel button returns
+            the user to the AuthOptions page""",
+            (WidgetTester widgetTester) async {
+          await app.main();
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          await widgetTester.tap(signInButtonFinder);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Password), findsOneWidget);
+          final cancelButtonFinder =
+              find.widgetWithText(ElevatedButton, "Cancel");
+          await widgetTester.tap(cancelButtonFinder);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
       });
     });
   });
