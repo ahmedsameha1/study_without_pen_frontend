@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,31 +12,18 @@ import 'package:study_without_pen_by_flutter/main.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
   group("User signs in using his account", () {
     setUpAll(() async {
       await Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform);
       await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-      var response = await http.post(
-          Uri.parse(
-              "http://10.0.2.2:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${DefaultFirebaseOptions.currentPlatform.apiKey}"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Charset': 'utf-8'
-          },
-          body: jsonEncode(<String, dynamic>{
-            "email": "test@test.com",
-            "password": "gweruigwiba",
-            "returnSecureToken": true
-          }));
-      if (response.statusCode != 200) {
-        fail("failed while creating a user account");
-      }
     });
 
     tearDownAll(() async {
       await http.delete(Uri.parse(
           "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/accounts"));
+      await FirebaseAuth.instance.signOut();
     });
     group("Android", () {
       group("English", () {
@@ -126,6 +112,30 @@ void main() {
           expect(find.byType(AuthOptions), findsOneWidget);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
+        testWidgets("""Pressing the sign in button while
+            there some input in the input fields: failure case""",
+            (WidgetTester widgetTester) async {
+          await app.main();
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          await widgetTester.tap(signInButtonFinder);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Password), findsOneWidget);
+          final emailTextFormFieldFinder = find.byType(TextFormField).at(0);
+          final passwordTextFormFieldFinder = find.byType(TextFormField).at(1);
+          await widgetTester.enterText(emailTextFormFieldFinder, "foo@foo.com");
+          await widgetTester.enterText(
+              passwordTextFormFieldFinder, "fhwoefhq[w4]");
+          await widgetTester.tap(signInButtonFinder);
+          await widgetTester.pumpAndSettle();
+          final snackBarFinder = find.byType(SnackBar);
+          final snakBarTextFinder = find.descendant(
+              of: snackBarFinder,
+              matching: find.text("Failure: user-not-found"));
+          expect(snackBarFinder, findsOneWidget);
+          expect(snakBarTextFinder, findsOneWidget);
+          expect(find.byType(Password), findsOneWidget);
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
       });
     });
   });
