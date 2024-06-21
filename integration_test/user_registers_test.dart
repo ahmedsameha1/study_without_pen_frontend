@@ -24,7 +24,6 @@ void main() {
     tearDownAll(() async {
       await http.delete(Uri.parse(
           "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/accounts"));
-      await FirebaseAuth.instance.signOut();
     });
 
     group("Android", () {
@@ -277,7 +276,8 @@ void main() {
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the register button while
-            there some input in the input fields: success case""",
+            there some input in the input fields: success case
+            then the user verify his email then refresh the account""",
             (WidgetTester widgetTester) async {
           await app.main();
           await widgetTester.pumpAndSettle();
@@ -326,6 +326,74 @@ void main() {
           await widgetTester.tap(refreshAccountButton);
           await widgetTester.pumpAndSettle();
           expect(find.byKey(Key("hi")), findsOneWidget);
+          await FirebaseAuth.instance.signOut();
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+        testWidgets("""Pressing the register button while
+            there some input in the input fields: success case
+            then the user ask for resending email for verify 
+            his email address""", (WidgetTester widgetTester) async {
+          await app.main();
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          await widgetTester.tap(registerButtonFinder);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Register), findsOneWidget);
+          final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
+          final emailTextFormFieldFinder = find.byType(TextFormField).at(1);
+          final passwordTextFormFieldFinder = find.byType(TextFormField).at(2);
+          final confirmPasswordTextFormFieldFinder =
+              find.byType(TextFormField).at(3);
+          await widgetTester.enterText(nameTextFormFieldFinder, "foo");
+          await widgetTester.enterText(
+              emailTextFormFieldFinder, "test34@test.com");
+          await widgetTester.enterText(
+              passwordTextFormFieldFinder, "mhwtefnq}w4]");
+          await widgetTester.enterText(
+              confirmPasswordTextFormFieldFinder, "mhwtefnq}w4]");
+          await widgetTester.tap(registerButtonFinder);
+          await widgetTester.pumpAndSettle(Durations.long1);
+          final snackBarFinder = find.byType(SnackBar);
+          final snakBarTextFinder = find.descendant(
+              of: snackBarFinder,
+              matching: find.text(
+                  "Success: Check your email to verify your email address"));
+          expect(snackBarFinder, findsOneWidget);
+          expect(snakBarTextFinder, findsOneWidget);
+          expect(find.byType(Locked), findsOneWidget);
+          var response = await http.get(Uri.parse(
+              "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+          var oobCodesLengthBeforeResending = 0;
+          if (response.statusCode == 200) {
+            Map<String, dynamic> data = jsonDecode(response.body);
+            List<dynamic> oobCodes = data["oobCodes"];
+            oobCodesLengthBeforeResending = oobCodes.length;
+            if (response.statusCode != 200) {
+              fail("problem");
+            }
+          } else {
+            fail("problem");
+          }
+          final resendVerificationEmailButton =
+              find.widgetWithText(ElevatedButton, "Resend verification email");
+          await widgetTester.tap(resendVerificationEmailButton);
+          await widgetTester.pumpAndSettle();
+          response = await http.get(Uri.parse(
+              "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+          var oobCodesLengthAfterResending = 0;
+          if (response.statusCode == 200) {
+            Map<String, dynamic> data = jsonDecode(response.body);
+            List<dynamic> oobCodes = data["oobCodes"];
+            oobCodesLengthAfterResending = oobCodes.length;
+            if (response.statusCode != 200) {
+              fail("problem");
+            }
+          } else {
+            fail("problem");
+          }
+          expect(
+              oobCodesLengthAfterResending, oobCodesLengthBeforeResending + 1);
+          await FirebaseAuth.instance.signOut();
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
       });
     });
