@@ -11,21 +11,23 @@ class App extends StatelessWidget {
   App(this.firebaseAuthInstance);
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthBloc>(
-            create: (context) => AuthBloc(firebaseAuthInstance))
-      ],
-      child: MaterialApp.router(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-     //   title: AppLocalizations.of(context)!.materialAppTitle,
-        /*
-        localeListResolutionCallback: (locales, supportedLocales) {
-          return Locale("en");
-        },
-        */
-        routerConfig: getRouterConfig(),
+    return SafeArea(
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+              create: (context) => AuthBloc(firebaseAuthInstance))
+        ],
+        child: MaterialApp.router(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+       //   title: AppLocalizations.of(context)!.materialAppTitle,
+          /*
+          localeListResolutionCallback: (locales, supportedLocales) {
+            return Locale("en");
+          },
+          */
+          routerConfig: getRouterConfig(),
+        ),
       ),
     );
   }
