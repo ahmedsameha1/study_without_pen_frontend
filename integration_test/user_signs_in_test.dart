@@ -40,6 +40,9 @@ void main() {
           await widgetTester.tap(signInButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Password), findsOneWidget);
+          ElevatedButton signInButton =
+              widgetTester.widget<ElevatedButton>(signInButtonFinder);
+          expect(signInButton.enabled, isFalse);
           final emailTextFormFieldFinder = find.byType(TextFormField).at(0);
           final invalidEmailTextFinder = find.descendant(
               of: emailTextFormFieldFinder,
@@ -47,17 +50,21 @@ void main() {
           await widgetTester.enterText(emailTextFormFieldFinder, "f");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
+          expect(signInButton.enabled, isFalse);
           await widgetTester.enterText(emailTextFormFieldFinder, "f@");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
+          expect(signInButton.enabled, isFalse);
           await widgetTester.enterText(
               emailTextFormFieldFinder, "test@test.com");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
+          expect(signInButton.enabled, isFalse);
           await widgetTester.enterText(
               emailTextFormFieldFinder, "test@شبكة.com");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
+          expect(signInButton.enabled, isFalse);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets(
@@ -69,6 +76,9 @@ void main() {
           await widgetTester.tap(signInButtonFinder);
           await widgetTester.pumpAndSettle();
           expect(find.byType(Password), findsOneWidget);
+          ElevatedButton signInButton =
+              widgetTester.widget<ElevatedButton>(signInButtonFinder);
+          expect(signInButton.enabled, isFalse);
           final passwordTextFormFieldFinder = find.byType(TextFormField).at(1);
           final invalidEmailTextFinder = find.descendant(
               of: passwordTextFormFieldFinder,
@@ -77,10 +87,12 @@ void main() {
           await widgetTester.enterText(passwordTextFormFieldFinder, "f");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
+          expect(signInButton.enabled, isFalse);
           await widgetTester.enterText(
               passwordTextFormFieldFinder, "test@شبكة.com");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
+          expect(signInButton.enabled, isFalse);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the system back button exits the app""",
@@ -128,6 +140,7 @@ void main() {
           await widgetTester.enterText(emailTextFormFieldFinder, "foo@foo.com");
           await widgetTester.enterText(
               passwordTextFormFieldFinder, "fhwoefhq[w4]");
+          await widgetTester.pumpAndSettle();
           await widgetTester.tap(signInButtonFinder);
           await widgetTester.pumpAndSettle();
           final snackBarFinder = find.byType(SnackBar);
@@ -193,6 +206,7 @@ void main() {
                       emailTextFormFieldFinder, validEmail);
                   await widgetTester.enterText(
                       passwordTextFormFieldFinder, "gweruigwiba");
+                  await widgetTester.pumpAndSettle();
                   await widgetTester.tap(signInButtonFinder);
                   await widgetTester.pumpAndSettle();
                   expect(find.byKey(Key("hi")), findsOneWidget);
