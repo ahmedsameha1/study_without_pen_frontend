@@ -438,6 +438,44 @@ void main() {
               oobCodesLengthAfterResending, oobCodesLengthBeforeResending + 1);
           await FirebaseAuth.instance.signOut();
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+        testWidgets("""Pressing the register button while
+            there some input in the input fields: success case
+            then the user signed out""", (WidgetTester widgetTester) async {
+          await app.main();
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+          await widgetTester.tap(registerButtonFinder);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(Register), findsOneWidget);
+          final nameTextFormFieldFinder = find.byType(TextFormField).at(0);
+          final emailTextFormFieldFinder = find.byType(TextFormField).at(1);
+          final passwordTextFormFieldFinder = find.byType(TextFormField).at(2);
+          final confirmPasswordTextFormFieldFinder =
+              find.byType(TextFormField).at(3);
+          await widgetTester.enterText(nameTextFormFieldFinder, "foo");
+          await widgetTester.enterText(
+              emailTextFormFieldFinder, "test35@test.com");
+          await widgetTester.enterText(
+              passwordTextFormFieldFinder, "mhwtefnq}w4]");
+          await widgetTester.enterText(
+              confirmPasswordTextFormFieldFinder, "mhwtefnq}w4]");
+          await widgetTester.pumpAndSettle();
+          await widgetTester.tap(registerButtonFinder);
+          await widgetTester.pumpAndSettle(Durations.long1);
+          final snackBarFinder = find.byType(SnackBar);
+          final snakBarTextFinder = find.descendant(
+              of: snackBarFinder,
+              matching: find.text(
+                  "Success: Check your email to verify your email address"));
+          expect(snackBarFinder, findsOneWidget);
+          expect(snakBarTextFinder, findsOneWidget);
+          expect(find.byType(Locked), findsOneWidget);
+          final signOutButton = find.widgetWithText(ElevatedButton, "Sign out");
+          await widgetTester.tap(signOutButton);
+          await widgetTester.pumpAndSettle();
+          expect(find.byType(AuthOptions), findsOneWidget);
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
       });
     });
   });
