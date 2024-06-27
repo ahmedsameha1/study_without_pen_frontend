@@ -227,6 +227,65 @@ void main() {
 
         testWidgets("""Pressing the sign in button while
             there some input in the input fields: successful case
+            :email not verified :then the user verify his email
+             then refresh the account""", (WidgetTester widgetTester) async {
+          var validEmail = "test-sign-in3@test.com";
+          var response = await http.post(
+              Uri.parse(
+                  "http://10.0.2.2:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${DefaultFirebaseOptions.currentPlatform.apiKey}"),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Charset': 'utf-8'
+              },
+              body: jsonEncode(<String, dynamic>{
+                "email": validEmail,
+                "password": "gweruigwiba",
+                "returnSecureToken": true
+              }));
+          if (response.statusCode == 200) {
+            await app.main();
+            await widgetTester.pumpAndSettle();
+            expect(find.byType(AuthOptions), findsOneWidget);
+            await widgetTester.tap(signInButtonFinder);
+            await widgetTester.pumpAndSettle();
+            expect(find.byType(Password), findsOneWidget);
+            final emailTextFormFieldFinder = find.byType(TextFormField).at(0);
+            final passwordTextFormFieldFinder =
+                find.byType(TextFormField).at(1);
+            await widgetTester.enterText(emailTextFormFieldFinder, validEmail);
+            await widgetTester.enterText(
+                passwordTextFormFieldFinder, "gweruigwiba");
+            await widgetTester.pumpAndSettle();
+            await widgetTester.tap(signInButtonFinder);
+            await widgetTester.pumpAndSettle();
+            expect(find.byType(Locked), findsOneWidget);
+            response = await http.get(Uri.parse(
+                "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+            if (response.statusCode == 200) {
+              print(response.body);
+              Map<String, dynamic> data = jsonDecode(response.body);
+              List<dynamic> oobCodes = data["oobCodes"];
+              response = await http.get(Uri.parse((data["oobCodes"]
+                      [oobCodes.length - 1]["oobLink"])
+                  .replaceFirst("127.0.0.1", "10.0.2.2")));
+              if (response.statusCode == 200) {
+                final refreshAccountButton =
+                    find.widgetWithText(ElevatedButton, "Refresh account");
+                await widgetTester.tap(refreshAccountButton);
+                await widgetTester.pumpAndSettle();
+                expect(find.byKey(Key("hi")), findsOneWidget);
+              }
+            } else {
+              fail("problem");
+            }
+          } else {
+            fail("failed while creating a user account");
+          }
+          await FirebaseAuth.instance.signOut();
+        }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+        testWidgets("""Pressing the sign in button while
+            there some input in the input fields: successful case
             :email not verified :then the user ask for resending email for verify 
             his email address""", (WidgetTester widgetTester) async {
           var validEmail = "test-sign-in2@test.com";
@@ -295,6 +354,7 @@ void main() {
           } else {
             fail("failed while creating a user account");
           }
+          await FirebaseAuth.instance.signOut();
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
       });
     });
