@@ -185,7 +185,6 @@ void main() {
               response = await http.get(Uri.parse(
                   "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
               if (response.statusCode == 200) {
-                print(response.body);
                 Map<String, dynamic> data = jsonDecode(response.body);
                 List<dynamic> oobCodes = data["oobCodes"];
                 response = await http.get(Uri.parse((data["oobCodes"]
@@ -262,7 +261,6 @@ void main() {
             response = await http.get(Uri.parse(
                 "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
             if (response.statusCode == 200) {
-              print(response.body);
               Map<String, dynamic> data = jsonDecode(response.body);
               List<dynamic> oobCodes = data["oobCodes"];
               response = await http.get(Uri.parse((data["oobCodes"]
