@@ -23,7 +23,7 @@ void main() {
 
     tearDownAll(() async {
       await http.delete(Uri.parse(
-          "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/accounts"));
+          "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/accounts"));
     });
 
     group("Android", () {
@@ -350,7 +350,7 @@ void main() {
           expect(snakBarTextFinder, findsOneWidget);
           expect(find.byType(Locked), findsOneWidget);
           var response = await http.get(Uri.parse(
-              "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+              "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/oobCodes"));
           if (response.statusCode == 200) {
             Map<String, dynamic> data = jsonDecode(response.body);
             List<dynamic> oobCodes = data["oobCodes"];
@@ -405,7 +405,7 @@ void main() {
           expect(snakBarTextFinder, findsOneWidget);
           expect(find.byType(Locked), findsOneWidget);
           var response = await http.get(Uri.parse(
-              "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+              "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/oobCodes"));
           var oobCodesLengthBeforeResending = 0;
           if (response.statusCode == 200) {
             Map<String, dynamic> data = jsonDecode(response.body);
@@ -422,7 +422,7 @@ void main() {
           await widgetTester.tap(resendVerificationEmailButton);
           await widgetTester.pumpAndSettle();
           response = await http.get(Uri.parse(
-              "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+              "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/oobCodes"));
           var oobCodesLengthAfterResending = 0;
           if (response.statusCode == 200) {
             Map<String, dynamic> data = jsonDecode(response.body);

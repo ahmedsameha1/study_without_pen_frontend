@@ -23,7 +23,7 @@ void main() {
 
     tearDownAll(() async {
       await http.delete(Uri.parse(
-          "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/accounts"));
+          "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/accounts"));
       await FirebaseAuth.instance.signOut();
     });
 
@@ -31,6 +31,10 @@ void main() {
       group("English", () {
         final signInButtonFinder =
             find.widgetWithText(ElevatedButton, "Sign in");
+            /*
+        final forgotPasswordButtonFinder =
+            find.widgetWithText(ElevatedButton, "Forgot password?");
+            */
         testWidgets(
             "Entering invalid email in the email TextFormField on the Password widget",
             (WidgetTester widgetTester) async {
@@ -42,7 +46,12 @@ void main() {
           expect(find.byType(Password), findsOneWidget);
           ElevatedButton signInButton =
               widgetTester.widget<ElevatedButton>(signInButtonFinder);
+              /*
+          ElevatedButton forgotPasswordButton =
+              widgetTester.widget<ElevatedButton>(forgotPasswordButtonFinder);
+              */
           expect(signInButton.enabled, isFalse);
+          //expect(forgotPasswordButton.enabled, isFalse);
           final emailTextFormFieldFinder = find.byType(TextFormField).at(0);
           final invalidEmailTextFinder = find.descendant(
               of: emailTextFormFieldFinder,
@@ -51,20 +60,24 @@ void main() {
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
           expect(signInButton.enabled, isFalse);
+          //expect(forgotPasswordButton.enabled, isFalse);
           await widgetTester.enterText(emailTextFormFieldFinder, "f@");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
           expect(signInButton.enabled, isFalse);
+          //expect(forgotPasswordButton.enabled, isFalse);
           await widgetTester.enterText(
               emailTextFormFieldFinder, "test@test.com");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
           expect(signInButton.enabled, isFalse);
+          //expect(forgotPasswordButton.enabled, isFalse);
           await widgetTester.enterText(
               emailTextFormFieldFinder, "test@شبكة.com");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
           expect(signInButton.enabled, isFalse);
+          //expect(forgotPasswordButton.enabled, isFalse);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets(
@@ -78,7 +91,12 @@ void main() {
           expect(find.byType(Password), findsOneWidget);
           ElevatedButton signInButton =
               widgetTester.widget<ElevatedButton>(signInButtonFinder);
+              /*
+          ElevatedButton forgotPasswordButton =
+              widgetTester.widget<ElevatedButton>(forgotPasswordButtonFinder);
+              */
           expect(signInButton.enabled, isFalse);
+          //expect(forgotPasswordButton.enabled, isFalse);
           final passwordTextFormFieldFinder = find.byType(TextFormField).at(1);
           final invalidEmailTextFinder = find.descendant(
               of: passwordTextFormFieldFinder,
@@ -88,11 +106,13 @@ void main() {
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
           expect(signInButton.enabled, isFalse);
+          //expect(forgotPasswordButton.enabled, isFalse);
           await widgetTester.enterText(
               passwordTextFormFieldFinder, "test@شبكة.com");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
           expect(signInButton.enabled, isFalse);
+          //expect(forgotPasswordButton.enabled, isFalse);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the system back button exits the app""",
@@ -183,7 +203,7 @@ void main() {
                 }));
             if (response.statusCode == 200) {
               response = await http.get(Uri.parse(
-                  "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+                  "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/oobCodes"));
               if (response.statusCode == 200) {
                 Map<String, dynamic> data = jsonDecode(response.body);
                 List<dynamic> oobCodes = data["oobCodes"];
@@ -259,7 +279,7 @@ void main() {
             await widgetTester.pumpAndSettle();
             expect(find.byType(Locked), findsOneWidget);
             response = await http.get(Uri.parse(
-                "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+                "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/oobCodes"));
             if (response.statusCode == 200) {
               Map<String, dynamic> data = jsonDecode(response.body);
               List<dynamic> oobCodes = data["oobCodes"];
@@ -362,7 +382,7 @@ void main() {
             await widgetTester.pumpAndSettle();
             expect(find.byType(Locked), findsOneWidget);
             var response = await http.get(Uri.parse(
-                "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+                "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/oobCodes"));
             var oobCodesLengthBeforeResending = 0;
             if (response.statusCode == 200) {
               Map<String, dynamic> data = jsonDecode(response.body);
@@ -379,7 +399,7 @@ void main() {
             await widgetTester.tap(resendVerificationEmailButton);
             await widgetTester.pumpAndSettle();
             response = await http.get(Uri.parse(
-                "http://10.0.2.2:9099/emulator/v1/projects/com-ahmedsameha1-peninbin/oobCodes"));
+                "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/oobCodes"));
             var oobCodesLengthAfterResending = 0;
             if (response.statusCode == 200) {
               Map<String, dynamic> data = jsonDecode(response.body);
