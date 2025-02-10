@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:nonso/nonso.dart';
+import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/firebase_options.dart';
 import 'package:study_without_pen_by_flutter/main.dart' as app;
 import 'package:http/http.dart' as http;
@@ -367,7 +368,7 @@ void main() {
               find.widgetWithText(ElevatedButton, "Refresh account");
           await widgetTester.tap(refreshAccountButton);
           await widgetTester.pumpAndSettle();
-          expect(find.byKey(Key("hi")), findsOneWidget);
+          expect(find.byType(FieldPage), findsOneWidget);
           await FirebaseAuth.instance.signOut();
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
