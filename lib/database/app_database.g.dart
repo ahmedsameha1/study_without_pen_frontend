@@ -21,11 +21,10 @@ class $EntryTextsTable extends EntryTexts
   late final GeneratedColumn<String> value = GeneratedColumn<String>(
       'value', aliasedName, false,
       check: () =>
-          value
-              .trim()
-              .length
+          ComparableExpr(StringExpressionOperators(value).trim().length)
               .isBiggerOrEqualValue(EntryTexts.MINIMUM_VALUE_LENGTH) &
-          value.length.isSmallerOrEqualValue(EntryTexts.MAXIMUM_VALUE_LENGTH),
+          ComparableExpr(value.length)
+              .isSmallerOrEqualValue(EntryTexts.MAXIMUM_VALUE_LENGTH),
       type: DriftSqlType.string,
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
@@ -112,6 +111,13 @@ class EntryText extends DataClass implements Insertable<EntryText> {
         id: id ?? this.id,
         value: value ?? this.value,
       );
+  EntryText copyWithCompanion(EntryTextsCompanion data) {
+    return EntryText(
+      id: data.id.present ? data.id.value : this.id,
+      value: data.value.present ? data.value.value : this.value,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('EntryText(')
@@ -320,6 +326,16 @@ class Question extends DataClass implements Insertable<Question> {
         questionType: questionType ?? this.questionType,
         address: address ?? this.address,
       );
+  Question copyWithCompanion(QuestionsCompanion data) {
+    return Question(
+      id: data.id.present ? data.id.value : this.id,
+      questionType: data.questionType.present
+          ? data.questionType.value
+          : this.questionType,
+      address: data.address.present ? data.address.value : this.address,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Question(')
@@ -433,10 +449,9 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
   @override
   late final GeneratedColumn<String> userAccountId = GeneratedColumn<String>(
       'user_account_id', aliasedName, false,
-      check: () => userAccountId
-          .trim()
-          .length
-          .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID),
+      check: () =>
+          ComparableExpr(StringExpressionOperators(userAccountId).trim().length)
+              .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
@@ -444,11 +459,10 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       check: () =>
-          name
-              .trim()
-              .length
+          ComparableExpr(StringExpressionOperators(name).trim().length)
               .isBiggerOrEqualValue(Fields.MINIMUM_LENGTH_OF_NAME) &
-          name.length.isSmallerOrEqualValue(Fields.MAXIMUM_LENGTH_OF_NAME),
+          ComparableExpr(name.length)
+              .isSmallerOrEqualValue(Fields.MAXIMUM_LENGTH_OF_NAME),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   static const VerificationMeta _creationAtMeta =
@@ -462,7 +476,8 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
   @override
   late final GeneratedColumn<DateTime> lastModificationAt =
       GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
-          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          check: () =>
+              ComparableExpr(lastModificationAt).isBiggerOrEqual(creationAt),
           type: DriftSqlType.dateTime,
           requiredDuringInsert: true);
   static const VerificationMeta _usageCountMeta =
@@ -471,8 +486,10 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
   late final GeneratedColumn<int> usageCount = GeneratedColumn<int>(
       'usage_count', aliasedName, false,
       check: () =>
-          usageCount.isBiggerOrEqualValue(Fields.MINIMUM_USAGE_COUNT) &
-          usageCount.isSmallerOrEqualValue(Fields.MAXIMUM_USAGE_COUNT),
+          ComparableExpr(usageCount)
+              .isBiggerOrEqualValue(Fields.MINIMUM_USAGE_COUNT) &
+          ComparableExpr(usageCount)
+              .isSmallerOrEqualValue(Fields.MAXIMUM_USAGE_COUNT),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(Fields.DEFAULT_USAGE_COUNT));
@@ -481,8 +498,8 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
   late final GeneratedColumn<int> color = GeneratedColumn<int>(
       'color', aliasedName, false,
       check: () =>
-          color.isBiggerOrEqualValue(Fields.MINIMUM_COLOR) &
-          color.isSmallerOrEqualValue(Fields.MAXIMUM_COLOR),
+          ComparableExpr(color).isBiggerOrEqualValue(Fields.MINIMUM_COLOR) &
+          ComparableExpr(color).isSmallerOrEqualValue(Fields.MAXIMUM_COLOR),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(Fields.DEFAULT_COLOR));
@@ -672,6 +689,24 @@ class Field extends DataClass implements Insertable<Field> {
         usageCount: usageCount ?? this.usageCount,
         color: color ?? this.color,
       );
+  Field copyWithCompanion(FieldsCompanion data) {
+    return Field(
+      id: data.id.present ? data.id.value : this.id,
+      userAccountId: data.userAccountId.present
+          ? data.userAccountId.value
+          : this.userAccountId,
+      name: data.name.present ? data.name.value : this.name,
+      creationAt:
+          data.creationAt.present ? data.creationAt.value : this.creationAt,
+      lastModificationAt: data.lastModificationAt.present
+          ? data.lastModificationAt.value
+          : this.lastModificationAt,
+      usageCount:
+          data.usageCount.present ? data.usageCount.value : this.usageCount,
+      color: data.color.present ? data.color.value : this.color,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Field(')
@@ -852,11 +887,10 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       check: () =>
-          name
-              .trim()
-              .length
+          ComparableExpr(StringExpressionOperators(name).trim().length)
               .isBiggerOrEqualValue(FieldLists.MINIMUM_LENGTH_OF_NAME) &
-          name.length.isSmallerOrEqualValue(FieldLists.MAXIMUM_LENGTH_OF_NAME),
+          ComparableExpr(name.length)
+              .isSmallerOrEqualValue(FieldLists.MAXIMUM_LENGTH_OF_NAME),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   static const VerificationMeta _creationAtMeta =
@@ -870,7 +904,8 @@ class $FieldListsTable extends FieldLists
   @override
   late final GeneratedColumn<DateTime> lastModificationAt =
       GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
-          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          check: () =>
+              ComparableExpr(lastModificationAt).isBiggerOrEqual(creationAt),
           type: DriftSqlType.dateTime,
           requiredDuringInsert: true);
   static const VerificationMeta _languageTagMeta =
@@ -885,8 +920,8 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> checkType = GeneratedColumn<int>(
       'check_type', aliasedName, false,
       check: () =>
-          checkType.isBiggerOrEqualValue(0) &
-          checkType.isSmallerThanValue(CheckType.MAX.index),
+          ComparableExpr(checkType).isBiggerOrEqualValue(0) &
+          ComparableExpr(checkType).isSmallerThanValue(CheckType.MAX.index),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(CheckType.NON_STRICT_IGNORE_CASE.index));
@@ -895,8 +930,8 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> sortBy = GeneratedColumn<int>(
       'sort_by', aliasedName, false,
       check: () =>
-          sortBy.isBiggerOrEqualValue(0) &
-          sortBy.isSmallerThanValue(SortBy.MAX.index),
+          ComparableExpr(sortBy).isBiggerOrEqualValue(0) &
+          ComparableExpr(sortBy).isSmallerThanValue(SortBy.MAX.index),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(SortBy.CREATION_DATE_DESC.index));
@@ -916,8 +951,10 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> usageCount = GeneratedColumn<int>(
       'usage_count', aliasedName, false,
       check: () =>
-          usageCount.isBiggerOrEqualValue(FieldLists.MINIMUM_USAGE_COUNT) &
-          usageCount.isSmallerOrEqualValue(FieldLists.MAXIMUM_USAGE_COUNT),
+          ComparableExpr(usageCount)
+              .isBiggerOrEqualValue(FieldLists.MINIMUM_USAGE_COUNT) &
+          ComparableExpr(usageCount)
+              .isSmallerOrEqualValue(FieldLists.MAXIMUM_USAGE_COUNT),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(0));
@@ -926,24 +963,23 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> color = GeneratedColumn<int>(
       'color', aliasedName, false,
       check: () =>
-          color.isBiggerOrEqualValue(FieldLists.MINIMUM_COLOR) &
-          color.isSmallerOrEqualValue(FieldLists.MAXIMUM_COLOR),
+          ComparableExpr(color).isBiggerOrEqualValue(FieldLists.MINIMUM_COLOR) &
+          ComparableExpr(color).isSmallerOrEqualValue(FieldLists.MAXIMUM_COLOR),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(FieldLists.MAXIMUM_COLOR));
   static const VerificationMeta _emulationNumberOfQuestionsMeta =
       const VerificationMeta('emulationNumberOfQuestions');
   @override
-  late final GeneratedColumn<int> emulationNumberOfQuestions =
-      GeneratedColumn<int>(
-          'emulation_number_of_questions', aliasedName, true,
-          check: () =>
-              emulationNumberOfQuestions.isBiggerOrEqualValue(
-                  FieldLists.MINIMUM_EMULATION_NUMBER_OF_QUESTIONS) &
-              emulationNumberOfQuestions.isSmallerOrEqualValue(
-                  FieldLists.MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS),
-          type: DriftSqlType.int,
-          requiredDuringInsert: false);
+  late final GeneratedColumn<int> emulationNumberOfQuestions = GeneratedColumn<
+          int>('emulation_number_of_questions', aliasedName, true,
+      check: () =>
+          ComparableExpr(emulationNumberOfQuestions).isBiggerOrEqualValue(
+              FieldLists.MINIMUM_EMULATION_NUMBER_OF_QUESTIONS) &
+          ComparableExpr(emulationNumberOfQuestions).isSmallerOrEqualValue(
+              FieldLists.MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS),
+      type: DriftSqlType.int,
+      requiredDuringInsert: false);
   static const VerificationMeta _emulationDaysMeta =
       const VerificationMeta('emulationDays');
   @override
@@ -956,7 +992,7 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> testsReadingQuestionLetterDuration =
       GeneratedColumn<int>(
           'tests_reading_question_letter_duration', aliasedName, true,
-          check: () => testsReadingQuestionLetterDuration
+          check: () => ComparableExpr(testsReadingQuestionLetterDuration)
               .isBiggerOrEqualValue(FieldLists.MINIMUM_TESTS_DURATIONS),
           type: DriftSqlType.int,
           requiredDuringInsert: false);
@@ -966,7 +1002,7 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> testsFindingAnswerDuration =
       GeneratedColumn<int>(
           'tests_finding_answer_duration', aliasedName, true,
-          check: () => testsFindingAnswerDuration
+          check: () => ComparableExpr(testsFindingAnswerDuration)
               .isBiggerOrEqualValue(FieldLists.MINIMUM_TESTS_DURATIONS),
           type: DriftSqlType.int,
           requiredDuringInsert: false);
@@ -976,7 +1012,7 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> testsTypingAnswerLetterDuration =
       GeneratedColumn<int>(
           'tests_typing_answer_letter_duration', aliasedName, true,
-          check: () => testsTypingAnswerLetterDuration
+          check: () => ComparableExpr(testsTypingAnswerLetterDuration)
               .isBiggerOrEqualValue(FieldLists.MINIMUM_TESTS_DURATIONS),
           type: DriftSqlType.int,
           requiredDuringInsert: false);
@@ -985,13 +1021,15 @@ class $FieldListsTable extends FieldLists
       const VerificationMeta('studyTillCorrectReadingQuestionLetterDuration');
   @override
   late final GeneratedColumn<int>
-      studyTillCorrectReadingQuestionLetterDuration = GeneratedColumn<int>(
+      studyTillCorrectReadingQuestionLetterDuration =
+      GeneratedColumn<int>(
           'study_till_correct_reading_question_letter_duration',
           aliasedName,
           true,
-          check: () => studyTillCorrectReadingQuestionLetterDuration
-              .isBiggerOrEqualValue(
-                  FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS),
+          check: () =>
+              ComparableExpr(studyTillCorrectReadingQuestionLetterDuration)
+                  .isBiggerOrEqualValue(
+                      FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS),
           type: DriftSqlType.int,
           requiredDuringInsert: false);
   static const VerificationMeta _studyTillCorrectFindingAnswerDurationMeta =
@@ -1000,8 +1038,8 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> studyTillCorrectFindingAnswerDuration =
       GeneratedColumn<int>(
           'study_till_correct_finding_answer_duration', aliasedName, true,
-          check: () =>
-              studyTillCorrectFindingAnswerDuration.isBiggerOrEqualValue(
+          check: () => ComparableExpr(studyTillCorrectFindingAnswerDuration)
+              .isBiggerOrEqualValue(
                   FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS),
           type: DriftSqlType.int,
           requiredDuringInsert: false);
@@ -1013,8 +1051,9 @@ class $FieldListsTable extends FieldLists
       GeneratedColumn<int>(
           'study_till_correct_typing_answer_letter_duration', aliasedName, true,
           check: () =>
-              studyTillCorrectTypingAnswerLetterDuration.isBiggerOrEqualValue(
-                  FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS),
+              ComparableExpr(studyTillCorrectTypingAnswerLetterDuration)
+                  .isBiggerOrEqualValue(
+                      FieldLists.MINIMUM_STUDY_TILL_CORRECT_DURATIONS),
           type: DriftSqlType.int,
           requiredDuringInsert: false);
   static const VerificationMeta _testsTimeOfAnswerActionMeta =
@@ -1023,8 +1062,8 @@ class $FieldListsTable extends FieldLists
   late final GeneratedColumn<int> testsTimeOfAnswerAction =
       GeneratedColumn<int>('tests_time_of_answer_action', aliasedName, false,
           check: () =>
-              testsTimeOfAnswerAction.isBiggerOrEqualValue(0) &
-              testsTimeOfAnswerAction
+              ComparableExpr(testsTimeOfAnswerAction).isBiggerOrEqualValue(0) &
+              ComparableExpr(testsTimeOfAnswerAction)
                   .isSmallerThanValue(TimeOfAnswerAction.MAX.index),
           type: DriftSqlType.int,
           requiredDuringInsert: false,
@@ -1570,6 +1609,64 @@ class FieldList extends DataClass implements Insertable<FieldList> {
         doesObfuscateQuestion:
             doesObfuscateQuestion ?? this.doesObfuscateQuestion,
       );
+  FieldList copyWithCompanion(FieldListsCompanion data) {
+    return FieldList(
+      id: data.id.present ? data.id.value : this.id,
+      fieldId: data.fieldId.present ? data.fieldId.value : this.fieldId,
+      name: data.name.present ? data.name.value : this.name,
+      creationAt:
+          data.creationAt.present ? data.creationAt.value : this.creationAt,
+      lastModificationAt: data.lastModificationAt.present
+          ? data.lastModificationAt.value
+          : this.lastModificationAt,
+      languageTag:
+          data.languageTag.present ? data.languageTag.value : this.languageTag,
+      checkType: data.checkType.present ? data.checkType.value : this.checkType,
+      sortBy: data.sortBy.present ? data.sortBy.value : this.sortBy,
+      doesReadAnswer: data.doesReadAnswer.present
+          ? data.doesReadAnswer.value
+          : this.doesReadAnswer,
+      usageCount:
+          data.usageCount.present ? data.usageCount.value : this.usageCount,
+      color: data.color.present ? data.color.value : this.color,
+      emulationNumberOfQuestions: data.emulationNumberOfQuestions.present
+          ? data.emulationNumberOfQuestions.value
+          : this.emulationNumberOfQuestions,
+      emulationDays: data.emulationDays.present
+          ? data.emulationDays.value
+          : this.emulationDays,
+      testsReadingQuestionLetterDuration:
+          data.testsReadingQuestionLetterDuration.present
+              ? data.testsReadingQuestionLetterDuration.value
+              : this.testsReadingQuestionLetterDuration,
+      testsFindingAnswerDuration: data.testsFindingAnswerDuration.present
+          ? data.testsFindingAnswerDuration.value
+          : this.testsFindingAnswerDuration,
+      testsTypingAnswerLetterDuration:
+          data.testsTypingAnswerLetterDuration.present
+              ? data.testsTypingAnswerLetterDuration.value
+              : this.testsTypingAnswerLetterDuration,
+      studyTillCorrectReadingQuestionLetterDuration:
+          data.studyTillCorrectReadingQuestionLetterDuration.present
+              ? data.studyTillCorrectReadingQuestionLetterDuration.value
+              : this.studyTillCorrectReadingQuestionLetterDuration,
+      studyTillCorrectFindingAnswerDuration:
+          data.studyTillCorrectFindingAnswerDuration.present
+              ? data.studyTillCorrectFindingAnswerDuration.value
+              : this.studyTillCorrectFindingAnswerDuration,
+      studyTillCorrectTypingAnswerLetterDuration:
+          data.studyTillCorrectTypingAnswerLetterDuration.present
+              ? data.studyTillCorrectTypingAnswerLetterDuration.value
+              : this.studyTillCorrectTypingAnswerLetterDuration,
+      testsTimeOfAnswerAction: data.testsTimeOfAnswerAction.present
+          ? data.testsTimeOfAnswerAction.value
+          : this.testsTimeOfAnswerAction,
+      doesObfuscateQuestion: data.doesObfuscateQuestion.present
+          ? data.doesObfuscateQuestion.value
+          : this.doesObfuscateQuestion,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('FieldList(')
@@ -2025,7 +2122,8 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
   @override
   late final GeneratedColumn<DateTime> lastModificationAt =
       GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
-          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          check: () =>
+              ComparableExpr(lastModificationAt).isBiggerOrEqual(creationAt),
           type: DriftSqlType.dateTime,
           requiredDuringInsert: true);
   static const VerificationMeta _orderMeta = const VerificationMeta('order');
@@ -2033,8 +2131,10 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
   late final GeneratedColumn<int> order = GeneratedColumn<int>(
       'order', aliasedName, false,
       check: () =>
-          order.isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
-          order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
+          ComparableExpr(order)
+              .isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
+          ComparableExpr(order)
+              .isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
   static const VerificationMeta _didAskedAtCurrentTestRoundMeta =
@@ -2064,8 +2164,10 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
   late final GeneratedColumn<int> askedCount = GeneratedColumn<int>(
       'asked_count', aliasedName, false,
       check: () =>
-          askedCount.isSmallerOrEqualValue(Entrys.ASKED_COUNT_MAXIMUM_VALUE) &
-          askedCount.isBiggerOrEqualValue(Entrys.ASKED_COUNT_MINIMUM_VALUE),
+          ComparableExpr(askedCount)
+              .isSmallerOrEqualValue(Entrys.ASKED_COUNT_MAXIMUM_VALUE) &
+          ComparableExpr(askedCount)
+              .isBiggerOrEqualValue(Entrys.ASKED_COUNT_MINIMUM_VALUE),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
   static const VerificationMeta _wronglyAnsweredCountMeta =
@@ -2074,9 +2176,9 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
   late final GeneratedColumn<int> wronglyAnsweredCount = GeneratedColumn<int>(
       'wrongly_answered_count', aliasedName, false,
       check: () =>
-          wronglyAnsweredCount.isSmallerOrEqualValue(
+          ComparableExpr(wronglyAnsweredCount).isSmallerOrEqualValue(
               Entrys.WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE) &
-          wronglyAnsweredCount.isBiggerOrEqualValue(
+          ComparableExpr(wronglyAnsweredCount).isBiggerOrEqualValue(
               Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
@@ -2372,6 +2474,35 @@ class Entry extends DataClass implements Insertable<Entry> {
         askedCount: askedCount ?? this.askedCount,
         wronglyAnsweredCount: wronglyAnsweredCount ?? this.wronglyAnsweredCount,
       );
+  Entry copyWithCompanion(EntrysCompanion data) {
+    return Entry(
+      id: data.id.present ? data.id.value : this.id,
+      fieldListId:
+          data.fieldListId.present ? data.fieldListId.value : this.fieldListId,
+      answerId: data.answerId.present ? data.answerId.value : this.answerId,
+      questionId:
+          data.questionId.present ? data.questionId.value : this.questionId,
+      creationAt:
+          data.creationAt.present ? data.creationAt.value : this.creationAt,
+      lastModificationAt: data.lastModificationAt.present
+          ? data.lastModificationAt.value
+          : this.lastModificationAt,
+      order: data.order.present ? data.order.value : this.order,
+      didAskedAtCurrentTestRound: data.didAskedAtCurrentTestRound.present
+          ? data.didAskedAtCurrentTestRound.value
+          : this.didAskedAtCurrentTestRound,
+      emulatedCreatedAt: data.emulatedCreatedAt.present
+          ? data.emulatedCreatedAt.value
+          : this.emulatedCreatedAt,
+      rank: data.rank.present ? data.rank.value : this.rank,
+      askedCount:
+          data.askedCount.present ? data.askedCount.value : this.askedCount,
+      wronglyAnsweredCount: data.wronglyAnsweredCount.present
+          ? data.wronglyAnsweredCount.value
+          : this.wronglyAnsweredCount,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Entry(')
@@ -2639,11 +2770,10 @@ class $FieldNotesTable extends FieldNotes
   late final GeneratedColumn<String> texT = GeneratedColumn<String>(
       'tex_t', aliasedName, false,
       check: () =>
-          texT
-              .trim()
-              .length
+          ComparableExpr(StringExpressionOperators(texT).trim().length)
               .isBiggerOrEqualValue(FieldNotes.MINIMUM_LENGTH_OF_TEXT) &
-          texT.length.isSmallerOrEqualValue(FieldNotes.MAXIMUM_LENGTH_OF_TEXT),
+          ComparableExpr(texT.length)
+              .isSmallerOrEqualValue(FieldNotes.MAXIMUM_LENGTH_OF_TEXT),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   static const VerificationMeta _creationAtMeta =
@@ -2657,7 +2787,8 @@ class $FieldNotesTable extends FieldNotes
   @override
   late final GeneratedColumn<DateTime> lastModificationAt =
       GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
-          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          check: () =>
+              ComparableExpr(lastModificationAt).isBiggerOrEqual(creationAt),
           type: DriftSqlType.dateTime,
           requiredDuringInsert: true);
   @override
@@ -2803,6 +2934,19 @@ class FieldNote extends DataClass implements Insertable<FieldNote> {
         creationAt: creationAt ?? this.creationAt,
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       );
+  FieldNote copyWithCompanion(FieldNotesCompanion data) {
+    return FieldNote(
+      id: data.id.present ? data.id.value : this.id,
+      fieldId: data.fieldId.present ? data.fieldId.value : this.fieldId,
+      texT: data.texT.present ? data.texT.value : this.texT,
+      creationAt:
+          data.creationAt.present ? data.creationAt.value : this.creationAt,
+      lastModificationAt: data.lastModificationAt.present
+          ? data.lastModificationAt.value
+          : this.lastModificationAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('FieldNote(')
@@ -2957,11 +3101,9 @@ class $FieldListNotesTable extends FieldListNotes
   late final GeneratedColumn<String> texT = GeneratedColumn<String>(
       'tex_t', aliasedName, false,
       check: () =>
-          texT
-              .trim()
-              .length
+          ComparableExpr(StringExpressionOperators(texT).trim().length)
               .isBiggerOrEqualValue(FieldListNotes.MINIMUM_LENGTH_OF_TEXT) &
-          texT.length
+          ComparableExpr(texT.length)
               .isSmallerOrEqualValue(FieldListNotes.MAXIMUM_LENGTH_OF_TEXT),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
@@ -2976,7 +3118,8 @@ class $FieldListNotesTable extends FieldListNotes
   @override
   late final GeneratedColumn<DateTime> lastModificationAt =
       GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
-          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          check: () =>
+              ComparableExpr(lastModificationAt).isBiggerOrEqual(creationAt),
           type: DriftSqlType.dateTime,
           requiredDuringInsert: true);
   @override
@@ -3124,6 +3267,20 @@ class FieldListNote extends DataClass implements Insertable<FieldListNote> {
         creationAt: creationAt ?? this.creationAt,
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       );
+  FieldListNote copyWithCompanion(FieldListNotesCompanion data) {
+    return FieldListNote(
+      id: data.id.present ? data.id.value : this.id,
+      fieldListId:
+          data.fieldListId.present ? data.fieldListId.value : this.fieldListId,
+      texT: data.texT.present ? data.texT.value : this.texT,
+      creationAt:
+          data.creationAt.present ? data.creationAt.value : this.creationAt,
+      lastModificationAt: data.lastModificationAt.present
+          ? data.lastModificationAt.value
+          : this.lastModificationAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('FieldListNote(')
@@ -3278,9 +3435,9 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
   late final GeneratedColumn<int> currentQuestionCounter = GeneratedColumn<int>(
       'current_question_counter', aliasedName, false,
       check: () =>
-          currentQuestionCounter
+          ComparableExpr(currentQuestionCounter)
               .isBiggerOrEqualValue(Sessions.MINIMUM_CURRENT_QUESTION_COUNTER) &
-          currentQuestionCounter
+          ComparableExpr(currentQuestionCounter)
               .isSmallerOrEqualValue(Sessions.MAXIMUM_CURRENT_QUESTION_COUNTER),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
@@ -3290,8 +3447,10 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
   late final GeneratedColumn<int> triesNumber = GeneratedColumn<int>(
       'tries_number', aliasedName, false,
       check: () =>
-          triesNumber.isBiggerOrEqualValue(Sessions.MINIMUM_TRIES_NUMBER) &
-          triesNumber.isSmallerOrEqualValue(Sessions.MAXIMUM_TRIES_NUMBER),
+          ComparableExpr(triesNumber)
+              .isBiggerOrEqualValue(Sessions.MINIMUM_TRIES_NUMBER) &
+          ComparableExpr(triesNumber)
+              .isSmallerOrEqualValue(Sessions.MAXIMUM_TRIES_NUMBER),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
   static const VerificationMeta _triesCounterMeta =
@@ -3300,9 +3459,11 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
   late final GeneratedColumn<int> triesCounter = GeneratedColumn<int>(
       'tries_counter', aliasedName, false,
       check: () =>
-          triesCounter.isBiggerOrEqualValue(Sessions.MINIMUM_TRIES_COUNTER) &
-          triesCounter.isSmallerOrEqualValue(Sessions.MAXIMUM_TRIES_COUNTER) &
-          triesCounter.isSmallerThan(triesNumber),
+          ComparableExpr(triesCounter)
+              .isBiggerOrEqualValue(Sessions.MINIMUM_TRIES_COUNTER) &
+          ComparableExpr(triesCounter)
+              .isSmallerOrEqualValue(Sessions.MAXIMUM_TRIES_COUNTER) &
+          ComparableExpr(triesCounter).isSmallerThan(triesNumber),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(0));
@@ -3311,8 +3472,8 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
   @override
   late final GeneratedColumn<int> elapsedTime = GeneratedColumn<int>(
       'elapsed_time', aliasedName, false,
-      check: () =>
-          elapsedTime.isBiggerOrEqualValue(Sessions.MINIMUM_ELAPSED_TIME),
+      check: () => ComparableExpr(elapsedTime)
+          .isBiggerOrEqualValue(Sessions.MINIMUM_ELAPSED_TIME),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
   static const VerificationMeta _isCompletedMeta =
@@ -3351,9 +3512,9 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
   late final GeneratedColumn<int> currentHintCounter = GeneratedColumn<int>(
       'current_hint_counter', aliasedName, false,
       check: () =>
-          currentHintCounter
+          ComparableExpr(currentHintCounter)
               .isBiggerOrEqualValue(Sessions.MINIMUM_CURRENT_HINT_COUNTER) &
-          currentHintCounter
+          ComparableExpr(currentHintCounter)
               .isSmallerOrEqualValue(Sessions.MAXIMUM_CURRENT_HINT_COUNTER),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
@@ -3369,7 +3530,8 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
   @override
   late final GeneratedColumn<DateTime> lastModificationAt =
       GeneratedColumn<DateTime>('last_modification_at', aliasedName, false,
-          check: () => lastModificationAt.isBiggerOrEqual(creationAt),
+          check: () =>
+              ComparableExpr(lastModificationAt).isBiggerOrEqual(creationAt),
           type: DriftSqlType.dateTime,
           requiredDuringInsert: true);
   @override
@@ -3656,6 +3818,40 @@ class Session extends DataClass implements Insertable<Session> {
         creationAt: creationAt ?? this.creationAt,
         lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       );
+  Session copyWithCompanion(SessionsCompanion data) {
+    return Session(
+      id: data.id.present ? data.id.value : this.id,
+      fieldListId:
+          data.fieldListId.present ? data.fieldListId.value : this.fieldListId,
+      currentQuestionCounter: data.currentQuestionCounter.present
+          ? data.currentQuestionCounter.value
+          : this.currentQuestionCounter,
+      triesNumber:
+          data.triesNumber.present ? data.triesNumber.value : this.triesNumber,
+      triesCounter: data.triesCounter.present
+          ? data.triesCounter.value
+          : this.triesCounter,
+      elapsedTime:
+          data.elapsedTime.present ? data.elapsedTime.value : this.elapsedTime,
+      isCompleted:
+          data.isCompleted.present ? data.isCompleted.value : this.isCompleted,
+      lastCheckedAnswerResult: data.lastCheckedAnswerResult.present
+          ? data.lastCheckedAnswerResult.value
+          : this.lastCheckedAnswerResult,
+      shouldCheckAnAnswer: data.shouldCheckAnAnswer.present
+          ? data.shouldCheckAnAnswer.value
+          : this.shouldCheckAnAnswer,
+      currentHintCounter: data.currentHintCounter.present
+          ? data.currentHintCounter.value
+          : this.currentHintCounter,
+      creationAt:
+          data.creationAt.present ? data.creationAt.value : this.creationAt,
+      lastModificationAt: data.lastModificationAt.present
+          ? data.lastModificationAt.value
+          : this.lastModificationAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Session(')
@@ -4005,6 +4201,13 @@ class SessionEntry extends DataClass implements Insertable<SessionEntry> {
         sessionId: sessionId ?? this.sessionId,
         entryId: entryId ?? this.entryId,
       );
+  SessionEntry copyWithCompanion(SessionEntrysCompanion data) {
+    return SessionEntry(
+      sessionId: data.sessionId.present ? data.sessionId.value : this.sessionId,
+      entryId: data.entryId.present ? data.entryId.value : this.entryId,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('SessionEntry(')
@@ -4107,9 +4310,9 @@ class $TestSessionsTable extends TestSessions
   late final GeneratedColumn<int> wrongAnswerCounter = GeneratedColumn<int>(
       'wrong_answer_counter', aliasedName, false,
       check: () =>
-          wrongAnswerCounter
+          ComparableExpr(wrongAnswerCounter)
               .isBiggerOrEqualValue(TestSessions.MINIMUM_WRONG_ANSWER_COUNTER) &
-          wrongAnswerCounter
+          ComparableExpr(wrongAnswerCounter)
               .isSmallerOrEqualValue(TestSessions.MAXIMUM_WRONG_ANSWER_COUNTER),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
@@ -4119,10 +4322,9 @@ class $TestSessionsTable extends TestSessions
   @override
   late final GeneratedColumn<String> lastAnswer = GeneratedColumn<String>(
       'last_answer', aliasedName, true,
-      check: () => lastAnswer
-          .trim()
-          .length
-          .isBiggerOrEqualValue(TestSessions.MINIMUM_LAST_ANSWER),
+      check: () =>
+          ComparableExpr(StringExpressionOperators(lastAnswer).trim().length)
+              .isBiggerOrEqualValue(TestSessions.MINIMUM_LAST_ANSWER),
       type: DriftSqlType.string,
       requiredDuringInsert: false);
   @override
@@ -4237,6 +4439,17 @@ class TestSession extends DataClass implements Insertable<TestSession> {
         wrongAnswerCounter: wrongAnswerCounter ?? this.wrongAnswerCounter,
         lastAnswer: lastAnswer.present ? lastAnswer.value : this.lastAnswer,
       );
+  TestSession copyWithCompanion(TestSessionsCompanion data) {
+    return TestSession(
+      sessionId: data.sessionId.present ? data.sessionId.value : this.sessionId,
+      wrongAnswerCounter: data.wrongAnswerCounter.present
+          ? data.wrongAnswerCounter.value
+          : this.wrongAnswerCounter,
+      lastAnswer:
+          data.lastAnswer.present ? data.lastAnswer.value : this.lastAnswer,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('TestSession(')
@@ -4368,10 +4581,9 @@ class $WrongAnswersTable extends WrongAnswers
   @override
   late final GeneratedColumn<String> value = GeneratedColumn<String>(
       'value', aliasedName, false,
-      check: () => value
-          .trim()
-          .length
-          .isBiggerOrEqualValue(WrongAnswers.MINIMUM_VALUE_LENGTH),
+      check: () =>
+          ComparableExpr(StringExpressionOperators(value).trim().length)
+              .isBiggerOrEqualValue(WrongAnswers.MINIMUM_VALUE_LENGTH),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   static const VerificationMeta _creationAtMeta =
@@ -4519,6 +4731,17 @@ class WrongAnswer extends DataClass implements Insertable<WrongAnswer> {
         value: value ?? this.value,
         creationAt: creationAt ?? this.creationAt,
       );
+  WrongAnswer copyWithCompanion(WrongAnswersCompanion data) {
+    return WrongAnswer(
+      id: data.id.present ? data.id.value : this.id,
+      sessionId: data.sessionId.present ? data.sessionId.value : this.sessionId,
+      entryId: data.entryId.present ? data.entryId.value : this.entryId,
+      value: data.value.present ? data.value.value : this.value,
+      creationAt:
+          data.creationAt.present ? data.creationAt.value : this.creationAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('WrongAnswer(')
@@ -4645,6 +4868,7 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
+  $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $EntryTextsTable entryTexts = $EntryTextsTable(this);
   late final $QuestionsTable questions = $QuestionsTable(this);
   late final $FieldsTable fields = $FieldsTable(this);
@@ -4691,4 +4915,4344 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   @override
   DriftDatabaseOptions get options =>
       const DriftDatabaseOptions(storeDateTimeAsText: true);
+}
+
+typedef $$EntryTextsTableCreateCompanionBuilder = EntryTextsCompanion Function({
+  Value<String> id,
+  required String value,
+  Value<int> rowid,
+});
+typedef $$EntryTextsTableUpdateCompanionBuilder = EntryTextsCompanion Function({
+  Value<String> id,
+  Value<String> value,
+  Value<int> rowid,
+});
+
+final class $$EntryTextsTableReferences
+    extends BaseReferences<_$AppDatabase, $EntryTextsTable, EntryText> {
+  $$EntryTextsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$EntrysTable, List<Entry>> _entrysRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.entrys,
+          aliasName:
+              $_aliasNameGenerator(db.entryTexts.id, db.entrys.answerId));
+
+  $$EntrysTableProcessedTableManager get entrysRefs {
+    final manager = $$EntrysTableTableManager($_db, $_db.entrys)
+        .filter((f) => f.answerId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_entrysRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$EntryTextsTableFilterComposer
+    extends Composer<_$AppDatabase, $EntryTextsTable> {
+  $$EntryTextsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> entrysRefs(
+      Expression<bool> Function($$EntrysTableFilterComposer f) f) {
+    final $$EntrysTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.answerId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableFilterComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$EntryTextsTableOrderingComposer
+    extends Composer<_$AppDatabase, $EntryTextsTable> {
+  $$EntryTextsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnOrderings(column));
+}
+
+class $$EntryTextsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EntryTextsTable> {
+  $$EntryTextsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+
+  Expression<T> entrysRefs<T extends Object>(
+      Expression<T> Function($$EntrysTableAnnotationComposer a) f) {
+    final $$EntrysTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.answerId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableAnnotationComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$EntryTextsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $EntryTextsTable,
+    EntryText,
+    $$EntryTextsTableFilterComposer,
+    $$EntryTextsTableOrderingComposer,
+    $$EntryTextsTableAnnotationComposer,
+    $$EntryTextsTableCreateCompanionBuilder,
+    $$EntryTextsTableUpdateCompanionBuilder,
+    (EntryText, $$EntryTextsTableReferences),
+    EntryText,
+    PrefetchHooks Function({bool entrysRefs})> {
+  $$EntryTextsTableTableManager(_$AppDatabase db, $EntryTextsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$EntryTextsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EntryTextsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EntryTextsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> value = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              EntryTextsCompanion(
+            id: id,
+            value: value,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            required String value,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              EntryTextsCompanion.insert(
+            id: id,
+            value: value,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$EntryTextsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({entrysRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (entrysRefs) db.entrys],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (entrysRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$EntryTextsTableReferences._entrysRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$EntryTextsTableReferences(db, table, p0)
+                                .entrysRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.answerId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$EntryTextsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $EntryTextsTable,
+    EntryText,
+    $$EntryTextsTableFilterComposer,
+    $$EntryTextsTableOrderingComposer,
+    $$EntryTextsTableAnnotationComposer,
+    $$EntryTextsTableCreateCompanionBuilder,
+    $$EntryTextsTableUpdateCompanionBuilder,
+    (EntryText, $$EntryTextsTableReferences),
+    EntryText,
+    PrefetchHooks Function({bool entrysRefs})>;
+typedef $$QuestionsTableCreateCompanionBuilder = QuestionsCompanion Function({
+  Value<String> id,
+  required int questionType,
+  required String address,
+  Value<int> rowid,
+});
+typedef $$QuestionsTableUpdateCompanionBuilder = QuestionsCompanion Function({
+  Value<String> id,
+  Value<int> questionType,
+  Value<String> address,
+  Value<int> rowid,
+});
+
+final class $$QuestionsTableReferences
+    extends BaseReferences<_$AppDatabase, $QuestionsTable, Question> {
+  $$QuestionsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$EntrysTable, List<Entry>> _entrysRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.entrys,
+          aliasName:
+              $_aliasNameGenerator(db.questions.id, db.entrys.questionId));
+
+  $$EntrysTableProcessedTableManager get entrysRefs {
+    final manager = $$EntrysTableTableManager($_db, $_db.entrys)
+        .filter((f) => f.questionId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_entrysRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$QuestionsTableFilterComposer
+    extends Composer<_$AppDatabase, $QuestionsTable> {
+  $$QuestionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get questionType => $composableBuilder(
+      column: $table.questionType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> entrysRefs(
+      Expression<bool> Function($$EntrysTableFilterComposer f) f) {
+    final $$EntrysTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.questionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableFilterComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$QuestionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $QuestionsTable> {
+  $$QuestionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get questionType => $composableBuilder(
+      column: $table.questionType,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnOrderings(column));
+}
+
+class $$QuestionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $QuestionsTable> {
+  $$QuestionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get questionType => $composableBuilder(
+      column: $table.questionType, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  Expression<T> entrysRefs<T extends Object>(
+      Expression<T> Function($$EntrysTableAnnotationComposer a) f) {
+    final $$EntrysTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.questionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableAnnotationComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$QuestionsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $QuestionsTable,
+    Question,
+    $$QuestionsTableFilterComposer,
+    $$QuestionsTableOrderingComposer,
+    $$QuestionsTableAnnotationComposer,
+    $$QuestionsTableCreateCompanionBuilder,
+    $$QuestionsTableUpdateCompanionBuilder,
+    (Question, $$QuestionsTableReferences),
+    Question,
+    PrefetchHooks Function({bool entrysRefs})> {
+  $$QuestionsTableTableManager(_$AppDatabase db, $QuestionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$QuestionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$QuestionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$QuestionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<int> questionType = const Value.absent(),
+            Value<String> address = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              QuestionsCompanion(
+            id: id,
+            questionType: questionType,
+            address: address,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            required int questionType,
+            required String address,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              QuestionsCompanion.insert(
+            id: id,
+            questionType: questionType,
+            address: address,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$QuestionsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({entrysRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (entrysRefs) db.entrys],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (entrysRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$QuestionsTableReferences._entrysRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$QuestionsTableReferences(db, table, p0)
+                                .entrysRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.questionId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$QuestionsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $QuestionsTable,
+    Question,
+    $$QuestionsTableFilterComposer,
+    $$QuestionsTableOrderingComposer,
+    $$QuestionsTableAnnotationComposer,
+    $$QuestionsTableCreateCompanionBuilder,
+    $$QuestionsTableUpdateCompanionBuilder,
+    (Question, $$QuestionsTableReferences),
+    Question,
+    PrefetchHooks Function({bool entrysRefs})>;
+typedef $$FieldsTableCreateCompanionBuilder = FieldsCompanion Function({
+  Value<String> id,
+  required String userAccountId,
+  required String name,
+  required DateTime creationAt,
+  required DateTime lastModificationAt,
+  Value<int> usageCount,
+  Value<int> color,
+  Value<int> rowid,
+});
+typedef $$FieldsTableUpdateCompanionBuilder = FieldsCompanion Function({
+  Value<String> id,
+  Value<String> userAccountId,
+  Value<String> name,
+  Value<DateTime> creationAt,
+  Value<DateTime> lastModificationAt,
+  Value<int> usageCount,
+  Value<int> color,
+  Value<int> rowid,
+});
+
+final class $$FieldsTableReferences
+    extends BaseReferences<_$AppDatabase, $FieldsTable, Field> {
+  $$FieldsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$FieldListsTable, List<FieldList>>
+      _fieldListsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+          db.fieldLists,
+          aliasName: $_aliasNameGenerator(db.fields.id, db.fieldLists.fieldId));
+
+  $$FieldListsTableProcessedTableManager get fieldListsRefs {
+    final manager = $$FieldListsTableTableManager($_db, $_db.fieldLists)
+        .filter((f) => f.fieldId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_fieldListsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$FieldNotesTable, List<FieldNote>>
+      _fieldNotesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+          db.fieldNotes,
+          aliasName: $_aliasNameGenerator(db.fields.id, db.fieldNotes.fieldId));
+
+  $$FieldNotesTableProcessedTableManager get fieldNotesRefs {
+    final manager = $$FieldNotesTableTableManager($_db, $_db.fieldNotes)
+        .filter((f) => f.fieldId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_fieldNotesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$FieldsTableFilterComposer
+    extends Composer<_$AppDatabase, $FieldsTable> {
+  $$FieldsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get userAccountId => $composableBuilder(
+      column: $table.userAccountId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get usageCount => $composableBuilder(
+      column: $table.usageCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> fieldListsRefs(
+      Expression<bool> Function($$FieldListsTableFilterComposer f) f) {
+    final $$FieldListsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.fieldId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableFilterComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> fieldNotesRefs(
+      Expression<bool> Function($$FieldNotesTableFilterComposer f) f) {
+    final $$FieldNotesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.fieldNotes,
+        getReferencedColumn: (t) => t.fieldId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldNotesTableFilterComposer(
+              $db: $db,
+              $table: $db.fieldNotes,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$FieldsTableOrderingComposer
+    extends Composer<_$AppDatabase, $FieldsTable> {
+  $$FieldsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get userAccountId => $composableBuilder(
+      column: $table.userAccountId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get usageCount => $composableBuilder(
+      column: $table.usageCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
+}
+
+class $$FieldsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FieldsTable> {
+  $$FieldsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get userAccountId => $composableBuilder(
+      column: $table.userAccountId, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt, builder: (column) => column);
+
+  GeneratedColumn<int> get usageCount => $composableBuilder(
+      column: $table.usageCount, builder: (column) => column);
+
+  GeneratedColumn<int> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  Expression<T> fieldListsRefs<T extends Object>(
+      Expression<T> Function($$FieldListsTableAnnotationComposer a) f) {
+    final $$FieldListsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.fieldId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> fieldNotesRefs<T extends Object>(
+      Expression<T> Function($$FieldNotesTableAnnotationComposer a) f) {
+    final $$FieldNotesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.fieldNotes,
+        getReferencedColumn: (t) => t.fieldId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldNotesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.fieldNotes,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$FieldsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $FieldsTable,
+    Field,
+    $$FieldsTableFilterComposer,
+    $$FieldsTableOrderingComposer,
+    $$FieldsTableAnnotationComposer,
+    $$FieldsTableCreateCompanionBuilder,
+    $$FieldsTableUpdateCompanionBuilder,
+    (Field, $$FieldsTableReferences),
+    Field,
+    PrefetchHooks Function({bool fieldListsRefs, bool fieldNotesRefs})> {
+  $$FieldsTableTableManager(_$AppDatabase db, $FieldsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FieldsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FieldsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FieldsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> userAccountId = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<DateTime> creationAt = const Value.absent(),
+            Value<DateTime> lastModificationAt = const Value.absent(),
+            Value<int> usageCount = const Value.absent(),
+            Value<int> color = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FieldsCompanion(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            usageCount: usageCount,
+            color: color,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            required String userAccountId,
+            required String name,
+            required DateTime creationAt,
+            required DateTime lastModificationAt,
+            Value<int> usageCount = const Value.absent(),
+            Value<int> color = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FieldsCompanion.insert(
+            id: id,
+            userAccountId: userAccountId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            usageCount: usageCount,
+            color: color,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$FieldsTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: (
+              {fieldListsRefs = false, fieldNotesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (fieldListsRefs) db.fieldLists,
+                if (fieldNotesRefs) db.fieldNotes
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (fieldListsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$FieldsTableReferences._fieldListsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$FieldsTableReferences(db, table, p0)
+                                .fieldListsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.fieldId == item.id),
+                        typedResults: items),
+                  if (fieldNotesRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$FieldsTableReferences._fieldNotesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$FieldsTableReferences(db, table, p0)
+                                .fieldNotesRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.fieldId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$FieldsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $FieldsTable,
+    Field,
+    $$FieldsTableFilterComposer,
+    $$FieldsTableOrderingComposer,
+    $$FieldsTableAnnotationComposer,
+    $$FieldsTableCreateCompanionBuilder,
+    $$FieldsTableUpdateCompanionBuilder,
+    (Field, $$FieldsTableReferences),
+    Field,
+    PrefetchHooks Function({bool fieldListsRefs, bool fieldNotesRefs})>;
+typedef $$FieldListsTableCreateCompanionBuilder = FieldListsCompanion Function({
+  Value<String> id,
+  required String fieldId,
+  required String name,
+  required DateTime creationAt,
+  required DateTime lastModificationAt,
+  Value<String?> languageTag,
+  Value<int> checkType,
+  Value<int> sortBy,
+  Value<bool> doesReadAnswer,
+  Value<int> usageCount,
+  Value<int> color,
+  Value<int?> emulationNumberOfQuestions,
+  Value<String?> emulationDays,
+  Value<int?> testsReadingQuestionLetterDuration,
+  Value<int?> testsFindingAnswerDuration,
+  Value<int?> testsTypingAnswerLetterDuration,
+  Value<int?> studyTillCorrectReadingQuestionLetterDuration,
+  Value<int?> studyTillCorrectFindingAnswerDuration,
+  Value<int?> studyTillCorrectTypingAnswerLetterDuration,
+  Value<int> testsTimeOfAnswerAction,
+  Value<bool> doesObfuscateQuestion,
+  Value<int> rowid,
+});
+typedef $$FieldListsTableUpdateCompanionBuilder = FieldListsCompanion Function({
+  Value<String> id,
+  Value<String> fieldId,
+  Value<String> name,
+  Value<DateTime> creationAt,
+  Value<DateTime> lastModificationAt,
+  Value<String?> languageTag,
+  Value<int> checkType,
+  Value<int> sortBy,
+  Value<bool> doesReadAnswer,
+  Value<int> usageCount,
+  Value<int> color,
+  Value<int?> emulationNumberOfQuestions,
+  Value<String?> emulationDays,
+  Value<int?> testsReadingQuestionLetterDuration,
+  Value<int?> testsFindingAnswerDuration,
+  Value<int?> testsTypingAnswerLetterDuration,
+  Value<int?> studyTillCorrectReadingQuestionLetterDuration,
+  Value<int?> studyTillCorrectFindingAnswerDuration,
+  Value<int?> studyTillCorrectTypingAnswerLetterDuration,
+  Value<int> testsTimeOfAnswerAction,
+  Value<bool> doesObfuscateQuestion,
+  Value<int> rowid,
+});
+
+final class $$FieldListsTableReferences
+    extends BaseReferences<_$AppDatabase, $FieldListsTable, FieldList> {
+  $$FieldListsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $FieldsTable _fieldIdTable(_$AppDatabase db) => db.fields
+      .createAlias($_aliasNameGenerator(db.fieldLists.fieldId, db.fields.id));
+
+  $$FieldsTableProcessedTableManager get fieldId {
+    final manager = $$FieldsTableTableManager($_db, $_db.fields)
+        .filter((f) => f.id($_item.fieldId!));
+    final item = $_typedResult.readTableOrNull(_fieldIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$EntrysTable, List<Entry>> _entrysRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.entrys,
+          aliasName:
+              $_aliasNameGenerator(db.fieldLists.id, db.entrys.fieldListId));
+
+  $$EntrysTableProcessedTableManager get entrysRefs {
+    final manager = $$EntrysTableTableManager($_db, $_db.entrys)
+        .filter((f) => f.fieldListId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_entrysRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$FieldListNotesTable, List<FieldListNote>>
+      _fieldListNotesRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.fieldListNotes,
+              aliasName: $_aliasNameGenerator(
+                  db.fieldLists.id, db.fieldListNotes.fieldListId));
+
+  $$FieldListNotesTableProcessedTableManager get fieldListNotesRefs {
+    final manager = $$FieldListNotesTableTableManager($_db, $_db.fieldListNotes)
+        .filter((f) => f.fieldListId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_fieldListNotesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$SessionsTable, List<Session>> _sessionsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.sessions,
+          aliasName:
+              $_aliasNameGenerator(db.fieldLists.id, db.sessions.fieldListId));
+
+  $$SessionsTableProcessedTableManager get sessionsRefs {
+    final manager = $$SessionsTableTableManager($_db, $_db.sessions)
+        .filter((f) => f.fieldListId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_sessionsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$FieldListsTableFilterComposer
+    extends Composer<_$AppDatabase, $FieldListsTable> {
+  $$FieldListsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get languageTag => $composableBuilder(
+      column: $table.languageTag, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get checkType => $composableBuilder(
+      column: $table.checkType, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get sortBy => $composableBuilder(
+      column: $table.sortBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get doesReadAnswer => $composableBuilder(
+      column: $table.doesReadAnswer,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get usageCount => $composableBuilder(
+      column: $table.usageCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get emulationNumberOfQuestions => $composableBuilder(
+      column: $table.emulationNumberOfQuestions,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get emulationDays => $composableBuilder(
+      column: $table.emulationDays, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get testsReadingQuestionLetterDuration =>
+      $composableBuilder(
+          column: $table.testsReadingQuestionLetterDuration,
+          builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get testsFindingAnswerDuration => $composableBuilder(
+      column: $table.testsFindingAnswerDuration,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get testsTypingAnswerLetterDuration => $composableBuilder(
+      column: $table.testsTypingAnswerLetterDuration,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get studyTillCorrectReadingQuestionLetterDuration =>
+      $composableBuilder(
+          column: $table.studyTillCorrectReadingQuestionLetterDuration,
+          builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get studyTillCorrectFindingAnswerDuration =>
+      $composableBuilder(
+          column: $table.studyTillCorrectFindingAnswerDuration,
+          builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get studyTillCorrectTypingAnswerLetterDuration =>
+      $composableBuilder(
+          column: $table.studyTillCorrectTypingAnswerLetterDuration,
+          builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get testsTimeOfAnswerAction => $composableBuilder(
+      column: $table.testsTimeOfAnswerAction,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get doesObfuscateQuestion => $composableBuilder(
+      column: $table.doesObfuscateQuestion,
+      builder: (column) => ColumnFilters(column));
+
+  $$FieldsTableFilterComposer get fieldId {
+    final $$FieldsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldId,
+        referencedTable: $db.fields,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldsTableFilterComposer(
+              $db: $db,
+              $table: $db.fields,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> entrysRefs(
+      Expression<bool> Function($$EntrysTableFilterComposer f) f) {
+    final $$EntrysTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.fieldListId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableFilterComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> fieldListNotesRefs(
+      Expression<bool> Function($$FieldListNotesTableFilterComposer f) f) {
+    final $$FieldListNotesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.fieldListNotes,
+        getReferencedColumn: (t) => t.fieldListId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListNotesTableFilterComposer(
+              $db: $db,
+              $table: $db.fieldListNotes,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> sessionsRefs(
+      Expression<bool> Function($$SessionsTableFilterComposer f) f) {
+    final $$SessionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.fieldListId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableFilterComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$FieldListsTableOrderingComposer
+    extends Composer<_$AppDatabase, $FieldListsTable> {
+  $$FieldListsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get languageTag => $composableBuilder(
+      column: $table.languageTag, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get checkType => $composableBuilder(
+      column: $table.checkType, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get sortBy => $composableBuilder(
+      column: $table.sortBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get doesReadAnswer => $composableBuilder(
+      column: $table.doesReadAnswer,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get usageCount => $composableBuilder(
+      column: $table.usageCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get emulationNumberOfQuestions => $composableBuilder(
+      column: $table.emulationNumberOfQuestions,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get emulationDays => $composableBuilder(
+      column: $table.emulationDays,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get testsReadingQuestionLetterDuration =>
+      $composableBuilder(
+          column: $table.testsReadingQuestionLetterDuration,
+          builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get testsFindingAnswerDuration => $composableBuilder(
+      column: $table.testsFindingAnswerDuration,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get testsTypingAnswerLetterDuration =>
+      $composableBuilder(
+          column: $table.testsTypingAnswerLetterDuration,
+          builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get studyTillCorrectReadingQuestionLetterDuration =>
+      $composableBuilder(
+          column: $table.studyTillCorrectReadingQuestionLetterDuration,
+          builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get studyTillCorrectFindingAnswerDuration =>
+      $composableBuilder(
+          column: $table.studyTillCorrectFindingAnswerDuration,
+          builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get studyTillCorrectTypingAnswerLetterDuration =>
+      $composableBuilder(
+          column: $table.studyTillCorrectTypingAnswerLetterDuration,
+          builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get testsTimeOfAnswerAction => $composableBuilder(
+      column: $table.testsTimeOfAnswerAction,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get doesObfuscateQuestion => $composableBuilder(
+      column: $table.doesObfuscateQuestion,
+      builder: (column) => ColumnOrderings(column));
+
+  $$FieldsTableOrderingComposer get fieldId {
+    final $$FieldsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldId,
+        referencedTable: $db.fields,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldsTableOrderingComposer(
+              $db: $db,
+              $table: $db.fields,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$FieldListsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FieldListsTable> {
+  $$FieldListsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt, builder: (column) => column);
+
+  GeneratedColumn<String> get languageTag => $composableBuilder(
+      column: $table.languageTag, builder: (column) => column);
+
+  GeneratedColumn<int> get checkType =>
+      $composableBuilder(column: $table.checkType, builder: (column) => column);
+
+  GeneratedColumn<int> get sortBy =>
+      $composableBuilder(column: $table.sortBy, builder: (column) => column);
+
+  GeneratedColumn<bool> get doesReadAnswer => $composableBuilder(
+      column: $table.doesReadAnswer, builder: (column) => column);
+
+  GeneratedColumn<int> get usageCount => $composableBuilder(
+      column: $table.usageCount, builder: (column) => column);
+
+  GeneratedColumn<int> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<int> get emulationNumberOfQuestions => $composableBuilder(
+      column: $table.emulationNumberOfQuestions, builder: (column) => column);
+
+  GeneratedColumn<String> get emulationDays => $composableBuilder(
+      column: $table.emulationDays, builder: (column) => column);
+
+  GeneratedColumn<int> get testsReadingQuestionLetterDuration =>
+      $composableBuilder(
+          column: $table.testsReadingQuestionLetterDuration,
+          builder: (column) => column);
+
+  GeneratedColumn<int> get testsFindingAnswerDuration => $composableBuilder(
+      column: $table.testsFindingAnswerDuration, builder: (column) => column);
+
+  GeneratedColumn<int> get testsTypingAnswerLetterDuration =>
+      $composableBuilder(
+          column: $table.testsTypingAnswerLetterDuration,
+          builder: (column) => column);
+
+  GeneratedColumn<int> get studyTillCorrectReadingQuestionLetterDuration =>
+      $composableBuilder(
+          column: $table.studyTillCorrectReadingQuestionLetterDuration,
+          builder: (column) => column);
+
+  GeneratedColumn<int> get studyTillCorrectFindingAnswerDuration =>
+      $composableBuilder(
+          column: $table.studyTillCorrectFindingAnswerDuration,
+          builder: (column) => column);
+
+  GeneratedColumn<int> get studyTillCorrectTypingAnswerLetterDuration =>
+      $composableBuilder(
+          column: $table.studyTillCorrectTypingAnswerLetterDuration,
+          builder: (column) => column);
+
+  GeneratedColumn<int> get testsTimeOfAnswerAction => $composableBuilder(
+      column: $table.testsTimeOfAnswerAction, builder: (column) => column);
+
+  GeneratedColumn<bool> get doesObfuscateQuestion => $composableBuilder(
+      column: $table.doesObfuscateQuestion, builder: (column) => column);
+
+  $$FieldsTableAnnotationComposer get fieldId {
+    final $$FieldsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldId,
+        referencedTable: $db.fields,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.fields,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> entrysRefs<T extends Object>(
+      Expression<T> Function($$EntrysTableAnnotationComposer a) f) {
+    final $$EntrysTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.fieldListId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableAnnotationComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> fieldListNotesRefs<T extends Object>(
+      Expression<T> Function($$FieldListNotesTableAnnotationComposer a) f) {
+    final $$FieldListNotesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.fieldListNotes,
+        getReferencedColumn: (t) => t.fieldListId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListNotesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.fieldListNotes,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> sessionsRefs<T extends Object>(
+      Expression<T> Function($$SessionsTableAnnotationComposer a) f) {
+    final $$SessionsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.fieldListId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$FieldListsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $FieldListsTable,
+    FieldList,
+    $$FieldListsTableFilterComposer,
+    $$FieldListsTableOrderingComposer,
+    $$FieldListsTableAnnotationComposer,
+    $$FieldListsTableCreateCompanionBuilder,
+    $$FieldListsTableUpdateCompanionBuilder,
+    (FieldList, $$FieldListsTableReferences),
+    FieldList,
+    PrefetchHooks Function(
+        {bool fieldId,
+        bool entrysRefs,
+        bool fieldListNotesRefs,
+        bool sessionsRefs})> {
+  $$FieldListsTableTableManager(_$AppDatabase db, $FieldListsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FieldListsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FieldListsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FieldListsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> fieldId = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<DateTime> creationAt = const Value.absent(),
+            Value<DateTime> lastModificationAt = const Value.absent(),
+            Value<String?> languageTag = const Value.absent(),
+            Value<int> checkType = const Value.absent(),
+            Value<int> sortBy = const Value.absent(),
+            Value<bool> doesReadAnswer = const Value.absent(),
+            Value<int> usageCount = const Value.absent(),
+            Value<int> color = const Value.absent(),
+            Value<int?> emulationNumberOfQuestions = const Value.absent(),
+            Value<String?> emulationDays = const Value.absent(),
+            Value<int?> testsReadingQuestionLetterDuration =
+                const Value.absent(),
+            Value<int?> testsFindingAnswerDuration = const Value.absent(),
+            Value<int?> testsTypingAnswerLetterDuration = const Value.absent(),
+            Value<int?> studyTillCorrectReadingQuestionLetterDuration =
+                const Value.absent(),
+            Value<int?> studyTillCorrectFindingAnswerDuration =
+                const Value.absent(),
+            Value<int?> studyTillCorrectTypingAnswerLetterDuration =
+                const Value.absent(),
+            Value<int> testsTimeOfAnswerAction = const Value.absent(),
+            Value<bool> doesObfuscateQuestion = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FieldListsCompanion(
+            id: id,
+            fieldId: fieldId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            languageTag: languageTag,
+            checkType: checkType,
+            sortBy: sortBy,
+            doesReadAnswer: doesReadAnswer,
+            usageCount: usageCount,
+            color: color,
+            emulationNumberOfQuestions: emulationNumberOfQuestions,
+            emulationDays: emulationDays,
+            testsReadingQuestionLetterDuration:
+                testsReadingQuestionLetterDuration,
+            testsFindingAnswerDuration: testsFindingAnswerDuration,
+            testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+            studyTillCorrectReadingQuestionLetterDuration:
+                studyTillCorrectReadingQuestionLetterDuration,
+            studyTillCorrectFindingAnswerDuration:
+                studyTillCorrectFindingAnswerDuration,
+            studyTillCorrectTypingAnswerLetterDuration:
+                studyTillCorrectTypingAnswerLetterDuration,
+            testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+            doesObfuscateQuestion: doesObfuscateQuestion,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            required String fieldId,
+            required String name,
+            required DateTime creationAt,
+            required DateTime lastModificationAt,
+            Value<String?> languageTag = const Value.absent(),
+            Value<int> checkType = const Value.absent(),
+            Value<int> sortBy = const Value.absent(),
+            Value<bool> doesReadAnswer = const Value.absent(),
+            Value<int> usageCount = const Value.absent(),
+            Value<int> color = const Value.absent(),
+            Value<int?> emulationNumberOfQuestions = const Value.absent(),
+            Value<String?> emulationDays = const Value.absent(),
+            Value<int?> testsReadingQuestionLetterDuration =
+                const Value.absent(),
+            Value<int?> testsFindingAnswerDuration = const Value.absent(),
+            Value<int?> testsTypingAnswerLetterDuration = const Value.absent(),
+            Value<int?> studyTillCorrectReadingQuestionLetterDuration =
+                const Value.absent(),
+            Value<int?> studyTillCorrectFindingAnswerDuration =
+                const Value.absent(),
+            Value<int?> studyTillCorrectTypingAnswerLetterDuration =
+                const Value.absent(),
+            Value<int> testsTimeOfAnswerAction = const Value.absent(),
+            Value<bool> doesObfuscateQuestion = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FieldListsCompanion.insert(
+            id: id,
+            fieldId: fieldId,
+            name: name,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            languageTag: languageTag,
+            checkType: checkType,
+            sortBy: sortBy,
+            doesReadAnswer: doesReadAnswer,
+            usageCount: usageCount,
+            color: color,
+            emulationNumberOfQuestions: emulationNumberOfQuestions,
+            emulationDays: emulationDays,
+            testsReadingQuestionLetterDuration:
+                testsReadingQuestionLetterDuration,
+            testsFindingAnswerDuration: testsFindingAnswerDuration,
+            testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+            studyTillCorrectReadingQuestionLetterDuration:
+                studyTillCorrectReadingQuestionLetterDuration,
+            studyTillCorrectFindingAnswerDuration:
+                studyTillCorrectFindingAnswerDuration,
+            studyTillCorrectTypingAnswerLetterDuration:
+                studyTillCorrectTypingAnswerLetterDuration,
+            testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+            doesObfuscateQuestion: doesObfuscateQuestion,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$FieldListsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: (
+              {fieldId = false,
+              entrysRefs = false,
+              fieldListNotesRefs = false,
+              sessionsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (entrysRefs) db.entrys,
+                if (fieldListNotesRefs) db.fieldListNotes,
+                if (sessionsRefs) db.sessions
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (fieldId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.fieldId,
+                    referencedTable:
+                        $$FieldListsTableReferences._fieldIdTable(db),
+                    referencedColumn:
+                        $$FieldListsTableReferences._fieldIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (entrysRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$FieldListsTableReferences._entrysRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$FieldListsTableReferences(db, table, p0)
+                                .entrysRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.fieldListId == item.id),
+                        typedResults: items),
+                  if (fieldListNotesRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$FieldListsTableReferences
+                            ._fieldListNotesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$FieldListsTableReferences(db, table, p0)
+                                .fieldListNotesRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.fieldListId == item.id),
+                        typedResults: items),
+                  if (sessionsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$FieldListsTableReferences._sessionsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$FieldListsTableReferences(db, table, p0)
+                                .sessionsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.fieldListId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$FieldListsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $FieldListsTable,
+    FieldList,
+    $$FieldListsTableFilterComposer,
+    $$FieldListsTableOrderingComposer,
+    $$FieldListsTableAnnotationComposer,
+    $$FieldListsTableCreateCompanionBuilder,
+    $$FieldListsTableUpdateCompanionBuilder,
+    (FieldList, $$FieldListsTableReferences),
+    FieldList,
+    PrefetchHooks Function(
+        {bool fieldId,
+        bool entrysRefs,
+        bool fieldListNotesRefs,
+        bool sessionsRefs})>;
+typedef $$EntrysTableCreateCompanionBuilder = EntrysCompanion Function({
+  Value<String> id,
+  required String fieldListId,
+  required String answerId,
+  required String questionId,
+  required DateTime creationAt,
+  required DateTime lastModificationAt,
+  required int order,
+  required bool didAskedAtCurrentTestRound,
+  required DateTime emulatedCreatedAt,
+  required int rank,
+  required int askedCount,
+  required int wronglyAnsweredCount,
+  Value<int> rowid,
+});
+typedef $$EntrysTableUpdateCompanionBuilder = EntrysCompanion Function({
+  Value<String> id,
+  Value<String> fieldListId,
+  Value<String> answerId,
+  Value<String> questionId,
+  Value<DateTime> creationAt,
+  Value<DateTime> lastModificationAt,
+  Value<int> order,
+  Value<bool> didAskedAtCurrentTestRound,
+  Value<DateTime> emulatedCreatedAt,
+  Value<int> rank,
+  Value<int> askedCount,
+  Value<int> wronglyAnsweredCount,
+  Value<int> rowid,
+});
+
+final class $$EntrysTableReferences
+    extends BaseReferences<_$AppDatabase, $EntrysTable, Entry> {
+  $$EntrysTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $FieldListsTable _fieldListIdTable(_$AppDatabase db) =>
+      db.fieldLists.createAlias(
+          $_aliasNameGenerator(db.entrys.fieldListId, db.fieldLists.id));
+
+  $$FieldListsTableProcessedTableManager get fieldListId {
+    final manager = $$FieldListsTableTableManager($_db, $_db.fieldLists)
+        .filter((f) => f.id($_item.fieldListId!));
+    final item = $_typedResult.readTableOrNull(_fieldListIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $EntryTextsTable _answerIdTable(_$AppDatabase db) => db.entryTexts
+      .createAlias($_aliasNameGenerator(db.entrys.answerId, db.entryTexts.id));
+
+  $$EntryTextsTableProcessedTableManager get answerId {
+    final manager = $$EntryTextsTableTableManager($_db, $_db.entryTexts)
+        .filter((f) => f.id($_item.answerId!));
+    final item = $_typedResult.readTableOrNull(_answerIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $QuestionsTable _questionIdTable(_$AppDatabase db) => db.questions
+      .createAlias($_aliasNameGenerator(db.entrys.questionId, db.questions.id));
+
+  $$QuestionsTableProcessedTableManager get questionId {
+    final manager = $$QuestionsTableTableManager($_db, $_db.questions)
+        .filter((f) => f.id($_item.questionId!));
+    final item = $_typedResult.readTableOrNull(_questionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$SessionEntrysTable, List<SessionEntry>>
+      _sessionEntrysRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.sessionEntrys,
+              aliasName:
+                  $_aliasNameGenerator(db.entrys.id, db.sessionEntrys.entryId));
+
+  $$SessionEntrysTableProcessedTableManager get sessionEntrysRefs {
+    final manager = $$SessionEntrysTableTableManager($_db, $_db.sessionEntrys)
+        .filter((f) => f.entryId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_sessionEntrysRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$WrongAnswersTable, List<WrongAnswer>>
+      _wrongAnswersRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.wrongAnswers,
+              aliasName:
+                  $_aliasNameGenerator(db.entrys.id, db.wrongAnswers.entryId));
+
+  $$WrongAnswersTableProcessedTableManager get wrongAnswersRefs {
+    final manager = $$WrongAnswersTableTableManager($_db, $_db.wrongAnswers)
+        .filter((f) => f.entryId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_wrongAnswersRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$EntrysTableFilterComposer
+    extends Composer<_$AppDatabase, $EntrysTable> {
+  $$EntrysTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get order => $composableBuilder(
+      column: $table.order, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get didAskedAtCurrentTestRound => $composableBuilder(
+      column: $table.didAskedAtCurrentTestRound,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get emulatedCreatedAt => $composableBuilder(
+      column: $table.emulatedCreatedAt,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get rank => $composableBuilder(
+      column: $table.rank, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get askedCount => $composableBuilder(
+      column: $table.askedCount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get wronglyAnsweredCount => $composableBuilder(
+      column: $table.wronglyAnsweredCount,
+      builder: (column) => ColumnFilters(column));
+
+  $$FieldListsTableFilterComposer get fieldListId {
+    final $$FieldListsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldListId,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableFilterComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$EntryTextsTableFilterComposer get answerId {
+    final $$EntryTextsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.answerId,
+        referencedTable: $db.entryTexts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntryTextsTableFilterComposer(
+              $db: $db,
+              $table: $db.entryTexts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$QuestionsTableFilterComposer get questionId {
+    final $$QuestionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.questionId,
+        referencedTable: $db.questions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$QuestionsTableFilterComposer(
+              $db: $db,
+              $table: $db.questions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> sessionEntrysRefs(
+      Expression<bool> Function($$SessionEntrysTableFilterComposer f) f) {
+    final $$SessionEntrysTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.sessionEntrys,
+        getReferencedColumn: (t) => t.entryId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionEntrysTableFilterComposer(
+              $db: $db,
+              $table: $db.sessionEntrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> wrongAnswersRefs(
+      Expression<bool> Function($$WrongAnswersTableFilterComposer f) f) {
+    final $$WrongAnswersTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.wrongAnswers,
+        getReferencedColumn: (t) => t.entryId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$WrongAnswersTableFilterComposer(
+              $db: $db,
+              $table: $db.wrongAnswers,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$EntrysTableOrderingComposer
+    extends Composer<_$AppDatabase, $EntrysTable> {
+  $$EntrysTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get order => $composableBuilder(
+      column: $table.order, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get didAskedAtCurrentTestRound => $composableBuilder(
+      column: $table.didAskedAtCurrentTestRound,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get emulatedCreatedAt => $composableBuilder(
+      column: $table.emulatedCreatedAt,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get rank => $composableBuilder(
+      column: $table.rank, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get askedCount => $composableBuilder(
+      column: $table.askedCount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get wronglyAnsweredCount => $composableBuilder(
+      column: $table.wronglyAnsweredCount,
+      builder: (column) => ColumnOrderings(column));
+
+  $$FieldListsTableOrderingComposer get fieldListId {
+    final $$FieldListsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldListId,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableOrderingComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$EntryTextsTableOrderingComposer get answerId {
+    final $$EntryTextsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.answerId,
+        referencedTable: $db.entryTexts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntryTextsTableOrderingComposer(
+              $db: $db,
+              $table: $db.entryTexts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$QuestionsTableOrderingComposer get questionId {
+    final $$QuestionsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.questionId,
+        referencedTable: $db.questions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$QuestionsTableOrderingComposer(
+              $db: $db,
+              $table: $db.questions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$EntrysTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EntrysTable> {
+  $$EntrysTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt, builder: (column) => column);
+
+  GeneratedColumn<int> get order =>
+      $composableBuilder(column: $table.order, builder: (column) => column);
+
+  GeneratedColumn<bool> get didAskedAtCurrentTestRound => $composableBuilder(
+      column: $table.didAskedAtCurrentTestRound, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get emulatedCreatedAt => $composableBuilder(
+      column: $table.emulatedCreatedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get rank =>
+      $composableBuilder(column: $table.rank, builder: (column) => column);
+
+  GeneratedColumn<int> get askedCount => $composableBuilder(
+      column: $table.askedCount, builder: (column) => column);
+
+  GeneratedColumn<int> get wronglyAnsweredCount => $composableBuilder(
+      column: $table.wronglyAnsweredCount, builder: (column) => column);
+
+  $$FieldListsTableAnnotationComposer get fieldListId {
+    final $$FieldListsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldListId,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$EntryTextsTableAnnotationComposer get answerId {
+    final $$EntryTextsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.answerId,
+        referencedTable: $db.entryTexts,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntryTextsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.entryTexts,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$QuestionsTableAnnotationComposer get questionId {
+    final $$QuestionsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.questionId,
+        referencedTable: $db.questions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$QuestionsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.questions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> sessionEntrysRefs<T extends Object>(
+      Expression<T> Function($$SessionEntrysTableAnnotationComposer a) f) {
+    final $$SessionEntrysTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.sessionEntrys,
+        getReferencedColumn: (t) => t.entryId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionEntrysTableAnnotationComposer(
+              $db: $db,
+              $table: $db.sessionEntrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> wrongAnswersRefs<T extends Object>(
+      Expression<T> Function($$WrongAnswersTableAnnotationComposer a) f) {
+    final $$WrongAnswersTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.wrongAnswers,
+        getReferencedColumn: (t) => t.entryId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$WrongAnswersTableAnnotationComposer(
+              $db: $db,
+              $table: $db.wrongAnswers,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$EntrysTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $EntrysTable,
+    Entry,
+    $$EntrysTableFilterComposer,
+    $$EntrysTableOrderingComposer,
+    $$EntrysTableAnnotationComposer,
+    $$EntrysTableCreateCompanionBuilder,
+    $$EntrysTableUpdateCompanionBuilder,
+    (Entry, $$EntrysTableReferences),
+    Entry,
+    PrefetchHooks Function(
+        {bool fieldListId,
+        bool answerId,
+        bool questionId,
+        bool sessionEntrysRefs,
+        bool wrongAnswersRefs})> {
+  $$EntrysTableTableManager(_$AppDatabase db, $EntrysTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$EntrysTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EntrysTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EntrysTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> fieldListId = const Value.absent(),
+            Value<String> answerId = const Value.absent(),
+            Value<String> questionId = const Value.absent(),
+            Value<DateTime> creationAt = const Value.absent(),
+            Value<DateTime> lastModificationAt = const Value.absent(),
+            Value<int> order = const Value.absent(),
+            Value<bool> didAskedAtCurrentTestRound = const Value.absent(),
+            Value<DateTime> emulatedCreatedAt = const Value.absent(),
+            Value<int> rank = const Value.absent(),
+            Value<int> askedCount = const Value.absent(),
+            Value<int> wronglyAnsweredCount = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              EntrysCompanion(
+            id: id,
+            fieldListId: fieldListId,
+            answerId: answerId,
+            questionId: questionId,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            order: order,
+            didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+            emulatedCreatedAt: emulatedCreatedAt,
+            rank: rank,
+            askedCount: askedCount,
+            wronglyAnsweredCount: wronglyAnsweredCount,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            required String fieldListId,
+            required String answerId,
+            required String questionId,
+            required DateTime creationAt,
+            required DateTime lastModificationAt,
+            required int order,
+            required bool didAskedAtCurrentTestRound,
+            required DateTime emulatedCreatedAt,
+            required int rank,
+            required int askedCount,
+            required int wronglyAnsweredCount,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              EntrysCompanion.insert(
+            id: id,
+            fieldListId: fieldListId,
+            answerId: answerId,
+            questionId: questionId,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            order: order,
+            didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+            emulatedCreatedAt: emulatedCreatedAt,
+            rank: rank,
+            askedCount: askedCount,
+            wronglyAnsweredCount: wronglyAnsweredCount,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$EntrysTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: (
+              {fieldListId = false,
+              answerId = false,
+              questionId = false,
+              sessionEntrysRefs = false,
+              wrongAnswersRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (sessionEntrysRefs) db.sessionEntrys,
+                if (wrongAnswersRefs) db.wrongAnswers
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (fieldListId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.fieldListId,
+                    referencedTable:
+                        $$EntrysTableReferences._fieldListIdTable(db),
+                    referencedColumn:
+                        $$EntrysTableReferences._fieldListIdTable(db).id,
+                  ) as T;
+                }
+                if (answerId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.answerId,
+                    referencedTable: $$EntrysTableReferences._answerIdTable(db),
+                    referencedColumn:
+                        $$EntrysTableReferences._answerIdTable(db).id,
+                  ) as T;
+                }
+                if (questionId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.questionId,
+                    referencedTable:
+                        $$EntrysTableReferences._questionIdTable(db),
+                    referencedColumn:
+                        $$EntrysTableReferences._questionIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (sessionEntrysRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$EntrysTableReferences._sessionEntrysRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$EntrysTableReferences(db, table, p0)
+                                .sessionEntrysRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.entryId == item.id),
+                        typedResults: items),
+                  if (wrongAnswersRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable:
+                            $$EntrysTableReferences._wrongAnswersRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$EntrysTableReferences(db, table, p0)
+                                .wrongAnswersRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.entryId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$EntrysTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $EntrysTable,
+    Entry,
+    $$EntrysTableFilterComposer,
+    $$EntrysTableOrderingComposer,
+    $$EntrysTableAnnotationComposer,
+    $$EntrysTableCreateCompanionBuilder,
+    $$EntrysTableUpdateCompanionBuilder,
+    (Entry, $$EntrysTableReferences),
+    Entry,
+    PrefetchHooks Function(
+        {bool fieldListId,
+        bool answerId,
+        bool questionId,
+        bool sessionEntrysRefs,
+        bool wrongAnswersRefs})>;
+typedef $$FieldNotesTableCreateCompanionBuilder = FieldNotesCompanion Function({
+  Value<String> id,
+  required String fieldId,
+  required String texT,
+  required DateTime creationAt,
+  required DateTime lastModificationAt,
+  Value<int> rowid,
+});
+typedef $$FieldNotesTableUpdateCompanionBuilder = FieldNotesCompanion Function({
+  Value<String> id,
+  Value<String> fieldId,
+  Value<String> texT,
+  Value<DateTime> creationAt,
+  Value<DateTime> lastModificationAt,
+  Value<int> rowid,
+});
+
+final class $$FieldNotesTableReferences
+    extends BaseReferences<_$AppDatabase, $FieldNotesTable, FieldNote> {
+  $$FieldNotesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $FieldsTable _fieldIdTable(_$AppDatabase db) => db.fields
+      .createAlias($_aliasNameGenerator(db.fieldNotes.fieldId, db.fields.id));
+
+  $$FieldsTableProcessedTableManager get fieldId {
+    final manager = $$FieldsTableTableManager($_db, $_db.fields)
+        .filter((f) => f.id($_item.fieldId!));
+    final item = $_typedResult.readTableOrNull(_fieldIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$FieldNotesTableFilterComposer
+    extends Composer<_$AppDatabase, $FieldNotesTable> {
+  $$FieldNotesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get texT => $composableBuilder(
+      column: $table.texT, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnFilters(column));
+
+  $$FieldsTableFilterComposer get fieldId {
+    final $$FieldsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldId,
+        referencedTable: $db.fields,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldsTableFilterComposer(
+              $db: $db,
+              $table: $db.fields,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$FieldNotesTableOrderingComposer
+    extends Composer<_$AppDatabase, $FieldNotesTable> {
+  $$FieldNotesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get texT => $composableBuilder(
+      column: $table.texT, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnOrderings(column));
+
+  $$FieldsTableOrderingComposer get fieldId {
+    final $$FieldsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldId,
+        referencedTable: $db.fields,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldsTableOrderingComposer(
+              $db: $db,
+              $table: $db.fields,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$FieldNotesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FieldNotesTable> {
+  $$FieldNotesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get texT =>
+      $composableBuilder(column: $table.texT, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt, builder: (column) => column);
+
+  $$FieldsTableAnnotationComposer get fieldId {
+    final $$FieldsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldId,
+        referencedTable: $db.fields,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.fields,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$FieldNotesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $FieldNotesTable,
+    FieldNote,
+    $$FieldNotesTableFilterComposer,
+    $$FieldNotesTableOrderingComposer,
+    $$FieldNotesTableAnnotationComposer,
+    $$FieldNotesTableCreateCompanionBuilder,
+    $$FieldNotesTableUpdateCompanionBuilder,
+    (FieldNote, $$FieldNotesTableReferences),
+    FieldNote,
+    PrefetchHooks Function({bool fieldId})> {
+  $$FieldNotesTableTableManager(_$AppDatabase db, $FieldNotesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FieldNotesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FieldNotesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FieldNotesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> fieldId = const Value.absent(),
+            Value<String> texT = const Value.absent(),
+            Value<DateTime> creationAt = const Value.absent(),
+            Value<DateTime> lastModificationAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FieldNotesCompanion(
+            id: id,
+            fieldId: fieldId,
+            texT: texT,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            required String fieldId,
+            required String texT,
+            required DateTime creationAt,
+            required DateTime lastModificationAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FieldNotesCompanion.insert(
+            id: id,
+            fieldId: fieldId,
+            texT: texT,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$FieldNotesTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({fieldId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (fieldId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.fieldId,
+                    referencedTable:
+                        $$FieldNotesTableReferences._fieldIdTable(db),
+                    referencedColumn:
+                        $$FieldNotesTableReferences._fieldIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$FieldNotesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $FieldNotesTable,
+    FieldNote,
+    $$FieldNotesTableFilterComposer,
+    $$FieldNotesTableOrderingComposer,
+    $$FieldNotesTableAnnotationComposer,
+    $$FieldNotesTableCreateCompanionBuilder,
+    $$FieldNotesTableUpdateCompanionBuilder,
+    (FieldNote, $$FieldNotesTableReferences),
+    FieldNote,
+    PrefetchHooks Function({bool fieldId})>;
+typedef $$FieldListNotesTableCreateCompanionBuilder = FieldListNotesCompanion
+    Function({
+  Value<String> id,
+  required String fieldListId,
+  required String texT,
+  required DateTime creationAt,
+  required DateTime lastModificationAt,
+  Value<int> rowid,
+});
+typedef $$FieldListNotesTableUpdateCompanionBuilder = FieldListNotesCompanion
+    Function({
+  Value<String> id,
+  Value<String> fieldListId,
+  Value<String> texT,
+  Value<DateTime> creationAt,
+  Value<DateTime> lastModificationAt,
+  Value<int> rowid,
+});
+
+final class $$FieldListNotesTableReferences
+    extends BaseReferences<_$AppDatabase, $FieldListNotesTable, FieldListNote> {
+  $$FieldListNotesTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $FieldListsTable _fieldListIdTable(_$AppDatabase db) =>
+      db.fieldLists.createAlias($_aliasNameGenerator(
+          db.fieldListNotes.fieldListId, db.fieldLists.id));
+
+  $$FieldListsTableProcessedTableManager get fieldListId {
+    final manager = $$FieldListsTableTableManager($_db, $_db.fieldLists)
+        .filter((f) => f.id($_item.fieldListId!));
+    final item = $_typedResult.readTableOrNull(_fieldListIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$FieldListNotesTableFilterComposer
+    extends Composer<_$AppDatabase, $FieldListNotesTable> {
+  $$FieldListNotesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get texT => $composableBuilder(
+      column: $table.texT, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnFilters(column));
+
+  $$FieldListsTableFilterComposer get fieldListId {
+    final $$FieldListsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldListId,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableFilterComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$FieldListNotesTableOrderingComposer
+    extends Composer<_$AppDatabase, $FieldListNotesTable> {
+  $$FieldListNotesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get texT => $composableBuilder(
+      column: $table.texT, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnOrderings(column));
+
+  $$FieldListsTableOrderingComposer get fieldListId {
+    final $$FieldListsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldListId,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableOrderingComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$FieldListNotesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FieldListNotesTable> {
+  $$FieldListNotesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get texT =>
+      $composableBuilder(column: $table.texT, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt, builder: (column) => column);
+
+  $$FieldListsTableAnnotationComposer get fieldListId {
+    final $$FieldListsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldListId,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$FieldListNotesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $FieldListNotesTable,
+    FieldListNote,
+    $$FieldListNotesTableFilterComposer,
+    $$FieldListNotesTableOrderingComposer,
+    $$FieldListNotesTableAnnotationComposer,
+    $$FieldListNotesTableCreateCompanionBuilder,
+    $$FieldListNotesTableUpdateCompanionBuilder,
+    (FieldListNote, $$FieldListNotesTableReferences),
+    FieldListNote,
+    PrefetchHooks Function({bool fieldListId})> {
+  $$FieldListNotesTableTableManager(
+      _$AppDatabase db, $FieldListNotesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FieldListNotesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FieldListNotesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FieldListNotesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> fieldListId = const Value.absent(),
+            Value<String> texT = const Value.absent(),
+            Value<DateTime> creationAt = const Value.absent(),
+            Value<DateTime> lastModificationAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FieldListNotesCompanion(
+            id: id,
+            fieldListId: fieldListId,
+            texT: texT,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            required String fieldListId,
+            required String texT,
+            required DateTime creationAt,
+            required DateTime lastModificationAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FieldListNotesCompanion.insert(
+            id: id,
+            fieldListId: fieldListId,
+            texT: texT,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$FieldListNotesTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({fieldListId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (fieldListId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.fieldListId,
+                    referencedTable:
+                        $$FieldListNotesTableReferences._fieldListIdTable(db),
+                    referencedColumn: $$FieldListNotesTableReferences
+                        ._fieldListIdTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$FieldListNotesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $FieldListNotesTable,
+    FieldListNote,
+    $$FieldListNotesTableFilterComposer,
+    $$FieldListNotesTableOrderingComposer,
+    $$FieldListNotesTableAnnotationComposer,
+    $$FieldListNotesTableCreateCompanionBuilder,
+    $$FieldListNotesTableUpdateCompanionBuilder,
+    (FieldListNote, $$FieldListNotesTableReferences),
+    FieldListNote,
+    PrefetchHooks Function({bool fieldListId})>;
+typedef $$SessionsTableCreateCompanionBuilder = SessionsCompanion Function({
+  Value<String> id,
+  required String fieldListId,
+  required int currentQuestionCounter,
+  required int triesNumber,
+  Value<int> triesCounter,
+  required int elapsedTime,
+  Value<bool> isCompleted,
+  Value<bool> lastCheckedAnswerResult,
+  Value<bool> shouldCheckAnAnswer,
+  Value<int> currentHintCounter,
+  required DateTime creationAt,
+  required DateTime lastModificationAt,
+  Value<int> rowid,
+});
+typedef $$SessionsTableUpdateCompanionBuilder = SessionsCompanion Function({
+  Value<String> id,
+  Value<String> fieldListId,
+  Value<int> currentQuestionCounter,
+  Value<int> triesNumber,
+  Value<int> triesCounter,
+  Value<int> elapsedTime,
+  Value<bool> isCompleted,
+  Value<bool> lastCheckedAnswerResult,
+  Value<bool> shouldCheckAnAnswer,
+  Value<int> currentHintCounter,
+  Value<DateTime> creationAt,
+  Value<DateTime> lastModificationAt,
+  Value<int> rowid,
+});
+
+final class $$SessionsTableReferences
+    extends BaseReferences<_$AppDatabase, $SessionsTable, Session> {
+  $$SessionsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $FieldListsTable _fieldListIdTable(_$AppDatabase db) =>
+      db.fieldLists.createAlias(
+          $_aliasNameGenerator(db.sessions.fieldListId, db.fieldLists.id));
+
+  $$FieldListsTableProcessedTableManager get fieldListId {
+    final manager = $$FieldListsTableTableManager($_db, $_db.fieldLists)
+        .filter((f) => f.id($_item.fieldListId!));
+    final item = $_typedResult.readTableOrNull(_fieldListIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$SessionEntrysTable, List<SessionEntry>>
+      _sessionEntrysRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.sessionEntrys,
+              aliasName: $_aliasNameGenerator(
+                  db.sessions.id, db.sessionEntrys.sessionId));
+
+  $$SessionEntrysTableProcessedTableManager get sessionEntrysRefs {
+    final manager = $$SessionEntrysTableTableManager($_db, $_db.sessionEntrys)
+        .filter((f) => f.sessionId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_sessionEntrysRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$TestSessionsTable, List<TestSession>>
+      _testSessionsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+          db.testSessions,
+          aliasName:
+              $_aliasNameGenerator(db.sessions.id, db.testSessions.sessionId));
+
+  $$TestSessionsTableProcessedTableManager get testSessionsRefs {
+    final manager = $$TestSessionsTableTableManager($_db, $_db.testSessions)
+        .filter((f) => f.sessionId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_testSessionsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$WrongAnswersTable, List<WrongAnswer>>
+      _wrongAnswersRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+          db.wrongAnswers,
+          aliasName:
+              $_aliasNameGenerator(db.sessions.id, db.wrongAnswers.sessionId));
+
+  $$WrongAnswersTableProcessedTableManager get wrongAnswersRefs {
+    final manager = $$WrongAnswersTableTableManager($_db, $_db.wrongAnswers)
+        .filter((f) => f.sessionId.id($_item.id));
+
+    final cache = $_typedResult.readTableOrNull(_wrongAnswersRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$SessionsTableFilterComposer
+    extends Composer<_$AppDatabase, $SessionsTable> {
+  $$SessionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get currentQuestionCounter => $composableBuilder(
+      column: $table.currentQuestionCounter,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get triesNumber => $composableBuilder(
+      column: $table.triesNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get triesCounter => $composableBuilder(
+      column: $table.triesCounter, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get elapsedTime => $composableBuilder(
+      column: $table.elapsedTime, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isCompleted => $composableBuilder(
+      column: $table.isCompleted, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get lastCheckedAnswerResult => $composableBuilder(
+      column: $table.lastCheckedAnswerResult,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get shouldCheckAnAnswer => $composableBuilder(
+      column: $table.shouldCheckAnAnswer,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get currentHintCounter => $composableBuilder(
+      column: $table.currentHintCounter,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnFilters(column));
+
+  $$FieldListsTableFilterComposer get fieldListId {
+    final $$FieldListsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldListId,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableFilterComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> sessionEntrysRefs(
+      Expression<bool> Function($$SessionEntrysTableFilterComposer f) f) {
+    final $$SessionEntrysTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.sessionEntrys,
+        getReferencedColumn: (t) => t.sessionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionEntrysTableFilterComposer(
+              $db: $db,
+              $table: $db.sessionEntrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> testSessionsRefs(
+      Expression<bool> Function($$TestSessionsTableFilterComposer f) f) {
+    final $$TestSessionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.testSessions,
+        getReferencedColumn: (t) => t.sessionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$TestSessionsTableFilterComposer(
+              $db: $db,
+              $table: $db.testSessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> wrongAnswersRefs(
+      Expression<bool> Function($$WrongAnswersTableFilterComposer f) f) {
+    final $$WrongAnswersTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.wrongAnswers,
+        getReferencedColumn: (t) => t.sessionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$WrongAnswersTableFilterComposer(
+              $db: $db,
+              $table: $db.wrongAnswers,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$SessionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $SessionsTable> {
+  $$SessionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get currentQuestionCounter => $composableBuilder(
+      column: $table.currentQuestionCounter,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get triesNumber => $composableBuilder(
+      column: $table.triesNumber, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get triesCounter => $composableBuilder(
+      column: $table.triesCounter,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get elapsedTime => $composableBuilder(
+      column: $table.elapsedTime, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isCompleted => $composableBuilder(
+      column: $table.isCompleted, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get lastCheckedAnswerResult => $composableBuilder(
+      column: $table.lastCheckedAnswerResult,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get shouldCheckAnAnswer => $composableBuilder(
+      column: $table.shouldCheckAnAnswer,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get currentHintCounter => $composableBuilder(
+      column: $table.currentHintCounter,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt,
+      builder: (column) => ColumnOrderings(column));
+
+  $$FieldListsTableOrderingComposer get fieldListId {
+    final $$FieldListsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldListId,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableOrderingComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$SessionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SessionsTable> {
+  $$SessionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get currentQuestionCounter => $composableBuilder(
+      column: $table.currentQuestionCounter, builder: (column) => column);
+
+  GeneratedColumn<int> get triesNumber => $composableBuilder(
+      column: $table.triesNumber, builder: (column) => column);
+
+  GeneratedColumn<int> get triesCounter => $composableBuilder(
+      column: $table.triesCounter, builder: (column) => column);
+
+  GeneratedColumn<int> get elapsedTime => $composableBuilder(
+      column: $table.elapsedTime, builder: (column) => column);
+
+  GeneratedColumn<bool> get isCompleted => $composableBuilder(
+      column: $table.isCompleted, builder: (column) => column);
+
+  GeneratedColumn<bool> get lastCheckedAnswerResult => $composableBuilder(
+      column: $table.lastCheckedAnswerResult, builder: (column) => column);
+
+  GeneratedColumn<bool> get shouldCheckAnAnswer => $composableBuilder(
+      column: $table.shouldCheckAnAnswer, builder: (column) => column);
+
+  GeneratedColumn<int> get currentHintCounter => $composableBuilder(
+      column: $table.currentHintCounter, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastModificationAt => $composableBuilder(
+      column: $table.lastModificationAt, builder: (column) => column);
+
+  $$FieldListsTableAnnotationComposer get fieldListId {
+    final $$FieldListsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.fieldListId,
+        referencedTable: $db.fieldLists,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$FieldListsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.fieldLists,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> sessionEntrysRefs<T extends Object>(
+      Expression<T> Function($$SessionEntrysTableAnnotationComposer a) f) {
+    final $$SessionEntrysTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.sessionEntrys,
+        getReferencedColumn: (t) => t.sessionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionEntrysTableAnnotationComposer(
+              $db: $db,
+              $table: $db.sessionEntrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> testSessionsRefs<T extends Object>(
+      Expression<T> Function($$TestSessionsTableAnnotationComposer a) f) {
+    final $$TestSessionsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.testSessions,
+        getReferencedColumn: (t) => t.sessionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$TestSessionsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.testSessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> wrongAnswersRefs<T extends Object>(
+      Expression<T> Function($$WrongAnswersTableAnnotationComposer a) f) {
+    final $$WrongAnswersTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.wrongAnswers,
+        getReferencedColumn: (t) => t.sessionId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$WrongAnswersTableAnnotationComposer(
+              $db: $db,
+              $table: $db.wrongAnswers,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$SessionsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SessionsTable,
+    Session,
+    $$SessionsTableFilterComposer,
+    $$SessionsTableOrderingComposer,
+    $$SessionsTableAnnotationComposer,
+    $$SessionsTableCreateCompanionBuilder,
+    $$SessionsTableUpdateCompanionBuilder,
+    (Session, $$SessionsTableReferences),
+    Session,
+    PrefetchHooks Function(
+        {bool fieldListId,
+        bool sessionEntrysRefs,
+        bool testSessionsRefs,
+        bool wrongAnswersRefs})> {
+  $$SessionsTableTableManager(_$AppDatabase db, $SessionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SessionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SessionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SessionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> fieldListId = const Value.absent(),
+            Value<int> currentQuestionCounter = const Value.absent(),
+            Value<int> triesNumber = const Value.absent(),
+            Value<int> triesCounter = const Value.absent(),
+            Value<int> elapsedTime = const Value.absent(),
+            Value<bool> isCompleted = const Value.absent(),
+            Value<bool> lastCheckedAnswerResult = const Value.absent(),
+            Value<bool> shouldCheckAnAnswer = const Value.absent(),
+            Value<int> currentHintCounter = const Value.absent(),
+            Value<DateTime> creationAt = const Value.absent(),
+            Value<DateTime> lastModificationAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SessionsCompanion(
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            required String fieldListId,
+            required int currentQuestionCounter,
+            required int triesNumber,
+            Value<int> triesCounter = const Value.absent(),
+            required int elapsedTime,
+            Value<bool> isCompleted = const Value.absent(),
+            Value<bool> lastCheckedAnswerResult = const Value.absent(),
+            Value<bool> shouldCheckAnAnswer = const Value.absent(),
+            Value<int> currentHintCounter = const Value.absent(),
+            required DateTime creationAt,
+            required DateTime lastModificationAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SessionsCompanion.insert(
+            id: id,
+            fieldListId: fieldListId,
+            currentQuestionCounter: currentQuestionCounter,
+            triesNumber: triesNumber,
+            triesCounter: triesCounter,
+            elapsedTime: elapsedTime,
+            isCompleted: isCompleted,
+            lastCheckedAnswerResult: lastCheckedAnswerResult,
+            shouldCheckAnAnswer: shouldCheckAnAnswer,
+            currentHintCounter: currentHintCounter,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$SessionsTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: (
+              {fieldListId = false,
+              sessionEntrysRefs = false,
+              testSessionsRefs = false,
+              wrongAnswersRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (sessionEntrysRefs) db.sessionEntrys,
+                if (testSessionsRefs) db.testSessions,
+                if (wrongAnswersRefs) db.wrongAnswers
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (fieldListId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.fieldListId,
+                    referencedTable:
+                        $$SessionsTableReferences._fieldListIdTable(db),
+                    referencedColumn:
+                        $$SessionsTableReferences._fieldListIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (sessionEntrysRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SessionsTableReferences
+                            ._sessionEntrysRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SessionsTableReferences(db, table, p0)
+                                .sessionEntrysRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.sessionId == item.id),
+                        typedResults: items),
+                  if (testSessionsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SessionsTableReferences
+                            ._testSessionsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SessionsTableReferences(db, table, p0)
+                                .testSessionsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.sessionId == item.id),
+                        typedResults: items),
+                  if (wrongAnswersRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$SessionsTableReferences
+                            ._wrongAnswersRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$SessionsTableReferences(db, table, p0)
+                                .wrongAnswersRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.sessionId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SessionsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SessionsTable,
+    Session,
+    $$SessionsTableFilterComposer,
+    $$SessionsTableOrderingComposer,
+    $$SessionsTableAnnotationComposer,
+    $$SessionsTableCreateCompanionBuilder,
+    $$SessionsTableUpdateCompanionBuilder,
+    (Session, $$SessionsTableReferences),
+    Session,
+    PrefetchHooks Function(
+        {bool fieldListId,
+        bool sessionEntrysRefs,
+        bool testSessionsRefs,
+        bool wrongAnswersRefs})>;
+typedef $$SessionEntrysTableCreateCompanionBuilder = SessionEntrysCompanion
+    Function({
+  required String sessionId,
+  required String entryId,
+  Value<int> rowid,
+});
+typedef $$SessionEntrysTableUpdateCompanionBuilder = SessionEntrysCompanion
+    Function({
+  Value<String> sessionId,
+  Value<String> entryId,
+  Value<int> rowid,
+});
+
+final class $$SessionEntrysTableReferences
+    extends BaseReferences<_$AppDatabase, $SessionEntrysTable, SessionEntry> {
+  $$SessionEntrysTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $SessionsTable _sessionIdTable(_$AppDatabase db) =>
+      db.sessions.createAlias(
+          $_aliasNameGenerator(db.sessionEntrys.sessionId, db.sessions.id));
+
+  $$SessionsTableProcessedTableManager get sessionId {
+    final manager = $$SessionsTableTableManager($_db, $_db.sessions)
+        .filter((f) => f.id($_item.sessionId!));
+    final item = $_typedResult.readTableOrNull(_sessionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $EntrysTable _entryIdTable(_$AppDatabase db) => db.entrys.createAlias(
+      $_aliasNameGenerator(db.sessionEntrys.entryId, db.entrys.id));
+
+  $$EntrysTableProcessedTableManager get entryId {
+    final manager = $$EntrysTableTableManager($_db, $_db.entrys)
+        .filter((f) => f.id($_item.entryId!));
+    final item = $_typedResult.readTableOrNull(_entryIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$SessionEntrysTableFilterComposer
+    extends Composer<_$AppDatabase, $SessionEntrysTable> {
+  $$SessionEntrysTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$SessionsTableFilterComposer get sessionId {
+    final $$SessionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableFilterComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$EntrysTableFilterComposer get entryId {
+    final $$EntrysTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.entryId,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableFilterComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$SessionEntrysTableOrderingComposer
+    extends Composer<_$AppDatabase, $SessionEntrysTable> {
+  $$SessionEntrysTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$SessionsTableOrderingComposer get sessionId {
+    final $$SessionsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableOrderingComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$EntrysTableOrderingComposer get entryId {
+    final $$EntrysTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.entryId,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableOrderingComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$SessionEntrysTableAnnotationComposer
+    extends Composer<_$AppDatabase, $SessionEntrysTable> {
+  $$SessionEntrysTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$SessionsTableAnnotationComposer get sessionId {
+    final $$SessionsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$EntrysTableAnnotationComposer get entryId {
+    final $$EntrysTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.entryId,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableAnnotationComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$SessionEntrysTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $SessionEntrysTable,
+    SessionEntry,
+    $$SessionEntrysTableFilterComposer,
+    $$SessionEntrysTableOrderingComposer,
+    $$SessionEntrysTableAnnotationComposer,
+    $$SessionEntrysTableCreateCompanionBuilder,
+    $$SessionEntrysTableUpdateCompanionBuilder,
+    (SessionEntry, $$SessionEntrysTableReferences),
+    SessionEntry,
+    PrefetchHooks Function({bool sessionId, bool entryId})> {
+  $$SessionEntrysTableTableManager(_$AppDatabase db, $SessionEntrysTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$SessionEntrysTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SessionEntrysTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SessionEntrysTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> sessionId = const Value.absent(),
+            Value<String> entryId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SessionEntrysCompanion(
+            sessionId: sessionId,
+            entryId: entryId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String sessionId,
+            required String entryId,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              SessionEntrysCompanion.insert(
+            sessionId: sessionId,
+            entryId: entryId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$SessionEntrysTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({sessionId = false, entryId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (sessionId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.sessionId,
+                    referencedTable:
+                        $$SessionEntrysTableReferences._sessionIdTable(db),
+                    referencedColumn:
+                        $$SessionEntrysTableReferences._sessionIdTable(db).id,
+                  ) as T;
+                }
+                if (entryId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.entryId,
+                    referencedTable:
+                        $$SessionEntrysTableReferences._entryIdTable(db),
+                    referencedColumn:
+                        $$SessionEntrysTableReferences._entryIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$SessionEntrysTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $SessionEntrysTable,
+    SessionEntry,
+    $$SessionEntrysTableFilterComposer,
+    $$SessionEntrysTableOrderingComposer,
+    $$SessionEntrysTableAnnotationComposer,
+    $$SessionEntrysTableCreateCompanionBuilder,
+    $$SessionEntrysTableUpdateCompanionBuilder,
+    (SessionEntry, $$SessionEntrysTableReferences),
+    SessionEntry,
+    PrefetchHooks Function({bool sessionId, bool entryId})>;
+typedef $$TestSessionsTableCreateCompanionBuilder = TestSessionsCompanion
+    Function({
+  required String sessionId,
+  Value<int> wrongAnswerCounter,
+  Value<String?> lastAnswer,
+  Value<int> rowid,
+});
+typedef $$TestSessionsTableUpdateCompanionBuilder = TestSessionsCompanion
+    Function({
+  Value<String> sessionId,
+  Value<int> wrongAnswerCounter,
+  Value<String?> lastAnswer,
+  Value<int> rowid,
+});
+
+final class $$TestSessionsTableReferences
+    extends BaseReferences<_$AppDatabase, $TestSessionsTable, TestSession> {
+  $$TestSessionsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $SessionsTable _sessionIdTable(_$AppDatabase db) =>
+      db.sessions.createAlias(
+          $_aliasNameGenerator(db.testSessions.sessionId, db.sessions.id));
+
+  $$SessionsTableProcessedTableManager get sessionId {
+    final manager = $$SessionsTableTableManager($_db, $_db.sessions)
+        .filter((f) => f.id($_item.sessionId!));
+    final item = $_typedResult.readTableOrNull(_sessionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$TestSessionsTableFilterComposer
+    extends Composer<_$AppDatabase, $TestSessionsTable> {
+  $$TestSessionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get wrongAnswerCounter => $composableBuilder(
+      column: $table.wrongAnswerCounter,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get lastAnswer => $composableBuilder(
+      column: $table.lastAnswer, builder: (column) => ColumnFilters(column));
+
+  $$SessionsTableFilterComposer get sessionId {
+    final $$SessionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableFilterComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$TestSessionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $TestSessionsTable> {
+  $$TestSessionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get wrongAnswerCounter => $composableBuilder(
+      column: $table.wrongAnswerCounter,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get lastAnswer => $composableBuilder(
+      column: $table.lastAnswer, builder: (column) => ColumnOrderings(column));
+
+  $$SessionsTableOrderingComposer get sessionId {
+    final $$SessionsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableOrderingComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$TestSessionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $TestSessionsTable> {
+  $$TestSessionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get wrongAnswerCounter => $composableBuilder(
+      column: $table.wrongAnswerCounter, builder: (column) => column);
+
+  GeneratedColumn<String> get lastAnswer => $composableBuilder(
+      column: $table.lastAnswer, builder: (column) => column);
+
+  $$SessionsTableAnnotationComposer get sessionId {
+    final $$SessionsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$TestSessionsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $TestSessionsTable,
+    TestSession,
+    $$TestSessionsTableFilterComposer,
+    $$TestSessionsTableOrderingComposer,
+    $$TestSessionsTableAnnotationComposer,
+    $$TestSessionsTableCreateCompanionBuilder,
+    $$TestSessionsTableUpdateCompanionBuilder,
+    (TestSession, $$TestSessionsTableReferences),
+    TestSession,
+    PrefetchHooks Function({bool sessionId})> {
+  $$TestSessionsTableTableManager(_$AppDatabase db, $TestSessionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TestSessionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TestSessionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TestSessionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> sessionId = const Value.absent(),
+            Value<int> wrongAnswerCounter = const Value.absent(),
+            Value<String?> lastAnswer = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              TestSessionsCompanion(
+            sessionId: sessionId,
+            wrongAnswerCounter: wrongAnswerCounter,
+            lastAnswer: lastAnswer,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required String sessionId,
+            Value<int> wrongAnswerCounter = const Value.absent(),
+            Value<String?> lastAnswer = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              TestSessionsCompanion.insert(
+            sessionId: sessionId,
+            wrongAnswerCounter: wrongAnswerCounter,
+            lastAnswer: lastAnswer,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$TestSessionsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({sessionId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (sessionId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.sessionId,
+                    referencedTable:
+                        $$TestSessionsTableReferences._sessionIdTable(db),
+                    referencedColumn:
+                        $$TestSessionsTableReferences._sessionIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$TestSessionsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $TestSessionsTable,
+    TestSession,
+    $$TestSessionsTableFilterComposer,
+    $$TestSessionsTableOrderingComposer,
+    $$TestSessionsTableAnnotationComposer,
+    $$TestSessionsTableCreateCompanionBuilder,
+    $$TestSessionsTableUpdateCompanionBuilder,
+    (TestSession, $$TestSessionsTableReferences),
+    TestSession,
+    PrefetchHooks Function({bool sessionId})>;
+typedef $$WrongAnswersTableCreateCompanionBuilder = WrongAnswersCompanion
+    Function({
+  Value<String> id,
+  required String sessionId,
+  required String entryId,
+  required String value,
+  required DateTime creationAt,
+  Value<int> rowid,
+});
+typedef $$WrongAnswersTableUpdateCompanionBuilder = WrongAnswersCompanion
+    Function({
+  Value<String> id,
+  Value<String> sessionId,
+  Value<String> entryId,
+  Value<String> value,
+  Value<DateTime> creationAt,
+  Value<int> rowid,
+});
+
+final class $$WrongAnswersTableReferences
+    extends BaseReferences<_$AppDatabase, $WrongAnswersTable, WrongAnswer> {
+  $$WrongAnswersTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $SessionsTable _sessionIdTable(_$AppDatabase db) =>
+      db.sessions.createAlias(
+          $_aliasNameGenerator(db.wrongAnswers.sessionId, db.sessions.id));
+
+  $$SessionsTableProcessedTableManager get sessionId {
+    final manager = $$SessionsTableTableManager($_db, $_db.sessions)
+        .filter((f) => f.id($_item.sessionId!));
+    final item = $_typedResult.readTableOrNull(_sessionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $EntrysTable _entryIdTable(_$AppDatabase db) => db.entrys
+      .createAlias($_aliasNameGenerator(db.wrongAnswers.entryId, db.entrys.id));
+
+  $$EntrysTableProcessedTableManager get entryId {
+    final manager = $$EntrysTableTableManager($_db, $_db.entrys)
+        .filter((f) => f.id($_item.entryId!));
+    final item = $_typedResult.readTableOrNull(_entryIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$WrongAnswersTableFilterComposer
+    extends Composer<_$AppDatabase, $WrongAnswersTable> {
+  $$WrongAnswersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnFilters(column));
+
+  $$SessionsTableFilterComposer get sessionId {
+    final $$SessionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableFilterComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$EntrysTableFilterComposer get entryId {
+    final $$EntrysTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.entryId,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableFilterComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$WrongAnswersTableOrderingComposer
+    extends Composer<_$AppDatabase, $WrongAnswersTable> {
+  $$WrongAnswersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get value => $composableBuilder(
+      column: $table.value, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => ColumnOrderings(column));
+
+  $$SessionsTableOrderingComposer get sessionId {
+    final $$SessionsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableOrderingComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$EntrysTableOrderingComposer get entryId {
+    final $$EntrysTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.entryId,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableOrderingComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$WrongAnswersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WrongAnswersTable> {
+  $$WrongAnswersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get value =>
+      $composableBuilder(column: $table.value, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get creationAt => $composableBuilder(
+      column: $table.creationAt, builder: (column) => column);
+
+  $$SessionsTableAnnotationComposer get sessionId {
+    final $$SessionsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.sessionId,
+        referencedTable: $db.sessions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$SessionsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.sessions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$EntrysTableAnnotationComposer get entryId {
+    final $$EntrysTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.entryId,
+        referencedTable: $db.entrys,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$EntrysTableAnnotationComposer(
+              $db: $db,
+              $table: $db.entrys,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$WrongAnswersTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $WrongAnswersTable,
+    WrongAnswer,
+    $$WrongAnswersTableFilterComposer,
+    $$WrongAnswersTableOrderingComposer,
+    $$WrongAnswersTableAnnotationComposer,
+    $$WrongAnswersTableCreateCompanionBuilder,
+    $$WrongAnswersTableUpdateCompanionBuilder,
+    (WrongAnswer, $$WrongAnswersTableReferences),
+    WrongAnswer,
+    PrefetchHooks Function({bool sessionId, bool entryId})> {
+  $$WrongAnswersTableTableManager(_$AppDatabase db, $WrongAnswersTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WrongAnswersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WrongAnswersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WrongAnswersTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            Value<String> sessionId = const Value.absent(),
+            Value<String> entryId = const Value.absent(),
+            Value<String> value = const Value.absent(),
+            Value<DateTime> creationAt = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              WrongAnswersCompanion(
+            id: id,
+            sessionId: sessionId,
+            entryId: entryId,
+            value: value,
+            creationAt: creationAt,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            Value<String> id = const Value.absent(),
+            required String sessionId,
+            required String entryId,
+            required String value,
+            required DateTime creationAt,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              WrongAnswersCompanion.insert(
+            id: id,
+            sessionId: sessionId,
+            entryId: entryId,
+            value: value,
+            creationAt: creationAt,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$WrongAnswersTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({sessionId = false, entryId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (sessionId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.sessionId,
+                    referencedTable:
+                        $$WrongAnswersTableReferences._sessionIdTable(db),
+                    referencedColumn:
+                        $$WrongAnswersTableReferences._sessionIdTable(db).id,
+                  ) as T;
+                }
+                if (entryId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.entryId,
+                    referencedTable:
+                        $$WrongAnswersTableReferences._entryIdTable(db),
+                    referencedColumn:
+                        $$WrongAnswersTableReferences._entryIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$WrongAnswersTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $WrongAnswersTable,
+    WrongAnswer,
+    $$WrongAnswersTableFilterComposer,
+    $$WrongAnswersTableOrderingComposer,
+    $$WrongAnswersTableAnnotationComposer,
+    $$WrongAnswersTableCreateCompanionBuilder,
+    $$WrongAnswersTableUpdateCompanionBuilder,
+    (WrongAnswer, $$WrongAnswersTableReferences),
+    WrongAnswer,
+    PrefetchHooks Function({bool sessionId, bool entryId})>;
+
+class $AppDatabaseManager {
+  final _$AppDatabase _db;
+  $AppDatabaseManager(this._db);
+  $$EntryTextsTableTableManager get entryTexts =>
+      $$EntryTextsTableTableManager(_db, _db.entryTexts);
+  $$QuestionsTableTableManager get questions =>
+      $$QuestionsTableTableManager(_db, _db.questions);
+  $$FieldsTableTableManager get fields =>
+      $$FieldsTableTableManager(_db, _db.fields);
+  $$FieldListsTableTableManager get fieldLists =>
+      $$FieldListsTableTableManager(_db, _db.fieldLists);
+  $$EntrysTableTableManager get entrys =>
+      $$EntrysTableTableManager(_db, _db.entrys);
+  $$FieldNotesTableTableManager get fieldNotes =>
+      $$FieldNotesTableTableManager(_db, _db.fieldNotes);
+  $$FieldListNotesTableTableManager get fieldListNotes =>
+      $$FieldListNotesTableTableManager(_db, _db.fieldListNotes);
+  $$SessionsTableTableManager get sessions =>
+      $$SessionsTableTableManager(_db, _db.sessions);
+  $$SessionEntrysTableTableManager get sessionEntrys =>
+      $$SessionEntrysTableTableManager(_db, _db.sessionEntrys);
+  $$TestSessionsTableTableManager get testSessions =>
+      $$TestSessionsTableTableManager(_db, _db.testSessions);
+  $$WrongAnswersTableTableManager get wrongAnswers =>
+      $$WrongAnswersTableTableManager(_db, _db.wrongAnswers);
 }
