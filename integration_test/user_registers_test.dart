@@ -301,6 +301,8 @@ void main() {
                   confirmPasswordTextFormFieldFinder, "fhwoefhq[w4]");
               await widgetTester.pumpAndSettle();
               await widgetTester.tap(registerButtonFinder);
+              await widgetTester.pump();
+              expect(find.byType(CircularProgressIndicator), findsOneWidget);
               await widgetTester.pumpAndSettle(Durations.long1);
               final snackBarFinder = find.byType(SnackBar);
               final snakBarTextFinder = find.descendant(
@@ -341,6 +343,8 @@ void main() {
               confirmPasswordTextFormFieldFinder, "fhwoefhq[w4]");
           await widgetTester.pumpAndSettle();
           await widgetTester.tap(registerButtonFinder);
+          await widgetTester.pump();
+          expect(find.byType(CircularProgressIndicator), findsOneWidget);
           await widgetTester.pumpAndSettle(Durations.long1);
           final snackBarFinder = find.byType(SnackBar);
           final snakBarTextFinder = find.descendant(
@@ -396,6 +400,8 @@ void main() {
               confirmPasswordTextFormFieldFinder, "mhwtefnq}w4]");
           await widgetTester.pumpAndSettle();
           await widgetTester.tap(registerButtonFinder);
+          await widgetTester.pump();
+          expect(find.byType(CircularProgressIndicator), findsOneWidget);
           await widgetTester.pumpAndSettle(Durations.long1);
           final snackBarFinder = find.byType(SnackBar);
           final snakBarTextFinder = find.descendant(
@@ -463,6 +469,8 @@ void main() {
               confirmPasswordTextFormFieldFinder, "mhwtefnq}w4]");
           await widgetTester.pumpAndSettle();
           await widgetTester.tap(registerButtonFinder);
+          await widgetTester.pump();
+          expect(find.byType(CircularProgressIndicator), findsOneWidget);
           await widgetTester.pumpAndSettle(Durations.long1);
           final snackBarFinder = find.byType(SnackBar);
           final snakBarTextFinder = find.descendant(
