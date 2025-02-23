@@ -169,6 +169,8 @@ void main() {
               passwordTextFormFieldFinder, "fhwoefhq[w4]");
           await widgetTester.pumpAndSettle();
           await widgetTester.tap(signInButtonFinder);
+          await widgetTester.pump();
+          expect(find.byType(CircularProgressIndicator), findsOneWidget);
           await widgetTester.pumpAndSettle();
           final snackBarFinder = find.byType(SnackBar);
           final snakBarTextFinder = find.descendant(
