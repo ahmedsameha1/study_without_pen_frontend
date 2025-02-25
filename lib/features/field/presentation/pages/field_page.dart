@@ -11,11 +11,15 @@ class FieldPage extends StatelessWidget {
       appBar: AppBar(
         actions: [
           BlocBuilder<AuthBloc, AuthState>(
-            builder:(context, state) => 
-             IconButton(
-                key: Key("logoutIconButton"),
-                onPressed: () => context.read<AuthBloc>().signOut(),
-                icon: Icon(Icons.logout)),
+            key: const Key("authBlocBuilder"),
+            builder: (context, state) => IconButton(
+                onPressed: () {
+                  context.read<AuthBloc>().signOut();
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                )),
           )
         ],
       ),

@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -45,13 +45,15 @@ dependencies:
     sdk: flutter
   intl: any
   go_router: ^14.2.0
-  firebase_core_platform_interface: 
+  firebase_core_platform_interface:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  bloc_test:
   drift_dev: ^2.4.1
   mockito:
+  mocktail:
   build_runner: ^2.4.6
   integration_test:
     sdk: flutter
