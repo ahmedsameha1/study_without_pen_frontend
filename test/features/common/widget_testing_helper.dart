@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nonso/nonso.dart';
+import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
 
-Widget createWidgetInASkeleton(Widget widget, AuthBloc bloc) {
+Widget createWidgetInASkeleton(Widget widget, nonso.AuthBloc bloc) {
   return MultiBlocProvider(
       providers: [BlocProvider(create: (context) => bloc)],
       child: MaterialApp.router(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          localizationsDelegates: [AppLocalizations.delegate, nonso.AppLocalizations.delegate],
           supportedLocales: AppLocalizations.supportedLocales,
           routerConfig: getRouterConfig()));
 }

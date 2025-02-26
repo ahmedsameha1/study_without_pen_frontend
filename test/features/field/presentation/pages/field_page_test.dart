@@ -5,29 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:nonso/nonso.dart';
+import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 
 import '../../../common/common_finders.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 
 import '../../../common/widget_testing_helper.dart';
 
-class MockAuthBloc extends MockBloc<AuthEvent, AuthState> implements AuthBloc {}
+class MockAuthBloc extends MockBloc<nonso.AuthEvent, nonso.AuthState> implements nonso.AuthBloc {}
 
 void main() {
   late Widget widgetInSkeleton;
   late Widget widgetProviderLocalization;
-  late AuthBloc authBloc;
+  late nonso.AuthBloc authBloc;
 
   setUp(() {
     authBloc = MockAuthBloc();
-    when(() => authBloc.state).thenReturn(AuthState(
-      applicationAuthState: ApplicationAuthState.signedIn,
+    when(() => authBloc.state).thenReturn(nonso.AuthState(
+      applicationAuthState: nonso.ApplicationAuthState.signedIn,
     ));
     when(() => authBloc.signOut()).thenAnswer((_) => Completer<void>().future);
     widgetInSkeleton =
-        createWidgetInASkeleton(AuthScreen(FieldPage()), authBloc);
+        createWidgetInASkeleton(nonso.AuthScreen(FieldPage()), authBloc);
   });
 
   group("Engish Locale", () {

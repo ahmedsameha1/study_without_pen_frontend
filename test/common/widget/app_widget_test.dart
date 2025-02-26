@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:study_without_pen_by_flutter/common/widget/app_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:nonso/nonso.dart';
+import 'package:nonso/nonso.dart' as nonso;
+import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 
 import 'app_widget_test.mocks.dart';
 
@@ -86,10 +86,10 @@ void main() {
       expect(materialAppFinder, findsOneWidget);
       MaterialApp materialApp = tester.widget(materialAppFinder) as MaterialApp;
       expect(materialApp.localizationsDelegates,
-          AppLocalizations.localizationsDelegates);
+          [AppLocalizations.delegate, nonso.AppLocalizations.delegate]);
       expect(materialApp.supportedLocales, AppLocalizations.supportedLocales);
     //  expect(materialApp.title, expectedTitle);
-      expect(find.byType(AuthScreen), findsOneWidget);
+      expect(find.byType(nonso.AuthScreen), findsOneWidget);
     });
 
 /*
