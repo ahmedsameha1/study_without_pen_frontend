@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nonso/nonso.dart';
+import 'package:nonso/nonso.dart' as nonso;
+import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 
 class FieldPage extends StatelessWidget {
   const FieldPage({super.key});
@@ -9,21 +10,26 @@ class FieldPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          AppLocalizations.of(context)!.materialAppTitle,
+        ),
         actions: [
-          BlocBuilder<AuthBloc, AuthState>(
+          BlocBuilder<nonso.AuthBloc, nonso.AuthState>(
             key: const Key("authBlocBuilder"),
             builder: (context, state) => IconButton(
                 onPressed: () {
-                  context.read<AuthBloc>().signOut();
+                  context.read<nonso.AuthBloc>().signOut();
                 },
                 icon: Icon(
                   Icons.logout,
-                  color: Theme.of(context).colorScheme.onPrimary,
                 )),
           )
         ],
       ),
-      //backgroundColor: Theme.of(context).colorScheme.surface,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
