@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get materialAppTitle => 'PenInBin!';
+  String get materialAppTitle => 'Study Withoud Pen!';
 
   @override
   String get nonso_register => 'Register';

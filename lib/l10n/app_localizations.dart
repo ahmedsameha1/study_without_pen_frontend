@@ -96,7 +96,7 @@ abstract class AppLocalizations {
   /// No description provided for @materialAppTitle.
   ///
   /// In en, this message translates to:
-  /// **'PenInBin!'**
+  /// **'Study Withoud Pen!'**
   String get materialAppTitle;
 
   /// No description provided for @nonso_register.

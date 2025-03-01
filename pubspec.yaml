@@ -46,6 +46,7 @@ dependencies:
   intl: any
   go_router: ^14.2.0
   firebase_core_platform_interface:
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
