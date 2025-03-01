@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -18,48 +18,53 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.18.6 <3.0.0"
-  flutter: ">=3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   # TODO remember to show that you use this library to the user and show Apache 2.0 license // license work should be done
-  clock: ^1.1.1
+  clock: ^1.1.0
   # TODO MIT license // license work should be done
-  uuid: ^3.0.5
-  firebase_auth: ^4.2.4
-  firebase_core: ^2.4.1
-  flutter_riverpod: ^2.1.3
-  riverpod_annotation: ^1.1.1
-  freezed_annotation: ^2.0.3
-  go_router: ^6.0.1
-  flutter_hooks: ^0.18.5+1
-  drift: ^2.2.0
+  uuid: ^4.1.0
+  drift: ^2.10.0
   sqlite3_flutter_libs: ^0.5.0
   path_provider: ^2.0.0
   path: ^1.8.2
+  rxdart: ^0.28.0
+  firebase_core:
+  firebase_auth:
+  nonso:
+    path: ../../nonso
+  flutter_bloc: ^8.1.3
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  go_router: ^14.2.0
+  firebase_core_platform_interface:
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner:
-  riverpod_generator: ^1.1.1
-  flutter_lints: ^2.0.1
-  mockito: 
-  drift_dev: ^2.2.0+1
-  freezed: ^2.1.1
+  bloc_test:
+  drift_dev: ^2.4.1
+  mockito:
+  mocktail:
+  build_runner: ^2.4.6
+  integration_test:
+    sdk: flutter
+  http: ^1.2.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
