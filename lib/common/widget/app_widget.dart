@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/theme.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
@@ -28,8 +27,7 @@ class App extends StatelessWidget {
           supportedLocales: AppLocalizations.supportedLocales,
           title: AppLocalizationsEn().materialAppTitle,
           routerConfig: getRouterConfig(),
-          theme: AppTheme.getTheme(Brightness.light),
-          darkTheme: AppTheme.getTheme(Brightness.dark),
+          theme: AppTheme.theme,
           debugShowCheckedModeBanner: false,
         ),
       ),

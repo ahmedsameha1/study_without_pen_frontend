@@ -7,16 +7,11 @@ class AppTheme {
       seedColor: seedColor,
       dynamicSchemeVariant: DynamicSchemeVariant.content,
       brightness: Brightness.light);
-  static final darkColorScheme = ColorScheme.fromSeed(
-      seedColor: seedColor,
-      dynamicSchemeVariant: DynamicSchemeVariant.content,
-      brightness: Brightness.dark);
-  static ThemeData getTheme(Brightness brightness) {
-    ColorScheme colorScheme =
-        brightness == Brightness.light ? lightColorScheme : darkColorScheme;
-    return ThemeData().copyWith(
+  static ThemeData get theme {
+    ColorScheme colorScheme = lightColorScheme;
+    final baseTheme = ThemeData(
+      brightness: Brightness.light,
       colorScheme: colorScheme,
-      textTheme: GoogleFonts.lexendTextTheme(),
       appBarTheme: AppBarTheme().copyWith(
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
@@ -24,5 +19,7 @@ class AppTheme {
       floatingActionButtonTheme: FloatingActionButtonThemeData().copyWith(
           shape: CircleBorder(), backgroundColor: colorScheme.primary),
     );
+    return baseTheme.copyWith(
+        textTheme: GoogleFonts.lexendTextTheme(baseTheme.textTheme));
   }
 }

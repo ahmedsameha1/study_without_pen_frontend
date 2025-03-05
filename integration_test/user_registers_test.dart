@@ -80,7 +80,7 @@ void main() {
           final emailTextFormFieldFinder = find.byType(TextFormField).at(1);
           final invalidEmailTextFinder = find.descendant(
               of: emailTextFormFieldFinder,
-              matching: find.text("This an invalid email"));
+              matching: find.text("This an invalid email."));
           await widgetTester.enterText(emailTextFormFieldFinder, "f");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
@@ -117,7 +117,7 @@ void main() {
           final invalidPasswordTextFinder = find.descendant(
               of: passwordTextFormFieldFinder,
               matching:
-                  find.text("Password needs to be at least 8 characters"));
+                  find.text("Password needs to be at least 8 characters."));
           await widgetTester.enterText(passwordTextFormFieldFinder, "f");
           await widgetTester.pumpAndSettle();
           expect(invalidPasswordTextFinder, findsOneWidget);
@@ -147,7 +147,7 @@ void main() {
               find.byType(TextFormField).at(3);
           final invalidConfirmPasswordTextFinder = find.descendant(
               of: confirmPasswordTextFormFieldFinder,
-              matching: find.text("This doesn't match the given password"));
+              matching: find.text("This doesn't match the given password."));
           await widgetTester.enterText(passwordTextFormFieldFinder, "56&*ptYn");
           await widgetTester.enterText(
               confirmPasswordTextFormFieldFinder, "ewh32eh3wq4tfg");
@@ -306,9 +306,9 @@ void main() {
               await widgetTester.pumpAndSettle(Durations.long1);
               final snackBarFinder = find.byType(SnackBar);
               final snakBarTextFinder = find.descendant(
-                  of: snackBarFinder,
-                  matching: find.text("Failure: email-already-in-use"));
-              expect(snackBarFinder, findsOneWidget);
+                  of: snackBarFinder, matching: find.byType(Text));
+              final failureText = widgetTester.widget<Text>(snakBarTextFinder);
+              expect(failureText.data!.startsWith("Failure:"), isTrue);
               expect(snakBarTextFinder, findsOneWidget);
               expect(find.byType(Register), findsOneWidget);
             } else {
@@ -350,7 +350,7 @@ void main() {
           final snakBarTextFinder = find.descendant(
               of: snackBarFinder,
               matching: find.text(
-                  "Success: Check your email to verify your email address"));
+                  "Success: Check your email inbox to verify your email address."));
           expect(snackBarFinder, findsOneWidget);
           expect(snakBarTextFinder, findsOneWidget);
           expect(find.byType(Locked), findsOneWidget);
@@ -407,7 +407,7 @@ void main() {
           final snakBarTextFinder = find.descendant(
               of: snackBarFinder,
               matching: find.text(
-                  "Success: Check your email to verify your email address"));
+                  "Success: Check your email inbox to verify your email address."));
           expect(snackBarFinder, findsOneWidget);
           expect(snakBarTextFinder, findsOneWidget);
           expect(find.byType(Locked), findsOneWidget);

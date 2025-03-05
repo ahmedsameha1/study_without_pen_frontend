@@ -32,8 +32,8 @@ void main() {
       group("English", () {
         final signInButtonFinder =
             find.widgetWithText(ElevatedButton, "Sign in");
-        final forgotPasswordButtonFinder =
-            find.widgetWithText(ElevatedButton, "Forgot password?");
+        final resetPasswordButtonFinder =
+            find.widgetWithText(ElevatedButton, "Reset password");
         testWidgets(
             "Entering invalid email in the email TextFormField on the Password widget",
             (WidgetTester widgetTester) async {
@@ -45,48 +45,48 @@ void main() {
           expect(find.byType(Password), findsOneWidget);
           ElevatedButton signInButton =
               widgetTester.widget<ElevatedButton>(signInButtonFinder);
-          ElevatedButton forgotPasswordButton =
-              widgetTester.widget<ElevatedButton>(forgotPasswordButtonFinder);
+          ElevatedButton resettPasswordButton =
+              widgetTester.widget<ElevatedButton>(resetPasswordButtonFinder);
           expect(signInButton.enabled, isFalse);
-          expect(forgotPasswordButton.enabled, isFalse);
+          expect(resettPasswordButton.enabled, isFalse);
           final emailTextFormFieldFinder = find.byType(TextFormField).at(0);
           final invalidEmailTextFinder = find.descendant(
               of: emailTextFormFieldFinder,
-              matching: find.text("This an invalid email"));
+              matching: find.text("This an invalid email."));
           await widgetTester.enterText(emailTextFormFieldFinder, "f");
           await widgetTester.pumpAndSettle();
           signInButton =
               widgetTester.widget<ElevatedButton>(signInButtonFinder);
-          forgotPasswordButton =
-              widgetTester.widget<ElevatedButton>(forgotPasswordButtonFinder);
+          resettPasswordButton =
+              widgetTester.widget<ElevatedButton>(resetPasswordButtonFinder);
           expect(invalidEmailTextFinder, findsOneWidget);
           expect(signInButton.enabled, isFalse);
-          expect(forgotPasswordButton.enabled, isFalse);
+          expect(resettPasswordButton.enabled, isFalse);
           await widgetTester.enterText(emailTextFormFieldFinder, "f@");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
           expect(signInButton.enabled, isFalse);
-          expect(forgotPasswordButton.enabled, isFalse);
+          expect(resettPasswordButton.enabled, isFalse);
           await widgetTester.enterText(
               emailTextFormFieldFinder, "test@test.com");
           await widgetTester.pumpAndSettle();
           signInButton =
               widgetTester.widget<ElevatedButton>(signInButtonFinder);
-          forgotPasswordButton =
-              widgetTester.widget<ElevatedButton>(forgotPasswordButtonFinder);
+          resettPasswordButton =
+              widgetTester.widget<ElevatedButton>(resetPasswordButtonFinder);
           expect(invalidEmailTextFinder, findsNothing);
           expect(signInButton.enabled, isFalse);
-          expect(forgotPasswordButton.enabled, isTrue);
+          expect(resettPasswordButton.enabled, isTrue);
           await widgetTester.enterText(
               emailTextFormFieldFinder, "test@شبكة.com");
           await widgetTester.pumpAndSettle();
           signInButton =
               widgetTester.widget<ElevatedButton>(signInButtonFinder);
-          forgotPasswordButton =
-              widgetTester.widget<ElevatedButton>(forgotPasswordButtonFinder);
+          resettPasswordButton =
+              widgetTester.widget<ElevatedButton>(resetPasswordButtonFinder);
           expect(invalidEmailTextFinder, findsNothing);
           expect(signInButton.enabled, isFalse);
-          expect(forgotPasswordButton.enabled, isTrue);
+          expect(resettPasswordButton.enabled, isTrue);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets(
@@ -100,26 +100,26 @@ void main() {
           expect(find.byType(Password), findsOneWidget);
           ElevatedButton signInButton =
               widgetTester.widget<ElevatedButton>(signInButtonFinder);
-          ElevatedButton forgotPasswordButton =
-              widgetTester.widget<ElevatedButton>(forgotPasswordButtonFinder);
+          ElevatedButton resetPasswordButton =
+              widgetTester.widget<ElevatedButton>(resetPasswordButtonFinder);
           expect(signInButton.enabled, isFalse);
-          expect(forgotPasswordButton.enabled, isFalse);
+          expect(resetPasswordButton.enabled, isFalse);
           final passwordTextFormFieldFinder = find.byType(TextFormField).at(1);
           final invalidEmailTextFinder = find.descendant(
               of: passwordTextFormFieldFinder,
               matching:
-                  find.text("Password needs to be at least 8 characters"));
+                  find.text("Password needs to be at least 8 characters."));
           await widgetTester.enterText(passwordTextFormFieldFinder, "f");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsOneWidget);
           expect(signInButton.enabled, isFalse);
-          expect(forgotPasswordButton.enabled, isFalse);
+          expect(resetPasswordButton.enabled, isFalse);
           await widgetTester.enterText(
               passwordTextFormFieldFinder, "test@شبكة.com");
           await widgetTester.pumpAndSettle();
           expect(invalidEmailTextFinder, findsNothing);
           expect(signInButton.enabled, isFalse);
-          expect(forgotPasswordButton.enabled, isFalse);
+          expect(resetPasswordButton.enabled, isFalse);
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the system back button exits the app""",
