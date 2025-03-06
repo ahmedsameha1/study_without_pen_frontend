@@ -47,8 +47,7 @@ void main() {
       expect(materialApp.localizationsDelegates,
           [AppLocalizations.delegate, nonso.AppLocalizations.delegate]);
       expect(materialApp.supportedLocales, AppLocalizations.supportedLocales);
-      expect(materialApp.theme, AppTheme.getTheme(Brightness.light));
-      expect(materialApp.darkTheme, AppTheme.getTheme(Brightness.dark));
+      expect(materialApp.theme, AppTheme.theme);
       expect(materialApp.themeMode, ThemeMode.system);
       expect(materialApp.title, expectedTitle);
       expect(materialApp.debugShowCheckedModeBanner, false);
