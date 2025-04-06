@@ -224,6 +224,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This doesn\'t match the given password'**
   String get nonso_confirmPasswordValidationError;
+
+  /// No description provided for @createNewField.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Field'**
+  String get createNewField;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

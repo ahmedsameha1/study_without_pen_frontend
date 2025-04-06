@@ -77,4 +77,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonso_confirmPasswordValidationError => 'This doesn\'t match the given password';
+
+  @override
+  String get createNewField => 'Create New Field';
 }

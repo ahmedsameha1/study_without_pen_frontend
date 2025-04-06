@@ -34,5 +34,6 @@
           }
       }
   },
-  "nonso_confirmPasswordValidationError": "This doesn't match the given password"
+  "nonso_confirmPasswordValidationError": "This doesn't match the given password",
+  "createNewField": "Create New Field"
 }
