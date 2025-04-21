@@ -1,17 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
 
+class AppThemeForTests {
+  static const seedColor = Color(0xFFEC407A);
+  static final lightColorScheme = ColorScheme.fromSeed(
+      seedColor: seedColor,
+      dynamicSchemeVariant: DynamicSchemeVariant.content,
+      brightness: Brightness.light);
+  static ThemeData get theme {
+    ColorScheme colorScheme = lightColorScheme;
+    final baseTheme = ThemeData(
+      brightness: Brightness.light,
+      colorScheme: colorScheme,
+      appBarTheme: AppBarTheme().copyWith(
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData().copyWith(
+          shape: CircleBorder(), backgroundColor: colorScheme.primary),
+    );
+    return baseTheme;
+  }
+}
+
 Widget createWidgetInASkeleton(Widget widget, nonso.AuthBloc bloc) {
   return MultiBlocProvider(
       providers: [BlocProvider(create: (context) => bloc)],
       child: MaterialApp.router(
-          localizationsDelegates: [AppLocalizations.delegate, nonso.AppLocalizations.delegate],
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            nonso.AppLocalizations.delegate
+          ],
           supportedLocales: AppLocalizations.supportedLocales,
           routerConfig: getRouterConfig()));
+}
+
+class ParentPage extends StatelessWidget {
+  final String childPath;
+  const ParentPage(this.childPath, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: TextButton(
+          onPressed: () => GoRouter.of(context).go(childPath),
+          child: Text("child")),
+    );
+  }
+}
+
+Widget createWidgetInASkeletonB(Widget widget) {
+  return MaterialApp.router(
+    localizationsDelegates: [
+      AppLocalizations.delegate,
+      nonso.AppLocalizations.delegate
+    ],
+    supportedLocales: AppLocalizations.supportedLocales,
+    theme: AppThemeForTests.theme,
+    routerConfig: GoRouter(routes: [
+      GoRoute(
+        path: "/",
+        builder: (context, state) => ParentPage("/child"),
+        routes: [GoRoute(path: "child", builder: (context, state) => widget)],
+      )
+    ]),
+  );
 }
 
 Future<AppLocalizations> getLocalizations(WidgetTester t, Locale locale) async {

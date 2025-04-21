@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
+import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations_en.dart';
 
@@ -22,7 +22,6 @@ void main() {
   late Widget widgetInSkeleton;
   late Widget widgetProviderLocalization;
   late nonso.AuthBloc authBloc;
-  String expectedCreateNewFieldDialogTitle = "Create New Field";
 
   setUp(() {
     authBloc = MockAuthBloc();
@@ -85,40 +84,11 @@ void main() {
 
     testWidgets(
         """Test that clicking the floating action button opens the create 
-        new field AlertDialog and testing the precense of the main widgets in
-        that dialog""", (WidgetTester tester) async {
+        field page""", (WidgetTester tester) async {
       await tester.pumpWidget(widgetProviderLocalization);
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
-      AlertDialog createNewFieldDialog =
-          tester.widget(find.byType(AlertDialog));
-      Text title = createNewFieldDialog.title as Text;
-      expect(title.data, expectedCreateNewFieldDialogTitle);
-      expect(title.textAlign, TextAlign.center);
-      Column createNewFieldDialogContent =
-          createNewFieldDialog.content as Column;
-      expect(createNewFieldDialogContent.mainAxisSize, MainAxisSize.min);
-      ColorIndicator colorIndicator =
-          tester.widget(find.byType(ColorIndicator));
-      expect(colorIndicator.color, Colors.red);
-      await tester.tap(find.byWidget(colorIndicator));
-      await tester.pumpAndSettle();
-      ColorWheelPicker colorWheelPicker =
-          tester.widget(find.byType(ColorWheelPicker));
-      expect(find.byWidget(colorWheelPicker), findsOneWidget);
-      final Offset colorWheelPickerCenter =
-          tester.getCenter(find.byWidget(colorWheelPicker));
-      await tester.timedDragFrom(
-          colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
-      await tester.pumpAndSettle(Durations.short2);
-      await tester.tap(find.text("OK"));
-      await tester.pumpAndSettle();
-      colorIndicator = tester.widget(find.byType(ColorIndicator));
-      expect(colorIndicator.color, const Color(0xff520a04));
-      expect(
-          checkWidgetsOrder(
-              createNewFieldDialogContent.children.toList(), [colorIndicator]),
-          isTrue);
+      expect(find.byType(CreateFieldPage), findsOneWidget);
     });
   });
 }

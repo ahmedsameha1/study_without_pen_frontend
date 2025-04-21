@@ -38,7 +38,7 @@ dependencies:
   rxdart: ^0.28.0
   firebase_core:
   firebase_auth:
-  nonso: ^0.0.8 
+  nonso: ^0.0.15 
   flutter_bloc: ^9.1.0
   flutter_localizations:
     sdk: flutter
@@ -47,6 +47,7 @@ dependencies:
   firebase_core_platform_interface:
   google_fonts: ^6.2.1
   flex_color_picker: ^3.7.0
+  flutter_hooks: ^0.21.2
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +60,7 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   http: ^1.2.0
+  flutter_lints: ^5.0.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

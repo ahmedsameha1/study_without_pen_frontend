@@ -1,39 +1,54 @@
 {
-  "materialAppTitle": "Study Withoud Pen!",
-  "nonso_register": "Register",
-  "nonso_signInUp": "Sign In/Up",
-  "nonso_email": "Email",
-  "nonso_next": "Next",
-  "nonso_cancel": "Cancel",
-  "nonso_invalidEmail": "This an invalid email",
-  "nonso_refresh": "Refresh account",
-  "nonso_verifyEmailAddress": "Check your email inbox to verify your email address",
-  "nonso_signOut": "Sign out",
-  "nonso_signIn": "Sign in",
-  "nonso_resendVerificationEmail": "Resend verification email",
-  "nonso_name": "Name",
-  "nonso_password": "Password",
-  "nonso_confirmPassword": "Confirm Password",
-  "nonso_forgotPassword": "Forgot password?",
-  "nonso_resetCodeSent": "Check your email inbox to reset your password",
-  "nonso_nameValidationError": "Enter your name",
-  "nonso_failed": "Failure: {exceptionCode}",
-  "@nonso_failed": {
-      "placeholders": {
-          "exceptionCode": {
-              "type": "String"
-          }
-      }
-  },
-  "nonso_success": "Success: Check your email to verify your email address",
-  "nonso_passwordValidationError": "Password needs to be at least {passwordMinimumLength} characters",
-  "@nonso_passwordValidationError": {
-      "placeholders": {
-          "passwordMinimumLength": {
-              "type": "int"
-          }
-      }
-  },
-  "nonso_confirmPasswordValidationError": "This doesn't match the given password",
-  "createNewField": "Create New Field"
+    "materialAppTitle": "Study Without Pen!",
+    "nonso_register": "Register",
+    "nonso_signInUp": "Sign In/Up",
+    "nonso_email": "Email",
+    "nonso_next": "Next",
+    "nonso_cancel": "Cancel",
+    "nonso_invalidEmail": "This an invalid email",
+    "nonso_refresh": "Refresh account",
+    "nonso_verifyEmailAddress": "Check your email inbox to verify your email address",
+    "nonso_signOut": "Sign out",
+    "nonso_signIn": "Sign in",
+    "nonso_resendVerificationEmail": "Resend verification email",
+    "nonso_name": "Name",
+    "nonso_password": "Password",
+    "nonso_confirmPassword": "Confirm Password",
+    "nonso_forgotPassword": "Forgot password?",
+    "nonso_resetCodeSent": "Check your email inbox to reset your password",
+    "nonso_nameValidationError": "Enter your name",
+    "nonso_failed": "Failure: {exceptionCode}",
+    "@nonso_failed": {
+        "placeholders": {
+            "exceptionCode": {
+                "type": "String"
+            }
+        }
+    },
+    "nonso_success": "Success: Check your email to verify your email address",
+    "nonso_passwordValidationError": "Password needs to be at least {passwordMinimumLength} characters",
+    "@nonso_passwordValidationError": {
+        "placeholders": {
+            "passwordMinimumLength": {
+                "type": "int"
+            }
+        }
+    },
+    "nonso_confirmPasswordValidationError": "This doesn't match the given password",
+    "createField": "Create Field",
+    "fieldName": "Field Name",
+    "selectColor": "Select Color",
+    "ok": "Ok",
+    "cancel": "Cancel",
+    "fieldNameValidationError": "Must be between {fieldNameMinimumLength} and {fieldNameMaximumLength} characters",
+    "@fieldNameValidationError": {
+        "placeholders": {
+            "fieldNameMinimumLength": {
+                "type": "int"
+            },
+            "fieldNameMaximumLength": {
+                "type": "int"
+            }
+        }
+    }
 }

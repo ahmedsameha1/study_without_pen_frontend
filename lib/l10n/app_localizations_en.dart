@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get materialAppTitle => 'Study Withoud Pen!';
+  String get materialAppTitle => 'Study Without Pen!';
 
   @override
   String get nonso_register => 'Register';
@@ -79,5 +79,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nonso_confirmPasswordValidationError => 'This doesn\'t match the given password';
 
   @override
-  String get createNewField => 'Create New Field';
+  String get createField => 'Create Field';
+
+  @override
+  String get fieldName => 'Field Name';
+
+  @override
+  String get selectColor => 'Select Color';
+
+  @override
+  String get ok => 'Ok';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String fieldNameValidationError(int fieldNameMinimumLength, int fieldNameMaximumLength) {
+    return 'Must be between $fieldNameMinimumLength and $fieldNameMaximumLength characters';
+  }
 }

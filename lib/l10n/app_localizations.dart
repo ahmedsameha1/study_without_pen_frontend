@@ -96,7 +96,7 @@ abstract class AppLocalizations {
   /// No description provided for @materialAppTitle.
   ///
   /// In en, this message translates to:
-  /// **'Study Withoud Pen!'**
+  /// **'Study Without Pen!'**
   String get materialAppTitle;
 
   /// No description provided for @nonso_register.
@@ -225,11 +225,41 @@ abstract class AppLocalizations {
   /// **'This doesn\'t match the given password'**
   String get nonso_confirmPasswordValidationError;
 
-  /// No description provided for @createNewField.
+  /// No description provided for @createField.
   ///
   /// In en, this message translates to:
-  /// **'Create New Field'**
-  String get createNewField;
+  /// **'Create Field'**
+  String get createField;
+
+  /// No description provided for @fieldName.
+  ///
+  /// In en, this message translates to:
+  /// **'Field Name'**
+  String get fieldName;
+
+  /// No description provided for @selectColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Color'**
+  String get selectColor;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'Ok'**
+  String get ok;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @fieldNameValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be between {fieldNameMinimumLength} and {fieldNameMaximumLength} characters'**
+  String fieldNameValidationError(int fieldNameMinimumLength, int fieldNameMaximumLength);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
