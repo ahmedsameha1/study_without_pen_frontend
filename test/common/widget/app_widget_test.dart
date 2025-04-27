@@ -35,15 +35,29 @@ void main() {
         (WidgetTester tester) async {
       String expectedTitle = AppLocalizationsEn().materialAppTitle;
       await tester.pumpWidget(Localizations(
-        child: App(firebaseAuth),
         locale: currentLocale,
         delegates: AppLocalizations.localizationsDelegates,
+        child: App(firebaseAuth),
       ));
-      final multiBlocProviderFinder = find.byType(MultiBlocProvider);
-      expect(multiBlocProviderFinder, findsOneWidget);
-      final materialAppFinder = find.byType(MaterialApp);
-      expect(materialAppFinder, findsOneWidget);
-      MaterialApp materialApp = tester.widget(materialAppFinder) as MaterialApp;
+      expect(find.byType(App), findsOneWidget);
+      expect(
+          find.descendant(
+              of: find.byType(App),
+              matching: find.byType(MultiRepositoryProvider)),
+          findsOneWidget);
+      expect(
+          find.descendant(
+              of: find.byType(MultiRepositoryProvider),
+              matching: find.byType(RepositoryProvider<FirebaseAuth>)),
+          findsOneWidget);
+      expect(
+          find.descendant(
+              of: find.byType(RepositoryProvider<FirebaseAuth>),
+              matching: find.byType(MultiBlocProvider)),
+          findsOneWidget);
+      MaterialApp materialApp = tester.widget(find.descendant(
+          of: find.byType(MultiBlocProvider),
+          matching: find.byType(MaterialApp)));
       expect(materialApp.localizationsDelegates,
           [AppLocalizations.delegate, nonso.AppLocalizations.delegate]);
       expect(materialApp.supportedLocales, AppLocalizations.supportedLocales);

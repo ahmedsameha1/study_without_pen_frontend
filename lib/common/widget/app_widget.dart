@@ -9,15 +9,16 @@ import 'package:study_without_pen_by_flutter/l10n/app_localizations_en.dart';
 import '../router_config.dart';
 
 class App extends StatelessWidget {
-  final FirebaseAuth firebaseAuthInstance;
-  App(this.firebaseAuthInstance);
+  const App(this.firebaseAuth, {super.key});
+  final FirebaseAuth firebaseAuth;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return MultiRepositoryProvider(
+      providers: [RepositoryProvider<FirebaseAuth>.value(value: firebaseAuth)],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<nonso.AuthBloc>(
-              create: (context) => nonso.AuthBloc(firebaseAuthInstance))
+              create: (context) => nonso.AuthBloc(context.read<FirebaseAuth>()))
         ],
         child: MaterialApp.router(
           localizationsDelegates: [
