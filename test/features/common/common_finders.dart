@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final scaffoldFinder = find.byType(Scaffold);
@@ -8,3 +9,4 @@ final singleChildScrollViewFinder = find.byType(SingleChildScrollView);
 final columnFinder = find.byType(Column);
 final formFinder = find.byType(Form);
 final textFormFieldFinder = find.byType(TextFormField);
+final blocProviderFinder = find.byType(BlocProvider);

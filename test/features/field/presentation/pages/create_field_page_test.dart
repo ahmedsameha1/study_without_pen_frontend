@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/create_field_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 
@@ -51,7 +53,14 @@ void main() {
       final createFieldPageFinder = find.byType(CreateFieldPage);
       expect(createFieldPageFinder, findsOneWidget);
       expect(
-          find.descendant(of: createFieldPageFinder, matching: scaffoldFinder),
+          find.descendant(
+              of: createFieldPageFinder,
+              matching: find.byType(BlocProvider<CreateFieldCubit>)),
+          findsOneWidget);
+      expect(
+          find.descendant(
+              of: find.byType(BlocProvider<CreateFieldCubit>),
+              matching: scaffoldFinder),
           findsOneWidget);
       final appBarFinder =
           find.descendant(of: scaffoldFinder, matching: find.byType(AppBar));
@@ -63,8 +72,11 @@ void main() {
           find.descendant(
               of: scaffoldFinder, matching: find.byKey(Key("center"))),
           findsOneWidget);
+      Scaffold scaffold = tester.widget(scaffoldFinder);
+      SafeArea safeArea = scaffold.body as SafeArea;
+      Center center = safeArea.child as Center;
       Card card = tester.widget(
-        find.descendant(of: centerFinder, matching: cardFinder),
+        find.descendant(of: find.byWidget(center), matching: cardFinder),
       );
       expect(card.margin!.horizontal, 40);
       expect(card.margin!.vertical, 40);
