@@ -1,54 +1,95 @@
 import 'dart:async';
+import 'package:clock/clock.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/features/field/domain/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/create_field_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
+import 'package:study_without_pen_by_flutter/common/router_config.dart'
+    as this_app;
+import 'package:uuid/uuid.dart';
 
 import '../../../common/common_finders.dart';
 import '../../../common/widget_testing_helper.dart';
 import 'field_page_test.dart';
 
+class MockUser extends Mock implements User {}
+
+class MockCreateFieldUseCase extends Mock implements CreateFieldUseCase {}
+
+class MockUuid extends Mock implements Uuid {}
+
+Widget createWidgetInASkeleton(
+    nonso.AuthBloc bloc,
+    CreateFieldUseCase createFieldUseCase,
+    Uuid uuid,
+    Locale locale,
+    GoRouter Function() getRouterConfig) {
+  return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: bloc),
+        RepositoryProvider.value(value: createFieldUseCase),
+        RepositoryProvider.value(value: uuid)
+      ],
+      child: MaterialApp.router(
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            nonso.AppLocalizations.delegate
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: locale,
+          routerConfig: getRouterConfig()));
+}
+
+Future<void> goToCreateFieldPage(
+    Widget widgetInskeleton, WidgetTester tester) async {
+  await tester.pumpWidget(widgetInskeleton);
+  await tester.tap(find.byType(FloatingActionButton));
+  await tester.pumpAndSettle();
+}
+
 void main() {
-  late Widget widgetInSkeleton;
-  late Widget widgetProviderLocalization;
+  late CreateFieldUseCase createFieldUseCase;
+  late Uuid uuid;
+  String userId = "fwefohwe";
+  User user;
   late nonso.AuthBloc authBloc;
   String expectedCreateFieldString = "Create Field";
   String expectedFieldNameString = "Field Name";
   String expectedSelectColorString = "Select Color";
   String expectedOkString = "Ok";
   String expectedCancelString = "Cancel";
-  String expectedInvalidNameString = "Must be between 1 and 64 characters";
+  String expectedInvalidNameString =
+      "Field name must be between 1 and 64 characters";
 
   setUp(() {
+    user = MockUser();
     authBloc = MockAuthBloc();
+    createFieldUseCase = MockCreateFieldUseCase();
+    uuid = MockUuid();
+    when(() => user.uid).thenReturn(userId);
     when(() => authBloc.state).thenReturn(nonso.AuthState(
-      applicationAuthState: nonso.ApplicationAuthState.signedIn,
-    ));
+        applicationAuthState: nonso.ApplicationAuthState.signedIn, user: user));
     when(() => authBloc.signOut()).thenAnswer((_) => Completer<void>().future);
-    widgetInSkeleton = createWidgetInASkeletonB(CreateFieldPage());
   });
 
   group("Engish Locale", () {
     Locale currentLocale = const Locale("en");
 
-    setUp(() {
-      widgetProviderLocalization = Localizations(
-        locale: currentLocale,
-        delegates: AppLocalizations.localizationsDelegates,
-        child: widgetInSkeleton,
-      );
-    });
-
     testWidgets("Test the presence of the main widgets",
         (WidgetTester tester) async {
-      await tester.pumpWidget(widgetProviderLocalization);
-      await tester.tap(find.widgetWithText(TextButton, "child"));
+      await goToCreateFieldPage(
+          createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
+              currentLocale, this_app.getRouterConfig),
+          tester);
       await tester.pumpAndSettle();
       final createFieldPageFinder = find.byType(CreateFieldPage);
       expect(createFieldPageFinder, findsOneWidget);
@@ -259,8 +300,10 @@ void main() {
     });
 
     testWidgets("name text form field validation", (WidgetTester tester) async {
-      await tester.pumpWidget(widgetProviderLocalization);
-      await tester.tap(find.widgetWithText(TextButton, "child"));
+      await goToCreateFieldPage(
+          createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
+              currentLocale, this_app.getRouterConfig),
+          tester);
       await tester.pumpAndSettle();
       ElevatedButton okElevatedButton =
           tester.widget(find.widgetWithText(ElevatedButton, expectedOkString));
@@ -305,14 +348,53 @@ void main() {
 
     testWidgets("Test clicking the cancel button exit the create field page",
         (WidgetTester tester) async {
-      await tester.pumpWidget(widgetProviderLocalization);
-      await tester.tap(find.widgetWithText(TextButton, "child"));
+      await goToCreateFieldPage(
+          createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
+              currentLocale, this_app.getRouterConfig),
+          tester);
       await tester.pumpAndSettle();
       expect(find.byType(CreateFieldPage), findsOneWidget);
       await tester
           .tap(find.widgetWithText(ElevatedButton, expectedCancelString));
       await tester.pumpAndSettle();
       expect(find.byType(CreateFieldPage), findsNothing);
+    });
+
+    testWidgets("Test clicking the ok button: validation error",
+        (WidgetTester tester) async {
+      DateTime creationAt = DateTime(2020, 1, 1);
+      final fieldId = const Uuid().v4();
+      final name = "";
+      int usageCount = 0;
+      int color = 0xff520404;
+      when(() => createFieldUseCase.call(
+              fieldId, userId, name, creationAt, creationAt, usageCount, color))
+          .thenThrow(ArgumentError('Field name cannot be blank'));
+      when(() => uuid.v4()).thenReturn(fieldId);
+      withClock(Clock.fixed(creationAt), () async {
+        await goToCreateFieldPage(
+            createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
+                currentLocale, getRouterConfig),
+            tester);
+        expect(find.byType(CreateFieldPage), findsOneWidget);
+        await tester.enterText(textFormFieldFinder, name);
+        await tester.tap(find.byKey(Key('stackForColorIndicator')));
+        await tester.pumpAndSettle();
+        ColorWheelPicker colorWheelPicker =
+            tester.widget(find.byType(ColorWheelPicker));
+        final Offset colorWheelPickerCenter =
+            tester.getCenter(find.byWidget(colorWheelPicker));
+        await tester.timedDragFrom(
+            colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
+        await tester.pumpAndSettle();
+        await tester.ensureVisible(
+            find.widgetWithText(ElevatedButton, expectedOkString));
+        await tester.tap(find.widgetWithText(ElevatedButton, expectedOkString));
+        await tester.pumpAndSettle();
+        expect(find.byType(SnackBar), findsOne);
+        SnackBar snackBar = tester.widget(snackBarFinder);
+        expect((snackBar.content as Text).data, expectedInvalidNameString);
+      });
     });
   });
 }

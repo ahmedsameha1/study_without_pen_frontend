@@ -40,7 +40,7 @@
     "selectColor": "Select Color",
     "ok": "Ok",
     "cancel": "Cancel",
-    "fieldNameValidationError": "Must be between {fieldNameMinimumLength} and {fieldNameMaximumLength} characters",
+    "fieldNameValidationError": "Field name must be between {fieldNameMinimumLength} and {fieldNameMaximumLength} characters",
     "@fieldNameValidationError": {
         "placeholders": {
             "fieldNameMinimumLength": {

@@ -10,3 +10,4 @@ final columnFinder = find.byType(Column);
 final formFinder = find.byType(Form);
 final textFormFieldFinder = find.byType(TextFormField);
 final blocProviderFinder = find.byType(BlocProvider);
+final snackBarFinder = find.byType(SnackBar);

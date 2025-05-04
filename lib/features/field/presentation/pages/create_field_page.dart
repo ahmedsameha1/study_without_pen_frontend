@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:clock/clock.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,11 +6,27 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/features/field/domain/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/create_field_cubit.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
+import 'package:uuid/uuid.dart';
 
-class CreateFieldPage extends HookWidget {
-  CreateFieldPage({super.key});
+class CreateFieldPage extends StatelessWidget {
+  const CreateFieldPage({this.usecaseValidationTest = false, super.key});
+  final bool usecaseValidationTest;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<CreateFieldCubit>(
+        create: (ctx) => CreateFieldCubit(ctx.read<CreateFieldUseCase>()),
+        child: CreateFieldPageView(usecaseValidationTest));
+  }
+}
+
+class CreateFieldPageView extends HookWidget {
+  CreateFieldPageView(this.usecaseValidationTest, {super.key});
+
+  final bool usecaseValidationTest;
   final GlobalKey<FormState> _nameFormKey = GlobalKey();
 
   @override
@@ -18,8 +34,15 @@ class CreateFieldPage extends HookWidget {
     final color = useState<Color>(Colors.white);
     final showColorPicker = useState<bool>(false);
     final isNameValid = useState<bool>(false);
-    return BlocProvider(
-        create: (_) => CreateFieldCubit(),
+    final TextEditingController nameTextEditingController =
+        useTextEditingController();
+    return BlocListener<CreateFieldCubit, CreateFieldState>(
+        listener: (context, state) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(AppLocalizations.of(context)!
+                  .fieldNameValidationError(Fields.MINIMUM_LENGTH_OF_NAME,
+                      Fields.MAXIMUM_LENGTH_OF_NAME))));
+        },
         child: Scaffold(
           appBar: AppBar(
               title: Text(
@@ -41,6 +64,7 @@ class CreateFieldPage extends HookWidget {
                           Form(
                             key: _nameFormKey,
                             child: TextFormField(
+                              controller: nameTextEditingController,
                               decoration: InputDecoration(
                                   label: Text(
                                       AppLocalizations.of(context)!.fieldName)),
@@ -138,7 +162,27 @@ class CreateFieldPage extends HookWidget {
                                       AppLocalizations.of(context)!.cancel)),
                               ElevatedButton(
                                   key: Key("okButton"),
-                                  onPressed: isNameValid.value ? () {} : null,
+                                  onPressed: isNameValid.value ||
+                                          usecaseValidationTest
+                                      ? () {
+                                          final dateTime = clock.now();
+                                          context
+                                              .read<CreateFieldCubit>()
+                                              .createField(
+                                                  context.read<Uuid>().v4(),
+                                                  context
+                                                      .read<nonso.AuthBloc>()
+                                                      .state
+                                                      .user!
+                                                      .uid,
+                                                  nameTextEditingController
+                                                      .text,
+                                                  dateTime,
+                                                  dateTime,
+                                                  0,
+                                                  color.value.toARGB32());
+                                        }
+                                      : null,
                                   child:
                                       Text(AppLocalizations.of(context)!.ok)),
                             ],

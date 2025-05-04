@@ -38,7 +38,7 @@ dependencies:
   rxdart: ^0.28.0
   firebase_core:
   firebase_auth:
-  nonso: ^0.0.15 
+  nonso: ^0.0.17 
   flutter_bloc: ^9.1.0
   flutter_localizations:
     sdk: flutter

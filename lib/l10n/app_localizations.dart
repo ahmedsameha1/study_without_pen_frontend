@@ -258,7 +258,7 @@ abstract class AppLocalizations {
   /// No description provided for @fieldNameValidationError.
   ///
   /// In en, this message translates to:
-  /// **'Must be between {fieldNameMinimumLength} and {fieldNameMaximumLength} characters'**
+  /// **'Field name must be between {fieldNameMinimumLength} and {fieldNameMaximumLength} characters'**
   String fieldNameValidationError(int fieldNameMinimumLength, int fieldNameMaximumLength);
 }
 

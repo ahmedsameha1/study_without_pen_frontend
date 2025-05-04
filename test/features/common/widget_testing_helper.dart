@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
+import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
+import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nonso/nonso.dart' as nonso;
@@ -102,4 +105,24 @@ bool checkWidgetsOrder(List<Widget> widgets, List<Widget> shouldList) {
     }
   }
   return true;
+}
+
+GoRouter getRouterConfig() {
+  return GoRouter(routes: [
+    GoRoute(
+        path: rootPath,
+        builder: rootPathBuilder,
+        routes: [GoRoute(path: createField, builder: createFieldPathBuilder)])
+  ]);
+}
+
+Widget rootPathBuilder(BuildContext buildContext, GoRouterState goRouterState) {
+  return nonso.AuthScreen(FieldPage());
+}
+
+Widget createFieldPathBuilder(
+    BuildContext buildContext, GoRouterState goRouterState) {
+  return CreateFieldPage(
+    usecaseValidationTest: true,
+  );
 }
