@@ -260,6 +260,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Field name must be between {fieldNameMinimumLength} and {fieldNameMaximumLength} characters'**
   String fieldNameValidationError(int fieldNameMinimumLength, int fieldNameMaximumLength);
+
+  /// No description provided for @fieldHasBeenCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Field has been created'**
+  String get fieldHasBeenCreated;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

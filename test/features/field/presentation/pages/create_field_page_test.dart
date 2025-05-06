@@ -69,6 +69,7 @@ void main() {
   String expectedCancelString = "Cancel";
   String expectedInvalidNameString =
       "Field name must be between 1 and 64 characters";
+  String expectedFieldHasBeenCreatedString = "Field has been created";
 
   setUp(() {
     user = MockUser();
@@ -360,40 +361,93 @@ void main() {
       expect(find.byType(CreateFieldPage), findsNothing);
     });
 
-    testWidgets("Test clicking the ok button: validation error",
-        (WidgetTester tester) async {
-      DateTime creationAt = DateTime(2020, 1, 1);
-      final fieldId = const Uuid().v4();
-      final name = "";
-      int usageCount = 0;
-      int color = 0xff520404;
-      when(() => createFieldUseCase.call(
-              fieldId, userId, name, creationAt, creationAt, usageCount, color))
-          .thenThrow(ArgumentError('Field name cannot be blank'));
-      when(() => uuid.v4()).thenReturn(fieldId);
-      withClock(Clock.fixed(creationAt), () async {
-        await goToCreateFieldPage(
-            createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
-                currentLocale, getRouterConfig),
-            tester);
-        expect(find.byType(CreateFieldPage), findsOneWidget);
-        await tester.enterText(textFormFieldFinder, name);
-        await tester.tap(find.byKey(Key('stackForColorIndicator')));
-        await tester.pumpAndSettle();
-        ColorWheelPicker colorWheelPicker =
-            tester.widget(find.byType(ColorWheelPicker));
-        final Offset colorWheelPickerCenter =
-            tester.getCenter(find.byWidget(colorWheelPicker));
-        await tester.timedDragFrom(
-            colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
-        await tester.pumpAndSettle();
-        await tester.ensureVisible(
-            find.widgetWithText(ElevatedButton, expectedOkString));
-        await tester.tap(find.widgetWithText(ElevatedButton, expectedOkString));
-        await tester.pumpAndSettle();
-        expect(find.byType(SnackBar), findsOne);
-        SnackBar snackBar = tester.widget(snackBarFinder);
-        expect((snackBar.content as Text).data, expectedInvalidNameString);
+    group('Ok button', () {
+      testWidgets("Test clicking the ok button: validation error",
+          (WidgetTester tester) async {
+        DateTime creationAt = DateTime(2020, 1, 1);
+        final fieldId = const Uuid().v4();
+        final name = "";
+        int usageCount = 0;
+        int color = 0xff520404;
+        when(() => createFieldUseCase.call(
+            fieldId,
+            userId,
+            name,
+            creationAt,
+            creationAt,
+            usageCount,
+            color)).thenThrow(ArgumentError('Field name cannot be blank'));
+        when(() => uuid.v4()).thenReturn(fieldId);
+        withClock(Clock.fixed(creationAt), () async {
+          await goToCreateFieldPage(
+              createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
+                  currentLocale, getRouterConfig),
+              tester);
+          expect(find.byType(CreateFieldPage), findsOneWidget);
+          await tester.enterText(textFormFieldFinder, name);
+          await tester.tap(find.byKey(Key('stackForColorIndicator')));
+          await tester.pumpAndSettle();
+          ColorWheelPicker colorWheelPicker =
+              tester.widget(find.byType(ColorWheelPicker));
+          final Offset colorWheelPickerCenter =
+              tester.getCenter(find.byWidget(colorWheelPicker));
+          await tester.timedDragFrom(
+              colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
+          await tester.pumpAndSettle();
+          await tester.ensureVisible(
+              find.widgetWithText(ElevatedButton, expectedOkString));
+          await tester
+              .tap(find.widgetWithText(ElevatedButton, expectedOkString));
+          await tester.pumpAndSettle();
+          expect(find.byType(SnackBar), findsOne);
+          SnackBar snackBar = tester.widget(snackBarFinder);
+          expect((snackBar.content as Text).data, expectedInvalidNameString);
+        });
+      });
+
+      testWidgets("Test clicking the ok button: success",
+          (WidgetTester tester) async {
+        DateTime creationAt = DateTime(2020, 1, 1);
+        final fieldId = const Uuid().v4();
+        final name = "field name";
+        int usageCount = 0;
+        int color = 0xff520404;
+        when(() => createFieldUseCase.call(
+            fieldId,
+            userId,
+            name,
+            creationAt,
+            creationAt,
+            usageCount,
+            color)).thenAnswer((_) => Completer<void>().future);
+        when(() => uuid.v4()).thenReturn(fieldId);
+        withClock(Clock.fixed(creationAt), () async {
+          await goToCreateFieldPage(
+              createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
+                  currentLocale, getRouterConfig),
+              tester);
+          expect(find.byType(CreateFieldPage), findsOneWidget);
+          await tester.enterText(textFormFieldFinder, name);
+          await tester.tap(find.byKey(Key('stackForColorIndicator')));
+          await tester.pumpAndSettle();
+          ColorWheelPicker colorWheelPicker =
+              tester.widget(find.byType(ColorWheelPicker));
+          final Offset colorWheelPickerCenter =
+              tester.getCenter(find.byWidget(colorWheelPicker));
+          await tester.timedDragFrom(
+              colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
+          await tester.pumpAndSettle();
+          await tester.ensureVisible(
+              find.widgetWithText(ElevatedButton, expectedOkString));
+          await tester
+              .tap(find.widgetWithText(ElevatedButton, expectedOkString));
+          await tester.pumpAndSettle();
+          expect(find.byType(SnackBar), findsOne);
+          SnackBar snackBar = tester.widget(snackBarFinder);
+          expect((snackBar.content as Text).data,
+              expectedFieldHasBeenCreatedString);
+          expect(find.byType(CreateFieldPage), findsNothing);
+        });
       });
     });
   });

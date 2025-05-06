@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart' as nonso;
+import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/field/domain/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/create_field_cubit.dart';
@@ -38,10 +39,17 @@ class CreateFieldPageView extends HookWidget {
         useTextEditingController();
     return BlocListener<CreateFieldCubit, CreateFieldState>(
         listener: (context, state) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(AppLocalizations.of(context)!
-                  .fieldNameValidationError(Fields.MINIMUM_LENGTH_OF_NAME,
-                      Fields.MAXIMUM_LENGTH_OF_NAME))));
+          if (state == CreateFieldState.failure) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(AppLocalizations.of(context)!
+                    .fieldNameValidationError(Fields.MINIMUM_LENGTH_OF_NAME,
+                        Fields.MAXIMUM_LENGTH_OF_NAME))));
+          } else if (state == CreateFieldState.success) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content:
+                    Text(AppLocalizations.of(context)!.fieldHasBeenCreated)));
+            GoRouter.of(context).go(rootPath);
+          }
         },
         child: Scaffold(
           appBar: AppBar(

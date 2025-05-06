@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -12,7 +14,7 @@ void main() {
   late CreateFieldCubit createFieldCubit;
   DateTime creationAt = DateTime(2020, 1, 1);
   final fieldId = const Uuid().v4();
-  final name = "";
+  String name = "";
   int usageCount = 0;
   int color = 0xff520404;
   String userId = "wofhwoef";
@@ -25,7 +27,7 @@ void main() {
 
   blocTest<CreateFieldCubit, CreateFieldState>('''
     When calling CreateFieldUseCase.call() throws an error then the state
-    should be CreateFieldState.failure''',
+    should be CreateFieldState.failure then CreateFieldState.initial''',
       build: () {
         createFieldUseCase = MockCreateFieldUseCase();
         when(() => createFieldUseCase.call(
@@ -41,4 +43,24 @@ void main() {
       act: (cubit) => cubit.createField(
           fieldId, userId, name, creationAt, creationAt, usageCount, color),
       expect: () => [CreateFieldState.failure, CreateFieldState.initial]);
+
+  blocTest<CreateFieldCubit, CreateFieldState>('''
+    When calling CreateFieldUseCase.call() return a future of void
+    should be CreateFieldState.success then CreateFieldState.initial''',
+      build: () {
+        name = "field name";
+        createFieldUseCase = MockCreateFieldUseCase();
+        when(() => createFieldUseCase.call(
+            fieldId,
+            userId,
+            name,
+            creationAt,
+            creationAt,
+            usageCount,
+            color)).thenAnswer((_) => Completer<void>().future);
+        return createFieldCubit = CreateFieldCubit(createFieldUseCase);
+      },
+      act: (cubit) => cubit.createField(
+          fieldId, userId, name, creationAt, creationAt, usageCount, color),
+      expect: () => [CreateFieldState.success, CreateFieldState.initial]);
 }

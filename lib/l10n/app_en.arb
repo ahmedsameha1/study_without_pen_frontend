@@ -50,5 +50,6 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "fieldHasBeenCreated": "Field has been created"
 }
