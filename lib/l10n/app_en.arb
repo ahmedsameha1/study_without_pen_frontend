@@ -51,5 +51,6 @@
             }
         }
     },
-    "fieldHasBeenCreated": "Field has been created"
+    "fieldHasBeenCreated": "The field has been created",
+    "fieldPersistanceError": "An Error has been occured while persisting the field"
 }

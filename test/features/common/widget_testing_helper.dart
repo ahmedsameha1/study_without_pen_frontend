@@ -1,13 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:study_without_pen_by_flutter/features/field/domain/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
+import 'package:uuid/uuid.dart';
+
+class MockUser extends Mock implements User {}
+
+class MockCreateFieldUseCase extends Mock implements CreateFieldUseCase {}
+
+class MockUuid extends Mock implements Uuid {}
 
 class AppThemeForTests {
   static const seedColor = Color(0xFFEC407A);
@@ -31,15 +39,25 @@ class AppThemeForTests {
   }
 }
 
-Widget createWidgetInASkeleton(Widget widget, nonso.AuthBloc bloc) {
-  return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => bloc)],
+Widget createWidgetInASkeleton(
+    nonso.AuthBloc bloc,
+    CreateFieldUseCase createFieldUseCase,
+    Uuid uuid,
+    Locale locale,
+    GoRouter Function() getRouterConfig) {
+  return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: bloc),
+        RepositoryProvider.value(value: createFieldUseCase),
+        RepositoryProvider.value(value: uuid)
+      ],
       child: MaterialApp.router(
           localizationsDelegates: [
             AppLocalizations.delegate,
             nonso.AppLocalizations.delegate
           ],
           supportedLocales: AppLocalizations.supportedLocales,
+          locale: locale,
           routerConfig: getRouterConfig()));
 }
 
@@ -55,45 +73,6 @@ class ParentPage extends StatelessWidget {
           child: Text("child")),
     );
   }
-}
-
-Widget createWidgetInASkeletonB(Widget widget) {
-  return MaterialApp.router(
-    localizationsDelegates: [
-      AppLocalizations.delegate,
-      nonso.AppLocalizations.delegate
-    ],
-    supportedLocales: AppLocalizations.supportedLocales,
-    theme: AppThemeForTests.theme,
-    routerConfig: GoRouter(routes: [
-      GoRoute(
-        path: "/",
-        builder: (context, state) => ParentPage("/child"),
-        routes: [GoRoute(path: "child", builder: (context, state) => widget)],
-      )
-    ]),
-  );
-}
-
-Future<AppLocalizations> getLocalizations(WidgetTester t, Locale locale) async {
-  late AppLocalizations result;
-  await t.pumpWidget(
-    MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      locale: locale,
-      home: Material(
-        child: Builder(
-          builder: (BuildContext context) {
-            result = AppLocalizations.of(context)!;
-            return Container();
-          },
-        ),
-      ),
-    ),
-  );
-  await t.pumpAndSettle();
-  return result;
 }
 
 bool checkWidgetsOrder(List<Widget> widgets, List<Widget> shouldList) {

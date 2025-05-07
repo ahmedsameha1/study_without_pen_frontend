@@ -1,7 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/field/domain/create_field_usecase.dart';
 
-enum CreateFieldState { initial, failure, success }
+enum CreateFieldState {
+  initial,
+  validationFailure,
+  persistanceFailure,
+  success
+}
 
 class CreateFieldCubit extends Cubit<CreateFieldState> {
   CreateFieldCubit(this.createFieldUseCase) : super(CreateFieldState.initial);
@@ -20,7 +25,9 @@ class CreateFieldCubit extends Cubit<CreateFieldState> {
           lastModificationAt, usageCount, color);
       emit(CreateFieldState.success);
     } on ArgumentError {
-      emit(CreateFieldState.failure);
+      emit(CreateFieldState.validationFailure);
+    } catch (e) {
+      emit(CreateFieldState.persistanceFailure);
     }
     emit(CreateFieldState.initial);
   }

@@ -48,15 +48,15 @@ void main() {
       expect(
           find.descendant(
               of: find.byType(MultiRepositoryProvider),
-              matching: find.byType(RepositoryProvider<FirebaseAuth>)),
+              matching: find.byType(MultiBlocProvider)),
           findsOneWidget);
       expect(
           find.descendant(
-              of: find.byType(RepositoryProvider<FirebaseAuth>),
-              matching: find.byType(MultiBlocProvider)),
+              of: find.byType(MultiBlocProvider),
+              matching: find.byType(BlocProvider<nonso.AuthBloc>)),
           findsOneWidget);
       MaterialApp materialApp = tester.widget(find.descendant(
-          of: find.byType(MultiBlocProvider),
+          of: find.byType(BlocProvider<nonso.AuthBloc>),
           matching: find.byType(MaterialApp)));
       expect(materialApp.localizationsDelegates,
           [AppLocalizations.delegate, nonso.AppLocalizations.delegate]);

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:clock/clock.dart';
+import 'package:drift/native.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,6 @@ import 'package:uuid/uuid.dart';
 import '../../../common/common_finders.dart';
 import '../../../common/widget_testing_helper.dart';
 import 'field_page_test.dart';
-
-class MockUser extends Mock implements User {}
-
-class MockCreateFieldUseCase extends Mock implements CreateFieldUseCase {}
-
-class MockUuid extends Mock implements Uuid {}
 
 Widget createWidgetInASkeleton(
     nonso.AuthBloc bloc,
@@ -69,7 +64,9 @@ void main() {
   String expectedCancelString = "Cancel";
   String expectedInvalidNameString =
       "Field name must be between 1 and 64 characters";
-  String expectedFieldHasBeenCreatedString = "Field has been created";
+  String expectedFieldHasBeenCreatedString = "The field has been created";
+  String expectedErrorOccuredWhileFieldPersistenceString =
+      "An Error has been occured while persisting the field";
 
   setUp(() {
     user = MockUser();
@@ -402,6 +399,50 @@ void main() {
           expect(find.byType(SnackBar), findsOne);
           SnackBar snackBar = tester.widget(snackBarFinder);
           expect((snackBar.content as Text).data, expectedInvalidNameString);
+        });
+      });
+
+      testWidgets("Test clicking the ok button: failure from the date repo",
+          (WidgetTester tester) async {
+        DateTime creationAt = DateTime(2020, 1, 1);
+        final fieldId = const Uuid().v4();
+        final name = "field name";
+        int usageCount = 0;
+        int color = 0xff520404;
+        when(() => createFieldUseCase.call(
+            fieldId,
+            userId,
+            name,
+            creationAt,
+            creationAt,
+            usageCount,
+            color)).thenThrow(SqliteException(1, "Error from database"));
+        when(() => uuid.v4()).thenReturn(fieldId);
+        withClock(Clock.fixed(creationAt), () async {
+          await goToCreateFieldPage(
+              createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
+                  currentLocale, getRouterConfig),
+              tester);
+          expect(find.byType(CreateFieldPage), findsOneWidget);
+          await tester.enterText(textFormFieldFinder, name);
+          await tester.tap(find.byKey(Key('stackForColorIndicator')));
+          await tester.pumpAndSettle();
+          ColorWheelPicker colorWheelPicker =
+              tester.widget(find.byType(ColorWheelPicker));
+          final Offset colorWheelPickerCenter =
+              tester.getCenter(find.byWidget(colorWheelPicker));
+          await tester.timedDragFrom(
+              colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
+          await tester.pumpAndSettle();
+          await tester.ensureVisible(
+              find.widgetWithText(ElevatedButton, expectedOkString));
+          await tester
+              .tap(find.widgetWithText(ElevatedButton, expectedOkString));
+          await tester.pumpAndSettle();
+          expect(find.byType(SnackBar), findsOne);
+          SnackBar snackBar = tester.widget(snackBarFinder);
+          expect((snackBar.content as Text).data,
+              expectedErrorOccuredWhileFieldPersistenceString);
         });
       });
 

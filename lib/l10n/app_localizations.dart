@@ -264,8 +264,14 @@ abstract class AppLocalizations {
   /// No description provided for @fieldHasBeenCreated.
   ///
   /// In en, this message translates to:
-  /// **'Field has been created'**
+  /// **'The field has been created'**
   String get fieldHasBeenCreated;
+
+  /// No description provided for @fieldPersistanceError.
+  ///
+  /// In en, this message translates to:
+  /// **'An Error has been occured while persisting the field'**
+  String get fieldPersistanceError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

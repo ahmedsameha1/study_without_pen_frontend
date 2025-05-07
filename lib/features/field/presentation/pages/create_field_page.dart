@@ -39,11 +39,15 @@ class CreateFieldPageView extends HookWidget {
         useTextEditingController();
     return BlocListener<CreateFieldCubit, CreateFieldState>(
         listener: (context, state) {
-          if (state == CreateFieldState.failure) {
+          if (state == CreateFieldState.validationFailure) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(AppLocalizations.of(context)!
                     .fieldNameValidationError(Fields.MINIMUM_LENGTH_OF_NAME,
                         Fields.MAXIMUM_LENGTH_OF_NAME))));
+          } else if (state == CreateFieldState.persistanceFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content:
+                    Text(AppLocalizations.of(context)!.fieldPersistanceError)));
           } else if (state == CreateFieldState.success) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content:

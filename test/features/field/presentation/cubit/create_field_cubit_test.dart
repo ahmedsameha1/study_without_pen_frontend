@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/features/field/domain/create_field_usecase.dart';
@@ -26,7 +27,7 @@ void main() {
   });
 
   blocTest<CreateFieldCubit, CreateFieldState>('''
-    When calling CreateFieldUseCase.call() throws an error then the state
+    When calling CreateFieldUseCase.call() throws an ArgumentError then the state
     should be CreateFieldState.failure then CreateFieldState.initial''',
       build: () {
         createFieldUseCase = MockCreateFieldUseCase();
@@ -42,7 +43,27 @@ void main() {
       },
       act: (cubit) => cubit.createField(
           fieldId, userId, name, creationAt, creationAt, usageCount, color),
-      expect: () => [CreateFieldState.failure, CreateFieldState.initial]);
+      expect: () => [CreateFieldState.validationFailure, CreateFieldState.initial]);
+
+  blocTest<CreateFieldCubit, CreateFieldState>('''
+    When calling CreateFieldUseCase.call() throws an error other than ArgumentError 
+    then the state should be CreateFieldState.failure then CreateFieldState.initial''',
+      build: () {
+        name = "field name";
+        createFieldUseCase = MockCreateFieldUseCase();
+        when(() => createFieldUseCase.call(
+            fieldId,
+            userId,
+            name,
+            creationAt,
+            creationAt,
+            usageCount,
+            color)).thenThrow(SqliteException(1, 'Error from database'));
+        return createFieldCubit = CreateFieldCubit(createFieldUseCase);
+      },
+      act: (cubit) => cubit.createField(
+          fieldId, userId, name, creationAt, creationAt, usageCount, color),
+      expect: () => [CreateFieldState.persistanceFailure, CreateFieldState.initial]);
 
   blocTest<CreateFieldCubit, CreateFieldState>('''
     When calling CreateFieldUseCase.call() return a future of void
