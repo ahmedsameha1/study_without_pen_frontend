@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
-import 'package:study_without_pen_by_flutter/features/field/domain/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field/domain/usecases/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations_en.dart';

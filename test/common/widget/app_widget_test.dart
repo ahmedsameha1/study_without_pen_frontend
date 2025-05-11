@@ -9,14 +9,18 @@ import 'package:study_without_pen_by_flutter/common/theme.dart';
 import 'package:study_without_pen_by_flutter/common/widget/app_widget.dart';
 import 'package:mockito/mockito.dart';
 import 'package:nonso/nonso.dart' as nonso;
+import 'package:study_without_pen_by_flutter/features/field/data/repositories/field_repository.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations_en.dart';
 
 import 'app_widget_test.mocks.dart';
 
+class MockFieldRepository extends Mock implements FieldRepository {}
+
 @GenerateMocks([FirebaseAuth])
 void main() {
   late FirebaseAuth firebaseAuth;
+  late FieldRepository fieldRepository;
   const User? nullUser = null;
 
   group("English Locale", () {
@@ -24,6 +28,7 @@ void main() {
 
     setUp(() {
       firebaseAuth = MockFirebaseAuth();
+      fieldRepository = MockFieldRepository();
       late StreamController<User?> streamController;
       streamController = StreamController();
       when(firebaseAuth.userChanges())
@@ -37,7 +42,7 @@ void main() {
       await tester.pumpWidget(Localizations(
         locale: currentLocale,
         delegates: AppLocalizations.localizationsDelegates,
-        child: App(firebaseAuth),
+        child: App(firebaseAuth, fieldRepository),
       ));
       expect(find.byType(App), findsOneWidget);
       expect(

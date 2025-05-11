@@ -4940,7 +4940,7 @@ final class $$EntryTextsTableReferences
 
   $$EntrysTableProcessedTableManager get entrysRefs {
     final manager = $$EntrysTableTableManager($_db, $_db.entrys)
-        .filter((f) => f.answerId.id($_item.id));
+        .filter((f) => f.answerId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_entrysRefsTable($_db));
     return ProcessedTableManager(
@@ -5094,7 +5094,8 @@ class $$EntryTextsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (entrysRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<EntryText, $EntryTextsTable,
+                            Entry>(
                         currentTable: table,
                         referencedTable:
                             $$EntryTextsTableReferences._entrysRefsTable(db),
@@ -5149,7 +5150,7 @@ final class $$QuestionsTableReferences
 
   $$EntrysTableProcessedTableManager get entrysRefs {
     final manager = $$EntrysTableTableManager($_db, $_db.entrys)
-        .filter((f) => f.questionId.id($_item.id));
+        .filter((f) => f.questionId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_entrysRefsTable($_db));
     return ProcessedTableManager(
@@ -5317,7 +5318,7 @@ class $$QuestionsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (entrysRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Question, $QuestionsTable, Entry>(
                         currentTable: table,
                         referencedTable:
                             $$QuestionsTableReferences._entrysRefsTable(db),
@@ -5379,7 +5380,7 @@ final class $$FieldsTableReferences
 
   $$FieldListsTableProcessedTableManager get fieldListsRefs {
     final manager = $$FieldListsTableTableManager($_db, $_db.fieldLists)
-        .filter((f) => f.fieldId.id($_item.id));
+        .filter((f) => f.fieldId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_fieldListsRefsTable($_db));
     return ProcessedTableManager(
@@ -5393,7 +5394,7 @@ final class $$FieldsTableReferences
 
   $$FieldNotesTableProcessedTableManager get fieldNotesRefs {
     final manager = $$FieldNotesTableTableManager($_db, $_db.fieldNotes)
-        .filter((f) => f.fieldId.id($_item.id));
+        .filter((f) => f.fieldId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_fieldNotesRefsTable($_db));
     return ProcessedTableManager(
@@ -5659,7 +5660,7 @@ class $$FieldsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (fieldListsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Field, $FieldsTable, FieldList>(
                         currentTable: table,
                         referencedTable:
                             $$FieldsTableReferences._fieldListsRefsTable(db),
@@ -5671,7 +5672,7 @@ class $$FieldsTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.fieldId == item.id),
                         typedResults: items),
                   if (fieldNotesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Field, $FieldsTable, FieldNote>(
                         currentTable: table,
                         referencedTable:
                             $$FieldsTableReferences._fieldNotesRefsTable(db),
@@ -5758,8 +5759,10 @@ final class $$FieldListsTableReferences
       .createAlias($_aliasNameGenerator(db.fieldLists.fieldId, db.fields.id));
 
   $$FieldsTableProcessedTableManager get fieldId {
+    final $_column = $_itemColumn<String>('field_id')!;
+
     final manager = $$FieldsTableTableManager($_db, $_db.fields)
-        .filter((f) => f.id($_item.fieldId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_fieldIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -5774,7 +5777,7 @@ final class $$FieldListsTableReferences
 
   $$EntrysTableProcessedTableManager get entrysRefs {
     final manager = $$EntrysTableTableManager($_db, $_db.entrys)
-        .filter((f) => f.fieldListId.id($_item.id));
+        .filter((f) => f.fieldListId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_entrysRefsTable($_db));
     return ProcessedTableManager(
@@ -5789,7 +5792,7 @@ final class $$FieldListsTableReferences
 
   $$FieldListNotesTableProcessedTableManager get fieldListNotesRefs {
     final manager = $$FieldListNotesTableTableManager($_db, $_db.fieldListNotes)
-        .filter((f) => f.fieldListId.id($_item.id));
+        .filter((f) => f.fieldListId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_fieldListNotesRefsTable($_db));
     return ProcessedTableManager(
@@ -5804,7 +5807,7 @@ final class $$FieldListsTableReferences
 
   $$SessionsTableProcessedTableManager get sessionsRefs {
     final manager = $$SessionsTableTableManager($_db, $_db.sessions)
-        .filter((f) => f.fieldListId.id($_item.id));
+        .filter((f) => f.fieldListId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_sessionsRefsTable($_db));
     return ProcessedTableManager(
@@ -6435,7 +6438,8 @@ class $$FieldListsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (entrysRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<FieldList, $FieldListsTable,
+                            Entry>(
                         currentTable: table,
                         referencedTable:
                             $$FieldListsTableReferences._entrysRefsTable(db),
@@ -6447,7 +6451,8 @@ class $$FieldListsTableTableManager extends RootTableManager<
                                 .where((e) => e.fieldListId == item.id),
                         typedResults: items),
                   if (fieldListNotesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<FieldList, $FieldListsTable,
+                            FieldListNote>(
                         currentTable: table,
                         referencedTable: $$FieldListsTableReferences
                             ._fieldListNotesRefsTable(db),
@@ -6459,7 +6464,8 @@ class $$FieldListsTableTableManager extends RootTableManager<
                                 .where((e) => e.fieldListId == item.id),
                         typedResults: items),
                   if (sessionsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<FieldList, $FieldListsTable,
+                            Session>(
                         currentTable: table,
                         referencedTable:
                             $$FieldListsTableReferences._sessionsRefsTable(db),
@@ -6533,8 +6539,10 @@ final class $$EntrysTableReferences
           $_aliasNameGenerator(db.entrys.fieldListId, db.fieldLists.id));
 
   $$FieldListsTableProcessedTableManager get fieldListId {
+    final $_column = $_itemColumn<String>('field_list_id')!;
+
     final manager = $$FieldListsTableTableManager($_db, $_db.fieldLists)
-        .filter((f) => f.id($_item.fieldListId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_fieldListIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -6545,8 +6553,10 @@ final class $$EntrysTableReferences
       .createAlias($_aliasNameGenerator(db.entrys.answerId, db.entryTexts.id));
 
   $$EntryTextsTableProcessedTableManager get answerId {
+    final $_column = $_itemColumn<String>('answer_id')!;
+
     final manager = $$EntryTextsTableTableManager($_db, $_db.entryTexts)
-        .filter((f) => f.id($_item.answerId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_answerIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -6557,8 +6567,10 @@ final class $$EntrysTableReferences
       .createAlias($_aliasNameGenerator(db.entrys.questionId, db.questions.id));
 
   $$QuestionsTableProcessedTableManager get questionId {
+    final $_column = $_itemColumn<String>('question_id')!;
+
     final manager = $$QuestionsTableTableManager($_db, $_db.questions)
-        .filter((f) => f.id($_item.questionId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_questionIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -6573,7 +6585,7 @@ final class $$EntrysTableReferences
 
   $$SessionEntrysTableProcessedTableManager get sessionEntrysRefs {
     final manager = $$SessionEntrysTableTableManager($_db, $_db.sessionEntrys)
-        .filter((f) => f.entryId.id($_item.id));
+        .filter((f) => f.entryId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_sessionEntrysRefsTable($_db));
     return ProcessedTableManager(
@@ -6588,7 +6600,7 @@ final class $$EntrysTableReferences
 
   $$WrongAnswersTableProcessedTableManager get wrongAnswersRefs {
     final manager = $$WrongAnswersTableTableManager($_db, $_db.wrongAnswers)
-        .filter((f) => f.entryId.id($_item.id));
+        .filter((f) => f.entryId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_wrongAnswersRefsTable($_db));
     return ProcessedTableManager(
@@ -7130,7 +7142,8 @@ class $$EntrysTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (sessionEntrysRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Entry, $EntrysTable,
+                            SessionEntry>(
                         currentTable: table,
                         referencedTable:
                             $$EntrysTableReferences._sessionEntrysRefsTable(db),
@@ -7142,7 +7155,7 @@ class $$EntrysTableTableManager extends RootTableManager<
                             referencedItems.where((e) => e.entryId == item.id),
                         typedResults: items),
                   if (wrongAnswersRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Entry, $EntrysTable, WrongAnswer>(
                         currentTable: table,
                         referencedTable:
                             $$EntrysTableReferences._wrongAnswersRefsTable(db),
@@ -7202,8 +7215,10 @@ final class $$FieldNotesTableReferences
       .createAlias($_aliasNameGenerator(db.fieldNotes.fieldId, db.fields.id));
 
   $$FieldsTableProcessedTableManager get fieldId {
+    final $_column = $_itemColumn<String>('field_id')!;
+
     final manager = $$FieldsTableTableManager($_db, $_db.fields)
-        .filter((f) => f.id($_item.fieldId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_fieldIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -7478,8 +7493,10 @@ final class $$FieldListNotesTableReferences
           db.fieldListNotes.fieldListId, db.fieldLists.id));
 
   $$FieldListsTableProcessedTableManager get fieldListId {
+    final $_column = $_itemColumn<String>('field_list_id')!;
+
     final manager = $$FieldListsTableTableManager($_db, $_db.fieldLists)
-        .filter((f) => f.id($_item.fieldListId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_fieldListIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -7767,8 +7784,10 @@ final class $$SessionsTableReferences
           $_aliasNameGenerator(db.sessions.fieldListId, db.fieldLists.id));
 
   $$FieldListsTableProcessedTableManager get fieldListId {
+    final $_column = $_itemColumn<String>('field_list_id')!;
+
     final manager = $$FieldListsTableTableManager($_db, $_db.fieldLists)
-        .filter((f) => f.id($_item.fieldListId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_fieldListIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -7783,7 +7802,7 @@ final class $$SessionsTableReferences
 
   $$SessionEntrysTableProcessedTableManager get sessionEntrysRefs {
     final manager = $$SessionEntrysTableTableManager($_db, $_db.sessionEntrys)
-        .filter((f) => f.sessionId.id($_item.id));
+        .filter((f) => f.sessionId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_sessionEntrysRefsTable($_db));
     return ProcessedTableManager(
@@ -7798,7 +7817,7 @@ final class $$SessionsTableReferences
 
   $$TestSessionsTableProcessedTableManager get testSessionsRefs {
     final manager = $$TestSessionsTableTableManager($_db, $_db.testSessions)
-        .filter((f) => f.sessionId.id($_item.id));
+        .filter((f) => f.sessionId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_testSessionsRefsTable($_db));
     return ProcessedTableManager(
@@ -7813,7 +7832,7 @@ final class $$SessionsTableReferences
 
   $$WrongAnswersTableProcessedTableManager get wrongAnswersRefs {
     final manager = $$WrongAnswersTableTableManager($_db, $_db.wrongAnswers)
-        .filter((f) => f.sessionId.id($_item.id));
+        .filter((f) => f.sessionId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_wrongAnswersRefsTable($_db));
     return ProcessedTableManager(
@@ -8278,7 +8297,8 @@ class $$SessionsTableTableManager extends RootTableManager<
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (sessionEntrysRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Session, $SessionsTable,
+                            SessionEntry>(
                         currentTable: table,
                         referencedTable: $$SessionsTableReferences
                             ._sessionEntrysRefsTable(db),
@@ -8290,7 +8310,8 @@ class $$SessionsTableTableManager extends RootTableManager<
                                 .where((e) => e.sessionId == item.id),
                         typedResults: items),
                   if (testSessionsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Session, $SessionsTable,
+                            TestSession>(
                         currentTable: table,
                         referencedTable: $$SessionsTableReferences
                             ._testSessionsRefsTable(db),
@@ -8302,7 +8323,8 @@ class $$SessionsTableTableManager extends RootTableManager<
                                 .where((e) => e.sessionId == item.id),
                         typedResults: items),
                   if (wrongAnswersRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Session, $SessionsTable,
+                            WrongAnswer>(
                         currentTable: table,
                         referencedTable: $$SessionsTableReferences
                             ._wrongAnswersRefsTable(db),
@@ -8359,8 +8381,10 @@ final class $$SessionEntrysTableReferences
           $_aliasNameGenerator(db.sessionEntrys.sessionId, db.sessions.id));
 
   $$SessionsTableProcessedTableManager get sessionId {
+    final $_column = $_itemColumn<String>('session_id')!;
+
     final manager = $$SessionsTableTableManager($_db, $_db.sessions)
-        .filter((f) => f.id($_item.sessionId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_sessionIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -8371,8 +8395,10 @@ final class $$SessionEntrysTableReferences
       $_aliasNameGenerator(db.sessionEntrys.entryId, db.entrys.id));
 
   $$EntrysTableProcessedTableManager get entryId {
+    final $_column = $_itemColumn<String>('entry_id')!;
+
     final manager = $$EntrysTableTableManager($_db, $_db.entrys)
-        .filter((f) => f.id($_item.entryId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_entryIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -8662,8 +8688,10 @@ final class $$TestSessionsTableReferences
           $_aliasNameGenerator(db.testSessions.sessionId, db.sessions.id));
 
   $$SessionsTableProcessedTableManager get sessionId {
+    final $_column = $_itemColumn<String>('session_id')!;
+
     final manager = $$SessionsTableTableManager($_db, $_db.sessions)
-        .filter((f) => f.id($_item.sessionId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_sessionIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -8911,8 +8939,10 @@ final class $$WrongAnswersTableReferences
           $_aliasNameGenerator(db.wrongAnswers.sessionId, db.sessions.id));
 
   $$SessionsTableProcessedTableManager get sessionId {
+    final $_column = $_itemColumn<String>('session_id')!;
+
     final manager = $$SessionsTableTableManager($_db, $_db.sessions)
-        .filter((f) => f.id($_item.sessionId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_sessionIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -8923,8 +8953,10 @@ final class $$WrongAnswersTableReferences
       .createAlias($_aliasNameGenerator(db.wrongAnswers.entryId, db.entrys.id));
 
   $$EntrysTableProcessedTableManager get entryId {
+    final $_column = $_itemColumn<String>('entry_id')!;
+
     final manager = $$EntrysTableTableManager($_db, $_db.entrys)
-        .filter((f) => f.id($_item.entryId!));
+        .filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_entryIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(

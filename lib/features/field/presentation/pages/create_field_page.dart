@@ -1,4 +1,3 @@
-import 'package:clock/clock.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,10 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/features/field/domain/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field/domain/usecases/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/create_field_cubit.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
-import 'package:uuid/uuid.dart';
 
 class CreateFieldPage extends StatelessWidget {
   const CreateFieldPage({this.usecaseValidationTest = false, super.key});
@@ -177,11 +175,9 @@ class CreateFieldPageView extends HookWidget {
                                   onPressed: isNameValid.value ||
                                           usecaseValidationTest
                                       ? () {
-                                          final dateTime = clock.now();
                                           context
                                               .read<CreateFieldCubit>()
                                               .createField(
-                                                  context.read<Uuid>().v4(),
                                                   context
                                                       .read<nonso.AuthBloc>()
                                                       .state
@@ -189,9 +185,6 @@ class CreateFieldPageView extends HookWidget {
                                                       .uid,
                                                   nameTextEditingController
                                                       .text,
-                                                  dateTime,
-                                                  dateTime,
-                                                  0,
                                                   color.value.toARGB32());
                                         }
                                       : null,

@@ -95,8 +95,7 @@ void main() {
         final emailTextFormFieldFinder = find.byType(TextFormField).at(0);
         final passwordTextFormFieldFinder = find.byType(TextFormField).at(1);
         await tester.enterText(emailTextFormFieldFinder, validEmail);
-        await tester.enterText(
-            passwordTextFormFieldFinder, "gweruigwiba");
+        await tester.enterText(passwordTextFormFieldFinder, "gweruigwiba");
         await tester.pumpAndSettle();
         await tester.tap(signInButtonFinder);
         await tester.pumpAndSettle();
@@ -104,8 +103,7 @@ void main() {
         await tester.tap(find.byType(FloatingActionButton));
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsOneWidget);
-        NavigatorState navigatorState =
-            tester.state(find.byType(Navigator));
+        NavigatorState navigatorState = tester.state(find.byType(Navigator));
         navigatorState.pop();
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsNothing);
@@ -126,8 +124,7 @@ void main() {
         final emailTextFormFieldFinder = find.byType(TextFormField).at(0);
         final passwordTextFormFieldFinder = find.byType(TextFormField).at(1);
         await tester.enterText(emailTextFormFieldFinder, validEmail);
-        await tester.enterText(
-            passwordTextFormFieldFinder, "gweruigwiba");
+        await tester.enterText(passwordTextFormFieldFinder, "gweruigwiba");
         await tester.pumpAndSettle();
         await tester.tap(signInButtonFinder);
         await tester.pumpAndSettle();
@@ -147,7 +144,7 @@ void main() {
             test the validation of the name TextFormField
             """, (WidgetTester tester) async {
         String expectedInvalidNameString =
-            "Must be between 1 and 64 characters";
+            "Field name must be between 1 and 64 characters";
         String expectedOkString = "Ok";
         await app.main();
         await tester.pumpAndSettle();
@@ -158,8 +155,7 @@ void main() {
         final emailTextFormFieldFinder = find.byType(TextFormField).at(0);
         final passwordTextFormFieldFinder = find.byType(TextFormField).at(1);
         await tester.enterText(emailTextFormFieldFinder, validEmail);
-        await tester.enterText(
-            passwordTextFormFieldFinder, "gweruigwiba");
+        await tester.enterText(passwordTextFormFieldFinder, "gweruigwiba");
         await tester.pumpAndSettle();
         await tester.tap(signInButtonFinder);
         await tester.pumpAndSettle();
@@ -211,9 +207,13 @@ void main() {
 
       testWidgets("""Signin in then the FieldPage opens then press the 
             floating action button then the CreateFieldPage opens
+            then enter field name in the textfield
             then click the color indicator then pick a color and the
             color of the color indicator changes to the picked color
+            then click on the ok button show a snack bar with creation
+            message then go back to FieldPage
             """, (WidgetTester tester) async {
+        String expectedOkString = "Ok";
         await app.main();
         await tester.pumpAndSettle();
         expect(find.byType(AuthOptions), findsOneWidget);
@@ -223,8 +223,7 @@ void main() {
         final emailTextFormFieldFinder = find.byType(TextFormField).at(0);
         final passwordTextFormFieldFinder = find.byType(TextFormField).at(1);
         await tester.enterText(emailTextFormFieldFinder, validEmail);
-        await tester.enterText(
-            passwordTextFormFieldFinder, "gweruigwiba");
+        await tester.enterText(passwordTextFormFieldFinder, "gweruigwiba");
         await tester.pumpAndSettle();
         await tester.tap(signInButtonFinder);
         await tester.pumpAndSettle();
@@ -232,6 +231,7 @@ void main() {
         await tester.tap(find.byType(FloatingActionButton));
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsOneWidget);
+        await tester.enterText(textFormFieldFinder, 'field name');
         ColorIndicator colorIndicator =
             tester.widget(find.byType(ColorIndicator));
         expect(colorIndicator.color, Colors.white);
@@ -247,6 +247,15 @@ void main() {
         await tester.pumpAndSettle();
         colorIndicator = tester.widget(find.byKey(Key("colorIndicator")));
         expect(colorIndicator.color, const Color(0xff520404));
+        await tester.ensureVisible(
+            find.widgetWithText(ElevatedButton, expectedOkString));
+        await tester.tap(find.widgetWithText(ElevatedButton, expectedOkString));
+        await tester.pumpAndSettle();
+        expect(find.byType(SnackBar), findsOne);
+        SnackBar snackBar = tester.widget(snackBarFinder);
+        expect((snackBar.content as Text).data, 'The field has been created');
+        expect(find.byType(CreateFieldPage), findsNothing);
+        expect(find.byType(FieldPage), findsOne);
         await FirebaseAuth.instance.signOut();
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
     });

@@ -48,6 +48,7 @@ dependencies:
   google_fonts: ^6.2.1
   flex_color_picker: ^3.7.0
   flutter_hooks: ^0.21.2
+  freezed_annotation: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +62,7 @@ dev_dependencies:
     sdk: flutter
   http: ^1.2.0
   flutter_lints: ^5.0.0
+  freezed: ^3.0.6
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

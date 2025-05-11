@@ -10,9 +10,10 @@ import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/features/field/domain/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field/domain/usecases/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/create_field_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
+import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:study_without_pen_by_flutter/common/router_config.dart'
     as this_app;
@@ -32,7 +33,6 @@ Widget createWidgetInASkeleton(
       providers: [
         RepositoryProvider.value(value: bloc),
         RepositoryProvider.value(value: createFieldUseCase),
-        RepositoryProvider.value(value: uuid)
       ],
       child: MaterialApp.router(
           localizationsDelegates: [
@@ -364,16 +364,9 @@ void main() {
         DateTime creationAt = DateTime(2020, 1, 1);
         final fieldId = const Uuid().v4();
         final name = "";
-        int usageCount = 0;
         int color = 0xff520404;
-        when(() => createFieldUseCase.call(
-            fieldId,
-            userId,
-            name,
-            creationAt,
-            creationAt,
-            usageCount,
-            color)).thenThrow(ArgumentError('Field name cannot be blank'));
+        when(() => createFieldUseCase.call(userId, name, color)).thenThrow(
+            AssertionError('Field name must be between 1 and 64 characters'));
         when(() => uuid.v4()).thenReturn(fieldId);
         withClock(Clock.fixed(creationAt), () async {
           await goToCreateFieldPage(
@@ -407,21 +400,14 @@ void main() {
         DateTime creationAt = DateTime(2020, 1, 1);
         final fieldId = const Uuid().v4();
         final name = "field name";
-        int usageCount = 0;
         int color = 0xff520404;
-        when(() => createFieldUseCase.call(
-            fieldId,
-            userId,
-            name,
-            creationAt,
-            creationAt,
-            usageCount,
-            color)).thenThrow(SqliteException(1, "Error from database"));
+        when(() => createFieldUseCase.call(userId, name, color))
+            .thenThrow(SqliteException(1, "Error from database"));
         when(() => uuid.v4()).thenReturn(fieldId);
         withClock(Clock.fixed(creationAt), () async {
           await goToCreateFieldPage(
               createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
-                  currentLocale, getRouterConfig),
+                  currentLocale, this_app.getRouterConfig),
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);
@@ -451,21 +437,14 @@ void main() {
         DateTime creationAt = DateTime(2020, 1, 1);
         final fieldId = const Uuid().v4();
         final name = "field name";
-        int usageCount = 0;
         int color = 0xff520404;
-        when(() => createFieldUseCase.call(
-            fieldId,
-            userId,
-            name,
-            creationAt,
-            creationAt,
-            usageCount,
-            color)).thenAnswer((_) => Completer<void>().future);
+        when(() => createFieldUseCase.call(userId, name, color))
+            .thenAnswer((_) => Future.value(1));
         when(() => uuid.v4()).thenReturn(fieldId);
         withClock(Clock.fixed(creationAt), () async {
           await goToCreateFieldPage(
               createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
-                  currentLocale, getRouterConfig),
+                  currentLocale, this_app.getRouterConfig),
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);
@@ -488,6 +467,7 @@ void main() {
           expect((snackBar.content as Text).data,
               expectedFieldHasBeenCreatedString);
           expect(find.byType(CreateFieldPage), findsNothing);
+          expect(find.byType(FieldPage), findsOne);
         });
       });
     });
