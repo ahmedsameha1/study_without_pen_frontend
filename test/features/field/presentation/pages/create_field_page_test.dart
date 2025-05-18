@@ -64,9 +64,9 @@ void main() {
   String expectedCancelString = "Cancel";
   String expectedInvalidNameString =
       "Field name must be between 1 and 64 characters";
-  String expectedFieldHasBeenCreatedString = "The field has been created";
+  String expectedFieldHasBeenCreatedString = "Created";
   String expectedErrorOccuredWhileFieldPersistenceString =
-      "An Error has been occured while persisting the field";
+      "Error while creation";
 
   setUp(() {
     user = MockUser();
@@ -388,10 +388,22 @@ void main() {
               find.widgetWithText(ElevatedButton, expectedOkString));
           await tester
               .tap(find.widgetWithText(ElevatedButton, expectedOkString));
-          await tester.pumpAndSettle();
-          expect(find.byType(SnackBar), findsOne);
-          SnackBar snackBar = tester.widget(snackBarFinder);
-          expect((snackBar.content as Text).data, expectedInvalidNameString);
+          await tester.runAsync(() async {
+            await Future.delayed(Duration(seconds: 1));
+            await tester.pump();
+            expect(
+                find.descendant(
+                    of: find.byType(Center),
+                    matching: circularProgressIndicatorFinder),
+                findsOne);
+            await tester.pumpAndSettle();
+            expect(find.byType(SnackBar), findsOne);
+            SnackBar snackBar = tester.widget(snackBarFinder);
+            expect((snackBar.content as Text).data, expectedInvalidNameString);
+            expect(
+                find.descendant(of: find.byType(Center), matching: cardFinder),
+                findsOne);
+          });
         });
       });
 
@@ -424,11 +436,23 @@ void main() {
               find.widgetWithText(ElevatedButton, expectedOkString));
           await tester
               .tap(find.widgetWithText(ElevatedButton, expectedOkString));
-          await tester.pumpAndSettle();
-          expect(find.byType(SnackBar), findsOne);
-          SnackBar snackBar = tester.widget(snackBarFinder);
-          expect((snackBar.content as Text).data,
-              expectedErrorOccuredWhileFieldPersistenceString);
+          await tester.runAsync(() async {
+            await Future.delayed(Duration(seconds: 1));
+            await tester.pump();
+            expect(
+                find.descendant(
+                    of: find.byType(Center),
+                    matching: circularProgressIndicatorFinder),
+                findsOne);
+            await tester.pumpAndSettle();
+            expect(find.byType(SnackBar), findsOne);
+            SnackBar snackBar = tester.widget(snackBarFinder);
+            expect((snackBar.content as Text).data,
+                expectedErrorOccuredWhileFieldPersistenceString);
+            expect(
+                find.descendant(of: find.byType(Center), matching: cardFinder),
+                findsOne);
+          });
         });
       });
 
@@ -461,13 +485,22 @@ void main() {
               find.widgetWithText(ElevatedButton, expectedOkString));
           await tester
               .tap(find.widgetWithText(ElevatedButton, expectedOkString));
-          await tester.pumpAndSettle();
-          expect(find.byType(SnackBar), findsOne);
-          SnackBar snackBar = tester.widget(snackBarFinder);
-          expect((snackBar.content as Text).data,
-              expectedFieldHasBeenCreatedString);
-          expect(find.byType(CreateFieldPage), findsNothing);
-          expect(find.byType(FieldPage), findsOne);
+          await tester.runAsync(() async {
+            await Future.delayed(Duration(seconds: 1));
+            await tester.pump();
+            expect(
+                find.descendant(
+                    of: find.byType(Center),
+                    matching: circularProgressIndicatorFinder),
+                findsOne);
+            await tester.pumpAndSettle();
+            expect(find.byType(SnackBar), findsOne);
+            SnackBar snackBar = tester.widget(snackBarFinder);
+            expect((snackBar.content as Text).data,
+                expectedFieldHasBeenCreatedString);
+            expect(find.byType(CreateFieldPage), findsNothing);
+            expect(find.byType(FieldPage), findsOne);
+          });
         });
       });
     });

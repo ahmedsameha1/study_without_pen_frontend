@@ -33,6 +33,7 @@ class CreateFieldPageView extends HookWidget {
     final color = useState<Color>(Colors.white);
     final showColorPicker = useState<bool>(false);
     final isNameValid = useState<bool>(false);
+    final state = context.select((CreateFieldCubit cubit) => cubit.state);
     final TextEditingController nameTextEditingController =
         useTextEditingController();
     return BlocListener<CreateFieldCubit, CreateFieldState>(
@@ -42,14 +43,14 @@ class CreateFieldPageView extends HookWidget {
                 content: Text(AppLocalizations.of(context)!
                     .fieldNameValidationError(Fields.MINIMUM_LENGTH_OF_NAME,
                         Fields.MAXIMUM_LENGTH_OF_NAME))));
-          } else if (state == CreateFieldState.persistanceFailure) {
+          } else if (state == CreateFieldState.persistenceFailure) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content:
-                    Text(AppLocalizations.of(context)!.fieldPersistanceError)));
+                    Text(AppLocalizations.of(context)!.creationError)));
           } else if (state == CreateFieldState.success) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content:
-                    Text(AppLocalizations.of(context)!.fieldHasBeenCreated)));
+                    Text(AppLocalizations.of(context)!.created)));
             GoRouter.of(context).go(rootPath);
           }
         },
@@ -61,142 +62,154 @@ class CreateFieldPageView extends HookWidget {
           body: SafeArea(
             child: Center(
                 key: Key("center"),
-                child: Card(
-                  margin: const EdgeInsets.all(20),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      key: const Key("paddingAroundColumn"),
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        key: Key("column"),
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Form(
-                            key: _nameFormKey,
-                            child: TextFormField(
-                              controller: nameTextEditingController,
-                              decoration: InputDecoration(
-                                  label: Text(
-                                      AppLocalizations.of(context)!.fieldName)),
-                              textInputAction: TextInputAction.next,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              validator: (value) {
-                                if (value == null) {
-                                  return AppLocalizations.of(context)!
-                                      .fieldNameValidationError(
-                                          Fields.MINIMUM_LENGTH_OF_NAME,
-                                          Fields.MAXIMUM_LENGTH_OF_NAME);
-                                }
-                                int trimmedValue = value.trim().length;
-                                if (trimmedValue <
-                                        Fields.MINIMUM_LENGTH_OF_NAME ||
-                                    trimmedValue >
-                                        Fields.MAXIMUM_LENGTH_OF_NAME) {
-                                  return AppLocalizations.of(context)!
-                                      .fieldNameValidationError(
-                                          Fields.MINIMUM_LENGTH_OF_NAME,
-                                          Fields.MAXIMUM_LENGTH_OF_NAME);
-                                }
-                                return null;
-                              },
-                            ),
-                            onChanged: () => isNameValid.value =
-                                _nameFormKey.currentState != null &&
-                                    _nameFormKey.currentState!.validate(),
-                          ),
-                          SizedBox(
-                            key: Key("sizedBoxBetweenFormAndStack"),
-                            height: 25,
-                          ),
-                          GestureDetector(
-                            key: Key("gestureDetector"),
-                            child: Stack(
-                              key: Key("stackForColorIndicator"),
-                              alignment: Alignment.center,
+                child: state == CreateFieldState.loading ||
+                        state == CreateFieldState.success
+                    ? CircularProgressIndicator()
+                    : Card(
+                        margin: const EdgeInsets.all(20),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            key: const Key("paddingAroundColumn"),
+                            padding: EdgeInsets.all(16),
+                            child: Column(
+                              key: Key("column"),
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                ColorIndicator(
-                                  key: Key("colorIndicator"),
-                                  width: double.infinity,
-                                  color: color.value,
-                                ),
-                                Text(
-                                  AppLocalizations.of(context)!.selectColor,
-                                  style: TextStyle(
-                                      color:
-                                          color.value.computeLuminance() > 0.5
-                                              ? Colors.black
-                                              : Colors.white),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              showColorPicker.value = !showColorPicker.value;
-                            },
-                          ),
-                          AnimatedSize(
-                            duration: const Duration(milliseconds: 500),
-                            child: showColorPicker.value
-                                ? ColorPicker(
-                                    color: color.value,
-                                    pickersEnabled: <ColorPickerType, bool>{
-                                      ColorPickerType.accent: false,
-                                      ColorPickerType.primary: false,
-                                      ColorPickerType.wheel: true,
+                                Form(
+                                  key: _nameFormKey,
+                                  child: TextFormField(
+                                    controller: nameTextEditingController,
+                                    decoration: InputDecoration(
+                                        label: Text(
+                                            AppLocalizations.of(context)!
+                                                .fieldName)),
+                                    textInputAction: TextInputAction.next,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return AppLocalizations.of(context)!
+                                            .fieldNameValidationError(
+                                                Fields.MINIMUM_LENGTH_OF_NAME,
+                                                Fields.MAXIMUM_LENGTH_OF_NAME);
+                                      }
+                                      int trimmedValue = value.trim().length;
+                                      if (trimmedValue <
+                                              Fields.MINIMUM_LENGTH_OF_NAME ||
+                                          trimmedValue >
+                                              Fields.MAXIMUM_LENGTH_OF_NAME) {
+                                        return AppLocalizations.of(context)!
+                                            .fieldNameValidationError(
+                                                Fields.MINIMUM_LENGTH_OF_NAME,
+                                                Fields.MAXIMUM_LENGTH_OF_NAME);
+                                      }
+                                      return null;
                                     },
-                                    heading: Text(
+                                  ),
+                                  onChanged: () => isNameValid.value =
+                                      _nameFormKey.currentState != null &&
+                                          _nameFormKey.currentState!.validate(),
+                                ),
+                                SizedBox(
+                                  key: Key("sizedBoxBetweenFormAndStack"),
+                                  height: 25,
+                                ),
+                                GestureDetector(
+                                  key: Key("gestureDetector"),
+                                  child: Stack(
+                                    key: Key("stackForColorIndicator"),
+                                    alignment: Alignment.center,
+                                    children: [
+                                      ColorIndicator(
+                                        key: Key("colorIndicator"),
+                                        width: double.infinity,
+                                        color: color.value,
+                                      ),
+                                      Text(
                                         AppLocalizations.of(context)!
                                             .selectColor,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall),
-                                    onColorChanged: (value) {
-                                      color.value = value;
-                                    },
-                                  )
-                                : SizedBox.shrink(),
-                          ),
-                          SizedBox(
-                            key: Key("sizedBoxBetweenStackAndButtons"),
-                            height: 25,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                  key: Key("cancelButton"),
-                                  onPressed: () {
-                                    GoRouter.of(context).pop();
+                                        style: TextStyle(
+                                            color:
+                                                color.value.computeLuminance() >
+                                                        0.5
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    showColorPicker.value =
+                                        !showColorPicker.value;
                                   },
-                                  child: Text(
-                                      AppLocalizations.of(context)!.cancel)),
-                              ElevatedButton(
-                                  key: Key("okButton"),
-                                  onPressed: isNameValid.value ||
-                                          usecaseValidationTest
-                                      ? () {
-                                          context
-                                              .read<CreateFieldCubit>()
-                                              .createField(
-                                                  context
-                                                      .read<nonso.AuthBloc>()
-                                                      .state
-                                                      .user!
-                                                      .uid,
-                                                  nameTextEditingController
-                                                      .text,
-                                                  color.value.toARGB32());
-                                        }
-                                      : null,
-                                  child:
-                                      Text(AppLocalizations.of(context)!.ok)),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )),
+                                ),
+                                AnimatedSize(
+                                  duration: const Duration(milliseconds: 500),
+                                  child: showColorPicker.value
+                                      ? ColorPicker(
+                                          color: color.value,
+                                          pickersEnabled: <ColorPickerType,
+                                              bool>{
+                                            ColorPickerType.accent: false,
+                                            ColorPickerType.primary: false,
+                                            ColorPickerType.wheel: true,
+                                          },
+                                          heading: Text(
+                                              AppLocalizations.of(context)!
+                                                  .selectColor,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineSmall),
+                                          onColorChanged: (value) {
+                                            color.value = value;
+                                          },
+                                        )
+                                      : SizedBox.shrink(),
+                                ),
+                                SizedBox(
+                                  key: Key("sizedBoxBetweenStackAndButtons"),
+                                  height: 25,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ElevatedButton(
+                                        key: Key("cancelButton"),
+                                        onPressed: () {
+                                          GoRouter.of(context).pop();
+                                        },
+                                        child: Text(
+                                            AppLocalizations.of(context)!
+                                                .cancel)),
+                                    ElevatedButton(
+                                        key: Key("okButton"),
+                                        onPressed: isNameValid.value ||
+                                                usecaseValidationTest
+                                            ? () async {
+                                                await context
+                                                    .read<CreateFieldCubit>()
+                                                    .createField(
+                                                        context
+                                                            .read<
+                                                                nonso
+                                                                .AuthBloc>()
+                                                            .state
+                                                            .user!
+                                                            .uid,
+                                                        nameTextEditingController
+                                                            .text,
+                                                        color.value.toARGB32());
+                                              }
+                                            : null,
+                                        child: Text(
+                                            AppLocalizations.of(context)!.ok)),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      )),
           ),
         ));
   }

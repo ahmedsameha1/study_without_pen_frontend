@@ -71,13 +71,11 @@ void main() {
       AppBar appBar = tester.widget<AppBar>(appBarFinder);
       Text title = appBar.title as Text;
       expect(title.data, AppLocalizationsEn().materialAppTitle);
-      BlocBuilder blocBuilder =
-          tester.widget(find.byKey(Key("authBlocBuilder")));
-      expect(appBar.actions, [blocBuilder]);
       final logoutIconButtonFinder = find.descendant(
-          of: find.byWidget(blocBuilder), matching: find.byType(IconButton));
+          of: find.byWidget(appBar), matching: find.byType(IconButton));
       final logoutIconButton =
           tester.widget<IconButton>(logoutIconButtonFinder);
+      expect(appBar.actions, [logoutIconButton]);
       final logoutIconFinder = find.descendant(
           of: find.byWidget(logoutIconButton), matching: find.byType(Icon));
       final logoutIcon = tester.widget<Icon>(logoutIconFinder);

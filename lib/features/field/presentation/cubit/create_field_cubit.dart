@@ -3,8 +3,9 @@ import 'package:study_without_pen_by_flutter/features/field/domain/usecases/crea
 
 enum CreateFieldState {
   initial,
+  loading,
   validationFailure,
-  persistanceFailure,
+  persistenceFailure,
   success
 }
 
@@ -12,15 +13,17 @@ class CreateFieldCubit extends Cubit<CreateFieldState> {
   CreateFieldCubit(this.createFieldUseCase) : super(CreateFieldState.initial);
   final CreateFieldUseCase createFieldUseCase;
 
-  void createField(String userAccountId, String name, int color) {
+  Future<void> createField(String userAccountId, String name, int color) async {
+    emit(CreateFieldState.loading);
     try {
-      createFieldUseCase.call(userAccountId, name, color);
+      await createFieldUseCase.call(userAccountId, name, color);
       emit(CreateFieldState.success);
     } on AssertionError {
       emit(CreateFieldState.validationFailure);
+      emit(CreateFieldState.initial);
     } catch (e) {
-      emit(CreateFieldState.persistanceFailure);
+      emit(CreateFieldState.persistenceFailure);
+      emit(CreateFieldState.initial);
     }
-    emit(CreateFieldState.initial);
   }
 }

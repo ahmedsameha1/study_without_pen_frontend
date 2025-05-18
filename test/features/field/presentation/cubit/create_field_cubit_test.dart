@@ -25,13 +25,16 @@ void main() {
     should be CreateFieldState.validationFailure then CreateFieldState.initial''',
       build: () {
         createFieldUseCase = MockCreateFieldUseCase();
-        when(() => createFieldUseCase.call(userId, name, color))
-            .thenThrow(AssertionError('Field name must be between 1 and 64 characters'));
+        when(() => createFieldUseCase.call(userId, name, color)).thenThrow(
+            AssertionError('Field name must be between 1 and 64 characters'));
         return createFieldCubit = CreateFieldCubit(createFieldUseCase);
       },
       act: (cubit) => cubit.createField(userId, name, color),
-      expect: () =>
-          [CreateFieldState.validationFailure, CreateFieldState.initial]);
+      expect: () => [
+            CreateFieldState.loading,
+            CreateFieldState.validationFailure,
+            CreateFieldState.initial
+          ]);
 
   blocTest<CreateFieldCubit, CreateFieldState>('''
     When calling CreateFieldUseCase.call() throws an error other than AssertionError 
@@ -44,12 +47,15 @@ void main() {
         return createFieldCubit = CreateFieldCubit(createFieldUseCase);
       },
       act: (cubit) => cubit.createField(userId, name, color),
-      expect: () =>
-          [CreateFieldState.persistanceFailure, CreateFieldState.initial]);
+      expect: () => [
+            CreateFieldState.loading,
+            CreateFieldState.persistenceFailure,
+            CreateFieldState.initial
+          ]);
 
   blocTest<CreateFieldCubit, CreateFieldState>('''
     When calling CreateFieldUseCase.call() return a future of int
-    should be CreateFieldState.success then CreateFieldState.initial''',
+    should be CreateFieldState.success''',
       build: () {
         name = "field name";
         createFieldUseCase = MockCreateFieldUseCase();
@@ -58,5 +64,8 @@ void main() {
         return createFieldCubit = CreateFieldCubit(createFieldUseCase);
       },
       act: (cubit) => cubit.createField(userId, name, color),
-      expect: () => [CreateFieldState.success, CreateFieldState.initial]);
+      expect: () => [
+            CreateFieldState.loading,
+            CreateFieldState.success,
+          ]);
 }

@@ -250,12 +250,96 @@ void main() {
         await tester.ensureVisible(
             find.widgetWithText(ElevatedButton, expectedOkString));
         await tester.tap(find.widgetWithText(ElevatedButton, expectedOkString));
+        await tester.pump();
+        expect(
+            find.descendant(
+                of: centerFinder, matching: circularProgressIndicatorFinder),
+            findsOne);
         await tester.pumpAndSettle();
         expect(find.byType(SnackBar), findsOne);
         SnackBar snackBar = tester.widget(snackBarFinder);
-        expect((snackBar.content as Text).data, 'The field has been created');
+        expect((snackBar.content as Text).data, 'Created');
         expect(find.byType(CreateFieldPage), findsNothing);
         expect(find.byType(FieldPage), findsOne);
+        await FirebaseAuth.instance.signOut();
+      }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+
+      testWidgets("""Signin in then the FieldPage opens then press the 
+            floating action button then the CreateFieldPage opens
+            then enter field name in the textfield
+            then click the color indicator then pick a color and the
+            color of the color indicator changes to the picked color
+            then click on the ok button show a snack bar with creation
+            message then go again to  the CreateFieldPage again
+            then the same field name then clikc on the ok button
+            and a snack bar should show with error and stay
+            in the CreateFieldPage go back to FieldPage
+            """, (WidgetTester tester) async {
+        String expectedOkString = "Ok";
+        await app.main();
+        await tester.pumpAndSettle();
+        expect(find.byType(AuthOptions), findsOneWidget);
+        await tester.tap(signInButtonFinder);
+        await tester.pumpAndSettle();
+        expect(find.byType(Password), findsOneWidget);
+        final emailTextFormFieldFinder = find.byType(TextFormField).at(0);
+        final passwordTextFormFieldFinder = find.byType(TextFormField).at(1);
+        await tester.enterText(emailTextFormFieldFinder, validEmail);
+        await tester.enterText(passwordTextFormFieldFinder, "gweruigwiba");
+        await tester.pumpAndSettle();
+        await tester.tap(signInButtonFinder);
+        await tester.pumpAndSettle();
+        expect(find.byType(FieldPage), findsOneWidget);
+        await tester.tap(find.byType(FloatingActionButton));
+        await tester.pumpAndSettle();
+        expect(find.byType(CreateFieldPage), findsOneWidget);
+        await tester.enterText(textFormFieldFinder, 'field name2');
+        ColorIndicator colorIndicator =
+            tester.widget(find.byType(ColorIndicator));
+        expect(colorIndicator.color, Colors.white);
+        await tester.tap(find.widgetWithText(Stack, "Select Color"));
+        await tester.pumpAndSettle();
+        ColorWheelPicker colorWheelPicker =
+            tester.widget(find.byType(ColorWheelPicker));
+        expect(colorWheelPicker.color, Colors.white);
+        final Offset colorWheelPickerCenter =
+            tester.getCenter(find.byWidget(colorWheelPicker));
+        await tester.timedDragFrom(
+            colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
+        await tester.pumpAndSettle();
+        colorIndicator = tester.widget(find.byKey(Key("colorIndicator")));
+        expect(colorIndicator.color, const Color(0xff520404));
+        await tester.ensureVisible(
+            find.widgetWithText(ElevatedButton, expectedOkString));
+        await tester.tap(find.widgetWithText(ElevatedButton, expectedOkString));
+        await tester.pump();
+        expect(
+            find.descendant(
+                of: centerFinder, matching: circularProgressIndicatorFinder),
+            findsOne);
+        await tester.pumpAndSettle();
+        expect(find.byType(SnackBar), findsOne);
+        SnackBar snackBar = tester.widget(snackBarFinder);
+        expect((snackBar.content as Text).data, 'Created');
+        expect(find.byType(CreateFieldPage), findsNothing);
+        expect(find.byType(FieldPage), findsOne);
+        await tester.tap(find.byType(FloatingActionButton));
+        await tester.pumpAndSettle();
+        expect(find.byType(CreateFieldPage), findsOneWidget);
+        await tester.enterText(textFormFieldFinder, 'field name2');
+        await tester.ensureVisible(
+            find.widgetWithText(ElevatedButton, expectedOkString));
+        await tester.tap(find.widgetWithText(ElevatedButton, expectedOkString));
+        await tester.pump();
+        expect(
+            find.descendant(
+                of: centerFinder, matching: circularProgressIndicatorFinder),
+            findsOne);
+        await tester.pumpAndSettle();
+        expect(find.byType(SnackBar), findsOne);
+        snackBar = tester.widget(snackBarFinder);
+        expect((snackBar.content as Text).data, 'Error while creation');
+        expect(find.byType(CreateFieldPage), findsOne);
         await FirebaseAuth.instance.signOut();
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
     });

@@ -261,17 +261,17 @@ abstract class AppLocalizations {
   /// **'Field name must be between {fieldNameMinimumLength} and {fieldNameMaximumLength} characters'**
   String fieldNameValidationError(int fieldNameMinimumLength, int fieldNameMaximumLength);
 
-  /// No description provided for @fieldHasBeenCreated.
+  /// No description provided for @created.
   ///
   /// In en, this message translates to:
-  /// **'The field has been created'**
-  String get fieldHasBeenCreated;
+  /// **'Created'**
+  String get created;
 
-  /// No description provided for @fieldPersistanceError.
+  /// No description provided for @creationError.
   ///
   /// In en, this message translates to:
-  /// **'An Error has been occured while persisting the field'**
-  String get fieldPersistanceError;
+  /// **'Error while creation'**
+  String get creationError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -16,15 +16,13 @@ class FieldPage extends StatelessWidget {
           AppLocalizations.of(context)!.materialAppTitle,
         ),
         actions: [
-          BlocBuilder<nonso.AuthBloc, nonso.AuthState>(
-            key: const Key("authBlocBuilder"),
-            builder: (context, state) => IconButton(
-                onPressed: () {
-                  context.read<nonso.AuthBloc>().signOut();
-                },
-                icon: Icon(
-                  Icons.logout,
-                )),
+          IconButton(
+            onPressed: () {
+              context.read<nonso.AuthBloc>().signOut();
+            },
+            icon: Icon(
+              Icons.logout,
+            ),
           )
         ],
       ),

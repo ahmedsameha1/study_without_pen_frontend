@@ -99,8 +99,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get fieldHasBeenCreated => 'The field has been created';
+  String get created => 'Created';
 
   @override
-  String get fieldPersistanceError => 'An Error has been occured while persisting the field';
+  String get creationError => 'Error while creation';
 }
