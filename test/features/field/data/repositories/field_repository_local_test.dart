@@ -45,4 +45,36 @@ void main() {
     int value = await fieldRepository.create(fieldEntity);
     expect(value, 1);
   });
+
+  test('watch() throws when FieldsDao.watchByUserAccountId() throws', () {
+    when(() => fieldsDao.watchByUserAccountId(userAccountId))
+        .thenThrow(SqliteException(1, 'sqlexception'));
+    expect(
+        () => fieldRepository.watch(userAccountId),
+        throwsA(predicate(
+            (e) => e is SqliteException && e.message == 'sqlexception')));
+  });
+
+  test('watch() returns what FieldsDao.watchByUserAccountId() return',
+      () async {
+    when(() => fieldsDao.watchByUserAccountId(userAccountId))
+        .thenAnswer((_) => Stream.value([
+              Field(
+                  id: "field id",
+                  userAccountId: userAccountId,
+                  name: name,
+                  creationAt: creationAt,
+                  lastModificationAt: creationAt,
+                  usageCount: usageCount,
+                  color: color)
+            ]));
+    expect(
+        fieldRepository.watch(userAccountId),
+        emitsInOrder([
+          [
+            FieldEntity('field id', userAccountId, name, creationAt, creationAt,
+                usageCount, color)
+          ]
+        ]));
+  });
 }
