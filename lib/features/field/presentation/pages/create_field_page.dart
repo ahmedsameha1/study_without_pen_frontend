@@ -45,12 +45,10 @@ class CreateFieldPageView extends HookWidget {
                         Fields.MAXIMUM_LENGTH_OF_NAME))));
           } else if (state == CreateFieldState.persistenceFailure) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content:
-                    Text(AppLocalizations.of(context)!.creationError)));
+                content: Text(AppLocalizations.of(context)!.creationError)));
           } else if (state == CreateFieldState.success) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content:
-                    Text(AppLocalizations.of(context)!.created)));
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(AppLocalizations.of(context)!.created)));
             GoRouter.of(context).go(rootPath);
           }
         },
@@ -86,6 +84,7 @@ class CreateFieldPageView extends HookWidget {
                                     textInputAction: TextInputAction.next,
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
+                                    autofocus: true,
                                     validator: (value) {
                                       if (value == null) {
                                         return AppLocalizations.of(context)!

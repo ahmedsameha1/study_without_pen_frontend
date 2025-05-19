@@ -144,6 +144,7 @@ void main() {
           expectedFieldNameString);
       expect(fieldNameTextField.keyboardType, TextInputType.text);
       expect(fieldNameTextField.textInputAction, TextInputAction.next);
+      expect(fieldNameTextField.autofocus, isTrue);
       SizedBox sizedBoxBetweenFormAndStack =
           tester.widget(find.byKey(Key("sizedBoxBetweenFormAndStack")));
       expect(sizedBoxBetweenFormAndStack.height!, 25);
