@@ -46,7 +46,7 @@ void main() {
     expect(value, 1);
   });
 
-  test('watch() throws when FieldsDao.watchByUserAccountId() throws', () {
+  test('watch() throws what FieldsDao.watchByUserAccountId() throw', () {
     when(() => fieldsDao.watchByUserAccountId(userAccountId))
         .thenThrow(SqliteException(1, 'sqlexception'));
     expect(

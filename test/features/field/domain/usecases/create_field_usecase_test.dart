@@ -1,4 +1,5 @@
 import 'package:clock/clock.dart';
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/features/field/data/repositories/field_repository.dart';
@@ -16,7 +17,7 @@ void main() {
   FieldRepository fieldRepository = MockFieldRepository();
   final usecase = CreateFieldUseCase(fieldRepository);
 
-  test('throws AssertionError when there is a validation error', () {
+  test('call() throws AssertionError when there is a validation error', () {
     name = "";
     expect(
         () => usecase.call(userAccountId, name, color),
@@ -25,7 +26,26 @@ void main() {
             e.message == 'Field name must be between 1 and 64 characters')));
   });
 
-  test('create field: success', () {
+  test('call() throws what FieldRepository.create() throw', () {
+    name = 'field name';
+    when(() => fieldRepository.create(FieldEntity(
+        null,
+        userAccountId,
+        name,
+        creationAt,
+        creationAt,
+        usageCount,
+        color))).thenThrow(SqliteException(1, 'sqlexception'));
+    withClock(Clock.fixed(creationAt), () async {
+    expect(
+        () => usecase.call(userAccountId, name, color),
+        throwsA(predicate((e) =>
+            e is SqliteException && e.extendedResultCode == 1 &&
+            e.message == 'sqlexception')));
+    });
+  });
+
+  test('call() success', () {
     name = 'field name';
     when(() => fieldRepository.create(FieldEntity(
         null,
