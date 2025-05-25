@@ -33,7 +33,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nonso_refresh => 'Refresh account';
 
   @override
-  String get nonso_verifyEmailAddress => 'Check your email inbox to verify your email address';
+  String get nonso_verifyEmailAddress =>
+      'Check your email inbox to verify your email address';
 
   @override
   String get nonso_signOut => 'Sign out';
@@ -57,7 +58,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nonso_forgotPassword => 'Forgot password?';
 
   @override
-  String get nonso_resetCodeSent => 'Check your email inbox to reset your password';
+  String get nonso_resetCodeSent =>
+      'Check your email inbox to reset your password';
 
   @override
   String get nonso_nameValidationError => 'Enter your name';
@@ -68,7 +70,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get nonso_success => 'Success: Check your email to verify your email address';
+  String get nonso_success =>
+      'Success: Check your email to verify your email address';
 
   @override
   String nonso_passwordValidationError(int passwordMinimumLength) {
@@ -76,7 +79,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get nonso_confirmPasswordValidationError => 'This doesn\'t match the given password';
+  String get nonso_confirmPasswordValidationError =>
+      'This doesn\'t match the given password';
 
   @override
   String get createField => 'Create Field';
@@ -94,7 +98,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
-  String fieldNameValidationError(int fieldNameMinimumLength, int fieldNameMaximumLength) {
+  String fieldNameValidationError(
+      int fieldNameMinimumLength, int fieldNameMaximumLength) {
     return 'Field name must be between $fieldNameMinimumLength and $fieldNameMaximumLength characters';
   }
 

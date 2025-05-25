@@ -2,9 +2,9 @@ import 'package:study_without_pen_by_flutter/features/field/data/repositories/fi
 import 'package:study_without_pen_by_flutter/features/field/domain/models/field_entity.dart';
 
 class WatchFieldsUsecase {
-  WatchFieldsUsecase(this.fieldRepository);
-  FieldRepository fieldRepository;
+  WatchFieldsUsecase(this._repository);
+  final FieldRepository _repository;
   Stream<List<FieldEntity>> call(String userAccountId) {
-    return fieldRepository.watch(userAccountId);
+    return _repository.watch(userAccountId);
   }
 }
