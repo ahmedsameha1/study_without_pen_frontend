@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FieldsState {
   FieldsStateStatus get fieldsStateStatus;
-  List<FieldEntity>? get fields;
+  List<FieldEntity> get fields;
 
   /// Create a copy of FieldsState
   /// with the given fields replaced by the non-null parameter values.
@@ -51,7 +51,7 @@ abstract mixin class $FieldsStateCopyWith<$Res> {
           FieldsState value, $Res Function(FieldsState) _then) =
       _$FieldsStateCopyWithImpl;
   @useResult
-  $Res call({FieldsStateStatus fieldsStateStatus, List<FieldEntity>? fields});
+  $Res call({FieldsStateStatus fieldsStateStatus, List<FieldEntity> fields});
 }
 
 /// @nodoc
@@ -67,17 +67,17 @@ class _$FieldsStateCopyWithImpl<$Res> implements $FieldsStateCopyWith<$Res> {
   @override
   $Res call({
     Object? fieldsStateStatus = null,
-    Object? fields = freezed,
+    Object? fields = null,
   }) {
     return _then(_self.copyWith(
       fieldsStateStatus: null == fieldsStateStatus
           ? _self.fieldsStateStatus
           : fieldsStateStatus // ignore: cast_nullable_to_non_nullable
               as FieldsStateStatus,
-      fields: freezed == fields
+      fields: null == fields
           ? _self.fields
           : fields // ignore: cast_nullable_to_non_nullable
-              as List<FieldEntity>?,
+              as List<FieldEntity>,
     ));
   }
 }
@@ -86,22 +86,20 @@ class _$FieldsStateCopyWithImpl<$Res> implements $FieldsStateCopyWith<$Res> {
 
 class _FieldsState implements FieldsState {
   const _FieldsState(
-      [this.fieldsStateStatus = FieldsStateStatus.initial,
-      final List<FieldEntity>? fields = const []])
+      [this.fieldsStateStatus = FieldsStateStatus.loading,
+      final List<FieldEntity> fields = const []])
       : _fields = fields;
 
   @override
   @JsonKey()
   final FieldsStateStatus fieldsStateStatus;
-  final List<FieldEntity>? _fields;
+  final List<FieldEntity> _fields;
   @override
   @JsonKey()
-  List<FieldEntity>? get fields {
-    final value = _fields;
-    if (value == null) return null;
+  List<FieldEntity> get fields {
     if (_fields is EqualUnmodifiableListView) return _fields;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_fields);
   }
 
   /// Create a copy of FieldsState
@@ -140,7 +138,7 @@ abstract mixin class _$FieldsStateCopyWith<$Res>
       __$FieldsStateCopyWithImpl;
   @override
   @useResult
-  $Res call({FieldsStateStatus fieldsStateStatus, List<FieldEntity>? fields});
+  $Res call({FieldsStateStatus fieldsStateStatus, List<FieldEntity> fields});
 }
 
 /// @nodoc
@@ -156,17 +154,17 @@ class __$FieldsStateCopyWithImpl<$Res> implements _$FieldsStateCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? fieldsStateStatus = null,
-    Object? fields = freezed,
+    Object? fields = null,
   }) {
     return _then(_FieldsState(
       null == fieldsStateStatus
           ? _self.fieldsStateStatus
           : fieldsStateStatus // ignore: cast_nullable_to_non_nullable
               as FieldsStateStatus,
-      freezed == fields
+      null == fields
           ? _self._fields
           : fields // ignore: cast_nullable_to_non_nullable
-              as List<FieldEntity>?,
+              as List<FieldEntity>,
     ));
   }
 }

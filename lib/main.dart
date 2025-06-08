@@ -4,11 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/widget/app.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
+import 'package:study_without_pen_by_flutter/features/field/data/repositories/field_repository.dart';
 import 'package:study_without_pen_by_flutter/features/field/data/repositories/field_repository_local.dart';
 import 'package:study_without_pen_by_flutter/features/field/domain/usecases/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field/domain/usecases/watch_fields_usecase.dart';
 
 import 'firebase_options.dart';
 
@@ -24,11 +27,16 @@ Future<void> main() async {
   };
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   appDatabase = AppDatabase(AppDatabase.openConnection());
+  FieldsDao fieldsDao = FieldsDao(appDatabase);
+  FieldRepository fieldRepository = FieldRepositoryLocal(fieldsDao);
   runApp(MultiRepositoryProvider(providers: [
-    RepositoryProvider<FirebaseAuth>.value(value: FirebaseAuth.instance),
+    RepositoryProvider<nonso.AuthBloc>(
+        create: (context) => nonso.AuthBloc(FirebaseAuth.instance)),
     RepositoryProvider<CreateFieldUseCase>(
-      create: (context) =>
-          CreateFieldUseCase(FieldRepositoryLocal(FieldsDao(appDatabase))),
+      create: (context) => CreateFieldUseCase(fieldRepository),
     ),
+    RepositoryProvider<WatchFieldsUsecase>(
+      create: (context) => WatchFieldsUsecase(fieldRepository),
+    )
   ], child: App()));
 }

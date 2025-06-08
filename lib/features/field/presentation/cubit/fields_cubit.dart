@@ -7,13 +7,14 @@ class FieldsCubit extends Cubit<FieldsState> {
   FieldsCubit(this._watchFieldsUsecase) : super(FieldsState());
   final WatchFieldsUsecase _watchFieldsUsecase;
 
-  watch(String userAccountId) async {
+  void watch(String userAccountId) {
     emit(FieldsState(FieldsStateStatus.loading, []));
     try {
       Stream<List<FieldEntity>> result =
           _watchFieldsUsecase.call(userAccountId);
-      result
-          .listen((list) => emit(FieldsState(FieldsStateStatus.success, list)));
+      result.listen(
+          (list) => emit(FieldsState(FieldsStateStatus.success, list)),
+          onError: (_) => emit(FieldsState(FieldsStateStatus.failure, [])));
     } catch (e) {
       emit(FieldsState(FieldsStateStatus.failure, []));
     }

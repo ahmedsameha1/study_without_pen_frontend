@@ -392,6 +392,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_staggered_grid_view:
+    dependency: "direct main"
+    description:
+      name: flutter_staggered_grid_view
+      sha256: "19e7abb550c96fbfeb546b23f3ff356ee7c59a019a651f8f102a4ba9b7349395"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -632,10 +640,10 @@ packages:
     dependency: "direct main"
     description:
       name: nonso
-      sha256: f457afd27ba2783be9a4f1c1757ba25aa1533729f6b8b008e8a4433880f77c9c
+      sha256: b201dd19bdd6261d7a56d536a7f3caab0756e46704f11ad9d354ed2fafce1e73
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.21"
+    version: "0.0.22"
   package_config:
     dependency: transitive
     description:

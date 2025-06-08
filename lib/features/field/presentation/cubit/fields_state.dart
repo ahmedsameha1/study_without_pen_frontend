@@ -3,11 +3,11 @@ import 'package:study_without_pen_by_flutter/features/field/domain/models/field_
 
 part 'fields_state.freezed.dart';
 
-enum FieldsStateStatus { initial, loading, failure, success }
+enum FieldsStateStatus { loading, failure, success }
 
 @freezed
 abstract class FieldsState with _$FieldsState {
   const factory FieldsState(
-      [@Default(FieldsStateStatus.initial) FieldsStateStatus fieldsStateStatus,
-      @Default([]) List<FieldEntity>? fields]) = _FieldsState;
+      [@Default(FieldsStateStatus.loading) FieldsStateStatus fieldsStateStatus,
+      @Default([]) List<FieldEntity> fields]) = _FieldsState;
 }

@@ -274,6 +274,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error while creation'**
   String get creationError;
+
+  /// No description provided for @noFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently, there are no fields!'**
+  String get noFields;
+
+  /// No description provided for @failureLoadingFields.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while loading the fields!'**
+  String get failureLoadingFields;
 }
 
 class _AppLocalizationsDelegate

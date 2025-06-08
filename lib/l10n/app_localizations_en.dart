@@ -108,4 +108,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get creationError => 'Error while creation';
+
+  @override
+  String get noFields => 'Currently, there are no fields!';
+
+  @override
+  String get failureLoadingFields =>
+      'An error occurred while loading the fields!';
 }

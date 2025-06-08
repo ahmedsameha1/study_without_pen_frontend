@@ -11,6 +11,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/field/domain/usecases/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field/domain/usecases/watch_fields_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/create_field_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
@@ -23,10 +24,10 @@ import '../../../common/common_finders.dart';
 import '../../../common/widget_testing_helper.dart';
 import 'field_page_test.dart';
 
+/*
 Widget createWidgetInASkeleton(
     nonso.AuthBloc bloc,
     CreateFieldUseCase createFieldUseCase,
-    Uuid uuid,
     Locale locale,
     GoRouter Function() getRouterConfig) {
   return MultiRepositoryProvider(
@@ -43,6 +44,7 @@ Widget createWidgetInASkeleton(
           locale: locale,
           routerConfig: getRouterConfig()));
 }
+*/
 
 Future<void> goToCreateFieldPage(
     Widget widgetInskeleton, WidgetTester tester) async {
@@ -53,7 +55,7 @@ Future<void> goToCreateFieldPage(
 
 void main() {
   late CreateFieldUseCase createFieldUseCase;
-  late Uuid uuid;
+  late WatchFieldsUsecase watchFieldsUsecase;
   String userId = "fwefohwe";
   User user;
   late nonso.AuthBloc authBloc;
@@ -71,8 +73,8 @@ void main() {
   setUp(() {
     user = MockUser();
     authBloc = MockAuthBloc();
+    watchFieldsUsecase = MockWatchFieldsUsecase();
     createFieldUseCase = MockCreateFieldUseCase();
-    uuid = MockUuid();
     when(() => user.uid).thenReturn(userId);
     when(() => authBloc.state).thenReturn(nonso.AuthState(
         applicationAuthState: nonso.ApplicationAuthState.signedIn, user: user));
@@ -85,8 +87,8 @@ void main() {
     testWidgets("Test the presence of the main widgets",
         (WidgetTester tester) async {
       await goToCreateFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
-              currentLocale, this_app.getRouterConfig),
+          createWidgetInASkeleton(authBloc, createFieldUseCase,
+              watchFieldsUsecase, currentLocale, this_app.getRouterConfig),
           tester);
       await tester.pumpAndSettle();
       final createFieldPageFinder = find.byType(CreateFieldPage);
@@ -300,8 +302,8 @@ void main() {
 
     testWidgets("name text form field validation", (WidgetTester tester) async {
       await goToCreateFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
-              currentLocale, this_app.getRouterConfig),
+          createWidgetInASkeleton(authBloc, createFieldUseCase,
+              watchFieldsUsecase, currentLocale, this_app.getRouterConfig),
           tester);
       await tester.pumpAndSettle();
       ElevatedButton okElevatedButton =
@@ -348,8 +350,8 @@ void main() {
     testWidgets("Test clicking the cancel button exit the create field page",
         (WidgetTester tester) async {
       await goToCreateFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
-              currentLocale, this_app.getRouterConfig),
+          createWidgetInASkeleton(authBloc, createFieldUseCase,
+              watchFieldsUsecase, currentLocale, this_app.getRouterConfig),
           tester);
       await tester.pumpAndSettle();
       expect(find.byType(CreateFieldPage), findsOneWidget);
@@ -363,16 +365,14 @@ void main() {
       testWidgets("Test clicking the ok button: validation error",
           (WidgetTester tester) async {
         DateTime creationAt = DateTime(2020, 1, 1);
-        final fieldId = const Uuid().v4();
         final name = "";
         int color = 0xff520404;
         when(() => createFieldUseCase.call(userId, name, color)).thenThrow(
             AssertionError('Field name must be between 1 and 64 characters'));
-        when(() => uuid.v4()).thenReturn(fieldId);
         withClock(Clock.fixed(creationAt), () async {
           await goToCreateFieldPage(
-              createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
-                  currentLocale, getRouterConfig),
+              createWidgetInASkeleton(authBloc, createFieldUseCase,
+                  watchFieldsUsecase, currentLocale, getRouterConfig),
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);
@@ -411,16 +411,14 @@ void main() {
       testWidgets("Test clicking the ok button: failure from the date repo",
           (WidgetTester tester) async {
         DateTime creationAt = DateTime(2020, 1, 1);
-        final fieldId = const Uuid().v4();
         final name = "field name";
         int color = 0xff520404;
         when(() => createFieldUseCase.call(userId, name, color))
             .thenThrow(SqliteException(1, "Error from database"));
-        when(() => uuid.v4()).thenReturn(fieldId);
         withClock(Clock.fixed(creationAt), () async {
           await goToCreateFieldPage(
-              createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
-                  currentLocale, this_app.getRouterConfig),
+              createWidgetInASkeleton(authBloc, createFieldUseCase,
+                  watchFieldsUsecase, currentLocale, this_app.getRouterConfig),
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);
@@ -460,16 +458,14 @@ void main() {
       testWidgets("Test clicking the ok button: success",
           (WidgetTester tester) async {
         DateTime creationAt = DateTime(2020, 1, 1);
-        final fieldId = const Uuid().v4();
         final name = "field name";
         int color = 0xff520404;
         when(() => createFieldUseCase.call(userId, name, color))
             .thenAnswer((_) => Future.value(1));
-        when(() => uuid.v4()).thenReturn(fieldId);
         withClock(Clock.fixed(creationAt), () async {
           await goToCreateFieldPage(
-              createWidgetInASkeleton(authBloc, createFieldUseCase, uuid,
-                  currentLocale, this_app.getRouterConfig),
+              createWidgetInASkeleton(authBloc, createFieldUseCase,
+                  watchFieldsUsecase, currentLocale, this_app.getRouterConfig),
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);

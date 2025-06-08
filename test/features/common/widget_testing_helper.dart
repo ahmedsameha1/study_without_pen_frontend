@@ -4,18 +4,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/features/field/domain/usecases/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field/domain/usecases/watch_fields_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/create_field_cubit.dart';
+import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/fields_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
-import 'package:uuid/uuid.dart';
 
 class MockUser extends Mock implements User {}
 
 class MockCreateFieldUseCase extends Mock implements CreateFieldUseCase {}
 
-class MockUuid extends Mock implements Uuid {}
+class MockWatchFieldsUsecase extends Mock implements WatchFieldsUsecase {}
 
 class AppThemeForTests {
   static const seedColor = Color(0xFFEC407A);
@@ -42,14 +44,14 @@ class AppThemeForTests {
 Widget createWidgetInASkeleton(
     nonso.AuthBloc bloc,
     CreateFieldUseCase createFieldUseCase,
-    Uuid uuid,
+    WatchFieldsUsecase watchFieldsUsecase,
     Locale locale,
     GoRouter Function() getRouterConfig) {
   return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: bloc),
         RepositoryProvider.value(value: createFieldUseCase),
-        RepositoryProvider.value(value: uuid)
+        RepositoryProvider.value(value: watchFieldsUsecase)
       ],
       child: MaterialApp.router(
           localizationsDelegates: [
