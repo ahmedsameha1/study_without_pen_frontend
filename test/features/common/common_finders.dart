@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 final scaffoldFinder = find.byType(Scaffold);
 final centerFinder = find.byType(Center);
+final paddingFinder = find.byType(Padding);
 final cardFinder = find.byType(Card);
 final singleChildScrollViewFinder = find.byType(SingleChildScrollView);
 final columnFinder = find.byType(Column);

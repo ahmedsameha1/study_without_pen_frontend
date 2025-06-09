@@ -76,13 +76,30 @@ class FieldPageView extends StatelessWidget {
                 interactive: true,
                 child: MasonryGridView.count(
                   padding: const EdgeInsets.all(10.0),
-                  itemCount: state.fields.length,
-                  itemBuilder: (context, index) => Card(
-                    child: Text(
-                      state.fields[index].name,
-                    ),
-                  ),
                   crossAxisCount: 2,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  itemCount: state.fields.length,
+                  itemBuilder: (context, index) {
+                    final color = Color(state.fields[index].color);
+                    return Card(
+                      color: color,
+                      elevation: 2,
+                      child: Padding(
+                        key: Key('cardContentPadding'),
+                        padding: const EdgeInsets.all(10.0),
+                        child: Center(
+                          child: Text(
+                            state.fields[index].name,
+                            style: TextStyle(
+                                color: color.computeLuminance() > 0.5
+                                    ? Colors.black
+                                    : Colors.white),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               );
             }

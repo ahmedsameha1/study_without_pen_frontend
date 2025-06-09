@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:drift/native.dart';
@@ -51,9 +52,9 @@ void main() {
   int usageCount1 = 10;
   int color1 = Colors.red.toARGB32();
   int usageCount2 = 20;
-  int color2 = Colors.green.toARGB32();
+  int color2 = 0xff520404;
   int usageCount3 = 30;
-  int color3 = Colors.blue.toARGB32();
+  int color3 = 0xffffffff;
 
   setUp(() {
     authBloc = MockAuthBloc();
@@ -148,6 +149,8 @@ void main() {
               matching: find.byType(MasonryGridView)),
         );
         expect(masonryGridView.padding, const EdgeInsets.all(10.0));
+        expect(masonryGridView.crossAxisSpacing, 5);
+        expect(masonryGridView.mainAxisSpacing, 5);
         expect(
             find.descendant(
                 of: find.byWidget(masonryGridView), matching: cardFinder),
@@ -155,15 +158,58 @@ void main() {
         Card firstCard = tester.widget<Card>(find.descendant(
             of: find.byType(MasonryGridView),
             matching: find.byType(Card).at(0)));
-        expect((firstCard.child as Text).data, fieldName1);
+        expect(firstCard.color, Color(color1));
+        expect(firstCard.elevation, 2);
+        Padding firstPadding = tester.widget(
+          find.descendant(
+              of: find.byWidget(firstCard),
+              matching: find.byKey(Key('cardContentPadding'))),
+        );
+        expect(firstPadding.padding, const EdgeInsets.all(10.0));
+        Center firstCenter = tester.widget(
+          find.descendant(
+              of: find.byWidget(firstPadding), matching: centerFinder),
+        );
+        expect((firstCenter.child as Text).data, fieldName1);
+        Text firstText = firstCenter.child as Text;
+        expect(firstText.data, fieldName1);
+        expect(firstText.style!.color, Colors.white);
         Card secondCard = tester.widget<Card>(find.descendant(
             of: find.byType(MasonryGridView),
             matching: find.byType(Card).at(1)));
-        expect((secondCard.child as Text).data, fieldName2);
+        expect(secondCard.color, Color(color2));
+        expect(secondCard.elevation, 2);
+        Padding secondPadding = tester.widget(
+          find.descendant(
+              of: find.byWidget(secondCard),
+              matching: find.byKey(Key('cardContentPadding'))),
+        );
+        expect(firstPadding.padding, const EdgeInsets.all(10.0));
+        Center secondCenter = tester.widget(
+          find.descendant(
+              of: find.byWidget(secondPadding), matching: centerFinder),
+        );
+        Text secondText = secondCenter.child as Text;
+        expect(secondText.data, fieldName2);
+        expect(secondText.style!.color, Colors.white);
         Card thirdCard = tester.widget<Card>(find.descendant(
             of: find.byType(MasonryGridView),
             matching: find.byType(Card).at(2)));
-        expect((thirdCard.child as Text).data, fieldName3);
+        expect(thirdCard.color, Color(color3));
+        expect(thirdCard.elevation, 2);
+        Padding thirdPadding = tester.widget(
+          find.descendant(
+              of: find.byWidget(thirdCard),
+              matching: find.byKey(Key('cardContentPadding'))),
+        );
+        expect(firstPadding.padding, const EdgeInsets.all(10.0));
+        Center thirdCenter = tester.widget(
+          find.descendant(
+              of: find.byWidget(thirdPadding), matching: centerFinder),
+        );
+        Text thirdText = thirdCenter.child as Text;
+        expect(thirdText.data, fieldName3);
+        expect(thirdText.style!.color, Colors.black);
       });
     });
 
