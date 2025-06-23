@@ -1,17 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/features/field/domain/usecases/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field/domain/usecases/watch_fields_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/create_field_cubit.dart';
-import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/fields_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
+import 'package:study_without_pen_by_flutter/main.dart' as app;
 
 class MockUser extends Mock implements User {}
 
@@ -106,4 +106,16 @@ Widget createFieldPathBuilder(
   return CreateFieldPage(
     usecaseValidationTest: true,
   );
+}
+
+Future<void> runAppWhileHandlingFlutterError(WidgetTester tester) async {
+  final originalOnError = FlutterError.onError!;
+  await app.main();
+  final overridenOnError = FlutterError.onError!;
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (originalOnError != overridenOnError) {
+      overridenOnError(details);
+    }
+    originalOnError(details);
+  };
 }

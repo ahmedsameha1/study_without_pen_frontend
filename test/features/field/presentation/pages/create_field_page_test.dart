@@ -6,7 +6,6 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
@@ -15,36 +14,12 @@ import 'package:study_without_pen_by_flutter/features/field/domain/usecases/watc
 import 'package:study_without_pen_by_flutter/features/field/presentation/cubit/create_field_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
-import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:study_without_pen_by_flutter/common/router_config.dart'
     as this_app;
-import 'package:uuid/uuid.dart';
 
 import '../../../common/common_finders.dart';
 import '../../../common/widget_testing_helper.dart';
 import 'field_page_test.dart';
-
-/*
-Widget createWidgetInASkeleton(
-    nonso.AuthBloc bloc,
-    CreateFieldUseCase createFieldUseCase,
-    Locale locale,
-    GoRouter Function() getRouterConfig) {
-  return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider.value(value: bloc),
-        RepositoryProvider.value(value: createFieldUseCase),
-      ],
-      child: MaterialApp.router(
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            nonso.AppLocalizations.delegate
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: locale,
-          routerConfig: getRouterConfig()));
-}
-*/
 
 Future<void> goToCreateFieldPage(
     Widget widgetInskeleton, WidgetTester tester) async {

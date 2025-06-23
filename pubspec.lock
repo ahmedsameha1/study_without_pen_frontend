@@ -640,10 +640,10 @@ packages:
     dependency: "direct main"
     description:
       name: nonso
-      sha256: b201dd19bdd6261d7a56d536a7f3caab0756e46704f11ad9d354ed2fafce1e73
+      sha256: "47a42df610819f8b1030253c98643b8551e8531d35030421b9124aa488dd21e2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.22"
+    version: "0.0.23"
   package_config:
     dependency: transitive
     description:

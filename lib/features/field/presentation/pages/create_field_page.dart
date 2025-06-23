@@ -38,6 +38,7 @@ class CreateFieldPageView extends HookWidget {
         useTextEditingController();
     return BlocListener<CreateFieldCubit, CreateFieldState>(
         listener: (context, state) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
           if (state == CreateFieldState.validationFailure) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(AppLocalizations.of(context)!
