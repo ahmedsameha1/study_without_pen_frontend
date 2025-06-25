@@ -9,7 +9,8 @@ import 'package:nonso/nonso.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/firebase_options.dart';
 import 'package:http/http.dart' as http;
-import 'package:study_without_pen_by_flutter/main.dart' as app;
+
+import '../test/features/common/widget_testing_helper.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -79,7 +80,7 @@ void main() {
                         [oobCodes.length - 1]["oobLink"])
                     .replaceFirst("127.0.0.1", "10.0.2.2")));
                 if (response.statusCode == 200) {
-                  await app.main();
+                  await runAppWhileHandlingFlutterError(widgetTester);
                   await widgetTester.pumpAndSettle();
                   expect(find.byType(AuthOptions), findsOneWidget);
                   await widgetTester.tap(signInButtonFinder);
@@ -173,7 +174,7 @@ void main() {
                         [oobCodes.length - 1]["oobLink"])
                     .replaceFirst("127.0.0.1", "10.0.2.2")));
                 if (response.statusCode == 200) {
-                  await app.main();
+                  await runAppWhileHandlingFlutterError(widgetTester);
                   await widgetTester.pumpAndSettle();
                   expect(find.byType(AuthOptions), findsOneWidget);
                   await widgetTester.tap(signInButtonFinder);

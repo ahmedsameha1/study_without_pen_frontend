@@ -25,7 +25,7 @@
             }
         }
     },
-    "nonso_success": "Success: Check your email to verify your email address",
+    "nonso_success": "Success: Check your email inbox to verify your email address.",
     "nonso_passwordValidationError": "Password needs to be at least {passwordMinimumLength} characters",
     "@nonso_passwordValidationError": {
         "placeholders": {

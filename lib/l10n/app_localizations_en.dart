@@ -71,7 +71,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nonso_success =>
-      'Success: Check your email to verify your email address';
+      'Success: Check your email inbox to verify your email address.';
 
   @override
   String nonso_passwordValidationError(int passwordMinimumLength) {

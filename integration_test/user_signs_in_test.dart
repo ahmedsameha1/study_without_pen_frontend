@@ -10,7 +10,8 @@ import 'package:nonso/nonso.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/firebase_options.dart';
 import 'package:http/http.dart' as http;
-import 'package:study_without_pen_by_flutter/main.dart' as app;
+
+import '../test/features/common/widget_testing_helper.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -22,10 +23,11 @@ void main() {
       await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
     });
 
+    tearDown(() async => await FirebaseAuth.instance.signOut());
+
     tearDownAll(() async {
       await http.delete(Uri.parse(
           "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/accounts"));
-      await FirebaseAuth.instance.signOut();
     });
 
     group("Android", () {
@@ -37,7 +39,7 @@ void main() {
         testWidgets(
             "Entering invalid email in the email TextFormField on the Password widget",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(signInButtonFinder);
@@ -92,7 +94,7 @@ void main() {
         testWidgets(
             "Entering invalid password in the password TextFormField on the Password widget",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(signInButtonFinder);
@@ -124,7 +126,7 @@ void main() {
 
         testWidgets("""Pressing the system back button exits the app""",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(signInButtonFinder);
@@ -140,7 +142,7 @@ void main() {
         testWidgets("""Pressing the cancel button returns
             the user to the AuthOptions page""",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(signInButtonFinder);
@@ -156,7 +158,7 @@ void main() {
         testWidgets("""Pressing the sign in button while
             there some input in the input fields: failure case""",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(signInButtonFinder);
@@ -199,7 +201,7 @@ void main() {
               }));
           if (response.statusCode == 200) {
             Map<String, dynamic> data = jsonDecode(response.body);
-            response = await http.post(
+            final response1 = await http.post(
                 Uri.parse(
                     "http://10.0.2.2:9099/identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${DefaultFirebaseOptions.currentPlatform.apiKey}"),
                 headers: <String, String>{
@@ -210,7 +212,19 @@ void main() {
                   "requestType": "VERIFY_EMAIL",
                   "idToken": data["idToken"]
                 }));
-            if (response.statusCode == 200) {
+            final response2 = await http.post(
+                Uri.parse(
+                    "http://10.0.2.2:9099/identitytoolkit.googleapis.com/v1/accounts:update?key=${DefaultFirebaseOptions.currentPlatform.apiKey}"),
+                headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                  'Charset': 'utf-8'
+                },
+                body: jsonEncode(<String, dynamic>{
+                  "idToken": data["idToken"],
+                  "displayName": "John Doe",
+                  "returnSecureToken": true,
+                }));
+            if (response1.statusCode == 200 && response2.statusCode == 200) {
               response = await http.get(Uri.parse(
                   "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/oobCodes"));
               if (response.statusCode == 200) {
@@ -220,7 +234,7 @@ void main() {
                         [oobCodes.length - 1]["oobLink"])
                     .replaceFirst("127.0.0.1", "10.0.2.2")));
                 if (response.statusCode == 200) {
-                  await app.main();
+                  await runAppWhileHandlingFlutterError(widgetTester);
                   await widgetTester.pumpAndSettle();
                   expect(find.byType(AuthOptions), findsOneWidget);
                   await widgetTester.tap(signInButtonFinder);
@@ -250,7 +264,6 @@ void main() {
           } else {
             fail("failed while creating a user account");
           }
-          await FirebaseAuth.instance.signOut();
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the sign in button while
@@ -271,7 +284,7 @@ void main() {
                 "returnSecureToken": true
               }));
           if (response.statusCode == 200) {
-            await app.main();
+            await runAppWhileHandlingFlutterError(widgetTester);
             await widgetTester.pumpAndSettle();
             expect(find.byType(AuthOptions), findsOneWidget);
             await widgetTester.tap(signInButtonFinder);
@@ -287,20 +300,48 @@ void main() {
             await widgetTester.tap(signInButtonFinder);
             await widgetTester.pumpAndSettle();
             expect(find.byType(Locked), findsOneWidget);
-            response = await http.get(Uri.parse(
-                "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/oobCodes"));
-            if (response.statusCode == 200) {
-              Map<String, dynamic> data = jsonDecode(response.body);
-              List<dynamic> oobCodes = data["oobCodes"];
-              response = await http.get(Uri.parse((data["oobCodes"]
-                      [oobCodes.length - 1]["oobLink"])
-                  .replaceFirst("127.0.0.1", "10.0.2.2")));
+            Map<String, dynamic> data = jsonDecode(response.body);
+            final response1 = await http.post(
+                Uri.parse(
+                    "http://10.0.2.2:9099/identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${DefaultFirebaseOptions.currentPlatform.apiKey}"),
+                headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                  'Charset': 'utf-8'
+                },
+                body: jsonEncode(<String, dynamic>{
+                  "requestType": "VERIFY_EMAIL",
+                  "idToken": data["idToken"]
+                }));
+            final response2 = await http.post(
+                Uri.parse(
+                    "http://10.0.2.2:9099/identitytoolkit.googleapis.com/v1/accounts:update?key=${DefaultFirebaseOptions.currentPlatform.apiKey}"),
+                headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                  'Charset': 'utf-8'
+                },
+                body: jsonEncode(<String, dynamic>{
+                  "idToken": data["idToken"],
+                  "displayName": "John Doe",
+                  "returnSecureToken": true,
+                }));
+            if (response1.statusCode == 200 && response2.statusCode == 200) {
+              response = await http.get(Uri.parse(
+                  "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/oobCodes"));
               if (response.statusCode == 200) {
-                final refreshAccountButton =
-                    find.widgetWithText(ElevatedButton, "Refresh account");
-                await widgetTester.tap(refreshAccountButton);
-                await widgetTester.pumpAndSettle();
-                expect(find.byType(FieldPage), findsOneWidget);
+                Map<String, dynamic> data = jsonDecode(response.body);
+                List<dynamic> oobCodes = data["oobCodes"];
+                response = await http.get(Uri.parse((data["oobCodes"]
+                        [oobCodes.length - 1]["oobLink"])
+                    .replaceFirst("127.0.0.1", "10.0.2.2")));
+                if (response.statusCode == 200) {
+                  final refreshAccountButton =
+                      find.widgetWithText(ElevatedButton, "Refresh account");
+                  await widgetTester.tap(refreshAccountButton);
+                  await widgetTester.pumpAndSettle();
+                  expect(find.byType(FieldPage), findsOneWidget);
+                }
+              } else {
+                fail("problem");
               }
             } else {
               fail("problem");
@@ -308,7 +349,6 @@ void main() {
           } else {
             fail("failed while creating a user account");
           }
-          await FirebaseAuth.instance.signOut();
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the sign in button while
@@ -329,7 +369,7 @@ void main() {
                 "returnSecureToken": true
               }));
           if (response.statusCode == 200) {
-            await app.main();
+            await runAppWhileHandlingFlutterError(widgetTester);
             await widgetTester.pumpAndSettle();
             expect(find.byType(AuthOptions), findsOneWidget);
             await widgetTester.tap(signInButtonFinder);
@@ -353,7 +393,6 @@ void main() {
           } else {
             fail("failed while creating a user account");
           }
-          await FirebaseAuth.instance.signOut();
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
         testWidgets("""Pressing the sign in button while
@@ -374,7 +413,7 @@ void main() {
                 "returnSecureToken": true
               }));
           if (response.statusCode == 200) {
-            await app.main();
+            await runAppWhileHandlingFlutterError(widgetTester);
             await widgetTester.pumpAndSettle();
             expect(find.byType(AuthOptions), findsOneWidget);
             await widgetTester.tap(signInButtonFinder);
@@ -422,11 +461,9 @@ void main() {
             }
             expect(oobCodesLengthAfterResending,
                 oobCodesLengthBeforeResending + 1);
-            await FirebaseAuth.instance.signOut();
           } else {
             fail("failed while creating a user account");
           }
-          await FirebaseAuth.instance.signOut();
         }, variant: TargetPlatformVariant.only(TargetPlatform.android));
       });
     });

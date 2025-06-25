@@ -211,7 +211,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonso_success.
   ///
   /// In en, this message translates to:
-  /// **'Success: Check your email to verify your email address'**
+  /// **'Success: Check your email inbox to verify your email address.'**
   String get nonso_success;
 
   /// No description provided for @nonso_passwordValidationError.

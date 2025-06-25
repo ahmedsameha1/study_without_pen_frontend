@@ -9,8 +9,9 @@ import 'package:integration_test/integration_test.dart';
 import 'package:nonso/nonso.dart';
 import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
 import 'package:study_without_pen_by_flutter/firebase_options.dart';
-import 'package:study_without_pen_by_flutter/main.dart' as app;
 import 'package:http/http.dart' as http;
+
+import '../test/features/common/widget_testing_helper.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,7 @@ void main() {
         testWidgets(
             "Entering invalid name in the name TextFormField on the Register widget",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -68,7 +69,7 @@ void main() {
         testWidgets(
             "Entering invalid email in the email TextFormField on the Register widget",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -104,7 +105,7 @@ void main() {
         testWidgets(
             "Entering invalid password in the password TextFormField on the Register widget",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -133,7 +134,7 @@ void main() {
             """Entering a password that doesn't match the password in the password TextFormField
                in the confirm password TextFormField on the Register widget""",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -164,7 +165,7 @@ void main() {
         testWidgets("""Pressing the system back button exits the app:
             there is nothing in the input fields""",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -180,7 +181,7 @@ void main() {
         testWidgets("""Pressing the system back button exits the app:
             there some input in the input fields""",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -209,7 +210,7 @@ void main() {
             the user to the AuthOptions page:
             there no input in the input fields""",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -226,7 +227,7 @@ void main() {
             the user to the AuthOptions page:
             there some input in the input fields""",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -280,7 +281,7 @@ void main() {
                   "idToken": data["idToken"]
                 }));
             if (response.statusCode == 200) {
-              await app.main();
+              await runAppWhileHandlingFlutterError(widgetTester);
               await widgetTester.pumpAndSettle();
               expect(find.byType(AuthOptions), findsOneWidget);
               await widgetTester.tap(registerButtonFinder);
@@ -323,7 +324,7 @@ void main() {
             there some input in the input fields: success case
             then the user verify his email then refresh the account""",
             (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -380,7 +381,7 @@ void main() {
             there some input in the input fields: success case
             then the user ask for resending email for verify 
             his email address""", (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -449,7 +450,7 @@ void main() {
         testWidgets("""Pressing the register button while
             there some input in the input fields: success case
             then the user signed out""", (WidgetTester widgetTester) async {
-          await app.main();
+          await runAppWhileHandlingFlutterError(widgetTester);
           await widgetTester.pumpAndSettle();
           expect(find.byType(AuthOptions), findsOneWidget);
           await widgetTester.tap(registerButtonFinder);
@@ -476,7 +477,7 @@ void main() {
           final snakBarTextFinder = find.descendant(
               of: snackBarFinder,
               matching: find.text(
-                  "Success: Check your email to verify your email address"));
+                  "Success: Check your email inbox to verify your email address."));
           expect(snackBarFinder, findsOneWidget);
           expect(snakBarTextFinder, findsOneWidget);
           expect(find.byType(Locked), findsOneWidget);

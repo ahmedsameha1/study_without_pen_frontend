@@ -85,13 +85,14 @@ void main() {
     }
   });
 
+  tearDown(() async => await FirebaseAuth.instance.signOut());
+
   tearDownAll(() async {
     final response = await http.delete(Uri.parse(
         "http://10.0.2.2:9099/emulator/v1/projects/learn-gcp-380012/accounts"));
     if (response.statusCode != 200) {
       fail("problem");
     }
-    await FirebaseAuth.instance.signOut();
   });
 
   group("Android", () {
@@ -124,7 +125,6 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsNothing);
         expect(find.byType(FieldPage), findsOneWidget);
-        await FirebaseAuth.instance.signOut();
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
       testWidgets("""Signin in then the FieldPage opens then press the 
@@ -152,7 +152,6 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsNothing);
         expect(find.byType(FieldPage), findsOneWidget);
-        await FirebaseAuth.instance.signOut();
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
       testWidgets("""Signin in then the FieldPage opens then press the 
@@ -218,7 +217,6 @@ void main() {
         okElevatedButton = tester
             .widget(find.widgetWithText(ElevatedButton, expectedOkString));
         expect(okElevatedButton.enabled, isFalse);
-        await FirebaseAuth.instance.signOut();
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
       testWidgets("""Signin in then the FieldPage opens then press the 
@@ -298,7 +296,6 @@ void main() {
             find.descendant(
                 of: find.byWidget(aCard), matching: find.text("field name")),
             findsOne);
-        await FirebaseAuth.instance.signOut();
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
       testWidgets("""Signin in then the FieldPage opens then press the 
@@ -390,7 +387,6 @@ void main() {
           expect((snackBar.content as Text).data, 'Error while creation');
           expect(find.byType(CreateFieldPage), findsOne);
         });
-        await FirebaseAuth.instance.signOut();
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
     });
   });
