@@ -343,7 +343,7 @@ void main() {
           usageCount: usageCount,
           color: color);
       await fieldsDao.create(field.toCompanion(true));
-      Field? gottenField = await fieldsDao.getById(id);
+      Field? gottenField = await fieldsDao.watchById(id).first;
       gottenField = gottenField!;
       expect(gottenField.id, id);
       expect(gottenField.userAccountId, userAccountId);
@@ -355,7 +355,7 @@ void main() {
     });
 
     test("Good case: this specific field is not found", () async {
-      Field? gottenField = await fieldsDao.getById(const Uuid().v4());
+      Field? gottenField = await fieldsDao.watchById(const Uuid().v4()).first;
       expect(gottenField, null);
     });
 
@@ -367,7 +367,7 @@ void main() {
           creationAt: Value(creationAt),
           lastModificationAt: Value(lastModificationAt));
       await fieldsDao.create(fieldCompanion);
-      Field? gottenField = await fieldsDao.getById(id);
+      Field? gottenField = await fieldsDao.watchById(id).first;
       gottenField = gottenField!;
       expect(gottenField.usageCount, Fields.DEFAULT_USAGE_COUNT);
       expect(gottenField.color, Fields.DEFAULT_COLOR);
@@ -746,7 +746,7 @@ void main() {
           usageCount: usageCount,
           color: newColor);
       await fieldsDao.mutate(field.toCompanion(true));
-      var gottenField = await fieldsDao.getById(id);
+      var gottenField = await fieldsDao.watchById(id).first;
       gottenField = gottenField!;
       expect(gottenField.id, id);
       expect(gottenField.userAccountId, userAccountId);
@@ -769,7 +769,7 @@ void main() {
           usageCount: newUsageCount,
           color: color);
       await fieldsDao.mutate(field.toCompanion(true));
-      var gottenField = await fieldsDao.getById(id);
+      var gottenField = await fieldsDao.watchById(id).first;
       gottenField = gottenField!;
       expect(gottenField.id, id);
       expect(gottenField.userAccountId, userAccountId);
@@ -792,7 +792,7 @@ void main() {
         color: color);
     await fieldsDao.create(field.toCompanion(true));
     await fieldsDao.remove(id);
-    var gottenField = await fieldsDao.getById(id);
+    var gottenField = await fieldsDao.watchById(id).first;
     expect(gottenField, null);
   });
 }

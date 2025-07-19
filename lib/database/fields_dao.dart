@@ -20,9 +20,9 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
     return into(fields).insert(fieldsCompanion);
   }
 
-  Future<Field?> getById(String id) {
+  Stream<Field?> watchById(String id) {
     return (select(fields)..where((tbl) => tbl.id.equals(id)))
-        .getSingleOrNull();
+        .watchSingleOrNull();
   }
 
   Stream<List<Field>> watchByUserAccountId(String id) {
@@ -42,7 +42,7 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
     if (fieldsCompanion.lastModificationAt.value.toUtc().isAfter(clock.now())) {
       throw InvalidDataException("lastModificationAt");
     }
-    final gotten = await getById(fieldsCompanion.id.value);
+    final Field? gotten = await watchById(fieldsCompanion.id.value).first;
     if (gotten != null &&
         (gotten.userAccountId != fieldsCompanion.userAccountId.value)) {
       throw InvalidDataException("Updating userAccountId");
