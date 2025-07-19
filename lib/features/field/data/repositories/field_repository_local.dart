@@ -31,4 +31,10 @@ class FieldRepositoryLocal implements FieldRepository {
             field.color))
         .toList());
   }
+  
+  @override
+  Stream<FieldEntity> watchField(String fieldId) {
+    // TODO: implement watchField
+    throw UnimplementedError();
+  }
 }
