@@ -13,3 +13,4 @@ final textFormFieldFinder = find.byType(TextFormField);
 final blocProviderFinder = find.byType(BlocProvider);
 final snackBarFinder = find.byType(SnackBar);
 final circularProgressIndicatorFinder = find.byType(CircularProgressIndicator);
+final appBarFinder = find.byType(AppBar);
