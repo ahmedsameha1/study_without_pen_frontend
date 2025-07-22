@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:study_without_pen_by_flutter/features/field/domain/usecases/create_field_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/field/domain/usecases/watch_fields_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
-import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
-import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/create_field_page.dart';
+import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/fields_page.dart';
+import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:study_without_pen_by_flutter/main.dart' as app;
 
 class MockUser extends Mock implements User {}
@@ -98,7 +98,7 @@ GoRouter getRouterConfig() {
 }
 
 Widget rootPathBuilder(BuildContext buildContext, GoRouterState goRouterState) {
-  return nonso.AuthScreen(FieldPage());
+  return nonso.AuthScreen(FieldsPage());
 }
 
 Widget createFieldPathBuilder(

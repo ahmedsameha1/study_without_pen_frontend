@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:nonso/nonso.dart';
-import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
+import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/fields_page.dart';
 import 'package:study_without_pen_by_flutter/firebase_options.dart';
 import 'package:http/http.dart' as http;
 
@@ -97,7 +97,7 @@ void main() {
                   await widgetTester.pumpAndSettle();
                   await widgetTester.tap(signInButtonFinder);
                   await widgetTester.pumpAndSettle();
-                  expect(find.byType(FieldPage), findsOneWidget);
+                  expect(find.byType(FieldsPage), findsOneWidget);
                   await widgetTester.tap(find.byKey(Key("logoutIconButton")));
                   await widgetTester.pumpAndSettle();
                   expect(find.byType(AuthOptions), findsOneWidget);
@@ -191,7 +191,7 @@ void main() {
                   await widgetTester.pumpAndSettle();
                   await widgetTester.tap(signInButtonFinder);
                   await widgetTester.pumpAndSettle();
-                  expect(find.byType(FieldPage), findsOneWidget);
+                  expect(find.byType(FieldsPage), findsOneWidget);
                   await widgetTester.tap(find.byKey(Key("logoutIconButton")));
                   await widgetTester.pumpAndSettle();
                   expect(find.byType(AuthOptions), findsOneWidget);
@@ -205,7 +205,9 @@ void main() {
                   await widgetTester.pumpAndSettle();
                   final snackBarFinder = find.byType(SnackBar);
                   final snakBarTextFinder = find.descendant(
-                      of: snackBarFinder, matching: find.text("Check your email inbox to get the reset code"));
+                      of: snackBarFinder,
+                      matching: find.text(
+                          "Check your email inbox to get the reset code"));
                   expect(snackBarFinder, findsOneWidget);
                   expect(snakBarTextFinder, findsOneWidget);
                 } else {

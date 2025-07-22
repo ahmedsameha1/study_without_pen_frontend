@@ -8,10 +8,10 @@ import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/widget/app.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
-import 'package:study_without_pen_by_flutter/features/field/data/repositories/field_repository.dart';
-import 'package:study_without_pen_by_flutter/features/field/data/repositories/field_repository_local.dart';
-import 'package:study_without_pen_by_flutter/features/field/domain/usecases/create_field_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/field/domain/usecases/watch_fields_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/data/repositories/fields_repository.dart';
+import 'package:study_without_pen_by_flutter/features/fields/data/repositories/fields_repository_local.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
 
 import 'firebase_options.dart';
 
@@ -28,7 +28,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   appDatabase = AppDatabase(AppDatabase.openConnection());
   FieldsDao fieldsDao = FieldsDao(appDatabase);
-  FieldRepository fieldRepository = FieldRepositoryLocal(fieldsDao);
+  FieldsRepository fieldRepository = FieldsRepositoryLocal(fieldsDao);
   runApp(MultiRepositoryProvider(providers: [
     RepositoryProvider<nonso.AuthBloc>(
         create: (context) => nonso.AuthBloc(FirebaseAuth.instance)),

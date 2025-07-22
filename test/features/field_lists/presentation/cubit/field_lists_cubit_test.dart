@@ -3,8 +3,8 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/common/state_status.dart';
-import 'package:study_without_pen_by_flutter/features/field/domain/models/field_entity.dart';
-import 'package:study_without_pen_by_flutter/features/field/domain/usecases/watch_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/cubit/field_lists_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/cubit/field_lists_state.dart';
 

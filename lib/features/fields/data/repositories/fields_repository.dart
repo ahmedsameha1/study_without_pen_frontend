@@ -1,0 +1,7 @@
+import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
+
+abstract class FieldsRepository {
+  Future<int> create(FieldEntity fieldEntity);
+  Stream<List<FieldEntity>> watch(String userAccountId);
+  Stream<FieldEntity> watchField(String fieldId);
+}

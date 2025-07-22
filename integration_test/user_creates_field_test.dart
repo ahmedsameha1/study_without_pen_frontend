@@ -6,13 +6,13 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:integration_test/integration_test.dart';
 import 'package:nonso/nonso.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/features/field/presentation/pages/create_field_page.dart';
-import 'package:study_without_pen_by_flutter/features/field/presentation/pages/field_page.dart';
+import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/create_field_page.dart';
+import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/fields_page.dart';
 import 'package:study_without_pen_by_flutter/firebase_options.dart';
-import 'package:http/http.dart' as http;
 
 import '../test/features/common/common_finders.dart';
 import '../test/features/common/widget_testing_helper.dart';
@@ -101,7 +101,7 @@ void main() {
 
       testWidgets("""Signin in then the FieldPage opens then press the 
             floating action button then the CreateFieldPage opens
-            then click the system back button the FieldPage return back
+            then click the system back button the FieldsPage return back
             """, (WidgetTester tester) async {
         await runAppWhileHandlingFlutterError(tester);
         await tester.pumpAndSettle();
@@ -116,7 +116,7 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(signInButtonFinder);
         await tester.pumpAndSettle();
-        expect(find.byType(FieldPage), findsOneWidget);
+        expect(find.byType(FieldsPage), findsOneWidget);
         await tester.tap(find.byType(FloatingActionButton));
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsOneWidget);
@@ -124,12 +124,12 @@ void main() {
         navigatorState.pop();
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsNothing);
-        expect(find.byType(FieldPage), findsOneWidget);
+        expect(find.byType(FieldsPage), findsOneWidget);
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
-      testWidgets("""Signin in then the FieldPage opens then press the 
+      testWidgets("""Signin in then the FieldsPage opens then press the 
             floating action button then the CreateFieldPage opens
-            then click the cancel button the FieldPage return back
+            then click the cancel button the FieldsPage return back
             """, (WidgetTester tester) async {
         await runAppWhileHandlingFlutterError(tester);
         await tester.pumpAndSettle();
@@ -144,17 +144,17 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(signInButtonFinder);
         await tester.pumpAndSettle();
-        expect(find.byType(FieldPage), findsOneWidget);
+        expect(find.byType(FieldsPage), findsOneWidget);
         await tester.tap(find.byType(FloatingActionButton));
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsOneWidget);
         await tester.tap(find.widgetWithText(ElevatedButton, "Cancel"));
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsNothing);
-        expect(find.byType(FieldPage), findsOneWidget);
+        expect(find.byType(FieldsPage), findsOneWidget);
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
-      testWidgets("""Signin in then the FieldPage opens then press the 
+      testWidgets("""Signin in then the FieldsPage opens then press the 
             floating action button then the CreateFieldPage opens
             test the validation of the name TextFormField
             """, (WidgetTester tester) async {
@@ -174,7 +174,7 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(signInButtonFinder);
         await tester.pumpAndSettle();
-        expect(find.byType(FieldPage), findsOneWidget);
+        expect(find.byType(FieldsPage), findsOneWidget);
         await tester.tap(find.byType(FloatingActionButton));
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsOneWidget);
@@ -219,13 +219,13 @@ void main() {
         expect(okElevatedButton.enabled, isFalse);
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
-      testWidgets("""Signin in then the FieldPage opens then press the 
+      testWidgets("""Signin in then the FieldsPage opens then press the 
             floating action button then the CreateFieldPage opens
             then enter field name in the textfield
             then click the color indicator then pick a color and the
             color of the color indicator changes to the picked color
             then click on the ok button show a snack bar with creation
-            message then go back to FieldPage
+            message then go back to FieldsPage
             """, (WidgetTester tester) async {
         String expectedOkString = "Ok";
         await runAppWhileHandlingFlutterError(tester);
@@ -250,7 +250,7 @@ void main() {
         SnackBar snackBar = tester.widget(snackBarFinder);
         expect((snackBar.content as Text).data, 'Welcome John Doe!');
         await tester.pumpAndSettle();
-        expect(find.byType(FieldPage), findsOneWidget);
+        expect(find.byType(FieldsPage), findsOneWidget);
         await tester.tap(find.byType(FloatingActionButton));
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsOneWidget);
@@ -283,10 +283,10 @@ void main() {
         snackBar = tester.widget(snackBarFinder);
         expect((snackBar.content as Text).data, 'Created');
         expect(find.byType(CreateFieldPage), findsNothing);
-        expect(find.byType(FieldPage), findsOne);
+        expect(find.byType(FieldsPage), findsOne);
         expect(
             find.descendant(
-                of: find.byType(FieldPage),
+                of: find.byType(FieldsPage),
                 matching: find.byType(MasonryGridView)),
             findsOne);
         Card aCard = tester.widget<Card>(find.descendant(
@@ -298,7 +298,7 @@ void main() {
             findsOne);
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
-      testWidgets("""Signin in then the FieldPage opens then press the 
+      testWidgets("""Signin in then the FieldsPage opens then press the 
             floating action button then the CreateFieldPage opens
             then enter field name in the textfield
             then click the color indicator then pick a color and the
@@ -333,7 +333,7 @@ void main() {
         SnackBar snackBar = tester.widget(snackBarFinder);
         expect((snackBar.content as Text).data, 'Welcome John Doe!');
         await tester.pumpAndSettle();
-        expect(find.byType(FieldPage), findsOneWidget);
+        expect(find.byType(FieldsPage), findsOneWidget);
         await tester.tap(find.byType(FloatingActionButton));
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsOneWidget);
@@ -366,7 +366,7 @@ void main() {
         snackBar = tester.widget(snackBarFinder);
         expect((snackBar.content as Text).data, 'Created');
         expect(find.byType(CreateFieldPage), findsNothing);
-        expect(find.byType(FieldPage), findsOne);
+        expect(find.byType(FieldsPage), findsOne);
         await tester.tap(find.byType(FloatingActionButton));
         await tester.pumpAndSettle();
         expect(find.byType(CreateFieldPage), findsOneWidget);
