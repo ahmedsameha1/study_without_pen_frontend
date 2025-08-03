@@ -14,13 +14,13 @@ class FieldListsPage extends StatelessWidget {
     return BlocProvider<FieldListsCubit>(
       create: (context) =>
           FieldListsCubit(context.read<WatchFieldUsecase>())..watch(fieldId),
-      child: const _FieldListsPageView(),
+      child: const FieldListsPageView(),
     );
   }
 }
 
-class _FieldListsPageView extends StatelessWidget {
-  const _FieldListsPageView();
+class FieldListsPageView extends StatelessWidget {
+  const FieldListsPageView({super.key});
 
   @override
   Widget build(BuildContext context) {
