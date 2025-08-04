@@ -286,6 +286,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred while loading the fields!'**
   String get failureLoadingFields;
+
+  /// No description provided for @failureLoadingData.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while loading the data!'**
+  String get failureLoadingData;
 }
 
 class _AppLocalizationsDelegate

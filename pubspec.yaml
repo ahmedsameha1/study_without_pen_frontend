@@ -66,6 +66,7 @@ dev_dependencies:
   http: ^1.2.0
   flutter_lints: ^5.0.0
   freezed: ^3.0.6
+  mockingjay: ^2.0.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

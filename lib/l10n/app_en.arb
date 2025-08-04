@@ -54,5 +54,6 @@
     "created": "Created",
     "creationError": "Error while creation",
     "noFields": "Currently, there are no fields!",
-    "failureLoadingFields": "An error occurred while loading the fields!"
+    "failureLoadingFields": "An error occurred while loading the fields!",
+    "failureLoadingData": "An error occurred while loading the data!"
 }
