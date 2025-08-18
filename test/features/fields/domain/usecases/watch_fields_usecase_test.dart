@@ -10,7 +10,6 @@ class MockFieldRepository extends Mock implements FieldsRepository {}
 void main() {
   FieldsRepository fieldRepository = MockFieldRepository();
   WatchFieldsUsecase watchFieldsUsecase = WatchFieldsUsecase(fieldRepository);
-  DateTime creationAt = DateTime(2020, 1, 1);
   final userAccountId = "fwefhwo";
   test('call() throws what FieldRepository.watch() throw', () {
     when(() => fieldRepository.watch(userAccountId))
@@ -28,6 +27,7 @@ void main() {
     String name = "field name";
     final usageCount = 0;
     int color = 0xff520404;
+    DateTime creationAt = DateTime(2020, 1, 1);
     when(() => fieldRepository.watch(userAccountId)).thenAnswer((_) =>
         Stream.value([
           FieldEntity(id, userAccountId, name, creationAt, creationAt,
