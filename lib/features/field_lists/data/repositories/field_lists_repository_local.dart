@@ -7,7 +7,34 @@ class FieldListsRepositoryLocal implements FieldListsRepository {
   final FieldListsDao _fieldListsDao;
   @override
   Stream<List<FieldListEntity>> watch(String fieldId) {
-    _fieldListsDao.watchByFieldId(fieldId);
-    return Stream.empty();
+    return _fieldListsDao.watchByFieldId(fieldId).map((list) => list
+        .map((fieldList) => FieldListEntity(
+            id: fieldList.id,
+            fieldId: fieldList.fieldId,
+            name: fieldList.name,
+            creationAt: fieldList.creationAt,
+            lastModificationAt: fieldList.lastModificationAt,
+            color: fieldList.color,
+            checkType: fieldList.checkType,
+            sortBy: fieldList.sortBy,
+            usageCount: fieldList.usageCount,
+            languageTag: fieldList.languageTag,
+            doesObfuscateQuestion: fieldList.doesObfuscateQuestion,
+            doesReadAnswer: fieldList.doesReadAnswer,
+            testsFindingAnswerDuration: fieldList.testsFindingAnswerDuration,
+            testsReadingQuestionLetterDuration:
+                fieldList.testsReadingQuestionLetterDuration,
+            testsTypingAnswerLetterDuration:
+                fieldList.testsTypingAnswerLetterDuration,
+            studyTillCorrectFindingAnswerDuration:
+                fieldList.studyTillCorrectFindingAnswerDuration,
+            studyTillCorrectReadingQuestionLetterDuration:
+                fieldList.studyTillCorrectReadingQuestionLetterDuration,
+            studyTillCorrectTypingAnswerLetterDuration:
+                fieldList.studyTillCorrectTypingAnswerLetterDuration,
+            testsTimeOfAnswerAction: fieldList.testsTimeOfAnswerAction,
+            emulationDays: fieldList.emulationDays,
+            emulationNumberOfQuestions: fieldList.emulationNumberOfQuestions))
+        .toList());
   }
 }
