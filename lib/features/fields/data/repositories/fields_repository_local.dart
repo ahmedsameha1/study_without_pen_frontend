@@ -34,7 +34,7 @@ class FieldsRepositoryLocal implements FieldsRepository {
 
   @override
   Stream<FieldEntity> watchField(String fieldId) {
-    // TODO: implement watchField
-    throw UnimplementedError();
+    _fieldsDao.watchById(fieldId);
+    return Stream.empty();
   }
 }
