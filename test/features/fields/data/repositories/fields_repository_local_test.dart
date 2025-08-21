@@ -80,4 +80,17 @@ void main() {
         throwsA(predicate(
             (e) => e is SqliteException && e.message == "sqlexception")));
   });
+
+  test('watchField() returns what FieldsDao.watchById return', () {
+    when(() => fieldsDao.watchById(fieldEntity.id!)).thenAnswer((_) =>
+        Stream.value(Field(
+            id: fieldEntity.id!,
+            userAccountId: fieldEntity.userAccountId,
+            name: fieldEntity.name,
+            creationAt: fieldEntity.creationAt,
+            lastModificationAt: fieldEntity.creationAt,
+            usageCount: fieldEntity.usageCount,
+            color: fieldEntity.color)));
+    expect(fieldRepository.watchField(fieldEntity.id!), emits(fieldEntity));
+  });
 }
