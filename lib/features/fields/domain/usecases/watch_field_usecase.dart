@@ -6,7 +6,7 @@ class WatchFieldUsecase {
 
   WatchFieldUsecase(this._fieldRepository);
 
-  Stream<FieldEntity> call(String fieldId) {
+  Stream<FieldEntity?> call(String fieldId) {
     return _fieldRepository.watchField(fieldId);
   }
 }

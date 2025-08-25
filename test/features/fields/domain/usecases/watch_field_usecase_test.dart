@@ -39,5 +39,9 @@ void main() {
           FieldEntity(id, userAccountId, name, creationAt, creationAt,
               usageCount, color)
         ]));
+
+    when(() => fieldRepository.watchField(fieldId))
+        .thenAnswer((_) => Stream.value(null));
+    expect(watchFieldUsecase.call(fieldId), emitsInOrder([null]));
   });
 }

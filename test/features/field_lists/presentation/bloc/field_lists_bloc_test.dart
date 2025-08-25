@@ -58,6 +58,20 @@ void main() {
 
   blocTest<FieldListsBloc, FieldListsState>(
       'emits state with failure status'
+      'when watchFieldUsecase.call() stream of null',
+      setUp: () {
+        when(() => watchFieldUsecase.call(fieldId))
+            .thenAnswer((_) => Stream.value(null));
+      },
+      build: buildBloc,
+      act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldId)),
+      expect: () => [
+            const FieldListsState(FieldListsStatus.loading),
+            FieldListsState(FieldListsStatus.failure)
+          ]);
+
+  blocTest<FieldListsBloc, FieldListsState>(
+      'emits state with failure status'
       'when watchFieldUsecase.call() stream emits error',
       setUp: () {
         when(() => watchFieldUsecase.call(fieldId))

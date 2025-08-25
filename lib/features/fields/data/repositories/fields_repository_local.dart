@@ -33,8 +33,20 @@ class FieldsRepositoryLocal implements FieldsRepository {
   }
 
   @override
-  Stream<FieldEntity> watchField(String fieldId) {
-    _fieldsDao.watchById(fieldId);
-    return Stream.empty();
+  Stream<FieldEntity?> watchField(String fieldId) {
+    return _fieldsDao.watchById(fieldId).map((field) {
+      if (field == null) {
+        return null;
+      } else {
+        return FieldEntity(
+            field!.id,
+            field.userAccountId,
+            field.name,
+            field.creationAt,
+            field.lastModificationAt,
+            field.usageCount,
+            field.color);
+      }
+    });
   }
 }

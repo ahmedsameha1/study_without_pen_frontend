@@ -91,6 +91,12 @@ void main() {
             lastModificationAt: fieldEntity.creationAt,
             usageCount: fieldEntity.usageCount,
             color: fieldEntity.color)));
-    expect(fieldRepository.watchField(fieldEntity.id!), emits(fieldEntity));
+    expect(fieldRepository.watchField(fieldEntity.id!),
+        emitsInOrder(<FieldEntity?>[fieldEntity]));
+
+    when(() => fieldsDao.watchById(fieldEntity.id!))
+        .thenAnswer((_) => Stream.value(null));
+    expect(fieldRepository.watchField(fieldEntity.id!),
+        emitsInOrder(<FieldEntity?>[null]));
   });
 }
