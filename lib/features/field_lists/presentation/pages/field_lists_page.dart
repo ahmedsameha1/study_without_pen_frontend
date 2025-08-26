@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_event.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_state.dart';
@@ -13,7 +14,8 @@ class FieldListsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FieldListsBloc>(
-      create: (context) => FieldListsBloc(context.read<WatchFieldUsecase>())
+      create: (context) => FieldListsBloc(context.read<WatchFieldUsecase>(),
+          context.read<WatchFieldListsUsecase>())
         ..add(FieldListsSubscriptionRequested(fieldId)),
       child: const FieldListsPageView(),
     );

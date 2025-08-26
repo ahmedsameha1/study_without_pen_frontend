@@ -109,7 +109,7 @@ void main() {
         when(() => navigator.push<void>(any())).thenAnswer((_) async {});
         fieldListsBloc = MockFieldListsBloc();
         when(() => fieldListsBloc.state)
-            .thenReturn(FieldListsState(FieldListsStatus.loading));
+            .thenReturn(FieldListsState(status: FieldListsStatus.loading));
         watchFieldUsecase = MockWatchFieldUseCase();
         when(() => watchFieldUsecase.call(mockFieldEntity.id!))
             .thenAnswer((_) => Stream.value(mockFieldEntity));
@@ -121,8 +121,10 @@ void main() {
           whenListen<FieldListsState>(
               fieldListsBloc,
               Stream.fromIterable([
-                FieldListsState(FieldListsStatus.loading),
-                FieldListsState(FieldListsStatus.success, mockFieldEntity.name)
+                FieldListsState(status: FieldListsStatus.loading),
+                FieldListsState(
+                    status: FieldListsStatus.success,
+                    fieldName: mockFieldEntity.name)
               ]));
           await _createFieldListPageInASkeletonB(tester, navigator,
               currentLocale, watchFieldUsecase, fieldListsBloc);
@@ -151,8 +153,8 @@ void main() {
           whenListen<FieldListsState>(
               fieldListsBloc,
               Stream.fromIterable([
-                FieldListsState(FieldListsStatus.loading),
-                FieldListsState(FieldListsStatus.failure)
+                FieldListsState(status: FieldListsStatus.loading),
+                FieldListsState(status: FieldListsStatus.failure)
               ]));
           await _createFieldListPageInASkeletonB(tester, navigator,
               currentLocale, watchFieldUsecase, fieldListsBloc);

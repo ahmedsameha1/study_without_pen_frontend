@@ -2,7 +2,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:study_without_pen_by_flutter/common/state_status.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_event.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_state.dart';
@@ -11,26 +12,56 @@ import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/wat
 
 class MockWatchFieldUsecase extends Mock implements WatchFieldUsecase {}
 
+class MockWatchFieldListsUsecase extends Mock
+    implements WatchFieldListsUsecase {}
+
 class FakeFieldEntity extends Fake implements FieldEntity {}
 
+class FakeFieldListEntity extends Fake implements FieldListEntity {}
+
 void main() {
+  String fieldId = 'wetowho0tgu';
   FieldEntity mockFieldEntity = FieldEntity('wetowho0tgu', 'weohofh',
       'fieldName', DateTime.now(), DateTime.now(), 10, 10);
+  List<FieldListEntity> mockFieldListEntities = [
+    FieldListEntity(
+        id: 'wofhweohg',
+        fieldId: fieldId,
+        name: "field list name 1",
+        creationAt: DateTime(2020),
+        lastModificationAt: DateTime(2020)),
+    FieldListEntity(
+        id: 'e3wngwgpwertpweortk',
+        fieldId: fieldId,
+        name: 'field list name 2',
+        creationAt: DateTime(2021),
+        lastModificationAt: DateTime(2021)),
+    FieldListEntity(
+        id: 'weofwheofhweofjwelfmwofise',
+        fieldId: fieldId,
+        name: 'field list name 3',
+        creationAt: DateTime(2022),
+        lastModificationAt: DateTime(2022))
+  ];
   late WatchFieldUsecase watchFieldUsecase;
-  String fieldId = 'wetowho0tgu';
+  late WatchFieldListsUsecase watchFieldListsUsecase;
 
   setUpAll(() {
     registerFallbackValue(FakeFieldEntity());
+    registerFallbackValue(FakeFieldListEntity());
   });
 
   setUp(() {
     watchFieldUsecase = MockWatchFieldUsecase();
+    watchFieldListsUsecase = MockWatchFieldListsUsecase();
     when(() => watchFieldUsecase.call(fieldId))
         .thenAnswer((_) => Stream.value(mockFieldEntity));
+    when(() => watchFieldListsUsecase.call(fieldId))
+        .thenAnswer((_) => Stream.value(mockFieldListEntities));
   });
 
   FieldListsBloc buildBloc() {
-    return FieldListsBloc(watchFieldUsecase);
+    return FieldListsBloc(watchFieldUsecase, watchFieldListsUsecase);
   }
 
   test('FieldListsBloc has a correct initial state', () {
@@ -43,17 +74,26 @@ void main() {
     act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldId)),
     verify: (_) {
       verify(() => watchFieldUsecase.call(fieldId)).called(1);
+      verify(() => watchFieldListsUsecase.call(fieldId)).called(1);
     },
   );
 
   blocTest<FieldListsBloc, FieldListsState>(
       'emits state with updated status and field name '
-      'when watchFieldUsecase.call() stream emits a field',
+      'when watchFieldUsecase.call() stream emits a field '
+      'and watchFieldListsUsecase.call stream emits a list of field lists',
       build: buildBloc,
       act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldId)),
       expect: () => [
-            const FieldListsState(FieldListsStatus.loading),
-            const FieldListsState(FieldListsStatus.success, 'fieldName')
+            const FieldListsState(status: FieldListsStatus.loading),
+            FieldListsState(
+              status: FieldListsStatus.success,
+              fieldName: 'fieldName',
+            ),
+            FieldListsState(
+                status: FieldListsStatus.success,
+                fieldName: 'fieldName',
+                fieldLists: mockFieldListEntities),
           ]);
 
   blocTest<FieldListsBloc, FieldListsState>(
@@ -66,8 +106,8 @@ void main() {
       build: buildBloc,
       act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldId)),
       expect: () => [
-            const FieldListsState(FieldListsStatus.loading),
-            FieldListsState(FieldListsStatus.failure)
+            const FieldListsState(status: FieldListsStatus.loading),
+            FieldListsState(status: FieldListsStatus.failure)
           ]);
 
   blocTest<FieldListsBloc, FieldListsState>(
@@ -80,8 +120,8 @@ void main() {
       build: buildBloc,
       act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldId)),
       expect: () => [
-            const FieldListsState(FieldListsStatus.loading),
-            FieldListsState(FieldListsStatus.failure)
+            const FieldListsState(status: FieldListsStatus.loading),
+            FieldListsState(status: FieldListsStatus.failure)
           ]);
 
   blocTest<FieldListsBloc, FieldListsState>(
@@ -94,7 +134,7 @@ void main() {
       build: buildBloc,
       act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldId)),
       expect: () => [
-            const FieldListsState(FieldListsStatus.loading),
-            FieldListsState(FieldListsStatus.failure)
+            const FieldListsState(status: FieldListsStatus.loading),
+            FieldListsState(status: FieldListsStatus.failure)
           ]);
 }

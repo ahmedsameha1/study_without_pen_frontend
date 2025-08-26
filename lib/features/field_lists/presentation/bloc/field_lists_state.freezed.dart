@@ -17,6 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$FieldListsState {
   FieldListsStatus get status;
   String get fieldName;
+  List<FieldListEntity> get fieldLists;
 
   /// Create a copy of FieldListsState
   /// with the given fields replaced by the non-null parameter values.
@@ -33,15 +34,18 @@ mixin _$FieldListsState {
             other is FieldListsState &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.fieldName, fieldName) ||
-                other.fieldName == fieldName));
+                other.fieldName == fieldName) &&
+            const DeepCollectionEquality()
+                .equals(other.fieldLists, fieldLists));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, fieldName);
+  int get hashCode => Object.hash(runtimeType, status, fieldName,
+      const DeepCollectionEquality().hash(fieldLists));
 
   @override
   String toString() {
-    return 'FieldListsState(status: $status, fieldName: $fieldName)';
+    return 'FieldListsState(status: $status, fieldName: $fieldName, fieldLists: $fieldLists)';
   }
 }
 
@@ -51,7 +55,10 @@ abstract mixin class $FieldListsStateCopyWith<$Res> {
           FieldListsState value, $Res Function(FieldListsState) _then) =
       _$FieldListsStateCopyWithImpl;
   @useResult
-  $Res call({FieldListsStatus status, String fieldName});
+  $Res call(
+      {FieldListsStatus status,
+      String fieldName,
+      List<FieldListEntity> fieldLists});
 }
 
 /// @nodoc
@@ -69,6 +76,7 @@ class _$FieldListsStateCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? fieldName = null,
+    Object? fieldLists = null,
   }) {
     return _then(_self.copyWith(
       status: null == status
@@ -79,6 +87,10 @@ class _$FieldListsStateCopyWithImpl<$Res>
           ? _self.fieldName
           : fieldName // ignore: cast_nullable_to_non_nullable
               as String,
+      fieldLists: null == fieldLists
+          ? _self.fieldLists
+          : fieldLists // ignore: cast_nullable_to_non_nullable
+              as List<FieldListEntity>,
     ));
   }
 }
@@ -87,7 +99,10 @@ class _$FieldListsStateCopyWithImpl<$Res>
 
 class _FieldListsState implements FieldListsState {
   const _FieldListsState(
-      [this.status = FieldListsStatus.initial, this.fieldName = '']);
+      {this.status = FieldListsStatus.initial,
+      this.fieldName = '',
+      final List<FieldListEntity> fieldLists = const <FieldListEntity>[]})
+      : _fieldLists = fieldLists;
 
   @override
   @JsonKey()
@@ -95,6 +110,14 @@ class _FieldListsState implements FieldListsState {
   @override
   @JsonKey()
   final String fieldName;
+  final List<FieldListEntity> _fieldLists;
+  @override
+  @JsonKey()
+  List<FieldListEntity> get fieldLists {
+    if (_fieldLists is EqualUnmodifiableListView) return _fieldLists;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_fieldLists);
+  }
 
   /// Create a copy of FieldListsState
   /// with the given fields replaced by the non-null parameter values.
@@ -111,15 +134,18 @@ class _FieldListsState implements FieldListsState {
             other is _FieldListsState &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.fieldName, fieldName) ||
-                other.fieldName == fieldName));
+                other.fieldName == fieldName) &&
+            const DeepCollectionEquality()
+                .equals(other._fieldLists, _fieldLists));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, fieldName);
+  int get hashCode => Object.hash(runtimeType, status, fieldName,
+      const DeepCollectionEquality().hash(_fieldLists));
 
   @override
   String toString() {
-    return 'FieldListsState(status: $status, fieldName: $fieldName)';
+    return 'FieldListsState(status: $status, fieldName: $fieldName, fieldLists: $fieldLists)';
   }
 }
 
@@ -131,7 +157,10 @@ abstract mixin class _$FieldListsStateCopyWith<$Res>
       __$FieldListsStateCopyWithImpl;
   @override
   @useResult
-  $Res call({FieldListsStatus status, String fieldName});
+  $Res call(
+      {FieldListsStatus status,
+      String fieldName,
+      List<FieldListEntity> fieldLists});
 }
 
 /// @nodoc
@@ -149,16 +178,21 @@ class __$FieldListsStateCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? fieldName = null,
+    Object? fieldLists = null,
   }) {
     return _then(_FieldListsState(
-      null == status
+      status: null == status
           ? _self.status
           : status // ignore: cast_nullable_to_non_nullable
               as FieldListsStatus,
-      null == fieldName
+      fieldName: null == fieldName
           ? _self.fieldName
           : fieldName // ignore: cast_nullable_to_non_nullable
               as String,
+      fieldLists: null == fieldLists
+          ? _self._fieldLists
+          : fieldLists // ignore: cast_nullable_to_non_nullable
+              as List<FieldListEntity>,
     ));
   }
 }
