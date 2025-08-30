@@ -9,7 +9,7 @@ enum FieldListsStatus { initial, loading, success, failure }
 abstract class FieldListsState with _$FieldListsState {
   const factory FieldListsState(
           {@Default(FieldListsStatus.initial) FieldListsStatus status,
-          @Default('') String fieldName,
-          @Default(<FieldListEntity>[]) List<FieldListEntity> fieldLists}) =
+          /*@Default('')*/ String? fieldName,
+          /*@Default(<FieldListEntity>[])*/ List<FieldListEntity>? fieldLists}) =
       _FieldListsState;
 }

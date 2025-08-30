@@ -23,18 +23,37 @@ class FieldListsBloc extends Bloc<FieldListsEvent, FieldListsState> {
     try {
       await emit.forEach<FieldEntity?>(_watchFieldUsecase.call(event.fieldId),
           onData: (field) {
-            if (field == null) {
-              return state.copyWith(status: FieldListsStatus.failure);
-            }
-            return state.copyWith(
-                status: FieldListsStatus.success, fieldName: field.name);
-          },
-          onError: (_, __) => state.copyWith(status: FieldListsStatus.failure));
+        if (field == null) {
+          return state.copyWith(status: FieldListsStatus.failure);
+        }
+        if ((state.status == FieldListsStatus.loading ||
+                state.status == FieldListsStatus.success) &&
+            state.fieldLists != null) {
+          return state.copyWith(
+              status: FieldListsStatus.success, fieldName: field.name);
+        } else {
+          return state.copyWith(fieldName: field.name);
+        }
+      }, onError: (_, __) {
+        return state.copyWith(status: FieldListsStatus.failure);
+      });
+    } catch (e) {
+      emit(state.copyWith(status: FieldListsStatus.failure));
+    }
+    try {
       await emit.forEach<List<FieldListEntity>>(
-        _watchFieldListsUsecase.call(event.fieldId),
-        onData: (fieldLists) => state.copyWith(
-            status: FieldListsStatus.success, fieldLists: fieldLists),
-      );
+          _watchFieldListsUsecase.call(event.fieldId), onData: (fieldLists) {
+        if ((state.status == FieldListsStatus.loading ||
+                state.status == FieldListsStatus.success) &&
+            state.fieldName != null) {
+          return state.copyWith(
+              status: FieldListsStatus.success, fieldLists: fieldLists);
+        } else {
+          return state.copyWith(fieldLists: fieldLists);
+        }
+      }, onError: (_, __) {
+        return state.copyWith(status: FieldListsStatus.failure);
+      });
     } catch (e) {
       emit(state.copyWith(status: FieldListsStatus.failure));
     }

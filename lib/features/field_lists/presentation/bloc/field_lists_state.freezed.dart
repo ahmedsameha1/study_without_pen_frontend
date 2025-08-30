@@ -15,9 +15,9 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$FieldListsState {
-  FieldListsStatus get status;
-  String get fieldName;
-  List<FieldListEntity> get fieldLists;
+  FieldListsStatus get status; /*@Default('')*/
+  String? get fieldName; /*@Default(<FieldListEntity>[])*/
+  List<FieldListEntity>? get fieldLists;
 
   /// Create a copy of FieldListsState
   /// with the given fields replaced by the non-null parameter values.
@@ -57,8 +57,8 @@ abstract mixin class $FieldListsStateCopyWith<$Res> {
   @useResult
   $Res call(
       {FieldListsStatus status,
-      String fieldName,
-      List<FieldListEntity> fieldLists});
+      String? fieldName,
+      List<FieldListEntity>? fieldLists});
 }
 
 /// @nodoc
@@ -75,22 +75,22 @@ class _$FieldListsStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = null,
-    Object? fieldName = null,
-    Object? fieldLists = null,
+    Object? fieldName = freezed,
+    Object? fieldLists = freezed,
   }) {
     return _then(_self.copyWith(
       status: null == status
           ? _self.status
           : status // ignore: cast_nullable_to_non_nullable
               as FieldListsStatus,
-      fieldName: null == fieldName
+      fieldName: freezed == fieldName
           ? _self.fieldName
           : fieldName // ignore: cast_nullable_to_non_nullable
-              as String,
-      fieldLists: null == fieldLists
+              as String?,
+      fieldLists: freezed == fieldLists
           ? _self.fieldLists
           : fieldLists // ignore: cast_nullable_to_non_nullable
-              as List<FieldListEntity>,
+              as List<FieldListEntity>?,
     ));
   }
 }
@@ -100,23 +100,26 @@ class _$FieldListsStateCopyWithImpl<$Res>
 class _FieldListsState implements FieldListsState {
   const _FieldListsState(
       {this.status = FieldListsStatus.initial,
-      this.fieldName = '',
-      final List<FieldListEntity> fieldLists = const <FieldListEntity>[]})
+      this.fieldName,
+      final List<FieldListEntity>? fieldLists})
       : _fieldLists = fieldLists;
 
   @override
   @JsonKey()
   final FieldListsStatus status;
+/*@Default('')*/
   @override
-  @JsonKey()
-  final String fieldName;
-  final List<FieldListEntity> _fieldLists;
+  final String? fieldName;
+/*@Default(<FieldListEntity>[])*/
+  final List<FieldListEntity>? _fieldLists;
+/*@Default(<FieldListEntity>[])*/
   @override
-  @JsonKey()
-  List<FieldListEntity> get fieldLists {
+  List<FieldListEntity>? get fieldLists {
+    final value = _fieldLists;
+    if (value == null) return null;
     if (_fieldLists is EqualUnmodifiableListView) return _fieldLists;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_fieldLists);
+    return EqualUnmodifiableListView(value);
   }
 
   /// Create a copy of FieldListsState
@@ -159,8 +162,8 @@ abstract mixin class _$FieldListsStateCopyWith<$Res>
   @useResult
   $Res call(
       {FieldListsStatus status,
-      String fieldName,
-      List<FieldListEntity> fieldLists});
+      String? fieldName,
+      List<FieldListEntity>? fieldLists});
 }
 
 /// @nodoc
@@ -177,22 +180,22 @@ class __$FieldListsStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   $Res call({
     Object? status = null,
-    Object? fieldName = null,
-    Object? fieldLists = null,
+    Object? fieldName = freezed,
+    Object? fieldLists = freezed,
   }) {
     return _then(_FieldListsState(
       status: null == status
           ? _self.status
           : status // ignore: cast_nullable_to_non_nullable
               as FieldListsStatus,
-      fieldName: null == fieldName
+      fieldName: freezed == fieldName
           ? _self.fieldName
           : fieldName // ignore: cast_nullable_to_non_nullable
-              as String,
-      fieldLists: null == fieldLists
+              as String?,
+      fieldLists: freezed == fieldLists
           ? _self._fieldLists
           : fieldLists // ignore: cast_nullable_to_non_nullable
-              as List<FieldListEntity>,
+              as List<FieldListEntity>?,
     ));
   }
 }

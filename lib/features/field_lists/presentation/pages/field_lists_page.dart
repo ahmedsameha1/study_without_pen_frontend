@@ -36,7 +36,7 @@ class FieldListsPageView extends StatelessWidget {
             child: Text(AppLocalizations.of(context)!.failureLoadingData));
       } else {
         // FieldListsStatus.success
-        String fieldName = state.fieldName;
+        String fieldName = state.fieldName!;
         return Scaffold(
           appBar: AppBar(
             title: Text(fieldName),
