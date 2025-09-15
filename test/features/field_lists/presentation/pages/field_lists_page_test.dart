@@ -1,9 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mockingjay/mockingjay.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_event.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_state.dart';
@@ -20,6 +23,9 @@ class MockGoRouter extends Mock implements GoRouter {}
 
 class MockWatchFieldUseCase extends Mock implements WatchFieldUsecase {}
 
+class MockWatchFieldListsUseCase extends Mock
+    implements WatchFieldListsUsecase {}
+
 class MockFieldListsBloc extends MockBloc<FieldListsEvent, FieldListsState>
     implements FieldListsBloc {}
 
@@ -28,29 +34,45 @@ Future<void> _createFieldListPageInASkeleton(
     Locale locale,
     GoRouter goRouter,
     WatchFieldUsecase watchFieldUsecase,
+    WatchFieldListsUsecase watchFieldListsUsecase,
     String fieldId) async {
-  await tester.pumpWidget(RepositoryProvider.value(
-    value: watchFieldUsecase,
-    child: MaterialApp(
-        localizationsDelegates: [
-          AppLocalizations.delegate,
-          nonso.AppLocalizations.delegate
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: locale,
-        home: InheritedGoRouter(
-            goRouter: goRouter, child: FieldListsPage(fieldId))),
-  ));
+  await tester.pumpWidget(
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(
+          value: watchFieldUsecase,
+        ),
+        RepositoryProvider.value(value: watchFieldListsUsecase)
+      ],
+      child: MaterialApp(
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            nonso.AppLocalizations.delegate
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: locale,
+          home: InheritedGoRouter(
+              goRouter: goRouter, child: FieldListsPage(fieldId))),
+    ),
+  );
 }
 
-Future<void> _createFieldListPageInASkeletonB(
+Future<void> _createFieldListPageViewInASkeleton(
     WidgetTester tester,
     MockNavigator navigator,
     Locale locale,
     WatchFieldUsecase watchFieldUsecase,
+    WatchFieldListsUsecase watchFieldListsUsecase,
     FieldListsBloc fieldListsBloc) async {
-  await tester.pumpWidget(RepositoryProvider.value(
-      value: watchFieldUsecase,
+  await tester.pumpWidget(MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(
+          value: watchFieldUsecase,
+        ),
+        RepositoryProvider.value(
+          value: watchFieldListsUsecase,
+        )
+      ],
       child: MaterialApp(
           localizationsDelegates: [
             AppLocalizations.delegate,
@@ -67,7 +89,31 @@ Future<void> _createFieldListPageInASkeletonB(
 void main() {
   FieldEntity mockFieldEntity = FieldEntity('oweoweyhfwo', 'wgohwoegh',
       'field name', DateTime(2020, 1, 1), DateTime(2020, 1, 1), 0, 0xff520404);
+  List<FieldListEntity> mockFieldListEntities = [
+    FieldListEntity(
+        id: 'wofhweohg',
+        fieldId: mockFieldEntity.id!,
+        name: "field list name 1",
+        creationAt: DateTime(2020),
+        lastModificationAt: DateTime(2020),
+        color: Colors.red.toARGB32()),
+    FieldListEntity(
+        id: 'e3wngwgpwertpweortk',
+        fieldId: mockFieldEntity.id!,
+        name: 'field list name 2',
+        creationAt: DateTime(2021),
+        lastModificationAt: DateTime(2021),
+        color: 0xff520404),
+    FieldListEntity(
+        id: 'weofwheofhweofjwelfmwofise',
+        fieldId: mockFieldEntity.id!,
+        name: 'field list name 3',
+        creationAt: DateTime(2022),
+        lastModificationAt: DateTime(2022),
+        color: 0xffffffff)
+  ];
   late WatchFieldUsecase watchFieldUsecase;
+  late WatchFieldListsUsecase watchFieldListsUsecase;
   late GoRouter goRouter = MockGoRouter();
 
   group("English locale", () {
@@ -76,13 +122,16 @@ void main() {
     group('FieldListsPage', () {
       setUp(() {
         watchFieldUsecase = MockWatchFieldUseCase();
+        watchFieldListsUsecase = MockWatchFieldListsUseCase();
         when(() => watchFieldUsecase.call(mockFieldEntity.id!))
             .thenAnswer((_) => Stream.value(mockFieldEntity));
+        when(() => watchFieldListsUsecase.call(mockFieldEntity.id!))
+            .thenAnswer((_) => Stream.value(mockFieldListEntities));
       });
       testWidgets("Test the presence of FieldListsPageView widget",
           (WidgetTester tester) async {
         await _createFieldListPageInASkeleton(tester, currentLocale, goRouter,
-            watchFieldUsecase, mockFieldEntity.id!);
+            watchFieldUsecase, watchFieldListsUsecase, mockFieldEntity.id!);
         expect(
             find.descendant(
                 of: find.byType(FieldListsPage),
@@ -93,8 +142,10 @@ void main() {
       testWidgets('Test calling watchFieldUsecase.call() on initialization',
           (WidgetTester tester) async {
         await _createFieldListPageInASkeleton(tester, currentLocale, goRouter,
-            watchFieldUsecase, mockFieldEntity.id!);
+            watchFieldUsecase, watchFieldListsUsecase, mockFieldEntity.id!);
         verify(() => watchFieldUsecase.call(mockFieldEntity.id!)).called(1);
+        verify(() => watchFieldListsUsecase.call(mockFieldEntity.id!))
+            .called(1);
       });
     });
 
@@ -111,8 +162,11 @@ void main() {
         when(() => fieldListsBloc.state)
             .thenReturn(FieldListsState(status: FieldListsStatus.loading));
         watchFieldUsecase = MockWatchFieldUseCase();
+        watchFieldListsUsecase = MockWatchFieldListsUseCase();
         when(() => watchFieldUsecase.call(mockFieldEntity.id!))
             .thenAnswer((_) => Stream.value(mockFieldEntity));
+        when(() => watchFieldListsUsecase.call(mockFieldEntity.id!))
+            .thenAnswer((_) => Stream.value(mockFieldListEntities));
       });
 
       testWidgets(
@@ -123,11 +177,20 @@ void main() {
               Stream.fromIterable([
                 FieldListsState(status: FieldListsStatus.loading),
                 FieldListsState(
+                    status: FieldListsStatus.loading,
+                    fieldName: mockFieldEntity.name),
+                FieldListsState(
                     status: FieldListsStatus.success,
-                    fieldName: mockFieldEntity.name)
+                    fieldName: mockFieldEntity.name,
+                    fieldLists: mockFieldListEntities),
               ]));
-          await _createFieldListPageInASkeletonB(tester, navigator,
-              currentLocale, watchFieldUsecase, fieldListsBloc);
+          await _createFieldListPageViewInASkeleton(
+              tester,
+              navigator,
+              currentLocale,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              fieldListsBloc);
           expect(
               find.descendant(
                   of: find.byType(FieldListsPageView),
@@ -144,8 +207,138 @@ void main() {
           expect(appBarFinder, findsOne);
           AppBar appBar = tester.widget<AppBar>(appBarFinder);
           expect((appBar.title as Text).data, mockFieldEntity.name);
+          Scrollbar scrollbar = tester.widget(find.descendant(
+              of: scaffoldFinder, matching: find.byType(Scrollbar)));
+          expect(scrollbar.thumbVisibility, isTrue);
+          expect(scrollbar.trackVisibility, isTrue);
+          expect(scrollbar.interactive, isTrue);
+          expect(scrollbar.thickness, 10);
+          expect(scrollbar.radius, const Radius.circular(8.0));
+          MasonryGridView masonryGridView = tester.widget(find.descendant(
+              of: find.byWidget(scrollbar),
+              matching: find.byType(MasonryGridView)));
+          expect(masonryGridView.padding, const EdgeInsets.all(10.0));
+          expect(masonryGridView.crossAxisSpacing, 5);
+          expect(masonryGridView.mainAxisSpacing, 5);
+          expect(
+              find.descendant(
+                  of: find.byWidget(masonryGridView), matching: cardFinder),
+              findsNWidgets(3));
+          Card firstCard = tester.widget<Card>(find.descendant(
+              of: find.byType(MasonryGridView),
+              matching: find.byType(Card).at(0)));
+          expect(firstCard.color, Color(mockFieldListEntities[0].color));
+          expect(firstCard.elevation, 2);
+          Padding firstPadding = tester.widget(
+            find.descendant(
+                of: find.byWidget(firstCard),
+                matching: find.byKey(Key('cardContentPadding'))),
+          );
+          expect(firstPadding.padding, const EdgeInsets.all(10.0));
+          Center firstCenter = tester.widget(
+            find.descendant(
+                of: find.byWidget(firstPadding), matching: centerFinder),
+          );
+          expect(
+              (firstCenter.child as Text).data, mockFieldListEntities[0].name);
+          Text firstText = firstCenter.child as Text;
+          expect(firstText.style!.color, Colors.white);
+          Card secondCard = tester.widget<Card>(find.descendant(
+              of: find.byType(MasonryGridView),
+              matching: find.byType(Card).at(1)));
+          expect(secondCard.color, Color(mockFieldListEntities[1].color));
+          expect(secondCard.elevation, 2);
+          Padding secondPadding = tester.widget(
+            find.descendant(
+                of: find.byWidget(secondCard),
+                matching: find.byKey(Key('cardContentPadding'))),
+          );
+          expect(secondPadding.padding, const EdgeInsets.all(10.0));
+          Center secondCenter = tester.widget(
+            find.descendant(
+                of: find.byWidget(secondPadding), matching: centerFinder),
+          );
+          expect(
+              (secondCenter.child as Text).data, mockFieldListEntities[1].name);
+          Text secondText = secondCenter.child as Text;
+          expect(secondText.style!.color, Colors.white);
+          Card thirdCard = tester.widget<Card>(find.descendant(
+              of: find.byType(MasonryGridView),
+              matching: find.byType(Card).at(2)));
+          expect(thirdCard.color, Color(mockFieldListEntities[2].color));
+          expect(thirdCard.elevation, 2);
+          Padding thirdPadding = tester.widget(
+            find.descendant(
+                of: find.byWidget(thirdCard),
+                matching: find.byKey(Key('cardContentPadding'))),
+          );
+          expect(thirdPadding.padding, const EdgeInsets.all(10.0));
+          Center thirdCenter = tester.widget(
+            find.descendant(
+                of: find.byWidget(thirdPadding), matching: centerFinder),
+          );
+          expect(
+              (thirdCenter.child as Text).data, mockFieldListEntities[2].name);
+          Text thirdText = thirdCenter.child as Text;
+          expect(thirdText.style!.color, Colors.black);
         },
       );
+
+      testWidgets(
+          "Test the presence of the main widgets when there is no fieldlists",
+          (WidgetTester tester) async {
+        whenListen<FieldListsState>(
+            fieldListsBloc,
+            Stream.fromIterable([
+              FieldListsState(status: FieldListsStatus.loading),
+              FieldListsState(
+                  status: FieldListsStatus.loading,
+                  fieldName: mockFieldEntity.name),
+              FieldListsState(
+                  status: FieldListsStatus.success,
+                  fieldName: mockFieldEntity.name,
+                  fieldLists: []),
+            ]));
+        await _createFieldListPageViewInASkeleton(
+            tester,
+            navigator,
+            currentLocale,
+            watchFieldUsecase,
+            watchFieldListsUsecase,
+            fieldListsBloc);
+        expect(
+            find.descendant(
+                of: find.byType(FieldListsPageView),
+                matching: find.descendant(
+                    of: centerFinder,
+                    matching: circularProgressIndicatorFinder)),
+            findsOne);
+        await tester.pump();
+        expect(
+            find.descendant(
+                of: find.byType(FieldListsPageView), matching: scaffoldFinder),
+            findsOne);
+        expect(appBarFinder, findsOne);
+        AppBar appBar = tester.widget<AppBar>(appBarFinder);
+        expect((appBar.title as Text).data, mockFieldEntity.name);
+        Scrollbar scrollbar = tester.widget(find.descendant(
+            of: scaffoldFinder, matching: find.byType(Scrollbar)));
+        expect(scrollbar.thumbVisibility, isTrue);
+        expect(scrollbar.trackVisibility, isTrue);
+        expect(scrollbar.interactive, isTrue);
+        expect(scrollbar.thickness, 10);
+        expect(scrollbar.radius, const Radius.circular(8.0));
+        MasonryGridView masonryGridView = tester.widget(find.descendant(
+            of: find.byWidget(scrollbar),
+            matching: find.byType(MasonryGridView)));
+        expect(masonryGridView.padding, const EdgeInsets.all(10.0));
+        expect(masonryGridView.crossAxisSpacing, 5);
+        expect(masonryGridView.mainAxisSpacing, 5);
+        expect(
+            find.descendant(
+                of: find.byWidget(masonryGridView), matching: cardFinder),
+            findsNothing);
+      });
 
       testWidgets(
         "Test the presence of the main widgets when the status of the state is failure",
@@ -156,8 +349,13 @@ void main() {
                 FieldListsState(status: FieldListsStatus.loading),
                 FieldListsState(status: FieldListsStatus.failure)
               ]));
-          await _createFieldListPageInASkeletonB(tester, navigator,
-              currentLocale, watchFieldUsecase, fieldListsBloc);
+          await _createFieldListPageViewInASkeleton(
+              tester,
+              navigator,
+              currentLocale,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              fieldListsBloc);
           expect(
               find.descendant(
                   of: find.byType(FieldListsPageView),
