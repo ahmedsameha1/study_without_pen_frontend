@@ -6,7 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/fields_page.dart';
@@ -18,6 +20,11 @@ class MockUser extends Mock implements User {}
 class MockCreateFieldUseCase extends Mock implements CreateFieldUseCase {}
 
 class MockWatchFieldsUsecase extends Mock implements WatchFieldsUsecase {}
+
+class MockWatchFieldUsecase extends Mock implements WatchFieldUsecase {}
+
+class MockWatchFieldListsUsecase extends Mock
+    implements WatchFieldListsUsecase {}
 
 class AppThemeForTests {
   static const seedColor = Color(0xFFEC407A);
@@ -45,13 +52,17 @@ Widget createWidgetInASkeleton(
     nonso.AuthBloc bloc,
     CreateFieldUseCase createFieldUseCase,
     WatchFieldsUsecase watchFieldsUsecase,
+    WatchFieldUsecase watchFieldUsecase,
+    WatchFieldListsUsecase watchFieldListsUsecase,
     Locale locale,
     GoRouter Function() getRouterConfig) {
   return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: bloc),
         RepositoryProvider.value(value: createFieldUseCase),
-        RepositoryProvider.value(value: watchFieldsUsecase)
+        RepositoryProvider.value(value: watchFieldsUsecase),
+        RepositoryProvider.value(value: watchFieldUsecase),
+        RepositoryProvider.value(value: watchFieldListsUsecase),
       ],
       child: MaterialApp.router(
           localizationsDelegates: [

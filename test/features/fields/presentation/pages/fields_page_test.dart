@@ -9,13 +9,17 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/field_lists_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_state.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/fields_page.dart';
+import 'package:study_without_pen_by_flutter/common/router_config.dart' as real;
 import 'package:study_without_pen_by_flutter/l10n/app_localizations_en.dart';
 
 import '../../../common/common_finders.dart';
@@ -31,6 +35,8 @@ Future<void> goToFieldPage(Widget widgetInskeleton, WidgetTester tester) async {
 void main() {
   late CreateFieldUseCase createFieldUseCase;
   late WatchFieldsUsecase watchFieldsUsecase;
+  late WatchFieldUsecase watchFieldUsecase;
+  late WatchFieldListsUsecase watchFieldListsUsecase;
   late StreamController<List<FieldEntity>> streamController;
   String userAccountId = "fwefohwe";
   User user;
@@ -72,6 +78,8 @@ void main() {
       authBloc = MockAuthBloc();
       createFieldUseCase = MockCreateFieldUseCase();
       watchFieldsUsecase = MockWatchFieldsUsecase();
+      watchFieldUsecase = MockWatchFieldUsecase();
+      watchFieldListsUsecase = MockWatchFieldListsUsecase();
       streamController = StreamController<List<FieldEntity>>();
       when(() => user.uid).thenReturn(userAccountId);
       when(() => authBloc.state).thenReturn(nonso.AuthState(
@@ -94,8 +102,14 @@ void main() {
                     lastModificationAt3, usageCount3, color3),
               ]));
       await goToFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase,
-              watchFieldsUsecase, currentLocale, getRouterConfig),
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              getRouterConfig),
           tester);
       final fieldsPageFinder = find.byType(FieldsPage);
       expect(fieldsPageFinder, findsOneWidget);
@@ -217,8 +231,14 @@ void main() {
       when(() => watchFieldsUsecase.call(userAccountId))
           .thenAnswer((_) => Stream.value([]));
       await goToFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase,
-              watchFieldsUsecase, currentLocale, getRouterConfig),
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              getRouterConfig),
           tester);
       final fieldPageFinder = find.byType(FieldsPage);
       expect(fieldPageFinder, findsOneWidget);
@@ -273,8 +293,14 @@ void main() {
       when(() => watchFieldsUsecase.call(userAccountId))
           .thenThrow(SqliteException(1, 'sqlexception'));
       await goToFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase,
-              watchFieldsUsecase, currentLocale, getRouterConfig),
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              getRouterConfig),
           tester);
       final fieldPageFinder = find.byType(FieldsPage);
       expect(fieldPageFinder, findsOneWidget);
@@ -321,8 +347,14 @@ void main() {
       when(() => watchFieldsUsecase.call(userAccountId))
           .thenAnswer((_) => streamController.stream);
       await goToFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase,
-              watchFieldsUsecase, currentLocale, getRouterConfig),
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              getRouterConfig),
           tester);
       final fieldPageFinder = find.byType(FieldsPage);
       expect(fieldPageFinder, findsOneWidget);
@@ -374,8 +406,14 @@ void main() {
     testWidgets("Test that clicking the logoutIconButton calls signOut()",
         (WidgetTester tester) async {
       await goToFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase,
-              watchFieldsUsecase, currentLocale, getRouterConfig),
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              getRouterConfig),
           tester);
       final logoutIconButtonFinder = find.byIcon(Icons.logout);
       await tester.tap(logoutIconButtonFinder);
@@ -385,8 +423,14 @@ void main() {
     testWidgets("Test that clicking the logoutIconButton calls signOut()",
         (WidgetTester tester) async {
       await goToFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase,
-              watchFieldsUsecase, currentLocale, getRouterConfig),
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              getRouterConfig),
           tester);
       final logoutIconButtonFinder = find.byIcon(Icons.logout);
       await tester.tap(logoutIconButtonFinder);
@@ -397,12 +441,53 @@ void main() {
         """Test that clicking the floating action button opens the create 
         field page""", (WidgetTester tester) async {
       await goToFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase,
-              watchFieldsUsecase, currentLocale, getRouterConfig),
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              getRouterConfig),
           tester);
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(CreateFieldPage), findsOneWidget);
+    });
+
+    testWidgets("Test that clicking the card opens the FieldListsPage",
+        (WidgetTester tester) async {
+      when(() => watchFieldsUsecase.call(userAccountId))
+          .thenAnswer((_) => Stream.value([
+                FieldEntity(fieldId1, userAccountId, fieldName1, creationAt1,
+                    lastModificationAt1, usageCount1, color1),
+                FieldEntity(fieldId2, userAccountId, fieldName2, creationAt2,
+                    lastModificationAt2, usageCount2, color2),
+                FieldEntity(fieldId3, userAccountId, fieldName3, creationAt3,
+                    lastModificationAt3, usageCount3, color3),
+              ]));
+      when(() => watchFieldListsUsecase.call(fieldId1))
+          .thenAnswer((_) => Stream.value([]));
+      when(() => watchFieldUsecase.call(fieldId1)).thenAnswer(
+        (_) => Stream.value(FieldEntity(fieldId1, userAccountId, fieldName1,
+            creationAt1, lastModificationAt1, usageCount1, color1)),
+      );
+      await goToFieldPage(
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              real.getRouterConfig),
+          tester);
+      await tester.runAsync(() async {
+        await tester.pump();
+        await tester.tap(find.byType(Card).at(0));
+        await tester.pumpAndSettle();
+        expect(find.byType(FieldListsPage), findsOne);
+      });
     });
   });
 }
