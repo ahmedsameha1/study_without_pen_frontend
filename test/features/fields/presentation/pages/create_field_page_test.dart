@@ -9,7 +9,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/create_field_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/create_field_page.dart';
@@ -31,6 +33,8 @@ Future<void> goToCreateFieldPage(
 void main() {
   late CreateFieldUseCase createFieldUseCase;
   late WatchFieldsUsecase watchFieldsUsecase;
+  late WatchFieldUsecase watchFieldUsecase;
+  late WatchFieldListsUsecase watchFieldListsUsecase;
   String userId = "fwefohwe";
   User user;
   late nonso.AuthBloc authBloc;
@@ -50,6 +54,8 @@ void main() {
     authBloc = MockAuthBloc();
     watchFieldsUsecase = MockWatchFieldsUsecase();
     createFieldUseCase = MockCreateFieldUseCase();
+    watchFieldUsecase = MockWatchFieldUsecase();
+    watchFieldListsUsecase = MockWatchFieldListsUsecase();
     when(() => user.uid).thenReturn(userId);
     when(() => authBloc.state).thenReturn(nonso.AuthState(
         applicationAuthState: nonso.ApplicationAuthState.signedIn, user: user));
@@ -62,8 +68,14 @@ void main() {
     testWidgets("Test the presence of the main widgets",
         (WidgetTester tester) async {
       await goToCreateFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase,
-              watchFieldsUsecase, currentLocale, this_app.getRouterConfig),
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              this_app.getRouterConfig),
           tester);
       await tester.pumpAndSettle();
       final createFieldPageFinder = find.byType(CreateFieldPage);
@@ -277,8 +289,14 @@ void main() {
 
     testWidgets("name text form field validation", (WidgetTester tester) async {
       await goToCreateFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase,
-              watchFieldsUsecase, currentLocale, this_app.getRouterConfig),
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              this_app.getRouterConfig),
           tester);
       await tester.pumpAndSettle();
       ElevatedButton okElevatedButton =
@@ -325,8 +343,14 @@ void main() {
     testWidgets("Test clicking the cancel button exit the create field page",
         (WidgetTester tester) async {
       await goToCreateFieldPage(
-          createWidgetInASkeleton(authBloc, createFieldUseCase,
-              watchFieldsUsecase, currentLocale, this_app.getRouterConfig),
+          createWidgetInASkeleton(
+              authBloc,
+              createFieldUseCase,
+              watchFieldsUsecase,
+              watchFieldUsecase,
+              watchFieldListsUsecase,
+              currentLocale,
+              this_app.getRouterConfig),
           tester);
       await tester.pumpAndSettle();
       expect(find.byType(CreateFieldPage), findsOneWidget);
@@ -346,8 +370,14 @@ void main() {
             AssertionError('Field name must be between 1 and 64 characters'));
         withClock(Clock.fixed(creationAt), () async {
           await goToCreateFieldPage(
-              createWidgetInASkeleton(authBloc, createFieldUseCase,
-                  watchFieldsUsecase, currentLocale, getRouterConfig),
+              createWidgetInASkeleton(
+                  authBloc,
+                  createFieldUseCase,
+                  watchFieldsUsecase,
+                  watchFieldUsecase,
+                  watchFieldListsUsecase,
+                  currentLocale,
+                  getRouterConfig),
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);
@@ -392,8 +422,14 @@ void main() {
             .thenThrow(SqliteException(1, "Error from database"));
         withClock(Clock.fixed(creationAt), () async {
           await goToCreateFieldPage(
-              createWidgetInASkeleton(authBloc, createFieldUseCase,
-                  watchFieldsUsecase, currentLocale, this_app.getRouterConfig),
+              createWidgetInASkeleton(
+                  authBloc,
+                  createFieldUseCase,
+                  watchFieldsUsecase,
+                  watchFieldUsecase,
+                  watchFieldListsUsecase,
+                  currentLocale,
+                  this_app.getRouterConfig),
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);
@@ -439,8 +475,14 @@ void main() {
             .thenAnswer((_) => Future.value(1));
         withClock(Clock.fixed(creationAt), () async {
           await goToCreateFieldPage(
-              createWidgetInASkeleton(authBloc, createFieldUseCase,
-                  watchFieldsUsecase, currentLocale, this_app.getRouterConfig),
+              createWidgetInASkeleton(
+                  authBloc,
+                  createFieldUseCase,
+                  watchFieldsUsecase,
+                  watchFieldUsecase,
+                  watchFieldListsUsecase,
+                  currentLocale,
+                  this_app.getRouterConfig),
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);

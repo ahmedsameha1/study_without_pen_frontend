@@ -5,10 +5,10 @@ import 'package:study_without_pen_by_flutter/features/fields/data/repositories/f
 import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_field_usecase.dart';
 
-class MockFieldRepository extends Mock implements FieldsRepository {}
+class MockFieldsRepository extends Mock implements FieldsRepository {}
 
 void main() {
-  FieldsRepository fieldRepository = MockFieldRepository();
+  FieldsRepository fieldRepository = MockFieldsRepository();
   WatchFieldUsecase watchFieldUsecase = WatchFieldUsecase(fieldRepository);
   String fieldId = 'weoghwoeg';
   test('call() returns what FieldRepository.watchField() return', () {

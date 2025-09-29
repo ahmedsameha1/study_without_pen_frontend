@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:integration_test/integration_test.dart';
 import 'package:nonso/nonso.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/field_lists_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/fields_page.dart';
 import 'package:study_without_pen_by_flutter/firebase_options.dart';
@@ -296,6 +297,9 @@ void main() {
             find.descendant(
                 of: find.byWidget(aCard), matching: find.text("field name")),
             findsOne);
+        await tester.tap(find.byWidget(aCard));
+        await tester.pumpAndSettle();
+        expect(find.byType(FieldListsPage), findsOne);
       }, variant: TargetPlatformVariant.only(TargetPlatform.android));
 
       testWidgets("""Signin in then the FieldsPage opens then press the 

@@ -21,7 +21,7 @@ class FieldListsBloc extends Bloc<FieldListsEvent, FieldListsState> {
   ) async {
     emit(state.copyWith(status: FieldListsStatus.loading));
     try {
-      await emit.forEach<FieldEntity?>(_watchFieldUsecase.call(event.fieldId),
+      emit.forEach<FieldEntity?>(_watchFieldUsecase.call(event.fieldId),
           onData: (field) {
         if (field == null) {
           return state.copyWith(status: FieldListsStatus.failure);
@@ -41,7 +41,7 @@ class FieldListsBloc extends Bloc<FieldListsEvent, FieldListsState> {
       emit(state.copyWith(status: FieldListsStatus.failure));
     }
     try {
-      await emit.forEach<List<FieldListEntity>>(
+       emit.forEach<List<FieldListEntity>>(
           _watchFieldListsUsecase.call(event.fieldId), onData: (fieldLists) {
         if ((state.status == FieldListsStatus.loading ||
                 state.status == FieldListsStatus.success) &&

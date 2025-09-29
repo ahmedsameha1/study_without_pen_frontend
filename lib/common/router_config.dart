@@ -10,7 +10,7 @@ const createField = "create_field";
 const createFieldPath = "$rootPath$createField";
 const fieldLists = "field_lists/:$fieldIdParameter";
 const fieldIdParameter = "fieldId";
-const fieldListsPath = "$rootPath$fieldLists";
+const fieldListsPath = "/field_lists/";
 
 GoRouter getRouterConfig() {
   return GoRouter(routes: [

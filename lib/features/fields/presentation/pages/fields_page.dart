@@ -84,7 +84,8 @@ class FieldsPageView extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final color = Color(state.fields[index].color);
                     return GestureDetector(
-                      onTap: () => GoRouter.of(context).go(fieldListsPath),
+                      onTap: () =>
+                          GoRouter.of(context).go('$fieldListsPath${state.fields[index].id!}'),
                       child: Card(
                         color: color,
                         elevation: 2,
