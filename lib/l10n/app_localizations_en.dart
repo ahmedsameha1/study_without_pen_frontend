@@ -118,4 +118,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failureLoadingData => 'An error occurred while loading the data!';
+
+  @override
+  String get noFieldLists => 'Currently, there are no lists!';
 }

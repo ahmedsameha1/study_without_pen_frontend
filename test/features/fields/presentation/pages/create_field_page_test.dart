@@ -33,7 +33,6 @@ Future<void> goToCreateFieldPage(
 void main() {
   late CreateFieldUseCase createFieldUseCase;
   late WatchFieldsUsecase watchFieldsUsecase;
-  late WatchFieldUsecase watchFieldUsecase;
   late WatchFieldListsUsecase watchFieldListsUsecase;
   String userId = "fwefohwe";
   User user;
@@ -54,7 +53,6 @@ void main() {
     authBloc = MockAuthBloc();
     watchFieldsUsecase = MockWatchFieldsUsecase();
     createFieldUseCase = MockCreateFieldUseCase();
-    watchFieldUsecase = MockWatchFieldUsecase();
     watchFieldListsUsecase = MockWatchFieldListsUsecase();
     when(() => user.uid).thenReturn(userId);
     when(() => authBloc.state).thenReturn(nonso.AuthState(
@@ -72,7 +70,6 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               this_app.getRouterConfig),
@@ -293,7 +290,6 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               this_app.getRouterConfig),
@@ -347,7 +343,6 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               this_app.getRouterConfig),
@@ -374,7 +369,6 @@ void main() {
                   authBloc,
                   createFieldUseCase,
                   watchFieldsUsecase,
-                  watchFieldUsecase,
                   watchFieldListsUsecase,
                   currentLocale,
                   getRouterConfig),
@@ -426,7 +420,6 @@ void main() {
                   authBloc,
                   createFieldUseCase,
                   watchFieldsUsecase,
-                  watchFieldUsecase,
                   watchFieldListsUsecase,
                   currentLocale,
                   this_app.getRouterConfig),
@@ -479,7 +472,6 @@ void main() {
                   authBloc,
                   createFieldUseCase,
                   watchFieldsUsecase,
-                  watchFieldUsecase,
                   watchFieldListsUsecase,
                   currentLocale,
                   this_app.getRouterConfig),

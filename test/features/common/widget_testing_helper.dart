@@ -52,7 +52,6 @@ Widget createWidgetInASkeleton(
     nonso.AuthBloc bloc,
     CreateFieldUseCase createFieldUseCase,
     WatchFieldsUsecase watchFieldsUsecase,
-    WatchFieldUsecase watchFieldUsecase,
     WatchFieldListsUsecase watchFieldListsUsecase,
     Locale locale,
     GoRouter Function() getRouterConfig) {
@@ -61,7 +60,6 @@ Widget createWidgetInASkeleton(
         RepositoryProvider.value(value: bloc),
         RepositoryProvider.value(value: createFieldUseCase),
         RepositoryProvider.value(value: watchFieldsUsecase),
-        RepositoryProvider.value(value: watchFieldUsecase),
         RepositoryProvider.value(value: watchFieldListsUsecase),
       ],
       child: MaterialApp.router(

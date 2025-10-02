@@ -292,6 +292,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred while loading the data!'**
   String get failureLoadingData;
+
+  /// No description provided for @noFieldLists.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently, there are no lists!'**
+  String get noFieldLists;
 }
 
 class _AppLocalizationsDelegate

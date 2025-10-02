@@ -9,11 +9,11 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_lists_page_data.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/field_lists_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_state.dart';
@@ -35,7 +35,6 @@ Future<void> goToFieldPage(Widget widgetInskeleton, WidgetTester tester) async {
 void main() {
   late CreateFieldUseCase createFieldUseCase;
   late WatchFieldsUsecase watchFieldsUsecase;
-  late WatchFieldUsecase watchFieldUsecase;
   late WatchFieldListsUsecase watchFieldListsUsecase;
   late StreamController<List<FieldEntity>> streamController;
   String userAccountId = "fwefohwe";
@@ -78,7 +77,6 @@ void main() {
       authBloc = MockAuthBloc();
       createFieldUseCase = MockCreateFieldUseCase();
       watchFieldsUsecase = MockWatchFieldsUsecase();
-      watchFieldUsecase = MockWatchFieldUsecase();
       watchFieldListsUsecase = MockWatchFieldListsUsecase();
       streamController = StreamController<List<FieldEntity>>();
       when(() => user.uid).thenReturn(userAccountId);
@@ -106,7 +104,6 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               getRouterConfig),
@@ -235,7 +232,6 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               getRouterConfig),
@@ -297,7 +293,6 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               getRouterConfig),
@@ -351,7 +346,6 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               getRouterConfig),
@@ -410,7 +404,6 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               getRouterConfig),
@@ -427,7 +420,6 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               getRouterConfig),
@@ -445,7 +437,6 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               getRouterConfig),
@@ -466,18 +457,14 @@ void main() {
                 FieldEntity(fieldId3, userAccountId, fieldName3, creationAt3,
                     lastModificationAt3, usageCount3, color3),
               ]));
-      when(() => watchFieldListsUsecase.call(fieldId1))
-          .thenAnswer((_) => Stream.value([]));
-      when(() => watchFieldUsecase.call(fieldId1)).thenAnswer(
-        (_) => Stream.value(FieldEntity(fieldId1, userAccountId, fieldName1,
-            creationAt1, lastModificationAt1, usageCount1, color1)),
-      );
+      when(() => watchFieldListsUsecase.call(fieldId1)).thenAnswer((_) =>
+          Stream.value(
+              FieldListsPageData(fieldName: "field name", fieldLists: [])));
       await goToFieldPage(
           createWidgetInASkeleton(
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldUsecase,
               watchFieldListsUsecase,
               currentLocale,
               real.getRouterConfig),

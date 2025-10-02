@@ -34,23 +34,24 @@ Future<void> main() async {
   appDatabase = AppDatabase(AppDatabase.openConnection());
   FieldsDao fieldsDao = FieldsDao(appDatabase);
   FieldListsDao fieldListsDao = FieldListsDao(appDatabase);
-  FieldsRepository fieldRepository = FieldsRepositoryLocal(fieldsDao);
+  FieldsRepository fieldsRepository = FieldsRepositoryLocal(fieldsDao);
   FieldListsRepository fieldListsRepository =
       FieldListsRepositoryLocal(fieldListsDao);
   runApp(MultiRepositoryProvider(providers: [
     RepositoryProvider<nonso.AuthBloc>(
         create: (context) => nonso.AuthBloc(FirebaseAuth.instance)),
     RepositoryProvider<CreateFieldUseCase>(
-      create: (context) => CreateFieldUseCase(fieldRepository),
+      create: (context) => CreateFieldUseCase(fieldsRepository),
     ),
     RepositoryProvider<WatchFieldsUsecase>(
-      create: (context) => WatchFieldsUsecase(fieldRepository),
+      create: (context) => WatchFieldsUsecase(fieldsRepository),
     ),
     RepositoryProvider<WatchFieldUsecase>(
-      create: (context) => WatchFieldUsecase(fieldRepository),
+      create: (context) => WatchFieldUsecase(fieldsRepository),
     ),
     RepositoryProvider<WatchFieldListsUsecase>(
-      create: (context) => WatchFieldListsUsecase(fieldListsRepository),
+      create: (context) =>
+          WatchFieldListsUsecase(fieldsRepository, fieldListsRepository),
     )
   ], child: App()));
 }
