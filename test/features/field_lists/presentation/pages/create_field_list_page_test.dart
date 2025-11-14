@@ -6,6 +6,7 @@ import 'package:mockingjay/mockingjay.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/create_field_list_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/create_field_list_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/create_field_list_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart'
@@ -72,6 +73,16 @@ void main() {
                 of: find.byType(CreateFieldListPage),
                 matching: find.byType(CreateFieldListPageView)),
             findsOne);
+      });
+    });
+
+    group('CreateFieldListPageView', () {
+      late MockNavigator navigator;
+      late CreateFieldListBloc createFieldListBloc;
+      setUp(() {
+        navigator = MockNavigator();
+        when(() => navigator.canPop()).thenReturn(false);
+        when(() => navigator.push<void>(any())).thenAnswer((_) async {});
       });
     });
   });
