@@ -36,6 +36,7 @@
     },
     "nonso_confirmPasswordValidationError": "This doesn't match the given password",
     "createField": "Create Field",
+    "createFieldList": "Create Field List",
     "fieldName": "Field Name",
     "selectColor": "Select Color",
     "ok": "Ok",

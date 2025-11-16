@@ -232,6 +232,12 @@ abstract class AppLocalizations {
   /// **'Create Field'**
   String get createField;
 
+  /// No description provided for @createFieldList.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Field List'**
+  String get createFieldList;
+
   /// No description provided for @fieldName.
   ///
   /// In en, this message translates to:

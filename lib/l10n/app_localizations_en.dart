@@ -86,6 +86,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createField => 'Create Field';
 
   @override
+  String get createFieldList => 'Create Field List';
+
+  @override
   String get fieldName => 'Field Name';
 
   @override
