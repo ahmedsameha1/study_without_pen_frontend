@@ -31,6 +31,21 @@ class CreateFieldListPageView extends StatelessWidget {
                 child: Column(
                   key: Key('column'),
                   mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      key: Key('fieldListNameTextField'),
+                      decoration: InputDecoration(
+                          label: Text(
+                              AppLocalizations.of(context)!.fieldListName)),
+                      textInputAction: TextInputAction.next,
+                      autofocus: true,
+                    ),
+                    SizedBox(
+                      key: Key(
+                          'sizedBoxBetweenTextFormFieldAndDropdownMenuFormField'),
+                      height: 25,
+                    ),
+                  ],
                 ),
               ),
             ),

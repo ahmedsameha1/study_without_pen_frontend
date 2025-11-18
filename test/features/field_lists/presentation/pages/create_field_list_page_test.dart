@@ -82,6 +82,7 @@ void main() {
 
   late CreateFieldListUsecase createFieldListUsecase;
   String expectedCreateFieldString = "Create Field List";
+  String expectedFieldListNameString = "Field List Name";
   group("English locale", () {
     Locale currentLocale = const Locale("en");
 
@@ -156,10 +157,27 @@ void main() {
         );
         expect(padding.padding.horizontal, 32);
         expect(padding.padding.vertical, 32);
+        Form form = tester.widget(
+            find.descendant(of: find.byWidget(padding), matching: formFinder));
         Column column = tester.widget(
-          find.descendant(of: formFinder, matching: columnFinder),
+          find.descendant(of: find.byWidget(form), matching: columnFinder),
         );
         expect(column.mainAxisAlignment, MainAxisAlignment.center);
+        final TextField fieldListNameTextField = tester.widget(find.descendant(
+            of: find.byWidget(column),
+            matching: find.descendant(
+                of: find.byType(TextFormField),
+                matching: find.byType(TextField)))) as TextField;
+        expect((fieldListNameTextField.decoration!.label as Text).data,
+            expectedFieldListNameString);
+        expect(fieldListNameTextField.keyboardType, TextInputType.text);
+        expect(fieldListNameTextField.textInputAction, TextInputAction.next);
+        expect(fieldListNameTextField.autofocus, isTrue);
+        SizedBox sizedBoxBetweenTextFormFieldAndDropDownMenuFormField =
+            tester.widget(find.byKey(
+                Key("sizedBoxBetweenTextFormFieldAndDropdownMenuFormField")));
+        expect(
+            sizedBoxBetweenTextFormFieldAndDropDownMenuFormField.height!, 25);
       });
     });
   });

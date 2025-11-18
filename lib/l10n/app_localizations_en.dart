@@ -92,6 +92,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fieldName => 'Field Name';
 
   @override
+  String get fieldListName => 'Field List Name';
+
+  @override
   String get selectColor => 'Select Color';
 
   @override

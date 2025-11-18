@@ -244,6 +244,12 @@ abstract class AppLocalizations {
   /// **'Field Name'**
   String get fieldName;
 
+  /// No description provided for @fieldListName.
+  ///
+  /// In en, this message translates to:
+  /// **'Field List Name'**
+  String get fieldListName;
+
   /// No description provided for @selectColor.
   ///
   /// In en, this message translates to:

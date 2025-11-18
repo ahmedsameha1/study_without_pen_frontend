@@ -38,6 +38,7 @@
     "createField": "Create Field",
     "createFieldList": "Create Field List",
     "fieldName": "Field Name",
+    "fieldListName": "Field List Name",
     "selectColor": "Select Color",
     "ok": "Ok",
     "cancel": "Cancel",
