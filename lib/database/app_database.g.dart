@@ -921,7 +921,8 @@ class $FieldListsTable extends FieldLists
       'check_type', aliasedName, false,
       check: () =>
           ComparableExpr(checkType).isBiggerOrEqualValue(0) &
-          ComparableExpr(checkType).isSmallerThanValue(CheckType.MAX.index),
+          ComparableExpr(checkType)
+              .isSmallerOrEqualValue(CheckType.DO_NOT_IGNORE_CASE.index),
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultValue: Constant(CheckType.NON_STRICT_IGNORE_CASE.index));

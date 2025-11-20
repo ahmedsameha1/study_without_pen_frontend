@@ -23,8 +23,8 @@ abstract class FieldListEntity with _$FieldListEntity {
             name.trim().length >= FieldLists.MINIMUM_LENGTH_OF_NAME &&
                 name.trim().length <= FieldLists.MAXIMUM_LENGTH_OF_NAME,
             'FieldList name must be between ${FieldLists.MINIMUM_LENGTH_OF_NAME} and ${FieldLists.MAXIMUM_LENGTH_OF_NAME} characters'),
-        assert(checkType >= 0 && checkType < CheckType.MAX.index,
-            'checkType must be bigger than or equal 0 and smaller than ${CheckType.MAX.index}'),
+        assert(checkType >= 0 && checkType <= CheckType.DO_NOT_IGNORE_CASE.index,
+            'checkType must be bigger than or equal 0 and smaller than or equal ${CheckType.DO_NOT_IGNORE_CASE.index}'),
         assert(sortBy >= 0 && sortBy < SortBy.MAX.index,
             'sortBy must be bigger than or equal 0 and smaller than ${SortBy.MAX.index}'),
         assert(

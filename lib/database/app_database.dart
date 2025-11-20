@@ -113,7 +113,7 @@ class FieldLists extends Table {
   IntColumn get checkType => integer()
       .withDefault(Constant(CheckType.NON_STRICT_IGNORE_CASE.index))
       .check(checkType.isBiggerOrEqualValue(0) &
-          checkType.isSmallerThanValue(CheckType.MAX.index))();
+          checkType.isSmallerOrEqualValue(CheckType.DO_NOT_IGNORE_CASE.index))();
   IntColumn get sortBy => integer()
       .withDefault(Constant(SortBy.CREATION_DATE_DESC.index))
       .check(sortBy.isBiggerOrEqualValue(0) &
@@ -398,7 +398,6 @@ enum CheckType {
   NON_STRICT_DO_NOT_IGNORE_CASE,
   IGNORE_CASE,
   DO_NOT_IGNORE_CASE,
-  MAX
 }
 
 enum SortBy {

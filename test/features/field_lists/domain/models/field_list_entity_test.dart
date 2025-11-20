@@ -64,11 +64,11 @@ void main() {
             name: "field list name",
             creationAt: DateTime(2020, 2, 20),
             lastModificationAt: DateTime(2020, 2, 20),
-            checkType: CheckType.MAX.index),
+            checkType: CheckType.DO_NOT_IGNORE_CASE.index+1),
         throwsA(predicate((e) =>
             e is AssertionError &&
             e.message ==
-                'checkType must be bigger than or equal 0 and smaller than ${CheckType.MAX.index}')));
+                'checkType must be bigger than or equal 0 and smaller than or equal ${CheckType.DO_NOT_IGNORE_CASE.index}')));
     expect(
         () => FieldListEntity(
             fieldId: "woehwfgehfg",
@@ -79,7 +79,7 @@ void main() {
         throwsA(predicate((e) =>
             e is AssertionError &&
             e.message ==
-                'checkType must be bigger than or equal 0 and smaller than ${CheckType.MAX.index}')));
+                'checkType must be bigger than or equal 0 and smaller than or equal ${CheckType.DO_NOT_IGNORE_CASE.index}')));
   });
   test('FieldListEntity checkType default value', () {
     final fieldListEntity = FieldListEntity(
