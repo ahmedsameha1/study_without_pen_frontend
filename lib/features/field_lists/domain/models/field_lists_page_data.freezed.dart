@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$FieldListsPageData {
-  String? get fieldName;
+  FieldEntity? get field;
   List<FieldListEntity> get fieldLists;
 
   /// Create a copy of FieldListsPageData
@@ -31,19 +31,18 @@ mixin _$FieldListsPageData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is FieldListsPageData &&
-            (identical(other.fieldName, fieldName) ||
-                other.fieldName == fieldName) &&
+            (identical(other.field, field) || other.field == field) &&
             const DeepCollectionEquality()
                 .equals(other.fieldLists, fieldLists));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, fieldName, const DeepCollectionEquality().hash(fieldLists));
+      runtimeType, field, const DeepCollectionEquality().hash(fieldLists));
 
   @override
   String toString() {
-    return 'FieldListsPageData(fieldName: $fieldName, fieldLists: $fieldLists)';
+    return 'FieldListsPageData(field: $field, fieldLists: $fieldLists)';
   }
 }
 
@@ -53,7 +52,9 @@ abstract mixin class $FieldListsPageDataCopyWith<$Res> {
           FieldListsPageData value, $Res Function(FieldListsPageData) _then) =
       _$FieldListsPageDataCopyWithImpl;
   @useResult
-  $Res call({String? fieldName, List<FieldListEntity> fieldLists});
+  $Res call({FieldEntity? field, List<FieldListEntity> fieldLists});
+
+  $FieldEntityCopyWith<$Res>? get field;
 }
 
 /// @nodoc
@@ -69,19 +70,33 @@ class _$FieldListsPageDataCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? fieldName = freezed,
+    Object? field = freezed,
     Object? fieldLists = null,
   }) {
     return _then(_self.copyWith(
-      fieldName: freezed == fieldName
-          ? _self.fieldName
-          : fieldName // ignore: cast_nullable_to_non_nullable
-              as String?,
+      field: freezed == field
+          ? _self.field
+          : field // ignore: cast_nullable_to_non_nullable
+              as FieldEntity?,
       fieldLists: null == fieldLists
           ? _self.fieldLists
           : fieldLists // ignore: cast_nullable_to_non_nullable
               as List<FieldListEntity>,
     ));
+  }
+
+  /// Create a copy of FieldListsPageData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $FieldEntityCopyWith<$Res>? get field {
+    if (_self.field == null) {
+      return null;
+    }
+
+    return $FieldEntityCopyWith<$Res>(_self.field!, (value) {
+      return _then(_self.copyWith(field: value));
+    });
   }
 }
 
@@ -89,11 +104,11 @@ class _$FieldListsPageDataCopyWithImpl<$Res>
 
 class _FieldListsPageData implements FieldListsPageData {
   const _FieldListsPageData(
-      {this.fieldName, required final List<FieldListEntity> fieldLists})
+      {this.field, required final List<FieldListEntity> fieldLists})
       : _fieldLists = fieldLists;
 
   @override
-  final String? fieldName;
+  final FieldEntity? field;
   final List<FieldListEntity> _fieldLists;
   @override
   List<FieldListEntity> get fieldLists {
@@ -115,19 +130,18 @@ class _FieldListsPageData implements FieldListsPageData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _FieldListsPageData &&
-            (identical(other.fieldName, fieldName) ||
-                other.fieldName == fieldName) &&
+            (identical(other.field, field) || other.field == field) &&
             const DeepCollectionEquality()
                 .equals(other._fieldLists, _fieldLists));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, fieldName, const DeepCollectionEquality().hash(_fieldLists));
+      runtimeType, field, const DeepCollectionEquality().hash(_fieldLists));
 
   @override
   String toString() {
-    return 'FieldListsPageData(fieldName: $fieldName, fieldLists: $fieldLists)';
+    return 'FieldListsPageData(field: $field, fieldLists: $fieldLists)';
   }
 }
 
@@ -139,7 +153,10 @@ abstract mixin class _$FieldListsPageDataCopyWith<$Res>
       __$FieldListsPageDataCopyWithImpl;
   @override
   @useResult
-  $Res call({String? fieldName, List<FieldListEntity> fieldLists});
+  $Res call({FieldEntity? field, List<FieldListEntity> fieldLists});
+
+  @override
+  $FieldEntityCopyWith<$Res>? get field;
 }
 
 /// @nodoc
@@ -155,19 +172,33 @@ class __$FieldListsPageDataCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? fieldName = freezed,
+    Object? field = freezed,
     Object? fieldLists = null,
   }) {
     return _then(_FieldListsPageData(
-      fieldName: freezed == fieldName
-          ? _self.fieldName
-          : fieldName // ignore: cast_nullable_to_non_nullable
-              as String?,
+      field: freezed == field
+          ? _self.field
+          : field // ignore: cast_nullable_to_non_nullable
+              as FieldEntity?,
       fieldLists: null == fieldLists
           ? _self._fieldLists
           : fieldLists // ignore: cast_nullable_to_non_nullable
               as List<FieldListEntity>,
     ));
+  }
+
+  /// Create a copy of FieldListsPageData
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $FieldEntityCopyWith<$Res>? get field {
+    if (_self.field == null) {
+      return null;
+    }
+
+    return $FieldEntityCopyWith<$Res>(_self.field!, (value) {
+      return _then(_self.copyWith(field: value));
+    });
   }
 }
 

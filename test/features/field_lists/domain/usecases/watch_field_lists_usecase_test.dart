@@ -20,10 +20,8 @@ void main() {
   String fieldId = 'wthowow4tg3tg';
   DateTime creationAt1 = DateTime(2020, 1, 1);
   DateTime creationAt2 = DateTime(2021, 1, 1);
-  final fieldEntity1 = FieldEntity(fieldId, "woeghwiouegfwo", "field name1",
+  final fieldEntity = FieldEntity(fieldId, "woeghwiouegfwo", "field name1",
       creationAt1, creationAt2, 0, 0xff520404);
-  final fieldEntity2 = FieldEntity("wofgwhoefghogho", "woeghwiouegfwo",
-      "field name2", creationAt1, creationAt2, 0, 0xff520404);
   final fieldListEntity1 = FieldListEntity(
     id: "woeghghefgwoegho",
     fieldId: fieldId,
@@ -76,7 +74,7 @@ void main() {
 
     ///
     when(() => fieldsRepository.watchField(fieldId))
-        .thenAnswer((_) => Stream.value(fieldEntity1));
+        .thenAnswer((_) => Stream.value(fieldEntity));
     when(() => fieldListsRepository.watch(fieldId))
         .thenAnswer((_) => Stream.empty());
     expect(watchFieldListsUsecase.call(fieldId), emitsInOrder([]));
@@ -89,31 +87,21 @@ void main() {
     when(() => fieldListsRepository.watch(fieldId))
         .thenAnswer((_) => Stream.fromIterable([
               [fieldListEntity1],
-              [fieldListEntity2]
+              [fieldListEntity1, fieldListEntity2],
+              [fieldListEntity2],
             ]));
-    when(() => fieldsRepository.watchField(fieldId))
-        .thenAnswer((_) => Stream.value(fieldEntity1));
+    when(() => fieldsRepository.watchField(fieldId)).thenAnswer(
+        (_) => Stream.fromIterable([fieldEntity, fieldEntity, fieldEntity]));
     expect(
         watchFieldListsUsecase.call(fieldId),
         emitsInOrder([
           FieldListsPageData(
-              fieldName: fieldEntity1.name, fieldLists: [fieldListEntity1]),
+              field: fieldEntity, fieldLists: [fieldListEntity1]),
           FieldListsPageData(
-              fieldName: fieldEntity1.name, fieldLists: [fieldListEntity2]),
-        ]));
-
-    ///
-    when(() => fieldListsRepository.watch(fieldId))
-        .thenAnswer((_) => Stream.value([fieldListEntity1]));
-    when(() => fieldsRepository.watchField(fieldId))
-        .thenAnswer((_) => Stream.fromIterable([fieldEntity1, fieldEntity2]));
-    expect(
-        watchFieldListsUsecase.call(fieldId),
-        emitsInOrder([
+              field: fieldEntity,
+              fieldLists: [fieldListEntity1, fieldListEntity2]),
           FieldListsPageData(
-              fieldName: fieldEntity1.name, fieldLists: [fieldListEntity1]),
-          FieldListsPageData(
-              fieldName: fieldEntity2.name, fieldLists: [fieldListEntity1]),
+              field: fieldEntity, fieldLists: [fieldListEntity2]),
         ]));
   });
 }

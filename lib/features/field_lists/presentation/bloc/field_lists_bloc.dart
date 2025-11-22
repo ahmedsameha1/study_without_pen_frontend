@@ -21,7 +21,7 @@ class FieldListsBloc extends Bloc<FieldListsEvent, FieldListsState> {
       await emit.forEach<FieldListsPageData>(
           _watchFieldListsUsecase.call(event.fieldId),
           onData: (fieldListsPageData) {
-        if (fieldListsPageData.fieldName == null) {
+        if (fieldListsPageData.field == null) {
           return state.copyWith(status: FieldListsStatus.failure);
         } else {
           return state.copyWith(

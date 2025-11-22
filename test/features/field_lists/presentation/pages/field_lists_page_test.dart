@@ -100,7 +100,7 @@ void main() {
         color: 0xffffffff)
   ];
   FieldListsPageData mockFieldListsPageData = FieldListsPageData(
-      fieldName: "field name", fieldLists: mockFieldListEntities);
+      field: mockFieldEntity, fieldLists: mockFieldListEntities);
   late WatchFieldListsUsecase watchFieldListsUsecase;
   late GoRouter goRouter = MockGoRouter();
 
@@ -269,8 +269,7 @@ void main() {
               FieldListsState(
                   status: FieldListsStatus.success,
                   fieldListsPageData: FieldListsPageData(
-                      fieldName: mockFieldListsPageData.fieldName,
-                      fieldLists: [])),
+                      field: mockFieldListsPageData.field, fieldLists: [])),
             ]));
         await _createFieldListPageViewInASkeleton(tester, navigator,
             currentLocale, watchFieldListsUsecase, fieldListsBloc);

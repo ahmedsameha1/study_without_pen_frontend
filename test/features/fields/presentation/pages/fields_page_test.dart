@@ -58,6 +58,8 @@ void main() {
   int color2 = 0xff520404;
   int usageCount3 = 30;
   int color3 = 0xffffffff;
+  FieldEntity fieldEntity = FieldEntity(fieldId1, userAccountId, fieldName1,
+      creationAt1, lastModificationAt1, usageCount1, color1);
 
   setUp(() {
     authBloc = MockAuthBloc();
@@ -458,8 +460,7 @@ void main() {
                     lastModificationAt3, usageCount3, color3),
               ]));
       when(() => watchFieldListsUsecase.call(fieldId1)).thenAnswer((_) =>
-          Stream.value(
-              FieldListsPageData(fieldName: "field name", fieldLists: [])));
+          Stream.value(FieldListsPageData(field: fieldEntity, fieldLists: [])));
       await goToFieldPage(
           createWidgetInASkeleton(
               authBloc,
