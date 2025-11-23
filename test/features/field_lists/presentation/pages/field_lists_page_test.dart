@@ -5,12 +5,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mockingjay/mockingjay.dart';
+import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_lists_page_data.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_event.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_state.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/create_field_list_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/field_lists_page.dart';
@@ -182,6 +184,12 @@ void main() {
           expect(appBarFinder, findsOne);
           AppBar appBar = tester.widget<AppBar>(appBarFinder);
           expect((appBar.title as Text).data, mockFieldEntity.name);
+          FloatingActionButton floatingActionButton = tester.widget(
+              find.descendant(
+                  of: scaffoldFinder,
+                  matching: find.byType(FloatingActionButton)));
+          Icon addIcon = floatingActionButton.child as Icon;
+          expect(addIcon.icon, Icons.add);
           Scrollbar scrollbar = tester.widget(find.descendant(
               of: scaffoldFinder, matching: find.byType(Scrollbar)));
           expect(scrollbar.thumbVisibility, isTrue);
@@ -290,6 +298,12 @@ void main() {
         expect(appBarFinder, findsOne);
         AppBar appBar = tester.widget<AppBar>(appBarFinder);
         expect((appBar.title as Text).data, mockFieldEntity.name);
+        FloatingActionButton floatingActionButton = tester.widget(
+            find.descendant(
+                of: scaffoldFinder,
+                matching: find.byType(FloatingActionButton)));
+        Icon addIcon = floatingActionButton.child as Icon;
+        expect(addIcon.icon, Icons.add);
         expect(
             find.descendant(
                 of: find.byType(FieldListsPageView),
@@ -331,8 +345,16 @@ void main() {
                           of: centerFinder,
                           matching: find.text(expectedErrorString)))),
               findsOne);
+          FloatingActionButton floatingActionButton = tester.widget(
+              find.descendant(
+                  of: scaffoldFinder,
+                  matching: find.byType(FloatingActionButton)));
+          Icon addIcon = floatingActionButton.child as Icon;
+          expect(addIcon.icon, Icons.add);
         },
       );
+      // Clicking the FLoattingActionButton that should open the CreateFieldListPage is not tested
+      // Currently tested using integration tests
     });
   });
 }

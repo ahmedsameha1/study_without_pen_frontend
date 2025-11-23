@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:go_router/go_router.dart';
+import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_event.dart';
@@ -35,7 +37,12 @@ class FieldListsPageView extends StatelessWidget {
       } else if (state.status == FieldListsStatus.failure) {
         return Scaffold(
             body: Center(
-                child: Text(AppLocalizations.of(context)!.failureLoadingData)));
+                child: Text(AppLocalizations.of(context)!.failureLoadingData)),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => GoRouter.of(context).go(
+                  '$fieldListsPath${state.fieldListsPageData!.field!.id!}$createFieldList'),
+              child: Icon(Icons.add),
+            ));
       } else {
         // FieldListsStatus.success
         String fieldName = state.fieldListsPageData!.field!.name;
@@ -81,7 +88,12 @@ class FieldListsPageView extends StatelessWidget {
                         );
                       },
                     ),
-                  ));
+                  ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => GoRouter.of(context).go(
+                  '$fieldListsPath${state.fieldListsPageData!.field!.id!}$createFieldList'),
+              child: Icon(Icons.add),
+            ));
       }
     });
   }

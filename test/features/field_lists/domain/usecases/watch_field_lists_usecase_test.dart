@@ -91,7 +91,7 @@ void main() {
               [fieldListEntity2],
             ]));
     when(() => fieldsRepository.watchField(fieldId)).thenAnswer(
-        (_) => Stream.fromIterable([fieldEntity, fieldEntity, fieldEntity]));
+        (_) => Stream.fromIterable([fieldEntity]));
     expect(
         watchFieldListsUsecase.call(fieldId),
         emitsInOrder([

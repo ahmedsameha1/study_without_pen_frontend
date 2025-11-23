@@ -11,6 +11,7 @@ import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/data/repositories/field_lists_repository.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/data/repositories/field_lists_repository_local.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/create_field_list_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/data/repositories/fields_repository.dart';
 import 'package:study_without_pen_by_flutter/features/fields/data/repositories/fields_repository_local.dart';
@@ -52,6 +53,8 @@ Future<void> main() async {
     RepositoryProvider<WatchFieldListsUsecase>(
       create: (context) =>
           WatchFieldListsUsecase(fieldsRepository, fieldListsRepository),
-    )
+    ),
+    RepositoryProvider<CreateFieldListUsecase>(
+        create: (context) => CreateFieldListUsecase(fieldListsRepository))
   ], child: App()));
 }
