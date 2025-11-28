@@ -64,5 +64,7 @@
     "nonStrictIgnoreCase": "Do not check letter case or space",
     "ignoreCase": "Do not check letter case",
     "nonStrictDoNotIgnoreCase": "Do not check space",
-    "doNotIgnoreCase": "Check both letter case and space"
+    "doNotIgnoreCase": "Check both letter case and space",
+    "readAnswer": "Read answer",
+    "whenAnsweredCorrectly": "When you answer correctly!"
 }

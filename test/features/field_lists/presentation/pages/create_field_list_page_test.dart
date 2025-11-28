@@ -175,22 +175,27 @@ void main() {
         expect(fieldListNameTextField.textInputAction, TextInputAction.next);
         expect(fieldListNameTextField.autofocus, isTrue);
         SizedBox sizedBoxBetweenTextFormFieldAndDropDownMenuFormField =
-            tester.widget(find.byKey(
-                Key("sizedBoxBetweenTextFormFieldAndDropdownMenuFormField")));
+            tester.widget(find.descendant(
+                of: find.byWidget(column),
+                matching: find.byKey(Key(
+                    "sizedBoxBetweenTextFormFieldAndDropdownMenuFormField"))));
         expect(
             sizedBoxBetweenTextFormFieldAndDropDownMenuFormField.height!, 25);
         final DropdownMenuFormField<CheckType> checkTypeDropdownMenuFormField =
-            tester.widget(find.byType(DropdownMenuFormField<CheckType>));
-        final DropdownMenu<CheckType> checkTypeDropdownMenu =
-            tester.widget(find.byType(DropdownMenu<CheckType>));
+            tester.widget(find.descendant(
+                of: find.byWidget(column),
+                matching: find.byType(DropdownMenuFormField<CheckType>)));
+        final DropdownMenu<CheckType> checkTypeDropdownMenu = tester.widget(
+            find.descendant(
+                of: find.byWidget(checkTypeDropdownMenuFormField),
+                matching: find.byType(DropdownMenu<CheckType>)));
         TextField checkTypeTextField = tester.widget(find.descendant(
             of: find.byWidget(checkTypeDropdownMenuFormField),
             matching: find.byType(TextField)));
         expect(checkTypeDropdownMenuFormField.initialValue,
             CheckType.NON_STRICT_IGNORE_CASE);
         expect((checkTypeDropdownMenu.label as Text).data, "Select check type");
-        expect(checkTypeDropdownMenu.helperText,
-            "How app checks your answers");
+        expect(checkTypeDropdownMenu.helperText, "How app checks your answers");
         expect(checkTypeTextField.maxLines, 2);
         Text checkType1Text =
             tester.widget(find.text("Do not check letter case or space").at(1));
@@ -219,6 +224,26 @@ void main() {
                 of: find.byWidget(checkTypeDropdownMenuFormField),
                 matching: find.byWidget(checkType4Text)),
             findsOne);
+        SizedBox sizedBoxBetweenDropDownMenuFormFieldAndCheckboxListTile =
+            tester.widget(find.descendant(
+                of: find.byWidget(column),
+                matching: find.byKey(Key(
+                    "sizedBoxBetweenDropdownMenuFormFieldAndCheckboxListTile"))));
+        expect(sizedBoxBetweenDropDownMenuFormFieldAndCheckboxListTile.height!,
+            25);
+        Checkbox readAnswerCheckBox = tester.widget(find.descendant(
+            of: find.byWidget(column),
+            matching: find.descendant(
+                of: find.byType(CheckboxListTile),
+                matching: find.byType(Checkbox))));
+        expect(readAnswerCheckBox.value, isFalse);
+        ListTile readAnswerLisTile = tester.widget(find.descendant(
+            of: find.byWidget(column),
+            matching: find.descendant(
+                of: find.byType(CheckboxListTile),
+                matching: find.byType(ListTile))));
+        expect((readAnswerLisTile.title as Text).data, "Read answer");
+        expect((readAnswerLisTile.subtitle as Text).data, "When you answer correctly!");
       });
     });
   });

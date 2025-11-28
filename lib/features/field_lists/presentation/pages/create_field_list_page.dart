@@ -58,23 +58,38 @@ class CreateFieldListPageView extends StatelessWidget {
                     DropdownMenuFormField<CheckType>(
                         maxLines: 2,
                         initialSelection: CheckType.NON_STRICT_IGNORE_CASE,
-                        label: Text(AppLocalizations.of(context)!.selectCheckType),
+                        label:
+                            Text(AppLocalizations.of(context)!.selectCheckType),
                         helperText:
                             AppLocalizations.of(context)!.howAppCheckAnswers,
                         dropdownMenuEntries: [
                           DropdownMenuEntry<CheckType>(
                               value: CheckType.NON_STRICT_IGNORE_CASE,
-                              label: AppLocalizations.of(context)!.nonStrictIgnoreCase),
+                              label: AppLocalizations.of(context)!
+                                  .nonStrictIgnoreCase),
                           DropdownMenuEntry<CheckType>(
                               value: CheckType.IGNORE_CASE,
                               label: AppLocalizations.of(context)!.ignoreCase),
                           DropdownMenuEntry<CheckType>(
                               value: CheckType.NON_STRICT_DO_NOT_IGNORE_CASE,
-                              label: AppLocalizations.of(context)!.nonStrictDoNotIgnoreCase),
+                              label: AppLocalizations.of(context)!
+                                  .nonStrictDoNotIgnoreCase),
                           DropdownMenuEntry<CheckType>(
                               value: CheckType.DO_NOT_IGNORE_CASE,
-                              label: AppLocalizations.of(context)!.doNotIgnoreCase),
-                        ])
+                              label: AppLocalizations.of(context)!
+                                  .doNotIgnoreCase),
+                        ]),
+                    SizedBox(
+                      key: Key(
+                          'sizedBoxBetweenDropdownMenuFormFieldAndCheckboxListTile'),
+                      height: 25,
+                    ),
+                    CheckboxListTile(
+                        value: false,
+                        onChanged: (v) {},
+                        title: Text(AppLocalizations.of(context)!.readAnswer),
+                        subtitle: Text(AppLocalizations.of(context)!
+                            .whenAnsweredCorrectly))
                   ],
                 ),
               ),

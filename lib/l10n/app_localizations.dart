@@ -346,6 +346,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check both letter case and space'**
   String get doNotIgnoreCase;
+
+  /// No description provided for @readAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Read answer'**
+  String get readAnswer;
+
+  /// No description provided for @whenAnsweredCorrectly.
+  ///
+  /// In en, this message translates to:
+  /// **'When you answer correctly!'**
+  String get whenAnsweredCorrectly;
 }
 
 class _AppLocalizationsDelegate

@@ -145,4 +145,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get doNotIgnoreCase => 'Check both letter case and space';
+
+  @override
+  String get readAnswer => 'Read answer';
+
+  @override
+  String get whenAnsweredCorrectly => 'When you answer correctly!';
 }
