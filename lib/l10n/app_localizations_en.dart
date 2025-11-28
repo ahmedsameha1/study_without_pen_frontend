@@ -127,4 +127,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noFieldLists => 'Currently, there are no lists!';
+
+  @override
+  String get selectCheckType => 'Select check type';
+
+  @override
+  String get howAppCheckAnswers => 'How app checks your answers';
+
+  @override
+  String get nonStrictIgnoreCase => 'Do not check letter case or space';
+
+  @override
+  String get ignoreCase => 'Do not check letter case';
+
+  @override
+  String get nonStrictDoNotIgnoreCase => 'Do not check space';
+
+  @override
+  String get doNotIgnoreCase => 'Check both letter case and space';
 }

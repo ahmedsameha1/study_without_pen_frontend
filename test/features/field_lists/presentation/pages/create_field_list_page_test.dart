@@ -15,6 +15,7 @@ import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart'
     as nonso;
 
 import '../../../common/common_finders.dart';
+import '../../../common/widget_testing_helper.dart';
 
 class MockGoRouter extends Mock implements GoRouter {}
 
@@ -178,6 +179,46 @@ void main() {
                 Key("sizedBoxBetweenTextFormFieldAndDropdownMenuFormField")));
         expect(
             sizedBoxBetweenTextFormFieldAndDropDownMenuFormField.height!, 25);
+        final DropdownMenuFormField<CheckType> checkTypeDropdownMenuFormField =
+            tester.widget(find.byType(DropdownMenuFormField<CheckType>));
+        final DropdownMenu<CheckType> checkTypeDropdownMenu =
+            tester.widget(find.byType(DropdownMenu<CheckType>));
+        TextField checkTypeTextField = tester.widget(find.descendant(
+            of: find.byWidget(checkTypeDropdownMenuFormField),
+            matching: find.byType(TextField)));
+        expect(checkTypeDropdownMenuFormField.initialValue,
+            CheckType.NON_STRICT_IGNORE_CASE);
+        expect((checkTypeDropdownMenu.label as Text).data, "Select check type");
+        expect(checkTypeDropdownMenu.helperText,
+            "How app checks your answers");
+        expect(checkTypeTextField.maxLines, 2);
+        Text checkType1Text =
+            tester.widget(find.text("Do not check letter case or space").at(1));
+        Text checkType2Text =
+            tester.widget(find.text("Do not check letter case"));
+        Text checkType3Text = tester.widget(find.text("Do not check space"));
+        Text checkType4Text =
+            tester.widget(find.text("Check both letter case and space"));
+        expect(
+            find.descendant(
+                of: find.byWidget(checkTypeDropdownMenuFormField),
+                matching: find.byWidget(checkType1Text)),
+            findsOne);
+        expect(
+            find.descendant(
+                of: find.byWidget(checkTypeDropdownMenuFormField),
+                matching: find.byWidget(checkType2Text)),
+            findsOne);
+        expect(
+            find.descendant(
+                of: find.byWidget(checkTypeDropdownMenuFormField),
+                matching: find.byWidget(checkType3Text)),
+            findsOne);
+        expect(
+            find.descendant(
+                of: find.byWidget(checkTypeDropdownMenuFormField),
+                matching: find.byWidget(checkType4Text)),
+            findsOne);
       });
     });
   });

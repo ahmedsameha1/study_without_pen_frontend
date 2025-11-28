@@ -58,5 +58,11 @@
     "noFields": "Currently, there are no fields!",
     "failureLoadingFields": "An error occurred while loading the fields!",
     "failureLoadingData": "An error occurred while loading the data!",
-    "noFieldLists": "Currently, there are no lists!"
+    "noFieldLists": "Currently, there are no lists!",
+    "selectCheckType": "Select check type",
+    "howAppCheckAnswers": "How app checks your answers",
+    "nonStrictIgnoreCase": "Do not check letter case or space",
+    "ignoreCase": "Do not check letter case",
+    "nonStrictDoNotIgnoreCase": "Do not check space",
+    "doNotIgnoreCase": "Check both letter case and space"
 }

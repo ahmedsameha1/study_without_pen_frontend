@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/create_field_list_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/create_field_list_bloc.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 
 class CreateFieldListPage extends StatelessWidget {
@@ -7,6 +11,12 @@ class CreateFieldListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CreateFieldListPageView();
+    /*
+    return BlocProvider<CreateFieldListBloc>(
+        create: (context) =>
+            CreateFieldListBloc(context.read<CreateFieldListUsecase>()),
+        child: const CreateFieldListPageView());
+        */
   }
 }
 
@@ -45,6 +55,26 @@ class CreateFieldListPageView extends StatelessWidget {
                           'sizedBoxBetweenTextFormFieldAndDropdownMenuFormField'),
                       height: 25,
                     ),
+                    DropdownMenuFormField<CheckType>(
+                        maxLines: 2,
+                        initialSelection: CheckType.NON_STRICT_IGNORE_CASE,
+                        label: Text(AppLocalizations.of(context)!.selectCheckType),
+                        helperText:
+                            AppLocalizations.of(context)!.howAppCheckAnswers,
+                        dropdownMenuEntries: [
+                          DropdownMenuEntry<CheckType>(
+                              value: CheckType.NON_STRICT_IGNORE_CASE,
+                              label: AppLocalizations.of(context)!.nonStrictIgnoreCase),
+                          DropdownMenuEntry<CheckType>(
+                              value: CheckType.IGNORE_CASE,
+                              label: AppLocalizations.of(context)!.ignoreCase),
+                          DropdownMenuEntry<CheckType>(
+                              value: CheckType.NON_STRICT_DO_NOT_IGNORE_CASE,
+                              label: AppLocalizations.of(context)!.nonStrictDoNotIgnoreCase),
+                          DropdownMenuEntry<CheckType>(
+                              value: CheckType.DO_NOT_IGNORE_CASE,
+                              label: AppLocalizations.of(context)!.doNotIgnoreCase),
+                        ])
                   ],
                 ),
               ),

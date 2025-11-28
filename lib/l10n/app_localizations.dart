@@ -310,6 +310,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Currently, there are no lists!'**
   String get noFieldLists;
+
+  /// No description provided for @selectCheckType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select check type'**
+  String get selectCheckType;
+
+  /// No description provided for @howAppCheckAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'How app checks your answers'**
+  String get howAppCheckAnswers;
+
+  /// No description provided for @nonStrictIgnoreCase.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not check letter case or space'**
+  String get nonStrictIgnoreCase;
+
+  /// No description provided for @ignoreCase.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not check letter case'**
+  String get ignoreCase;
+
+  /// No description provided for @nonStrictDoNotIgnoreCase.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not check space'**
+  String get nonStrictDoNotIgnoreCase;
+
+  /// No description provided for @doNotIgnoreCase.
+  ///
+  /// In en, this message translates to:
+  /// **'Check both letter case and space'**
+  String get doNotIgnoreCase;
 }
 
 class _AppLocalizationsDelegate
