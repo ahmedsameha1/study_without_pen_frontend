@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nonso/nonso.dart' as nonso;
-import 'package:study_without_pen_by_flutter/common/widget/app.dart';
+import 'package:study_without_pen_by_flutter/common/widgets/app.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fields_dao.dart';

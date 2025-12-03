@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/common/theme.dart';
-import 'package:study_without_pen_by_flutter/common/widget/app.dart';
+import 'package:study_without_pen_by_flutter/common/widgets/app.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
