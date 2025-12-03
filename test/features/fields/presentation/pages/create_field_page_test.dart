@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:clock/clock.dart';
 import 'package:drift/native.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
+import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
@@ -38,7 +38,6 @@ void main() {
   late nonso.AuthBloc authBloc;
   String expectedCreateFieldString = "Create Field";
   String expectedFieldNameString = "Field Name";
-  String expectedSelectColorString = "Select Color";
   String expectedOkString = "Ok";
   String expectedCancelString = "Cancel";
   String expectedInvalidNameString =
@@ -116,7 +115,8 @@ void main() {
       expect(padding.padding.horizontal, 32);
       expect(padding.padding.vertical, 32);
       Column column = tester.widget(
-        find.descendant(of: find.byWidget(padding), matching: columnFinder),
+        find.descendant(
+            of: find.byWidget(padding), matching: columnFinder.at(0)),
       );
       expect(column.mainAxisAlignment, MainAxisAlignment.center);
       expect(find.descendant(of: columnFinder, matching: formFinder),
@@ -133,41 +133,6 @@ void main() {
       SizedBox sizedBoxBetweenFormAndStack =
           tester.widget(find.byKey(Key("sizedBoxBetweenFormAndStack")));
       expect(sizedBoxBetweenFormAndStack.height!, 25);
-      GestureDetector gestureDetector =
-          tester.widget(find.byKey(Key("gestureDetector")));
-      Finder stackFinder = find.descendant(
-          of: find.byWidget(gestureDetector),
-          matching: find.byKey(
-            Key("stackForColorIndicator"),
-          ));
-      Stack stack = tester.widget(stackFinder);
-      expect(stack.alignment, Alignment.center);
-      ColorIndicator colorIndicator =
-          tester.widget(find.byKey(Key("colorIndicator")));
-      expect(colorIndicator.color, Colors.white);
-      expect(colorIndicator.width, double.infinity);
-      Text selectColorText =
-          tester.widget(find.text(expectedSelectColorString));
-      expect(selectColorText.data, expectedSelectColorString);
-      TextStyle selectColorTextTextStyle = selectColorText.style!;
-      expect(selectColorTextTextStyle.color, Colors.black);
-      expect(
-          checkWidgetsOrder(
-              stack.children.toList(), [colorIndicator, selectColorText]),
-          isTrue);
-      AnimatedSize animatedSize = tester.widget(find.byType(AnimatedSize));
-      expect(animatedSize.duration, const Duration(milliseconds: 500));
-      expect(
-          find.descendant(
-              of: find.byWidget(animatedSize),
-              matching: find.byType(ColorPicker)),
-          findsNothing);
-      SizedBox shrinkedSizedBox = tester.widget(
-        find.descendant(
-            of: find.byWidget(animatedSize), matching: find.byType(SizedBox)),
-      );
-      expect(tester.getSize(find.byWidget(shrinkedSizedBox)).width, 0);
-      expect(tester.getSize(find.byWidget(shrinkedSizedBox)).height, 0);
       SizedBox sizedBoxBetweenStackAndButtons =
           tester.widget(find.byKey(Key("sizedBoxBetweenStackAndButtons")));
       expect(sizedBoxBetweenStackAndButtons.height, 25);
@@ -184,99 +149,11 @@ void main() {
             okButton,
           ]),
           isTrue);
-      await tester.tap(find.byWidget(stack));
-      await tester.pumpAndSettle();
-      padding = tester.widget(
-        find.descendant(
-            of: singleChildScrollViewFinder,
-            matching: find.byKey(const Key("paddingAroundColumn"))),
-      );
-      column = tester.widget(
-        find.descendant(
-            of: find.byWidget(padding), matching: find.byKey(Key("column"))),
-      );
-      form = tester.widget(find.byType(Form));
-      sizedBoxBetweenFormAndStack =
-          tester.widget(find.byKey(Key("sizedBoxBetweenFormAndStack")));
-      gestureDetector = tester.widget(find.byKey(Key("gestureDetector")));
-      animatedSize = tester.widget(find.byType(AnimatedSize));
-      expect(find.byWidget(shrinkedSizedBox), findsNothing);
-      final colorPickerFinder = find.descendant(
-          of: find.byWidget(animatedSize), matching: find.byType(ColorPicker));
-      expect(colorPickerFinder, findsOneWidget);
-      sizedBoxBetweenStackAndButtons =
-          tester.widget(find.byKey(Key("sizedBoxBetweenStackAndButtons")));
-      rowOfButtons = tester.widget(find.byType(Row));
       expect(
           checkWidgetsOrder(column.children.toList(), [
             form,
             sizedBoxBetweenFormAndStack,
-            gestureDetector,
-            animatedSize,
-            sizedBoxBetweenStackAndButtons,
-            rowOfButtons,
-          ]),
-          isTrue);
-      ColorPicker colorPicker = tester.widget(colorPickerFinder);
-      Text selectColorTextOfColorPicker = colorPicker.heading as Text;
-      BuildContext context =
-          tester.element(find.byWidget(selectColorTextOfColorPicker));
-      expect(selectColorTextOfColorPicker.style,
-          Theme.of(context).textTheme.headlineSmall);
-      expect(selectColorTextOfColorPicker.data, expectedSelectColorString);
-      ColorWheelPicker colorWheelPicker =
-          tester.widget(find.byType(ColorWheelPicker));
-      expect(colorWheelPicker.color, Colors.white);
-      final Offset colorWheelPickerCenter =
-          tester.getCenter(find.byWidget(colorWheelPicker));
-      await tester.timedDragFrom(
-          colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
-      await tester.pumpAndSettle();
-      colorIndicator = tester.widget(find.byKey(Key("colorIndicator")));
-      expect(colorIndicator.color, const Color(0xff520404));
-      selectColorText = tester.widget(find.descendant(
-          of: find.byType(Stack),
-          matching: find.text(expectedSelectColorString)));
-      expect(selectColorText.data, expectedSelectColorString);
-      selectColorTextTextStyle = selectColorText.style!;
-      expect(selectColorTextTextStyle.color, Colors.white);
-      gestureDetector = tester.widget(find.byKey(Key("gestureDetector")));
-      stackFinder = find.descendant(
-          of: find.byWidget(gestureDetector),
-          matching: find.byKey(
-            Key("stackForColorIndicator"),
-          ));
-      await tester.tap(stackFinder);
-      await tester.pumpAndSettle();
-      padding = tester.widget(
-        find.descendant(
-            of: singleChildScrollViewFinder,
-            matching: find.byKey(const Key("paddingAroundColumn"))),
-      );
-      column = tester.widget(
-        find.descendant(
-            of: find.byWidget(padding), matching: find.byKey(Key("column"))),
-      );
-      form = tester.widget(find.byType(Form));
-      sizedBoxBetweenFormAndStack =
-          tester.widget(find.byKey(Key("sizedBoxBetweenFormAndStack")));
-      gestureDetector = tester.widget(find.byKey(Key("gestureDetector")));
-      animatedSize = tester.widget(find.byType(AnimatedSize));
-      shrinkedSizedBox = tester.widget(
-        find.descendant(
-            of: find.byWidget(animatedSize), matching: find.byType(SizedBox)),
-      );
-      expect(find.byWidget(shrinkedSizedBox), findsOneWidget);
-      expect(colorPickerFinder, findsNothing);
-      sizedBoxBetweenStackAndButtons =
-          tester.widget(find.byKey(Key("sizedBoxBetweenStackAndButtons")));
-      rowOfButtons = tester.widget(find.byType(Row));
-      expect(
-          checkWidgetsOrder(column.children.toList(), [
-            form,
-            sizedBoxBetweenFormAndStack,
-            gestureDetector,
-            animatedSize,
+            tester.widget(find.byType(PickColor)),
             sizedBoxBetweenStackAndButtons,
             rowOfButtons,
           ]),
@@ -370,19 +247,10 @@ void main() {
                   watchFieldsUsecase,
                   watchFieldListsUsecase,
                   currentLocale,
-                  getRouterConfig),
+                  getRouterConfig), //bybassing form validation
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);
-          await tester.tap(find.byKey(Key('stackForColorIndicator')));
-          await tester.pumpAndSettle();
-          ColorWheelPicker colorWheelPicker =
-              tester.widget(find.byType(ColorWheelPicker));
-          final Offset colorWheelPickerCenter =
-              tester.getCenter(find.byWidget(colorWheelPicker));
-          await tester.timedDragFrom(
-              colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
-          await tester.pumpAndSettle();
           await tester.ensureVisible(
               find.widgetWithText(ElevatedButton, expectedOkString));
           await tester
@@ -425,15 +293,6 @@ void main() {
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);
-          await tester.tap(find.byKey(Key('stackForColorIndicator')));
-          await tester.pumpAndSettle();
-          ColorWheelPicker colorWheelPicker =
-              tester.widget(find.byType(ColorWheelPicker));
-          final Offset colorWheelPickerCenter =
-              tester.getCenter(find.byWidget(colorWheelPicker));
-          await tester.timedDragFrom(
-              colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
-          await tester.pumpAndSettle();
           await tester.ensureVisible(
               find.widgetWithText(ElevatedButton, expectedOkString));
           await tester
@@ -477,15 +336,6 @@ void main() {
               tester);
           expect(find.byType(CreateFieldPage), findsOneWidget);
           await tester.enterText(textFormFieldFinder, name);
-          await tester.tap(find.byKey(Key('stackForColorIndicator')));
-          await tester.pumpAndSettle();
-          ColorWheelPicker colorWheelPicker =
-              tester.widget(find.byType(ColorWheelPicker));
-          final Offset colorWheelPickerCenter =
-              tester.getCenter(find.byWidget(colorWheelPicker));
-          await tester.timedDragFrom(
-              colorWheelPickerCenter, const Offset(50, 20), Durations.short1);
-          await tester.pumpAndSettle();
           await tester.ensureVisible(
               find.widgetWithText(ElevatedButton, expectedOkString));
           await tester

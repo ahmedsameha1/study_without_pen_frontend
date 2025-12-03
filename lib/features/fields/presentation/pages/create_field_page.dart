@@ -1,4 +1,3 @@
-import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -6,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/common/state_status.dart';
+import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/create_field_cubit.dart';
@@ -32,7 +32,6 @@ class CreateFieldPageView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final color = useState<Color>(Colors.white);
-    final showColorPicker = useState<bool>(false);
     final isNameValid = useState<bool>(false);
     final state = context.select((CreateFieldCubit cubit) => cubit.state);
     final TextEditingController nameTextEditingController =
@@ -115,57 +114,9 @@ class CreateFieldPageView extends HookWidget {
                                   key: Key("sizedBoxBetweenFormAndStack"),
                                   height: 25,
                                 ),
-                                GestureDetector(
-                                  key: Key("gestureDetector"),
-                                  child: Stack(
-                                    key: Key("stackForColorIndicator"),
-                                    alignment: Alignment.center,
-                                    children: [
-                                      ColorIndicator(
-                                        key: Key("colorIndicator"),
-                                        width: double.infinity,
-                                        color: color.value,
-                                      ),
-                                      Text(
-                                        AppLocalizations.of(context)!
-                                            .selectColor,
-                                        style: TextStyle(
-                                            color:
-                                                color.value.computeLuminance() >
-                                                        0.5
-                                                    ? Colors.black
-                                                    : Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                  onTap: () {
-                                    showColorPicker.value =
-                                        !showColorPicker.value;
-                                  },
-                                ),
-                                AnimatedSize(
-                                  duration: const Duration(milliseconds: 500),
-                                  child: showColorPicker.value
-                                      ? ColorPicker(
-                                          color: color.value,
-                                          pickersEnabled: <ColorPickerType,
-                                              bool>{
-                                            ColorPickerType.accent: false,
-                                            ColorPickerType.primary: false,
-                                            ColorPickerType.wheel: true,
-                                          },
-                                          heading: Text(
-                                              AppLocalizations.of(context)!
-                                                  .selectColor,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headlineSmall),
-                                          onColorChanged: (value) {
-                                            color.value = value;
-                                          },
-                                        )
-                                      : SizedBox.shrink(),
-                                ),
+                                PickColor(callback: (Color newColor) {
+                                  color.value = newColor;
+                                }),
                                 SizedBox(
                                   key: Key("sizedBoxBetweenStackAndButtons"),
                                   height: 25,
