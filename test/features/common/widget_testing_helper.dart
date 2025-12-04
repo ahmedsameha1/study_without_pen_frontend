@@ -91,6 +91,8 @@ bool checkWidgetsOrder(List<Widget> widgets, List<Widget> shouldList) {
     final index_1 = widgets.indexOf(shouldList[i]);
     final index_2 = widgets.indexOf(shouldList[i + 1]);
     if (index_1 == -1 || index_2 == -1 || index_1 >= index_2) {
+      debugPrint('$i');
+      debugPrint('$index_1  $index_2');
       return false;
     }
   }

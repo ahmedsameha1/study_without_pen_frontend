@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mockingjay/mockingjay.dart';
+import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/create_field_list_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/create_field_list_bloc.dart';
@@ -161,7 +162,8 @@ void main() {
         Form form = tester.widget(
             find.descendant(of: find.byWidget(padding), matching: formFinder));
         Column column = tester.widget(
-          find.descendant(of: find.byWidget(form), matching: columnFinder),
+          find.descendant(
+              of: find.byWidget(form), matching: find.byKey(const Key('column'))),
         );
         expect(column.mainAxisAlignment, MainAxisAlignment.center);
         final TextField fieldListNameTextField = tester.widget(find.descendant(
@@ -243,7 +245,29 @@ void main() {
                 of: find.byType(CheckboxListTile),
                 matching: find.byType(ListTile))));
         expect((readAnswerLisTile.title as Text).data, "Read answer");
-        expect((readAnswerLisTile.subtitle as Text).data, "When you answer correctly!");
+        expect((readAnswerLisTile.subtitle as Text).data,
+            "When you answer correctly!");
+        SizedBox sizedBoxBetweenCheckboxListTileAndPickColor = tester.widget(
+            find.descendant(
+                of: find.byWidget(column),
+                matching: find.byKey(
+                    Key("sizedBoxBetweenCheckboxListTileAndPickColor"))));
+        expect(sizedBoxBetweenCheckboxListTileAndPickColor.height!, 25);
+        PickColor pickColor = tester.widget(
+          find.descendant(
+              of: find.byWidget(column), matching: find.byType(PickColor)),
+        );
+        expect(
+            checkWidgetsOrder(column.children.toList(), [
+              tester.widget(find.byType(TextFormField)),
+              sizedBoxBetweenTextFormFieldAndDropDownMenuFormField,
+              checkTypeDropdownMenuFormField,
+              sizedBoxBetweenDropDownMenuFormFieldAndCheckboxListTile,
+              tester.widget(find.byType(CheckboxListTile)),
+              sizedBoxBetweenCheckboxListTileAndPickColor,
+              pickColor,
+            ]),
+            isTrue);
       });
     });
   });

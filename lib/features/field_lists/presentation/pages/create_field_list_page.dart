@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/create_field_list_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/create_field_list_bloc.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 
 class CreateFieldListPage extends StatelessWidget {
@@ -89,7 +87,14 @@ class CreateFieldListPageView extends StatelessWidget {
                         onChanged: (v) {},
                         title: Text(AppLocalizations.of(context)!.readAnswer),
                         subtitle: Text(AppLocalizations.of(context)!
-                            .whenAnsweredCorrectly))
+                            .whenAnsweredCorrectly)),
+                    SizedBox(
+                      key: Key('sizedBoxBetweenCheckboxListTileAndPickColor'),
+                      height: 25,
+                    ),
+                    PickColor(
+                      callback: (_) {},
+                    )
                   ],
                 ),
               ),
