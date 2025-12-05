@@ -105,7 +105,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String fieldNameValidationError(
-      int fieldNameMinimumLength, int fieldNameMaximumLength) {
+    int fieldNameMinimumLength,
+    int fieldNameMaximumLength,
+  ) {
     return 'Field name must be between $fieldNameMinimumLength and $fieldNameMaximumLength characters';
   }
 
