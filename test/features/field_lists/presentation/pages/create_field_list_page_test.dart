@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mockingjay/mockingjay.dart';
+import 'package:study_without_pen_by_flutter/common/widgets/ok_cancel.dart';
 import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/create_field_list_usecase.dart';
@@ -163,7 +164,8 @@ void main() {
             find.descendant(of: find.byWidget(padding), matching: formFinder));
         Column column = tester.widget(
           find.descendant(
-              of: find.byWidget(form), matching: find.byKey(const Key('column'))),
+              of: find.byWidget(form),
+              matching: find.byKey(const Key('column'))),
         );
         expect(column.mainAxisAlignment, MainAxisAlignment.center);
         final TextField fieldListNameTextField = tester.widget(find.descendant(
@@ -253,10 +255,12 @@ void main() {
                 matching: find.byKey(
                     Key("sizedBoxBetweenCheckboxListTileAndPickColor"))));
         expect(sizedBoxBetweenCheckboxListTileAndPickColor.height!, 25);
-        PickColor pickColor = tester.widget(
-          find.descendant(
-              of: find.byWidget(column), matching: find.byType(PickColor)),
-        );
+        SizedBox sizedBoxBetweenCheckboxListTileAndOkCancel = tester.widget(
+            find.descendant(
+                of: find.byWidget(column),
+                matching: find
+                    .byKey(Key("sizedBoxBetweenCheckboxListTileAndOkCancel"))));
+        expect(sizedBoxBetweenCheckboxListTileAndPickColor.height!, 25);
         expect(
             checkWidgetsOrder(column.children.toList(), [
               tester.widget(find.byType(TextFormField)),
@@ -265,7 +269,9 @@ void main() {
               sizedBoxBetweenDropDownMenuFormFieldAndCheckboxListTile,
               tester.widget(find.byType(CheckboxListTile)),
               sizedBoxBetweenCheckboxListTileAndPickColor,
-              pickColor,
+              tester.widget(find.byType(PickColor)),
+              sizedBoxBetweenCheckboxListTileAndOkCancel,
+              tester.widget(find.byType(OkCancel))
             ]),
             isTrue);
       });

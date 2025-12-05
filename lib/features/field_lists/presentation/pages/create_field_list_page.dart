@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:study_without_pen_by_flutter/common/widgets/ok_cancel.dart';
 import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
@@ -94,7 +95,16 @@ class CreateFieldListPageView extends StatelessWidget {
                     ),
                     PickColor(
                       callback: (_) {},
-                    )
+                    ),
+                    SizedBox(
+                      key: Key('sizedBoxBetweenCheckboxListTileAndOkCancel'),
+                      height: 25,
+                    ),
+                    OkCancel(
+                        valid: false,
+                        usecaseValidationTest: false,
+                        okCallback: () {},
+                        cancelCallback: () {}),
                   ],
                 ),
               ),
