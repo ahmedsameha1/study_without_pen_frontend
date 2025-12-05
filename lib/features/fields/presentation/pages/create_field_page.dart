@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/common/state_status.dart';
+import 'package:study_without_pen_by_flutter/common/widgets/ok_cancel.dart';
 import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
@@ -121,42 +122,25 @@ class CreateFieldPageView extends HookWidget {
                                   key: Key("sizedBoxBetweenStackAndButtons"),
                                   height: 25,
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    ElevatedButton(
-                                        key: Key("cancelButton"),
-                                        onPressed: () {
-                                          GoRouter.of(context).pop();
-                                        },
-                                        child: Text(
-                                            AppLocalizations.of(context)!
-                                                .cancel)),
-                                    ElevatedButton(
-                                        key: Key("okButton"),
-                                        onPressed: isNameValid.value ||
-                                                usecaseValidationTest
-                                            ? () async {
-                                                await context
-                                                    .read<CreateFieldCubit>()
-                                                    .createField(
-                                                        context
-                                                            .read<
-                                                                nonso
-                                                                .AuthBloc>()
-                                                            .state
-                                                            .user!
-                                                            .uid,
-                                                        nameTextEditingController
-                                                            .text,
-                                                        color.value.toARGB32());
-                                              }
-                                            : null,
-                                        child: Text(
-                                            AppLocalizations.of(context)!.ok)),
-                                  ],
-                                )
+                                OkCancel(
+                                    valid: isNameValid.value,
+                                    usecaseValidationTest:
+                                        usecaseValidationTest,
+                                    okCallback: () async {
+                                      await context
+                                          .read<CreateFieldCubit>()
+                                          .createField(
+                                              context
+                                                  .read<nonso.AuthBloc>()
+                                                  .state
+                                                  .user!
+                                                  .uid,
+                                              nameTextEditingController.text,
+                                              color.value.toARGB32());
+                                    },
+                                    cancelCallback: () {
+                                      GoRouter.of(context).pop();
+                                    })
                               ],
                             ),
                           ),

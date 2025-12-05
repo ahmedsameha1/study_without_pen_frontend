@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
+import 'package:study_without_pen_by_flutter/common/widgets/ok_cancel.dart';
 import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
@@ -133,29 +134,16 @@ void main() {
       SizedBox sizedBoxBetweenFormAndStack =
           tester.widget(find.byKey(Key("sizedBoxBetweenFormAndStack")));
       expect(sizedBoxBetweenFormAndStack.height!, 25);
-      SizedBox sizedBoxBetweenStackAndButtons =
+      SizedBox sizedBoxBetweenStackAndOkCancel =
           tester.widget(find.byKey(Key("sizedBoxBetweenStackAndButtons")));
-      expect(sizedBoxBetweenStackAndButtons.height, 25);
-      Row rowOfButtons = tester.widget(find.byType(Row));
-      expect(rowOfButtons.mainAxisAlignment, MainAxisAlignment.spaceEvenly);
-      ElevatedButton okButton = tester.widget(find.byKey(Key("okButton")));
-      expect((okButton.child as Text).data, expectedOkString);
-      ElevatedButton cancelButton =
-          tester.widget(find.byKey(Key("cancelButton")));
-      expect((cancelButton.child as Text).data, expectedCancelString);
-      expect(
-          checkWidgetsOrder(rowOfButtons.children.toList(), [
-            cancelButton,
-            okButton,
-          ]),
-          isTrue);
+      expect(sizedBoxBetweenStackAndOkCancel.height, 25);
       expect(
           checkWidgetsOrder(column.children.toList(), [
             form,
             sizedBoxBetweenFormAndStack,
             tester.widget(find.byType(PickColor)),
-            sizedBoxBetweenStackAndButtons,
-            rowOfButtons,
+            sizedBoxBetweenStackAndOkCancel,
+            tester.widget(find.byType(OkCancel)),
           ]),
           isTrue);
     });
