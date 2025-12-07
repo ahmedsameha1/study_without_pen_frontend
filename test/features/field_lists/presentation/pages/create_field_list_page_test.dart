@@ -416,12 +416,12 @@ void main() {
         await tester.pumpAndSettle();
         expect(nameValidationErrorTextFinder, findsNothing);
         okButton = tester.widget(find.byKey(const Key('okButton')));
-        //expect(okButton.enabled, isTrue);
+        expect(okButton.enabled, isTrue);
         await tester.enterText(textFormFieldFinder, 'field list name');
         await tester.pumpAndSettle();
         expect(nameValidationErrorTextFinder, findsNothing);
         okButton = tester.widget(find.byKey(const Key('okButton')));
-        //expect(okButton.enabled, isTrue);
+        expect(okButton.enabled, isTrue);
         await tester.enterText(textFormFieldFinder, ' ');
         await tester.pumpAndSettle();
         expect(nameValidationErrorTextFinder, findsOne);

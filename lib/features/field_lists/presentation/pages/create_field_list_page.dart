@@ -19,9 +19,17 @@ class CreateFieldListPage extends StatelessWidget {
   }
 }
 
-class CreateFieldListPageView extends StatelessWidget {
+class CreateFieldListPageView extends StatefulWidget {
   const CreateFieldListPageView({super.key});
 
+  @override
+  State<CreateFieldListPageView> createState() =>
+      _CreateFieldListPageViewState();
+}
+
+class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  bool isNameValid = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +45,7 @@ class CreateFieldListPageView extends StatelessWidget {
                 key: Key('paddingAroundColumn'),
                 padding: EdgeInsets.all(16),
                 child: Form(
+                  key: _formKey,
                   child: Column(
                     key: Key('column'),
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -73,6 +82,13 @@ class CreateFieldListPageView extends StatelessWidget {
                             );
                           }
                           return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            isNameValid =
+                                _formKey.currentState != null &&
+                                _formKey.currentState!.validate();
+                          });
                         },
                       ),
                       SizedBox(
@@ -139,7 +155,7 @@ class CreateFieldListPageView extends StatelessWidget {
                         height: 25,
                       ),
                       OkCancel(
-                        valid: false,
+                        valid: isNameValid,
                         usecaseValidationTest: false,
                         okCallback: () {},
                         cancelCallback: () {},
