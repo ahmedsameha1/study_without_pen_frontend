@@ -277,6 +277,15 @@ abstract class AppLocalizations {
     int fieldNameMaximumLength,
   );
 
+  /// No description provided for @fieldListNameValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Field list name must be between {fieldListNameMinimumLength} and {fieldListNameMaximumLength} characters'**
+  String fieldListNameValidationError(
+    int fieldListNameMinimumLength,
+    int fieldListNameMaximumLength,
+  );
+
   /// No description provided for @created.
   ///
   /// In en, this message translates to:

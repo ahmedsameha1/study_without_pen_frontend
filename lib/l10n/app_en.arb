@@ -53,6 +53,17 @@
             }
         }
     },
+    "fieldListNameValidationError": "Field list name must be between {fieldListNameMinimumLength} and {fieldListNameMaximumLength} characters",
+    "@fieldListNameValidationError": {
+        "placeholders": {
+            "fieldListNameMinimumLength": {
+                "type": "int"
+            },
+            "fieldListNameMaximumLength": {
+                "type": "int"
+            }
+        }
+    },
     "created": "Created",
     "creationError": "Error while creation",
     "noFields": "Currently, there are no fields!",

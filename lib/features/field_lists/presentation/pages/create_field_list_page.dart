@@ -29,89 +29,129 @@ class CreateFieldListPageView extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.createFieldList),
       ),
       body: SafeArea(
-          child: Center(
-        child: Card(
-          margin: EdgeInsets.all(20),
-          child: SingleChildScrollView(
-            child: Padding(
-              key: Key('paddingAroundColumn'),
-              padding: EdgeInsets.all(16),
-              child: Form(
-                child: Column(
-                  key: Key('column'),
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      key: Key('fieldListNameTextField'),
-                      decoration: InputDecoration(
+        child: Center(
+          child: Card(
+            margin: EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Padding(
+                key: Key('paddingAroundColumn'),
+                padding: EdgeInsets.all(16),
+                child: Form(
+                  child: Column(
+                    key: Key('column'),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextFormField(
+                        key: Key('fieldListNameTextField'),
+                        decoration: InputDecoration(
                           label: Text(
-                              AppLocalizations.of(context)!.fieldListName)),
-                      textInputAction: TextInputAction.next,
-                      autofocus: true,
-                    ),
-                    SizedBox(
-                      key: Key(
-                          'sizedBoxBetweenTextFormFieldAndDropdownMenuFormField'),
-                      height: 25,
-                    ),
-                    DropdownMenuFormField<CheckType>(
+                            AppLocalizations.of(context)!.fieldListName,
+                          ),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        autofocus: true,
+                        autovalidateMode: .onUserInteraction,
+                        validator: (value) {
+                          if (value == null) {
+                            return AppLocalizations.of(
+                              context,
+                            )!.fieldListNameValidationError(
+                              FieldLists.MINIMUM_LENGTH_OF_NAME,
+                              FieldLists.MAXIMUM_LENGTH_OF_NAME,
+                            );
+                          }
+                          final trimmedValueLength = value.trim().length;
+                          if (trimmedValueLength >
+                                  FieldLists.MAXIMUM_LENGTH_OF_NAME ||
+                              trimmedValueLength <
+                                  FieldLists.MINIMUM_LENGTH_OF_NAME) {
+                            return AppLocalizations.of(
+                              context,
+                            )!.fieldListNameValidationError(
+                              FieldLists.MINIMUM_LENGTH_OF_NAME,
+                              FieldLists.MAXIMUM_LENGTH_OF_NAME,
+                            );
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        key: Key(
+                          'sizedBoxBetweenTextFormFieldAndDropdownMenuFormField',
+                        ),
+                        height: 25,
+                      ),
+                      DropdownMenuFormField<CheckType>(
                         maxLines: 2,
                         initialSelection: CheckType.NON_STRICT_IGNORE_CASE,
-                        label:
-                            Text(AppLocalizations.of(context)!.selectCheckType),
-                        helperText:
-                            AppLocalizations.of(context)!.howAppCheckAnswers,
+                        label: Text(
+                          AppLocalizations.of(context)!.selectCheckType,
+                        ),
+                        helperText: AppLocalizations.of(
+                          context,
+                        )!.howAppCheckAnswers,
                         dropdownMenuEntries: [
                           DropdownMenuEntry<CheckType>(
-                              value: CheckType.NON_STRICT_IGNORE_CASE,
-                              label: AppLocalizations.of(context)!
-                                  .nonStrictIgnoreCase),
+                            value: CheckType.NON_STRICT_IGNORE_CASE,
+                            label: AppLocalizations.of(
+                              context,
+                            )!.nonStrictIgnoreCase,
+                          ),
                           DropdownMenuEntry<CheckType>(
-                              value: CheckType.IGNORE_CASE,
-                              label: AppLocalizations.of(context)!.ignoreCase),
+                            value: CheckType.IGNORE_CASE,
+                            label: AppLocalizations.of(context)!.ignoreCase,
+                          ),
                           DropdownMenuEntry<CheckType>(
-                              value: CheckType.NON_STRICT_DO_NOT_IGNORE_CASE,
-                              label: AppLocalizations.of(context)!
-                                  .nonStrictDoNotIgnoreCase),
+                            value: CheckType.NON_STRICT_DO_NOT_IGNORE_CASE,
+                            label: AppLocalizations.of(
+                              context,
+                            )!.nonStrictDoNotIgnoreCase,
+                          ),
                           DropdownMenuEntry<CheckType>(
-                              value: CheckType.DO_NOT_IGNORE_CASE,
-                              label: AppLocalizations.of(context)!
-                                  .doNotIgnoreCase),
-                        ]),
-                    SizedBox(
-                      key: Key(
-                          'sizedBoxBetweenDropdownMenuFormFieldAndCheckboxListTile'),
-                      height: 25,
-                    ),
-                    CheckboxListTile(
+                            value: CheckType.DO_NOT_IGNORE_CASE,
+                            label: AppLocalizations.of(
+                              context,
+                            )!.doNotIgnoreCase,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        key: Key(
+                          'sizedBoxBetweenDropdownMenuFormFieldAndCheckboxListTile',
+                        ),
+                        height: 25,
+                      ),
+                      CheckboxListTile(
                         value: false,
                         onChanged: (v) {},
                         title: Text(AppLocalizations.of(context)!.readAnswer),
-                        subtitle: Text(AppLocalizations.of(context)!
-                            .whenAnsweredCorrectly)),
-                    SizedBox(
-                      key: Key('sizedBoxBetweenCheckboxListTileAndPickColor'),
-                      height: 25,
-                    ),
-                    PickColor(
-                      callback: (_) {},
-                    ),
-                    SizedBox(
-                      key: Key('sizedBoxBetweenCheckboxListTileAndOkCancel'),
-                      height: 25,
-                    ),
-                    OkCancel(
+                        subtitle: Text(
+                          AppLocalizations.of(context)!.whenAnsweredCorrectly,
+                        ),
+                      ),
+                      SizedBox(
+                        key: Key('sizedBoxBetweenCheckboxListTileAndPickColor'),
+                        height: 25,
+                      ),
+                      PickColor(callback: (_) {}),
+                      SizedBox(
+                        key: Key('sizedBoxBetweenCheckboxListTileAndOkCancel'),
+                        height: 25,
+                      ),
+                      OkCancel(
                         valid: false,
                         usecaseValidationTest: false,
                         okCallback: () {},
-                        cancelCallback: () {}),
-                  ],
+                        cancelCallback: () {},
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
-      )),
+      ),
     );
   }
 }

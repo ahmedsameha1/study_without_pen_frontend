@@ -112,6 +112,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String fieldListNameValidationError(
+    int fieldListNameMinimumLength,
+    int fieldListNameMaximumLength,
+  ) {
+    return 'Field list name must be between $fieldListNameMinimumLength and $fieldListNameMaximumLength characters';
+  }
+
+  @override
   String get created => 'Created';
 
   @override

@@ -29,50 +29,58 @@ class MockCreateFieldListBloc
     implements CreateFieldListBloc {}
 
 Future<void> _createCreateFieldListPageInASkeleton(
-    WidgetTester tester,
-    Locale locale,
-    GoRouter goRouter,
-    CreateFieldListUsecase createFieldListUsecase,
-    String fieldId) async {
+  WidgetTester tester,
+  Locale locale,
+  GoRouter goRouter,
+  CreateFieldListUsecase createFieldListUsecase,
+  String fieldId,
+) async {
   await tester.pumpWidget(
     RepositoryProvider.value(
       value: createFieldListUsecase,
       child: MaterialApp(
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            nonso.AppLocalizations.delegate
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: locale,
-          home: InheritedGoRouter(
-              goRouter: goRouter,
-              child: CreateFieldListPage(fieldId: fieldId))),
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          nonso.AppLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: locale,
+        home: InheritedGoRouter(
+          goRouter: goRouter,
+          child: CreateFieldListPage(fieldId: fieldId),
+        ),
+      ),
     ),
   );
 }
 
 Future<void> _createCreateFieldListPageViewInASkeleton(
-    WidgetTester tester,
-    Locale locale,
-    MockNavigator navigator,
-    CreateFieldListUsecase createFieldListUsecase,
-    CreateFieldListBloc createFieldListBloc) async {
-  return tester.pumpWidget(RepositoryProvider.value(
-    value: createFieldListUsecase,
-    child: MaterialApp(
+  WidgetTester tester,
+  Locale locale,
+  MockNavigator navigator,
+  CreateFieldListUsecase createFieldListUsecase,
+  CreateFieldListBloc createFieldListBloc,
+) async {
+  return tester.pumpWidget(
+    RepositoryProvider.value(
+      value: createFieldListUsecase,
+      child: MaterialApp(
         localizationsDelegates: [
           AppLocalizations.delegate,
-          nonso.AppLocalizations.delegate
+          nonso.AppLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         locale: locale,
         home: MockNavigatorProvider(
-            navigator: navigator,
-            child: BlocProvider.value(
-              value: createFieldListBloc,
-              child: const CreateFieldListPageView(),
-            ))),
-  ));
+          navigator: navigator,
+          child: BlocProvider.value(
+            value: createFieldListBloc,
+            child: const CreateFieldListPageView(),
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 void main() {
@@ -88,25 +96,40 @@ void main() {
   String expectedFieldListNameString = "Field List Name";
   group("English locale", () {
     Locale currentLocale = const Locale("en");
+    String expectedInvalidNameString =
+        "Field list name must be between 1 and 64 characters";
 
     group('CreateFieldListPage', () {
       setUp(() {
         createFieldListUsecase = MockCreateFieldListUsecase();
         when(
           () => createFieldListUsecase.call(
-              fieldId, fieldListName, checkType, readAnswer, color),
+            fieldId,
+            fieldListName,
+            checkType,
+            readAnswer,
+            color,
+          ),
         ).thenAnswer((_) => Future.value(1));
       });
 
-      testWidgets('Test the precense of CreateFieldListPageView',
-          (WidgetTester tester) async {
+      testWidgets('Test the precense of CreateFieldListPageView', (
+        WidgetTester tester,
+      ) async {
         await _createCreateFieldListPageInASkeleton(
-            tester, currentLocale, goRouter, createFieldListUsecase, fieldId);
+          tester,
+          currentLocale,
+          goRouter,
+          createFieldListUsecase,
+          fieldId,
+        );
         expect(
-            find.descendant(
-                of: find.byType(CreateFieldListPage),
-                matching: find.byType(CreateFieldListPageView)),
-            findsOne);
+          find.descendant(
+            of: find.byType(CreateFieldListPage),
+            matching: find.byType(CreateFieldListPageView),
+          ),
+          findsOne,
+        );
       });
     });
 
@@ -118,25 +141,42 @@ void main() {
         when(() => navigator.canPop()).thenReturn(false);
         when(() => navigator.push<void>(any())).thenAnswer((_) async {});
         createFieldListBloc = MockCreateFieldListBloc();
-        when(() => createFieldListBloc.state)
-            .thenReturn(CreateFieldListState());
+        when(
+          () => createFieldListBloc.state,
+        ).thenReturn(CreateFieldListState());
         createFieldListUsecase = MockCreateFieldListUsecase();
-        when(() => createFieldListUsecase.call(
-                fieldId, fieldListName, checkType, readAnswer, color))
-            .thenAnswer((_) => Future.value(1));
+        when(
+          () => createFieldListUsecase.call(
+            fieldId,
+            fieldListName,
+            checkType,
+            readAnswer,
+            color,
+          ),
+        ).thenAnswer((_) => Future.value(1));
       });
 
-      testWidgets('test the presence of the main widgets',
-          (WidgetTester tester) async {
-        await _createCreateFieldListPageViewInASkeleton(tester, currentLocale,
-            navigator, createFieldListUsecase, createFieldListBloc);
+      testWidgets('test the presence of the main widgets', (
+        WidgetTester tester,
+      ) async {
+        await _createCreateFieldListPageViewInASkeleton(
+          tester,
+          currentLocale,
+          navigator,
+          createFieldListUsecase,
+          createFieldListBloc,
+        );
         expect(
-            find.descendant(
-                of: find.byType(CreateFieldListPageView),
-                matching: scaffoldFinder),
-            findsOne);
-        final appBarFinder =
-            find.descendant(of: scaffoldFinder, matching: find.byType(AppBar));
+          find.descendant(
+            of: find.byType(CreateFieldListPageView),
+            matching: scaffoldFinder,
+          ),
+          findsOne,
+        );
+        final appBarFinder = find.descendant(
+          of: scaffoldFinder,
+          matching: find.byType(AppBar),
+        );
         expect(appBarFinder, findsOneWidget);
         AppBar appBar = tester.widget<AppBar>(appBarFinder);
         Text title = appBar.title as Text;
@@ -150,130 +190,248 @@ void main() {
         expect(card.margin!.horizontal, 40);
         expect(card.margin!.vertical, 40);
         expect(
-            find.descendant(
-                of: find.byWidget(card), matching: singleChildScrollViewFinder),
-            findsOneWidget);
+          find.descendant(
+            of: find.byWidget(card),
+            matching: singleChildScrollViewFinder,
+          ),
+          findsOneWidget,
+        );
         Padding padding = tester.widget(
           find.descendant(
-              of: singleChildScrollViewFinder,
-              matching: find.byKey(const Key("paddingAroundColumn"))),
+            of: singleChildScrollViewFinder,
+            matching: find.byKey(const Key("paddingAroundColumn")),
+          ),
         );
         expect(padding.padding.horizontal, 32);
         expect(padding.padding.vertical, 32);
         Form form = tester.widget(
-            find.descendant(of: find.byWidget(padding), matching: formFinder));
+          find.descendant(of: find.byWidget(padding), matching: formFinder),
+        );
         Column column = tester.widget(
           find.descendant(
-              of: find.byWidget(form),
-              matching: find.byKey(const Key('column'))),
+            of: find.byWidget(form),
+            matching: find.byKey(const Key('column')),
+          ),
         );
         expect(column.mainAxisAlignment, MainAxisAlignment.center);
-        final TextField fieldListNameTextField = tester.widget(find.descendant(
-            of: find.byWidget(column),
-            matching: find.descendant(
-                of: find.byType(TextFormField),
-                matching: find.byType(TextField)))) as TextField;
-        expect((fieldListNameTextField.decoration!.label as Text).data,
-            expectedFieldListNameString);
+        final TextField fieldListNameTextField =
+            tester.widget(
+                  find.descendant(
+                    of: find.byWidget(column),
+                    matching: find.descendant(
+                      of: find.byType(TextFormField),
+                      matching: find.byType(TextField),
+                    ),
+                  ),
+                )
+                as TextField;
+        expect(
+          (fieldListNameTextField.decoration!.label as Text).data,
+          expectedFieldListNameString,
+        );
         expect(fieldListNameTextField.keyboardType, TextInputType.text);
         expect(fieldListNameTextField.textInputAction, TextInputAction.next);
         expect(fieldListNameTextField.autofocus, isTrue);
-        SizedBox sizedBoxBetweenTextFormFieldAndDropDownMenuFormField =
-            tester.widget(find.descendant(
+        SizedBox sizedBoxBetweenTextFormFieldAndDropDownMenuFormField = tester
+            .widget(
+              find.descendant(
                 of: find.byWidget(column),
-                matching: find.byKey(Key(
-                    "sizedBoxBetweenTextFormFieldAndDropdownMenuFormField"))));
+                matching: find.byKey(
+                  Key("sizedBoxBetweenTextFormFieldAndDropdownMenuFormField"),
+                ),
+              ),
+            );
         expect(
-            sizedBoxBetweenTextFormFieldAndDropDownMenuFormField.height!, 25);
+          sizedBoxBetweenTextFormFieldAndDropDownMenuFormField.height!,
+          25,
+        );
         final DropdownMenuFormField<CheckType> checkTypeDropdownMenuFormField =
-            tester.widget(find.descendant(
+            tester.widget(
+              find.descendant(
                 of: find.byWidget(column),
-                matching: find.byType(DropdownMenuFormField<CheckType>)));
+                matching: find.byType(DropdownMenuFormField<CheckType>),
+              ),
+            );
         final DropdownMenu<CheckType> checkTypeDropdownMenu = tester.widget(
-            find.descendant(
-                of: find.byWidget(checkTypeDropdownMenuFormField),
-                matching: find.byType(DropdownMenu<CheckType>)));
-        TextField checkTypeTextField = tester.widget(find.descendant(
+          find.descendant(
             of: find.byWidget(checkTypeDropdownMenuFormField),
-            matching: find.byType(TextField)));
-        expect(checkTypeDropdownMenuFormField.initialValue,
-            CheckType.NON_STRICT_IGNORE_CASE);
+            matching: find.byType(DropdownMenu<CheckType>),
+          ),
+        );
+        TextField checkTypeTextField = tester.widget(
+          find.descendant(
+            of: find.byWidget(checkTypeDropdownMenuFormField),
+            matching: find.byType(TextField),
+          ),
+        );
+        expect(
+          checkTypeDropdownMenuFormField.initialValue,
+          CheckType.NON_STRICT_IGNORE_CASE,
+        );
         expect((checkTypeDropdownMenu.label as Text).data, "Select check type");
         expect(checkTypeDropdownMenu.helperText, "How app checks your answers");
         expect(checkTypeTextField.maxLines, 2);
-        Text checkType1Text =
-            tester.widget(find.text("Do not check letter case or space").at(1));
-        Text checkType2Text =
-            tester.widget(find.text("Do not check letter case"));
+        Text checkType1Text = tester.widget(
+          find.text("Do not check letter case or space").at(1),
+        );
+        Text checkType2Text = tester.widget(
+          find.text("Do not check letter case"),
+        );
         Text checkType3Text = tester.widget(find.text("Do not check space"));
-        Text checkType4Text =
-            tester.widget(find.text("Check both letter case and space"));
+        Text checkType4Text = tester.widget(
+          find.text("Check both letter case and space"),
+        );
         expect(
-            find.descendant(
-                of: find.byWidget(checkTypeDropdownMenuFormField),
-                matching: find.byWidget(checkType1Text)),
-            findsOne);
+          find.descendant(
+            of: find.byWidget(checkTypeDropdownMenuFormField),
+            matching: find.byWidget(checkType1Text),
+          ),
+          findsOne,
+        );
         expect(
-            find.descendant(
-                of: find.byWidget(checkTypeDropdownMenuFormField),
-                matching: find.byWidget(checkType2Text)),
-            findsOne);
+          find.descendant(
+            of: find.byWidget(checkTypeDropdownMenuFormField),
+            matching: find.byWidget(checkType2Text),
+          ),
+          findsOne,
+        );
         expect(
-            find.descendant(
-                of: find.byWidget(checkTypeDropdownMenuFormField),
-                matching: find.byWidget(checkType3Text)),
-            findsOne);
+          find.descendant(
+            of: find.byWidget(checkTypeDropdownMenuFormField),
+            matching: find.byWidget(checkType3Text),
+          ),
+          findsOne,
+        );
         expect(
-            find.descendant(
-                of: find.byWidget(checkTypeDropdownMenuFormField),
-                matching: find.byWidget(checkType4Text)),
-            findsOne);
+          find.descendant(
+            of: find.byWidget(checkTypeDropdownMenuFormField),
+            matching: find.byWidget(checkType4Text),
+          ),
+          findsOne,
+        );
         SizedBox sizedBoxBetweenDropDownMenuFormFieldAndCheckboxListTile =
-            tester.widget(find.descendant(
-                of: find.byWidget(column),
-                matching: find.byKey(Key(
-                    "sizedBoxBetweenDropdownMenuFormFieldAndCheckboxListTile"))));
-        expect(sizedBoxBetweenDropDownMenuFormFieldAndCheckboxListTile.height!,
-            25);
-        Checkbox readAnswerCheckBox = tester.widget(find.descendant(
-            of: find.byWidget(column),
-            matching: find.descendant(
-                of: find.byType(CheckboxListTile),
-                matching: find.byType(Checkbox))));
-        expect(readAnswerCheckBox.value, isFalse);
-        ListTile readAnswerLisTile = tester.widget(find.descendant(
-            of: find.byWidget(column),
-            matching: find.descendant(
-                of: find.byType(CheckboxListTile),
-                matching: find.byType(ListTile))));
-        expect((readAnswerLisTile.title as Text).data, "Read answer");
-        expect((readAnswerLisTile.subtitle as Text).data,
-            "When you answer correctly!");
-        SizedBox sizedBoxBetweenCheckboxListTileAndPickColor = tester.widget(
-            find.descendant(
+            tester.widget(
+              find.descendant(
                 of: find.byWidget(column),
                 matching: find.byKey(
-                    Key("sizedBoxBetweenCheckboxListTileAndPickColor"))));
+                  Key(
+                    "sizedBoxBetweenDropdownMenuFormFieldAndCheckboxListTile",
+                  ),
+                ),
+              ),
+            );
+        expect(
+          sizedBoxBetweenDropDownMenuFormFieldAndCheckboxListTile.height!,
+          25,
+        );
+        Checkbox readAnswerCheckBox = tester.widget(
+          find.descendant(
+            of: find.byWidget(column),
+            matching: find.descendant(
+              of: find.byType(CheckboxListTile),
+              matching: find.byType(Checkbox),
+            ),
+          ),
+        );
+        expect(readAnswerCheckBox.value, isFalse);
+        ListTile readAnswerLisTile = tester.widget(
+          find.descendant(
+            of: find.byWidget(column),
+            matching: find.descendant(
+              of: find.byType(CheckboxListTile),
+              matching: find.byType(ListTile),
+            ),
+          ),
+        );
+        expect((readAnswerLisTile.title as Text).data, "Read answer");
+        expect(
+          (readAnswerLisTile.subtitle as Text).data,
+          "When you answer correctly!",
+        );
+        SizedBox sizedBoxBetweenCheckboxListTileAndPickColor = tester.widget(
+          find.descendant(
+            of: find.byWidget(column),
+            matching: find.byKey(
+              Key("sizedBoxBetweenCheckboxListTileAndPickColor"),
+            ),
+          ),
+        );
         expect(sizedBoxBetweenCheckboxListTileAndPickColor.height!, 25);
         SizedBox sizedBoxBetweenCheckboxListTileAndOkCancel = tester.widget(
-            find.descendant(
-                of: find.byWidget(column),
-                matching: find
-                    .byKey(Key("sizedBoxBetweenCheckboxListTileAndOkCancel"))));
+          find.descendant(
+            of: find.byWidget(column),
+            matching: find.byKey(
+              Key("sizedBoxBetweenCheckboxListTileAndOkCancel"),
+            ),
+          ),
+        );
         expect(sizedBoxBetweenCheckboxListTileAndPickColor.height!, 25);
         expect(
-            checkWidgetsOrder(column.children.toList(), [
-              tester.widget(find.byType(TextFormField)),
-              sizedBoxBetweenTextFormFieldAndDropDownMenuFormField,
-              checkTypeDropdownMenuFormField,
-              sizedBoxBetweenDropDownMenuFormFieldAndCheckboxListTile,
-              tester.widget(find.byType(CheckboxListTile)),
-              sizedBoxBetweenCheckboxListTileAndPickColor,
-              tester.widget(find.byType(PickColor)),
-              sizedBoxBetweenCheckboxListTileAndOkCancel,
-              tester.widget(find.byType(OkCancel))
-            ]),
-            isTrue);
+          checkWidgetsOrder(column.children.toList(), [
+            tester.widget(find.byType(TextFormField)),
+            sizedBoxBetweenTextFormFieldAndDropDownMenuFormField,
+            checkTypeDropdownMenuFormField,
+            sizedBoxBetweenDropDownMenuFormFieldAndCheckboxListTile,
+            tester.widget(find.byType(CheckboxListTile)),
+            sizedBoxBetweenCheckboxListTileAndPickColor,
+            tester.widget(find.byType(PickColor)),
+            sizedBoxBetweenCheckboxListTileAndOkCancel,
+            tester.widget(find.byType(OkCancel)),
+          ]),
+          isTrue,
+        );
+      });
+
+      testWidgets('field list name text field validation', (
+        WidgetTester tester,
+      ) async {
+        await _createCreateFieldListPageViewInASkeleton(
+          tester,
+          currentLocale,
+          navigator,
+          createFieldListUsecase,
+          createFieldListBloc,
+        );
+        ElevatedButton okButton = tester.widget(
+          find.byKey(const Key('okButton')),
+        );
+        final Finder nameValidationErrorTextFinder = find.descendant(
+          of: textFormFieldFinder,
+          matching: find.text(expectedInvalidNameString),
+        );
+        expect(nameValidationErrorTextFinder, findsNothing);
+        expect(okButton.enabled, isFalse);
+        await tester.enterText(
+          textFormFieldFinder,
+          'r' * (FieldLists.MAXIMUM_LENGTH_OF_NAME + 1),
+        );
+        await tester.pumpAndSettle();
+        expect(nameValidationErrorTextFinder, findsOne);
+        okButton = tester.widget(find.byKey(const Key('okButton')));
+        expect(okButton.enabled, isFalse);
+        await tester.enterText(
+          textFormFieldFinder,
+          '${'r' * FieldLists.MAXIMUM_LENGTH_OF_NAME} ',
+        );
+        await tester.pumpAndSettle();
+        expect(nameValidationErrorTextFinder, findsNothing);
+        okButton = tester.widget(find.byKey(const Key('okButton')));
+        //expect(okButton.enabled, isTrue);
+        await tester.enterText(textFormFieldFinder, 'field list name');
+        await tester.pumpAndSettle();
+        expect(nameValidationErrorTextFinder, findsNothing);
+        okButton = tester.widget(find.byKey(const Key('okButton')));
+        //expect(okButton.enabled, isTrue);
+        await tester.enterText(textFormFieldFinder, ' ');
+        await tester.pumpAndSettle();
+        expect(nameValidationErrorTextFinder, findsOne);
+        okButton = tester.widget(find.byKey(const Key('okButton')));
+        expect(okButton.enabled, isFalse);
+        await tester.enterText(textFormFieldFinder, '');
+        await tester.pumpAndSettle();
+        expect(nameValidationErrorTextFinder, findsOne);
+        okButton = tester.widget(find.byKey(const Key('okButton')));
+        expect(okButton.enabled, isFalse);
       });
     });
   });
