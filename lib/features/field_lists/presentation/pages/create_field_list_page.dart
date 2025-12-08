@@ -59,7 +59,7 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
                         ),
                         textInputAction: TextInputAction.next,
                         autofocus: true,
-                        autovalidateMode: .onUserInteraction,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (value == null) {
                             return AppLocalizations.of(
