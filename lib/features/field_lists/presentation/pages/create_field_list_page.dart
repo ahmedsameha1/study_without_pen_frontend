@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_without_pen_by_flutter/common/widgets/ok_cancel.dart';
 import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/create_field_list_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/create_field_list_bloc.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/create_field_list_event.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 
 class CreateFieldListPage extends StatelessWidget {
-  const CreateFieldListPage({required String fieldId, super.key});
+  const CreateFieldListPage({required this.fieldId, super.key});
+  final String fieldId;
 
   @override
   Widget build(BuildContext context) {
-    return const CreateFieldListPageView();
-    /*
     return BlocProvider<CreateFieldListBloc>(
-        create: (context) =>
-            CreateFieldListBloc(context.read<CreateFieldListUsecase>()),
-        child: const CreateFieldListPageView());
-        */
+      create: (context) =>
+          CreateFieldListBloc(context.read<CreateFieldListUsecase>(), fieldId),
+      child: const CreateFieldListPageView(),
+    );
   }
 }
 
@@ -138,8 +141,16 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
                         height: 25,
                       ),
                       CheckboxListTile(
-                        value: false,
-                        onChanged: (v) {},
+                        value: context.select(
+                          (CreateFieldListBloc bloc) => bloc.state.readAnswer,
+                        ),
+                        onChanged: (newValue) {
+                          if (newValue != null) {
+                            context.read<CreateFieldListBloc>().add(
+                              CreateFieldListReadAnswerChanged(newValue),
+                            );
+                          }
+                        },
                         title: Text(AppLocalizations.of(context)!.readAnswer),
                         subtitle: Text(
                           AppLocalizations.of(context)!.whenAnsweredCorrectly,

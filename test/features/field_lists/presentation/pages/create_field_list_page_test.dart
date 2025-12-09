@@ -433,6 +433,24 @@ void main() {
         okButton = tester.widget(find.byKey(const Key('okButton')));
         expect(okButton.enabled, isFalse);
       });
+
+      testWidgets('clicking the CheckboxListTile adds an event to the bloc', (
+        WidgetTester tester,
+      ) async {
+        await _createCreateFieldListPageViewInASkeleton(
+          tester,
+          currentLocale,
+          navigator,
+          createFieldListUsecase,
+          createFieldListBloc,
+        );
+        await tester.tap(find.byType(CheckboxListTile));
+        verify(
+          () => createFieldListBloc.add(
+            const CreateFieldListReadAnswerChanged(true),
+          ),
+        );
+      });
     });
   });
 }
