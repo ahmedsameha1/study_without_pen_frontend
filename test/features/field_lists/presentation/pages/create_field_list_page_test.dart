@@ -98,6 +98,7 @@ void main() {
     Locale currentLocale = const Locale("en");
     String expectedInvalidNameString =
         "Field list name must be between 1 and 64 characters";
+    String doNotCheckLetterCaseString = 'Do not check letter case';
 
     group('CreateFieldListPage', () {
       setUp(() {
@@ -275,7 +276,7 @@ void main() {
           find.text("Do not check letter case or space").at(1),
         );
         Text checkType2Text = tester.widget(
-          find.text("Do not check letter case"),
+          find.text(doNotCheckLetterCaseString),
         );
         Text checkType3Text = tester.widget(find.text("Do not check space"));
         Text checkType4Text = tester.widget(
@@ -448,6 +449,27 @@ void main() {
         verify(
           () => createFieldListBloc.add(
             const CreateFieldListReadAnswerChanged(true),
+          ),
+        );
+      });
+
+      testWidgets('Selecting a CheckType adds an event to the bloc', (
+        WidgetTester tester,
+      ) async {
+        await _createCreateFieldListPageViewInASkeleton(
+          tester,
+          currentLocale,
+          navigator,
+          createFieldListUsecase,
+          createFieldListBloc,
+        );
+        await tester.tap(find.byType(DropdownMenu<CheckType>));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(doNotCheckLetterCaseString).last);
+        await tester.pumpAndSettle();
+        verify(
+          () => createFieldListBloc.add(
+            const CreateFieldListCheckTypeChanged(CheckType.IGNORE_CASE),
           ),
         );
       });

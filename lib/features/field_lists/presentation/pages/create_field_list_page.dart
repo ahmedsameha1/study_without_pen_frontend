@@ -102,7 +102,9 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
                       ),
                       DropdownMenuFormField<CheckType>(
                         maxLines: 2,
-                        initialSelection: CheckType.NON_STRICT_IGNORE_CASE,
+                        initialSelection: context.select(
+                          (CreateFieldListBloc bloc) => bloc.state.checkType,
+                        ),
                         label: Text(
                           AppLocalizations.of(context)!.selectCheckType,
                         ),
@@ -133,6 +135,13 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
                             )!.doNotIgnoreCase,
                           ),
                         ],
+                        onSelected: (newValue) {
+                          if (newValue != null) {
+                            context.read<CreateFieldListBloc>().add(
+                              CreateFieldListCheckTypeChanged(newValue),
+                            );
+                          }
+                        },
                       ),
                       SizedBox(
                         key: Key(
