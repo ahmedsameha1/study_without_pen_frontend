@@ -19,6 +19,9 @@ import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart'
 import '../../../common/common_finders.dart';
 import '../../../common/widget_testing_helper.dart';
 
+class FakeCreateFieldListNameChanged extends Fake
+    implements CreateFieldListNameChanged {}
+
 class MockGoRouter extends Mock implements GoRouter {}
 
 class MockCreateFieldListUsecase extends Mock
@@ -102,6 +105,7 @@ void main() {
 
     group('CreateFieldListPage', () {
       setUp(() {
+        registerFallbackValue(FakeCreateFieldListNameChanged());
         createFieldListUsecase = MockCreateFieldListUsecase();
         when(
           () => createFieldListUsecase.call(
@@ -418,7 +422,7 @@ void main() {
         expect(nameValidationErrorTextFinder, findsNothing);
         okButton = tester.widget(find.byKey(const Key('okButton')));
         expect(okButton.enabled, isTrue);
-        await tester.enterText(textFormFieldFinder, 'field list name');
+        await tester.enterText(textFormFieldFinder, fieldListName);
         await tester.pumpAndSettle();
         expect(nameValidationErrorTextFinder, findsNothing);
         okButton = tester.widget(find.byKey(const Key('okButton')));
@@ -433,6 +437,45 @@ void main() {
         expect(nameValidationErrorTextFinder, findsOne);
         okButton = tester.widget(find.byKey(const Key('okButton')));
         expect(okButton.enabled, isFalse);
+      });
+
+      testWidgets('Entring a valid name adds an event to the bloc', (
+        WidgetTester tester,
+      ) async {
+        await _createCreateFieldListPageViewInASkeleton(
+          tester,
+          currentLocale,
+          navigator,
+          createFieldListUsecase,
+          createFieldListBloc,
+        );
+        await tester.enterText(find.byType(TextFormField), fieldListName);
+        verify(
+          () => createFieldListBloc.add(
+            CreateFieldListNameChanged(fieldListName),
+          ),
+        ).called(1);
+      });
+
+      testWidgets('Entring an invalid name adds an event to the bloc', (
+        WidgetTester tester,
+      ) async {
+        await _createCreateFieldListPageViewInASkeleton(
+          tester,
+          currentLocale,
+          navigator,
+          createFieldListUsecase,
+          createFieldListBloc,
+        );
+        await tester.enterText(
+          find.byType(TextFormField),
+          (fieldListName * 64),
+        );
+        verifyNever(
+          () => createFieldListBloc.add(
+            any(that: isA<CreateFieldListNameChanged>()),
+          ),
+        );
       });
 
       testWidgets('clicking the CheckboxListTile adds an event to the bloc', (
@@ -450,7 +493,7 @@ void main() {
           () => createFieldListBloc.add(
             const CreateFieldListReadAnswerChanged(true),
           ),
-        );
+        ).called(1);
       });
 
       testWidgets('Selecting a CheckType adds an event to the bloc', (
@@ -471,8 +514,11 @@ void main() {
           () => createFieldListBloc.add(
             const CreateFieldListCheckTypeChanged(CheckType.IGNORE_CASE),
           ),
-        );
+        ).called(1);
       });
+
+      //Could not to test picking a color calls the bloc add()
+      //I will try to test it in the integration test
     });
   });
 }

@@ -92,6 +92,11 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
                                 _formKey.currentState != null &&
                                 _formKey.currentState!.validate();
                           });
+                          if (isNameValid) {
+                            context.read<CreateFieldListBloc>().add(
+                              CreateFieldListNameChanged(value),
+                            );
+                          }
                         },
                       ),
                       SizedBox(
