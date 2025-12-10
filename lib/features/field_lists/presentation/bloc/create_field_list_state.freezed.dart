@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreateFieldListState {
 
- CreateFieldListStatus get status; String get name; CheckType get checkType; bool get readAnswer; int get color;
+ CreateFieldListStatus get status; String get fieldId; String get name; CheckType get checkType; bool get readAnswer; int get color;
 /// Create a copy of CreateFieldListState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $CreateFieldListStateCopyWith<CreateFieldListState> get copyWith => _$CreateFiel
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateFieldListState&&(identical(other.status, status) || other.status == status)&&(identical(other.name, name) || other.name == name)&&(identical(other.checkType, checkType) || other.checkType == checkType)&&(identical(other.readAnswer, readAnswer) || other.readAnswer == readAnswer)&&(identical(other.color, color) || other.color == color));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateFieldListState&&(identical(other.status, status) || other.status == status)&&(identical(other.fieldId, fieldId) || other.fieldId == fieldId)&&(identical(other.name, name) || other.name == name)&&(identical(other.checkType, checkType) || other.checkType == checkType)&&(identical(other.readAnswer, readAnswer) || other.readAnswer == readAnswer)&&(identical(other.color, color) || other.color == color));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,name,checkType,readAnswer,color);
+int get hashCode => Object.hash(runtimeType,status,fieldId,name,checkType,readAnswer,color);
 
 @override
 String toString() {
-  return 'CreateFieldListState(status: $status, name: $name, checkType: $checkType, readAnswer: $readAnswer, color: $color)';
+  return 'CreateFieldListState(status: $status, fieldId: $fieldId, name: $name, checkType: $checkType, readAnswer: $readAnswer, color: $color)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $CreateFieldListStateCopyWith<$Res>  {
   factory $CreateFieldListStateCopyWith(CreateFieldListState value, $Res Function(CreateFieldListState) _then) = _$CreateFieldListStateCopyWithImpl;
 @useResult
 $Res call({
- CreateFieldListStatus status, String name, CheckType checkType, bool readAnswer, int color
+ CreateFieldListStatus status, String fieldId, String name, CheckType checkType, bool readAnswer, int color
 });
 
 
@@ -62,10 +62,11 @@ class _$CreateFieldListStateCopyWithImpl<$Res>
 
 /// Create a copy of CreateFieldListState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? name = null,Object? checkType = null,Object? readAnswer = null,Object? color = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? fieldId = null,Object? name = null,Object? checkType = null,Object? readAnswer = null,Object? color = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as CreateFieldListStatus,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as CreateFieldListStatus,fieldId: null == fieldId ? _self.fieldId : fieldId // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,checkType: null == checkType ? _self.checkType : checkType // ignore: cast_nullable_to_non_nullable
 as CheckType,readAnswer: null == readAnswer ? _self.readAnswer : readAnswer // ignore: cast_nullable_to_non_nullable
 as bool,color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CreateFieldListStatus status,  String name,  CheckType checkType,  bool readAnswer,  int color)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CreateFieldListStatus status,  String fieldId,  String name,  CheckType checkType,  bool readAnswer,  int color)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateFieldListState() when $default != null:
-return $default(_that.status,_that.name,_that.checkType,_that.readAnswer,_that.color);case _:
+return $default(_that.status,_that.fieldId,_that.name,_that.checkType,_that.readAnswer,_that.color);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.status,_that.name,_that.checkType,_that.readAnswer,_that.c
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CreateFieldListStatus status,  String name,  CheckType checkType,  bool readAnswer,  int color)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CreateFieldListStatus status,  String fieldId,  String name,  CheckType checkType,  bool readAnswer,  int color)  $default,) {final _that = this;
 switch (_that) {
 case _CreateFieldListState():
-return $default(_that.status,_that.name,_that.checkType,_that.readAnswer,_that.color);case _:
+return $default(_that.status,_that.fieldId,_that.name,_that.checkType,_that.readAnswer,_that.color);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.status,_that.name,_that.checkType,_that.readAnswer,_that.c
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CreateFieldListStatus status,  String name,  CheckType checkType,  bool readAnswer,  int color)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CreateFieldListStatus status,  String fieldId,  String name,  CheckType checkType,  bool readAnswer,  int color)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateFieldListState() when $default != null:
-return $default(_that.status,_that.name,_that.checkType,_that.readAnswer,_that.color);case _:
+return $default(_that.status,_that.fieldId,_that.name,_that.checkType,_that.readAnswer,_that.color);case _:
   return null;
 
 }
@@ -210,10 +211,11 @@ return $default(_that.status,_that.name,_that.checkType,_that.readAnswer,_that.c
 
 
 class _CreateFieldListState implements CreateFieldListState {
-  const _CreateFieldListState({this.status = CreateFieldListStatus.initial, this.name = '', this.checkType = CheckType.NON_STRICT_IGNORE_CASE, this.readAnswer = false, this.color = 4294967295});
+  const _CreateFieldListState({this.status = CreateFieldListStatus.initial, required this.fieldId, this.name = '', this.checkType = CheckType.NON_STRICT_IGNORE_CASE, this.readAnswer = false, this.color = 4294967295});
   
 
 @override@JsonKey() final  CreateFieldListStatus status;
+@override final  String fieldId;
 @override@JsonKey() final  String name;
 @override@JsonKey() final  CheckType checkType;
 @override@JsonKey() final  bool readAnswer;
@@ -229,16 +231,16 @@ _$CreateFieldListStateCopyWith<_CreateFieldListState> get copyWith => __$CreateF
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateFieldListState&&(identical(other.status, status) || other.status == status)&&(identical(other.name, name) || other.name == name)&&(identical(other.checkType, checkType) || other.checkType == checkType)&&(identical(other.readAnswer, readAnswer) || other.readAnswer == readAnswer)&&(identical(other.color, color) || other.color == color));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateFieldListState&&(identical(other.status, status) || other.status == status)&&(identical(other.fieldId, fieldId) || other.fieldId == fieldId)&&(identical(other.name, name) || other.name == name)&&(identical(other.checkType, checkType) || other.checkType == checkType)&&(identical(other.readAnswer, readAnswer) || other.readAnswer == readAnswer)&&(identical(other.color, color) || other.color == color));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,name,checkType,readAnswer,color);
+int get hashCode => Object.hash(runtimeType,status,fieldId,name,checkType,readAnswer,color);
 
 @override
 String toString() {
-  return 'CreateFieldListState(status: $status, name: $name, checkType: $checkType, readAnswer: $readAnswer, color: $color)';
+  return 'CreateFieldListState(status: $status, fieldId: $fieldId, name: $name, checkType: $checkType, readAnswer: $readAnswer, color: $color)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$CreateFieldListStateCopyWith<$Res> implements $CreateFiel
   factory _$CreateFieldListStateCopyWith(_CreateFieldListState value, $Res Function(_CreateFieldListState) _then) = __$CreateFieldListStateCopyWithImpl;
 @override @useResult
 $Res call({
- CreateFieldListStatus status, String name, CheckType checkType, bool readAnswer, int color
+ CreateFieldListStatus status, String fieldId, String name, CheckType checkType, bool readAnswer, int color
 });
 
 
@@ -266,10 +268,11 @@ class __$CreateFieldListStateCopyWithImpl<$Res>
 
 /// Create a copy of CreateFieldListState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? name = null,Object? checkType = null,Object? readAnswer = null,Object? color = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? fieldId = null,Object? name = null,Object? checkType = null,Object? readAnswer = null,Object? color = null,}) {
   return _then(_CreateFieldListState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as CreateFieldListStatus,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as CreateFieldListStatus,fieldId: null == fieldId ? _self.fieldId : fieldId // ignore: cast_nullable_to_non_nullable
+as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,checkType: null == checkType ? _self.checkType : checkType // ignore: cast_nullable_to_non_nullable
 as CheckType,readAnswer: null == readAnswer ? _self.readAnswer : readAnswer // ignore: cast_nullable_to_non_nullable
 as bool,color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable

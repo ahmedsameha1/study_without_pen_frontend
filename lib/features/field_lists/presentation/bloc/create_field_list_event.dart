@@ -69,6 +69,7 @@ class CreateFieldListColorChanged extends CreateFieldListEvent {
 }
 
 class CreateFieldListSubmitted extends CreateFieldListEvent {
+  const CreateFieldListSubmitted();
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

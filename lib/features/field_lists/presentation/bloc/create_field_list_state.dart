@@ -9,6 +9,7 @@ enum CreateFieldListStatus { initial, loading, success, failure }
 abstract class CreateFieldListState with _$CreateFieldListState {
   const factory CreateFieldListState({
     @Default(CreateFieldListStatus.initial) CreateFieldListStatus status,
+    required String fieldId,
     @Default('') String name,
     @Default(CheckType.NON_STRICT_IGNORE_CASE) CheckType checkType,
     @Default(false) bool readAnswer,

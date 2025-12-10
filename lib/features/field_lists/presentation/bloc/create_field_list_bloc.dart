@@ -6,7 +6,7 @@ import 'package:study_without_pen_by_flutter/features/field_lists/presentation/b
 class CreateFieldListBloc
     extends Bloc<CreateFieldListEvent, CreateFieldListState> {
   CreateFieldListBloc(this._createFieldListUsecase, this._fieldId)
-    : super(CreateFieldListState()) {
+    : super(CreateFieldListState(fieldId: _fieldId)) {
     on<CreateFieldListNameChanged>(_onNameChanged);
     on<CreateFieldListCheckTypeChanged>(_onCheckTypeChanged);
     on<CreateFieldListReadAnswerChanged>(_onReadAnswerChanged);

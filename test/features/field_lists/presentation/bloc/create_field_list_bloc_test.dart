@@ -40,13 +40,16 @@ void main() {
     build: buildBloc,
     act: (bloc) =>
         bloc.add(const CreateFieldListNameChanged('field list name')),
-    expect: () => const [CreateFieldListState(name: 'field list name')],
+    expect: () => [
+      CreateFieldListState(fieldId: fieldId, name: 'field list name'),
+    ],
   );
 
   blocTest<CreateFieldListBloc, CreateFieldListState>(
     'emits new state with updated name 2',
     build: buildBloc,
     seed: () => CreateFieldListState(
+      fieldId: fieldId,
       name: 'hi',
       checkType: CheckType.IGNORE_CASE,
       readAnswer: true,
@@ -56,6 +59,7 @@ void main() {
         bloc.add(const CreateFieldListNameChanged('field list name')),
     expect: () => [
       CreateFieldListState(
+      fieldId: fieldId,
         name: 'field list name',
         checkType: CheckType.IGNORE_CASE,
         readAnswer: true,
@@ -70,8 +74,8 @@ void main() {
     act: (bloc) => bloc.add(
       const CreateFieldListCheckTypeChanged(CheckType.DO_NOT_IGNORE_CASE),
     ),
-    expect: () => const [
-      CreateFieldListState(checkType: CheckType.DO_NOT_IGNORE_CASE),
+    expect: () =>  [
+      CreateFieldListState(fieldId: fieldId,checkType: CheckType.DO_NOT_IGNORE_CASE),
     ],
   );
 
@@ -79,6 +83,7 @@ void main() {
     'emits new state with updated CheckType 2',
     build: buildBloc,
     seed: () => CreateFieldListState(
+      fieldId: fieldId,
       name: 'field list name',
       checkType: CheckType.IGNORE_CASE,
       readAnswer: true,
@@ -89,6 +94,7 @@ void main() {
     ),
     expect: () => [
       CreateFieldListState(
+fieldId: fieldId,
         name: 'field list name',
         checkType: CheckType.DO_NOT_IGNORE_CASE,
         readAnswer: true,
@@ -101,13 +107,15 @@ void main() {
     'emits new state with updated readAnswer 1',
     build: buildBloc,
     act: (bloc) => bloc.add(const CreateFieldListReadAnswerChanged(true)),
-    expect: () => const [CreateFieldListState(readAnswer: true)],
+    expect: () =>  [CreateFieldListState(
+     fieldId: fieldId, readAnswer: true)],
   );
 
   blocTest<CreateFieldListBloc, CreateFieldListState>(
     'emits new state with updated readAnswer 2',
     build: buildBloc,
     seed: () => CreateFieldListState(
+      fieldId: fieldId,
       name: 'field list name',
       checkType: CheckType.IGNORE_CASE,
       readAnswer: false,
@@ -116,6 +124,7 @@ void main() {
     act: (bloc) => bloc.add(const CreateFieldListReadAnswerChanged(true)),
     expect: () => [
       CreateFieldListState(
+        fieldId: fieldId,
         name: 'field list name',
         checkType: CheckType.IGNORE_CASE,
         readAnswer: true,
@@ -129,13 +138,14 @@ void main() {
     build: buildBloc,
     act: (bloc) =>
         bloc.add(CreateFieldListColorChanged(Colors.grey.toARGB32())),
-    expect: () => [CreateFieldListState(color: Colors.grey.toARGB32())],
+    expect: () => [CreateFieldListState(fieldId: fieldId, color: Colors.grey.toARGB32())],
   );
 
   blocTest<CreateFieldListBloc, CreateFieldListState>(
     'emits new state with updated color 2',
     build: buildBloc,
     seed: () => CreateFieldListState(
+        fieldId: fieldId,
       name: 'field list name',
       checkType: CheckType.IGNORE_CASE,
       readAnswer: true,
@@ -145,6 +155,7 @@ void main() {
         bloc.add(CreateFieldListColorChanged(Colors.grey.toARGB32())),
     expect: () => [
       CreateFieldListState(
+        fieldId: fieldId,
         name: 'field list name',
         checkType: CheckType.IGNORE_CASE,
         readAnswer: true,
@@ -168,6 +179,7 @@ void main() {
       ).thenAnswer((_) => Future.value(1));
     },
     seed: () => CreateFieldListState(
+        fieldId: fieldId,
       name: fieldListName,
       checkType: checkType,
       readAnswer: readAnswer,
@@ -176,6 +188,7 @@ void main() {
     act: (bloc) => bloc.add(CreateFieldListSubmitted()),
     expect: () => [
       CreateFieldListState(
+        fieldId: fieldId,
         status: CreateFieldListStatus.loading,
         name: fieldListName,
         checkType: checkType,
@@ -183,6 +196,7 @@ void main() {
         color: color,
       ),
       CreateFieldListState(
+        fieldId: fieldId,
         status: CreateFieldListStatus.success,
         name: fieldListName,
         checkType: checkType,
@@ -218,6 +232,7 @@ void main() {
       ).thenThrow((_) => SqliteException(1, 'sqliteexception'));
     },
     seed: () => CreateFieldListState(
+        fieldId: fieldId,
       name: fieldListName,
       checkType: checkType,
       readAnswer: readAnswer,
@@ -226,6 +241,7 @@ void main() {
     act: (bloc) => bloc.add(CreateFieldListSubmitted()),
     expect: () => [
       CreateFieldListState(
+        fieldId: fieldId,
         status: CreateFieldListStatus.loading,
         name: fieldListName,
         checkType: checkType,
@@ -233,6 +249,7 @@ void main() {
         color: color,
       ),
       CreateFieldListState(
+        fieldId: fieldId,
         status: CreateFieldListStatus.failure,
         name: fieldListName,
         checkType: checkType,
@@ -268,6 +285,7 @@ void main() {
       ).thenAnswer((_) => Future.error(SqliteException(1, 'sqliteexception')));
     },
     seed: () => CreateFieldListState(
+        fieldId: fieldId,
       name: fieldListName,
       checkType: checkType,
       readAnswer: readAnswer,
@@ -276,6 +294,7 @@ void main() {
     act: (bloc) => bloc.add(CreateFieldListSubmitted()),
     expect: () => [
       CreateFieldListState(
+        fieldId: fieldId,
         status: CreateFieldListStatus.loading,
         name: fieldListName,
         checkType: checkType,
@@ -283,6 +302,7 @@ void main() {
         color: color,
       ),
       CreateFieldListState(
+        fieldId: fieldId,
         status: CreateFieldListStatus.failure,
         name: fieldListName,
         checkType: checkType,

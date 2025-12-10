@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mockingjay/mockingjay.dart';
+import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/common/widgets/ok_cancel.dart';
 import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
@@ -60,7 +61,7 @@ Future<void> _createCreateFieldListPageInASkeleton(
 Future<void> _createCreateFieldListPageViewInASkeleton(
   WidgetTester tester,
   Locale locale,
-  MockNavigator navigator,
+  GoRouter goRouter,
   CreateFieldListUsecase createFieldListUsecase,
   CreateFieldListBloc createFieldListBloc,
 ) async {
@@ -74,8 +75,8 @@ Future<void> _createCreateFieldListPageViewInASkeleton(
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         locale: locale,
-        home: MockNavigatorProvider(
-          navigator: navigator,
+        home: InheritedGoRouter(
+          goRouter: goRouter,
           child: BlocProvider.value(
             value: createFieldListBloc,
             child: const CreateFieldListPageView(),
@@ -148,7 +149,7 @@ void main() {
         createFieldListBloc = MockCreateFieldListBloc();
         when(
           () => createFieldListBloc.state,
-        ).thenReturn(CreateFieldListState());
+        ).thenReturn(CreateFieldListState(fieldId: fieldId));
         createFieldListUsecase = MockCreateFieldListUsecase();
         when(
           () => createFieldListUsecase.call(
@@ -167,7 +168,7 @@ void main() {
         await _createCreateFieldListPageViewInASkeleton(
           tester,
           currentLocale,
-          navigator,
+          goRouter,
           createFieldListUsecase,
           createFieldListBloc,
         );
@@ -393,7 +394,7 @@ void main() {
         await _createCreateFieldListPageViewInASkeleton(
           tester,
           currentLocale,
-          navigator,
+          goRouter,
           createFieldListUsecase,
           createFieldListBloc,
         );
@@ -445,7 +446,7 @@ void main() {
         await _createCreateFieldListPageViewInASkeleton(
           tester,
           currentLocale,
-          navigator,
+          goRouter,
           createFieldListUsecase,
           createFieldListBloc,
         );
@@ -463,7 +464,7 @@ void main() {
         await _createCreateFieldListPageViewInASkeleton(
           tester,
           currentLocale,
-          navigator,
+          goRouter,
           createFieldListUsecase,
           createFieldListBloc,
         );
@@ -484,7 +485,7 @@ void main() {
         await _createCreateFieldListPageViewInASkeleton(
           tester,
           currentLocale,
-          navigator,
+          goRouter,
           createFieldListUsecase,
           createFieldListBloc,
         );
@@ -502,7 +503,7 @@ void main() {
         await _createCreateFieldListPageViewInASkeleton(
           tester,
           currentLocale,
-          navigator,
+          goRouter,
           createFieldListUsecase,
           createFieldListBloc,
         );
@@ -519,6 +520,43 @@ void main() {
 
       //Could not to test picking a color calls the bloc add()
       //I will try to test it in the integration test
+
+      testWidgets('Clicking ok adds an event to the bloc', (
+        WidgetTester tester,
+      ) async {
+        whenListen<CreateFieldListState>(
+          createFieldListBloc,
+          Stream.fromIterable([
+            CreateFieldListState(
+              status: CreateFieldListStatus.initial,
+              fieldId: fieldId,
+            ),
+            CreateFieldListState(
+              status: CreateFieldListStatus.loading,
+              fieldId: fieldId,
+            ),
+            CreateFieldListState(
+              status: CreateFieldListStatus.success,
+              fieldId: fieldId,
+            ),
+          ]),
+        );
+        await _createCreateFieldListPageViewInASkeleton(
+          tester,
+          currentLocale,
+          goRouter,
+          createFieldListUsecase,
+          createFieldListBloc,
+        );
+        //To enable the ok button
+        await tester.enterText(find.byType(TextFormField), fieldListName);
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('okButton')));
+        verify(
+          () => createFieldListBloc.add(const CreateFieldListSubmitted()),
+        ).called(1);
+        verify(() => goRouter.go('$fieldListsPath$fieldId')).called(1);
+      });
     });
   });
 }
