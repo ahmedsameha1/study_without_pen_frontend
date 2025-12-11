@@ -140,12 +140,8 @@ void main() {
     });
 
     group('CreateFieldListPageView', () {
-      late MockNavigator navigator;
       late CreateFieldListBloc createFieldListBloc;
       setUp(() {
-        navigator = MockNavigator();
-        when(() => navigator.canPop()).thenReturn(false);
-        when(() => navigator.push<void>(any())).thenAnswer((_) async {});
         createFieldListBloc = MockCreateFieldListBloc();
         when(
           () => createFieldListBloc.state,
@@ -555,6 +551,20 @@ void main() {
         verify(
           () => createFieldListBloc.add(const CreateFieldListSubmitted()),
         ).called(1);
+        verify(() => goRouter.go('$fieldListsPath$fieldId')).called(1);
+      });
+
+      testWidgets('Clicking cancel adds goes to FieldListsPage', (
+        WidgetTester tester,
+      ) async {
+        await _createCreateFieldListPageViewInASkeleton(
+          tester,
+          currentLocale,
+          goRouter,
+          createFieldListUsecase,
+          createFieldListBloc,
+        );
+        await tester.tap(find.byKey(const Key('cancelButton')));
         verify(() => goRouter.go('$fieldListsPath$fieldId')).called(1);
       });
     });

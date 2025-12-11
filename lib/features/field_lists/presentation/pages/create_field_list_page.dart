@@ -210,7 +210,9 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
                               const CreateFieldListSubmitted(),
                             );
                           },
-                          cancelCallback: () {},
+                          cancelCallback: () {
+                            GoRouter.of(context).go('$fieldListsPath$fieldId');
+                          },
                         ),
                       ],
                     ),
