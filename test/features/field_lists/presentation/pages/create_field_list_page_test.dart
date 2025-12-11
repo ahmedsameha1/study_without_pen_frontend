@@ -105,6 +105,8 @@ void main() {
     String doNotCheckLetterCaseString = 'Do not check letter case';
     String expectedFieldHasBeenCreatedString = "Created";
 
+    String expectedErrorOccuredWhileFieldPersistenceString =
+        "Error while creation";
     group('CreateFieldListPage', () {
       setUp(() {
         registerFallbackValue(FakeCreateFieldListNameChanged());
@@ -625,6 +627,42 @@ void main() {
           );
         },
       );
+
+      testWidgets('Showing a SnackBar when the status is failure', (
+        WidgetTester tester,
+      ) async {
+        whenListen<CreateFieldListState>(
+          createFieldListBloc,
+          Stream.fromIterable([
+            CreateFieldListState(
+              status: CreateFieldListStatus.initial,
+              fieldId: fieldId,
+            ),
+            CreateFieldListState(
+              status: CreateFieldListStatus.loading,
+              fieldId: fieldId,
+            ),
+            CreateFieldListState(
+              status: CreateFieldListStatus.failure,
+              fieldId: fieldId,
+            ),
+          ]),
+        );
+        await _createCreateFieldListPageViewInASkeleton(
+          tester,
+          currentLocale,
+          goRouter,
+          createFieldListUsecase,
+          createFieldListBloc,
+        );
+        await tester.pump();
+        await tester.pump();
+        SnackBar snackBar = tester.widget(snackBarFinder);
+        expect(
+          (snackBar.content as Text).data,
+          expectedErrorOccuredWhileFieldPersistenceString,
+        );
+      });
     });
   });
 }

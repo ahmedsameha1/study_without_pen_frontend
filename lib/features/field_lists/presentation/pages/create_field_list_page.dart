@@ -49,6 +49,12 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
             SnackBar(content: Text(AppLocalizations.of(context)!.created)),
           );
           GoRouter.of(context).go('$fieldListsPath$fieldId');
+        } else if (state.status == CreateFieldListStatus.failure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.creationError),
+            ),
+          );
         }
       },
       child: Scaffold(
