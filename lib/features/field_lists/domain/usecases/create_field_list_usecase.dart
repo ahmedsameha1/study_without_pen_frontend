@@ -3,9 +3,15 @@ import 'package:study_without_pen_by_flutter/features/field_lists/data/repositor
 
 class CreateFieldListUsecase {
   CreateFieldListUsecase(this._fieldListsRepository);
-  FieldListsRepository _fieldListsRepository;
-  Future<int> call(String fieldId, String fieldListName, CheckType checkType,
-      bool readAnswer, int color) {
+  final FieldListsRepository _fieldListsRepository;
+  Future<int> call(
+    String fieldId,
+    String fieldListName,
+    CheckType checkType,
+    bool readAnswer,
+    int color,
+  ) async {
+    await Future.delayed(Duration(seconds: 1));
     return Future.value(1);
   }
 }

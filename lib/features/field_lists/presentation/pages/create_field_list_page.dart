@@ -54,172 +54,196 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
         ),
         body: SafeArea(
           child: Center(
-            child: Card(
-              margin: EdgeInsets.all(20),
-              child: SingleChildScrollView(
-                child: Padding(
-                  key: Key('paddingAroundColumn'),
-                  padding: EdgeInsets.all(16),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      key: Key('column'),
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextFormField(
-                          key: Key('fieldListNameTextField'),
-                          decoration: InputDecoration(
-                            label: Text(
-                              AppLocalizations.of(context)!.fieldListName,
-                            ),
+            child:
+                context.select(
+                      (CreateFieldListBloc bloc) => bloc.state.status,
+                    ) ==
+                    CreateFieldListStatus.loading
+                ? CircularProgressIndicator()
+                : Card(
+                    margin: EdgeInsets.all(20),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        key: Key('paddingAroundColumn'),
+                        padding: EdgeInsets.all(16),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            key: Key('column'),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextFormField(
+                                key: Key('fieldListNameTextField'),
+                                decoration: InputDecoration(
+                                  label: Text(
+                                    AppLocalizations.of(context)!.fieldListName,
+                                  ),
+                                ),
+                                textInputAction: TextInputAction.next,
+                                autofocus: true,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                validator: (value) {
+                                  if (value == null) {
+                                    return AppLocalizations.of(
+                                      context,
+                                    )!.fieldListNameValidationError(
+                                      FieldLists.MINIMUM_LENGTH_OF_NAME,
+                                      FieldLists.MAXIMUM_LENGTH_OF_NAME,
+                                    );
+                                  }
+                                  final trimmedValueLength = value
+                                      .trim()
+                                      .length;
+                                  if (trimmedValueLength >
+                                          FieldLists.MAXIMUM_LENGTH_OF_NAME ||
+                                      trimmedValueLength <
+                                          FieldLists.MINIMUM_LENGTH_OF_NAME) {
+                                    return AppLocalizations.of(
+                                      context,
+                                    )!.fieldListNameValidationError(
+                                      FieldLists.MINIMUM_LENGTH_OF_NAME,
+                                      FieldLists.MAXIMUM_LENGTH_OF_NAME,
+                                    );
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  setState(() {
+                                    isNameValid =
+                                        _formKey.currentState != null &&
+                                        _formKey.currentState!.validate();
+                                  });
+                                  if (isNameValid) {
+                                    context.read<CreateFieldListBloc>().add(
+                                      CreateFieldListNameChanged(value),
+                                    );
+                                  }
+                                },
+                              ),
+                              SizedBox(
+                                key: Key(
+                                  'sizedBoxBetweenTextFormFieldAndDropdownMenuFormField',
+                                ),
+                                height: 25,
+                              ),
+                              DropdownMenuFormField<CheckType>(
+                                maxLines: 2,
+                                initialSelection: context.select(
+                                  (CreateFieldListBloc bloc) =>
+                                      bloc.state.checkType,
+                                ),
+                                label: Text(
+                                  AppLocalizations.of(context)!.selectCheckType,
+                                ),
+                                helperText: AppLocalizations.of(
+                                  context,
+                                )!.howAppCheckAnswers,
+                                dropdownMenuEntries: [
+                                  DropdownMenuEntry<CheckType>(
+                                    value: CheckType.NON_STRICT_IGNORE_CASE,
+                                    label: AppLocalizations.of(
+                                      context,
+                                    )!.nonStrictIgnoreCase,
+                                  ),
+                                  DropdownMenuEntry<CheckType>(
+                                    value: CheckType.IGNORE_CASE,
+                                    label: AppLocalizations.of(
+                                      context,
+                                    )!.ignoreCase,
+                                  ),
+                                  DropdownMenuEntry<CheckType>(
+                                    value:
+                                        CheckType.NON_STRICT_DO_NOT_IGNORE_CASE,
+                                    label: AppLocalizations.of(
+                                      context,
+                                    )!.nonStrictDoNotIgnoreCase,
+                                  ),
+                                  DropdownMenuEntry<CheckType>(
+                                    value: CheckType.DO_NOT_IGNORE_CASE,
+                                    label: AppLocalizations.of(
+                                      context,
+                                    )!.doNotIgnoreCase,
+                                  ),
+                                ],
+                                onSelected: (newValue) {
+                                  if (newValue != null) {
+                                    context.read<CreateFieldListBloc>().add(
+                                      CreateFieldListCheckTypeChanged(newValue),
+                                    );
+                                  }
+                                },
+                              ),
+                              SizedBox(
+                                key: Key(
+                                  'sizedBoxBetweenDropdownMenuFormFieldAndCheckboxListTile',
+                                ),
+                                height: 25,
+                              ),
+                              CheckboxListTile(
+                                value: context.select(
+                                  (CreateFieldListBloc bloc) =>
+                                      bloc.state.readAnswer,
+                                ),
+                                onChanged: (newValue) {
+                                  if (newValue != null) {
+                                    context.read<CreateFieldListBloc>().add(
+                                      CreateFieldListReadAnswerChanged(
+                                        newValue,
+                                      ),
+                                    );
+                                  }
+                                },
+                                title: Text(
+                                  AppLocalizations.of(context)!.readAnswer,
+                                ),
+                                subtitle: Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.whenAnsweredCorrectly,
+                                ),
+                              ),
+                              SizedBox(
+                                key: Key(
+                                  'sizedBoxBetweenCheckboxListTileAndPickColor',
+                                ),
+                                height: 25,
+                              ),
+                              PickColor(
+                                callback: (newValue) {
+                                  context.read<CreateFieldListBloc>().add(
+                                    CreateFieldListColorChanged(
+                                      newValue.toARGB32(),
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(
+                                key: Key(
+                                  'sizedBoxBetweenCheckboxListTileAndOkCancel',
+                                ),
+                                height: 25,
+                              ),
+                              OkCancel(
+                                valid: isNameValid,
+                                usecaseValidationTest: false,
+                                okCallback: () {
+                                  context.read<CreateFieldListBloc>().add(
+                                    const CreateFieldListSubmitted(),
+                                  );
+                                },
+                                cancelCallback: () {
+                                  GoRouter.of(
+                                    context,
+                                  ).go('$fieldListsPath$fieldId');
+                                },
+                              ),
+                            ],
                           ),
-                          textInputAction: TextInputAction.next,
-                          autofocus: true,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            if (value == null) {
-                              return AppLocalizations.of(
-                                context,
-                              )!.fieldListNameValidationError(
-                                FieldLists.MINIMUM_LENGTH_OF_NAME,
-                                FieldLists.MAXIMUM_LENGTH_OF_NAME,
-                              );
-                            }
-                            final trimmedValueLength = value.trim().length;
-                            if (trimmedValueLength >
-                                    FieldLists.MAXIMUM_LENGTH_OF_NAME ||
-                                trimmedValueLength <
-                                    FieldLists.MINIMUM_LENGTH_OF_NAME) {
-                              return AppLocalizations.of(
-                                context,
-                              )!.fieldListNameValidationError(
-                                FieldLists.MINIMUM_LENGTH_OF_NAME,
-                                FieldLists.MAXIMUM_LENGTH_OF_NAME,
-                              );
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            setState(() {
-                              isNameValid =
-                                  _formKey.currentState != null &&
-                                  _formKey.currentState!.validate();
-                            });
-                            if (isNameValid) {
-                              context.read<CreateFieldListBloc>().add(
-                                CreateFieldListNameChanged(value),
-                              );
-                            }
-                          },
                         ),
-                        SizedBox(
-                          key: Key(
-                            'sizedBoxBetweenTextFormFieldAndDropdownMenuFormField',
-                          ),
-                          height: 25,
-                        ),
-                        DropdownMenuFormField<CheckType>(
-                          maxLines: 2,
-                          initialSelection: context.select(
-                            (CreateFieldListBloc bloc) => bloc.state.checkType,
-                          ),
-                          label: Text(
-                            AppLocalizations.of(context)!.selectCheckType,
-                          ),
-                          helperText: AppLocalizations.of(
-                            context,
-                          )!.howAppCheckAnswers,
-                          dropdownMenuEntries: [
-                            DropdownMenuEntry<CheckType>(
-                              value: CheckType.NON_STRICT_IGNORE_CASE,
-                              label: AppLocalizations.of(
-                                context,
-                              )!.nonStrictIgnoreCase,
-                            ),
-                            DropdownMenuEntry<CheckType>(
-                              value: CheckType.IGNORE_CASE,
-                              label: AppLocalizations.of(context)!.ignoreCase,
-                            ),
-                            DropdownMenuEntry<CheckType>(
-                              value: CheckType.NON_STRICT_DO_NOT_IGNORE_CASE,
-                              label: AppLocalizations.of(
-                                context,
-                              )!.nonStrictDoNotIgnoreCase,
-                            ),
-                            DropdownMenuEntry<CheckType>(
-                              value: CheckType.DO_NOT_IGNORE_CASE,
-                              label: AppLocalizations.of(
-                                context,
-                              )!.doNotIgnoreCase,
-                            ),
-                          ],
-                          onSelected: (newValue) {
-                            if (newValue != null) {
-                              context.read<CreateFieldListBloc>().add(
-                                CreateFieldListCheckTypeChanged(newValue),
-                              );
-                            }
-                          },
-                        ),
-                        SizedBox(
-                          key: Key(
-                            'sizedBoxBetweenDropdownMenuFormFieldAndCheckboxListTile',
-                          ),
-                          height: 25,
-                        ),
-                        CheckboxListTile(
-                          value: context.select(
-                            (CreateFieldListBloc bloc) => bloc.state.readAnswer,
-                          ),
-                          onChanged: (newValue) {
-                            if (newValue != null) {
-                              context.read<CreateFieldListBloc>().add(
-                                CreateFieldListReadAnswerChanged(newValue),
-                              );
-                            }
-                          },
-                          title: Text(AppLocalizations.of(context)!.readAnswer),
-                          subtitle: Text(
-                            AppLocalizations.of(context)!.whenAnsweredCorrectly,
-                          ),
-                        ),
-                        SizedBox(
-                          key: Key(
-                            'sizedBoxBetweenCheckboxListTileAndPickColor',
-                          ),
-                          height: 25,
-                        ),
-                        PickColor(
-                          callback: (newValue) {
-                            context.read<CreateFieldListBloc>().add(
-                              CreateFieldListColorChanged(newValue.toARGB32()),
-                            );
-                          },
-                        ),
-                        SizedBox(
-                          key: Key(
-                            'sizedBoxBetweenCheckboxListTileAndOkCancel',
-                          ),
-                          height: 25,
-                        ),
-                        OkCancel(
-                          valid: isNameValid,
-                          usecaseValidationTest: false,
-                          okCallback: () {
-                            context.read<CreateFieldListBloc>().add(
-                              const CreateFieldListSubmitted(),
-                            );
-                          },
-                          cancelCallback: () {
-                            GoRouter.of(context).go('$fieldListsPath$fieldId');
-                          },
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
           ),
         ),
       ),

@@ -567,6 +567,58 @@ void main() {
         await tester.tap(find.byKey(const Key('cancelButton')));
         verify(() => goRouter.go('$fieldListsPath$fieldId')).called(1);
       });
+
+      testWidgets(
+        'Showing a CircularProgressIndicator when the status is loading',
+        (WidgetTester tester) async {
+          whenListen<CreateFieldListState>(
+            createFieldListBloc,
+            Stream.fromIterable([
+              CreateFieldListState(
+                status: CreateFieldListStatus.initial,
+                fieldId: fieldId,
+              ),
+              CreateFieldListState(
+                status: CreateFieldListStatus.loading,
+                fieldId: fieldId,
+              ),
+            ]),
+          );
+          await _createCreateFieldListPageViewInASkeleton(
+            tester,
+            currentLocale,
+            goRouter,
+            createFieldListUsecase,
+            createFieldListBloc,
+          );
+          await tester.pump();
+          expect(
+            find.descendant(
+              of: find.byType(CreateFieldListPageView),
+              matching: scaffoldFinder,
+            ),
+            findsOne,
+          );
+          final appBarFinder = find.descendant(
+            of: scaffoldFinder,
+            matching: find.byType(AppBar),
+          );
+          expect(appBarFinder, findsOneWidget);
+          AppBar appBar = tester.widget<AppBar>(appBarFinder);
+          Text title = appBar.title as Text;
+          expect(title.data, expectedCreateFieldString);
+          Scaffold scaffold = tester.widget(scaffoldFinder);
+          SafeArea safeArea = scaffold.body as SafeArea;
+          Center center = safeArea.child as Center;
+          expect(
+            find.descendant(
+              of: find.byWidget(center),
+              matching: find.byType(CircularProgressIndicator),
+            ),
+            findsOne,
+          );
+        },
+      );
     });
   });
 }
