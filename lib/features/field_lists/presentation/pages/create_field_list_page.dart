@@ -45,6 +45,9 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
       listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status == CreateFieldListStatus.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context)!.created)),
+          );
           GoRouter.of(context).go('$fieldListsPath$fieldId');
         }
       },

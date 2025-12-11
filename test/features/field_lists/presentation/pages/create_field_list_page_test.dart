@@ -103,6 +103,7 @@ void main() {
     String expectedInvalidNameString =
         "Field list name must be between 1 and 64 characters";
     String doNotCheckLetterCaseString = 'Do not check letter case';
+    String expectedFieldHasBeenCreatedString = "Created";
 
     group('CreateFieldListPage', () {
       setUp(() {
@@ -517,7 +518,7 @@ void main() {
       //Could not to test picking a color calls the bloc add()
       //I will try to test it in the integration test
 
-      testWidgets('Clicking ok adds an event to the bloc', (
+      testWidgets('Clicking ok adds an event to the bloc & Snackbar is shown', (
         WidgetTester tester,
       ) async {
         whenListen<CreateFieldListState>(
@@ -552,6 +553,11 @@ void main() {
           () => createFieldListBloc.add(const CreateFieldListSubmitted()),
         ).called(1);
         verify(() => goRouter.go('$fieldListsPath$fieldId')).called(1);
+        SnackBar snackBar = tester.widget(snackBarFinder);
+        expect(
+          (snackBar.content as Text).data,
+          expectedFieldHasBeenCreatedString,
+        );
       });
 
       testWidgets('Clicking cancel adds goes to FieldListsPage', (
