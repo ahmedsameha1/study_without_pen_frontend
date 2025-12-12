@@ -1,5 +1,7 @@
+import 'package:clock/clock.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/data/repositories/field_lists_repository.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
 
 class CreateFieldListUsecase {
   CreateFieldListUsecase(this._fieldListsRepository);
@@ -10,8 +12,17 @@ class CreateFieldListUsecase {
     CheckType checkType,
     bool readAnswer,
     int color,
-  ) async {
-    await Future.delayed(Duration(seconds: 1));
-    return Future.error(1);
+  ) {
+    final now = clock.now();
+    FieldListEntity fieldListEntity = FieldListEntity(
+      fieldId: fieldId,
+      name: fieldListName,
+      checkType: checkType.index,
+      doesReadAnswer: readAnswer,
+      color: color,
+      creationAt: now,
+      lastModificationAt: now,
+    );
+    return _fieldListsRepository.create(fieldListEntity);
   }
 }
