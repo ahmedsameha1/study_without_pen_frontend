@@ -12,6 +12,6 @@ class CreateFieldListUsecase {
     int color,
   ) async {
     await Future.delayed(Duration(seconds: 1));
-    return Future.value(1);
+    return Future.error(1);
   }
 }

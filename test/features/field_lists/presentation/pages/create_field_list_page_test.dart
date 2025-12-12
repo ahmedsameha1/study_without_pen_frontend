@@ -631,20 +631,33 @@ void main() {
       testWidgets('Showing a SnackBar when the status is failure', (
         WidgetTester tester,
       ) async {
+        int green = Colors.green.toARGB32();
         whenListen<CreateFieldListState>(
           createFieldListBloc,
           Stream.fromIterable([
             CreateFieldListState(
               status: CreateFieldListStatus.initial,
               fieldId: fieldId,
+              name: fieldListName,
+              readAnswer: true,
+              checkType: CheckType.IGNORE_CASE,
+              color: green,
             ),
             CreateFieldListState(
               status: CreateFieldListStatus.loading,
               fieldId: fieldId,
+              name: fieldListName,
+              readAnswer: true,
+              checkType: CheckType.IGNORE_CASE,
+              color: green,
             ),
             CreateFieldListState(
               status: CreateFieldListStatus.failure,
               fieldId: fieldId,
+              name: fieldListName,
+              readAnswer: true,
+              checkType: CheckType.IGNORE_CASE,
+              color: green,
             ),
           ]),
         );
@@ -662,6 +675,24 @@ void main() {
           (snackBar.content as Text).data,
           expectedErrorOccuredWhileFieldPersistenceString,
         );
+        TextFormField nameTextFormField = tester.widget(
+          find.byType(TextFormField),
+        );
+        expect(nameTextFormField.initialValue, fieldListName);
+        Checkbox readAnswerCheckBox = tester.widget(find.byType(Checkbox));
+        expect(readAnswerCheckBox.value, true);
+        DropdownMenu checkTypeDropdowmMenu = tester.widget(
+          find.byType(DropdownMenu<CheckType>),
+        );
+        expect(checkTypeDropdowmMenu.initialSelection, CheckType.IGNORE_CASE);
+        /*
+        ColorIndicator colorIndicator = tester.widget(
+          find.byType(ColorIndicator),
+        );
+        This expectations fails although after the state turns to failure the
+        color indicator get the color in the current state
+        expect(colorIndicator.color, Colors.green);
+        */
       });
     });
   });

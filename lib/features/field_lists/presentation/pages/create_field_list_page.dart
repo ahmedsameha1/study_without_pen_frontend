@@ -82,6 +82,9 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TextFormField(
+                                initialValue: context.select(
+                                  (CreateFieldListBloc bloc) => bloc.state.name,
+                                ),
                                 key: Key('fieldListNameTextField'),
                                 decoration: InputDecoration(
                                   label: Text(
@@ -219,6 +222,10 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
                                 height: 25,
                               ),
                               PickColor(
+                                color: context.select(
+                                  (CreateFieldListBloc bloc) =>
+                                      bloc.state.color,
+                                ),
                                 callback: (newValue) {
                                   context.read<CreateFieldListBloc>().add(
                                     CreateFieldListColorChanged(

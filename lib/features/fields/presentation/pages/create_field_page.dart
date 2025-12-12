@@ -19,8 +19,9 @@ class CreateFieldPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CreateFieldCubit>(
-        create: (ctx) => CreateFieldCubit(ctx.read<CreateFieldUseCase>()),
-        child: CreateFieldPageView(usecaseValidationTest));
+      create: (ctx) => CreateFieldCubit(ctx.read<CreateFieldUseCase>()),
+      child: CreateFieldPageView(usecaseValidationTest),
+    );
   }
 }
 
@@ -38,115 +39,132 @@ class CreateFieldPageView extends HookWidget {
     final TextEditingController nameTextEditingController =
         useTextEditingController();
     return BlocListener<CreateFieldCubit, StateStatus>(
-        listener: (context, state) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          if (state == StateStatus.validationFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!
-                    .fieldNameValidationError(Fields.MINIMUM_LENGTH_OF_NAME,
-                        Fields.MAXIMUM_LENGTH_OF_NAME))));
-          } else if (state == StateStatus.persistenceFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(AppLocalizations.of(context)!.creationError)));
-          } else if (state == StateStatus.success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(AppLocalizations.of(context)!.created)));
-            GoRouter.of(context).go(rootPath);
-          }
-        },
-        child: Scaffold(
-          appBar: AppBar(
-              title: Text(
-            AppLocalizations.of(context)!.createField,
-          )),
-          body: SafeArea(
-            child: Center(
-                key: Key("center"),
-                child: state == StateStatus.loading ||
-                        state == StateStatus.success
-                    ? CircularProgressIndicator()
-                    : Card(
-                        margin: const EdgeInsets.all(20),
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            key: const Key("paddingAroundColumn"),
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              key: Key("column"),
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Form(
-                                  key: _nameFormKey,
-                                  child: TextFormField(
-                                    controller: nameTextEditingController,
-                                    decoration: InputDecoration(
-                                        label: Text(
-                                            AppLocalizations.of(context)!
-                                                .fieldName)),
-                                    textInputAction: TextInputAction.next,
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    autofocus: true,
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return AppLocalizations.of(context)!
-                                            .fieldNameValidationError(
-                                                Fields.MINIMUM_LENGTH_OF_NAME,
-                                                Fields.MAXIMUM_LENGTH_OF_NAME);
-                                      }
-                                      int trimmedValue = value.trim().length;
-                                      if (trimmedValue <
-                                              Fields.MINIMUM_LENGTH_OF_NAME ||
-                                          trimmedValue >
-                                              Fields.MAXIMUM_LENGTH_OF_NAME) {
-                                        return AppLocalizations.of(context)!
-                                            .fieldNameValidationError(
-                                                Fields.MINIMUM_LENGTH_OF_NAME,
-                                                Fields.MAXIMUM_LENGTH_OF_NAME);
-                                      }
-                                      return null;
-                                    },
+      listener: (context, state) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        if (state == StateStatus.validationFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.fieldNameValidationError(
+                  Fields.MINIMUM_LENGTH_OF_NAME,
+                  Fields.MAXIMUM_LENGTH_OF_NAME,
+                ),
+              ),
+            ),
+          );
+        } else if (state == StateStatus.persistenceFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.creationError),
+            ),
+          );
+        } else if (state == StateStatus.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context)!.created)),
+          );
+          GoRouter.of(context).go(rootPath);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: Text(AppLocalizations.of(context)!.createField)),
+        body: SafeArea(
+          child: Center(
+            key: Key("center"),
+            child: state == StateStatus.loading || state == StateStatus.success
+                ? CircularProgressIndicator()
+                : Card(
+                    margin: const EdgeInsets.all(20),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        key: const Key("paddingAroundColumn"),
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          key: Key("column"),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Form(
+                              key: _nameFormKey,
+                              child: TextFormField(
+                                controller: nameTextEditingController,
+                                decoration: InputDecoration(
+                                  label: Text(
+                                    AppLocalizations.of(context)!.fieldName,
                                   ),
-                                  onChanged: () => isNameValid.value =
-                                      _nameFormKey.currentState != null &&
-                                          _nameFormKey.currentState!.validate(),
                                 ),
-                                SizedBox(
-                                  key: Key("sizedBoxBetweenFormAndStack"),
-                                  height: 25,
-                                ),
-                                PickColor(callback: (Color newColor) {
-                                  color.value = newColor;
-                                }),
-                                SizedBox(
-                                  key: Key("sizedBoxBetweenStackAndButtons"),
-                                  height: 25,
-                                ),
-                                OkCancel(
-                                    valid: isNameValid.value,
-                                    usecaseValidationTest:
-                                        usecaseValidationTest,
-                                    okCallback: () async {
-                                      await context
-                                          .read<CreateFieldCubit>()
-                                          .createField(
-                                              context
-                                                  .read<nonso.AuthBloc>()
-                                                  .state
-                                                  .user!
-                                                  .uid,
-                                              nameTextEditingController.text,
-                                              color.value.toARGB32());
-                                    },
-                                    cancelCallback: () {
-                                      GoRouter.of(context).pop();
-                                    })
-                              ],
+                                textInputAction: TextInputAction.next,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                autofocus: true,
+                                validator: (value) {
+                                  if (value == null) {
+                                    return AppLocalizations.of(
+                                      context,
+                                    )!.fieldNameValidationError(
+                                      Fields.MINIMUM_LENGTH_OF_NAME,
+                                      Fields.MAXIMUM_LENGTH_OF_NAME,
+                                    );
+                                  }
+                                  int trimmedValue = value.trim().length;
+                                  if (trimmedValue <
+                                          Fields.MINIMUM_LENGTH_OF_NAME ||
+                                      trimmedValue >
+                                          Fields.MAXIMUM_LENGTH_OF_NAME) {
+                                    return AppLocalizations.of(
+                                      context,
+                                    )!.fieldNameValidationError(
+                                      Fields.MINIMUM_LENGTH_OF_NAME,
+                                      Fields.MAXIMUM_LENGTH_OF_NAME,
+                                    );
+                                  }
+                                  return null;
+                                },
+                              ),
+                              onChanged: () => isNameValid.value =
+                                  _nameFormKey.currentState != null &&
+                                  _nameFormKey.currentState!.validate(),
                             ),
-                          ),
+                            SizedBox(
+                              key: Key("sizedBoxBetweenFormAndStack"),
+                              height: 25,
+                            ),
+                            PickColor(
+                              color: Colors.white.toARGB32(),
+                              callback: (Color newColor) {
+                                color.value = newColor;
+                              },
+                            ),
+                            SizedBox(
+                              key: Key("sizedBoxBetweenStackAndButtons"),
+                              height: 25,
+                            ),
+                            OkCancel(
+                              valid: isNameValid.value,
+                              usecaseValidationTest: usecaseValidationTest,
+                              okCallback: () async {
+                                await context
+                                    .read<CreateFieldCubit>()
+                                    .createField(
+                                      context
+                                          .read<nonso.AuthBloc>()
+                                          .state
+                                          .user!
+                                          .uid,
+                                      nameTextEditingController.text,
+                                      color.value.toARGB32(),
+                                    );
+                              },
+                              cancelCallback: () {
+                                GoRouter.of(context).pop();
+                              },
+                            ),
+                          ],
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
