@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -11,62 +12,168 @@ class MockFieldListsDao extends Mock implements FieldListsDao {}
 
 void main() {
   FieldListsDao fieldListsDao = MockFieldListsDao();
-  FieldListsRepository fieldListsRepository =
-      FieldListsRepositoryLocal(fieldListsDao);
+  FieldListsRepository fieldListsRepository = FieldListsRepositoryLocal(
+    fieldListsDao,
+  );
   FieldListEntity fieldListEntity = FieldListEntity(
-      id: "wwoefwwofgwe",
-      fieldId: "owefhweo",
-      name: "field list name",
-      creationAt: DateTime(2020, 1, 1),
-      lastModificationAt: DateTime(2020, 1, 1));
+    id: "wwoefwwofgwe",
+    fieldId: "owefhweo",
+    name: "field list name",
+    creationAt: DateTime(2020, 1, 1),
+    lastModificationAt: DateTime(2020, 1, 1),
+  );
 
   test('watch() throws what fieldListsDao.watchByFieldId() throw', () {
-    when(() => fieldListsDao.watchByFieldId(fieldListEntity.fieldId))
-        .thenThrow(SqliteException(1, 'sqlexception'));
+    when(
+      () => fieldListsDao.watchByFieldId(fieldListEntity.fieldId),
+    ).thenThrow(SqliteException(1, 'sqlexception'));
     expect(
-        () => fieldListsRepository.watch(fieldListEntity.fieldId),
-        throwsA(predicate(
-            (e) => e is SqliteException && e.message == 'sqlexception')));
+      () => fieldListsRepository.watch(fieldListEntity.fieldId),
+      throwsA(
+        predicate((e) => e is SqliteException && e.message == 'sqlexception'),
+      ),
+    );
   });
 
   test('watch() returns what fieldListsDao.watchByFieldId() return', () {
-    when(() => fieldListsDao.watchByFieldId(fieldListEntity.fieldId))
-        .thenAnswer((_) => Stream.value([
-              FieldList(
-                  id: fieldListEntity.id!,
-                  fieldId: fieldListEntity.fieldId,
-                  name: fieldListEntity.name,
-                  creationAt: fieldListEntity.creationAt,
-                  lastModificationAt: fieldListEntity.lastModificationAt,
-                  checkType: fieldListEntity.checkType,
-                  sortBy: fieldListEntity.sortBy,
-                  doesReadAnswer: fieldListEntity.doesReadAnswer,
-                  usageCount: fieldListEntity.usageCount,
-                  color: fieldListEntity.color,
-                  testsTimeOfAnswerAction:
-                      fieldListEntity.testsTimeOfAnswerAction,
-                  doesObfuscateQuestion: fieldListEntity.doesObfuscateQuestion,
-                  studyTillCorrectFindingAnswerDuration:
-                      fieldListEntity.studyTillCorrectFindingAnswerDuration,
-                  studyTillCorrectReadingQuestionLetterDuration: fieldListEntity
-                      .studyTillCorrectReadingQuestionLetterDuration,
-                  studyTillCorrectTypingAnswerLetterDuration: fieldListEntity
-                      .studyTillCorrectTypingAnswerLetterDuration,
-                  testsFindingAnswerDuration:
-                      fieldListEntity.testsFindingAnswerDuration,
-                  testsReadingQuestionLetterDuration:
-                      fieldListEntity.testsReadingQuestionLetterDuration,
-                  testsTypingAnswerLetterDuration:
-                      fieldListEntity.testsTypingAnswerLetterDuration,
-                  languageTag: fieldListEntity.languageTag,
-                  emulationDays: fieldListEntity.emulationDays,
-                  emulationNumberOfQuestions:
-                      fieldListEntity.emulationNumberOfQuestions)
-            ]));
+    when(
+      () => fieldListsDao.watchByFieldId(fieldListEntity.fieldId),
+    ).thenAnswer(
+      (_) => Stream.value([
+        FieldList(
+          id: fieldListEntity.id!,
+          fieldId: fieldListEntity.fieldId,
+          name: fieldListEntity.name,
+          creationAt: fieldListEntity.creationAt,
+          lastModificationAt: fieldListEntity.lastModificationAt,
+          checkType: fieldListEntity.checkType,
+          sortBy: fieldListEntity.sortBy,
+          doesReadAnswer: fieldListEntity.doesReadAnswer,
+          usageCount: fieldListEntity.usageCount,
+          color: fieldListEntity.color,
+          testsTimeOfAnswerAction: fieldListEntity.testsTimeOfAnswerAction,
+          doesObfuscateQuestion: fieldListEntity.doesObfuscateQuestion,
+          studyTillCorrectFindingAnswerDuration:
+              fieldListEntity.studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              fieldListEntity.studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              fieldListEntity.studyTillCorrectTypingAnswerLetterDuration,
+          testsFindingAnswerDuration:
+              fieldListEntity.testsFindingAnswerDuration,
+          testsReadingQuestionLetterDuration:
+              fieldListEntity.testsReadingQuestionLetterDuration,
+          testsTypingAnswerLetterDuration:
+              fieldListEntity.testsTypingAnswerLetterDuration,
+          languageTag: fieldListEntity.languageTag,
+          emulationDays: fieldListEntity.emulationDays,
+          emulationNumberOfQuestions:
+              fieldListEntity.emulationNumberOfQuestions,
+        ),
+      ]),
+    );
     expect(
-        fieldListsRepository.watch(fieldListEntity.fieldId),
-        emitsInOrder([
-          [fieldListEntity]
-        ]));
+      fieldListsRepository.watch(fieldListEntity.fieldId),
+      emitsInOrder([
+        [fieldListEntity],
+      ]),
+    );
+  });
+
+  test('create() throws what fieldListsDao.create() throw', () {
+    when(
+      () => fieldListsDao.create(
+        FieldListsCompanion(
+          fieldId: Value(fieldListEntity.fieldId),
+          name: Value(fieldListEntity.name),
+          creationAt: Value(fieldListEntity.creationAt),
+          lastModificationAt: Value(fieldListEntity.lastModificationAt),
+          color: Value(fieldListEntity.color),
+          checkType: Value(fieldListEntity.checkType),
+          sortBy: Value(fieldListEntity.sortBy),
+          usageCount: Value(fieldListEntity.usageCount),
+          languageTag: Value(fieldListEntity.languageTag),
+          doesObfuscateQuestion: Value(fieldListEntity.doesObfuscateQuestion),
+          doesReadAnswer: Value(fieldListEntity.doesReadAnswer),
+          testsFindingAnswerDuration: Value(
+            fieldListEntity.testsFindingAnswerDuration,
+          ),
+          testsReadingQuestionLetterDuration: Value(
+            fieldListEntity.testsReadingQuestionLetterDuration,
+          ),
+          testsTypingAnswerLetterDuration: Value(
+            fieldListEntity.testsTypingAnswerLetterDuration,
+          ),
+          studyTillCorrectFindingAnswerDuration: Value(
+            fieldListEntity.studyTillCorrectFindingAnswerDuration,
+          ),
+          studyTillCorrectReadingQuestionLetterDuration: Value(
+            fieldListEntity.studyTillCorrectReadingQuestionLetterDuration,
+          ),
+          studyTillCorrectTypingAnswerLetterDuration: Value(
+            fieldListEntity.studyTillCorrectTypingAnswerLetterDuration,
+          ),
+          testsTimeOfAnswerAction: Value(
+            fieldListEntity.testsTimeOfAnswerAction,
+          ),
+          emulationDays: Value(fieldListEntity.emulationDays),
+          emulationNumberOfQuestions: Value(
+            fieldListEntity.emulationNumberOfQuestions,
+          ),
+        ),
+      ),
+    ).thenThrow(SqliteException(1, 'sqlexception'));
+    expect(
+      () => fieldListsRepository.create(fieldListEntity),
+      throwsA(
+        predicate((e) => e is SqliteException && e.message == 'sqlexception'),
+      ),
+    );
+  });
+
+  test('create() returns what fieldListsDao.create() return', () {
+    when(
+      () => fieldListsDao.create(
+        FieldListsCompanion(
+          fieldId: Value(fieldListEntity.fieldId),
+          name: Value(fieldListEntity.name),
+          creationAt: Value(fieldListEntity.creationAt),
+          lastModificationAt: Value(fieldListEntity.lastModificationAt),
+          color: Value(fieldListEntity.color),
+          checkType: Value(fieldListEntity.checkType),
+          sortBy: Value(fieldListEntity.sortBy),
+          usageCount: Value(fieldListEntity.usageCount),
+          languageTag: Value(fieldListEntity.languageTag),
+          doesObfuscateQuestion: Value(fieldListEntity.doesObfuscateQuestion),
+          doesReadAnswer: Value(fieldListEntity.doesReadAnswer),
+          testsFindingAnswerDuration: Value(
+            fieldListEntity.testsFindingAnswerDuration,
+          ),
+          testsReadingQuestionLetterDuration: Value(
+            fieldListEntity.testsReadingQuestionLetterDuration,
+          ),
+          testsTypingAnswerLetterDuration: Value(
+            fieldListEntity.testsTypingAnswerLetterDuration,
+          ),
+          studyTillCorrectFindingAnswerDuration: Value(
+            fieldListEntity.studyTillCorrectFindingAnswerDuration,
+          ),
+          studyTillCorrectReadingQuestionLetterDuration: Value(
+            fieldListEntity.studyTillCorrectReadingQuestionLetterDuration,
+          ),
+          studyTillCorrectTypingAnswerLetterDuration: Value(
+            fieldListEntity.studyTillCorrectTypingAnswerLetterDuration,
+          ),
+          testsTimeOfAnswerAction: Value(
+            fieldListEntity.testsTimeOfAnswerAction,
+          ),
+          emulationDays: Value(fieldListEntity.emulationDays),
+          emulationNumberOfQuestions: Value(
+            fieldListEntity.emulationNumberOfQuestions,
+          ),
+        ),
+      ),
+    ).thenAnswer((_) => Future.value(2));
+    expectLater(fieldListsRepository.create(fieldListEntity), completion(2));
   });
 }

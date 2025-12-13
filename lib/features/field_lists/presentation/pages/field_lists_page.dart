@@ -63,7 +63,7 @@ class FieldListsPageView extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       mainAxisSpacing: 5,
                       crossAxisSpacing: 5,
-                      crossAxisCount: 3,
+                      crossAxisCount: 2,
                       itemCount: state.fieldListsPageData!.fieldLists.length,
                       itemBuilder: (BuildContext context, int index) {
                         final fieldList =
