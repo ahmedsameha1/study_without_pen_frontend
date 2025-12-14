@@ -1,1 +1,30 @@
-{"emulators":{"singleProjectMode":true,"auth":{"port":9099},"ui":{"enabled":true}},"flutter":{"platforms":{"android":{"default":{"projectId":"learn-gcp-380012","appId":"1:8613264590:android:03e259f7a922a81421649f","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"learn-gcp-380012","configurations":{"android":"1:8613264590:android:03e259f7a922a81421649f"}}}}}}
+{
+    "emulators": {
+        "singleProjectMode": false,
+        "auth": {
+            "port": 9099
+        },
+        "ui": {
+            "enabled": true
+        }
+    },
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "learn-gcp-380012",
+                    "appId": "1:8613264590:android:03e259f7a922a81421649f",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "learn-gcp-380012",
+                    "configurations": {
+                        "android": "1:8613264590:android:03e259f7a922a81421649f"
+                    }
+                }
+            }
+        }
+    }
+}

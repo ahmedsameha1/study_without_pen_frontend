@@ -12,7 +12,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<nonso.AuthBloc>.value(
-        value: context.read<nonso.AuthBloc>(), child: AppView());
+      value: context.read<nonso.AuthBloc>(),
+      child: AppView(),
+    );
   }
 }
 
@@ -23,7 +25,7 @@ class AppView extends StatelessWidget {
     return MaterialApp.router(
       localizationsDelegates: [
         AppLocalizations.delegate,
-        nonso.AppLocalizations.delegate
+        nonso.AppLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       title: AppLocalizationsEn().materialAppTitle,
