@@ -19,7 +19,7 @@ void main() {
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
   DateTime emulatedCreatedAt = DateTime.utc(2022, 2, 2);
   int order = 1;
-  int rank = Rank.Normal.index;
+  int rank = Rank.normal.index;
   int askedCount = 2;
   int wronglyAnsweredCount = 1;
   bool didAskedAtCurrentTestRound = true;
@@ -847,7 +847,7 @@ void main() {
       );
     });
 
-    test("Invalid Entry: rank is invalid value", () async {
+    test("Invalid Entry: invalid rank", () async {
       var entry = Entry(
         id: id,
         fieldListId: fieldListId,
@@ -858,7 +858,7 @@ void main() {
         order: order,
         didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
         emulatedCreatedAt: emulatedCreatedAt,
-        rank: 8,
+        rank: Rank.vital.index + 1,
         askedCount: askedCount,
         wronglyAnsweredCount: wronglyAnsweredCount,
       );
@@ -867,9 +867,30 @@ void main() {
           await entrysDao.create(entry.toCompanion(true));
         },
         throwsA(
-          predicate(
-            (e) => e is InvalidDataException && e.message.contains("rank"),
-          ),
+          predicate((e) => e is SqliteException && e.message.contains("rank")),
+        ),
+      );
+
+      entry = Entry(
+        id: id,
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.low.index - 1,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount,
+      );
+      expect(
+        () async {
+          await entrysDao.create(entry.toCompanion(true));
+        },
+        throwsA(
+          predicate((e) => e is SqliteException && e.message.contains("rank")),
         ),
       );
     });
@@ -1264,7 +1285,7 @@ void main() {
       );
     });
 
-    test("Invalid update: rank is invalid value", () {
+    test("Invalid update: invalid rank", () {
       var entry = Entry(
         id: id,
         fieldListId: fieldListId,
@@ -1275,7 +1296,7 @@ void main() {
         order: order,
         didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
         emulatedCreatedAt: emulatedCreatedAt,
-        rank: 7,
+        rank: Rank.vital.index + 1,
         askedCount: askedCount,
         wronglyAnsweredCount: wronglyAnsweredCount,
       );
@@ -1284,9 +1305,30 @@ void main() {
           await entrysDao.mutate(entry.toCompanion(true));
         },
         throwsA(
-          predicate(
-            (e) => e is InvalidDataException && e.message.contains("rank"),
-          ),
+          predicate((e) => e is SqliteException && e.message.contains("rank")),
+        ),
+      );
+
+      entry = Entry(
+        id: id,
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.low.index - 1,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount,
+      );
+      expect(
+        () async {
+          await entrysDao.mutate(entry.toCompanion(true));
+        },
+        throwsA(
+          predicate((e) => e is SqliteException && e.message.contains("rank")),
         ),
       );
     });

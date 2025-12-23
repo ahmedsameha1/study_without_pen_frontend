@@ -24,9 +24,6 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     )) {
       throw InvalidDataException("lastModificationAt");
     }
-    if (entrysCompanion.rank.value != Rank.Normal.index) {
-      throw InvalidDataException("rank");
-    }
     return into(entrys).insert(entrysCompanion);
   }
 
@@ -74,9 +71,6 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     )) {
       throw InvalidDataException("lastModificationAt");
     }
-    if (entrysCompanion.rank.value != Rank.Normal.index) {
-      throw InvalidDataException("rank");
-    }
     return update(entrys).replace(entrysCompanion);
   }
 
@@ -87,10 +81,7 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
   Future<List<String>?> getHintsByEntryId(String entryId) async {
     final otherEntrys = alias(entrys, "otherEntrys");
     final query = select(entrys).join([
-      innerJoin(
-        otherEntrys,
-        otherEntrys.question.equalsExp(entrys.question),
-      ),
+      innerJoin(otherEntrys, otherEntrys.question.equalsExp(entrys.question)),
     ])..where(entrys.id.equals(entryId));
     final result = await query.get();
     if (result.length == 1) {
@@ -137,4 +128,4 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
   }
 }
 
-enum Rank { Normal }
+enum Rank { low, normal, important, vital }

@@ -2061,6 +2061,9 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
     'rank',
     aliasedName,
     false,
+    check: () =>
+        ComparableExpr(rank).isSmallerOrEqualValue(Rank.vital.index) &
+        ComparableExpr(rank).isBiggerOrEqualValue(Rank.low.index),
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
