@@ -3,483 +3,6 @@
 part of 'app_database.dart';
 
 // ignore_for_file: type=lint
-class $EntryTextsTable extends EntryTexts
-    with TableInfo<$EntryTextsTable, EntryText> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $EntryTextsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    clientDefault: () => const Uuid().v4(),
-  );
-  static const VerificationMeta _valueMeta = const VerificationMeta('value');
-  @override
-  late final GeneratedColumn<String> value = GeneratedColumn<String>(
-    'value',
-    aliasedName,
-    false,
-    check: () =>
-        ComparableExpr(
-          StringExpressionOperators(value).trim().length,
-        ).isBiggerOrEqualValue(EntryTexts.MINIMUM_VALUE_LENGTH) &
-        ComparableExpr(
-          value.length,
-        ).isSmallerOrEqualValue(EntryTexts.MAXIMUM_VALUE_LENGTH),
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
-  );
-  @override
-  List<GeneratedColumn> get $columns => [id, value];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'entry_texts';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<EntryText> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('value')) {
-      context.handle(
-        _valueMeta,
-        value.isAcceptableOrUnknown(data['value']!, _valueMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_valueMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  EntryText map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return EntryText(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      value: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}value'],
-      )!,
-    );
-  }
-
-  @override
-  $EntryTextsTable createAlias(String alias) {
-    return $EntryTextsTable(attachedDatabase, alias);
-  }
-}
-
-class EntryText extends DataClass implements Insertable<EntryText> {
-  final String id;
-  final String value;
-  const EntryText({required this.id, required this.value});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['value'] = Variable<String>(value);
-    return map;
-  }
-
-  EntryTextsCompanion toCompanion(bool nullToAbsent) {
-    return EntryTextsCompanion(id: Value(id), value: Value(value));
-  }
-
-  factory EntryText.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return EntryText(
-      id: serializer.fromJson<String>(json['id']),
-      value: serializer.fromJson<String>(json['value']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'value': serializer.toJson<String>(value),
-    };
-  }
-
-  EntryText copyWith({String? id, String? value}) =>
-      EntryText(id: id ?? this.id, value: value ?? this.value);
-  EntryText copyWithCompanion(EntryTextsCompanion data) {
-    return EntryText(
-      id: data.id.present ? data.id.value : this.id,
-      value: data.value.present ? data.value.value : this.value,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('EntryText(')
-          ..write('id: $id, ')
-          ..write('value: $value')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, value);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is EntryText && other.id == this.id && other.value == this.value);
-}
-
-class EntryTextsCompanion extends UpdateCompanion<EntryText> {
-  final Value<String> id;
-  final Value<String> value;
-  final Value<int> rowid;
-  const EntryTextsCompanion({
-    this.id = const Value.absent(),
-    this.value = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  EntryTextsCompanion.insert({
-    this.id = const Value.absent(),
-    required String value,
-    this.rowid = const Value.absent(),
-  }) : value = Value(value);
-  static Insertable<EntryText> custom({
-    Expression<String>? id,
-    Expression<String>? value,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (value != null) 'value': value,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  EntryTextsCompanion copyWith({
-    Value<String>? id,
-    Value<String>? value,
-    Value<int>? rowid,
-  }) {
-    return EntryTextsCompanion(
-      id: id ?? this.id,
-      value: value ?? this.value,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (value.present) {
-      map['value'] = Variable<String>(value.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('EntryTextsCompanion(')
-          ..write('id: $id, ')
-          ..write('value: $value, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $QuestionsTable extends Questions
-    with TableInfo<$QuestionsTable, Question> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $QuestionsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<String> id = GeneratedColumn<String>(
-    'id',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    clientDefault: () => const Uuid().v4(),
-  );
-  static const VerificationMeta _questionTypeMeta = const VerificationMeta(
-    'questionType',
-  );
-  @override
-  late final GeneratedColumn<int> questionType = GeneratedColumn<int>(
-    'question_type',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
-  static const VerificationMeta _addressMeta = const VerificationMeta(
-    'address',
-  );
-  @override
-  late final GeneratedColumn<String> address = GeneratedColumn<String>(
-    'address',
-    aliasedName,
-    false,
-    type: DriftSqlType.string,
-    requiredDuringInsert: true,
-  );
-  @override
-  List<GeneratedColumn> get $columns => [id, questionType, address];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'questions';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<Question> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('question_type')) {
-      context.handle(
-        _questionTypeMeta,
-        questionType.isAcceptableOrUnknown(
-          data['question_type']!,
-          _questionTypeMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_questionTypeMeta);
-    }
-    if (data.containsKey('address')) {
-      context.handle(
-        _addressMeta,
-        address.isAcceptableOrUnknown(data['address']!, _addressMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_addressMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  List<Set<GeneratedColumn>> get uniqueKeys => [
-    {questionType, address},
-  ];
-  @override
-  Question map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Question(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}id'],
-      )!,
-      questionType: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}question_type'],
-      )!,
-      address: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}address'],
-      )!,
-    );
-  }
-
-  @override
-  $QuestionsTable createAlias(String alias) {
-    return $QuestionsTable(attachedDatabase, alias);
-  }
-}
-
-class Question extends DataClass implements Insertable<Question> {
-  final String id;
-  final int questionType;
-  final String address;
-  const Question({
-    required this.id,
-    required this.questionType,
-    required this.address,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<String>(id);
-    map['question_type'] = Variable<int>(questionType);
-    map['address'] = Variable<String>(address);
-    return map;
-  }
-
-  QuestionsCompanion toCompanion(bool nullToAbsent) {
-    return QuestionsCompanion(
-      id: Value(id),
-      questionType: Value(questionType),
-      address: Value(address),
-    );
-  }
-
-  factory Question.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Question(
-      id: serializer.fromJson<String>(json['id']),
-      questionType: serializer.fromJson<int>(json['questionType']),
-      address: serializer.fromJson<String>(json['address']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<String>(id),
-      'questionType': serializer.toJson<int>(questionType),
-      'address': serializer.toJson<String>(address),
-    };
-  }
-
-  Question copyWith({String? id, int? questionType, String? address}) =>
-      Question(
-        id: id ?? this.id,
-        questionType: questionType ?? this.questionType,
-        address: address ?? this.address,
-      );
-  Question copyWithCompanion(QuestionsCompanion data) {
-    return Question(
-      id: data.id.present ? data.id.value : this.id,
-      questionType: data.questionType.present
-          ? data.questionType.value
-          : this.questionType,
-      address: data.address.present ? data.address.value : this.address,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('Question(')
-          ..write('id: $id, ')
-          ..write('questionType: $questionType, ')
-          ..write('address: $address')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, questionType, address);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Question &&
-          other.id == this.id &&
-          other.questionType == this.questionType &&
-          other.address == this.address);
-}
-
-class QuestionsCompanion extends UpdateCompanion<Question> {
-  final Value<String> id;
-  final Value<int> questionType;
-  final Value<String> address;
-  final Value<int> rowid;
-  const QuestionsCompanion({
-    this.id = const Value.absent(),
-    this.questionType = const Value.absent(),
-    this.address = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  QuestionsCompanion.insert({
-    this.id = const Value.absent(),
-    required int questionType,
-    required String address,
-    this.rowid = const Value.absent(),
-  }) : questionType = Value(questionType),
-       address = Value(address);
-  static Insertable<Question> custom({
-    Expression<String>? id,
-    Expression<int>? questionType,
-    Expression<String>? address,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (questionType != null) 'question_type': questionType,
-      if (address != null) 'address': address,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  QuestionsCompanion copyWith({
-    Value<String>? id,
-    Value<int>? questionType,
-    Value<String>? address,
-    Value<int>? rowid,
-  }) {
-    return QuestionsCompanion(
-      id: id ?? this.id,
-      questionType: questionType ?? this.questionType,
-      address: address ?? this.address,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<String>(id.value);
-    }
-    if (questionType.present) {
-      map['question_type'] = Variable<int>(questionType.value);
-    }
-    if (address.present) {
-      map['address'] = Variable<String>(address.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('QuestionsCompanion(')
-          ..write('id: $id, ')
-          ..write('questionType: $questionType, ')
-          ..write('address: $address, ')
-          ..write('rowid: $rowid')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -2434,33 +1957,39 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
       'REFERENCES field_lists (id)',
     ),
   );
-  static const VerificationMeta _answerIdMeta = const VerificationMeta(
-    'answerId',
-  );
+  static const VerificationMeta _answerMeta = const VerificationMeta('answer');
   @override
-  late final GeneratedColumn<String> answerId = GeneratedColumn<String>(
-    'answer_id',
+  late final GeneratedColumn<String> answer = GeneratedColumn<String>(
+    'answer',
     aliasedName,
     false,
+    check: () =>
+        ComparableExpr(
+          answer.length,
+        ).isSmallerOrEqualValue(Entrys.maximumTextLength) &
+        ComparableExpr(
+          answer.length,
+        ).isBiggerOrEqualValue(Entrys.minimumTextLength),
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES entry_texts (id)',
-    ),
   );
-  static const VerificationMeta _questionIdMeta = const VerificationMeta(
-    'questionId',
+  static const VerificationMeta _questionMeta = const VerificationMeta(
+    'question',
   );
   @override
-  late final GeneratedColumn<String> questionId = GeneratedColumn<String>(
-    'question_id',
+  late final GeneratedColumn<String> question = GeneratedColumn<String>(
+    'question',
     aliasedName,
     false,
+    check: () =>
+        ComparableExpr(
+          question.length,
+        ).isSmallerOrEqualValue(Entrys.maximumTextLength) &
+        ComparableExpr(
+          question.length,
+        ).isBiggerOrEqualValue(Entrys.minimumTextLength),
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES questions (id)',
-    ),
   );
   static const VerificationMeta _creationAtMeta = const VerificationMeta(
     'creationAt',
@@ -2574,8 +2103,8 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
   List<GeneratedColumn> get $columns => [
     id,
     fieldListId,
-    answerId,
-    questionId,
+    answer,
+    question,
     creationAt,
     lastModificationAt,
     order,
@@ -2611,21 +2140,21 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
     } else if (isInserting) {
       context.missing(_fieldListIdMeta);
     }
-    if (data.containsKey('answer_id')) {
+    if (data.containsKey('answer')) {
       context.handle(
-        _answerIdMeta,
-        answerId.isAcceptableOrUnknown(data['answer_id']!, _answerIdMeta),
+        _answerMeta,
+        answer.isAcceptableOrUnknown(data['answer']!, _answerMeta),
       );
     } else if (isInserting) {
-      context.missing(_answerIdMeta);
+      context.missing(_answerMeta);
     }
-    if (data.containsKey('question_id')) {
+    if (data.containsKey('question')) {
       context.handle(
-        _questionIdMeta,
-        questionId.isAcceptableOrUnknown(data['question_id']!, _questionIdMeta),
+        _questionMeta,
+        question.isAcceptableOrUnknown(data['question']!, _questionMeta),
       );
     } else if (isInserting) {
-      context.missing(_questionIdMeta);
+      context.missing(_questionMeta);
     }
     if (data.containsKey('creation_at')) {
       context.handle(
@@ -2710,7 +2239,7 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-    {fieldListId, answerId, questionId},
+    {fieldListId, answer, question},
   ];
   @override
   Entry map(Map<String, dynamic> data, {String? tablePrefix}) {
@@ -2724,13 +2253,13 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         DriftSqlType.string,
         data['${effectivePrefix}field_list_id'],
       )!,
-      answerId: attachedDatabase.typeMapping.read(
+      answer: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}answer_id'],
+        data['${effectivePrefix}answer'],
       )!,
-      questionId: attachedDatabase.typeMapping.read(
+      question: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}question_id'],
+        data['${effectivePrefix}question'],
       )!,
       creationAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -2776,8 +2305,8 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
 class Entry extends DataClass implements Insertable<Entry> {
   final String id;
   final String fieldListId;
-  final String answerId;
-  final String questionId;
+  final String answer;
+  final String question;
   final DateTime creationAt;
   final DateTime lastModificationAt;
   final int order;
@@ -2789,8 +2318,8 @@ class Entry extends DataClass implements Insertable<Entry> {
   const Entry({
     required this.id,
     required this.fieldListId,
-    required this.answerId,
-    required this.questionId,
+    required this.answer,
+    required this.question,
     required this.creationAt,
     required this.lastModificationAt,
     required this.order,
@@ -2805,8 +2334,8 @@ class Entry extends DataClass implements Insertable<Entry> {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['field_list_id'] = Variable<String>(fieldListId);
-    map['answer_id'] = Variable<String>(answerId);
-    map['question_id'] = Variable<String>(questionId);
+    map['answer'] = Variable<String>(answer);
+    map['question'] = Variable<String>(question);
     map['creation_at'] = Variable<DateTime>(creationAt);
     map['last_modification_at'] = Variable<DateTime>(lastModificationAt);
     map['order'] = Variable<int>(order);
@@ -2824,8 +2353,8 @@ class Entry extends DataClass implements Insertable<Entry> {
     return EntrysCompanion(
       id: Value(id),
       fieldListId: Value(fieldListId),
-      answerId: Value(answerId),
-      questionId: Value(questionId),
+      answer: Value(answer),
+      question: Value(question),
       creationAt: Value(creationAt),
       lastModificationAt: Value(lastModificationAt),
       order: Value(order),
@@ -2845,8 +2374,8 @@ class Entry extends DataClass implements Insertable<Entry> {
     return Entry(
       id: serializer.fromJson<String>(json['id']),
       fieldListId: serializer.fromJson<String>(json['fieldListId']),
-      answerId: serializer.fromJson<String>(json['answerId']),
-      questionId: serializer.fromJson<String>(json['questionId']),
+      answer: serializer.fromJson<String>(json['answer']),
+      question: serializer.fromJson<String>(json['question']),
       creationAt: serializer.fromJson<DateTime>(json['creationAt']),
       lastModificationAt: serializer.fromJson<DateTime>(
         json['lastModificationAt'],
@@ -2871,8 +2400,8 @@ class Entry extends DataClass implements Insertable<Entry> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'fieldListId': serializer.toJson<String>(fieldListId),
-      'answerId': serializer.toJson<String>(answerId),
-      'questionId': serializer.toJson<String>(questionId),
+      'answer': serializer.toJson<String>(answer),
+      'question': serializer.toJson<String>(question),
       'creationAt': serializer.toJson<DateTime>(creationAt),
       'lastModificationAt': serializer.toJson<DateTime>(lastModificationAt),
       'order': serializer.toJson<int>(order),
@@ -2889,8 +2418,8 @@ class Entry extends DataClass implements Insertable<Entry> {
   Entry copyWith({
     String? id,
     String? fieldListId,
-    String? answerId,
-    String? questionId,
+    String? answer,
+    String? question,
     DateTime? creationAt,
     DateTime? lastModificationAt,
     int? order,
@@ -2902,8 +2431,8 @@ class Entry extends DataClass implements Insertable<Entry> {
   }) => Entry(
     id: id ?? this.id,
     fieldListId: fieldListId ?? this.fieldListId,
-    answerId: answerId ?? this.answerId,
-    questionId: questionId ?? this.questionId,
+    answer: answer ?? this.answer,
+    question: question ?? this.question,
     creationAt: creationAt ?? this.creationAt,
     lastModificationAt: lastModificationAt ?? this.lastModificationAt,
     order: order ?? this.order,
@@ -2920,10 +2449,8 @@ class Entry extends DataClass implements Insertable<Entry> {
       fieldListId: data.fieldListId.present
           ? data.fieldListId.value
           : this.fieldListId,
-      answerId: data.answerId.present ? data.answerId.value : this.answerId,
-      questionId: data.questionId.present
-          ? data.questionId.value
-          : this.questionId,
+      answer: data.answer.present ? data.answer.value : this.answer,
+      question: data.question.present ? data.question.value : this.question,
       creationAt: data.creationAt.present
           ? data.creationAt.value
           : this.creationAt,
@@ -2952,8 +2479,8 @@ class Entry extends DataClass implements Insertable<Entry> {
     return (StringBuffer('Entry(')
           ..write('id: $id, ')
           ..write('fieldListId: $fieldListId, ')
-          ..write('answerId: $answerId, ')
-          ..write('questionId: $questionId, ')
+          ..write('answer: $answer, ')
+          ..write('question: $question, ')
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
           ..write('order: $order, ')
@@ -2970,8 +2497,8 @@ class Entry extends DataClass implements Insertable<Entry> {
   int get hashCode => Object.hash(
     id,
     fieldListId,
-    answerId,
-    questionId,
+    answer,
+    question,
     creationAt,
     lastModificationAt,
     order,
@@ -2987,8 +2514,8 @@ class Entry extends DataClass implements Insertable<Entry> {
       (other is Entry &&
           other.id == this.id &&
           other.fieldListId == this.fieldListId &&
-          other.answerId == this.answerId &&
-          other.questionId == this.questionId &&
+          other.answer == this.answer &&
+          other.question == this.question &&
           other.creationAt == this.creationAt &&
           other.lastModificationAt == this.lastModificationAt &&
           other.order == this.order &&
@@ -3002,8 +2529,8 @@ class Entry extends DataClass implements Insertable<Entry> {
 class EntrysCompanion extends UpdateCompanion<Entry> {
   final Value<String> id;
   final Value<String> fieldListId;
-  final Value<String> answerId;
-  final Value<String> questionId;
+  final Value<String> answer;
+  final Value<String> question;
   final Value<DateTime> creationAt;
   final Value<DateTime> lastModificationAt;
   final Value<int> order;
@@ -3016,8 +2543,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
   const EntrysCompanion({
     this.id = const Value.absent(),
     this.fieldListId = const Value.absent(),
-    this.answerId = const Value.absent(),
-    this.questionId = const Value.absent(),
+    this.answer = const Value.absent(),
+    this.question = const Value.absent(),
     this.creationAt = const Value.absent(),
     this.lastModificationAt = const Value.absent(),
     this.order = const Value.absent(),
@@ -3031,8 +2558,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
   EntrysCompanion.insert({
     this.id = const Value.absent(),
     required String fieldListId,
-    required String answerId,
-    required String questionId,
+    required String answer,
+    required String question,
     required DateTime creationAt,
     required DateTime lastModificationAt,
     required int order,
@@ -3043,8 +2570,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     required int wronglyAnsweredCount,
     this.rowid = const Value.absent(),
   }) : fieldListId = Value(fieldListId),
-       answerId = Value(answerId),
-       questionId = Value(questionId),
+       answer = Value(answer),
+       question = Value(question),
        creationAt = Value(creationAt),
        lastModificationAt = Value(lastModificationAt),
        order = Value(order),
@@ -3056,8 +2583,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
   static Insertable<Entry> custom({
     Expression<String>? id,
     Expression<String>? fieldListId,
-    Expression<String>? answerId,
-    Expression<String>? questionId,
+    Expression<String>? answer,
+    Expression<String>? question,
     Expression<DateTime>? creationAt,
     Expression<DateTime>? lastModificationAt,
     Expression<int>? order,
@@ -3071,8 +2598,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (fieldListId != null) 'field_list_id': fieldListId,
-      if (answerId != null) 'answer_id': answerId,
-      if (questionId != null) 'question_id': questionId,
+      if (answer != null) 'answer': answer,
+      if (question != null) 'question': question,
       if (creationAt != null) 'creation_at': creationAt,
       if (lastModificationAt != null)
         'last_modification_at': lastModificationAt,
@@ -3091,8 +2618,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
   EntrysCompanion copyWith({
     Value<String>? id,
     Value<String>? fieldListId,
-    Value<String>? answerId,
-    Value<String>? questionId,
+    Value<String>? answer,
+    Value<String>? question,
     Value<DateTime>? creationAt,
     Value<DateTime>? lastModificationAt,
     Value<int>? order,
@@ -3106,8 +2633,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     return EntrysCompanion(
       id: id ?? this.id,
       fieldListId: fieldListId ?? this.fieldListId,
-      answerId: answerId ?? this.answerId,
-      questionId: questionId ?? this.questionId,
+      answer: answer ?? this.answer,
+      question: question ?? this.question,
       creationAt: creationAt ?? this.creationAt,
       lastModificationAt: lastModificationAt ?? this.lastModificationAt,
       order: order ?? this.order,
@@ -3130,11 +2657,11 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     if (fieldListId.present) {
       map['field_list_id'] = Variable<String>(fieldListId.value);
     }
-    if (answerId.present) {
-      map['answer_id'] = Variable<String>(answerId.value);
+    if (answer.present) {
+      map['answer'] = Variable<String>(answer.value);
     }
-    if (questionId.present) {
-      map['question_id'] = Variable<String>(questionId.value);
+    if (question.present) {
+      map['question'] = Variable<String>(question.value);
     }
     if (creationAt.present) {
       map['creation_at'] = Variable<DateTime>(creationAt.value);
@@ -3175,8 +2702,8 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     return (StringBuffer('EntrysCompanion(')
           ..write('id: $id, ')
           ..write('fieldListId: $fieldListId, ')
-          ..write('answerId: $answerId, ')
-          ..write('questionId: $questionId, ')
+          ..write('answer: $answer, ')
+          ..write('question: $question, ')
           ..write('creationAt: $creationAt, ')
           ..write('lastModificationAt: $lastModificationAt, ')
           ..write('order: $order, ')
@@ -5660,8 +5187,6 @@ class WrongAnswersCompanion extends UpdateCompanion<WrongAnswer> {
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
-  late final $EntryTextsTable entryTexts = $EntryTextsTable(this);
-  late final $QuestionsTable questions = $QuestionsTable(this);
   late final $FieldsTable fields = $FieldsTable(this);
   late final $FieldListsTable fieldLists = $FieldListsTable(this);
   late final $EntrysTable entrys = $EntrysTable(this);
@@ -5671,8 +5196,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SessionEntrysTable sessionEntrys = $SessionEntrysTable(this);
   late final $TestSessionsTable testSessions = $TestSessionsTable(this);
   late final $WrongAnswersTable wrongAnswers = $WrongAnswersTable(this);
-  late final EntryTextsDao entryTextsDao = EntryTextsDao(this as AppDatabase);
-  late final QuestionsDao questionsDao = QuestionsDao(this as AppDatabase);
   late final EntrysDao entrysDao = EntrysDao(this as AppDatabase);
   late final FieldListsDao fieldListsDao = FieldListsDao(this as AppDatabase);
   late final FieldsDao fieldsDao = FieldsDao(this as AppDatabase);
@@ -5695,8 +5218,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-    entryTexts,
-    questions,
     fields,
     fieldLists,
     entrys,
@@ -5712,501 +5233,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       const DriftDatabaseOptions(storeDateTimeAsText: true);
 }
 
-typedef $$EntryTextsTableCreateCompanionBuilder =
-    EntryTextsCompanion Function({
-      Value<String> id,
-      required String value,
-      Value<int> rowid,
-    });
-typedef $$EntryTextsTableUpdateCompanionBuilder =
-    EntryTextsCompanion Function({
-      Value<String> id,
-      Value<String> value,
-      Value<int> rowid,
-    });
-
-final class $$EntryTextsTableReferences
-    extends BaseReferences<_$AppDatabase, $EntryTextsTable, EntryText> {
-  $$EntryTextsTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$EntrysTable, List<Entry>> _entrysRefsTable(
-    _$AppDatabase db,
-  ) => MultiTypedResultKey.fromTable(
-    db.entrys,
-    aliasName: $_aliasNameGenerator(db.entryTexts.id, db.entrys.answerId),
-  );
-
-  $$EntrysTableProcessedTableManager get entrysRefs {
-    final manager = $$EntrysTableTableManager(
-      $_db,
-      $_db.entrys,
-    ).filter((f) => f.answerId.id.sqlEquals($_itemColumn<String>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_entrysRefsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-}
-
-class $$EntryTextsTableFilterComposer
-    extends Composer<_$AppDatabase, $EntryTextsTable> {
-  $$EntryTextsTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get value => $composableBuilder(
-    column: $table.value,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  Expression<bool> entrysRefs(
-    Expression<bool> Function($$EntrysTableFilterComposer f) f,
-  ) {
-    final $$EntrysTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.entrys,
-      getReferencedColumn: (t) => t.answerId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$EntrysTableFilterComposer(
-            $db: $db,
-            $table: $db.entrys,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-}
-
-class $$EntryTextsTableOrderingComposer
-    extends Composer<_$AppDatabase, $EntryTextsTable> {
-  $$EntryTextsTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get value => $composableBuilder(
-    column: $table.value,
-    builder: (column) => ColumnOrderings(column),
-  );
-}
-
-class $$EntryTextsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $EntryTextsTable> {
-  $$EntryTextsTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<String> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<String> get value =>
-      $composableBuilder(column: $table.value, builder: (column) => column);
-
-  Expression<T> entrysRefs<T extends Object>(
-    Expression<T> Function($$EntrysTableAnnotationComposer a) f,
-  ) {
-    final $$EntrysTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.entrys,
-      getReferencedColumn: (t) => t.answerId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$EntrysTableAnnotationComposer(
-            $db: $db,
-            $table: $db.entrys,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-}
-
-class $$EntryTextsTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $EntryTextsTable,
-          EntryText,
-          $$EntryTextsTableFilterComposer,
-          $$EntryTextsTableOrderingComposer,
-          $$EntryTextsTableAnnotationComposer,
-          $$EntryTextsTableCreateCompanionBuilder,
-          $$EntryTextsTableUpdateCompanionBuilder,
-          (EntryText, $$EntryTextsTableReferences),
-          EntryText,
-          PrefetchHooks Function({bool entrysRefs})
-        > {
-  $$EntryTextsTableTableManager(_$AppDatabase db, $EntryTextsTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$EntryTextsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$EntryTextsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$EntryTextsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<String> value = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => EntryTextsCompanion(id: id, value: value, rowid: rowid),
-          createCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                required String value,
-                Value<int> rowid = const Value.absent(),
-              }) => EntryTextsCompanion.insert(
-                id: id,
-                value: value,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$EntryTextsTableReferences(db, table, e),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback: ({entrysRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (entrysRefs) db.entrys],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (entrysRefs)
-                    await $_getPrefetchedData<
-                      EntryText,
-                      $EntryTextsTable,
-                      Entry
-                    >(
-                      currentTable: table,
-                      referencedTable: $$EntryTextsTableReferences
-                          ._entrysRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$EntryTextsTableReferences(db, table, p0).entrysRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.answerId == item.id),
-                      typedResults: items,
-                    ),
-                ];
-              },
-            );
-          },
-        ),
-      );
-}
-
-typedef $$EntryTextsTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $EntryTextsTable,
-      EntryText,
-      $$EntryTextsTableFilterComposer,
-      $$EntryTextsTableOrderingComposer,
-      $$EntryTextsTableAnnotationComposer,
-      $$EntryTextsTableCreateCompanionBuilder,
-      $$EntryTextsTableUpdateCompanionBuilder,
-      (EntryText, $$EntryTextsTableReferences),
-      EntryText,
-      PrefetchHooks Function({bool entrysRefs})
-    >;
-typedef $$QuestionsTableCreateCompanionBuilder =
-    QuestionsCompanion Function({
-      Value<String> id,
-      required int questionType,
-      required String address,
-      Value<int> rowid,
-    });
-typedef $$QuestionsTableUpdateCompanionBuilder =
-    QuestionsCompanion Function({
-      Value<String> id,
-      Value<int> questionType,
-      Value<String> address,
-      Value<int> rowid,
-    });
-
-final class $$QuestionsTableReferences
-    extends BaseReferences<_$AppDatabase, $QuestionsTable, Question> {
-  $$QuestionsTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static MultiTypedResultKey<$EntrysTable, List<Entry>> _entrysRefsTable(
-    _$AppDatabase db,
-  ) => MultiTypedResultKey.fromTable(
-    db.entrys,
-    aliasName: $_aliasNameGenerator(db.questions.id, db.entrys.questionId),
-  );
-
-  $$EntrysTableProcessedTableManager get entrysRefs {
-    final manager = $$EntrysTableTableManager(
-      $_db,
-      $_db.entrys,
-    ).filter((f) => f.questionId.id.sqlEquals($_itemColumn<String>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_entrysRefsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-}
-
-class $$QuestionsTableFilterComposer
-    extends Composer<_$AppDatabase, $QuestionsTable> {
-  $$QuestionsTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<int> get questionType => $composableBuilder(
-    column: $table.questionType,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get address => $composableBuilder(
-    column: $table.address,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  Expression<bool> entrysRefs(
-    Expression<bool> Function($$EntrysTableFilterComposer f) f,
-  ) {
-    final $$EntrysTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.entrys,
-      getReferencedColumn: (t) => t.questionId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$EntrysTableFilterComposer(
-            $db: $db,
-            $table: $db.entrys,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-}
-
-class $$QuestionsTableOrderingComposer
-    extends Composer<_$AppDatabase, $QuestionsTable> {
-  $$QuestionsTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<String> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<int> get questionType => $composableBuilder(
-    column: $table.questionType,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get address => $composableBuilder(
-    column: $table.address,
-    builder: (column) => ColumnOrderings(column),
-  );
-}
-
-class $$QuestionsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $QuestionsTable> {
-  $$QuestionsTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<String> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumn<int> get questionType => $composableBuilder(
-    column: $table.questionType,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get address =>
-      $composableBuilder(column: $table.address, builder: (column) => column);
-
-  Expression<T> entrysRefs<T extends Object>(
-    Expression<T> Function($$EntrysTableAnnotationComposer a) f,
-  ) {
-    final $$EntrysTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.entrys,
-      getReferencedColumn: (t) => t.questionId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$EntrysTableAnnotationComposer(
-            $db: $db,
-            $table: $db.entrys,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-}
-
-class $$QuestionsTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $QuestionsTable,
-          Question,
-          $$QuestionsTableFilterComposer,
-          $$QuestionsTableOrderingComposer,
-          $$QuestionsTableAnnotationComposer,
-          $$QuestionsTableCreateCompanionBuilder,
-          $$QuestionsTableUpdateCompanionBuilder,
-          (Question, $$QuestionsTableReferences),
-          Question,
-          PrefetchHooks Function({bool entrysRefs})
-        > {
-  $$QuestionsTableTableManager(_$AppDatabase db, $QuestionsTable table)
-    : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$QuestionsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$QuestionsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$QuestionsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                Value<int> questionType = const Value.absent(),
-                Value<String> address = const Value.absent(),
-                Value<int> rowid = const Value.absent(),
-              }) => QuestionsCompanion(
-                id: id,
-                questionType: questionType,
-                address: address,
-                rowid: rowid,
-              ),
-          createCompanionCallback:
-              ({
-                Value<String> id = const Value.absent(),
-                required int questionType,
-                required String address,
-                Value<int> rowid = const Value.absent(),
-              }) => QuestionsCompanion.insert(
-                id: id,
-                questionType: questionType,
-                address: address,
-                rowid: rowid,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$QuestionsTableReferences(db, table, e),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback: ({entrysRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (entrysRefs) db.entrys],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (entrysRefs)
-                    await $_getPrefetchedData<Question, $QuestionsTable, Entry>(
-                      currentTable: table,
-                      referencedTable: $$QuestionsTableReferences
-                          ._entrysRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$QuestionsTableReferences(db, table, p0).entrysRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.questionId == item.id),
-                      typedResults: items,
-                    ),
-                ];
-              },
-            );
-          },
-        ),
-      );
-}
-
-typedef $$QuestionsTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $QuestionsTable,
-      Question,
-      $$QuestionsTableFilterComposer,
-      $$QuestionsTableOrderingComposer,
-      $$QuestionsTableAnnotationComposer,
-      $$QuestionsTableCreateCompanionBuilder,
-      $$QuestionsTableUpdateCompanionBuilder,
-      (Question, $$QuestionsTableReferences),
-      Question,
-      PrefetchHooks Function({bool entrysRefs})
-    >;
 typedef $$FieldsTableCreateCompanionBuilder =
     FieldsCompanion Function({
       Value<String> id,
@@ -7631,8 +6657,8 @@ typedef $$EntrysTableCreateCompanionBuilder =
     EntrysCompanion Function({
       Value<String> id,
       required String fieldListId,
-      required String answerId,
-      required String questionId,
+      required String answer,
+      required String question,
       required DateTime creationAt,
       required DateTime lastModificationAt,
       required int order,
@@ -7647,8 +6673,8 @@ typedef $$EntrysTableUpdateCompanionBuilder =
     EntrysCompanion Function({
       Value<String> id,
       Value<String> fieldListId,
-      Value<String> answerId,
-      Value<String> questionId,
+      Value<String> answer,
+      Value<String> question,
       Value<DateTime> creationAt,
       Value<DateTime> lastModificationAt,
       Value<int> order,
@@ -7677,40 +6703,6 @@ final class $$EntrysTableReferences
       $_db.fieldLists,
     ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_fieldListIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
-  static $EntryTextsTable _answerIdTable(_$AppDatabase db) => db.entryTexts
-      .createAlias($_aliasNameGenerator(db.entrys.answerId, db.entryTexts.id));
-
-  $$EntryTextsTableProcessedTableManager get answerId {
-    final $_column = $_itemColumn<String>('answer_id')!;
-
-    final manager = $$EntryTextsTableTableManager(
-      $_db,
-      $_db.entryTexts,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_answerIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
-  static $QuestionsTable _questionIdTable(_$AppDatabase db) => db.questions
-      .createAlias($_aliasNameGenerator(db.entrys.questionId, db.questions.id));
-
-  $$QuestionsTableProcessedTableManager get questionId {
-    final $_column = $_itemColumn<String>('question_id')!;
-
-    final manager = $$QuestionsTableTableManager(
-      $_db,
-      $_db.questions,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_questionIdTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -7768,6 +6760,16 @@ class $$EntrysTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnFilters<String> get answer => $composableBuilder(
+    column: $table.answer,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get question => $composableBuilder(
+    column: $table.question,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<DateTime> get creationAt => $composableBuilder(
     column: $table.creationAt,
     builder: (column) => ColumnFilters(column),
@@ -7822,52 +6824,6 @@ class $$EntrysTableFilterComposer
           }) => $$FieldListsTableFilterComposer(
             $db: $db,
             $table: $db.fieldLists,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$EntryTextsTableFilterComposer get answerId {
-    final $$EntryTextsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.answerId,
-      referencedTable: $db.entryTexts,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$EntryTextsTableFilterComposer(
-            $db: $db,
-            $table: $db.entryTexts,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$QuestionsTableFilterComposer get questionId {
-    final $$QuestionsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.questionId,
-      referencedTable: $db.questions,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$QuestionsTableFilterComposer(
-            $db: $db,
-            $table: $db.questions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -7942,6 +6898,16 @@ class $$EntrysTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get answer => $composableBuilder(
+    column: $table.answer,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get question => $composableBuilder(
+    column: $table.question,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get creationAt => $composableBuilder(
     column: $table.creationAt,
     builder: (column) => ColumnOrderings(column),
@@ -8004,52 +6970,6 @@ class $$EntrysTableOrderingComposer
     );
     return composer;
   }
-
-  $$EntryTextsTableOrderingComposer get answerId {
-    final $$EntryTextsTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.answerId,
-      referencedTable: $db.entryTexts,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$EntryTextsTableOrderingComposer(
-            $db: $db,
-            $table: $db.entryTexts,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$QuestionsTableOrderingComposer get questionId {
-    final $$QuestionsTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.questionId,
-      referencedTable: $db.questions,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$QuestionsTableOrderingComposer(
-            $db: $db,
-            $table: $db.questions,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$EntrysTableAnnotationComposer
@@ -8063,6 +6983,12 @@ class $$EntrysTableAnnotationComposer
   });
   GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get answer =>
+      $composableBuilder(column: $table.answer, builder: (column) => column);
+
+  GeneratedColumn<String> get question =>
+      $composableBuilder(column: $table.question, builder: (column) => column);
 
   GeneratedColumn<DateTime> get creationAt => $composableBuilder(
     column: $table.creationAt,
@@ -8114,52 +7040,6 @@ class $$EntrysTableAnnotationComposer
           }) => $$FieldListsTableAnnotationComposer(
             $db: $db,
             $table: $db.fieldLists,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$EntryTextsTableAnnotationComposer get answerId {
-    final $$EntryTextsTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.answerId,
-      referencedTable: $db.entryTexts,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$EntryTextsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.entryTexts,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  $$QuestionsTableAnnotationComposer get questionId {
-    final $$QuestionsTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.questionId,
-      referencedTable: $db.questions,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$QuestionsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.questions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -8235,8 +7115,6 @@ class $$EntrysTableTableManager
           Entry,
           PrefetchHooks Function({
             bool fieldListId,
-            bool answerId,
-            bool questionId,
             bool sessionEntrysRefs,
             bool wrongAnswersRefs,
           })
@@ -8256,8 +7134,8 @@ class $$EntrysTableTableManager
               ({
                 Value<String> id = const Value.absent(),
                 Value<String> fieldListId = const Value.absent(),
-                Value<String> answerId = const Value.absent(),
-                Value<String> questionId = const Value.absent(),
+                Value<String> answer = const Value.absent(),
+                Value<String> question = const Value.absent(),
                 Value<DateTime> creationAt = const Value.absent(),
                 Value<DateTime> lastModificationAt = const Value.absent(),
                 Value<int> order = const Value.absent(),
@@ -8270,8 +7148,8 @@ class $$EntrysTableTableManager
               }) => EntrysCompanion(
                 id: id,
                 fieldListId: fieldListId,
-                answerId: answerId,
-                questionId: questionId,
+                answer: answer,
+                question: question,
                 creationAt: creationAt,
                 lastModificationAt: lastModificationAt,
                 order: order,
@@ -8286,8 +7164,8 @@ class $$EntrysTableTableManager
               ({
                 Value<String> id = const Value.absent(),
                 required String fieldListId,
-                required String answerId,
-                required String questionId,
+                required String answer,
+                required String question,
                 required DateTime creationAt,
                 required DateTime lastModificationAt,
                 required int order,
@@ -8300,8 +7178,8 @@ class $$EntrysTableTableManager
               }) => EntrysCompanion.insert(
                 id: id,
                 fieldListId: fieldListId,
-                answerId: answerId,
-                questionId: questionId,
+                answer: answer,
+                question: question,
                 creationAt: creationAt,
                 lastModificationAt: lastModificationAt,
                 order: order,
@@ -8321,8 +7199,6 @@ class $$EntrysTableTableManager
           prefetchHooksCallback:
               ({
                 fieldListId = false,
-                answerId = false,
-                questionId = false,
                 sessionEntrysRefs = false,
                 wrongAnswersRefs = false,
               }) {
@@ -8357,32 +7233,6 @@ class $$EntrysTableTableManager
                                         ._fieldListIdTable(db),
                                     referencedColumn: $$EntrysTableReferences
                                         ._fieldListIdTable(db)
-                                        .id,
-                                  )
-                                  as T;
-                        }
-                        if (answerId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.answerId,
-                                    referencedTable: $$EntrysTableReferences
-                                        ._answerIdTable(db),
-                                    referencedColumn: $$EntrysTableReferences
-                                        ._answerIdTable(db)
-                                        .id,
-                                  )
-                                  as T;
-                        }
-                        if (questionId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.questionId,
-                                    referencedTable: $$EntrysTableReferences
-                                        ._questionIdTable(db),
-                                    referencedColumn: $$EntrysTableReferences
-                                        ._questionIdTable(db)
                                         .id,
                                   )
                                   as T;
@@ -8456,8 +7306,6 @@ typedef $$EntrysTableProcessedTableManager =
       Entry,
       PrefetchHooks Function({
         bool fieldListId,
-        bool answerId,
-        bool questionId,
         bool sessionEntrysRefs,
         bool wrongAnswersRefs,
       })
@@ -10924,10 +9772,6 @@ typedef $$WrongAnswersTableProcessedTableManager =
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
-  $$EntryTextsTableTableManager get entryTexts =>
-      $$EntryTextsTableTableManager(_db, _db.entryTexts);
-  $$QuestionsTableTableManager get questions =>
-      $$QuestionsTableTableManager(_db, _db.questions);
   $$FieldsTableTableManager get fields =>
       $$FieldsTableTableManager(_db, _db.fields);
   $$FieldListsTableTableManager get fieldLists =>

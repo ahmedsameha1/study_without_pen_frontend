@@ -6,7 +6,5 @@ part of 'entrys_dao.dart';
 mixin _$EntrysDaoMixin on DatabaseAccessor<AppDatabase> {
   $FieldsTable get fields => attachedDatabase.fields;
   $FieldListsTable get fieldLists => attachedDatabase.fieldLists;
-  $EntryTextsTable get entryTexts => attachedDatabase.entryTexts;
-  $QuestionsTable get questions => attachedDatabase.questions;
   $EntrysTable get entrys => attachedDatabase.entrys;
 }

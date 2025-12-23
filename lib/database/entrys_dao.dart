@@ -7,7 +7,7 @@ part 'entrys_dao.g.dart';
 
 @DriftAccessor(tables: [Entrys])
 class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
-  EntrysDao(AppDatabase appDatabase) : super(appDatabase);
+  EntrysDao(super.appDatabase);
 
   Future<int> create(EntrysCompanion entrysCompanion) {
     if (entrysCompanion.id.present && !isValid(entrysCompanion.id.value)) {
@@ -16,18 +16,12 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     if (!isValid(entrysCompanion.fieldListId.value)) {
       throw InvalidDataException("fieldListId");
     }
-    if (!isValid(entrysCompanion.answerId.value)) {
-      throw InvalidDataException("answerId");
-    }
-    if (!isValid(entrysCompanion.questionId.value)) {
-      throw InvalidDataException("questionId");
-    }
     if (entrysCompanion.creationAt.value.toUtc().isAfter(clock.now().toUtc())) {
       throw InvalidDataException("creationAt");
     }
-    if (entrysCompanion.lastModificationAt.value
-        .toUtc()
-        .isAfter(clock.now().toUtc())) {
+    if (entrysCompanion.lastModificationAt.value.toUtc().isAfter(
+      clock.now().toUtc(),
+    )) {
       throw InvalidDataException("lastModificationAt");
     }
     if (entrysCompanion.rank.value != Rank.Normal.index) {
@@ -37,13 +31,14 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
   }
 
   Future<List<Entry>> getAll() {
-    return (select(entrys)
-          ..orderBy([
-            ((tbl) =>
-                OrderingTerm(expression: tbl.order, mode: OrderingMode.asc)),
-            ((tbl) => OrderingTerm(
-                expression: tbl.creationAt, mode: OrderingMode.desc)),
-          ]))
+    return (select(entrys)..orderBy([
+          ((tbl) =>
+              OrderingTerm(expression: tbl.order, mode: OrderingMode.asc)),
+          ((tbl) => OrderingTerm(
+            expression: tbl.creationAt,
+            mode: OrderingMode.desc,
+          )),
+        ]))
         .get();
   }
 
@@ -54,32 +49,29 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
             ((tbl) =>
                 OrderingTerm(expression: tbl.order, mode: OrderingMode.asc)),
             ((tbl) => OrderingTerm(
-                expression: tbl.creationAt, mode: OrderingMode.desc)),
+              expression: tbl.creationAt,
+              mode: OrderingMode.desc,
+            )),
           ]))
         .get();
   }
 
   Future<Entry?> getById(String id) {
-    return (select(entrys)..where((tbl) => tbl.id.equals(id)))
-        .getSingleOrNull();
+    return (select(
+      entrys,
+    )..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
 
   Future<bool> mutate(EntrysCompanion entrysCompanion) {
     if (!isValid(entrysCompanion.fieldListId.value)) {
       throw InvalidDataException("fieldListId");
     }
-    if (!isValid(entrysCompanion.answerId.value)) {
-      throw InvalidDataException("answerId");
-    }
-    if (!isValid(entrysCompanion.questionId.value)) {
-      throw InvalidDataException("questionId");
-    }
     if (entrysCompanion.creationAt.value.toUtc().isAfter(clock.now().toUtc())) {
       throw InvalidDataException("creationAt");
     }
-    if (entrysCompanion.lastModificationAt.value
-        .toUtc()
-        .isAfter(clock.now().toUtc())) {
+    if (entrysCompanion.lastModificationAt.value.toUtc().isAfter(
+      clock.now().toUtc(),
+    )) {
       throw InvalidDataException("lastModificationAt");
     }
     if (entrysCompanion.rank.value != Rank.Normal.index) {
@@ -88,7 +80,7 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     return update(entrys).replace(entrysCompanion);
   }
 
-  remove(String id) {
+  Future<int> remove(String id) {
     return (delete(entrys)..where((tbl) => tbl.id.equals(id))).go();
   }
 
@@ -96,24 +88,23 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     final otherEntrys = alias(entrys, "otherEntrys");
     final query = select(entrys).join([
       innerJoin(
-          otherEntrys, otherEntrys.questionId.equalsExp(entrys.questionId)),
-      innerJoin(attachedDatabase.entryTexts,
-          attachedDatabase.entryTexts.id.equalsExp(otherEntrys.answerId))
-    ])
-      ..where(entrys.id.equals(entryId));
+        otherEntrys,
+        otherEntrys.question.equalsExp(entrys.question),
+      ),
+    ])..where(entrys.id.equals(entryId));
     final result = await query.get();
     if (result.length == 1) {
       return Future.value(null);
     }
-    var thisAnswer;
+    late String thisAnswer;
     var otherAnswers = [];
-    result.forEach((row) {
+    for (var row in result) {
       if (row.readTable(otherEntrys).id == entryId) {
-        thisAnswer = row.readTable(attachedDatabase.entryTexts).value;
+        thisAnswer = row.readTable(otherEntrys).answer;
       } else {
-        otherAnswers.add(row.readTable(attachedDatabase.entryTexts).value);
+        otherAnswers.add(row.readTable(otherEntrys).answer);
       }
-    });
+    }
     final hints = ["Length: ${thisAnswer.length}"];
     final thisAnswerLength = thisAnswer.length;
     final otherLengthAnswers = [];

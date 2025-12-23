@@ -31,7 +31,7 @@ dependencies:
   clock: ^1.1.0
   # TODO MIT license // license work should be done
   uuid: ^4.1.0
-  drift: ^2.10.0
+  drift: ^2.30.0
   sqlite3_flutter_libs: ^0.5.0
   path_provider: ^2.0.0
   path: ^1.8.2
@@ -45,7 +45,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
-  go_router: ^14.2.0
+  go_router: ^17.0.1
   firebase_core_platform_interface:
   google_fonts: ^6.3.2
   flex_color_picker: ^3.7.0
@@ -57,14 +57,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   bloc_test:
-  drift_dev: ^2.4.1
+  drift_dev: ^2.30.0
   mockito:
   mocktail:
-  build_runner: ^2.4.6
+  build_runner: ^2.10.4
   integration_test:
     sdk: flutter
   http: ^1.2.0
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   freezed: ^3.2.3
   mockingjay: ^2.0.0
 # For information on the generic Dart part of this file, see the
