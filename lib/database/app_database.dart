@@ -30,12 +30,12 @@ class Entrys extends Table {
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldListId => text().references(FieldLists, #id)();
   TextColumn get answer => text().check(
-    answer.length.isSmallerOrEqualValue(Entrys.maximumTextLength) &
-        answer.length.isBiggerOrEqualValue(Entrys.minimumTextLength),
+    answer.trim().length.isBiggerOrEqualValue(Entrys.minimumTextLength) &
+        answer.length.isSmallerOrEqualValue(Entrys.maximumTextLength),
   )();
   TextColumn get question => text().check(
-    question.length.isSmallerOrEqualValue(Entrys.maximumTextLength) &
-        question.length.isBiggerOrEqualValue(Entrys.minimumTextLength),
+    question.trim().length.isBiggerOrEqualValue(Entrys.minimumTextLength) &
+        question.length.isSmallerOrEqualValue(Entrys.maximumTextLength),
   )();
   DateTimeColumn get creationAt => dateTime()();
   DateTimeColumn get lastModificationAt =>

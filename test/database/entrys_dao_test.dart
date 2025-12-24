@@ -581,10 +581,36 @@ void main() {
           ),
         ),
       );
+
       entry = Entry(
         id: id,
         fieldListId: fieldListId,
         answer: 'r' * (Entrys.minimumTextLength - 1),
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount,
+      );
+      expect(
+        () async {
+          await entrysDao.create(entry.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) => e is SqliteException && e.message.contains('answer'),
+          ),
+        ),
+      );
+
+      entry = Entry(
+        id: id,
+        fieldListId: fieldListId,
+        answer: ' ',
         question: question,
         creationAt: creationAt,
         lastModificationAt: lastModificationAt,
@@ -638,6 +664,31 @@ void main() {
         fieldListId: fieldListId,
         answer: answer,
         question: 'r' * (Entrys.minimumTextLength - 1),
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount,
+      );
+      expect(
+        () async {
+          await entrysDao.create(entry.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) => e is SqliteException && e.message.contains("question"),
+          ),
+        ),
+      );
+
+      entry = Entry(
+        id: id,
+        fieldListId: fieldListId,
+        answer: answer,
+        question: ' ',
         creationAt: creationAt,
         lastModificationAt: lastModificationAt,
         order: order,
@@ -1113,7 +1164,7 @@ void main() {
       );
     });
 
-    test("invalid answer", () {
+    test("Invalid Entry: invalid answer", () {
       var entry = Entry(
         id: id,
         fieldListId: fieldListId,
@@ -1160,6 +1211,108 @@ void main() {
         throwsA(
           predicate(
             (e) => e is SqliteException && e.message.contains("answer"),
+          ),
+        ),
+      );
+
+      entry = Entry(
+        id: id,
+        fieldListId: fieldListId,
+        answer: ' ',
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount,
+      );
+      expect(
+        () async {
+          await entrysDao.mutate(entry.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) => e is SqliteException && e.message.contains("answer"),
+          ),
+        ),
+      );
+    });
+
+    test("Invalid Entry: invalid question", () {
+      var entry = Entry(
+        id: id,
+        fieldListId: fieldListId,
+        answer: answer,
+        question: 'r' * (Entrys.maximumTextLength + 1),
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount,
+      );
+      expect(
+        () async {
+          await entrysDao.mutate(entry.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) => e is SqliteException && e.message.contains("question"),
+          ),
+        ),
+      );
+
+      entry = Entry(
+        id: id,
+        fieldListId: fieldListId,
+        answer: answer,
+        question: 'r' * (Entrys.minimumTextLength - 1),
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount,
+      );
+      expect(
+        () async {
+          await entrysDao.mutate(entry.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) => e is SqliteException && e.message.contains("question"),
+          ),
+        ),
+      );
+
+      entry = Entry(
+        id: id,
+        fieldListId: fieldListId,
+        answer: answer,
+        question: ' ',
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        askedCount: askedCount,
+        wronglyAnsweredCount: wronglyAnsweredCount,
+      );
+      expect(
+        () async {
+          await entrysDao.mutate(entry.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) => e is SqliteException && e.message.contains("question"),
           ),
         ),
       );
