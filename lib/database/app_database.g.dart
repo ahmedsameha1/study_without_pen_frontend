@@ -2038,10 +2038,11 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         aliasedName,
         false,
         type: DriftSqlType.bool,
-        requiredDuringInsert: true,
+        requiredDuringInsert: false,
         defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("did_asked_at_current_test_round" IN (0, 1))',
         ),
+        defaultValue: Constant(true),
       );
   static const VerificationMeta _emulatedCreatedAtMeta = const VerificationMeta(
     'emulatedCreatedAt',
@@ -2194,8 +2195,6 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
           _didAskedAtCurrentTestRoundMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_didAskedAtCurrentTestRoundMeta);
     }
     if (data.containsKey('emulated_created_at')) {
       context.handle(
@@ -2566,7 +2565,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     required DateTime creationAt,
     required DateTime lastModificationAt,
     required int order,
-    required bool didAskedAtCurrentTestRound,
+    this.didAskedAtCurrentTestRound = const Value.absent(),
     required DateTime emulatedCreatedAt,
     required int rank,
     required int askedCount,
@@ -2578,7 +2577,6 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
        creationAt = Value(creationAt),
        lastModificationAt = Value(lastModificationAt),
        order = Value(order),
-       didAskedAtCurrentTestRound = Value(didAskedAtCurrentTestRound),
        emulatedCreatedAt = Value(emulatedCreatedAt),
        rank = Value(rank),
        askedCount = Value(askedCount),
@@ -6665,7 +6663,7 @@ typedef $$EntrysTableCreateCompanionBuilder =
       required DateTime creationAt,
       required DateTime lastModificationAt,
       required int order,
-      required bool didAskedAtCurrentTestRound,
+      Value<bool> didAskedAtCurrentTestRound,
       required DateTime emulatedCreatedAt,
       required int rank,
       required int askedCount,
@@ -7172,7 +7170,7 @@ class $$EntrysTableTableManager
                 required DateTime creationAt,
                 required DateTime lastModificationAt,
                 required int order,
-                required bool didAskedAtCurrentTestRound,
+                Value<bool> didAskedAtCurrentTestRound = const Value.absent(),
                 required DateTime emulatedCreatedAt,
                 required int rank,
                 required int askedCount,

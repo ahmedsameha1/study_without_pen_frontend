@@ -44,7 +44,8 @@ class Entrys extends Table {
     order.isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
         order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
   )();
-  BoolColumn get didAskedAtCurrentTestRound => boolean()();
+  BoolColumn get didAskedAtCurrentTestRound =>
+      boolean().withDefault(Constant(true))();
   DateTimeColumn get emulatedCreatedAt => dateTime()();
   IntColumn get rank => integer().check(
     rank.isSmallerOrEqualValue(Rank.vital.index) &

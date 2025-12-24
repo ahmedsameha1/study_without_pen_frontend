@@ -1043,6 +1043,28 @@ void main() {
       List<Entry> entrys = await entrysDao.getAll();
       expect(isValid(entrys[0].id), true);
     });
+
+    test(
+      "Good case: Creating Entry without giving an didAskedAtCurrentTestRound",
+      () async {
+        var entrysCompanion = EntrysCompanion(
+          id: Value(id),
+          fieldListId: Value(fieldListId),
+          answer: Value(answer),
+          question: Value(question),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          order: Value(order),
+          emulatedCreatedAt: Value(emulatedCreatedAt),
+          rank: Value(rank),
+          askedCount: Value(askedCount),
+          wronglyAnsweredCount: Value(wronglyAnsweredCount),
+        );
+        await entrysDao.create(entrysCompanion);
+        List<Entry> entrys = await entrysDao.getAll();
+        expect(entrys[0].didAskedAtCurrentTestRound, true);
+      },
+    );
   });
 
   group("Update Entry", () {
