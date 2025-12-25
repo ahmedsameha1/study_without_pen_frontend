@@ -20,7 +20,7 @@ void main() {
   DateTime emulatedCreatedAt = DateTime.utc(2022, 2, 2);
   int order = 1;
   int rank = Rank.normal.index;
-  int askedCount = 2;
+  BigInt? askedCount = BigInt.from(2);
   int wronglyAnsweredCount = 1;
   bool didAskedAtCurrentTestRound = true;
   String fieldId = const Uuid().v4();
@@ -946,33 +946,6 @@ void main() {
       );
     });
 
-    test("Invalid Entry: askedCount is greater than 65535", () {
-      var entry = Entry(
-        id: id,
-        fieldListId: fieldListId,
-        answer: answer,
-        question: question,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt,
-        order: 1,
-        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
-        emulatedCreatedAt: emulatedCreatedAt,
-        rank: rank,
-        askedCount: 65535 + 1,
-        wronglyAnsweredCount: wronglyAnsweredCount,
-      );
-      expect(
-        () async {
-          await entrysDao.create(entry.toCompanion(true));
-        },
-        throwsA(
-          predicate(
-            (e) => e is SqliteException && e.message.contains("asked_count"),
-          ),
-        ),
-      );
-    });
-
     test("Invalid Entry: askedCount is smaller than 0", () async {
       var entry = Entry(
         id: id,
@@ -985,7 +958,7 @@ void main() {
         didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
         emulatedCreatedAt: emulatedCreatedAt,
         rank: rank,
-        askedCount: 0 - 1,
+        askedCount: BigInt.from(0 - 1),
         wronglyAnsweredCount: wronglyAnsweredCount,
       );
       expect(
@@ -1175,6 +1148,25 @@ void main() {
       await entrysDao.create(entrysCompanion);
       List<Entry> entrys = await entrysDao.getAll();
       expect(entrys[0].rank, Rank.normal.index);
+    });
+
+    test("Good case: Creating Entry without giving an askedCount", () async {
+      var entrysCompanion = EntrysCompanion(
+        id: Value(id),
+        fieldListId: Value(fieldListId),
+        answer: Value(answer),
+        question: Value(question),
+        creationAt: Value(creationAt),
+        lastModificationAt: Value(lastModificationAt),
+        didAskedAtCurrentTestRound: Value(true),
+        emulatedCreatedAt: Value(emulatedCreatedAt),
+        order: Value(order),
+        rank: Value(rank),
+        wronglyAnsweredCount: Value(wronglyAnsweredCount),
+      );
+      await entrysDao.create(entrysCompanion);
+      List<Entry> entrys = await entrysDao.getAll();
+      expect(entrys[0].askedCount, Entrys.ASKED_COUNT_MINIMUM_VALUE);
     });
   });
 
@@ -1568,33 +1560,6 @@ void main() {
       );
     });
 
-    test("Invalid update: askedCount is greater than 65535", () {
-      var entry = Entry(
-        id: id,
-        fieldListId: fieldListId,
-        answer: answer,
-        question: question,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt,
-        order: order,
-        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
-        emulatedCreatedAt: emulatedCreatedAt,
-        rank: rank,
-        askedCount: 65535 + 1,
-        wronglyAnsweredCount: wronglyAnsweredCount,
-      );
-      expect(
-        () async {
-          await entrysDao.mutate(entry.toCompanion(true));
-        },
-        throwsA(
-          predicate(
-            (e) => e is SqliteException && e.message.contains("asked_count"),
-          ),
-        ),
-      );
-    });
-
     test("Invalid update: askedCount is smaller than 0", () {
       var entry = Entry(
         id: id,
@@ -1607,7 +1572,7 @@ void main() {
         didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
         emulatedCreatedAt: emulatedCreatedAt,
         rank: rank,
-        askedCount: 0 - 1,
+        askedCount: BigInt.from(0 - 1),
         wronglyAnsweredCount: wronglyAnsweredCount,
       );
       expect(
@@ -1717,11 +1682,10 @@ void main() {
       expect(gottenEntry.wronglyAnsweredCount, wronglyAnsweredCount);
     });
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     test("Good case 2", () async {
       const thisOrder = 10;
       var thisAnswer = 'thisAnswer';
-      const thisAskedCount = 1000;
+      BigInt thisAskedCount = BigInt.from(1000);
       var entry = Entry(
         id: id,
         fieldListId: fieldListId,

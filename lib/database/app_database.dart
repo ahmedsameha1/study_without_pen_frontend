@@ -22,10 +22,9 @@ class Entrys extends Table {
   static const int minimumTextLength = 1;
   static const int maximumTextLength = 2000;
   static const int ORDER_MINIMUM_VALUE = 0;
-  static const int ASKED_COUNT_MINIMUM_VALUE = 0;
+  static BigInt ASKED_COUNT_MINIMUM_VALUE = BigInt.from(0);
   static const int WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE = 0;
   static const int ORDER_MAXIMUM_VALUE = 65535;
-  static const int ASKED_COUNT_MAXIMUM_VALUE = 65535;
   static const int WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE = 65535;
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldListId => text().references(FieldLists, #id)();
@@ -55,10 +54,11 @@ class Entrys extends Table {
         rank.isSmallerOrEqualValue(Rank.vital.index) &
             rank.isBiggerOrEqualValue(Rank.low.index),
       )();
-  IntColumn get askedCount => integer().check(
-    askedCount.isSmallerOrEqualValue(Entrys.ASKED_COUNT_MAXIMUM_VALUE) &
+  Int64Column get askedCount => int64()
+      .withDefault(Constant(Entrys.ASKED_COUNT_MINIMUM_VALUE))
+      .check(
         askedCount.isBiggerOrEqualValue(Entrys.ASKED_COUNT_MINIMUM_VALUE),
-  )();
+      )();
   IntColumn get wronglyAnsweredCount => integer().check(
     wronglyAnsweredCount.isSmallerOrEqualValue(
           Entrys.WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE,
