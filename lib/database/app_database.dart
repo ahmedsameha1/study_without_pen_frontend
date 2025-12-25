@@ -40,10 +40,12 @@ class Entrys extends Table {
   DateTimeColumn get creationAt => dateTime()();
   DateTimeColumn get lastModificationAt =>
       dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
-  IntColumn get order => integer().check(
-    order.isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
-        order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
-  )();
+  IntColumn get order => integer()
+      .withDefault(Constant(Entrys.ORDER_MINIMUM_VALUE))
+      .check(
+        order.isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
+            order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
+      )();
   BoolColumn get didAskedAtCurrentTestRound =>
       boolean().withDefault(Constant(true))();
   DateTimeColumn get emulatedCreatedAt => dateTime()();

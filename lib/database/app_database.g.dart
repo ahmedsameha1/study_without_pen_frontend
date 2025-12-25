@@ -1965,11 +1965,11 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
     false,
     check: () =>
         ComparableExpr(
-          answer.length,
-        ).isSmallerOrEqualValue(Entrys.maximumTextLength) &
+          StringExpressionOperators(answer).trim().length,
+        ).isBiggerOrEqualValue(Entrys.minimumTextLength) &
         ComparableExpr(
           answer.length,
-        ).isBiggerOrEqualValue(Entrys.minimumTextLength),
+        ).isSmallerOrEqualValue(Entrys.maximumTextLength),
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
@@ -1983,11 +1983,11 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
     false,
     check: () =>
         ComparableExpr(
-          question.length,
-        ).isSmallerOrEqualValue(Entrys.maximumTextLength) &
+          StringExpressionOperators(question).trim().length,
+        ).isBiggerOrEqualValue(Entrys.minimumTextLength) &
         ComparableExpr(
           question.length,
-        ).isBiggerOrEqualValue(Entrys.minimumTextLength),
+        ).isSmallerOrEqualValue(Entrys.maximumTextLength),
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
@@ -2027,7 +2027,8 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         ).isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
         ComparableExpr(order).isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    defaultValue: Constant(Entrys.ORDER_MINIMUM_VALUE),
   );
   static const VerificationMeta _didAskedAtCurrentTestRoundMeta =
       const VerificationMeta('didAskedAtCurrentTestRound');
@@ -2184,8 +2185,6 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         _orderMeta,
         order.isAcceptableOrUnknown(data['order']!, _orderMeta),
       );
-    } else if (isInserting) {
-      context.missing(_orderMeta);
     }
     if (data.containsKey('did_asked_at_current_test_round')) {
       context.handle(
@@ -2564,7 +2563,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     required String question,
     required DateTime creationAt,
     required DateTime lastModificationAt,
-    required int order,
+    this.order = const Value.absent(),
     this.didAskedAtCurrentTestRound = const Value.absent(),
     required DateTime emulatedCreatedAt,
     required int rank,
@@ -2576,7 +2575,6 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
        question = Value(question),
        creationAt = Value(creationAt),
        lastModificationAt = Value(lastModificationAt),
-       order = Value(order),
        emulatedCreatedAt = Value(emulatedCreatedAt),
        rank = Value(rank),
        askedCount = Value(askedCount),
@@ -6662,7 +6660,7 @@ typedef $$EntrysTableCreateCompanionBuilder =
       required String question,
       required DateTime creationAt,
       required DateTime lastModificationAt,
-      required int order,
+      Value<int> order,
       Value<bool> didAskedAtCurrentTestRound,
       required DateTime emulatedCreatedAt,
       required int rank,
@@ -7169,7 +7167,7 @@ class $$EntrysTableTableManager
                 required String question,
                 required DateTime creationAt,
                 required DateTime lastModificationAt,
-                required int order,
+                Value<int> order = const Value.absent(),
                 Value<bool> didAskedAtCurrentTestRound = const Value.absent(),
                 required DateTime emulatedCreatedAt,
                 required int rank,

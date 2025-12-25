@@ -1096,7 +1096,7 @@ void main() {
     });
 
     test(
-      "Good case: Creating Entry without giving an didAskedAtCurrentTestRound",
+      "Good case: Creating Entry without giving a didAskedAtCurrentTestRound",
       () async {
         var entrysCompanion = EntrysCompanion(
           id: Value(id),
@@ -1116,6 +1116,25 @@ void main() {
         expect(entrys[0].didAskedAtCurrentTestRound, true);
       },
     );
+
+    test("Good case: Creating Entry without giving an order", () async {
+      var entrysCompanion = EntrysCompanion(
+        id: Value(id),
+        fieldListId: Value(fieldListId),
+        answer: Value(answer),
+        question: Value(question),
+        creationAt: Value(creationAt),
+        lastModificationAt: Value(lastModificationAt),
+        didAskedAtCurrentTestRound: Value(true),
+        emulatedCreatedAt: Value(emulatedCreatedAt),
+        rank: Value(rank),
+        askedCount: Value(askedCount),
+        wronglyAnsweredCount: Value(wronglyAnsweredCount),
+      );
+      await entrysDao.create(entrysCompanion);
+      List<Entry> entrys = await entrysDao.getAll();
+      expect(entrys[0].order, Entrys.ORDER_MINIMUM_VALUE);
+    });
   });
 
   group("Update Entry", () {
