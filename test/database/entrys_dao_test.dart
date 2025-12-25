@@ -1157,6 +1157,25 @@ void main() {
         expect(entrys[0].emulatedCreatedAt, null);
       },
     );
+
+    test("Good case: Creating Entry without giving a rank", () async {
+      var entrysCompanion = EntrysCompanion(
+        id: Value(id),
+        fieldListId: Value(fieldListId),
+        answer: Value(answer),
+        question: Value(question),
+        creationAt: Value(creationAt),
+        lastModificationAt: Value(lastModificationAt),
+        didAskedAtCurrentTestRound: Value(true),
+        emulatedCreatedAt: Value(emulatedCreatedAt),
+        order: Value(order),
+        askedCount: Value(askedCount),
+        wronglyAnsweredCount: Value(wronglyAnsweredCount),
+      );
+      await entrysDao.create(entrysCompanion);
+      List<Entry> entrys = await entrysDao.getAll();
+      expect(entrys[0].rank, Rank.normal.index);
+    });
   });
 
   group("Update Entry", () {

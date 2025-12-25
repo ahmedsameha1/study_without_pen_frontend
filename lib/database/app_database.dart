@@ -49,10 +49,12 @@ class Entrys extends Table {
   BoolColumn get didAskedAtCurrentTestRound =>
       boolean().withDefault(Constant(true))();
   DateTimeColumn get emulatedCreatedAt => dateTime().nullable()();
-  IntColumn get rank => integer().check(
-    rank.isSmallerOrEqualValue(Rank.vital.index) &
-        rank.isBiggerOrEqualValue(Rank.low.index),
-  )();
+  IntColumn get rank => integer()
+      .withDefault(Constant(Rank.normal.index))
+      .check(
+        rank.isSmallerOrEqualValue(Rank.vital.index) &
+            rank.isBiggerOrEqualValue(Rank.low.index),
+      )();
   IntColumn get askedCount => integer().check(
     askedCount.isSmallerOrEqualValue(Entrys.ASKED_COUNT_MAXIMUM_VALUE) &
         askedCount.isBiggerOrEqualValue(Entrys.ASKED_COUNT_MINIMUM_VALUE),

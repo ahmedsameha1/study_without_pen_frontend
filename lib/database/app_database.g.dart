@@ -2067,7 +2067,8 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         ComparableExpr(rank).isSmallerOrEqualValue(Rank.vital.index) &
         ComparableExpr(rank).isBiggerOrEqualValue(Rank.low.index),
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    defaultValue: Constant(Rank.normal.index),
   );
   static const VerificationMeta _askedCountMeta = const VerificationMeta(
     'askedCount',
@@ -2209,8 +2210,6 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         _rankMeta,
         rank.isAcceptableOrUnknown(data['rank']!, _rankMeta),
       );
-    } else if (isInserting) {
-      context.missing(_rankMeta);
     }
     if (data.containsKey('asked_count')) {
       context.handle(
@@ -2570,7 +2569,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     this.order = const Value.absent(),
     this.didAskedAtCurrentTestRound = const Value.absent(),
     this.emulatedCreatedAt = const Value.absent(),
-    required int rank,
+    this.rank = const Value.absent(),
     required int askedCount,
     required int wronglyAnsweredCount,
     this.rowid = const Value.absent(),
@@ -2579,7 +2578,6 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
        question = Value(question),
        creationAt = Value(creationAt),
        lastModificationAt = Value(lastModificationAt),
-       rank = Value(rank),
        askedCount = Value(askedCount),
        wronglyAnsweredCount = Value(wronglyAnsweredCount);
   static Insertable<Entry> custom({
@@ -6666,7 +6664,7 @@ typedef $$EntrysTableCreateCompanionBuilder =
       Value<int> order,
       Value<bool> didAskedAtCurrentTestRound,
       Value<DateTime?> emulatedCreatedAt,
-      required int rank,
+      Value<int> rank,
       required int askedCount,
       required int wronglyAnsweredCount,
       Value<int> rowid,
@@ -7173,7 +7171,7 @@ class $$EntrysTableTableManager
                 Value<int> order = const Value.absent(),
                 Value<bool> didAskedAtCurrentTestRound = const Value.absent(),
                 Value<DateTime?> emulatedCreatedAt = const Value.absent(),
-                required int rank,
+                Value<int> rank = const Value.absent(),
                 required int askedCount,
                 required int wronglyAnsweredCount,
                 Value<int> rowid = const Value.absent(),
