@@ -48,7 +48,7 @@ class Entrys extends Table {
       )();
   BoolColumn get didAskedAtCurrentTestRound =>
       boolean().withDefault(Constant(true))();
-  DateTimeColumn get emulatedCreatedAt => dateTime()();
+  DateTimeColumn get emulatedCreatedAt => dateTime().nullable()();
   IntColumn get rank => integer().check(
     rank.isSmallerOrEqualValue(Rank.vital.index) &
         rank.isBiggerOrEqualValue(Rank.low.index),

@@ -1135,6 +1135,28 @@ void main() {
       List<Entry> entrys = await entrysDao.getAll();
       expect(entrys[0].order, Entrys.ORDER_MINIMUM_VALUE);
     });
+
+    test(
+      "Good case: Creating Entry without giving an emulatedCreatedAt",
+      () async {
+        var entrysCompanion = EntrysCompanion(
+          id: Value(id),
+          fieldListId: Value(fieldListId),
+          answer: Value(answer),
+          question: Value(question),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          didAskedAtCurrentTestRound: Value(true),
+          order: Value(order),
+          rank: Value(rank),
+          askedCount: Value(askedCount),
+          wronglyAnsweredCount: Value(wronglyAnsweredCount),
+        );
+        await entrysDao.create(entrysCompanion);
+        List<Entry> entrys = await entrysDao.getAll();
+        expect(entrys[0].emulatedCreatedAt, null);
+      },
+    );
   });
 
   group("Update Entry", () {
