@@ -2088,20 +2088,18 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
   static const VerificationMeta _wronglyAnsweredCountMeta =
       const VerificationMeta('wronglyAnsweredCount');
   @override
-  late final GeneratedColumn<int> wronglyAnsweredCount = GeneratedColumn<int>(
-    'wrongly_answered_count',
-    aliasedName,
-    false,
-    check: () =>
-        ComparableExpr(
-          wronglyAnsweredCount,
-        ).isSmallerOrEqualValue(Entrys.WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE) &
-        ComparableExpr(
+  late final GeneratedColumn<BigInt> wronglyAnsweredCount =
+      GeneratedColumn<BigInt>(
+        'wrongly_answered_count',
+        aliasedName,
+        false,
+        check: () => ComparableExpr(
           wronglyAnsweredCount,
         ).isBiggerOrEqualValue(Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE),
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-  );
+        type: DriftSqlType.bigInt,
+        requiredDuringInsert: false,
+        defaultValue: Constant(Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE),
+      );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2222,8 +2220,6 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
           _wronglyAnsweredCountMeta,
         ),
       );
-    } else if (isInserting) {
-      context.missing(_wronglyAnsweredCountMeta);
     }
     return context;
   }
@@ -2283,7 +2279,7 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         data['${effectivePrefix}asked_count'],
       )!,
       wronglyAnsweredCount: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
+        DriftSqlType.bigInt,
         data['${effectivePrefix}wrongly_answered_count'],
       )!,
     );
@@ -2307,7 +2303,7 @@ class Entry extends DataClass implements Insertable<Entry> {
   final DateTime? emulatedCreatedAt;
   final int rank;
   final BigInt askedCount;
-  final int wronglyAnsweredCount;
+  final BigInt wronglyAnsweredCount;
   const Entry({
     required this.id,
     required this.fieldListId,
@@ -2340,7 +2336,7 @@ class Entry extends DataClass implements Insertable<Entry> {
     }
     map['rank'] = Variable<int>(rank);
     map['asked_count'] = Variable<BigInt>(askedCount);
-    map['wrongly_answered_count'] = Variable<int>(wronglyAnsweredCount);
+    map['wrongly_answered_count'] = Variable<BigInt>(wronglyAnsweredCount);
     return map;
   }
 
@@ -2386,7 +2382,7 @@ class Entry extends DataClass implements Insertable<Entry> {
       ),
       rank: serializer.fromJson<int>(json['rank']),
       askedCount: serializer.fromJson<BigInt>(json['askedCount']),
-      wronglyAnsweredCount: serializer.fromJson<int>(
+      wronglyAnsweredCount: serializer.fromJson<BigInt>(
         json['wronglyAnsweredCount'],
       ),
     );
@@ -2408,7 +2404,7 @@ class Entry extends DataClass implements Insertable<Entry> {
       'emulatedCreatedAt': serializer.toJson<DateTime?>(emulatedCreatedAt),
       'rank': serializer.toJson<int>(rank),
       'askedCount': serializer.toJson<BigInt>(askedCount),
-      'wronglyAnsweredCount': serializer.toJson<int>(wronglyAnsweredCount),
+      'wronglyAnsweredCount': serializer.toJson<BigInt>(wronglyAnsweredCount),
     };
   }
 
@@ -2424,7 +2420,7 @@ class Entry extends DataClass implements Insertable<Entry> {
     Value<DateTime?> emulatedCreatedAt = const Value.absent(),
     int? rank,
     BigInt? askedCount,
-    int? wronglyAnsweredCount,
+    BigInt? wronglyAnsweredCount,
   }) => Entry(
     id: id ?? this.id,
     fieldListId: fieldListId ?? this.fieldListId,
@@ -2537,7 +2533,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
   final Value<DateTime?> emulatedCreatedAt;
   final Value<int> rank;
   final Value<BigInt> askedCount;
-  final Value<int> wronglyAnsweredCount;
+  final Value<BigInt> wronglyAnsweredCount;
   final Value<int> rowid;
   const EntrysCompanion({
     this.id = const Value.absent(),
@@ -2566,14 +2562,13 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     this.emulatedCreatedAt = const Value.absent(),
     this.rank = const Value.absent(),
     this.askedCount = const Value.absent(),
-    required int wronglyAnsweredCount,
+    this.wronglyAnsweredCount = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : fieldListId = Value(fieldListId),
        answer = Value(answer),
        question = Value(question),
        creationAt = Value(creationAt),
-       lastModificationAt = Value(lastModificationAt),
-       wronglyAnsweredCount = Value(wronglyAnsweredCount);
+       lastModificationAt = Value(lastModificationAt);
   static Insertable<Entry> custom({
     Expression<String>? id,
     Expression<String>? fieldListId,
@@ -2586,7 +2581,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     Expression<DateTime>? emulatedCreatedAt,
     Expression<int>? rank,
     Expression<BigInt>? askedCount,
-    Expression<int>? wronglyAnsweredCount,
+    Expression<BigInt>? wronglyAnsweredCount,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2621,7 +2616,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     Value<DateTime?>? emulatedCreatedAt,
     Value<int>? rank,
     Value<BigInt>? askedCount,
-    Value<int>? wronglyAnsweredCount,
+    Value<BigInt>? wronglyAnsweredCount,
     Value<int>? rowid,
   }) {
     return EntrysCompanion(
@@ -2683,7 +2678,9 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
       map['asked_count'] = Variable<BigInt>(askedCount.value);
     }
     if (wronglyAnsweredCount.present) {
-      map['wrongly_answered_count'] = Variable<int>(wronglyAnsweredCount.value);
+      map['wrongly_answered_count'] = Variable<BigInt>(
+        wronglyAnsweredCount.value,
+      );
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -6660,7 +6657,7 @@ typedef $$EntrysTableCreateCompanionBuilder =
       Value<DateTime?> emulatedCreatedAt,
       Value<int> rank,
       Value<BigInt> askedCount,
-      required int wronglyAnsweredCount,
+      Value<BigInt> wronglyAnsweredCount,
       Value<int> rowid,
     });
 typedef $$EntrysTableUpdateCompanionBuilder =
@@ -6676,7 +6673,7 @@ typedef $$EntrysTableUpdateCompanionBuilder =
       Value<DateTime?> emulatedCreatedAt,
       Value<int> rank,
       Value<BigInt> askedCount,
-      Value<int> wronglyAnsweredCount,
+      Value<BigInt> wronglyAnsweredCount,
       Value<int> rowid,
     });
 
@@ -6799,7 +6796,7 @@ class $$EntrysTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get wronglyAnsweredCount => $composableBuilder(
+  ColumnFilters<BigInt> get wronglyAnsweredCount => $composableBuilder(
     column: $table.wronglyAnsweredCount,
     builder: (column) => ColumnFilters(column),
   );
@@ -6937,7 +6934,7 @@ class $$EntrysTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<int> get wronglyAnsweredCount => $composableBuilder(
+  ColumnOrderings<BigInt> get wronglyAnsweredCount => $composableBuilder(
     column: $table.wronglyAnsweredCount,
     builder: (column) => ColumnOrderings(column),
   );
@@ -7015,7 +7012,7 @@ class $$EntrysTableAnnotationComposer
     builder: (column) => column,
   );
 
-  GeneratedColumn<int> get wronglyAnsweredCount => $composableBuilder(
+  GeneratedColumn<BigInt> get wronglyAnsweredCount => $composableBuilder(
     column: $table.wronglyAnsweredCount,
     builder: (column) => column,
   );
@@ -7137,7 +7134,7 @@ class $$EntrysTableTableManager
                 Value<DateTime?> emulatedCreatedAt = const Value.absent(),
                 Value<int> rank = const Value.absent(),
                 Value<BigInt> askedCount = const Value.absent(),
-                Value<int> wronglyAnsweredCount = const Value.absent(),
+                Value<BigInt> wronglyAnsweredCount = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EntrysCompanion(
                 id: id,
@@ -7167,7 +7164,7 @@ class $$EntrysTableTableManager
                 Value<DateTime?> emulatedCreatedAt = const Value.absent(),
                 Value<int> rank = const Value.absent(),
                 Value<BigInt> askedCount = const Value.absent(),
-                required int wronglyAnsweredCount,
+                Value<BigInt> wronglyAnsweredCount = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EntrysCompanion.insert(
                 id: id,

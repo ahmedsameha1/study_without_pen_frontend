@@ -23,9 +23,8 @@ class Entrys extends Table {
   static const int maximumTextLength = 2000;
   static const int ORDER_MINIMUM_VALUE = 0;
   static BigInt ASKED_COUNT_MINIMUM_VALUE = BigInt.from(0);
-  static const int WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE = 0;
+  static BigInt WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE = BigInt.from(0);
   static const int ORDER_MAXIMUM_VALUE = 65535;
-  static const int WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE = 65535;
   TextColumn get id => text().clientDefault(() => const Uuid().v4())();
   TextColumn get fieldListId => text().references(FieldLists, #id)();
   TextColumn get answer => text().check(
@@ -59,14 +58,13 @@ class Entrys extends Table {
       .check(
         askedCount.isBiggerOrEqualValue(Entrys.ASKED_COUNT_MINIMUM_VALUE),
       )();
-  IntColumn get wronglyAnsweredCount => integer().check(
-    wronglyAnsweredCount.isSmallerOrEqualValue(
-          Entrys.WRONGLY_ANSWERED_COUNT_MAXIMUM_VALUE,
-        ) &
+  Int64Column get wronglyAnsweredCount => int64()
+      .withDefault(Constant(Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE))
+      .check(
         wronglyAnsweredCount.isBiggerOrEqualValue(
           Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE,
         ),
-  )();
+      )();
 
   @override
   Set<Column> get primaryKey => {id};

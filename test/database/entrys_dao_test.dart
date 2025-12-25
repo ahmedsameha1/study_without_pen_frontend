@@ -20,8 +20,8 @@ void main() {
   DateTime emulatedCreatedAt = DateTime.utc(2022, 2, 2);
   int order = 1;
   int rank = Rank.normal.index;
-  BigInt? askedCount = BigInt.from(2);
-  int wronglyAnsweredCount = 1;
+  BigInt askedCount = BigInt.from(2);
+  BigInt wronglyAnsweredCount = BigInt.from(1);
   bool didAskedAtCurrentTestRound = true;
   String fieldId = const Uuid().v4();
   String name = "fieldList1";
@@ -973,35 +973,6 @@ void main() {
       );
     });
 
-    test("Invalid Entry: wronglyAnsweredCount is greater than 65535", () {
-      var entry = Entry(
-        id: id,
-        fieldListId: fieldListId,
-        answer: answer,
-        question: question,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt,
-        order: 1,
-        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
-        emulatedCreatedAt: emulatedCreatedAt,
-        rank: rank,
-        askedCount: askedCount,
-        wronglyAnsweredCount: 65535 + 1,
-      );
-      expect(
-        () async {
-          await entrysDao.create(entry.toCompanion(true));
-        },
-        throwsA(
-          predicate(
-            (e) =>
-                e is SqliteException &&
-                e.message.contains("wrongly_answered_count"),
-          ),
-        ),
-      );
-    });
-
     test("Invalid Entry: wronglyAnsweredCount is smaller than 0", () async {
       var entry = Entry(
         id: id,
@@ -1015,7 +986,7 @@ void main() {
         emulatedCreatedAt: emulatedCreatedAt,
         rank: rank,
         askedCount: askedCount,
-        wronglyAnsweredCount: 0 - 1,
+        wronglyAnsweredCount: BigInt.from(0 - 1),
       );
       expect(
         () async {
@@ -1168,6 +1139,31 @@ void main() {
       List<Entry> entrys = await entrysDao.getAll();
       expect(entrys[0].askedCount, Entrys.ASKED_COUNT_MINIMUM_VALUE);
     });
+
+    test(
+      "Good case: Creating Entry without giving a wronglyAnsweredCount",
+      () async {
+        var entrysCompanion = EntrysCompanion(
+          id: Value(id),
+          fieldListId: Value(fieldListId),
+          answer: Value(answer),
+          question: Value(question),
+          creationAt: Value(creationAt),
+          lastModificationAt: Value(lastModificationAt),
+          didAskedAtCurrentTestRound: Value(true),
+          emulatedCreatedAt: Value(emulatedCreatedAt),
+          order: Value(order),
+          rank: Value(rank),
+          askedCount: Value(askedCount),
+        );
+        await entrysDao.create(entrysCompanion);
+        List<Entry> entrys = await entrysDao.getAll();
+        expect(
+          entrys[0].wronglyAnsweredCount,
+          Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE,
+        );
+      },
+    );
   });
 
   group("Update Entry", () {
@@ -1587,35 +1583,6 @@ void main() {
       );
     });
 
-    test("Invalid update: wronglyAnsweredCount is greater than 65535", () {
-      var entry = Entry(
-        id: id,
-        fieldListId: fieldListId,
-        answer: answer,
-        question: question,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt,
-        order: order,
-        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
-        emulatedCreatedAt: emulatedCreatedAt,
-        rank: rank,
-        askedCount: askedCount,
-        wronglyAnsweredCount: 65535 + 1,
-      );
-      expect(
-        () async {
-          await entrysDao.mutate(entry.toCompanion(true));
-        },
-        throwsA(
-          predicate(
-            (e) =>
-                e is SqliteException &&
-                e.message.contains("wrongly_answered_count"),
-          ),
-        ),
-      );
-    });
-
     test("Invalid update: wronglyAnsweredCount is smaller than 0", () {
       var entry = Entry(
         id: id,
@@ -1629,7 +1596,7 @@ void main() {
         emulatedCreatedAt: emulatedCreatedAt,
         rank: rank,
         askedCount: askedCount,
-        wronglyAnsweredCount: 0 - 1,
+        wronglyAnsweredCount: BigInt.from(0 - 1),
       );
       expect(
         () async {
