@@ -1,8 +1,6 @@
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/database/entry_texts_dao.dart';
 import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
 import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
-import 'package:study_without_pen_by_flutter/database/questions_dao.dart';
 import 'package:study_without_pen_by_flutter/database/session_entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
@@ -18,8 +16,6 @@ void main() {
   late EntrysDao entrysDao;
   late FieldsDao fieldsDao;
   late FieldListsDao fieldListsDao;
-  late EntryTextsDao entryTextsDao;
-  late QuestionsDao questionsDao;
   final entryId = Uuid().v4();
   final sessionId = Uuid().v4();
   String fieldId = Uuid().v4();
@@ -34,11 +30,9 @@ void main() {
   int currentHintCounter = 0;
   DateTime creationAt = DateTime.utc(2020, 1, 1);
   DateTime lastModificationAt = DateTime.utc(2020, 2, 2);
-  String answerId = const Uuid().v4();
-  String questionId = const Uuid().v4();
   DateTime emulatedCreatedAt = DateTime.utc(2022, 2, 2);
   int order = 1;
-  int rank = Rank.Normal.index;
+  int rank = Rank.normal.index;
   int askedCount = 2;
   int wronglyAnsweredCount = 1;
   bool didAskedAtCurrentTestRound = true;
@@ -67,12 +61,8 @@ void main() {
   DateTime lastModificationAt2 = DateTime.utc(2018, 2, 2);
   int usageCount1 = 9;
   int color1 = 0xff55ee11;
-  String questionAddress = const Uuid().v4();
-  final entryTextQuestion = EntryText(id: questionAddress, value: "text");
-  Question question = Question(
-      id: questionId,
-      questionType: QuestionType.EntryTextQuestion.index,
-      address: questionAddress);
+  String question = "question";
+  final answer = "answer";
 
   setUp(() async {
     appDatabase = AppDatabase(NativeDatabase.memory());
@@ -81,74 +71,72 @@ void main() {
     entrysDao = EntrysDao(appDatabase);
     fieldsDao = FieldsDao(appDatabase);
     fieldListsDao = FieldListsDao(appDatabase);
-    entryTextsDao = EntryTextsDao(appDatabase);
-    questionsDao = QuestionsDao(appDatabase);
-    final answer = EntryText(id: answerId, value: "answer");
-    await entryTextsDao.create(answer.toCompanion(true));
-    await entryTextsDao.create(entryTextQuestion.toCompanion(true));
-    await questionsDao.create(question.toCompanion(true));
     var field = Field(
-        id: fieldId,
-        userAccountId: userAccountId,
-        name: name1,
-        creationAt: creationAt2,
-        lastModificationAt: lastModificationAt2,
-        usageCount: usageCount1,
-        color: color1);
+      id: fieldId,
+      userAccountId: userAccountId,
+      name: name1,
+      creationAt: creationAt2,
+      lastModificationAt: lastModificationAt2,
+      usageCount: usageCount1,
+      color: color1,
+    );
     fieldsDao.create(field.toCompanion(true));
     var fieldList = FieldList(
-        id: fieldListId,
-        fieldId: fieldId,
-        name: name,
-        creationAt: creationAt1,
-        lastModificationAt: lastModificationAt1,
-        languageTag: languageTag,
-        checkType: checkType,
-        sortBy: sortBy,
-        doesReadAnswer: doesReadAnswer,
-        usageCount: usageCount,
-        color: color,
-        emulationNumberOfQuestions: emulationNumberOfQuestions,
-        emulationDays: emulationDays,
-        testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
-        testsFindingAnswerDuration: testsFindingAnswerDuration,
-        testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
-        studyTillCorrectReadingQuestionLetterDuration:
-            studyTillCorrectReadingQuestionLetterDuration,
-        studyTillCorrectFindingAnswerDuration:
-            studyTillCorrectFindingAnswerDuration,
-        studyTillCorrectTypingAnswerLetterDuration:
-            studyTillCorrectTypingAnswerLetterDuration,
-        testsTimeOfAnswerAction: testsTimeOfAnswerAction,
-        doesObfuscateQuestion: doesObfuscateQuestion);
+      id: fieldListId,
+      fieldId: fieldId,
+      name: name,
+      creationAt: creationAt1,
+      lastModificationAt: lastModificationAt1,
+      languageTag: languageTag,
+      checkType: checkType,
+      sortBy: sortBy,
+      doesReadAnswer: doesReadAnswer,
+      usageCount: usageCount,
+      color: color,
+      emulationNumberOfQuestions: emulationNumberOfQuestions,
+      emulationDays: emulationDays,
+      testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration,
+      testsFindingAnswerDuration: testsFindingAnswerDuration,
+      testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration,
+      studyTillCorrectReadingQuestionLetterDuration:
+          studyTillCorrectReadingQuestionLetterDuration,
+      studyTillCorrectFindingAnswerDuration:
+          studyTillCorrectFindingAnswerDuration,
+      studyTillCorrectTypingAnswerLetterDuration:
+          studyTillCorrectTypingAnswerLetterDuration,
+      testsTimeOfAnswerAction: testsTimeOfAnswerAction,
+      doesObfuscateQuestion: doesObfuscateQuestion,
+    );
     await fieldListsDao.create(fieldList.toCompanion(true));
     var session = Session(
-        id: sessionId,
-        fieldListId: fieldListId,
-        currentQuestionCounter: currentQuestionCounter,
-        triesNumber: triesNumber,
-        triesCounter: triesCounter,
-        elapsedTime: elapsedTime,
-        isCompleted: isCompleted,
-        lastCheckedAnswerResult: lastCheckedAnswerResult,
-        shouldCheckAnAnswer: shouldCheckAnAnswer,
-        currentHintCounter: currentHintCounter,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt);
+      id: sessionId,
+      fieldListId: fieldListId,
+      currentQuestionCounter: currentQuestionCounter,
+      triesNumber: triesNumber,
+      triesCounter: triesCounter,
+      elapsedTime: elapsedTime,
+      isCompleted: isCompleted,
+      lastCheckedAnswerResult: lastCheckedAnswerResult,
+      shouldCheckAnAnswer: shouldCheckAnAnswer,
+      currentHintCounter: currentHintCounter,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+    );
     await sessionsDao.create(session.toCompanion(true));
     var entry = Entry(
-        id: entryId,
-        fieldListId: fieldListId,
-        answerId: answerId,
-        questionId: questionId,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt,
-        order: order,
-        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
-        emulatedCreatedAt: emulatedCreatedAt,
-        rank: rank,
-        askedCount: askedCount,
-        wronglyAnsweredCount: wronglyAnsweredCount);
+      id: entryId,
+      fieldListId: fieldListId,
+      answer: answer,
+      question: question,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      order: order,
+      didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt,
+      rank: rank,
+      askedCount: BigInt.from(askedCount),
+      wronglyAnsweredCount: BigInt.from(wronglyAnsweredCount),
+    );
     await entrysDao.create(entry.toCompanion(true));
   });
 
@@ -159,67 +147,110 @@ void main() {
   group("Create SessionEntry", () {
     test("Invalid SessionEntry: sessionId is an invalid UUID v4", () async {
       final sessionEntry = SessionEntry(sessionId: "wef", entryId: entryId);
-      expect(() async {
-        await sessionEntrysDao.create(sessionEntry.toCompanion(true));
-      },
-          throwsA(predicate((e) =>
-              e is InvalidDataException && e.message.contains("sessionId"))));
+      expect(
+        () async {
+          await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) => e is InvalidDataException && e.message.contains("sessionId"),
+          ),
+        ),
+      );
     });
 
-    test("Invalid SessionEntry: sessionId doesn't exist in sessions table",
-        () async {
-      final sessionEntry =
-          SessionEntry(sessionId: const Uuid().v4(), entryId: entryId);
-      expect(() async {
-        await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+    test(
+      "Invalid SessionEntry: sessionId doesn't exist in sessions table",
+      () async {
+        final sessionEntry = SessionEntry(
+          sessionId: const Uuid().v4(),
+          entryId: entryId,
+        );
+        expect(
+          () async {
+            await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("FOREIGN KEY"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("FOREIGN KEY"))));
-    });
+    );
 
     test("Invalid SessionEntry: entryId is an invalid UUID v4", () async {
-      final sessionEntry =
-          SessionEntry(sessionId: sessionId, entryId: "ehfwofj");
-      expect(() async {
-        await sessionEntrysDao.create(sessionEntry.toCompanion(true));
-      },
-          throwsA(predicate((e) =>
-              e is InvalidDataException && e.message.contains("entryId"))));
+      final sessionEntry = SessionEntry(
+        sessionId: sessionId,
+        entryId: "ehfwofj",
+      );
+      expect(
+        () async {
+          await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) => e is InvalidDataException && e.message.contains("entryId"),
+          ),
+        ),
+      );
     });
 
-    test("Invalid SessionEntry: entryId doesn't exist in entrys table",
-        () async {
-      final sessionEntry =
-          SessionEntry(sessionId: sessionId, entryId: const Uuid().v4());
-      expect(() async {
-        await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+    test(
+      "Invalid SessionEntry: entryId doesn't exist in entrys table",
+      () async {
+        final sessionEntry = SessionEntry(
+          sessionId: sessionId,
+          entryId: const Uuid().v4(),
+        );
+        expect(
+          () async {
+            await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("FOREIGN KEY"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("FOREIGN KEY"))));
-    });
+    );
 
-    test("No more one SesstionEntry with the same sessionId and entryId",
-        () async {
-      final sessionEntry = SessionEntry(sessionId: sessionId, entryId: entryId);
-      await sessionEntrysDao.create(sessionEntry.toCompanion(true));
-      expect(() async {
+    test(
+      "No more one SesstionEntry with the same sessionId and entryId",
+      () async {
+        final sessionEntry = SessionEntry(
+          sessionId: sessionId,
+          entryId: entryId,
+        );
         await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+        expect(
+          () async {
+            await sessionEntrysDao.create(sessionEntry.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) =>
+                  e is SqliteException &&
+                  e.message.contains("entry_id") &&
+                  e.message.contains("session_id"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate((e) =>
-              e is SqliteException &&
-              e.message.contains("entry_id") &&
-              e.message.contains("session_id"))));
-    });
+    );
   });
 
   test("Delete SessionEntry", () async {
     final sessionEntry = SessionEntry(sessionId: sessionId, entryId: entryId);
     await sessionEntrysDao.create(sessionEntry.toCompanion(true));
     await sessionEntrysDao.remove(sessionId, entryId);
-    final result = await (appDatabase.select(appDatabase.sessionEntrys)
-          ..where((tbl) =>
-              tbl.sessionId.equals(sessionId) & tbl.entryId.equals(entryId)))
-        .getSingleOrNull();
+    final result =
+        await (appDatabase.select(appDatabase.sessionEntrys)..where(
+              (tbl) =>
+                  tbl.sessionId.equals(sessionId) & tbl.entryId.equals(entryId),
+            ))
+            .getSingleOrNull();
     expect(result, null);
   });
 }
