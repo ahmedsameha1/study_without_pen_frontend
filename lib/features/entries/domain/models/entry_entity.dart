@@ -56,6 +56,7 @@ abstract class EntryEntity with _$EntryEntity {
          'wronglyAnsweredCount must be zero or bigger',
        );
   factory EntryEntity({
+    String? id,
     required String fieldListId,
     required String answer,
     required String question,
