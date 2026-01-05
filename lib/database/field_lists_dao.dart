@@ -17,14 +17,14 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     if (!isValid(fieldListsCompanion.fieldId.value)) {
       throw InvalidDataException("fieldId");
     }
-    if (fieldListsCompanion.creationAt.value
-        .toUtc()
-        .isAfter(clock.now().toUtc())) {
+    if (fieldListsCompanion.creationAt.value.toUtc().isAfter(
+      clock.now().toUtc(),
+    )) {
       throw InvalidDataException("creationAt");
     }
-    if (fieldListsCompanion.lastModificationAt.value
-        .toUtc()
-        .isAfter(clock.now().toUtc())) {
+    if (fieldListsCompanion.lastModificationAt.value.toUtc().isAfter(
+      clock.now().toUtc(),
+    )) {
       throw InvalidDataException("lastModificationAt");
     }
     if (fieldListsCompanion.emulationDays.present &&
@@ -46,29 +46,36 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
       throw InvalidDataException("tests durations is not consistant null wise");
     }
     if (!((fieldListsCompanion
-                    .studyTillCorrectReadingQuestionLetterDuration.value ==
+                    .studyTillCorrectReadingQuestionLetterDuration
+                    .value ==
                 null &&
             fieldListsCompanion.studyTillCorrectFindingAnswerDuration.value ==
                 null &&
-            fieldListsCompanion.studyTillCorrectTypingAnswerLetterDuration.value ==
+            fieldListsCompanion
+                    .studyTillCorrectTypingAnswerLetterDuration
+                    .value ==
                 null) ||
         (fieldListsCompanion
-                    .studyTillCorrectReadingQuestionLetterDuration.value !=
+                    .studyTillCorrectReadingQuestionLetterDuration
+                    .value !=
                 null &&
             fieldListsCompanion.studyTillCorrectFindingAnswerDuration.value !=
                 null &&
             fieldListsCompanion
-                    .studyTillCorrectTypingAnswerLetterDuration.value !=
+                    .studyTillCorrectTypingAnswerLetterDuration
+                    .value !=
                 null))) {
       throw InvalidDataException(
-          "study till correct durations is not consistant null wise");
+        "study till correct durations is not consistant null wise",
+      );
     }
     return into(fieldLists).insert(fieldListsCompanion);
   }
 
-  Future<FieldList?> getById(String id) {
-    return (select(fieldLists)..where(((tbl) => tbl.id.equals(id))))
-        .getSingleOrNull();
+  Stream<FieldList?> watchById(String id) {
+    return (select(
+      fieldLists,
+    )..where(((tbl) => tbl.id.equals(id)))).watchSingleOrNull();
   }
 
   Stream<List<FieldList>> watchByFieldId(String fieldId) {
@@ -76,7 +83,9 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
           ..where((tbl) => tbl.fieldId.equals(fieldId))
           ..orderBy([
             (tbl) => OrderingTerm(
-                expression: tbl.usageCount, mode: OrderingMode.desc)
+              expression: tbl.usageCount,
+              mode: OrderingMode.desc,
+            ),
           ]))
         .watch();
   }
@@ -85,14 +94,14 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     if (!isValid(fieldListsCompanion.fieldId.value)) {
       throw InvalidDataException("fieldId");
     }
-    if (fieldListsCompanion.creationAt.value
-        .toUtc()
-        .isAfter(clock.now().toUtc())) {
+    if (fieldListsCompanion.creationAt.value.toUtc().isAfter(
+      clock.now().toUtc(),
+    )) {
       throw InvalidDataException("creationAt");
     }
-    if (fieldListsCompanion.lastModificationAt.value
-        .toUtc()
-        .isAfter(clock.now().toUtc())) {
+    if (fieldListsCompanion.lastModificationAt.value.toUtc().isAfter(
+      clock.now().toUtc(),
+    )) {
       throw InvalidDataException("lastModificationAt");
     }
     if (fieldListsCompanion.emulationDays.present &&
@@ -114,22 +123,28 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
       throw InvalidDataException("tests durations is not consistant null wise");
     }
     if (!((fieldListsCompanion
-                    .studyTillCorrectReadingQuestionLetterDuration.value ==
+                    .studyTillCorrectReadingQuestionLetterDuration
+                    .value ==
                 null &&
             fieldListsCompanion.studyTillCorrectFindingAnswerDuration.value ==
                 null &&
-            fieldListsCompanion.studyTillCorrectTypingAnswerLetterDuration.value ==
+            fieldListsCompanion
+                    .studyTillCorrectTypingAnswerLetterDuration
+                    .value ==
                 null) ||
         (fieldListsCompanion
-                    .studyTillCorrectReadingQuestionLetterDuration.value !=
+                    .studyTillCorrectReadingQuestionLetterDuration
+                    .value !=
                 null &&
             fieldListsCompanion.studyTillCorrectFindingAnswerDuration.value !=
                 null &&
             fieldListsCompanion
-                    .studyTillCorrectTypingAnswerLetterDuration.value !=
+                    .studyTillCorrectTypingAnswerLetterDuration
+                    .value !=
                 null))) {
       throw InvalidDataException(
-          "study till correct durations is not consistant null wise");
+        "study till correct durations is not consistant null wise",
+      );
     }
     return update(fieldLists).replace(fieldListsCompanion);
   }
