@@ -176,4 +176,60 @@ void main() {
     ).thenAnswer((_) => Future.value(2));
     expectLater(fieldListsRepository.create(fieldListEntity), completion(2));
   });
+
+  test('watchFieldList() throws what FieldListsDao.watchById() throw', () {
+    when(
+      () => fieldListsDao.watchById(fieldListEntity.id!),
+    ).thenThrow(SqliteException(1, 'sqlexception'));
+    expect(
+      () => fieldListsRepository.watchFieldList(fieldListEntity.id!),
+      throwsA(
+        predicate((e) => e is SqliteException && e.message == 'sqlexception'),
+      ),
+    );
+  });
+
+  test(
+    'watchFieldList() returns what fieldListsDao.watchByFieldId() return',
+    () {
+      when(() => fieldListsDao.watchById(fieldListEntity.id!)).thenAnswer(
+        (_) => Stream.value(
+          FieldList(
+            id: fieldListEntity.id!,
+            fieldId: fieldListEntity.fieldId,
+            name: fieldListEntity.name,
+            creationAt: fieldListEntity.creationAt,
+            lastModificationAt: fieldListEntity.lastModificationAt,
+            checkType: fieldListEntity.checkType,
+            sortBy: fieldListEntity.sortBy,
+            doesReadAnswer: fieldListEntity.doesReadAnswer,
+            usageCount: fieldListEntity.usageCount,
+            color: fieldListEntity.color,
+            testsTimeOfAnswerAction: fieldListEntity.testsTimeOfAnswerAction,
+            doesObfuscateQuestion: fieldListEntity.doesObfuscateQuestion,
+            studyTillCorrectFindingAnswerDuration:
+                fieldListEntity.studyTillCorrectFindingAnswerDuration,
+            studyTillCorrectReadingQuestionLetterDuration:
+                fieldListEntity.studyTillCorrectReadingQuestionLetterDuration,
+            studyTillCorrectTypingAnswerLetterDuration:
+                fieldListEntity.studyTillCorrectTypingAnswerLetterDuration,
+            testsFindingAnswerDuration:
+                fieldListEntity.testsFindingAnswerDuration,
+            testsReadingQuestionLetterDuration:
+                fieldListEntity.testsReadingQuestionLetterDuration,
+            testsTypingAnswerLetterDuration:
+                fieldListEntity.testsTypingAnswerLetterDuration,
+            languageTag: fieldListEntity.languageTag,
+            emulationDays: fieldListEntity.emulationDays,
+            emulationNumberOfQuestions:
+                fieldListEntity.emulationNumberOfQuestions,
+          ),
+        ),
+      );
+      expect(
+        fieldListsRepository.watchFieldList(fieldListEntity.id!),
+        emitsInOrder([fieldListEntity]),
+      );
+    },
+  );
 }
