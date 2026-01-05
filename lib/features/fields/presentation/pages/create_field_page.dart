@@ -24,7 +24,8 @@ class CreateFieldPage extends StatelessWidget {
     );
   }
 }
-
+//TODO consider using regular StatefulWidget
+//TODO review this page to match Bloc Todo example on the bloc website
 class CreateFieldPageView extends HookWidget {
   CreateFieldPageView(this.usecaseValidationTest, {super.key});
 
@@ -149,6 +150,7 @@ class CreateFieldPageView extends HookWidget {
                                           .state
                                           .user!
                                           .uid,
+                                      //TODO trim the value
                                       nameTextEditingController.text,
                                       color.value.toARGB32(),
                                     );

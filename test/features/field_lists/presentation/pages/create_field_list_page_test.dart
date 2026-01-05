@@ -96,15 +96,14 @@ void main() {
   GoRouter goRouter = MockGoRouter();
 
   late CreateFieldListUsecase createFieldListUsecase;
+  group("English locale", () {
   String expectedCreateFieldString = "Create Field List";
   String expectedFieldListNameString = "Field List Name";
-  group("English locale", () {
     Locale currentLocale = const Locale("en");
     String expectedInvalidNameString =
         "Field list name must be between 1 and 64 characters";
     String doNotCheckLetterCaseString = 'Do not check letter case';
     String expectedFieldHasBeenCreatedString = "Created";
-
     String expectedErrorOccuredWhileFieldPersistenceString =
         "Error while creation";
     group('CreateFieldListPage', () {
@@ -457,7 +456,7 @@ void main() {
         ).called(1);
       });
 
-      testWidgets('Entring an invalid name adds an event to the bloc', (
+      testWidgets('Entring an invalid name does not add an event to the bloc', (
         WidgetTester tester,
       ) async {
         await _createCreateFieldListPageViewInASkeleton(

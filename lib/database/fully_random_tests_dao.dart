@@ -62,12 +62,12 @@ class FullyRandomTestsDao {
           wrongAnswerCounter: wrongAnswerCounter,
           lastAnswer: lastAnswer);
       await testSessionsDao.create(testSession.toCompanion(true));
-      final entries = await entrysDao.getByFieldListId(fieldListId);
+      final entries = await entrysDao.watchByFieldListId(fieldListId).first;
       if (entries.length < questionsNumber) {
         throw InvalidDataException(
             "number of entries in fieldlist is less than questions number");
       }
-      final fieldListEntries = await entrysDao.getByFieldListId(fieldListId);
+      final fieldListEntries = await entrysDao.watchByFieldListId(fieldListId).first;
       fieldListEntries.shuffle(Random(seed = seed));
       for (var i = 0; i < questionsNumber; i++) {
         var sessionEntry =

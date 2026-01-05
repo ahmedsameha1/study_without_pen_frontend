@@ -39,7 +39,7 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
         .get();
   }
 
-  Future<List<Entry>> getByFieldListId(String fieldListId) {
+  Stream<List<Entry>> watchByFieldListId(String fieldListId) {
     return (select(entrys)
           ..where((tbl) => tbl.fieldListId.equals(fieldListId))
           ..orderBy([
@@ -50,7 +50,7 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
               mode: OrderingMode.desc,
             )),
           ]))
-        .get();
+        .watch();
   }
 
   Future<Entry?> getById(String id) {

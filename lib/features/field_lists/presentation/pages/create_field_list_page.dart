@@ -201,6 +201,7 @@ class _CreateFieldListPageViewState extends State<CreateFieldListPageView> {
                                   if (newValue != null) {
                                     context.read<CreateFieldListBloc>().add(
                                       CreateFieldListReadAnswerChanged(
+                                        //TODO trim the value
                                         newValue,
                                       ),
                                     );

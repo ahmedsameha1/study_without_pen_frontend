@@ -248,7 +248,9 @@ void main() {
         wronglyAnsweredCount: wronglyAnsweredCount,
       );
       await entrysDao.create(entry.toCompanion(true));
-      List<Entry> entries = await entrysDao.getByFieldListId(fieldListId);
+      List<Entry> entries = await entrysDao
+          .watchByFieldListId(fieldListId)
+          .first;
       expect(entries.length, 3);
       entry = entries[0];
       expect(entry.id, id3);
@@ -292,7 +294,7 @@ void main() {
     });
 
     test("Good case: no entry is found in the fieldList", () async {
-      var entries = await entrysDao.getByFieldListId(const Uuid().v4());
+      var entries = await entrysDao.watchByFieldListId(const Uuid().v4()).first;
       expect(entries.length, 0);
     });
   });
