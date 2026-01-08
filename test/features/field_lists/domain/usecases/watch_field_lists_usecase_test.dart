@@ -15,13 +15,22 @@ class MockFieldListsRepository extends Mock implements FieldListsRepository {}
 void main() {
   FieldListsRepository fieldListsRepository = MockFieldListsRepository();
   FieldsRepository fieldsRepository = MockFieldsRepository();
-  WatchFieldListsUsecase watchFieldListsUsecase =
-      WatchFieldListsUsecase(fieldsRepository, fieldListsRepository);
+  WatchFieldListsUsecase watchFieldListsUsecase = WatchFieldListsUsecase(
+    fieldsRepository,
+    fieldListsRepository,
+  );
   String fieldId = 'wthowow4tg3tg';
   DateTime creationAt1 = DateTime(2020, 1, 1);
   DateTime creationAt2 = DateTime(2021, 1, 1);
-  final fieldEntity = FieldEntity(fieldId, "woeghwiouegfwo", "field name1",
-      creationAt1, creationAt2, 0, 0xff520404);
+  final fieldEntity = FieldEntity(
+    fieldId,
+    "woeghwiouegfwo",
+    "field name1",
+    creationAt1,
+    creationAt2,
+    0,
+    0xff520404,
+  );
   final fieldListEntity1 = FieldListEntity(
     id: "woeghghefgwoegho",
     fieldId: fieldId,
@@ -37,71 +46,99 @@ void main() {
     lastModificationAt: creationAt2,
   );
   test('call() throws what FieldListsRepository.watch() throw', () {
-    when(() => fieldsRepository.watchField(fieldId))
-        .thenAnswer((_) => Stream.empty());
-    when(() => fieldListsRepository.watch(fieldId))
-        .thenThrow(SqliteException(1, 'sqlexception1'));
+    when(
+      () => fieldsRepository.watchField(fieldId),
+    ).thenAnswer((_) => Stream.empty());
+    when(
+      () => fieldListsRepository.watch(fieldId),
+    ).thenThrow(SqliteException(1, 'sqlexception1'));
     expect(
-        () => watchFieldListsUsecase.call(fieldId),
-        throwsA(predicate((e) =>
-            e is SqliteException &&
-            e.extendedResultCode == 1 &&
-            e.message == 'sqlexception1')));
+      () => watchFieldListsUsecase.call(fieldId),
+      throwsA(
+        predicate(
+          (e) =>
+              e is SqliteException &&
+              e.extendedResultCode == 1 &&
+              e.message == 'sqlexception1',
+        ),
+      ),
+    );
   });
 
-  test('call() throws what FieldsRepository.watch() throw', () {
-    when(() => fieldsRepository.watchField(fieldId))
-        .thenThrow(SqliteException(2, 'sqlexception2'));
-    when(() => fieldListsRepository.watch(fieldId))
-        .thenAnswer((_) => Stream.empty());
+  test('call() throws what FieldsRepository.watchField() throw', () {
+    when(
+      () => fieldsRepository.watchField(fieldId),
+    ).thenThrow(SqliteException(2, 'sqlexception2'));
+    when(
+      () => fieldListsRepository.watch(fieldId),
+    ).thenAnswer((_) => Stream.empty());
     expect(
-        () => watchFieldListsUsecase.call(fieldId),
-        throwsA(predicate((e) =>
-            e is SqliteException &&
-            e.extendedResultCode == 2 &&
-            e.message == 'sqlexception2')));
-  });
-
-  test(
-      '''call() doesn't return a Stream of FieldListsPageData if any of '''
-      '''FieldListsRepository.watch() and FieldsRepository.watch() return an empty Stream''',
-      () {
-    when(() => fieldsRepository.watchField(fieldId))
-        .thenAnswer((_) => Stream.empty());
-    when(() => fieldListsRepository.watch(fieldId))
-        .thenAnswer((_) => Stream.value([fieldListEntity1]));
-    expect(watchFieldListsUsecase.call(fieldId), emitsInOrder([]));
-
-    ///
-    when(() => fieldsRepository.watchField(fieldId))
-        .thenAnswer((_) => Stream.value(fieldEntity));
-    when(() => fieldListsRepository.watch(fieldId))
-        .thenAnswer((_) => Stream.empty());
-    expect(watchFieldListsUsecase.call(fieldId), emitsInOrder([]));
+      () => watchFieldListsUsecase.call(fieldId),
+      throwsA(
+        predicate(
+          (e) =>
+              e is SqliteException &&
+              e.extendedResultCode == 2 &&
+              e.message == 'sqlexception2',
+        ),
+      ),
+    );
   });
 
   test(
-      '''call() returns a Stream of FieldListsPageData with what '''
-      '''FieldListsRepository.watch() and FieldsRepository.watch() return''',
-      () {
-    when(() => fieldListsRepository.watch(fieldId))
-        .thenAnswer((_) => Stream.fromIterable([
-              [fieldListEntity1],
-              [fieldListEntity1, fieldListEntity2],
-              [fieldListEntity2],
-            ]));
-    when(() => fieldsRepository.watchField(fieldId)).thenAnswer(
-        (_) => Stream.fromIterable([fieldEntity]));
-    expect(
+    '''call() doesn't return a Stream of FieldListsPageData if any of '''
+    '''FieldListsRepository.watch() and FieldsRepository.watchField() return an empty Stream''',
+    () {
+      when(
+        () => fieldsRepository.watchField(fieldId),
+      ).thenAnswer((_) => Stream.empty());
+      when(
+        () => fieldListsRepository.watch(fieldId),
+      ).thenAnswer((_) => Stream.value([fieldListEntity1]));
+      expect(watchFieldListsUsecase.call(fieldId), emitsInOrder([]));
+
+      ///
+      when(
+        () => fieldsRepository.watchField(fieldId),
+      ).thenAnswer((_) => Stream.value(fieldEntity));
+      when(
+        () => fieldListsRepository.watch(fieldId),
+      ).thenAnswer((_) => Stream.empty());
+      expect(watchFieldListsUsecase.call(fieldId), emitsInOrder([]));
+    },
+  );
+
+  test(
+    '''call() returns a Stream of FieldListsPageData with what '''
+    '''FieldListsRepository.watch() and FieldsRepository.watchField() return''',
+    () {
+      when(() => fieldListsRepository.watch(fieldId)).thenAnswer(
+        (_) => Stream.fromIterable([
+          [fieldListEntity1],
+          [fieldListEntity1, fieldListEntity2],
+          [fieldListEntity2],
+        ]),
+      );
+      when(
+        () => fieldsRepository.watchField(fieldId),
+      ).thenAnswer((_) => Stream.fromIterable([fieldEntity]));
+      expect(
         watchFieldListsUsecase.call(fieldId),
         emitsInOrder([
           FieldListsPageData(
-              field: fieldEntity, fieldLists: [fieldListEntity1]),
+            field: fieldEntity,
+            fieldLists: [fieldListEntity1],
+          ),
           FieldListsPageData(
-              field: fieldEntity,
-              fieldLists: [fieldListEntity1, fieldListEntity2]),
+            field: fieldEntity,
+            fieldLists: [fieldListEntity1, fieldListEntity2],
+          ),
           FieldListsPageData(
-              field: fieldEntity, fieldLists: [fieldListEntity2]),
-        ]));
-  });
+            field: fieldEntity,
+            fieldLists: [fieldListEntity2],
+          ),
+        ]),
+      );
+    },
+  );
 }
