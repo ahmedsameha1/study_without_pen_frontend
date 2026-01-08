@@ -129,11 +129,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noFields => 'Currently, there are no fields!';
 
   @override
+  String get noEntries => 'Currently, there are no entries!';
+
+  @override
   String get failureLoadingFields =>
       'An error occurred while loading the fields!';
 
   @override
   String get failureLoadingData => 'An error occurred while loading the data!';
+
+  @override
+  String get failureLoadingEntries =>
+      'An error occurred while loading entries!';
 
   @override
   String get noFieldLists => 'Currently, there are no lists!';

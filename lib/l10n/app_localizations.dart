@@ -304,6 +304,12 @@ abstract class AppLocalizations {
   /// **'Currently, there are no fields!'**
   String get noFields;
 
+  /// No description provided for @noEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently, there are no entries!'**
+  String get noEntries;
+
   /// No description provided for @failureLoadingFields.
   ///
   /// In en, this message translates to:
@@ -315,6 +321,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred while loading the data!'**
   String get failureLoadingData;
+
+  /// No description provided for @failureLoadingEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while loading entries!'**
+  String get failureLoadingEntries;
 
   /// No description provided for @noFieldLists.
   ///
