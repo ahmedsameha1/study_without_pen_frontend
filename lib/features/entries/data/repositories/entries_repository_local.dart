@@ -1,3 +1,5 @@
+import 'package:drift/drift.dart';
+import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/features/entries/data/repositories/entries_repository.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
@@ -30,5 +32,28 @@ class EntriesRepositoryLocal implements EntriesRepository {
               )
               .toList(),
         );
+  }
+
+  @override
+  Future<int> create(EntryEntity entryEntity) {
+    return _entrysDao.create(
+      EntrysCompanion(
+        fieldListId: Value(entryEntity.fieldListId),
+        answer: Value(entryEntity.answer),
+        question: Value(entryEntity.question),
+        creationAt: Value(entryEntity.creationAt),
+        lastModificationAt: Value(entryEntity.lastModificationAt),
+        order: Value(entryEntity.order),
+        didAskedAtCurrentTestRound: Value(
+          entryEntity.didAskedAtCurrentTestRound,
+        ),
+        emulatedCreatedAt: Value(entryEntity.emulatedCreatedAt),
+        rank: Value(entryEntity.rank),
+        askedCount: Value(BigInt.from(entryEntity.askedCount)),
+        wronglyAnsweredCount: Value(
+          BigInt.from(entryEntity.wronglyAnsweredCount),
+        ),
+      ),
+    );
   }
 }

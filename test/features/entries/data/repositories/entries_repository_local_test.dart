@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -60,5 +61,60 @@ void main() {
         [entryEntity],
       ]),
     );
+  });
+
+  test('create() throws what EntrysDao.create() throw', () {
+    when(
+      () => entrysDao.create(
+        EntrysCompanion(
+          fieldListId: Value(entryEntity.fieldListId),
+          answer: Value(entryEntity.answer),
+          question: Value(entryEntity.question),
+          creationAt: Value(entryEntity.creationAt),
+          lastModificationAt: Value(entryEntity.lastModificationAt),
+          order: Value(entryEntity.order),
+          didAskedAtCurrentTestRound: Value(
+            entryEntity.didAskedAtCurrentTestRound,
+          ),
+          emulatedCreatedAt: Value(entryEntity.emulatedCreatedAt),
+          rank: Value(entryEntity.rank),
+          askedCount: Value(BigInt.from(entryEntity.askedCount)),
+          wronglyAnsweredCount: Value(
+            BigInt.from(entryEntity.wronglyAnsweredCount),
+          ),
+        ),
+      ),
+    ).thenThrow(SqliteException(1, 'sqlexception'));
+    expect(
+      () => entriesRepository.create(entryEntity),
+      throwsA(
+        predicate((e) => e is SqliteException && e.message == 'sqlexception'),
+      ),
+    );
+  });
+
+  test('create() returns what EntrysDao.create() return', () {
+    when(
+      () => entrysDao.create(
+        EntrysCompanion(
+          fieldListId: Value(entryEntity.fieldListId),
+          answer: Value(entryEntity.answer),
+          question: Value(entryEntity.question),
+          creationAt: Value(entryEntity.creationAt),
+          lastModificationAt: Value(entryEntity.lastModificationAt),
+          order: Value(entryEntity.order),
+          didAskedAtCurrentTestRound: Value(
+            entryEntity.didAskedAtCurrentTestRound,
+          ),
+          emulatedCreatedAt: Value(entryEntity.emulatedCreatedAt),
+          rank: Value(entryEntity.rank),
+          askedCount: Value(BigInt.from(entryEntity.askedCount)),
+          wronglyAnsweredCount: Value(
+            BigInt.from(entryEntity.wronglyAnsweredCount),
+          ),
+        ),
+      ),
+    ).thenAnswer((_) => Future.value(2));
+    expectLater(entriesRepository.create(entryEntity), completion(2));
   });
 }
