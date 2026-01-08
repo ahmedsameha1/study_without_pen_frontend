@@ -19,40 +19,45 @@ class FieldListsPage extends StatelessWidget {
       create: (context) =>
           FieldListsBloc(context.read<WatchFieldListsUsecase>())
             ..add(FieldListsSubscriptionRequested(fieldId)),
-      child: const FieldListsPageView(),
+      child: FieldListsPageView(fieldId: fieldId),
     );
   }
 }
 
 class FieldListsPageView extends StatelessWidget {
-  const FieldListsPageView({super.key});
+  const FieldListsPageView({required this.fieldId, super.key});
+  final String fieldId;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FieldListsBloc, FieldListsState>(
-        builder: (context, state) {
-      if (state.status == FieldListsStatus.loading ||
-          state.status == FieldListsStatus.initial) {
-        return Scaffold(body: const Center(child: CircularProgressIndicator()));
-      } else if (state.status == FieldListsStatus.failure) {
-        return Scaffold(
+      builder: (context, state) {
+        if (state.status == FieldListsStatus.loading ||
+            state.status == FieldListsStatus.initial) {
+          return Scaffold(
+            body: const Center(child: CircularProgressIndicator()),
+          );
+        } else if (state.status == FieldListsStatus.failure) {
+          return Scaffold(
             body: Center(
-                child: Text(AppLocalizations.of(context)!.failureLoadingData)),
+              child: Text(AppLocalizations.of(context)!.failureLoadingData),
+            ),
             floatingActionButton: FloatingActionButton(
               onPressed: () => GoRouter.of(context).go(
-                  '$fieldListsPath${state.fieldListsPageData!.field!.id!}$createFieldList'),
+                '$fieldListsPath${state.fieldListsPageData!.field!.id!}$createFieldList',
+              ),
               child: Icon(Icons.add),
-            ));
-      } else {
-        // FieldListsStatus.success
-        String fieldName = state.fieldListsPageData!.field!.name;
-        return Scaffold(
-            appBar: AppBar(
-              title: Text(fieldName),
             ),
+          );
+        } else {
+          // FieldListsStatus.success
+          String fieldName = state.fieldListsPageData!.field!.name;
+          return Scaffold(
+            appBar: AppBar(title: Text(fieldName)),
             body: state.fieldListsPageData!.fieldLists.isEmpty
                 ? Center(
-                    child: Text(AppLocalizations.of(context)!.noFieldLists))
+                    child: Text(AppLocalizations.of(context)!.noFieldLists),
+                  )
                 : Scrollbar(
                     thumbVisibility: true,
                     trackVisibility: true,
@@ -69,19 +74,25 @@ class FieldListsPageView extends StatelessWidget {
                         final fieldList =
                             state.fieldListsPageData!.fieldLists[index];
                         final color = Color(fieldList.color);
-                        return Card(
-                          color: color,
-                          elevation: 2,
-                          child: Padding(
-                            key: Key("cardContentPadding"),
-                            padding: EdgeInsetsGeometry.all(10.0),
-                            child: Center(
-                              child: Text(
-                                fieldList.name,
-                                style: TextStyle(
+                        return InkWell(
+                          onTap: () => GoRouter.of(context).go(
+                            '$fieldListsPath$fieldId$entriesPath${state.fieldListsPageData!.fieldLists[index].id!}',
+                          ),
+                          child: Card(
+                            color: color,
+                            elevation: 2,
+                            child: Padding(
+                              key: Key("cardContentPadding"),
+                              padding: EdgeInsetsGeometry.all(10.0),
+                              child: Center(
+                                child: Text(
+                                  fieldList.name,
+                                  style: TextStyle(
                                     color: color.computeLuminance() > 0.5
                                         ? Colors.black
-                                        : Colors.white),
+                                        : Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -91,10 +102,13 @@ class FieldListsPageView extends StatelessWidget {
                   ),
             floatingActionButton: FloatingActionButton(
               onPressed: () => GoRouter.of(context).go(
-                  '$fieldListsPath${state.fieldListsPageData!.field!.id!}$createFieldList'),
+                '$fieldListsPath${state.fieldListsPageData!.field!.id!}$createFieldList',
+              ),
               child: Icon(Icons.add),
-            ));
-      }
-    });
+            ),
+          );
+        }
+      },
+    );
   }
 }
