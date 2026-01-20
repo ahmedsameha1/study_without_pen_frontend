@@ -178,7 +178,14 @@ void main() {
         creationAt: creationAt,
         lastModificationAt: lastModificationAt,
       ),
-      returnsNormally,
+      throwsA(
+        predicate(
+          (e) =>
+              e is AssertionError &&
+              e.message ==
+                  'question must be between ${Entrys.minimumTextLength} and ${Entrys.maximumTextLength} characters',
+        ),
+      ),
     );
   });
 

@@ -29,7 +29,7 @@ abstract class EntryEntity with _$EntryEntity {
        ),
        assert(
          question.trim().length >= Entrys.minimumTextLength &&
-             question.trim().length <= Entrys.maximumTextLength,
+             question.length <= Entrys.maximumTextLength,
          'question must be between ${Entrys.minimumTextLength} and ${Entrys.maximumTextLength} characters',
        ),
        assert(
