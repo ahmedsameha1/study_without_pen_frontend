@@ -89,6 +89,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createFieldList => 'Create Field List';
 
   @override
+  String get createEntry => 'Create Entry';
+
+  @override
   String get fieldName => 'Field Name';
 
   @override
@@ -117,6 +120,27 @@ class AppLocalizationsEn extends AppLocalizations {
     int fieldListNameMaximumLength,
   ) {
     return 'Field list name must be between $fieldListNameMinimumLength and $fieldListNameMaximumLength characters';
+  }
+
+  @override
+  String questionValidationError(
+    int questionMinimumLength,
+    int questionMaximumLength,
+  ) {
+    return 'Question must be between $questionMinimumLength and $questionMaximumLength characters';
+  }
+
+  @override
+  String answerValidationError(
+    int answerMinimumLength,
+    int answerMaximumLength,
+  ) {
+    return 'Answer must be between $answerMinimumLength and $answerMaximumLength characters';
+  }
+
+  @override
+  String orderValidationError(int orderMinimumLength, int orderMaximumLength) {
+    return 'Order must be between $orderMinimumLength and $orderMaximumLength';
   }
 
   @override
@@ -168,4 +192,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get whenAnsweredCorrectly => 'When you answer correctly!';
+
+  @override
+  String get question => 'Question';
+
+  @override
+  String get answer => 'Answer';
+
+  @override
+  String get low => 'Low';
+
+  @override
+  String get normal => 'Normal';
+
+  @override
+  String get important => 'Important';
+
+  @override
+  String get vital => 'Vital';
+
+  @override
+  String get order => 'Order';
+
+  @override
+  String get optional => 'Optional';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get duplicatedEntry => 'Failure: already exists!';
 }

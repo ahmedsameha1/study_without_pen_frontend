@@ -238,6 +238,12 @@ abstract class AppLocalizations {
   /// **'Create Field List'**
   String get createFieldList;
 
+  /// No description provided for @createEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Entry'**
+  String get createEntry;
+
   /// No description provided for @fieldName.
   ///
   /// In en, this message translates to:
@@ -285,6 +291,30 @@ abstract class AppLocalizations {
     int fieldListNameMinimumLength,
     int fieldListNameMaximumLength,
   );
+
+  /// No description provided for @questionValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Question must be between {questionMinimumLength} and {questionMaximumLength} characters'**
+  String questionValidationError(
+    int questionMinimumLength,
+    int questionMaximumLength,
+  );
+
+  /// No description provided for @answerValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer must be between {answerMinimumLength} and {answerMaximumLength} characters'**
+  String answerValidationError(
+    int answerMinimumLength,
+    int answerMaximumLength,
+  );
+
+  /// No description provided for @orderValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Order must be between {orderMinimumLength} and {orderMaximumLength}'**
+  String orderValidationError(int orderMinimumLength, int orderMaximumLength);
 
   /// No description provided for @created.
   ///
@@ -381,6 +411,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'When you answer correctly!'**
   String get whenAnsweredCorrectly;
+
+  /// No description provided for @question.
+  ///
+  /// In en, this message translates to:
+  /// **'Question'**
+  String get question;
+
+  /// No description provided for @answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer'**
+  String get answer;
+
+  /// No description provided for @low.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get low;
+
+  /// No description provided for @normal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get normal;
+
+  /// No description provided for @important.
+  ///
+  /// In en, this message translates to:
+  /// **'Important'**
+  String get important;
+
+  /// No description provided for @vital.
+  ///
+  /// In en, this message translates to:
+  /// **'Vital'**
+  String get vital;
+
+  /// No description provided for @order.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get order;
+
+  /// No description provided for @optional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get optional;
+
+  /// No description provided for @create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
+  /// No description provided for @duplicatedEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Failure: already exists!'**
+  String get duplicatedEntry;
 }
 
 class _AppLocalizationsDelegate

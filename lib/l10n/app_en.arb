@@ -37,6 +37,7 @@
     "nonso_confirmPasswordValidationError": "This doesn't match the given password",
     "createField": "Create Field",
     "createFieldList": "Create Field List",
+    "createEntry": "Create Entry",
     "fieldName": "Field Name",
     "fieldListName": "Field List Name",
     "selectColor": "Select Color",
@@ -64,6 +65,39 @@
             }
         }
     },
+    "questionValidationError": "Question must be between {questionMinimumLength} and {questionMaximumLength} characters",
+    "@questionValidationError": {
+        "placeholders": {
+            "questionMinimumLength": {
+                "type": "int"
+            },
+            "questionMaximumLength": {
+                "type": "int"
+            }
+        }
+    },
+    "answerValidationError": "Answer must be between {answerMinimumLength} and {answerMaximumLength} characters",
+    "@answerValidationError": {
+        "placeholders": {
+            "answerMinimumLength": {
+                "type": "int"
+            },
+            "answerMaximumLength": {
+                "type": "int"
+            }
+        }
+    },
+    "orderValidationError": "Order must be between {orderMinimumLength} and {orderMaximumLength}",
+    "@orderValidationError": {
+        "placeholders": {
+            "orderMinimumLength": {
+                "type": "int"
+            },
+            "orderMaximumLength": {
+                "type": "int"
+            }
+        }
+    },
     "created": "Created",
     "creationError": "Error while creation",
     "noFields": "Currently, there are no fields!",
@@ -79,5 +113,15 @@
     "nonStrictDoNotIgnoreCase": "Do not check space",
     "doNotIgnoreCase": "Check both letter case and space",
     "readAnswer": "Read answer",
-    "whenAnsweredCorrectly": "When you answer correctly!"
+    "whenAnsweredCorrectly": "When you answer correctly!",
+    "question": "Question",
+    "answer": "Answer",
+    "low": "Low",
+    "normal": "Normal",
+    "important": "Important",
+    "vital": "Vital",
+    "order": "Order",
+    "optional": "Optional",
+    "create": "Create",
+    "duplicatedEntry": "Failure: already exists!"
 }
