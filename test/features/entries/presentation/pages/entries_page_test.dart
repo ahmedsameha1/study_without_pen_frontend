@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entries_page_data.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/usecases/watch_entries_usecase.dart';
@@ -26,11 +27,14 @@ Future<void> _createEntriesPageInASkeleton(
   WidgetTester tester,
   WatchEntriesUsecase watchEntriesUsecase,
   String fieldListId,
+  String fieldId,
 ) async {
   return tester.pumpWidget(
     RepositoryProvider.value(
       value: watchEntriesUsecase,
-      child: MaterialApp(home: EntriesPage(fieldListId)),
+      child: MaterialApp(
+        home: EntriesPage(fieldId: fieldId, fieldListId: fieldListId),
+      ),
     ),
   );
 }
@@ -42,6 +46,8 @@ Future<void> _createEntriesPageViewInASkeleton(
   // Todo Consider removing this
   WatchEntriesUsecase watchEntriesUsecase,
   EntriesBloc entriesBloc,
+  String fieldListId,
+  String fieldId,
 ) {
   return tester.pumpWidget(
     RepositoryProvider.value(
@@ -54,7 +60,7 @@ Future<void> _createEntriesPageViewInASkeleton(
           goRouter: goRouter,
           child: BlocProvider.value(
             value: entriesBloc,
-            child: const EntriesPageView(),
+            child: EntriesPageView(fieldId: fieldId, fieldListId: fieldListId),
           ),
         ),
       ),
@@ -128,6 +134,7 @@ void main() {
           tester,
           watchEntriesUsecase,
           fieldListId,
+          fieldId,
         );
         expect(
           find.descendant(
@@ -145,6 +152,7 @@ void main() {
           tester,
           watchEntriesUsecase,
           fieldListId,
+          fieldId,
         );
         verify(() => watchEntriesUsecase.call(fieldListId)).called(1);
       });
@@ -184,6 +192,8 @@ void main() {
             goRouter,
             watchEntriesUsecase,
             entriesBloc,
+            fieldListId,
+            fieldId,
           );
           expect(
             find.descendant(
@@ -237,6 +247,8 @@ void main() {
             goRouter,
             watchEntriesUsecase,
             entriesBloc,
+            fieldListId,
+            fieldId,
           );
           expect(
             find.descendant(
@@ -278,6 +290,55 @@ void main() {
           expect(addIcon.icon, Icons.add);
         },
       );
+
+      testWidgets('Clicking the floatingActionButton go to CreateEntryPage', (
+        WidgetTester tester,
+      ) async {
+        whenListen<EntriesState>(
+          entriesBloc,
+          Stream.fromIterable([
+            const EntriesState(status: EntriesStatus.loading),
+            EntriesState(
+              status: EntriesStatus.success,
+              entriesPageData: EntriesPageData(
+                fieldList: fieldListEntity,
+                entries: [],
+              ),
+            ),
+          ]),
+          initialState: const EntriesState(status: EntriesStatus.initial),
+        );
+        await _createEntriesPageViewInASkeleton(
+          tester,
+          currentLocale,
+          goRouter,
+          watchEntriesUsecase,
+          entriesBloc,
+          fieldListId,
+          fieldId,
+        );
+        expect(
+          find.descendant(
+            of: find.byType(EntriesPageView),
+            matching: find.descendant(
+              of: scaffoldFinder,
+              matching: find.descendant(
+                of: centerFinder,
+                matching: circularProgressIndicatorFinder,
+              ),
+            ),
+          ),
+          findsOne,
+        );
+        await tester.pump();
+        await tester.pumpAndSettle();
+        await tester.tap(floatingActionButtonFinder);
+        verify(
+          () => goRouter.go(
+            '$fieldListsPath$fieldId$entriesPath$fieldListId$createEntry',
+          ),
+        ).called(1);
+      });
     });
   });
 }

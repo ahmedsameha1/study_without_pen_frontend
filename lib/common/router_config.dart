@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart';
+import 'package:study_without_pen_by_flutter/features/entries/presentation/pages/create_entry_page.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/pages/entries_page.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/create_field_list_page.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/field_lists_page.dart';
@@ -14,6 +15,7 @@ const fieldLists = "field_lists/:$fieldIdParameter";
 const entries = "entries/:$fieldListIdParameter";
 const fieldIdParameter = "fieldId";
 const fieldListIdParameter = "fieldListId";
+const fieldListNameParameter = 'fieldListName';
 const fieldListsPath = "/field_lists/";
 const entriesPath = "/entries/";
 const createFieldList = '/create_field_list';
@@ -35,7 +37,13 @@ GoRouter getRouterConfig() {
                 path: createFieldList,
                 builder: createFieldListPathBuilder,
               ),
-              GoRoute(path: entries, builder: entriesPathBuilder),
+              GoRoute(
+                path: entries,
+                builder: entriesPathBuilder,
+                routes: [
+                  GoRoute(path: createEntry, builder: createEntryPathBuilder),
+                ],
+              ),
             ],
           ),
         ],
@@ -66,7 +74,10 @@ Widget entriesPathBuilder(
   BuildContext buildContext,
   GoRouterState goRouterState,
 ) {
-  return EntriesPage(goRouterState.pathParameters[fieldListIdParameter]!);
+  return EntriesPage(
+    fieldId: goRouterState.pathParameters[fieldIdParameter]!,
+    fieldListId: goRouterState.pathParameters[fieldListIdParameter]!,
+  );
 }
 
 Widget createFieldListPathBuilder(
@@ -82,7 +93,7 @@ Widget createEntryPathBuilder(
   BuildContext buildContext,
   GoRouterState goRouterState,
 ) {
-  return CreateFieldListPage(
-    fieldId: goRouterState.pathParameters[fieldIdParameter]!,
+  return CreateEntryPage(
+    fieldListId: goRouterState.pathParameters[fieldListIdParameter]!,
   );
 }
