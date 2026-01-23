@@ -5,24 +5,38 @@ import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/features/entries/data/repositories/entries_repository.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/usecases/create_entry_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/data/repositories/field_lists_repository.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
 import 'package:uuid/uuid.dart';
 
-import 'watch_entries_usecase_test.dart';
+class MockEntriesRepository extends Mock implements EntriesRepository {}
+
+class MockFieldListsRepository extends Mock implements FieldListsRepository {}
 
 void main() {
   EntriesRepository entriesRepository = MockEntriesRepository();
-  CreateEntryUsecase createEntryUsecase = CreateEntryUsecase(entriesRepository);
-  final fieldListId = const Uuid().v4();
+  FieldListsRepository fieldListsRepository = MockFieldListsRepository();
+  CreateEntryUsecase createEntryUsecase = CreateEntryUsecase(
+    fieldListsRepository,
+    entriesRepository,
+  );
   final answer = 'answer';
   final question = 'question';
   final order = 12;
   final rank = 2;
   DateTime creationAt = DateTime(2020, 1, 1);
+  FieldListEntity fieldListEntity = FieldListEntity(
+    id: const Uuid().v4(),
+    fieldId: const Uuid().v4(),
+    name: 'fieldListName',
+    creationAt: creationAt.subtract(Duration(days: 2)),
+    lastModificationAt: creationAt.subtract(Duration(days: 1)),
+  );
 
   test('call() throws AssertionError when there is a validation error', () {
     expect(
       () => createEntryUsecase.call(
-        fieldListId: fieldListId,
+        fieldListId: fieldListEntity.id!,
         answer: '',
         question: question,
         rank: rank,
@@ -38,11 +52,11 @@ void main() {
     );
   });
 
-  test('call() throws what FieldRepository.create() throw', () {
+  test('call() throws what EntriesRepository.create() throw', () {
     when(
       () => entriesRepository.create(
         EntryEntity(
-          fieldListId: fieldListId,
+          fieldListId: fieldListEntity.id!,
           answer: answer,
           question: question,
           rank: rank,
@@ -55,7 +69,7 @@ void main() {
     withClock(Clock.fixed(creationAt), () async {
       expect(
         () => createEntryUsecase.call(
-          fieldListId: fieldListId,
+          fieldListId: fieldListEntity.id!,
           answer: answer,
           question: question,
           rank: rank,
@@ -77,7 +91,7 @@ void main() {
     when(
       () => entriesRepository.create(
         EntryEntity(
-          fieldListId: fieldListId,
+          fieldListId: fieldListEntity.id!,
           answer: answer,
           question: question,
           rank: rank,
@@ -90,7 +104,7 @@ void main() {
     withClock(Clock.fixed(creationAt), () async {
       expectLater(
         createEntryUsecase.call(
-          fieldListId: fieldListId,
+          fieldListId: fieldListEntity.id!,
           answer: answer,
           question: question,
           rank: rank,
@@ -100,4 +114,37 @@ void main() {
       );
     });
   });
+
+  test(
+    'watchFieldList() throws what FieldListsRepository.watchFieldList throw',
+    () {
+      when(
+        () => fieldListsRepository.watchFieldList(fieldListEntity.id!),
+      ).thenThrow(SqliteException(1, 'sqlexception'));
+      expect(
+        () => createEntryUsecase.watchFieldList(fieldListEntity.id!),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception',
+          ),
+        ),
+      );
+    },
+  );
+
+  test(
+    'watchFieldList() returns what FieldListsRepository.watchFieldList() return',
+    () {
+      when(
+        () => fieldListsRepository.watchFieldList(fieldListEntity.id!),
+      ).thenAnswer((_) => Stream.value(fieldListEntity));
+      expect(
+        createEntryUsecase.watchFieldList(fieldListEntity.id!),
+        emitsInOrder([fieldListEntity]),
+      );
+    },
+  );
 }
