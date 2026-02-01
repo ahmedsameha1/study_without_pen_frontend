@@ -471,6 +471,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failure: already exists!'**
   String get duplicatedEntry;
+
+  /// No description provided for @score.
+  ///
+  /// In en, this message translates to:
+  /// **'Score'**
+  String get score;
+
+  /// No description provided for @wrongness.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrongness'**
+  String get wrongness;
+
+  /// No description provided for @study.
+  ///
+  /// In en, this message translates to:
+  /// **'Study'**
+  String get study;
+
+  /// No description provided for @test.
+  ///
+  /// In en, this message translates to:
+  /// **'Test'**
+  String get test;
 }
 
 class _AppLocalizationsDelegate

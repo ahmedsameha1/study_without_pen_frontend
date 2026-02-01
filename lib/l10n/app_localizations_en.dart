@@ -222,4 +222,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get duplicatedEntry => 'Failure: already exists!';
+
+  @override
+  String get score => 'Score';
+
+  @override
+  String get wrongness => 'Wrongness';
+
+  @override
+  String get study => 'Study';
+
+  @override
+  String get test => 'Test';
 }

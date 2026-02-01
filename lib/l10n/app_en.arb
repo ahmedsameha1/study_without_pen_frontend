@@ -123,5 +123,9 @@
     "order": "Order",
     "optional": "Optional",
     "create": "Create",
-    "duplicatedEntry": "Failure: already exists!"
+    "duplicatedEntry": "Failure: already exists!",
+    "score": "Score",
+    "wrongness": "Wrongness",
+    "study": "Study",
+    "test": "Test"
 }

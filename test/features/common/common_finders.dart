@@ -8,6 +8,7 @@ final paddingFinder = find.byType(Padding);
 final cardFinder = find.byType(Card);
 final singleChildScrollViewFinder = find.byType(SingleChildScrollView);
 final columnFinder = find.byType(Column);
+final rowFinder = find.byType(Row);
 final formFinder = find.byType(Form);
 final textFormFieldFinder = find.byType(TextFormField);
 final blocProviderFinder = find.byType(BlocProvider);
