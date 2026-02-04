@@ -39,7 +39,15 @@ class EntryCard extends StatelessWidget {
                           Chip(
                             label: Text(AppLocalizations.of(context)!.score),
                           ),
-                          Chip(label: Text(AppLocalizations.of(context)!.rank)),
+                          Chip(
+                            label: Text(switch (entry.rank) {
+                              0 => AppLocalizations.of(context)!.low,
+                              1 => AppLocalizations.of(context)!.normal,
+                              2 => AppLocalizations.of(context)!.important,
+                              3 => AppLocalizations.of(context)!.vital,
+                              _ => throw AssertionError('Invalid rank'),
+                            }),
+                          ),
                         ],
                       ),
                       PopupMenuButton<String>(
@@ -64,7 +72,7 @@ class EntryCard extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.titleLarge!
                                 .copyWith(fontWeight: FontWeight.w600),
-                            'question',
+                            entry.question,
                           ),
                         ),
                       ),
@@ -81,7 +89,7 @@ class EntryCard extends StatelessWidget {
                           child: SelectableText(
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyLarge,
-                            'answer',
+                            entry.answer,
                           ),
                         ),
                       ),
