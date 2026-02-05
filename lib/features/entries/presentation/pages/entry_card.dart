@@ -38,6 +38,13 @@ class EntryCard extends StatelessWidget {
                         children: [
                           Chip(
                             label: Text(AppLocalizations.of(context)!.score),
+                            labelStyle: Theme.of(context).textTheme.labelSmall,
+                          ),
+                          Chip(
+                            label: Text(
+                              AppLocalizations.of(context)!.wrongness,
+                            ),
+                            labelStyle: Theme.of(context).textTheme.labelSmall,
                           ),
                           Chip(
                             label: Text(switch (entry.rank) {
@@ -47,6 +54,7 @@ class EntryCard extends StatelessWidget {
                               3 => AppLocalizations.of(context)!.vital,
                               _ => throw AssertionError('Invalid rank'),
                             }),
+                            labelStyle: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],
                       ),

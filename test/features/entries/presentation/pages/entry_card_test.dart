@@ -12,6 +12,7 @@ void main() {
   group('English', () {
     const Locale currentLocale = Locale('en');
     const expectedScoreString = 'Score';
+    const expectedWrongnessString = 'Wrongness';
     const expectedLowString = 'Low';
     const expectedNormalString = 'Normal';
     const expectedImportantString = 'Important';
@@ -103,13 +104,37 @@ void main() {
         ),
       );
       expect((scoreChip.label as Text).data, startsWith(expectedScoreString));
-      Chip rankChip = tester.widget(
+      expect(
+        scoreChip.labelStyle,
+        Theme.of(tester.element(find.byWidget(scoreChip))).textTheme.labelSmall,
+      );
+      Chip wrongnessChip = tester.widget(
         find.descendant(
           of: find.byWidget(scoreRankRow),
           matching: find.byType(Chip).at(1),
         ),
       );
+      expect(
+        (wrongnessChip.label as Text).data,
+        startsWith(expectedWrongnessString),
+      );
+      expect(
+        wrongnessChip.labelStyle,
+        Theme.of(
+          tester.element(find.byWidget(wrongnessChip)),
+        ).textTheme.labelSmall,
+      );
+      Chip rankChip = tester.widget(
+        find.descendant(
+          of: find.byWidget(scoreRankRow),
+          matching: find.byType(Chip).at(2),
+        ),
+      );
       expect((rankChip.label as Text).data, startsWith(expectedLowString));
+      expect(
+        rankChip.labelStyle,
+        Theme.of(tester.element(find.byWidget(rankChip))).textTheme.labelSmall,
+      );
       expect(
         find.descendant(
           of: find.byWidget(firstRow),
@@ -253,7 +278,7 @@ void main() {
         ),
       );
       Chip rankChip = tester.widget(
-        find.descendant(of: rowFinder, matching: find.byType(Chip).at(1)),
+        find.descendant(of: rowFinder, matching: find.byType(Chip).at(2)),
       );
       expect((rankChip.label as Text).data, startsWith(expectedNormalString));
     });
@@ -270,7 +295,7 @@ void main() {
         ),
       );
       Chip rankChip = tester.widget(
-        find.descendant(of: rowFinder, matching: find.byType(Chip).at(1)),
+        find.descendant(of: rowFinder, matching: find.byType(Chip).at(2)),
       );
       expect(
         (rankChip.label as Text).data,
@@ -290,7 +315,7 @@ void main() {
         ),
       );
       Chip rankChip = tester.widget(
-        find.descendant(of: rowFinder, matching: find.byType(Chip).at(1)),
+        find.descendant(of: rowFinder, matching: find.byType(Chip).at(2)),
       );
       expect((rankChip.label as Text).data, startsWith(expectedVitalString));
     });
