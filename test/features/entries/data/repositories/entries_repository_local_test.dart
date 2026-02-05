@@ -21,6 +21,9 @@ void main() {
     question: 'question',
     creationAt: DateTime(2025),
     lastModificationAt: DateTime(2025),
+    askedCount: 8,
+    wronglyAnsweredCount: 2,
+    wrongness: 0.25,
   );
 
   test('watch() throws what entrysDao.watchByFieldListId() throw', () {

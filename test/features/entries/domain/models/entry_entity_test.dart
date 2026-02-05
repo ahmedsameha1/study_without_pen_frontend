@@ -537,4 +537,83 @@ void main() {
       Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE.toInt(),
     );
   });
+
+  test(
+    'EntryEntity throws AssertionError when created with an invalid wrongness 1',
+    () {
+      expect(
+        () => EntryEntity(
+          fieldListId: fieldListId,
+          answer: answer,
+          question: question,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          rank: rank,
+          wrongness: -1,
+        ),
+        throwsA(
+          predicate(
+            (e) =>
+                e is AssertionError &&
+                e.message == 'wrongness must be zero or bigger',
+          ),
+        ),
+      );
+    },
+  );
+
+  test(
+    'EntryEntity throws AssertionError when created with an invalid wrongness 2',
+    () {
+      expect(
+        () => EntryEntity(
+          fieldListId: fieldListId,
+          answer: answer,
+          question: question,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          rank: rank,
+          askedCount: 8,
+          wronglyAnsweredCount: 2,
+          wrongness: 1,
+        ),
+        throwsA(
+          predicate(
+            (e) =>
+                e is AssertionError &&
+                e.message == 'wrongness calculated wrongly',
+          ),
+        ),
+      );
+    },
+  );
+
+  test('EntryEntity wrongness got the correct value', () {
+    EntryEntity entry = EntryEntity(
+      fieldListId: fieldListId,
+      answer: answer,
+      question: question,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      order: order,
+      didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt,
+      rank: rank,
+      wrongness: 1 / 3,
+    );
+    expect(entry.wrongness, closeTo(1 / 3, 0.000001));
+  });
+
+  test('EntryEntity wrongness got its default value', () {
+    EntryEntity entry = EntryEntity(
+      fieldListId: fieldListId,
+      answer: answer,
+      question: question,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      order: order,
+      didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+    );
+    expect(entry.wrongness, 0);
+  });
 }
