@@ -13,7 +13,7 @@ void main() {
   final order = 2;
   final didAskedAtCurrentTestRound = false;
   final emulatedCreatedAt = DateTime(2026);
-  final rank = Rank.normal.index;
+  final rank = Rank.normal;
   final askedCount = 3;
   final wronglyAnsweredCount = 1;
   test(
@@ -360,46 +360,6 @@ void main() {
     expect(entry.emulatedCreatedAt, null);
   });
 
-  test('EntryEntity throws AssertionError when created with an invalid rank', () {
-    expect(
-      () => EntryEntity(
-        fieldListId: fieldListId,
-        answer: answer,
-        question: question,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt,
-        rank: Rank.low.index - 1,
-      ),
-      throwsA(
-        predicate(
-          (e) =>
-              e is AssertionError &&
-              e.message ==
-                  'rank must be between ${Rank.low.index} and ${Rank.vital.index}',
-        ),
-      ),
-    );
-
-    expect(
-      () => EntryEntity(
-        fieldListId: fieldListId,
-        answer: answer,
-        question: question,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt,
-        rank: Rank.vital.index + 1,
-      ),
-      throwsA(
-        predicate(
-          (e) =>
-              e is AssertionError &&
-              e.message ==
-                  'rank must be between ${Rank.low.index} and ${Rank.vital.index}',
-        ),
-      ),
-    );
-  });
-
   test('EntryEntity rank got the correct value', () {
     EntryEntity entry = EntryEntity(
       fieldListId: fieldListId,
@@ -410,9 +370,9 @@ void main() {
       order: order,
       didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
       emulatedCreatedAt: emulatedCreatedAt,
-      rank: rank,
+      rank: Rank.vital,
     );
-    expect(entry.rank, rank);
+    expect(entry.rank, Rank.vital);
   });
 
   test('EntryEntity rank got its default value', () {
@@ -425,7 +385,7 @@ void main() {
       order: order,
       didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
     );
-    expect(entry.rank, Rank.normal.index);
+    expect(entry.rank, Rank.normal);
   });
 
   test(

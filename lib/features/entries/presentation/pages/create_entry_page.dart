@@ -10,6 +10,8 @@ import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/
 import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/create_entry_state.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 
+import '../../../../database/entrys_dao.dart';
+
 class CreateEntryPage extends StatelessWidget {
   const CreateEntryPage({required this.fieldListId, super.key});
   final String fieldListId;
@@ -299,12 +301,13 @@ class _CreateEntryPageViewState extends State<CreateEntryPageView> {
                                       ),
                                       selected: context.select(
                                         (CreateEntryBloc bloc) =>
-                                            bloc.state.rank == 0,
+                                            bloc.state.rank == Rank.low,
                                       ),
                                       padding: EdgeInsets.all(0),
-                                      onSelected: (value) => context
-                                          .read<CreateEntryBloc>()
-                                          .add(CreateEntryRankChanged(0)),
+                                      onSelected: (value) =>
+                                          context.read<CreateEntryBloc>().add(
+                                            CreateEntryRankChanged(Rank.low),
+                                          ),
                                     ),
                                     ChoiceChip(
                                       label: Text(
@@ -312,12 +315,13 @@ class _CreateEntryPageViewState extends State<CreateEntryPageView> {
                                       ),
                                       selected: context.select(
                                         (CreateEntryBloc bloc) =>
-                                            bloc.state.rank == 1,
+                                            bloc.state.rank == Rank.normal,
                                       ),
                                       padding: EdgeInsets.all(0),
-                                      onSelected: (value) => context
-                                          .read<CreateEntryBloc>()
-                                          .add(CreateEntryRankChanged(1)),
+                                      onSelected: (value) =>
+                                          context.read<CreateEntryBloc>().add(
+                                            CreateEntryRankChanged(Rank.normal),
+                                          ),
                                     ),
                                     ChoiceChip(
                                       label: Text(
@@ -325,12 +329,15 @@ class _CreateEntryPageViewState extends State<CreateEntryPageView> {
                                       ),
                                       selected: context.select(
                                         (CreateEntryBloc bloc) =>
-                                            bloc.state.rank == 2,
+                                            bloc.state.rank == Rank.important,
                                       ),
                                       padding: EdgeInsets.all(0),
-                                      onSelected: (value) => context
-                                          .read<CreateEntryBloc>()
-                                          .add(CreateEntryRankChanged(2)),
+                                      onSelected: (value) =>
+                                          context.read<CreateEntryBloc>().add(
+                                            CreateEntryRankChanged(
+                                              Rank.important,
+                                            ),
+                                          ),
                                     ),
                                     ChoiceChip(
                                       label: Text(
@@ -338,12 +345,13 @@ class _CreateEntryPageViewState extends State<CreateEntryPageView> {
                                       ),
                                       selected: context.select(
                                         (CreateEntryBloc bloc) =>
-                                            bloc.state.rank == 3,
+                                            bloc.state.rank == Rank.vital,
                                       ),
                                       padding: EdgeInsets.all(0),
-                                      onSelected: (value) => context
-                                          .read<CreateEntryBloc>()
-                                          .add(CreateEntryRankChanged(3)),
+                                      onSelected: (value) =>
+                                          context.read<CreateEntryBloc>().add(
+                                            CreateEntryRankChanged(Rank.vital),
+                                          ),
                                     ),
                                   ],
                                 ),

@@ -44,10 +44,6 @@ abstract class EntryEntity with _$EntryEntity {
          'order must be between ${Entrys.ORDER_MINIMUM_VALUE} and ${Entrys.ORDER_MAXIMUM_VALUE}',
        ),
        assert(
-         rank >= Rank.low.index && rank <= Rank.vital.index,
-         'rank must be between ${Rank.low.index} and ${Rank.vital.index}',
-       ),
-       assert(
          askedCount >= Entrys.ASKED_COUNT_MINIMUM_VALUE.toInt(),
          'askedCount must be zero or bigger',
        ),
@@ -74,7 +70,7 @@ abstract class EntryEntity with _$EntryEntity {
     @Default(Entrys.ORDER_MINIMUM_VALUE) int order,
     @Default(true) bool didAskedAtCurrentTestRound,
     DateTime? emulatedCreatedAt,
-    @Default(1) int rank,
+    @Default(Rank.normal) Rank rank,
     @Default(0) int askedCount,
     @Default(0) int wronglyAnsweredCount,
     @Default(0) double wrongness,
@@ -94,7 +90,7 @@ abstract class EntryEntity with _$EntryEntity {
   @override
   final bool didAskedAtCurrentTestRound;
   @override
-  final int rank;
+  final Rank rank;
   @override
   final int askedCount;
   @override

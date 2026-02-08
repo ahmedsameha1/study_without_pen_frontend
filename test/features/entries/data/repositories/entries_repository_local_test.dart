@@ -21,6 +21,7 @@ void main() {
     question: 'question',
     creationAt: DateTime(2025),
     lastModificationAt: DateTime(2025),
+    rank: Rank.normal,
     askedCount: 8,
     wronglyAnsweredCount: 2,
     wrongness: 0.25,
@@ -38,33 +39,129 @@ void main() {
     );
   });
 
-  test('watch() returns what entrysDao.watchByFieldListId() return', () {
-    when(
-      () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
-    ).thenAnswer(
-      (_) => Stream.value([
-        Entry(
-          id: entryEntity.id!,
-          fieldListId: entryEntity.fieldListId,
-          answer: entryEntity.answer,
-          question: entryEntity.question,
-          creationAt: entryEntity.creationAt,
-          lastModificationAt: entryEntity.lastModificationAt,
-          order: entryEntity.order,
-          didAskedAtCurrentTestRound: entryEntity.didAskedAtCurrentTestRound,
-          rank: entryEntity.rank,
-          askedCount: BigInt.from(entryEntity.askedCount),
-          wronglyAnsweredCount: BigInt.from(entryEntity.wronglyAnsweredCount),
-        ),
-      ]),
-    );
-    expect(
-      entriesRepository.watch(entryEntity.fieldListId),
-      emitsInOrder([
-        [entryEntity],
-      ]),
-    );
-  });
+  test(
+    'watch() returns what entrysDao.watchByFieldListId() return: rank normal',
+    () {
+      when(
+        () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
+      ).thenAnswer(
+        (_) => Stream.value([
+          Entry(
+            id: entryEntity.id!,
+            fieldListId: entryEntity.fieldListId,
+            answer: entryEntity.answer,
+            question: entryEntity.question,
+            creationAt: entryEntity.creationAt,
+            lastModificationAt: entryEntity.lastModificationAt,
+            order: entryEntity.order,
+            didAskedAtCurrentTestRound: entryEntity.didAskedAtCurrentTestRound,
+            rank: entryEntity.rank.index,
+            askedCount: BigInt.from(entryEntity.askedCount),
+            wronglyAnsweredCount: BigInt.from(entryEntity.wronglyAnsweredCount),
+          ),
+        ]),
+      );
+      expect(
+        entriesRepository.watch(entryEntity.fieldListId),
+        emitsInOrder([
+          [entryEntity],
+        ]),
+      );
+    },
+  );
+
+  test(
+    'watch() returns what entrysDao.watchByFieldListId() return: rank low',
+    () {
+      when(
+        () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
+      ).thenAnswer(
+        (_) => Stream.value([
+          Entry(
+            id: entryEntity.id!,
+            fieldListId: entryEntity.fieldListId,
+            answer: entryEntity.answer,
+            question: entryEntity.question,
+            creationAt: entryEntity.creationAt,
+            lastModificationAt: entryEntity.lastModificationAt,
+            order: entryEntity.order,
+            didAskedAtCurrentTestRound: entryEntity.didAskedAtCurrentTestRound,
+            rank: Rank.low.index,
+            askedCount: BigInt.from(entryEntity.askedCount),
+            wronglyAnsweredCount: BigInt.from(entryEntity.wronglyAnsweredCount),
+          ),
+        ]),
+      );
+      expect(
+        entriesRepository.watch(entryEntity.fieldListId),
+        emitsInOrder([
+          [entryEntity.copyWith(rank: Rank.low)],
+        ]),
+      );
+    },
+  );
+
+  test(
+    'watch() returns what entrysDao.watchByFieldListId() return: rank important',
+    () {
+      when(
+        () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
+      ).thenAnswer(
+        (_) => Stream.value([
+          Entry(
+            id: entryEntity.id!,
+            fieldListId: entryEntity.fieldListId,
+            answer: entryEntity.answer,
+            question: entryEntity.question,
+            creationAt: entryEntity.creationAt,
+            lastModificationAt: entryEntity.lastModificationAt,
+            order: entryEntity.order,
+            didAskedAtCurrentTestRound: entryEntity.didAskedAtCurrentTestRound,
+            rank: Rank.important.index,
+            askedCount: BigInt.from(entryEntity.askedCount),
+            wronglyAnsweredCount: BigInt.from(entryEntity.wronglyAnsweredCount),
+          ),
+        ]),
+      );
+      expect(
+        entriesRepository.watch(entryEntity.fieldListId),
+        emitsInOrder([
+          [entryEntity.copyWith(rank: Rank.important)],
+        ]),
+      );
+    },
+  );
+
+  test(
+    'watch() returns what entrysDao.watchByFieldListId() return: rank vital',
+    () {
+      when(
+        () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
+      ).thenAnswer(
+        (_) => Stream.value([
+          Entry(
+            id: entryEntity.id!,
+            fieldListId: entryEntity.fieldListId,
+            answer: entryEntity.answer,
+            question: entryEntity.question,
+            creationAt: entryEntity.creationAt,
+            lastModificationAt: entryEntity.lastModificationAt,
+            order: entryEntity.order,
+            didAskedAtCurrentTestRound: entryEntity.didAskedAtCurrentTestRound,
+            rank: Rank.vital.index,
+            askedCount: BigInt.from(entryEntity.askedCount),
+            wronglyAnsweredCount: BigInt.from(entryEntity.wronglyAnsweredCount),
+          ),
+        ]),
+      );
+      expect(
+        entriesRepository.watch(entryEntity.fieldListId),
+        emitsInOrder([
+          [entryEntity.copyWith(rank: Rank.vital)],
+        ]),
+      );
+    },
+  );
 
   test('create() throws what EntrysDao.create() throw', () {
     when(
@@ -80,7 +177,7 @@ void main() {
             entryEntity.didAskedAtCurrentTestRound,
           ),
           emulatedCreatedAt: Value(entryEntity.emulatedCreatedAt),
-          rank: Value(entryEntity.rank),
+          rank: Value(entryEntity.rank.index),
           askedCount: Value(BigInt.from(entryEntity.askedCount)),
           wronglyAnsweredCount: Value(
             BigInt.from(entryEntity.wronglyAnsweredCount),
@@ -110,7 +207,7 @@ void main() {
             entryEntity.didAskedAtCurrentTestRound,
           ),
           emulatedCreatedAt: Value(entryEntity.emulatedCreatedAt),
-          rank: Value(entryEntity.rank),
+          rank: Value(entryEntity.rank.index),
           askedCount: Value(BigInt.from(entryEntity.askedCount)),
           wronglyAnsweredCount: Value(
             BigInt.from(entryEntity.wronglyAnsweredCount),

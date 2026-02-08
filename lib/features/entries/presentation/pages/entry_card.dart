@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../database/entrys_dao.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/models/entry_entity.dart';
 
@@ -48,11 +49,14 @@ class EntryCard extends StatelessWidget {
                           ),
                           Chip(
                             label: Text(switch (entry.rank) {
-                              0 => AppLocalizations.of(context)!.low,
-                              1 => AppLocalizations.of(context)!.normal,
-                              2 => AppLocalizations.of(context)!.important,
-                              3 => AppLocalizations.of(context)!.vital,
-                              _ => throw AssertionError('Invalid rank'),
+                              Rank.low => AppLocalizations.of(context)!.low,
+                              Rank.normal => AppLocalizations.of(
+                                context,
+                              )!.normal,
+                              Rank.important => AppLocalizations.of(
+                                context,
+                              )!.important,
+                              Rank.vital => AppLocalizations.of(context)!.vital,
                             }),
                             labelStyle: Theme.of(context).textTheme.labelSmall,
                           ),

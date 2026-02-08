@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreateEntryState {
 
- CreateEntryStatus get status; String get question; String get answer; String get order; int get rank; FieldListEntity? get fieldList;
+ CreateEntryStatus get status; String get question; String get answer; String get order; Rank get rank; FieldListEntity? get fieldList;
 /// Create a copy of CreateEntryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $CreateEntryStateCopyWith<$Res>  {
   factory $CreateEntryStateCopyWith(CreateEntryState value, $Res Function(CreateEntryState) _then) = _$CreateEntryStateCopyWithImpl;
 @useResult
 $Res call({
- CreateEntryStatus status, String question, String answer, String order, int rank, FieldListEntity? fieldList
+ CreateEntryStatus status, String question, String answer, String order, Rank rank, FieldListEntity? fieldList
 });
 
 
@@ -69,7 +69,7 @@ as CreateEntryStatus,question: null == question ? _self.question : question // i
 as String,answer: null == answer ? _self.answer : answer // ignore: cast_nullable_to_non_nullable
 as String,order: null == order ? _self.order : order // ignore: cast_nullable_to_non_nullable
 as String,rank: null == rank ? _self.rank : rank // ignore: cast_nullable_to_non_nullable
-as int,fieldList: freezed == fieldList ? _self.fieldList : fieldList // ignore: cast_nullable_to_non_nullable
+as Rank,fieldList: freezed == fieldList ? _self.fieldList : fieldList // ignore: cast_nullable_to_non_nullable
 as FieldListEntity?,
   ));
 }
@@ -167,7 +167,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CreateEntryStatus status,  String question,  String answer,  String order,  int rank,  FieldListEntity? fieldList)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( CreateEntryStatus status,  String question,  String answer,  String order,  Rank rank,  FieldListEntity? fieldList)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateEntryState() when $default != null:
 return $default(_that.status,_that.question,_that.answer,_that.order,_that.rank,_that.fieldList);case _:
@@ -188,7 +188,7 @@ return $default(_that.status,_that.question,_that.answer,_that.order,_that.rank,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CreateEntryStatus status,  String question,  String answer,  String order,  int rank,  FieldListEntity? fieldList)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( CreateEntryStatus status,  String question,  String answer,  String order,  Rank rank,  FieldListEntity? fieldList)  $default,) {final _that = this;
 switch (_that) {
 case _CreateEntryState():
 return $default(_that.status,_that.question,_that.answer,_that.order,_that.rank,_that.fieldList);case _:
@@ -208,7 +208,7 @@ return $default(_that.status,_that.question,_that.answer,_that.order,_that.rank,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CreateEntryStatus status,  String question,  String answer,  String order,  int rank,  FieldListEntity? fieldList)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( CreateEntryStatus status,  String question,  String answer,  String order,  Rank rank,  FieldListEntity? fieldList)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateEntryState() when $default != null:
 return $default(_that.status,_that.question,_that.answer,_that.order,_that.rank,_that.fieldList);case _:
@@ -223,14 +223,14 @@ return $default(_that.status,_that.question,_that.answer,_that.order,_that.rank,
 
 
 class _CreateEntryState implements CreateEntryState {
-  const _CreateEntryState({this.status = CreateEntryStatus.loading, this.question = '', this.answer = '', this.order = '', this.rank = 1, this.fieldList});
+  const _CreateEntryState({this.status = CreateEntryStatus.loading, this.question = '', this.answer = '', this.order = '', this.rank = Rank.normal, this.fieldList});
   
 
 @override@JsonKey() final  CreateEntryStatus status;
 @override@JsonKey() final  String question;
 @override@JsonKey() final  String answer;
 @override@JsonKey() final  String order;
-@override@JsonKey() final  int rank;
+@override@JsonKey() final  Rank rank;
 @override final  FieldListEntity? fieldList;
 
 /// Create a copy of CreateEntryState
@@ -263,7 +263,7 @@ abstract mixin class _$CreateEntryStateCopyWith<$Res> implements $CreateEntrySta
   factory _$CreateEntryStateCopyWith(_CreateEntryState value, $Res Function(_CreateEntryState) _then) = __$CreateEntryStateCopyWithImpl;
 @override @useResult
 $Res call({
- CreateEntryStatus status, String question, String answer, String order, int rank, FieldListEntity? fieldList
+ CreateEntryStatus status, String question, String answer, String order, Rank rank, FieldListEntity? fieldList
 });
 
 
@@ -287,7 +287,7 @@ as CreateEntryStatus,question: null == question ? _self.question : question // i
 as String,answer: null == answer ? _self.answer : answer // ignore: cast_nullable_to_non_nullable
 as String,order: null == order ? _self.order : order // ignore: cast_nullable_to_non_nullable
 as String,rank: null == rank ? _self.rank : rank // ignore: cast_nullable_to_non_nullable
-as int,fieldList: freezed == fieldList ? _self.fieldList : fieldList // ignore: cast_nullable_to_non_nullable
+as Rank,fieldList: freezed == fieldList ? _self.fieldList : fieldList // ignore: cast_nullable_to_non_nullable
 as FieldListEntity?,
   ));
 }

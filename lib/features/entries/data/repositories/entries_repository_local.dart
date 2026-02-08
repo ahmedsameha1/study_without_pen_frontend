@@ -25,7 +25,13 @@ class EntriesRepositoryLocal implements EntriesRepository {
                   order: entry.order,
                   didAskedAtCurrentTestRound: entry.didAskedAtCurrentTestRound,
                   emulatedCreatedAt: entry.emulatedCreatedAt,
-                  rank: entry.rank,
+                  rank: switch (entry.rank) {
+                    0 => Rank.low,
+                    1 => Rank.normal,
+                    2 => Rank.important,
+                    3 => Rank.vital,
+                    _ => throw AssertionError('Invalid rank'),
+                  },
                   askedCount: entry.askedCount.toInt(),
                   wronglyAnsweredCount: entry.wronglyAnsweredCount.toInt(),
                   wrongness: entry.askedCount > BigInt.from(0)
@@ -51,7 +57,7 @@ class EntriesRepositoryLocal implements EntriesRepository {
           entryEntity.didAskedAtCurrentTestRound,
         ),
         emulatedCreatedAt: Value(entryEntity.emulatedCreatedAt),
-        rank: Value(entryEntity.rank),
+        rank: Value(entryEntity.rank.index),
         askedCount: Value(BigInt.from(entryEntity.askedCount)),
         wronglyAnsweredCount: Value(
           BigInt.from(entryEntity.wronglyAnsweredCount),

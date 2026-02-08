@@ -1,10 +1,12 @@
+import '../../../../database/entrys_dao.dart';
+
 sealed class CreateEntryEvent {
   const CreateEntryEvent();
 }
 
 class CreateEntryRankChanged extends CreateEntryEvent {
   const CreateEntryRankChanged(this.rank);
-  final int rank;
+  final Rank rank;
 
   @override
   bool operator ==(Object other) {

@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/usecases/create_entry_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/create_entry_bloc.dart';
@@ -19,7 +20,7 @@ void main() {
     fieldListId: const Uuid().v4(),
     answer: 'answer',
     question: 'question',
-    rank: 3,
+    rank: Rank.vital,
     order: 9,
     creationAt: creationAt,
     lastModificationAt: creationAt,
@@ -52,9 +53,9 @@ void main() {
     'Emit new state with updated rank',
     build: buildBloc,
     seed: () => CreateEntryState(status: CreateEntryStatus.initial),
-    act: (bloc) => bloc.add(const CreateEntryRankChanged(0)),
+    act: (bloc) => bloc.add(const CreateEntryRankChanged(Rank.low)),
     expect: () => [
-      CreateEntryState(status: CreateEntryStatus.initial, rank: 0),
+      CreateEntryState(status: CreateEntryStatus.initial, rank: Rank.low),
     ],
   );
 
@@ -65,14 +66,14 @@ void main() {
       status: CreateEntryStatus.initial,
       question: entry.question,
       answer: entry.answer,
-      rank: 2,
+      rank: Rank.important,
       order: '${entry.order}',
     ),
-    act: (bloc) => bloc.add(const CreateEntryRankChanged(0)),
+    act: (bloc) => bloc.add(const CreateEntryRankChanged(Rank.low)),
     expect: () => [
       CreateEntryState(
         status: CreateEntryStatus.initial,
-        rank: 0,
+        rank: Rank.low,
         question: entry.question,
         answer: entry.answer,
         order: '${entry.order}',

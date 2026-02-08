@@ -2,6 +2,7 @@ import 'package:clock/clock.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/features/entries/data/repositories/entries_repository.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/usecases/create_entry_usecase.dart';
@@ -23,7 +24,7 @@ void main() {
   final answer = 'answer';
   final question = 'question';
   final order = 12;
-  final rank = 2;
+  final rank = Rank.important;
   DateTime creationAt = DateTime(2020, 1, 1);
   FieldListEntity fieldListEntity = FieldListEntity(
     id: const Uuid().v4(),

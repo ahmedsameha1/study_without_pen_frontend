@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/common/theme.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/usecases/create_entry_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/create_entry_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/create_entry_event.dart';
@@ -136,7 +137,7 @@ void main() {
       late CreateEntryBloc createEntryBloc;
       final question = 'question';
       final answer = 'answer';
-      final rank = 1;
+      final rank = Rank.normal;
       final order = 5;
 
       setUp(() {
@@ -448,7 +449,7 @@ void main() {
             CreateEntryState(
               status: CreateEntryStatus.initial,
               fieldList: fieldListEntity,
-              rank: 0,
+              rank: Rank.low,
             ),
           ]),
         );
@@ -485,7 +486,7 @@ void main() {
             CreateEntryState(
               status: CreateEntryStatus.initial,
               fieldList: fieldListEntity,
-              rank: 2,
+              rank: Rank.important,
             ),
           ]),
         );
@@ -522,7 +523,7 @@ void main() {
             CreateEntryState(
               status: CreateEntryStatus.initial,
               fieldList: fieldListEntity,
-              rank: 3,
+              rank: Rank.vital,
             ),
           ]),
         );
@@ -780,7 +781,7 @@ void main() {
           );
           await tester.tap(find.byWidget(lowChoiceChip));
           verify(
-            () => createEntryBloc.add(CreateEntryRankChanged(0)),
+            () => createEntryBloc.add(CreateEntryRankChanged(Rank.low)),
           ).called(1);
           whenListen<CreateEntryState>(
             createEntryBloc,
@@ -803,7 +804,7 @@ void main() {
           );
           await tester.tap(find.byWidget(normalChoiceChip));
           verify(
-            () => createEntryBloc.add(CreateEntryRankChanged(1)),
+            () => createEntryBloc.add(CreateEntryRankChanged(Rank.normal)),
           ).called(1);
           whenListen<CreateEntryState>(
             createEntryBloc,
@@ -826,7 +827,7 @@ void main() {
           );
           await tester.tap(find.byWidget(importantChoiceChip));
           verify(
-            () => createEntryBloc.add(CreateEntryRankChanged(2)),
+            () => createEntryBloc.add(CreateEntryRankChanged(Rank.important)),
           ).called(1);
           whenListen<CreateEntryState>(
             createEntryBloc,
@@ -849,7 +850,7 @@ void main() {
           );
           await tester.tap(find.byWidget(vitalChoiceChip));
           verify(
-            () => createEntryBloc.add(CreateEntryRankChanged(3)),
+            () => createEntryBloc.add(CreateEntryRankChanged(Rank.vital)),
           ).called(1);
         },
       );
@@ -1030,7 +1031,7 @@ void main() {
               status: CreateEntryStatus.success,
               question: 'question',
               answer: 'answer',
-              rank: 1,
+              rank: Rank.normal,
             ),
           ]),
         );
@@ -1063,7 +1064,7 @@ void main() {
               status: CreateEntryStatus.failure,
               question: 'question',
               answer: 'answer',
-              rank: 1,
+              rank: Rank.normal,
             ),
           ]),
         );
@@ -1091,7 +1092,7 @@ void main() {
                 status: CreateEntryStatus.duplicationFailure,
                 question: 'question',
                 answer: 'answer',
-                rank: 1,
+                rank: Rank.normal,
               ),
             ]),
           );

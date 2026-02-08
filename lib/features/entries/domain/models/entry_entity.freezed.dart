@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EntryEntity {
 
- String get fieldListId; String get answer; String get question; DateTime get creationAt; DateTime get lastModificationAt; int get order; bool get didAskedAtCurrentTestRound; int get rank; int get askedCount; int get wronglyAnsweredCount; String? get id; DateTime? get emulatedCreatedAt;
+ String get fieldListId; String get answer; String get question; DateTime get creationAt; DateTime get lastModificationAt; int get order; bool get didAskedAtCurrentTestRound; Rank get rank; int get askedCount; int get wronglyAnsweredCount; double get wrongness; String? get id; DateTime? get emulatedCreatedAt;
 /// Create a copy of EntryEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $EntryEntityCopyWith<EntryEntity> get copyWith => _$EntryEntityCopyWithImpl<Entr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntryEntity&&(identical(other.fieldListId, fieldListId) || other.fieldListId == fieldListId)&&(identical(other.answer, answer) || other.answer == answer)&&(identical(other.question, question) || other.question == question)&&(identical(other.creationAt, creationAt) || other.creationAt == creationAt)&&(identical(other.lastModificationAt, lastModificationAt) || other.lastModificationAt == lastModificationAt)&&(identical(other.order, order) || other.order == order)&&(identical(other.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound) || other.didAskedAtCurrentTestRound == didAskedAtCurrentTestRound)&&(identical(other.rank, rank) || other.rank == rank)&&(identical(other.askedCount, askedCount) || other.askedCount == askedCount)&&(identical(other.wronglyAnsweredCount, wronglyAnsweredCount) || other.wronglyAnsweredCount == wronglyAnsweredCount)&&(identical(other.id, id) || other.id == id)&&(identical(other.emulatedCreatedAt, emulatedCreatedAt) || other.emulatedCreatedAt == emulatedCreatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntryEntity&&(identical(other.fieldListId, fieldListId) || other.fieldListId == fieldListId)&&(identical(other.answer, answer) || other.answer == answer)&&(identical(other.question, question) || other.question == question)&&(identical(other.creationAt, creationAt) || other.creationAt == creationAt)&&(identical(other.lastModificationAt, lastModificationAt) || other.lastModificationAt == lastModificationAt)&&(identical(other.order, order) || other.order == order)&&(identical(other.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound) || other.didAskedAtCurrentTestRound == didAskedAtCurrentTestRound)&&(identical(other.rank, rank) || other.rank == rank)&&(identical(other.askedCount, askedCount) || other.askedCount == askedCount)&&(identical(other.wronglyAnsweredCount, wronglyAnsweredCount) || other.wronglyAnsweredCount == wronglyAnsweredCount)&&(identical(other.wrongness, wrongness) || other.wrongness == wrongness)&&(identical(other.id, id) || other.id == id)&&(identical(other.emulatedCreatedAt, emulatedCreatedAt) || other.emulatedCreatedAt == emulatedCreatedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,fieldListId,answer,question,creationAt,lastModificationAt,order,didAskedAtCurrentTestRound,rank,askedCount,wronglyAnsweredCount,id,emulatedCreatedAt);
+int get hashCode => Object.hash(runtimeType,fieldListId,answer,question,creationAt,lastModificationAt,order,didAskedAtCurrentTestRound,rank,askedCount,wronglyAnsweredCount,wrongness,id,emulatedCreatedAt);
 
 @override
 String toString() {
-  return 'EntryEntity(fieldListId: $fieldListId, answer: $answer, question: $question, creationAt: $creationAt, lastModificationAt: $lastModificationAt, order: $order, didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, rank: $rank, askedCount: $askedCount, wronglyAnsweredCount: $wronglyAnsweredCount, id: $id, emulatedCreatedAt: $emulatedCreatedAt)';
+  return 'EntryEntity(fieldListId: $fieldListId, answer: $answer, question: $question, creationAt: $creationAt, lastModificationAt: $lastModificationAt, order: $order, didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, rank: $rank, askedCount: $askedCount, wronglyAnsweredCount: $wronglyAnsweredCount, wrongness: $wrongness, id: $id, emulatedCreatedAt: $emulatedCreatedAt)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $EntryEntityCopyWith<$Res>  {
   factory $EntryEntityCopyWith(EntryEntity value, $Res Function(EntryEntity) _then) = _$EntryEntityCopyWithImpl;
 @useResult
 $Res call({
- String? id, String fieldListId, String answer, String question, DateTime creationAt, DateTime lastModificationAt, int order, bool didAskedAtCurrentTestRound, DateTime? emulatedCreatedAt, int rank, int askedCount, int wronglyAnsweredCount
+ String? id, String fieldListId, String answer, String question, DateTime creationAt, DateTime lastModificationAt, int order, bool didAskedAtCurrentTestRound, DateTime? emulatedCreatedAt, Rank rank, int askedCount, int wronglyAnsweredCount, double wrongness
 });
 
 
@@ -62,7 +62,7 @@ class _$EntryEntityCopyWithImpl<$Res>
 
 /// Create a copy of EntryEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? fieldListId = null,Object? answer = null,Object? question = null,Object? creationAt = null,Object? lastModificationAt = null,Object? order = null,Object? didAskedAtCurrentTestRound = null,Object? emulatedCreatedAt = freezed,Object? rank = null,Object? askedCount = null,Object? wronglyAnsweredCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? fieldListId = null,Object? answer = null,Object? question = null,Object? creationAt = null,Object? lastModificationAt = null,Object? order = null,Object? didAskedAtCurrentTestRound = null,Object? emulatedCreatedAt = freezed,Object? rank = null,Object? askedCount = null,Object? wronglyAnsweredCount = null,Object? wrongness = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,fieldListId: null == fieldListId ? _self.fieldListId : fieldListId // ignore: cast_nullable_to_non_nullable
@@ -74,9 +74,10 @@ as DateTime,order: null == order ? _self.order : order // ignore: cast_nullable_
 as int,didAskedAtCurrentTestRound: null == didAskedAtCurrentTestRound ? _self.didAskedAtCurrentTestRound : didAskedAtCurrentTestRound // ignore: cast_nullable_to_non_nullable
 as bool,emulatedCreatedAt: freezed == emulatedCreatedAt ? _self.emulatedCreatedAt : emulatedCreatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,rank: null == rank ? _self.rank : rank // ignore: cast_nullable_to_non_nullable
-as int,askedCount: null == askedCount ? _self.askedCount : askedCount // ignore: cast_nullable_to_non_nullable
+as Rank,askedCount: null == askedCount ? _self.askedCount : askedCount // ignore: cast_nullable_to_non_nullable
 as int,wronglyAnsweredCount: null == wronglyAnsweredCount ? _self.wronglyAnsweredCount : wronglyAnsweredCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,wrongness: null == wrongness ? _self.wrongness : wrongness // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 
@@ -161,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String fieldListId,  String answer,  String question,  DateTime creationAt,  DateTime lastModificationAt,  int order,  bool didAskedAtCurrentTestRound,  DateTime? emulatedCreatedAt,  int rank,  int askedCount,  int wronglyAnsweredCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String fieldListId,  String answer,  String question,  DateTime creationAt,  DateTime lastModificationAt,  int order,  bool didAskedAtCurrentTestRound,  DateTime? emulatedCreatedAt,  Rank rank,  int askedCount,  int wronglyAnsweredCount,  double wrongness)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EntryEntity() when $default != null:
-return $default(_that.id,_that.fieldListId,_that.answer,_that.question,_that.creationAt,_that.lastModificationAt,_that.order,_that.didAskedAtCurrentTestRound,_that.emulatedCreatedAt,_that.rank,_that.askedCount,_that.wronglyAnsweredCount);case _:
+return $default(_that.id,_that.fieldListId,_that.answer,_that.question,_that.creationAt,_that.lastModificationAt,_that.order,_that.didAskedAtCurrentTestRound,_that.emulatedCreatedAt,_that.rank,_that.askedCount,_that.wronglyAnsweredCount,_that.wrongness);case _:
   return orElse();
 
 }
@@ -182,10 +183,10 @@ return $default(_that.id,_that.fieldListId,_that.answer,_that.question,_that.cre
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String fieldListId,  String answer,  String question,  DateTime creationAt,  DateTime lastModificationAt,  int order,  bool didAskedAtCurrentTestRound,  DateTime? emulatedCreatedAt,  int rank,  int askedCount,  int wronglyAnsweredCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String fieldListId,  String answer,  String question,  DateTime creationAt,  DateTime lastModificationAt,  int order,  bool didAskedAtCurrentTestRound,  DateTime? emulatedCreatedAt,  Rank rank,  int askedCount,  int wronglyAnsweredCount,  double wrongness)  $default,) {final _that = this;
 switch (_that) {
 case _EntryEntity():
-return $default(_that.id,_that.fieldListId,_that.answer,_that.question,_that.creationAt,_that.lastModificationAt,_that.order,_that.didAskedAtCurrentTestRound,_that.emulatedCreatedAt,_that.rank,_that.askedCount,_that.wronglyAnsweredCount);case _:
+return $default(_that.id,_that.fieldListId,_that.answer,_that.question,_that.creationAt,_that.lastModificationAt,_that.order,_that.didAskedAtCurrentTestRound,_that.emulatedCreatedAt,_that.rank,_that.askedCount,_that.wronglyAnsweredCount,_that.wrongness);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +203,10 @@ return $default(_that.id,_that.fieldListId,_that.answer,_that.question,_that.cre
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String fieldListId,  String answer,  String question,  DateTime creationAt,  DateTime lastModificationAt,  int order,  bool didAskedAtCurrentTestRound,  DateTime? emulatedCreatedAt,  int rank,  int askedCount,  int wronglyAnsweredCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String fieldListId,  String answer,  String question,  DateTime creationAt,  DateTime lastModificationAt,  int order,  bool didAskedAtCurrentTestRound,  DateTime? emulatedCreatedAt,  Rank rank,  int askedCount,  int wronglyAnsweredCount,  double wrongness)?  $default,) {final _that = this;
 switch (_that) {
 case _EntryEntity() when $default != null:
-return $default(_that.id,_that.fieldListId,_that.answer,_that.question,_that.creationAt,_that.lastModificationAt,_that.order,_that.didAskedAtCurrentTestRound,_that.emulatedCreatedAt,_that.rank,_that.askedCount,_that.wronglyAnsweredCount);case _:
+return $default(_that.id,_that.fieldListId,_that.answer,_that.question,_that.creationAt,_that.lastModificationAt,_that.order,_that.didAskedAtCurrentTestRound,_that.emulatedCreatedAt,_that.rank,_that.askedCount,_that.wronglyAnsweredCount,_that.wrongness);case _:
   return null;
 
 }
@@ -217,7 +218,7 @@ return $default(_that.id,_that.fieldListId,_that.answer,_that.question,_that.cre
 
 
 class _EntryEntity extends EntryEntity {
-   _EntryEntity({this.id, required final  String fieldListId, required final  String answer, required final  String question, required final  DateTime creationAt, required final  DateTime lastModificationAt, final  int order = Entrys.ORDER_MINIMUM_VALUE, final  bool didAskedAtCurrentTestRound = true, this.emulatedCreatedAt, final  int rank = 1, final  int askedCount = 0, final  int wronglyAnsweredCount = 0}): super._(fieldListId: fieldListId, answer: answer, question: question, creationAt: creationAt, lastModificationAt: lastModificationAt, order: order, didAskedAtCurrentTestRound: didAskedAtCurrentTestRound, rank: rank, askedCount: askedCount, wronglyAnsweredCount: wronglyAnsweredCount);
+   _EntryEntity({this.id, required final  String fieldListId, required final  String answer, required final  String question, required final  DateTime creationAt, required final  DateTime lastModificationAt, final  int order = Entrys.ORDER_MINIMUM_VALUE, final  bool didAskedAtCurrentTestRound = true, this.emulatedCreatedAt, final  Rank rank = Rank.normal, final  int askedCount = 0, final  int wronglyAnsweredCount = 0, final  double wrongness = 0}): super._(fieldListId: fieldListId, answer: answer, question: question, creationAt: creationAt, lastModificationAt: lastModificationAt, order: order, didAskedAtCurrentTestRound: didAskedAtCurrentTestRound, rank: rank, askedCount: askedCount, wronglyAnsweredCount: wronglyAnsweredCount, wrongness: wrongness);
   
 
 @override final  String? id;
@@ -233,16 +234,16 @@ _$EntryEntityCopyWith<_EntryEntity> get copyWith => __$EntryEntityCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntryEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.fieldListId, fieldListId) || other.fieldListId == fieldListId)&&(identical(other.answer, answer) || other.answer == answer)&&(identical(other.question, question) || other.question == question)&&(identical(other.creationAt, creationAt) || other.creationAt == creationAt)&&(identical(other.lastModificationAt, lastModificationAt) || other.lastModificationAt == lastModificationAt)&&(identical(other.order, order) || other.order == order)&&(identical(other.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound) || other.didAskedAtCurrentTestRound == didAskedAtCurrentTestRound)&&(identical(other.emulatedCreatedAt, emulatedCreatedAt) || other.emulatedCreatedAt == emulatedCreatedAt)&&(identical(other.rank, rank) || other.rank == rank)&&(identical(other.askedCount, askedCount) || other.askedCount == askedCount)&&(identical(other.wronglyAnsweredCount, wronglyAnsweredCount) || other.wronglyAnsweredCount == wronglyAnsweredCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntryEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.fieldListId, fieldListId) || other.fieldListId == fieldListId)&&(identical(other.answer, answer) || other.answer == answer)&&(identical(other.question, question) || other.question == question)&&(identical(other.creationAt, creationAt) || other.creationAt == creationAt)&&(identical(other.lastModificationAt, lastModificationAt) || other.lastModificationAt == lastModificationAt)&&(identical(other.order, order) || other.order == order)&&(identical(other.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound) || other.didAskedAtCurrentTestRound == didAskedAtCurrentTestRound)&&(identical(other.emulatedCreatedAt, emulatedCreatedAt) || other.emulatedCreatedAt == emulatedCreatedAt)&&(identical(other.rank, rank) || other.rank == rank)&&(identical(other.askedCount, askedCount) || other.askedCount == askedCount)&&(identical(other.wronglyAnsweredCount, wronglyAnsweredCount) || other.wronglyAnsweredCount == wronglyAnsweredCount)&&(identical(other.wrongness, wrongness) || other.wrongness == wrongness));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,fieldListId,answer,question,creationAt,lastModificationAt,order,didAskedAtCurrentTestRound,emulatedCreatedAt,rank,askedCount,wronglyAnsweredCount);
+int get hashCode => Object.hash(runtimeType,id,fieldListId,answer,question,creationAt,lastModificationAt,order,didAskedAtCurrentTestRound,emulatedCreatedAt,rank,askedCount,wronglyAnsweredCount,wrongness);
 
 @override
 String toString() {
-  return 'EntryEntity(id: $id, fieldListId: $fieldListId, answer: $answer, question: $question, creationAt: $creationAt, lastModificationAt: $lastModificationAt, order: $order, didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, emulatedCreatedAt: $emulatedCreatedAt, rank: $rank, askedCount: $askedCount, wronglyAnsweredCount: $wronglyAnsweredCount)';
+  return 'EntryEntity(id: $id, fieldListId: $fieldListId, answer: $answer, question: $question, creationAt: $creationAt, lastModificationAt: $lastModificationAt, order: $order, didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, emulatedCreatedAt: $emulatedCreatedAt, rank: $rank, askedCount: $askedCount, wronglyAnsweredCount: $wronglyAnsweredCount, wrongness: $wrongness)';
 }
 
 
@@ -253,7 +254,7 @@ abstract mixin class _$EntryEntityCopyWith<$Res> implements $EntryEntityCopyWith
   factory _$EntryEntityCopyWith(_EntryEntity value, $Res Function(_EntryEntity) _then) = __$EntryEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String fieldListId, String answer, String question, DateTime creationAt, DateTime lastModificationAt, int order, bool didAskedAtCurrentTestRound, DateTime? emulatedCreatedAt, int rank, int askedCount, int wronglyAnsweredCount
+ String? id, String fieldListId, String answer, String question, DateTime creationAt, DateTime lastModificationAt, int order, bool didAskedAtCurrentTestRound, DateTime? emulatedCreatedAt, Rank rank, int askedCount, int wronglyAnsweredCount, double wrongness
 });
 
 
@@ -270,7 +271,7 @@ class __$EntryEntityCopyWithImpl<$Res>
 
 /// Create a copy of EntryEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? fieldListId = null,Object? answer = null,Object? question = null,Object? creationAt = null,Object? lastModificationAt = null,Object? order = null,Object? didAskedAtCurrentTestRound = null,Object? emulatedCreatedAt = freezed,Object? rank = null,Object? askedCount = null,Object? wronglyAnsweredCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? fieldListId = null,Object? answer = null,Object? question = null,Object? creationAt = null,Object? lastModificationAt = null,Object? order = null,Object? didAskedAtCurrentTestRound = null,Object? emulatedCreatedAt = freezed,Object? rank = null,Object? askedCount = null,Object? wronglyAnsweredCount = null,Object? wrongness = null,}) {
   return _then(_EntryEntity(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,fieldListId: null == fieldListId ? _self.fieldListId : fieldListId // ignore: cast_nullable_to_non_nullable
@@ -282,9 +283,10 @@ as DateTime,order: null == order ? _self.order : order // ignore: cast_nullable_
 as int,didAskedAtCurrentTestRound: null == didAskedAtCurrentTestRound ? _self.didAskedAtCurrentTestRound : didAskedAtCurrentTestRound // ignore: cast_nullable_to_non_nullable
 as bool,emulatedCreatedAt: freezed == emulatedCreatedAt ? _self.emulatedCreatedAt : emulatedCreatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,rank: null == rank ? _self.rank : rank // ignore: cast_nullable_to_non_nullable
-as int,askedCount: null == askedCount ? _self.askedCount : askedCount // ignore: cast_nullable_to_non_nullable
+as Rank,askedCount: null == askedCount ? _self.askedCount : askedCount // ignore: cast_nullable_to_non_nullable
 as int,wronglyAnsweredCount: null == wronglyAnsweredCount ? _self.wronglyAnsweredCount : wronglyAnsweredCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,wrongness: null == wrongness ? _self.wrongness : wrongness // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/common/theme.dart';
+import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/pages/entry_card.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
@@ -25,7 +26,7 @@ void main() {
       question: 'question',
       creationAt: DateTime(2025),
       lastModificationAt: DateTime(2025),
-      rank: 0,
+      rank: Rank.low,
     );
     testWidgets('Test the precense of the main widgets', (
       WidgetTester tester,
@@ -274,7 +275,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry.copyWith(rank: 1)),
+          home: EntryCard(entry: entry.copyWith(rank: Rank.normal)),
         ),
       );
       Chip rankChip = tester.widget(
@@ -291,7 +292,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry.copyWith(rank: 2)),
+          home: EntryCard(entry: entry.copyWith(rank: Rank.important)),
         ),
       );
       Chip rankChip = tester.widget(
@@ -311,7 +312,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry.copyWith(rank: 3)),
+          home: EntryCard(entry: entry.copyWith(rank: Rank.vital)),
         ),
       );
       Chip rankChip = tester.widget(
