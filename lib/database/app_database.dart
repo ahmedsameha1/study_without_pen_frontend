@@ -4,15 +4,15 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:study_without_pen_by_flutter/database/fields_dao.dart';
-import 'package:study_without_pen_by_flutter/database/session_entrys_dao.dart';
-import 'package:study_without_pen_by_flutter/database/sessions_dao.dart';
-import 'package:study_without_pen_by_flutter/database/field_notes_dao.dart';
 import 'package:uuid/uuid.dart';
 
 import 'entrys_dao.dart';
 import 'field_list_notes_dao.dart';
 import 'field_lists_dao.dart';
+import 'field_notes_dao.dart';
+import 'fields_dao.dart';
+import 'session_entrys_dao.dart';
+import 'sessions_dao.dart';
 import 'test_sessions_dao.dart';
 import 'wrong_answers_dao.dart';
 
@@ -65,6 +65,7 @@ class Entrys extends Table {
           Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE,
         ),
       )();
+  DateTimeColumn get lastAskedAt => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};

@@ -10,6 +10,8 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
   EntrysDao(super.appDatabase);
 
   Future<int> create(EntrysCompanion entrysCompanion) {
+    // the following checks are here because it is hard to write them in a check  
+    // function in the definition of the table
     if (entrysCompanion.id.present && !isValid(entrysCompanion.id.value)) {
       throw InvalidDataException("id");
     }
@@ -23,6 +25,12 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
       clock.now().toUtc(),
     )) {
       throw InvalidDataException("lastModificationAt");
+    }
+    if (entrysCompanion.lastAskedAt.value != null &&
+        entrysCompanion.lastAskedAt.value!.toUtc().isAfter(
+          clock.now().toUtc(),
+        )) {
+      throw InvalidDataException('lastAskedAt');
     }
     return into(entrys).insert(entrysCompanion);
   }

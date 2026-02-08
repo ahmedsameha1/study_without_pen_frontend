@@ -2100,6 +2100,17 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         requiredDuringInsert: false,
         defaultValue: Constant(Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE),
       );
+  static const VerificationMeta _lastAskedAtMeta = const VerificationMeta(
+    'lastAskedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastAskedAt = GeneratedColumn<DateTime>(
+    'last_asked_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -2114,6 +2125,7 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
     rank,
     askedCount,
     wronglyAnsweredCount,
+    lastAskedAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2221,6 +2233,15 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         ),
       );
     }
+    if (data.containsKey('last_asked_at')) {
+      context.handle(
+        _lastAskedAtMeta,
+        lastAskedAt.isAcceptableOrUnknown(
+          data['last_asked_at']!,
+          _lastAskedAtMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -2282,6 +2303,10 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         DriftSqlType.bigInt,
         data['${effectivePrefix}wrongly_answered_count'],
       )!,
+      lastAskedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_asked_at'],
+      ),
     );
   }
 
@@ -2304,6 +2329,7 @@ class Entry extends DataClass implements Insertable<Entry> {
   final int rank;
   final BigInt askedCount;
   final BigInt wronglyAnsweredCount;
+  final DateTime? lastAskedAt;
   const Entry({
     required this.id,
     required this.fieldListId,
@@ -2317,6 +2343,7 @@ class Entry extends DataClass implements Insertable<Entry> {
     required this.rank,
     required this.askedCount,
     required this.wronglyAnsweredCount,
+    this.lastAskedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2337,6 +2364,9 @@ class Entry extends DataClass implements Insertable<Entry> {
     map['rank'] = Variable<int>(rank);
     map['asked_count'] = Variable<BigInt>(askedCount);
     map['wrongly_answered_count'] = Variable<BigInt>(wronglyAnsweredCount);
+    if (!nullToAbsent || lastAskedAt != null) {
+      map['last_asked_at'] = Variable<DateTime>(lastAskedAt);
+    }
     return map;
   }
 
@@ -2356,6 +2386,9 @@ class Entry extends DataClass implements Insertable<Entry> {
       rank: Value(rank),
       askedCount: Value(askedCount),
       wronglyAnsweredCount: Value(wronglyAnsweredCount),
+      lastAskedAt: lastAskedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastAskedAt),
     );
   }
 
@@ -2385,6 +2418,7 @@ class Entry extends DataClass implements Insertable<Entry> {
       wronglyAnsweredCount: serializer.fromJson<BigInt>(
         json['wronglyAnsweredCount'],
       ),
+      lastAskedAt: serializer.fromJson<DateTime?>(json['lastAskedAt']),
     );
   }
   @override
@@ -2405,6 +2439,7 @@ class Entry extends DataClass implements Insertable<Entry> {
       'rank': serializer.toJson<int>(rank),
       'askedCount': serializer.toJson<BigInt>(askedCount),
       'wronglyAnsweredCount': serializer.toJson<BigInt>(wronglyAnsweredCount),
+      'lastAskedAt': serializer.toJson<DateTime?>(lastAskedAt),
     };
   }
 
@@ -2421,6 +2456,7 @@ class Entry extends DataClass implements Insertable<Entry> {
     int? rank,
     BigInt? askedCount,
     BigInt? wronglyAnsweredCount,
+    Value<DateTime?> lastAskedAt = const Value.absent(),
   }) => Entry(
     id: id ?? this.id,
     fieldListId: fieldListId ?? this.fieldListId,
@@ -2437,6 +2473,7 @@ class Entry extends DataClass implements Insertable<Entry> {
     rank: rank ?? this.rank,
     askedCount: askedCount ?? this.askedCount,
     wronglyAnsweredCount: wronglyAnsweredCount ?? this.wronglyAnsweredCount,
+    lastAskedAt: lastAskedAt.present ? lastAskedAt.value : this.lastAskedAt,
   );
   Entry copyWithCompanion(EntrysCompanion data) {
     return Entry(
@@ -2466,6 +2503,9 @@ class Entry extends DataClass implements Insertable<Entry> {
       wronglyAnsweredCount: data.wronglyAnsweredCount.present
           ? data.wronglyAnsweredCount.value
           : this.wronglyAnsweredCount,
+      lastAskedAt: data.lastAskedAt.present
+          ? data.lastAskedAt.value
+          : this.lastAskedAt,
     );
   }
 
@@ -2483,7 +2523,8 @@ class Entry extends DataClass implements Insertable<Entry> {
           ..write('emulatedCreatedAt: $emulatedCreatedAt, ')
           ..write('rank: $rank, ')
           ..write('askedCount: $askedCount, ')
-          ..write('wronglyAnsweredCount: $wronglyAnsweredCount')
+          ..write('wronglyAnsweredCount: $wronglyAnsweredCount, ')
+          ..write('lastAskedAt: $lastAskedAt')
           ..write(')'))
         .toString();
   }
@@ -2502,6 +2543,7 @@ class Entry extends DataClass implements Insertable<Entry> {
     rank,
     askedCount,
     wronglyAnsweredCount,
+    lastAskedAt,
   );
   @override
   bool operator ==(Object other) =>
@@ -2518,7 +2560,8 @@ class Entry extends DataClass implements Insertable<Entry> {
           other.emulatedCreatedAt == this.emulatedCreatedAt &&
           other.rank == this.rank &&
           other.askedCount == this.askedCount &&
-          other.wronglyAnsweredCount == this.wronglyAnsweredCount);
+          other.wronglyAnsweredCount == this.wronglyAnsweredCount &&
+          other.lastAskedAt == this.lastAskedAt);
 }
 
 class EntrysCompanion extends UpdateCompanion<Entry> {
@@ -2534,6 +2577,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
   final Value<int> rank;
   final Value<BigInt> askedCount;
   final Value<BigInt> wronglyAnsweredCount;
+  final Value<DateTime?> lastAskedAt;
   final Value<int> rowid;
   const EntrysCompanion({
     this.id = const Value.absent(),
@@ -2548,6 +2592,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     this.rank = const Value.absent(),
     this.askedCount = const Value.absent(),
     this.wronglyAnsweredCount = const Value.absent(),
+    this.lastAskedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   EntrysCompanion.insert({
@@ -2563,6 +2608,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     this.rank = const Value.absent(),
     this.askedCount = const Value.absent(),
     this.wronglyAnsweredCount = const Value.absent(),
+    this.lastAskedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : fieldListId = Value(fieldListId),
        answer = Value(answer),
@@ -2582,6 +2628,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     Expression<int>? rank,
     Expression<BigInt>? askedCount,
     Expression<BigInt>? wronglyAnsweredCount,
+    Expression<DateTime>? lastAskedAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2600,6 +2647,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
       if (askedCount != null) 'asked_count': askedCount,
       if (wronglyAnsweredCount != null)
         'wrongly_answered_count': wronglyAnsweredCount,
+      if (lastAskedAt != null) 'last_asked_at': lastAskedAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2617,6 +2665,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
     Value<int>? rank,
     Value<BigInt>? askedCount,
     Value<BigInt>? wronglyAnsweredCount,
+    Value<DateTime?>? lastAskedAt,
     Value<int>? rowid,
   }) {
     return EntrysCompanion(
@@ -2633,6 +2682,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
       rank: rank ?? this.rank,
       askedCount: askedCount ?? this.askedCount,
       wronglyAnsweredCount: wronglyAnsweredCount ?? this.wronglyAnsweredCount,
+      lastAskedAt: lastAskedAt ?? this.lastAskedAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2682,6 +2732,9 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
         wronglyAnsweredCount.value,
       );
     }
+    if (lastAskedAt.present) {
+      map['last_asked_at'] = Variable<DateTime>(lastAskedAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2703,6 +2756,7 @@ class EntrysCompanion extends UpdateCompanion<Entry> {
           ..write('rank: $rank, ')
           ..write('askedCount: $askedCount, ')
           ..write('wronglyAnsweredCount: $wronglyAnsweredCount, ')
+          ..write('lastAskedAt: $lastAskedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -6658,6 +6712,7 @@ typedef $$EntrysTableCreateCompanionBuilder =
       Value<int> rank,
       Value<BigInt> askedCount,
       Value<BigInt> wronglyAnsweredCount,
+      Value<DateTime?> lastAskedAt,
       Value<int> rowid,
     });
 typedef $$EntrysTableUpdateCompanionBuilder =
@@ -6674,6 +6729,7 @@ typedef $$EntrysTableUpdateCompanionBuilder =
       Value<int> rank,
       Value<BigInt> askedCount,
       Value<BigInt> wronglyAnsweredCount,
+      Value<DateTime?> lastAskedAt,
       Value<int> rowid,
     });
 
@@ -6798,6 +6854,11 @@ class $$EntrysTableFilterComposer
 
   ColumnFilters<BigInt> get wronglyAnsweredCount => $composableBuilder(
     column: $table.wronglyAnsweredCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastAskedAt => $composableBuilder(
+    column: $table.lastAskedAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -6939,6 +7000,11 @@ class $$EntrysTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<DateTime> get lastAskedAt => $composableBuilder(
+    column: $table.lastAskedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$FieldListsTableOrderingComposer get fieldListId {
     final $$FieldListsTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -7014,6 +7080,11 @@ class $$EntrysTableAnnotationComposer
 
   GeneratedColumn<BigInt> get wronglyAnsweredCount => $composableBuilder(
     column: $table.wronglyAnsweredCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get lastAskedAt => $composableBuilder(
+    column: $table.lastAskedAt,
     builder: (column) => column,
   );
 
@@ -7135,6 +7206,7 @@ class $$EntrysTableTableManager
                 Value<int> rank = const Value.absent(),
                 Value<BigInt> askedCount = const Value.absent(),
                 Value<BigInt> wronglyAnsweredCount = const Value.absent(),
+                Value<DateTime?> lastAskedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EntrysCompanion(
                 id: id,
@@ -7149,6 +7221,7 @@ class $$EntrysTableTableManager
                 rank: rank,
                 askedCount: askedCount,
                 wronglyAnsweredCount: wronglyAnsweredCount,
+                lastAskedAt: lastAskedAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -7165,6 +7238,7 @@ class $$EntrysTableTableManager
                 Value<int> rank = const Value.absent(),
                 Value<BigInt> askedCount = const Value.absent(),
                 Value<BigInt> wronglyAnsweredCount = const Value.absent(),
+                Value<DateTime?> lastAskedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EntrysCompanion.insert(
                 id: id,
@@ -7179,6 +7253,7 @@ class $$EntrysTableTableManager
                 rank: rank,
                 askedCount: askedCount,
                 wronglyAnsweredCount: wronglyAnsweredCount,
+                lastAskedAt: lastAskedAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

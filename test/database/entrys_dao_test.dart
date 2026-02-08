@@ -1004,6 +1004,36 @@ void main() {
       );
     });
 
+    test("Invalid Entry: lastAskedAt is in the future", () async {
+      withClock(Clock.fixed(DateTime.utc(2020, 3, 3)), () {
+        var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answer: answer,
+          question: question,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+          lastAskedAt: DateTime.utc(2021, 5, 5),
+        );
+        expect(
+          () async {
+            await entrysDao.create(entry.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is InvalidDataException && e.message == 'lastAskedAt',
+            ),
+          ),
+        );
+      });
+    });
+
     test("Good case", () async {
       var entry = Entry(
         id: id,
@@ -1166,6 +1196,26 @@ void main() {
         );
       },
     );
+
+    test('Good case: Creating Entry without giving a lastAskedAt', () async {
+      final entrysCompanion = EntrysCompanion(
+        id: Value(id),
+        fieldListId: Value(fieldListId),
+        answer: Value(answer),
+        question: Value(question),
+        creationAt: Value(creationAt),
+        lastModificationAt: Value(lastModificationAt),
+        didAskedAtCurrentTestRound: const Value(true),
+        emulatedCreatedAt: Value(emulatedCreatedAt),
+        order: Value(order),
+        rank: Value(rank),
+        askedCount: Value(askedCount),
+        wronglyAnsweredCount: Value(wronglyAnsweredCount),
+      );
+      await entrysDao.create(entrysCompanion);
+      List<Entry> entrys = await entrysDao.getAll();
+      expect(entrys[0].lastAskedAt, null);
+    });
   });
 
   group("Update Entry", () {
