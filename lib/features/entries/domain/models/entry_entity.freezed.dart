@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EntryEntity {
 
- String get fieldListId; String get answer; String get question; DateTime get creationAt; DateTime get lastModificationAt; int get order; bool get didAskedAtCurrentTestRound; Rank get rank; int get askedCount; int get wronglyAnsweredCount; DateTime? get lastAskedAt; String? get id; DateTime? get emulatedCreatedAt;
+ String get fieldListId; String get answer; String get question; DateTime get creationAt; DateTime get lastModificationAt; int get order; bool get didAskedAtCurrentTestRound; Rank get rank; int get askedCount; DateTime? get lastAskedAt; int get wronglyAnsweredCount; String? get id; DateTime? get emulatedCreatedAt;
 /// Create a copy of EntryEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $EntryEntityCopyWith<EntryEntity> get copyWith => _$EntryEntityCopyWithImpl<Entr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntryEntity&&(identical(other.fieldListId, fieldListId) || other.fieldListId == fieldListId)&&(identical(other.answer, answer) || other.answer == answer)&&(identical(other.question, question) || other.question == question)&&(identical(other.creationAt, creationAt) || other.creationAt == creationAt)&&(identical(other.lastModificationAt, lastModificationAt) || other.lastModificationAt == lastModificationAt)&&(identical(other.order, order) || other.order == order)&&(identical(other.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound) || other.didAskedAtCurrentTestRound == didAskedAtCurrentTestRound)&&(identical(other.rank, rank) || other.rank == rank)&&(identical(other.askedCount, askedCount) || other.askedCount == askedCount)&&(identical(other.wronglyAnsweredCount, wronglyAnsweredCount) || other.wronglyAnsweredCount == wronglyAnsweredCount)&&(identical(other.lastAskedAt, lastAskedAt) || other.lastAskedAt == lastAskedAt)&&(identical(other.id, id) || other.id == id)&&(identical(other.emulatedCreatedAt, emulatedCreatedAt) || other.emulatedCreatedAt == emulatedCreatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntryEntity&&(identical(other.fieldListId, fieldListId) || other.fieldListId == fieldListId)&&(identical(other.answer, answer) || other.answer == answer)&&(identical(other.question, question) || other.question == question)&&(identical(other.creationAt, creationAt) || other.creationAt == creationAt)&&(identical(other.lastModificationAt, lastModificationAt) || other.lastModificationAt == lastModificationAt)&&(identical(other.order, order) || other.order == order)&&(identical(other.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound) || other.didAskedAtCurrentTestRound == didAskedAtCurrentTestRound)&&(identical(other.rank, rank) || other.rank == rank)&&(identical(other.askedCount, askedCount) || other.askedCount == askedCount)&&(identical(other.lastAskedAt, lastAskedAt) || other.lastAskedAt == lastAskedAt)&&(identical(other.wronglyAnsweredCount, wronglyAnsweredCount) || other.wronglyAnsweredCount == wronglyAnsweredCount)&&(identical(other.id, id) || other.id == id)&&(identical(other.emulatedCreatedAt, emulatedCreatedAt) || other.emulatedCreatedAt == emulatedCreatedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,fieldListId,answer,question,creationAt,lastModificationAt,order,didAskedAtCurrentTestRound,rank,askedCount,wronglyAnsweredCount,lastAskedAt,id,emulatedCreatedAt);
+int get hashCode => Object.hash(runtimeType,fieldListId,answer,question,creationAt,lastModificationAt,order,didAskedAtCurrentTestRound,rank,askedCount,lastAskedAt,wronglyAnsweredCount,id,emulatedCreatedAt);
 
 @override
 String toString() {
-  return 'EntryEntity(fieldListId: $fieldListId, answer: $answer, question: $question, creationAt: $creationAt, lastModificationAt: $lastModificationAt, order: $order, didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, rank: $rank, askedCount: $askedCount, wronglyAnsweredCount: $wronglyAnsweredCount, lastAskedAt: $lastAskedAt, id: $id, emulatedCreatedAt: $emulatedCreatedAt)';
+  return 'EntryEntity(fieldListId: $fieldListId, answer: $answer, question: $question, creationAt: $creationAt, lastModificationAt: $lastModificationAt, order: $order, didAskedAtCurrentTestRound: $didAskedAtCurrentTestRound, rank: $rank, askedCount: $askedCount, lastAskedAt: $lastAskedAt, wronglyAnsweredCount: $wronglyAnsweredCount, id: $id, emulatedCreatedAt: $emulatedCreatedAt)';
 }
 
 

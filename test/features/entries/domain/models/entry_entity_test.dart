@@ -586,4 +586,343 @@ void main() {
     );
     expect(entry.wrongness, closeTo(1 / 3, 0.001));
   });
+
+  test('EntryEntity score got the correct value', () {
+    EntryEntity entry = EntryEntity(
+      fieldListId: fieldListId,
+      answer: answer,
+      question: question,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      order: order,
+      didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt,
+      rank: rank,
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
+    );
+    expect(entry.score, closeTo(0, 0.001));
+
+    entry = EntryEntity(
+      fieldListId: fieldListId,
+      answer: answer,
+      question: question,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      order: order,
+      didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt,
+      rank: Rank.low,
+      askedCount: 3,
+      wronglyAnsweredCount: 1,
+      lastAskedAt: null,
+    );
+    expect(entry.score, closeTo(1 / 3, 0.001));
+
+    entry = EntryEntity(
+      fieldListId: fieldListId,
+      answer: answer,
+      question: question,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      order: order,
+      didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt,
+      rank: Rank.normal,
+      askedCount: 3,
+      wronglyAnsweredCount: 1,
+      lastAskedAt: null,
+    );
+    expect(entry.score, closeTo(2 / 3, 0.001));
+
+    entry = EntryEntity(
+      fieldListId: fieldListId,
+      answer: answer,
+      question: question,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      order: order,
+      didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt,
+      rank: Rank.important,
+      askedCount: 3,
+      wronglyAnsweredCount: 1,
+      lastAskedAt: null,
+    );
+    expect(entry.score, closeTo(1, 0.001));
+
+    entry = EntryEntity(
+      fieldListId: fieldListId,
+      answer: answer,
+      question: question,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      order: order,
+      didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt,
+      rank: Rank.vital,
+      askedCount: 3,
+      wronglyAnsweredCount: 1,
+      lastAskedAt: null,
+    );
+    expect(entry.score, closeTo(1 + (1 / 3), 0.001));
+
+    withClock(Clock.fixed(DateTime.utc(2023, 1, 31)), () {
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.low,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 31),
+      );
+      expect(entry.score, closeTo(1 / 3, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.normal,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 31),
+      );
+      expect(entry.score, closeTo(2 / 3, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.important,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 31),
+      );
+      expect(entry.score, closeTo(1, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.vital,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 31),
+      );
+      expect(entry.score, closeTo(1 + (1 / 3), 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.low,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 30),
+      );
+      expect(entry.score, closeTo(1 / 3, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.normal,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 30),
+      );
+      expect(entry.score, closeTo(2 / 3, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.important,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 30),
+      );
+      expect(entry.score, closeTo(1, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.vital,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 30),
+      );
+      expect(entry.score, closeTo(1 + (1 / 3), 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.low,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 29),
+      );
+      expect(entry.score, closeTo(1 / 3, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.normal,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 29),
+      );
+      expect(entry.score, closeTo(2 / 3, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.important,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 29),
+      );
+      expect(entry.score, closeTo(1, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.vital,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 29),
+      );
+      expect(entry.score, closeTo(1 + (1 / 3), 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.low,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 28),
+      );
+      expect(entry.score, closeTo(0.528320834, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.normal,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 28),
+      );
+      expect(entry.score, closeTo(1.056641667, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.important,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 28),
+      );
+      expect(entry.score, closeTo(1.584962501, 0.001));
+
+      entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: Rank.vital,
+        askedCount: 3,
+        wronglyAnsweredCount: 1,
+        lastAskedAt: DateTime.utc(2023, 1, 28),
+      );
+      expect(entry.score, closeTo(2.113283334, 0.001));
+    });
+  });
 }
