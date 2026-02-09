@@ -24,7 +24,6 @@ void main() {
     rank: Rank.normal,
     askedCount: 8,
     wronglyAnsweredCount: 2,
-    wrongness: 0.25,
   );
 
   test('watch() throws what entrysDao.watchByFieldListId() throw', () {

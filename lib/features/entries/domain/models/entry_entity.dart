@@ -18,7 +18,6 @@ abstract class EntryEntity with _$EntryEntity {
     required this.rank,
     required this.askedCount,
     required this.wronglyAnsweredCount,
-    required this.wrongness,
   }) : assert(
          UuidValidation.isValidUUID(fromString: fieldListId),
          'fieldListId is not a valid UUID v4',
@@ -51,14 +50,6 @@ abstract class EntryEntity with _$EntryEntity {
          wronglyAnsweredCount >=
              Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE.toInt(),
          'wronglyAnsweredCount must be zero or bigger',
-       ),
-       assert(wrongness >= 0, 'wrongness must be zero or bigger'),
-       assert(
-         (askedCount > 0 &&
-                 (wrongness - (wronglyAnsweredCount / askedCount)).abs() <
-                     0.000001) ||
-             askedCount == 0,
-         'wrongness calculated wrongly',
        );
   factory EntryEntity({
     String? id,
@@ -73,7 +64,6 @@ abstract class EntryEntity with _$EntryEntity {
     @Default(Rank.normal) Rank rank,
     @Default(0) int askedCount,
     @Default(0) int wronglyAnsweredCount,
-    @Default(0) double wrongness,
   }) = _EntryEntity;
   @override
   final String fieldListId;
@@ -96,5 +86,11 @@ abstract class EntryEntity with _$EntryEntity {
   @override
   final int wronglyAnsweredCount;
   @override
-  final double wrongness;
+  double get wrongness {
+    if (askedCount == 0) {
+      return 0;
+    } else {
+      return wronglyAnsweredCount / askedCount;
+    }
+  }
 }

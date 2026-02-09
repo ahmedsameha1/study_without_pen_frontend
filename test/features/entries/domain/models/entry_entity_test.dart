@@ -498,56 +498,6 @@ void main() {
     );
   });
 
-  test(
-    'EntryEntity throws AssertionError when created with an invalid wrongness 1',
-    () {
-      expect(
-        () => EntryEntity(
-          fieldListId: fieldListId,
-          answer: answer,
-          question: question,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          rank: rank,
-          wrongness: -1,
-        ),
-        throwsA(
-          predicate(
-            (e) =>
-                e is AssertionError &&
-                e.message == 'wrongness must be zero or bigger',
-          ),
-        ),
-      );
-    },
-  );
-
-  test(
-    'EntryEntity throws AssertionError when created with an invalid wrongness 2',
-    () {
-      expect(
-        () => EntryEntity(
-          fieldListId: fieldListId,
-          answer: answer,
-          question: question,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          rank: rank,
-          askedCount: 8,
-          wronglyAnsweredCount: 2,
-          wrongness: 1,
-        ),
-        throwsA(
-          predicate(
-            (e) =>
-                e is AssertionError &&
-                e.message == 'wrongness calculated wrongly',
-          ),
-        ),
-      );
-    },
-  );
-
   test('EntryEntity wrongness got the correct value', () {
     EntryEntity entry = EntryEntity(
       fieldListId: fieldListId,
@@ -559,13 +509,11 @@ void main() {
       didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
       emulatedCreatedAt: emulatedCreatedAt,
       rank: rank,
-      wrongness: 1 / 3,
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
     );
-    expect(entry.wrongness, closeTo(1 / 3, 0.000001));
-  });
-
-  test('EntryEntity wrongness got its default value', () {
-    EntryEntity entry = EntryEntity(
+    expect(entry.wrongness, closeTo(0, 0.001));
+    entry = EntryEntity(
       fieldListId: fieldListId,
       answer: answer,
       question: question,
@@ -573,7 +521,11 @@ void main() {
       lastModificationAt: lastModificationAt,
       order: order,
       didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+      emulatedCreatedAt: emulatedCreatedAt,
+      rank: rank,
+      askedCount: 3,
+      wronglyAnsweredCount: 1,
     );
-    expect(entry.wrongness, 0);
+    expect(entry.wrongness, closeTo(1 / 3, 0.001));
   });
 }
