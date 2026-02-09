@@ -34,6 +34,7 @@ class EntriesRepositoryLocal implements EntriesRepository {
                   },
                   askedCount: entry.askedCount.toInt(),
                   wronglyAnsweredCount: entry.wronglyAnsweredCount.toInt(),
+                  lastAskedAt: entry.lastAskedAt,
                 ),
               )
               .toList(),

@@ -24,6 +24,7 @@ void main() {
     rank: Rank.normal,
     askedCount: 8,
     wronglyAnsweredCount: 2,
+    lastAskedAt: DateTime(2025, 2, 2),
   );
 
   test('watch() throws what entrysDao.watchByFieldListId() throw', () {
@@ -57,6 +58,7 @@ void main() {
             rank: entryEntity.rank.index,
             askedCount: BigInt.from(entryEntity.askedCount),
             wronglyAnsweredCount: BigInt.from(entryEntity.wronglyAnsweredCount),
+            lastAskedAt: entryEntity.lastAskedAt,
           ),
         ]),
       );
@@ -88,6 +90,7 @@ void main() {
             rank: Rank.low.index,
             askedCount: BigInt.from(entryEntity.askedCount),
             wronglyAnsweredCount: BigInt.from(entryEntity.wronglyAnsweredCount),
+            lastAskedAt: entryEntity.lastAskedAt,
           ),
         ]),
       );
@@ -119,6 +122,7 @@ void main() {
             rank: Rank.important.index,
             askedCount: BigInt.from(entryEntity.askedCount),
             wronglyAnsweredCount: BigInt.from(entryEntity.wronglyAnsweredCount),
+            lastAskedAt: entryEntity.lastAskedAt,
           ),
         ]),
       );
@@ -150,6 +154,7 @@ void main() {
             rank: Rank.vital.index,
             askedCount: BigInt.from(entryEntity.askedCount),
             wronglyAnsweredCount: BigInt.from(entryEntity.wronglyAnsweredCount),
+            lastAskedAt: entryEntity.lastAskedAt,
           ),
         ]),
       );

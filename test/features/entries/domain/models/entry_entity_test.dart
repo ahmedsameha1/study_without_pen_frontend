@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
@@ -496,6 +497,63 @@ void main() {
       entry.wronglyAnsweredCount,
       Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE.toInt(),
     );
+  });
+
+  test(
+    'EntryEntity throws AssertionError when created with an invalid lastAskedAt',
+    () {
+      withClock(Clock.fixed(DateTime.utc(2023, 1, 1)), () {
+        expect(
+          () => EntryEntity(
+            fieldListId: fieldListId,
+            answer: answer,
+            question: question,
+            creationAt: creationAt,
+            lastModificationAt: lastModificationAt,
+            rank: rank,
+            lastAskedAt: DateTime.utc(2024, 1, 1),
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is AssertionError &&
+                  e.message == 'lastAskedAt cannot be in the future',
+            ),
+          ),
+        );
+      });
+    },
+  );
+
+  test('EntryEntity lastAskedAt got the correct value', () {
+    withClock(Clock.fixed(DateTime.utc(2023, 1, 1)), () {
+      EntryEntity entry = EntryEntity(
+        fieldListId: fieldListId,
+        answer: answer,
+        question: question,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        order: order,
+        didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+        emulatedCreatedAt: emulatedCreatedAt,
+        rank: rank,
+        lastAskedAt: DateTime.utc(2022, 1, 1),
+      );
+      expect(entry.lastAskedAt, DateTime.utc(2022, 1, 1));
+    });
+  });
+
+  test('EntryEntity lastAskedAt got its default value', () {
+    EntryEntity entry = EntryEntity(
+      fieldListId: fieldListId,
+      answer: answer,
+      question: question,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      order: order,
+      didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+    );
+    expect(entry.lastAskedAt, isNull);
   });
 
   test('EntryEntity wrongness got the correct value', () {
