@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../database/app_database.dart';
 import '../../../../database/entrys_dao.dart';
@@ -18,6 +19,7 @@ abstract class EntryEntity with _$EntryEntity {
     required this.rank,
     required this.askedCount,
     required this.wronglyAnsweredCount,
+    this.lastAskedAt,
   }) : assert(
          UuidValidation.isValidUUID(fromString: fieldListId),
          'fieldListId is not a valid UUID v4',
@@ -50,6 +52,10 @@ abstract class EntryEntity with _$EntryEntity {
          wronglyAnsweredCount >=
              Entrys.WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE.toInt(),
          'wronglyAnsweredCount must be zero or bigger',
+       ),
+       assert(
+         lastAskedAt == null || !lastAskedAt.isAfter(clock.now()),
+         'lastAskedAt cannot be in the future',
        );
   factory EntryEntity({
     String? id,
@@ -64,6 +70,7 @@ abstract class EntryEntity with _$EntryEntity {
     @Default(Rank.normal) Rank rank,
     @Default(0) int askedCount,
     @Default(0) int wronglyAnsweredCount,
+    DateTime? lastAskedAt,
   }) = _EntryEntity;
   @override
   final String fieldListId;
@@ -93,4 +100,7 @@ abstract class EntryEntity with _$EntryEntity {
       return wronglyAnsweredCount / askedCount;
     }
   }
+
+  @override
+  final DateTime? lastAskedAt;
 }
