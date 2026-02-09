@@ -20,13 +20,35 @@ void main() {
     const expectedVitalString = 'Vital';
     const expectedTestString = 'Test';
     const expectedStudyString = 'Study';
-    final entry = EntryEntity(
+    final entry1 = EntryEntity(
       fieldListId: const Uuid().v4(),
       answer: 'answer',
       question: 'question',
       creationAt: DateTime(2025),
       lastModificationAt: DateTime(2025),
       rank: Rank.low,
+      askedCount: 10,
+      wronglyAnsweredCount: 1,
+    );
+    final entry2 = EntryEntity(
+      fieldListId: const Uuid().v4(),
+      answer: 'answer',
+      question: 'question',
+      creationAt: DateTime(2025),
+      lastModificationAt: DateTime(2025),
+      rank: Rank.low,
+      askedCount: 10,
+      wronglyAnsweredCount: 4,
+    );
+    final entry3 = EntryEntity(
+      fieldListId: const Uuid().v4(),
+      answer: 'answer',
+      question: 'question',
+      creationAt: DateTime(2025),
+      lastModificationAt: DateTime(2025),
+      rank: Rank.low,
+      askedCount: 10,
+      wronglyAnsweredCount: 5,
     );
     testWidgets('Test the precense of the main widgets', (
       WidgetTester tester,
@@ -38,7 +60,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry),
+          home: EntryCard(entry: entry1),
         ),
       );
       expect(
@@ -83,7 +105,7 @@ void main() {
       expect(container.padding!.vertical, 20);
       expect(
         ((container.decoration! as BoxDecoration).border! as Border).left,
-        BorderSide(color: Colors.red.shade700, width: 7),
+        const BorderSide(color: Colors.green, width: 4),
       );
       Column outerColumn = tester.widget(
         find.descendant(of: find.byWidget(container), matching: columnFinder),
@@ -104,7 +126,10 @@ void main() {
           matching: find.byType(Chip).at(0),
         ),
       );
-      expect((scoreChip.label as Text).data, startsWith(expectedScoreString));
+      expect(
+        (scoreChip.label as Text).data,
+        '$expectedScoreString: ${entry1.score}',
+      );
       expect(
         scoreChip.labelStyle,
         Theme.of(tester.element(find.byWidget(scoreChip))).textTheme.labelSmall,
@@ -117,7 +142,7 @@ void main() {
       );
       expect(
         (wrongnessChip.label as Text).data,
-        startsWith(expectedWrongnessString),
+        '$expectedWrongnessString: ${entry1.wrongness}',
       );
       expect(
         wrongnessChip.labelStyle,
@@ -131,7 +156,7 @@ void main() {
           matching: find.byType(Chip).at(2),
         ),
       );
-      expect((rankChip.label as Text).data, startsWith(expectedLowString));
+      expect((rankChip.label as Text).data, expectedLowString);
       expect(
         rankChip.labelStyle,
         Theme.of(tester.element(find.byWidget(rankChip))).textTheme.labelSmall,
@@ -172,7 +197,7 @@ void main() {
           tester.element(find.byWidget(questionSelectableText)),
         ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
       );
-      expect(questionSelectableText.data, entry.question);
+      expect(questionSelectableText.data, entry1.question);
       SizedBox questionAnswerSizedBox = tester.widget(
         find.descendant(
           of: find.byWidget(outerColumn),
@@ -202,7 +227,7 @@ void main() {
           tester.element(find.byWidget(questionSelectableText)),
         ).textTheme.bodyLarge,
       );
-      expect(answerSelectableText.data, entry.answer);
+      expect(answerSelectableText.data, entry1.answer);
       SizedBox answerButtonsSizedBox = tester.widget(
         find.descendant(
           of: find.byWidget(outerColumn),
@@ -275,13 +300,13 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry.copyWith(rank: Rank.normal)),
+          home: EntryCard(entry: entry1.copyWith(rank: Rank.normal)),
         ),
       );
       Chip rankChip = tester.widget(
         find.descendant(of: rowFinder, matching: find.byType(Chip).at(2)),
       );
-      expect((rankChip.label as Text).data, startsWith(expectedNormalString));
+      expect((rankChip.label as Text).data, expectedNormalString);
     });
 
     testWidgets('rank is Important', (WidgetTester tester) async {
@@ -292,16 +317,13 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry.copyWith(rank: Rank.important)),
+          home: EntryCard(entry: entry1.copyWith(rank: Rank.important)),
         ),
       );
       Chip rankChip = tester.widget(
         find.descendant(of: rowFinder, matching: find.byType(Chip).at(2)),
       );
-      expect(
-        (rankChip.label as Text).data,
-        startsWith(expectedImportantString),
-      );
+      expect((rankChip.label as Text).data, expectedImportantString);
     });
 
     testWidgets('rank is Vital', (WidgetTester tester) async {
@@ -312,13 +334,59 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry.copyWith(rank: Rank.vital)),
+          home: EntryCard(entry: entry1.copyWith(rank: Rank.vital)),
         ),
       );
       Chip rankChip = tester.widget(
         find.descendant(of: rowFinder, matching: find.byType(Chip).at(2)),
       );
-      expect((rankChip.label as Text).data, startsWith(expectedVitalString));
+      expect((rankChip.label as Text).data, expectedVitalString);
+    });
+
+    testWidgets('woringness is in middle', (WidgetTester tester) async {
+      await tester.binding.setLocale('en', 'US');
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: currentLocale,
+          theme: AppTheme.theme,
+          home: EntryCard(entry: entry2),
+        ),
+      );
+      Container container = tester.widget(
+        find.descendant(
+          of: find.byType(ClipPath),
+          matching: find.byType(Container),
+        ),
+      );
+      expect(
+        ((container.decoration! as BoxDecoration).border! as Border).left,
+        const BorderSide(color: Colors.yellow, width: 4),
+      );
+    });
+
+    testWidgets('woringness is in high', (WidgetTester tester) async {
+      await tester.binding.setLocale('en', 'US');
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: currentLocale,
+          theme: AppTheme.theme,
+          home: EntryCard(entry: entry3),
+        ),
+      );
+      Container container = tester.widget(
+        find.descendant(
+          of: find.byType(ClipPath),
+          matching: find.byType(Container),
+        ),
+      );
+      expect(
+        ((container.decoration! as BoxDecoration).border! as Border).left,
+        BorderSide(color: Colors.red.shade700, width: 4),
+      );
     });
   });
 }
