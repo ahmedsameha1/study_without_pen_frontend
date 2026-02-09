@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:clock/clock.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../../database/app_database.dart';
@@ -91,6 +93,8 @@ abstract class EntryEntity with _$EntryEntity {
   @override
   final int askedCount;
   @override
+  final DateTime? lastAskedAt;
+  @override
   final int wronglyAnsweredCount;
   @override
   double get wrongness {
@@ -101,6 +105,18 @@ abstract class EntryEntity with _$EntryEntity {
     }
   }
 
-  @override
-  final DateTime? lastAskedAt;
+  double get score {
+    if (askedCount == 0) {
+      return 0;
+    } else {
+      if (lastAskedAt == null ||
+          clock.now().difference(lastAskedAt!).inDays <= 2) {
+        return (wronglyAnsweredCount / askedCount) * (rank.index + 1);
+      } else {
+        return (wronglyAnsweredCount / askedCount) *
+            (rank.index + 1) *
+            (log(clock.now().difference(lastAskedAt!).inDays) / log(2));
+      }
+    }
+  }
 }
