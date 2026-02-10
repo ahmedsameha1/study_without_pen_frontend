@@ -291,6 +291,90 @@ void main() {
         },
       );
 
+      testWidgets(
+        'Test the presence of the main widgets when there is no fieldlists',
+        (WidgetTester tester) async {
+          whenListen<EntriesState>(
+            entriesBloc,
+            Stream.fromIterable([
+              const EntriesState(status: EntriesStatus.loading),
+              EntriesState(
+                status: EntriesStatus.success,
+                entriesPageData: EntriesPageData(
+                  fieldList: fieldListEntity,
+                  entries: entries,
+                ),
+              ),
+            ]),
+            initialState: const EntriesState(status: EntriesStatus.initial),
+          );
+          await _createEntriesPageViewInASkeleton(
+            tester,
+            currentLocale,
+            goRouter,
+            watchEntriesUsecase,
+            entriesBloc,
+            fieldListId,
+            fieldId,
+          );
+          expect(
+            find.descendant(
+              of: find.byType(EntriesPageView),
+              matching: find.descendant(
+                of: scaffoldFinder,
+                matching: find.descendant(
+                  of: centerFinder,
+                  matching: circularProgressIndicatorFinder,
+                ),
+              ),
+            ),
+            findsOne,
+          );
+          await tester.pump();
+          DefaultTabController defaultTabController = tester.widget(
+            find.descendant(
+              of: find.byType(EntriesPageView),
+              matching: find.byType(DefaultTabController),
+            ),
+          );
+          expect(defaultTabController.length, 5);
+          expect(
+            find.descendant(
+              of: find.byWidget(defaultTabController),
+              matching: find.byType(NestedScrollView),
+            ),
+            findsOne,
+          );
+          SliverOverlapAbsorber sliverOverlapAbsorber = tester.widget(
+            find.descendant(
+              of: find.byType(NestedScrollView),
+              matching: find.byType(SliverOverlapAbsorber),
+            ),
+          );
+          expect(
+            sliverOverlapAbsorber.handle,
+            NestedScrollView.sliverOverlapAbsorberHandleFor(
+              tester.firstElement(find.byWidget(sliverOverlapAbsorber)),
+            ),
+          );
+          SliverAppBar sliverAppBar = tester.widget(
+            find.descendant(
+              of: find.byWidget(sliverOverlapAbsorber),
+              matching: find.byType(SliverAppBar),
+            ),
+          );
+          expect(sliverAppBar.floating, isTrue);
+          expect((sliverAppBar.title! as Text).data, fieldListEntity.name);
+          expect(
+            find.descendant(
+              of: find.byWidget(sliverAppBar),
+              matching: find.byIcon(Icons.search),
+            ),
+            findsOne,
+          );
+        },
+      );
+
       testWidgets('Clicking the floatingActionButton go to CreateEntryPage', (
         WidgetTester tester,
       ) async {

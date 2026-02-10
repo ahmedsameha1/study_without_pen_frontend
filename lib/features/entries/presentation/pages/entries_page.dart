@@ -56,7 +56,34 @@ class EntriesPageView extends StatelessWidget {
           body: Center(
             child: state.entriesPageData!.entries.isEmpty
                 ? Text(AppLocalizations.of(context)!.noEntries)
-                : const Placeholder(),
+                : DefaultTabController(
+                    length: 5,
+                    child: NestedScrollView(
+                      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                        SliverOverlapAbsorber(
+                          handle:
+                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                context,
+                              ),
+                          sliver: SliverAppBar(
+                            floating: true,
+                            title: Text(state.entriesPageData!.fieldList.name),
+                            actions: [
+                              SearchAnchor(
+                                builder: (context, controller) =>
+                                    const IconButton(
+                                      onPressed: null,
+                                      icon: Icon(Icons.search),
+                                    ),
+                                suggestionsBuilder: (context, controller) => [],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      body: const Text('X'),
+                    ),
+                  ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () => GoRouter.of(context).go(
