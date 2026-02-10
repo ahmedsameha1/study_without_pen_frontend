@@ -16,6 +16,7 @@ import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../common/common_finders.dart';
+import '../../../common/widget_testing_helper.dart';
 
 class MockWatchEntriesUsecase extends Mock implements WatchEntriesUsecase {}
 
@@ -70,42 +71,73 @@ Future<void> _createEntriesPageViewInASkeleton(
 
 void main() {
   DateTime fieldListDateTime = DateTime(2025);
-  final fieldId = const Uuid().v4();
-  final fieldListId = const Uuid().v4();
-  final entry1Id = const Uuid().v4();
-  final entry2Id = const Uuid().v4();
-  final entry3Id = const Uuid().v4();
   FieldListEntity fieldListEntity = FieldListEntity(
-    id: fieldListId,
-    fieldId: fieldId,
+    id: const Uuid().v4(),
+    fieldId: const Uuid().v4(),
     name: 'field list name',
     creationAt: fieldListDateTime,
     lastModificationAt: fieldListDateTime,
   );
   List<EntryEntity> entries = [
     EntryEntity(
-      id: entry1Id,
-      fieldListId: fieldListId,
+      id: const Uuid().v4(),
+      fieldListId: fieldListEntity.id!,
       answer: 'answer1',
-      question: 'question',
+      question: 'question1',
       creationAt: fieldListDateTime,
       lastModificationAt: fieldListDateTime,
+      askedCount: 10,
+      wronglyAnsweredCount: 1,
     ),
     EntryEntity(
-      id: entry2Id,
-      fieldListId: fieldListId,
-      answer: 'answer',
-      question: 'question',
+      id: const Uuid().v4(),
+      fieldListId: fieldListEntity.id!,
+      answer: 'answer2',
+      question: 'question2',
       creationAt: fieldListDateTime,
       lastModificationAt: fieldListDateTime,
+      askedCount: 10,
+      wronglyAnsweredCount: 4,
     ),
     EntryEntity(
-      id: entry3Id,
-      fieldListId: fieldListId,
-      answer: 'answer',
-      question: 'question',
+      id: const Uuid().v4(),
+      fieldListId: fieldListEntity.id!,
+      answer: 'answer3',
+      question: 'question3',
       creationAt: fieldListDateTime,
       lastModificationAt: fieldListDateTime,
+      askedCount: 10,
+      wronglyAnsweredCount: 5,
+    ),
+    EntryEntity(
+      id: const Uuid().v4(),
+      fieldListId: fieldListEntity.id!,
+      answer: 'answer4',
+      question: 'question4',
+      creationAt: fieldListDateTime,
+      lastModificationAt: fieldListDateTime,
+      askedCount: 10,
+      wronglyAnsweredCount: 1,
+    ),
+    EntryEntity(
+      id: const Uuid().v4(),
+      fieldListId: fieldListEntity.id!,
+      answer: 'answer5',
+      question: 'question5',
+      creationAt: fieldListDateTime,
+      lastModificationAt: fieldListDateTime,
+      askedCount: 10,
+      wronglyAnsweredCount: 4,
+    ),
+    EntryEntity(
+      id: const Uuid().v4(),
+      fieldListId: fieldListEntity.id!,
+      answer: 'answer6',
+      question: 'question6',
+      creationAt: fieldListDateTime,
+      lastModificationAt: fieldListDateTime,
+      askedCount: 10,
+      wronglyAnsweredCount: 5,
     ),
   ];
   final entriesPageData = EntriesPageData(
@@ -115,7 +147,9 @@ void main() {
   late WatchEntriesUsecase watchEntriesUsecase;
   group("English locale", () {
     String expectedErrorString = 'An error occurred while loading entries!';
-    String expectedNoEntriesString = "Currently, there are no entries!";
+    String expectedNoEntriesString = 'Currently, there are no entries!';
+    String expectedMasteredString = 'Mastered';
+    String expectedNeedsFocusString = 'Needs Focus';
 
     Locale currentLocale = const Locale("en");
 
@@ -123,7 +157,7 @@ void main() {
       setUp(() {
         watchEntriesUsecase = MockWatchEntriesUsecase();
         when(
-          () => watchEntriesUsecase.call(fieldListId),
+          () => watchEntriesUsecase.call(fieldListEntity.id!),
         ).thenAnswer((_) => Stream.value(entriesPageData));
       });
 
@@ -133,8 +167,8 @@ void main() {
         await _createEntriesPageInASkeleton(
           tester,
           watchEntriesUsecase,
-          fieldListId,
-          fieldId,
+          fieldListEntity.id!,
+          fieldListEntity.fieldId,
         );
         expect(
           find.descendant(
@@ -151,10 +185,10 @@ void main() {
         await _createEntriesPageInASkeleton(
           tester,
           watchEntriesUsecase,
-          fieldListId,
-          fieldId,
+          fieldListEntity.id!,
+          fieldListEntity.fieldId,
         );
-        verify(() => watchEntriesUsecase.call(fieldListId)).called(1);
+        verify(() => watchEntriesUsecase.call(fieldListEntity.id!)).called(1);
       });
     });
 
@@ -192,8 +226,8 @@ void main() {
             goRouter,
             watchEntriesUsecase,
             entriesBloc,
-            fieldListId,
-            fieldId,
+            fieldListEntity.id!,
+            fieldListEntity.fieldId,
           );
           expect(
             find.descendant(
@@ -247,8 +281,8 @@ void main() {
             goRouter,
             watchEntriesUsecase,
             entriesBloc,
-            fieldListId,
-            fieldId,
+            fieldListEntity.id!,
+            fieldListEntity.fieldId,
           );
           expect(
             find.descendant(
@@ -314,8 +348,8 @@ void main() {
             goRouter,
             watchEntriesUsecase,
             entriesBloc,
-            fieldListId,
-            fieldId,
+            fieldListEntity.id!,
+            fieldListEntity.fieldId,
           );
           expect(
             find.descendant(
@@ -372,6 +406,192 @@ void main() {
             ),
             findsOne,
           );
+          SliverPadding sliverPadding = tester.widget(
+            find.descendant(
+              of: find.byType(NestedScrollView),
+              matching: find.byType(SliverPadding),
+            ),
+          );
+          expect(sliverPadding.padding.horizontal, 30);
+          expect(sliverPadding.padding.vertical, 15);
+          SliverToBoxAdapter sliverToBoxAdapter = tester.widget(
+            find.descendant(
+              of: find.byWidget(sliverPadding),
+              matching: find.byType(SliverToBoxAdapter),
+            ),
+          );
+          Row mastryRow = tester.widget(
+            find.descendant(
+              of: find.byWidget(sliverToBoxAdapter),
+              matching: rowFinder.at(1),
+            ),
+          );
+          expect(mastryRow.mainAxisAlignment, MainAxisAlignment.center);
+          Text masteryText = tester.widget(
+            find.descendant(
+              of: find.byWidget(mastryRow),
+              matching: find.text(expectedMasteredString),
+            ),
+          );
+          SizedBox masteredMasteryLineSizedBox = tester.widget(
+            find.descendant(
+              of: find.byWidget(mastryRow),
+              matching: find.byKey(const Key('masteredMasteryLineSizedBox')),
+            ),
+          );
+          expect(masteredMasteryLineSizedBox.width, 5);
+          Container masteryLineContainer = tester.widget(
+            find.descendant(
+              of: find.byWidget(mastryRow),
+              matching: find.descendant(
+                of: find.byType(Expanded),
+                matching: find.byType(Container),
+              ),
+            ),
+          );
+          expect(
+            (masteryLineContainer.decoration! as BoxDecoration).borderRadius!
+                as BorderRadius,
+            BorderRadius.circular(5),
+          );
+          expect(
+            ((masteryLineContainer.decoration! as BoxDecoration).border!
+                    as Border)
+                .left,
+            BorderSide(
+              color: Theme.of(
+                tester.element(find.byWidget(masteryLineContainer)),
+              ).colorScheme.onSurfaceVariant,
+              width: 1,
+            ),
+          );
+          expect(
+            ((masteryLineContainer.decoration! as BoxDecoration).border!
+                    as Border)
+                .right,
+            BorderSide(
+              color: Theme.of(
+                tester.element(find.byWidget(masteryLineContainer)),
+              ).colorScheme.onSurfaceVariant,
+              width: 1,
+            ),
+          );
+          expect(
+            ((masteryLineContainer.decoration! as BoxDecoration).border!
+                    as Border)
+                .top,
+            BorderSide(
+              color: Theme.of(
+                tester.element(find.byWidget(masteryLineContainer)),
+              ).colorScheme.onSurfaceVariant,
+              width: 1,
+            ),
+          );
+          expect(
+            ((masteryLineContainer.decoration! as BoxDecoration).border!
+                    as Border)
+                .bottom,
+            BorderSide(
+              color: Theme.of(
+                tester.element(find.byWidget(masteryLineContainer)),
+              ).colorScheme.onSurfaceVariant,
+              width: 1,
+            ),
+          );
+          Expanded greenExpanded = tester.widget(
+            find.descendant(
+              of: find.byWidget(masteryLineContainer),
+              matching: find.descendant(
+                of: rowFinder,
+                matching: expandedFinder.at(1),
+              ),
+            ),
+          );
+          expect(greenExpanded.flex, 2);
+          SizedBox greenSizedBox = tester.widget(
+            find.descendant(
+              of: find.byWidget(greenExpanded),
+              matching: sizedBoxFinder,
+            ),
+          );
+          expect(greenSizedBox.height, 10);
+          ColoredBox greenBox = tester.widget(
+            find.descendant(
+              of: find.byWidget(greenSizedBox),
+              matching: find.byType(ColoredBox),
+            ),
+          );
+          expect(greenBox.color, Colors.green);
+          Expanded yellowExpanded = tester.widget(
+            find.descendant(
+              of: find.byWidget(masteryLineContainer),
+              matching: find.descendant(
+                of: rowFinder,
+                matching: expandedFinder.at(2),
+              ),
+            ),
+          );
+          expect(yellowExpanded.flex, 2);
+          SizedBox yellowSizedBox = tester.widget(
+            find.descendant(
+              of: find.byWidget(yellowExpanded),
+              matching: sizedBoxFinder,
+            ),
+          );
+          expect(yellowSizedBox.height, 10);
+          ColoredBox yellowBox = tester.widget(
+            find.descendant(
+              of: find.byWidget(yellowSizedBox),
+              matching: find.byType(ColoredBox),
+            ),
+          );
+          expect(yellowBox.color, Colors.yellow);
+          Expanded redExpanded = tester.widget(
+            find.descendant(
+              of: find.byWidget(masteryLineContainer),
+              matching: find.descendant(
+                of: rowFinder,
+                matching: expandedFinder.at(3),
+              ),
+            ),
+          );
+          expect(redExpanded.flex, 2);
+          SizedBox redSizedBox = tester.widget(
+            find.descendant(
+              of: find.byWidget(redExpanded),
+              matching: sizedBoxFinder,
+            ),
+          );
+          expect(redSizedBox.height, 10);
+          ColoredBox redBox = tester.widget(
+            find.descendant(
+              of: find.byWidget(redSizedBox),
+              matching: find.byType(ColoredBox),
+            ),
+          );
+          expect(redBox.color, Colors.red.shade700);
+          SizedBox masteryLineNeedsFocusSizedBox = tester.widget(
+            find.descendant(
+              of: find.byWidget(mastryRow),
+              matching: find.byKey(const Key('masteryLineNeedsFocusSizedBox')),
+            ),
+          );
+          expect(masteryLineNeedsFocusSizedBox.width, 5);
+          Text needsFocusText = tester.widget(
+            find.descendant(
+              of: find.byWidget(mastryRow),
+              matching: find.text(expectedNeedsFocusString),
+            ),
+          );
+          checkWidgetsOrder(mastryRow.children, [
+            masteryText,
+            masteredMasteryLineSizedBox,
+            greenExpanded,
+            yellowExpanded,
+            redExpanded,
+            masteryLineNeedsFocusSizedBox,
+            needsFocusText,
+          ]);
         },
       );
 
@@ -398,8 +618,8 @@ void main() {
           goRouter,
           watchEntriesUsecase,
           entriesBloc,
-          fieldListId,
-          fieldId,
+          fieldListEntity.id!,
+          fieldListEntity.fieldId,
         );
         expect(
           find.descendant(
@@ -419,7 +639,7 @@ void main() {
         await tester.tap(floatingActionButtonFinder);
         verify(
           () => goRouter.go(
-            '$fieldListsPath$fieldId$entriesPath$fieldListId$createEntry',
+            '$fieldListsPath${fieldListEntity.fieldId}$entriesPath${fieldListEntity.id!}$createEntry',
           ),
         ).called(1);
       });

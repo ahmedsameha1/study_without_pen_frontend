@@ -495,6 +495,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Test'**
   String get test;
+
+  /// No description provided for @mastered.
+  ///
+  /// In en, this message translates to:
+  /// **'Mastered'**
+  String get mastered;
+
+  /// No description provided for @needsFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs Focus'**
+  String get needsFocus;
 }
 
 class _AppLocalizationsDelegate
