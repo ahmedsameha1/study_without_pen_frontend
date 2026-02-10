@@ -127,5 +127,7 @@
     "score": "Score",
     "wrongness": "Wrongness",
     "study": "Study",
-    "test": "Test"
+    "test": "Test",
+    "mastered": "Mastered",
+    "needsFocus": "Needs Focus"
 }

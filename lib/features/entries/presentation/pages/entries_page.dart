@@ -80,6 +80,93 @@ class EntriesPageView extends StatelessWidget {
                             ],
                           ),
                         ),
+                        SliverPadding(
+                          padding: const EdgeInsets.only(
+                            top: 15,
+                            left: 15,
+                            right: 15,
+                          ),
+                          sliver: SliverToBoxAdapter(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(AppLocalizations.of(context)!.mastered),
+                                const SizedBox(
+                                  key: Key('masteredMasteryLineSizedBox'),
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        width: 1,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: state.entriesPageData!.entries
+                                              .where(
+                                                (entry) =>
+                                                    entry.wrongness <= 0.1,
+                                              )
+                                              .toList()
+                                              .length,
+                                          child: const SizedBox(
+                                            height: 10,
+                                            child: ColoredBox(
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: state.entriesPageData!.entries
+                                              .where(
+                                                (entry) =>
+                                                    entry.wrongness > 0.1 &&
+                                                    entry.wrongness <= 0.4,
+                                              )
+                                              .toList()
+                                              .length,
+                                          child: const SizedBox(
+                                            height: 10,
+                                            child: ColoredBox(
+                                              color: Colors.yellow,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: state.entriesPageData!.entries
+                                              .where(
+                                                (entry) =>
+                                                    entry.wrongness > 0.4,
+                                              )
+                                              .toList()
+                                              .length,
+                                          child: SizedBox(
+                                            height: 10,
+                                            child: ColoredBox(
+                                              color: Colors.red.shade700,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  key: Key('masteryLineNeedsFocusSizedBox'),
+                                  width: 5,
+                                ),
+                                Text(AppLocalizations.of(context)!.needsFocus),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                       body: const Text('X'),
                     ),

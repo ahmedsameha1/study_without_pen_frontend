@@ -234,4 +234,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get test => 'Test';
+
+  @override
+  String get mastered => 'Mastered';
+
+  @override
+  String get needsFocus => 'Needs Focus';
 }
