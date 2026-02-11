@@ -150,6 +150,7 @@ void main() {
     String expectedNoEntriesString = 'Currently, there are no entries!';
     String expectedMasteredString = 'Mastered';
     String expectedNeedsFocusString = 'Needs Focus';
+    String expectedScoreString = 'Score';
 
     Locale currentLocale = const Locale("en");
 
@@ -371,7 +372,7 @@ void main() {
               matching: find.byType(DefaultTabController),
             ),
           );
-          expect(defaultTabController.length, 5);
+          expect(defaultTabController.length, 1);
           expect(
             find.descendant(
               of: find.byWidget(defaultTabController),
@@ -592,6 +593,29 @@ void main() {
             masteryLineNeedsFocusSizedBox,
             needsFocusText,
           ]);
+          SliverPersistentHeader sliverPersistentHeader = tester.widget(
+            find.descendant(
+              of: find.byType(NestedScrollView),
+              matching: find.byKey(const Key('sliverPersistentHeader')),
+            ),
+          );
+          expect(sliverPersistentHeader.pinned, isTrue);
+          Padding padding = tester.widget(
+            find.descendant(
+              of: find.byWidget(sliverPersistentHeader),
+              matching: find.byKey(const Key('sliverPersistentHeaderPadding')),
+            ),
+          );
+          expect(padding.padding.horizontal, 30);
+          expect(padding.padding.vertical, 10);
+          TabBar tabBar = tester.widget(
+            find.descendant(
+              of: find.byWidget(padding),
+              matching: find.byType(TabBar),
+            ),
+          );
+          expect(tabBar.isScrollable, isTrue);
+          expect((tabBar.tabs[0] as Text).data, expectedScoreString);
         },
       );
 

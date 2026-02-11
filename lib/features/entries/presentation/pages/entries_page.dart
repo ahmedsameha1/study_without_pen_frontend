@@ -57,7 +57,7 @@ class EntriesPageView extends StatelessWidget {
             child: state.entriesPageData!.entries.isEmpty
                 ? Text(AppLocalizations.of(context)!.noEntries)
                 : DefaultTabController(
-                    length: 5,
+                    length: 1,
                     child: NestedScrollView(
                       headerSliverBuilder: (context, innerBoxIsScrolled) => [
                         SliverOverlapAbsorber(
@@ -167,6 +167,11 @@ class EntriesPageView extends StatelessWidget {
                             ),
                           ),
                         ),
+                        SliverPersistentHeader(
+                          key: const Key('sliverPersistentHeader'),
+                          pinned: true,
+                          delegate: _StickyHeader(),
+                        ),
                       ],
                       body: const Text('X'),
                     ),
@@ -183,4 +188,33 @@ class EntriesPageView extends StatelessWidget {
       }
     },
   );
+}
+
+class _StickyHeader extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) => Container(
+    alignment: Alignment.center,
+    child: Padding(
+      key: const Key('sliverPersistentHeaderPadding'),
+      padding: const EdgeInsetsGeometry.symmetric(horizontal: 15, vertical: 5),
+      child: TabBar(
+        isScrollable: true,
+        tabs: [Text(AppLocalizations.of(context)!.score)],
+      ),
+    ),
+  );
+
+  @override
+  double get maxExtent => 60;
+
+  @override
+  double get minExtent => 60;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      true;
 }
