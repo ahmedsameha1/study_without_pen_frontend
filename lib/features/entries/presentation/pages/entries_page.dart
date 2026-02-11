@@ -52,7 +52,9 @@ class EntriesPageView extends StatelessWidget {
       } else {
         // EntriesStatus.success
         return Scaffold(
-          appBar: AppBar(title: Text(state.entriesPageData!.fieldList.name)),
+          appBar: state.entriesPageData!.entries.isEmpty
+              ? AppBar(title: Text(state.entriesPageData!.fieldList.name))
+              : null,
           body: Center(
             child: state.entriesPageData!.entries.isEmpty
                 ? Text(AppLocalizations.of(context)!.noEntries)
