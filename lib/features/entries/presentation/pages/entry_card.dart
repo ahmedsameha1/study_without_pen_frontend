@@ -50,6 +50,7 @@ class EntryCard extends StatelessWidget {
                               labelStyle: Theme.of(
                                 context,
                               ).textTheme.labelSmall,
+                              padding: EdgeInsets.zero,
                             ),
                             Chip(
                               label: Text(
@@ -58,6 +59,7 @@ class EntryCard extends StatelessWidget {
                               labelStyle: Theme.of(
                                 context,
                               ).textTheme.labelSmall,
+                              padding: EdgeInsets.zero,
                             ),
                             Chip(
                               label: Text(switch (entry.rank) {
@@ -75,6 +77,7 @@ class EntryCard extends StatelessWidget {
                               labelStyle: Theme.of(
                                 context,
                               ).textTheme.labelSmall,
+                              padding: EdgeInsets.zero,
                             ),
                           ],
                         ),

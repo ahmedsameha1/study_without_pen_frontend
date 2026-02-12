@@ -8,6 +8,7 @@ import '../../domain/usecases/watch_entries_usecase.dart';
 import '../bloc/entries_bloc.dart';
 import '../bloc/entries_event.dart';
 import '../bloc/entries_state.dart';
+import '../bloc/tab_data.dart';
 import 'entry_card.dart';
 
 /// This page displays the list of entries
@@ -47,14 +48,20 @@ class _EntriesPageViewState extends State<EntriesPageView>
   late TabController _tabController;
 
   @override
-  void initState() {
-    _tabController = TabController(length: 1, vsync: this);
-    super.initState();
+  void didChangeDependencies() {
+    _tabController = TabController(
+      length: BlocProvider.of<EntriesBloc>(context).state.tabs.length,
+      vsync: this,
+    );
+    _tabController.addListener(_handleTabChange);
+    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController
+      ..removeListener(_handleTabChange)
+      ..dispose();
     super.dispose();
   }
 
@@ -94,11 +101,12 @@ class _EntriesPageViewState extends State<EntriesPageView>
                           title: Text(state.entriesPageData!.fieldList.name),
                           actions: [
                             SearchAnchor(
-                              builder: (context, controller) =>
-                                  const IconButton(
-                                    onPressed: null,
-                                    icon: Icon(Icons.search),
-                                  ),
+                              builder: (context, controller) => IconButton(
+                                onPressed: () {
+                                  controller.openView();
+                                },
+                                icon: const Icon(Icons.search),
+                              ),
                               suggestionsBuilder: (context, controller) => [],
                             ),
                           ],
@@ -192,63 +200,147 @@ class _EntriesPageViewState extends State<EntriesPageView>
                       SliverPersistentHeader(
                         key: const Key('sliverPersistentHeader'),
                         pinned: true,
-                        delegate: _StickyHeader(_tabController),
+                        delegate: _StickyHeader(
+                          _tabController,
+                          state.tabs
+                              .map(
+                                (tab) => Text(switch (tab.name) {
+                                  scoreTabName => AppLocalizations.of(
+                                    context,
+                                  )!.score,
+                                  strugglingTabName => AppLocalizations.of(
+                                    context,
+                                  )!.struggling,
+                                  todayTabName => AppLocalizations.of(
+                                    context,
+                                  )!.today,
+                                  unseenTabName => AppLocalizations.of(
+                                    context,
+                                  )!.unseen,
+                                  browseTabName => AppLocalizations.of(
+                                    context,
+                                  )!.browse,
+                                  _ => throw ArgumentError(tab.name),
+                                }),
+                              )
+                              .toList(),
+                        ),
                       ),
                     ],
                     body: TabBarView(
                       controller: _tabController,
-                      children: [
-                        Builder(
-                          key: const Key('scoreTabViewBuilder'),
-                          builder: (context) => CustomScrollView(
-                            slivers: [
-                              SliverOverlapInjector(
-                                handle:
-                                    NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                      context,
-                                    ),
-                              ),
-                              SliverPadding(
-                                key: const Key('summerySliverPadding'),
-                                padding: const EdgeInsetsGeometry.all(5),
-                                sliver: SliverToBoxAdapter(
-                                  child: Center(
-                                    child: Text(
-                                      AppLocalizations.of(
-                                        context,
-                                      )!.scoreSummary(
-                                        state.entriesPageData!.entries.length,
-                                        state.entriesPageData!.entries.length,
-                                      ),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                            color: Theme.of(context).hintColor,
-                                          )
-                                          .copyWith(
-                                            backgroundColor: Theme.of(
-                                              context,
-                                            ).colorScheme.onSecondary,
+                      children: state.tabs
+                          .map(
+                            (tab) => tab.status == TabDataStatus.loading
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : Builder(
+                                    builder: (context) => CustomScrollView(
+                                      key: PageStorageKey<String>(tab.name),
+                                      slivers: [
+                                        SliverOverlapInjector(
+                                          handle:
+                                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                                context,
+                                              ),
+                                        ),
+                                        SliverPadding(
+                                          key: const Key(
+                                            'descriptionSliverPadding',
                                           ),
+                                          padding: const EdgeInsetsGeometry.all(
+                                            5,
+                                          ),
+                                          sliver: SliverToBoxAdapter(
+                                            child: Center(
+                                              child: Text(
+                                                switch (tab.description) {
+                                                  scoreTabDescription =>
+                                                    AppLocalizations.of(
+                                                      context,
+                                                    )!.scoreDescription(
+                                                      state
+                                                          .entriesPageData!
+                                                          .entries
+                                                          .length,
+                                                      tab.entries.length,
+                                                    ),
+                                                  strugglingTabDescription =>
+                                                    AppLocalizations.of(
+                                                      context,
+                                                    )!.strugglingDescription(
+                                                      state
+                                                          .entriesPageData!
+                                                          .entries
+                                                          .length,
+                                                      tab.entries.length,
+                                                    ),
+                                                  todayTabDescription =>
+                                                    AppLocalizations.of(
+                                                      context,
+                                                    )!.todayDescription(
+                                                      state
+                                                          .entriesPageData!
+                                                          .entries
+                                                          .length,
+                                                      tab.entries.length,
+                                                    ),
+                                                  unseenTabDescription =>
+                                                    AppLocalizations.of(
+                                                      context,
+                                                    )!.unseenDescription(
+                                                      state
+                                                          .entriesPageData!
+                                                          .entries
+                                                          .length,
+                                                      tab.entries.length,
+                                                    ),
+                                                  browseTabDescription =>
+                                                    AppLocalizations.of(
+                                                      context,
+                                                    )!.browseDescription(
+                                                      state
+                                                          .entriesPageData!
+                                                          .entries
+                                                          .length,
+                                                      tab.entries.length,
+                                                    ),
+                                                  _ => throw ArgumentError(
+                                                    tab.description,
+                                                  ),
+                                                },
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                      color: Theme.of(
+                                                        context,
+                                                      ).hintColor,
+                                                    )
+                                                    .copyWith(
+                                                      backgroundColor: Theme.of(
+                                                        context,
+                                                      ).colorScheme.onSecondary,
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SliverList(
+                                          key: PageStorageKey<String>(tab.name),
+                                          delegate: SliverChildBuilderDelegate(
+                                            childCount: tab.entries.length,
+                                            (context, index) => EntryCard(
+                                              entry: tab.entries[index],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                              ),
-                              SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                  childCount:
-                                      state.entriesPageData!.entries.length,
-                                  (context, index) => EntryCard(
-                                    entry:
-                                        state.entriesPageData!.entries[index],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                          )
+                          .toList(),
                     ),
                   ),
           ),
@@ -263,11 +355,20 @@ class _EntriesPageViewState extends State<EntriesPageView>
       }
     },
   );
+
+  void _handleTabChange() {
+    if (!_tabController.indexIsChanging) {
+      BlocProvider.of<EntriesBloc>(
+        context,
+      ).add(PrepareTab(_tabController.index, DateTime.now()));
+    }
+  }
 }
 
 class _StickyHeader extends SliverPersistentHeaderDelegate {
-  TabController _tabController;
-  _StickyHeader(this._tabController);
+  _StickyHeader(this._tabController, this._tabsWidgets);
+  final TabController _tabController;
+  final List<Widget> _tabsWidgets;
   @override
   Widget build(
     BuildContext context,
@@ -279,7 +380,7 @@ class _StickyHeader extends SliverPersistentHeaderDelegate {
     child: TabBar(
       controller: _tabController,
       isScrollable: true,
-      tabs: [Text(AppLocalizations.of(context)!.score)],
+      tabs: _tabsWidgets,
     ),
   );
 

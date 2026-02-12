@@ -98,8 +98,60 @@
             }
         }
     },
-    "scoreSummary": "{numberOfDisplayedEntries}/{numberOfEntries} entries ordered by score descendingly",
-    "@scoreSummary": {
+    "scoreDescription": "{numberOfDisplayedEntries}/{numberOfEntries} entries ordered by score descendingly",
+    "@scoreDescription": {
+        "placeholders": {
+            "numberOfDisplayedEntries": {
+                "type": "int"
+            }
+        },
+        "placeholders": {
+            "numberOfEntries": {
+                "type": "int"
+            }
+        }
+    },
+    "strugglingDescription": "{numberOfDisplayedEntries}/{numberOfEntries} entries with a 60%+ wrongness rate",
+    "@strugglingDescription": {
+        "placeholders": {
+            "numberOfDisplayedEntries": {
+                "type": "int"
+            }
+        },
+        "placeholders": {
+            "numberOfEntries": {
+                "type": "int"
+            }
+        }
+    },
+    "todayDescription": "{numberOfDisplayedEntries}/{numberOfEntries} entries created today",
+    "@todayDescription": {
+        "placeholders": {
+            "numberOfDisplayedEntries": {
+                "type": "int"
+            }
+        },
+        "placeholders": {
+            "numberOfEntries": {
+                "type": "int"
+            }
+        }
+    },
+    "unseenDescription": "{numberOfDisplayedEntries}/{numberOfEntries} entries from previous days yet to be studied",
+    "@unseenDescription": {
+        "placeholders": {
+            "numberOfDisplayedEntries": {
+                "type": "int"
+            }
+        },
+        "placeholders": {
+            "numberOfEntries": {
+                "type": "int"
+            }
+        }
+    },
+    "browseDescription": "{numberOfDisplayedEntries}/{numberOfEntries} entries indexed by order and alphabet",
+    "@browseDescription": {
         "placeholders": {
             "numberOfDisplayedEntries": {
                 "type": "int"
@@ -138,6 +190,10 @@
     "create": "Create",
     "duplicatedEntry": "Failure: already exists!",
     "score": "Score",
+    "struggling": "Struggling",
+    "today": "Today",
+    "unseen": "Unseen",
+    "browse": "Browse",
     "wrongness": "Wrongness",
     "study": "Study",
     "test": "Test",
