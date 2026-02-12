@@ -144,8 +144,43 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String scoreSummary(int numberOfEntries, Object numberOfDisplayedEntries) {
+  String scoreDescription(
+    int numberOfEntries,
+    Object numberOfDisplayedEntries,
+  ) {
     return '$numberOfDisplayedEntries/$numberOfEntries entries ordered by score descendingly';
+  }
+
+  @override
+  String strugglingDescription(
+    int numberOfEntries,
+    Object numberOfDisplayedEntries,
+  ) {
+    return '$numberOfDisplayedEntries/$numberOfEntries entries with a 60%+ wrongness rate';
+  }
+
+  @override
+  String todayDescription(
+    int numberOfEntries,
+    Object numberOfDisplayedEntries,
+  ) {
+    return '$numberOfDisplayedEntries/$numberOfEntries entries created today';
+  }
+
+  @override
+  String unseenDescription(
+    int numberOfEntries,
+    Object numberOfDisplayedEntries,
+  ) {
+    return '$numberOfDisplayedEntries/$numberOfEntries entries from previous days yet to be studied';
+  }
+
+  @override
+  String browseDescription(
+    int numberOfEntries,
+    Object numberOfDisplayedEntries,
+  ) {
+    return '$numberOfDisplayedEntries/$numberOfEntries entries indexed by order and alphabet';
   }
 
   @override
@@ -230,6 +265,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get score => 'Score';
+
+  @override
+  String get struggling => 'Struggling';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get unseen => 'Unseen';
+
+  @override
+  String get browse => 'Browse';
 
   @override
   String get wrongness => 'Wrongness';

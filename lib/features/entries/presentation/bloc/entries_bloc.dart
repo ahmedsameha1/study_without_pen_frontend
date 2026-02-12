@@ -34,10 +34,8 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
       await emit.onEach<EntriesPageData>(
         _watchEntriesUsecase.call(event.fieldListId),
         onData: (entriesPageData) {
-          if (!isClosed) {
-            add(NewData(entriesPageData));
-            add(PrepareTab(state.currentTabIndex, DateTime.now()));
-          }
+          add(NewData(entriesPageData));
+          add(PrepareTab(state.currentTabIndex, DateTime.now()));
         },
         onError: (_, _) => emit(state.copyWith(status: EntriesStatus.failure)),
       );

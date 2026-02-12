@@ -316,11 +316,44 @@ abstract class AppLocalizations {
   /// **'Order must be between {orderMinimumLength} and {orderMaximumLength}'**
   String orderValidationError(int orderMinimumLength, int orderMaximumLength);
 
-  /// No description provided for @scoreSummary.
+  /// No description provided for @scoreDescription.
   ///
   /// In en, this message translates to:
   /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries ordered by score descendingly'**
-  String scoreSummary(int numberOfEntries, Object numberOfDisplayedEntries);
+  String scoreDescription(int numberOfEntries, Object numberOfDisplayedEntries);
+
+  /// No description provided for @strugglingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries with a 60%+ wrongness rate'**
+  String strugglingDescription(
+    int numberOfEntries,
+    Object numberOfDisplayedEntries,
+  );
+
+  /// No description provided for @todayDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries created today'**
+  String todayDescription(int numberOfEntries, Object numberOfDisplayedEntries);
+
+  /// No description provided for @unseenDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries from previous days yet to be studied'**
+  String unseenDescription(
+    int numberOfEntries,
+    Object numberOfDisplayedEntries,
+  );
+
+  /// No description provided for @browseDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries indexed by order and alphabet'**
+  String browseDescription(
+    int numberOfEntries,
+    Object numberOfDisplayedEntries,
+  );
 
   /// No description provided for @created.
   ///
@@ -483,6 +516,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Score'**
   String get score;
+
+  /// No description provided for @struggling.
+  ///
+  /// In en, this message translates to:
+  /// **'Struggling'**
+  String get struggling;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @unseen.
+  ///
+  /// In en, this message translates to:
+  /// **'Unseen'**
+  String get unseen;
+
+  /// No description provided for @browse.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse'**
+  String get browse;
 
   /// No description provided for @wrongness.
   ///
