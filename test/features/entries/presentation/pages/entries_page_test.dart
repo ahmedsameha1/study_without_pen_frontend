@@ -10,6 +10,7 @@ import 'package:study_without_pen_by_flutter/features/entries/domain/models/entr
 import 'package:study_without_pen_by_flutter/features/entries/domain/usecases/watch_entries_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/entries_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/entries_state.dart';
+import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/tab_data.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/pages/entries_page.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/pages/entry_card.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
@@ -152,7 +153,8 @@ void main() {
     String expectedMasteredString = 'Mastered';
     String expectedNeedsFocusString = 'Needs Focus';
     String expectedScoreString = 'Score';
-    String expectedScoreSummaryString = 'entries ordered by score descendingly';
+    String expectedScoreDescriptionString =
+        'entries ordered by score descendingly';
 
     Locale currentLocale = const Locale("en");
 
@@ -201,10 +203,6 @@ void main() {
       setUp(() {
         goRouter = MockGoRouter();
         entriesBloc = MockEntriesBloc();
-        watchEntriesUsecase = MockWatchEntriesUsecase();
-        when(
-          () => entriesBloc.state,
-        ).thenReturn(EntriesState(status: EntriesStatus.initial));
       });
 
       testWidgets(
@@ -262,6 +260,7 @@ void main() {
           );
         },
       );
+
       testWidgets(
         'Test the presence of the main widgets when there is no entries',
         (WidgetTester tester) async {
@@ -348,6 +347,41 @@ void main() {
                   fieldList: fieldListEntity,
                   entries: entries,
                 ),
+              ),
+              EntriesState(
+                status: EntriesStatus.success,
+                entriesPageData: EntriesPageData(
+                  fieldList: fieldListEntity,
+                  entries: entries,
+                ),
+                tabs: [
+                  TabData(
+                    name: scoreTabName,
+                    description: scoreTabDescription,
+                    status: TabDataStatus.ready,
+                    outdated: false,
+                    entries: entries,
+                  ),
+                  TabData(
+                    name: strugglingTabName,
+                    description: strugglingTabDescription,
+                    status: TabDataStatus.ready,
+                    outdated: false,
+                    entries: entries,
+                  ),
+                  const TabData(
+                    name: todayTabName,
+                    description: todayTabDescription,
+                  ),
+                  const TabData(
+                    name: unseenTabName,
+                    description: unseenTabDescription,
+                  ),
+                  const TabData(
+                    name: browseTabName,
+                    description: browseTabDescription,
+                  ),
+                ],
               ),
             ]),
             initialState: const EntriesState(status: EntriesStatus.initial),
@@ -636,38 +670,38 @@ void main() {
           );
           expect(tabBar.isScrollable, isTrue);
           expect((tabBar.tabs[0] as Text).data, expectedScoreString);
-          SliverPadding scoreSummarySliverPadding = tester.widget(
-            find.byKey(const Key('summerySliverPadding')),
+          SliverPadding descriptionSliverPadding = tester.widget(
+            find.byKey(const Key('descriptionSliverPadding')),
           );
-          expect(scoreSummarySliverPadding.padding.horizontal, 10);
-          expect(scoreSummarySliverPadding.padding.vertical, 10);
-          Text scoreSummaryText = tester.widget(
+          expect(descriptionSliverPadding.padding.horizontal, 10);
+          expect(descriptionSliverPadding.padding.vertical, 10);
+          Text scoreDescriptionText = tester.widget(
             find.descendant(
-              of: find.byWidget(scoreSummarySliverPadding),
+              of: find.byWidget(descriptionSliverPadding),
               matching: find.descendant(
                 of: find.byType(SliverToBoxAdapter),
                 matching: find.descendant(
                   of: centerFinder,
                   matching: find.text(
-                    '${entries.length}/${entries.length} $expectedScoreSummaryString',
+                    '${entries.length}/${entries.length} $expectedScoreDescriptionString',
                   ),
                 ),
               ),
             ),
           );
           expect(
-            scoreSummaryText.style,
-            Theme.of(tester.element(find.byWidget(scoreSummaryText)))
+            scoreDescriptionText.style,
+            Theme.of(tester.element(find.byWidget(scoreDescriptionText)))
                 .textTheme
                 .bodySmall!
                 .copyWith(
                   color: Theme.of(
-                    tester.element(find.byWidget(scoreSummaryText)),
+                    tester.element(find.byWidget(scoreDescriptionText)),
                   ).hintColor,
                 )
                 .copyWith(
                   backgroundColor: Theme.of(
-                    tester.element(find.byWidget(scoreSummaryText)),
+                    tester.element(find.byWidget(scoreDescriptionText)),
                   ).colorScheme.onSecondary,
                 ),
           );
