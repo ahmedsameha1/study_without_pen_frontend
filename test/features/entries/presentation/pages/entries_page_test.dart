@@ -11,6 +11,7 @@ import 'package:study_without_pen_by_flutter/features/entries/domain/usecases/wa
 import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/entries_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/entries_state.dart';
 import 'package:study_without_pen_by_flutter/features/entries/presentation/pages/entries_page.dart';
+import 'package:study_without_pen_by_flutter/features/entries/presentation/pages/entry_card.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:uuid/uuid.dart';
@@ -151,6 +152,7 @@ void main() {
     String expectedMasteredString = 'Mastered';
     String expectedNeedsFocusString = 'Needs Focus';
     String expectedScoreString = 'Score';
+    String expectedScoreSummaryString = 'entries ordered by score descendingly';
 
     Locale currentLocale = const Locale("en");
 
@@ -389,7 +391,7 @@ void main() {
           expect(
             sliverOverlapAbsorber.handle,
             NestedScrollView.sliverOverlapAbsorberHandleFor(
-              tester.firstElement(find.byWidget(sliverOverlapAbsorber)),
+              tester.element(find.byWidget(sliverOverlapAbsorber)),
             ),
           );
           SliverAppBar sliverAppBar = tester.widget(
@@ -410,7 +412,7 @@ void main() {
           SliverPadding sliverPadding = tester.widget(
             find.descendant(
               of: find.byType(NestedScrollView),
-              matching: find.byType(SliverPadding),
+              matching: find.byType(SliverPadding).at(0),
             ),
           );
           expect(sliverPadding.padding.horizontal, 30);
@@ -600,22 +602,69 @@ void main() {
             ),
           );
           expect(sliverPersistentHeader.pinned, isTrue);
-          Padding padding = tester.widget(
+          Container sliverPersistentHeaderContainer = tester.widget(
             find.descendant(
               of: find.byWidget(sliverPersistentHeader),
-              matching: find.byKey(const Key('sliverPersistentHeaderPadding')),
+              matching: find.byType(Container),
             ),
           );
-          expect(padding.padding.horizontal, 30);
-          expect(padding.padding.vertical, 10);
+          expect(
+            sliverPersistentHeaderContainer.color,
+            Theme.of(
+              tester.element(find.byWidget(sliverPersistentHeaderContainer)),
+            ).scaffoldBackgroundColor,
+          );
+          expect(sliverPersistentHeaderContainer.alignment, Alignment.center);
           TabBar tabBar = tester.widget(
             find.descendant(
-              of: find.byWidget(padding),
+              of: find.byWidget(sliverPersistentHeaderContainer),
               matching: find.byType(TabBar),
             ),
           );
           expect(tabBar.isScrollable, isTrue);
           expect((tabBar.tabs[0] as Text).data, expectedScoreString);
+          SliverPadding scoreSummarySliverPadding = tester.widget(
+            find.byKey(const Key('summerySliverPadding')),
+          );
+          expect(scoreSummarySliverPadding.padding.horizontal, 10);
+          expect(scoreSummarySliverPadding.padding.vertical, 10);
+          Text scoreSummaryText = tester.widget(
+            find.descendant(
+              of: find.byWidget(scoreSummarySliverPadding),
+              matching: find.descendant(
+                of: find.byType(SliverToBoxAdapter),
+                matching: find.descendant(
+                  of: centerFinder,
+                  matching: find.text(
+                    '${entries.length}/${entries.length} $expectedScoreSummaryString',
+                  ),
+                ),
+              ),
+            ),
+          );
+          expect(
+            scoreSummaryText.style,
+            Theme.of(tester.element(find.byWidget(scoreSummaryText)))
+                .textTheme
+                .bodySmall!
+                .copyWith(
+                  color: Theme.of(
+                    tester.element(find.byWidget(scoreSummaryText)),
+                  ).hintColor,
+                )
+                .copyWith(
+                  backgroundColor: Theme.of(
+                    tester.element(find.byWidget(scoreSummaryText)),
+                  ).colorScheme.onSecondary,
+                ),
+          );
+          expect(
+            find.descendant(
+              of: find.byType(SliverList),
+              matching: find.byType(EntryCard),
+            ),
+            findsWidgets,
+          );
         },
       );
 

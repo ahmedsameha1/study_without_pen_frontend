@@ -98,6 +98,19 @@
             }
         }
     },
+    "scoreSummary": "{numberOfDisplayedEntries}/{numberOfEntries} entries ordered by score descendingly",
+    "@scoreSummary": {
+        "placeholders": {
+            "numberOfDisplayedEntries": {
+                "type": "int"
+            }
+        },
+        "placeholders": {
+            "numberOfEntries": {
+                "type": "int"
+            }
+        }
+    },
     "created": "Created",
     "creationError": "Error while creation",
     "noFields": "Currently, there are no fields!",
