@@ -144,6 +144,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String scoreSummary(int numberOfEntries, Object numberOfDisplayedEntries) {
+    return '$numberOfDisplayedEntries/$numberOfEntries entries ordered by score descendingly';
+  }
+
+  @override
   String get created => 'Created';
 
   @override

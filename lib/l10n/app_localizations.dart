@@ -316,6 +316,12 @@ abstract class AppLocalizations {
   /// **'Order must be between {orderMinimumLength} and {orderMaximumLength}'**
   String orderValidationError(int orderMinimumLength, int orderMaximumLength);
 
+  /// No description provided for @scoreSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries ordered by score descendingly'**
+  String scoreSummary(int numberOfEntries, Object numberOfDisplayedEntries);
+
   /// No description provided for @created.
   ///
   /// In en, this message translates to:

@@ -8,6 +8,7 @@ import '../../domain/usecases/watch_entries_usecase.dart';
 import '../bloc/entries_bloc.dart';
 import '../bloc/entries_event.dart';
 import '../bloc/entries_state.dart';
+import 'entry_card.dart';
 
 /// This page displays the list of entries
 class EntriesPage extends StatelessWidget {
@@ -175,7 +176,62 @@ class EntriesPageView extends StatelessWidget {
                           delegate: _StickyHeader(),
                         ),
                       ],
-                      body: const Text('X'),
+                      body: TabBarView(
+                        children: [
+                          Builder(
+                            key: const Key('scoreTabViewBuilder'),
+                            builder: (context) => CustomScrollView(
+                              slivers: [
+                                SliverOverlapInjector(
+                                  handle:
+                                      NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                        context,
+                                      ),
+                                ),
+                                SliverPadding(
+                                  key: const Key('summerySliverPadding'),
+                                  padding: EdgeInsetsGeometry.all(5),
+                                  sliver: SliverToBoxAdapter(
+                                    child: Center(
+                                      child: Text(
+                                        AppLocalizations.of(
+                                          context,
+                                        )!.scoreSummary(
+                                          state.entriesPageData!.entries.length,
+                                          state.entriesPageData!.entries.length,
+                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: Theme.of(
+                                                context,
+                                              ).hintColor,
+                                            )
+                                            .copyWith(
+                                              backgroundColor: Theme.of(
+                                                context,
+                                              ).colorScheme.onSecondary,
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                    childCount:
+                                        state.entriesPageData!.entries.length,
+                                    (context, index) => EntryCard(
+                                      entry:
+                                          state.entriesPageData!.entries[index],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
           ),
@@ -199,22 +255,19 @@ class _StickyHeader extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) => Container(
+    color: Theme.of(context).scaffoldBackgroundColor,
     alignment: Alignment.center,
-    child: Padding(
-      key: const Key('sliverPersistentHeaderPadding'),
-      padding: const EdgeInsetsGeometry.symmetric(horizontal: 15, vertical: 5),
-      child: TabBar(
-        isScrollable: true,
-        tabs: [Text(AppLocalizations.of(context)!.score)],
-      ),
+    child: TabBar(
+      isScrollable: true,
+      tabs: [Text(AppLocalizations.of(context)!.score)],
     ),
   );
 
   @override
-  double get maxExtent => 60;
+  double get maxExtent => 40;
 
   @override
-  double get minExtent => 60;
+  double get minExtent => 40;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
