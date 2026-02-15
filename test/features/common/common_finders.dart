@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final scaffoldFinder = find.byType(Scaffold);
+final safeAreaFinder = find.byType(SafeArea);
 final centerFinder = find.byType(Center);
 final paddingFinder = find.byType(Padding);
 final cardFinder = find.byType(Card);
