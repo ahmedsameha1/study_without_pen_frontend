@@ -205,11 +205,6 @@ void main() {
         when(
           () => entriesBloc.state,
         ).thenReturn(EntriesState(status: EntriesStatus.initial));
-        /*
-        when(
-          () => watchEntriesUsecase.call(fieldListId),
-        ).thenAnswer((_) => Stream.value(entriesPageData));
-        */
       });
 
       testWidgets(
@@ -238,8 +233,11 @@ void main() {
               matching: find.descendant(
                 of: scaffoldFinder,
                 matching: find.descendant(
-                  of: centerFinder,
-                  matching: circularProgressIndicatorFinder,
+                  of: safeAreaFinder,
+                  matching: find.descendant(
+                    of: centerFinder,
+                    matching: circularProgressIndicatorFinder,
+                  ),
                 ),
               ),
             ),
@@ -252,8 +250,11 @@ void main() {
               matching: find.descendant(
                 of: scaffoldFinder,
                 matching: find.descendant(
-                  of: centerFinder,
-                  matching: find.text(expectedErrorString),
+                  of: safeAreaFinder,
+                  matching: find.descendant(
+                    of: centerFinder,
+                    matching: find.text(expectedErrorString),
+                  ),
                 ),
               ),
             ),
@@ -262,7 +263,7 @@ void main() {
         },
       );
       testWidgets(
-        "Test the presence of the main widgets when there is no fieldlists",
+        'Test the presence of the main widgets when there is no entries',
         (WidgetTester tester) async {
           whenListen<EntriesState>(
             entriesBloc,
@@ -293,8 +294,11 @@ void main() {
               matching: find.descendant(
                 of: scaffoldFinder,
                 matching: find.descendant(
-                  of: centerFinder,
-                  matching: circularProgressIndicatorFinder,
+                  of: safeAreaFinder,
+                  matching: find.descendant(
+                    of: centerFinder,
+                    matching: circularProgressIndicatorFinder,
+                  ),
                 ),
               ),
             ),
@@ -307,8 +311,11 @@ void main() {
               matching: find.descendant(
                 of: scaffoldFinder,
                 matching: find.descendant(
-                  of: centerFinder,
-                  matching: find.text(expectedNoEntriesString),
+                  of: safeAreaFinder,
+                  matching: find.descendant(
+                    of: centerFinder,
+                    matching: find.text(expectedNoEntriesString),
+                  ),
                 ),
               ),
             ),
@@ -329,7 +336,7 @@ void main() {
       );
 
       testWidgets(
-        'Test the presence of the main widgets when there is no fieldlists',
+        'Test the presence of the main widgets when there are entries',
         (WidgetTester tester) async {
           whenListen<EntriesState>(
             entriesBloc,
@@ -360,24 +367,30 @@ void main() {
               matching: find.descendant(
                 of: scaffoldFinder,
                 matching: find.descendant(
-                  of: centerFinder,
-                  matching: circularProgressIndicatorFinder,
+                  of: safeAreaFinder,
+                  matching: find.descendant(
+                    of: centerFinder,
+                    matching: circularProgressIndicatorFinder,
+                  ),
                 ),
               ),
             ),
             findsOne,
           );
           await tester.pump();
-          DefaultTabController defaultTabController = tester.widget(
-            find.descendant(
-              of: find.byType(EntriesPageView),
-              matching: find.byType(DefaultTabController),
-            ),
-          );
-          expect(defaultTabController.length, 1);
           expect(
             find.descendant(
-              of: find.byWidget(defaultTabController),
+              of: find.byType(EntriesPageView),
+              matching: find.descendant(
+                of: scaffoldFinder,
+                matching: safeAreaFinder,
+              ),
+            ),
+            findsNWidgets(2),
+          );
+          expect(
+            find.descendant(
+              of: safeAreaFinder,
               matching: find.byType(NestedScrollView),
             ),
             findsOne,
