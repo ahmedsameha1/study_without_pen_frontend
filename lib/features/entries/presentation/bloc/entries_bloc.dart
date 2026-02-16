@@ -1,12 +1,17 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:study_without_pen_by_flutter/features/entries/domain/models/entries_page_data.dart';
-import 'package:study_without_pen_by_flutter/features/entries/domain/usecases/watch_entries_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/entries_event.dart';
-import 'package:study_without_pen_by_flutter/features/entries/presentation/bloc/entries_state.dart';
+
+import '../../domain/models/entries_page_data.dart';
+import '../../domain/models/entry_entity.dart';
+import '../../domain/usecases/watch_entries_usecase.dart';
+import 'entries_event.dart';
+import 'entries_state.dart';
+import 'tab_data.dart';
 
 class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   EntriesBloc(this._watchEntriesUsecase) : super(const EntriesState()) {
     on<EntriesSubscriptionRequested>(_onSubscriptionRequested);
+    on<PrepareTab>(_onPrepareTab);
   }
   final WatchEntriesUsecase _watchEntriesUsecase;
 
@@ -18,14 +23,45 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     try {
       await emit.forEach<EntriesPageData>(
         _watchEntriesUsecase.call(event.fieldListId),
-        onData: (entriesPageData) => state.copyWith(
-          status: EntriesStatus.success,
-          entriesPageData: entriesPageData,
-        ),
+        onData: (entriesPageData) {
+          add(PrepareTab(state.currentTabIndex));
+          return state.copyWith(
+            status: EntriesStatus.success,
+            entriesPageData: entriesPageData,
+            tabs: state.tabs
+                .map((tab) => tab.copyWith(outdated: true))
+                .toList(),
+          );
+        },
         onError: (_, _) => state.copyWith(status: EntriesStatus.failure),
       );
     } catch (e) {
       emit(state.copyWith(status: EntriesStatus.failure));
     }
+  }
+
+  Future<void> _onPrepareTab(
+    PrepareTab event,
+    Emitter<EntriesState> emit,
+  ) async {
+    final entries = await compute<List<EntryEntity>, List<EntryEntity>>((
+      List<EntryEntity> entries,
+    ) {
+      entries.sort((a, b) => a.score >= b.score ? -1 : 1);
+      return entries;
+    }, List<EntryEntity>.from(state.entriesPageData!.entries));
+    List<TabData> tabs = [...state.tabs];
+    final tab = tabs.removeAt(event.tabIndex);
+    tabs.insert(
+      event.tabIndex,
+      TabData(
+        outdated: false,
+        name: tab.name,
+        description: tab.description,
+        status: TabDataStatus.ready,
+        entries: entries,
+      ),
+    );
+    emit(state.copyWith(tabs: tabs));
   }
 }
