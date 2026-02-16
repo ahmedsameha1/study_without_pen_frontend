@@ -14,6 +14,8 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     on<PrepareTab>(_onPrepareTab);
   }
   final WatchEntriesUsecase _watchEntriesUsecase;
+  static const scoreTabIndex = 0;
+  static const strugglingTabIndex = 1;
 
   Future<void> _onSubscriptionRequested(
     EntriesSubscriptionRequested event,
@@ -44,12 +46,6 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     PrepareTab event,
     Emitter<EntriesState> emit,
   ) async {
-    final entries = await compute<List<EntryEntity>, List<EntryEntity>>((
-      List<EntryEntity> entries,
-    ) {
-      entries.sort((a, b) => a.score >= b.score ? -1 : 1);
-      return entries;
-    }, List<EntryEntity>.from(state.entriesPageData!.entries));
     List<TabData> tabs = [...state.tabs];
     final tab = tabs.removeAt(event.tabIndex);
     tabs.insert(
@@ -59,9 +55,19 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
         name: tab.name,
         description: tab.description,
         status: TabDataStatus.ready,
-        entries: entries,
+        entries: await compute<List<EntryEntity>, List<EntryEntity>>(
+          (List<EntryEntity> entries) => switch (event.tabIndex) {
+            scoreTabIndex =>
+              entries..sort((a, b) => a.score >= b.score ? -1 : 1),
+            strugglingTabIndex =>
+              entries.where((entry) => entry.wrongness > 0.6).toList()
+                ..sort((a, b) => a.score >= b.score ? -1 : 1),
+            _ => throw ArgumentError(''),
+          },
+          List<EntryEntity>.from(state.entriesPageData!.entries),
+        ),
       ),
     );
-    emit(state.copyWith(tabs: tabs));
+    emit(state.copyWith(currentTabIndex: event.tabIndex, tabs: tabs));
   }
 }

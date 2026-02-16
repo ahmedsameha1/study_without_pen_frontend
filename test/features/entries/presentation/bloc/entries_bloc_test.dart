@@ -42,7 +42,7 @@ void main() {
       creationAt: fieldListDateTime,
       lastModificationAt: fieldListDateTime,
       askedCount: 4,
-      wronglyAnsweredCount: 1,
+      wronglyAnsweredCount: 3,
       rank: Rank.important,
     ),
     EntryEntity(
@@ -53,7 +53,7 @@ void main() {
       creationAt: fieldListDateTime,
       lastModificationAt: fieldListDateTime,
       askedCount: 4,
-      wronglyAnsweredCount: 1,
+      wronglyAnsweredCount: 2,
       rank: Rank.normal,
     ),
     EntryEntity(
@@ -64,45 +64,12 @@ void main() {
       creationAt: fieldListDateTime,
       lastModificationAt: fieldListDateTime,
       askedCount: 4,
-      wronglyAnsweredCount: 1,
+      wronglyAnsweredCount: 4,
       rank: Rank.vital,
     ),
   ];
-  final List<EntryEntity> scoreEntries = [
-    EntryEntity(
-      id: entry3Id,
-      fieldListId: fieldListId,
-      answer: 'answer',
-      question: 'question',
-      creationAt: fieldListDateTime,
-      lastModificationAt: fieldListDateTime,
-      askedCount: 4,
-      wronglyAnsweredCount: 1,
-      rank: Rank.vital,
-    ),
-    EntryEntity(
-      id: entry1Id,
-      fieldListId: fieldListId,
-      answer: 'answer1',
-      question: 'question',
-      creationAt: fieldListDateTime,
-      lastModificationAt: fieldListDateTime,
-      askedCount: 4,
-      wronglyAnsweredCount: 1,
-      rank: Rank.important,
-    ),
-    EntryEntity(
-      id: entry2Id,
-      fieldListId: fieldListId,
-      answer: 'answer',
-      question: 'question',
-      creationAt: fieldListDateTime,
-      lastModificationAt: fieldListDateTime,
-      askedCount: 4,
-      wronglyAnsweredCount: 1,
-      rank: Rank.normal,
-    ),
-  ];
+  final List<EntryEntity> scoreEntries = [entries[2], entries[0], entries[1]];
+  final List<EntryEntity> strugglingEntries = [entries[2], entries[0]];
   EntriesPageData entriesPageData = EntriesPageData(
     fieldList: fieldListEntity,
     entries: entries,
@@ -149,19 +116,24 @@ void main() {
       EntriesState(
         status: EntriesStatus.success,
         entriesPageData: entriesPageData,
-        currentTabIndex: 0,
+        currentTabIndex: EntriesBloc.scoreTabIndex,
         tabs: [
           const TabData(
             status: TabDataStatus.loading,
             name: scoreTabName,
             description: scoreTabDescription,
           ),
+          const TabData(
+            status: TabDataStatus.loading,
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
         ],
       ),
       EntriesState(
         status: EntriesStatus.success,
         entriesPageData: entriesPageData,
-        currentTabIndex: 0,
+        currentTabIndex: EntriesBloc.scoreTabIndex,
         tabs: [
           TabData(
             status: TabDataStatus.ready,
@@ -169,6 +141,66 @@ void main() {
             name: scoreTabName,
             description: scoreTabDescription,
             entries: scoreEntries,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+        ],
+      ),
+    ],
+  );
+
+  blocTest<EntriesBloc, EntriesState>(
+    '''
+    When PrepareTab(1) event is added
+    the entries is prepared for the struggling tab and 
+    an updated state is emmited
+    ''',
+    build: buildBloc,
+    seed: () => EntriesState(
+      status: EntriesStatus.success,
+      entriesPageData: entriesPageData,
+      currentTabIndex: EntriesBloc.scoreTabIndex,
+      tabs: [
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: scoreTabName,
+          description: scoreTabDescription,
+          entries: scoreEntries,
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: strugglingTabName,
+          description: strugglingTabDescription,
+          entries: [],
+        ),
+      ],
+    ),
+    act: (bloc) => bloc.add(const PrepareTab(1)),
+    wait: const Duration(milliseconds: 1),
+    expect: () => [
+      EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData,
+        currentTabIndex: EntriesBloc.strugglingTabIndex,
+        tabs: [
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: scoreTabName,
+            description: scoreTabDescription,
+            entries: scoreEntries,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+            entries: strugglingEntries,
           ),
         ],
       ),
