@@ -10,6 +10,8 @@ enum EntriesStatus { initial, loading, success, failure }
 
 const scoreTabName = 'score';
 const scoreTabDescription = 'scoreDescription';
+const strugglingTabName = 'struggling';
+const strugglingTabDescription = 'strugglingDescription';
 
 @freezed
 abstract class EntriesState with _$EntriesState {
@@ -23,6 +25,13 @@ abstract class EntriesState with _$EntriesState {
         outdated: true,
         name: scoreTabName,
         description: scoreTabDescription,
+        entries: <EntryEntity>[],
+      ),
+      TabData(
+        status: TabDataStatus.loading,
+        outdated: true,
+        name: strugglingTabName,
+        description: strugglingTabDescription,
         entries: <EntryEntity>[],
       ),
     ])
