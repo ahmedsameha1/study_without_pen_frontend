@@ -9,5 +9,6 @@ void main() {
       EntriesSubscriptionRequested(fieldListId),
       EntriesSubscriptionRequested(fieldListId),
     );
+    expect(const PrepareTab(1), const PrepareTab(1));
   });
 }
