@@ -18,6 +18,7 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   static const strugglingTabIndex = 1;
   static const todayTabIndex = 2;
   static const unseenTabIndex = 3;
+  static const browseTabIndex = 4;
 
   Future<void> _onSubscriptionRequested(
     EntriesSubscriptionRequested event,
@@ -90,6 +91,14 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
                   (a, b) =>
                       b.creationAt.difference(a.creationAt).inMicroseconds,
                 ),
+            browseTabIndex =>
+              entries..sort(
+                (a, b) => a.order > b.order
+                    ? 1
+                    : b.question.compareTo(a.question) > 0
+                    ? 1
+                    : b.creationAt.difference(a.creationAt).inMicroseconds,
+              ),
             _ => throw ArgumentError(''),
           },
           List<EntryEntity>.from(state.entriesPageData!.entries),

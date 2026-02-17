@@ -16,6 +16,8 @@ const todayTabName = 'today';
 const todayTabDescription = 'todayDescription';
 const unseenTabName = 'unseen';
 const unseenTabDescription = 'unseenDescription';
+const browseTabName = 'browse';
+const browseTabDescription = 'browseDescription';
 
 @freezed
 abstract class EntriesState with _$EntriesState {
@@ -50,6 +52,13 @@ abstract class EntriesState with _$EntriesState {
         outdated: true,
         name: unseenTabName,
         description: unseenTabDescription,
+        entries: <EntryEntity>[],
+      ),
+      TabData(
+        status: TabDataStatus.loading,
+        outdated: true,
+        name: browseTabName,
+        description: browseTabDescription,
         entries: <EntryEntity>[],
       ),
     ])
