@@ -221,7 +221,7 @@ return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.t
 
 
 class _EntriesState implements EntriesState {
-  const _EntriesState({this.status = EntriesStatus.initial, this.entriesPageData, this.currentTabIndex = 0, final  List<TabData> tabs = const [TabData(status: TabDataStatus.loading, outdated: true, name: scoreTabName, description: scoreTabDescription, entries: <EntryEntity>[]), TabData(status: TabDataStatus.loading, outdated: true, name: strugglingTabName, description: strugglingTabDescription, entries: <EntryEntity>[]), TabData(status: TabDataStatus.loading, outdated: true, name: todayTabName, description: todayTabDescription, entries: <EntryEntity>[])]}): _tabs = tabs;
+  const _EntriesState({this.status = EntriesStatus.initial, this.entriesPageData, this.currentTabIndex = 0, final  List<TabData> tabs = const [TabData(status: TabDataStatus.loading, outdated: true, name: scoreTabName, description: scoreTabDescription, entries: <EntryEntity>[]), TabData(status: TabDataStatus.loading, outdated: true, name: strugglingTabName, description: strugglingTabDescription, entries: <EntryEntity>[]), TabData(status: TabDataStatus.loading, outdated: true, name: todayTabName, description: todayTabDescription, entries: <EntryEntity>[]), TabData(status: TabDataStatus.loading, outdated: true, name: unseenTabName, description: unseenTabDescription, entries: <EntryEntity>[])]}): _tabs = tabs;
   
 
 @override@JsonKey() final  EntriesStatus status;

@@ -26,6 +26,7 @@ void main() {
   final entry1Id = const Uuid().v4();
   final entry2Id = const Uuid().v4();
   final entry3Id = const Uuid().v4();
+  final entry4Id = const Uuid().v4();
   FieldListEntity fieldListEntity = FieldListEntity(
     id: fieldListId,
     fieldId: fieldId,
@@ -103,6 +104,52 @@ void main() {
       rank: Rank.vital,
     ),
   ];
+  List<EntryEntity> entries3 = [
+    EntryEntity(
+      id: entry1Id,
+      fieldListId: fieldListId,
+      answer: 'answer1',
+      question: 'question',
+      creationAt: aDateTime.subtract(const Duration(days: 3)),
+      lastModificationAt: aDateTime.subtract(const Duration(days: 3)),
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
+      rank: Rank.important,
+    ),
+    EntryEntity(
+      id: entry2Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'question',
+      creationAt: aDateTime.subtract(const Duration(days: 2)),
+      lastModificationAt: aDateTime.subtract(const Duration(days: 2)),
+      askedCount: 4,
+      wronglyAnsweredCount: 2,
+      rank: Rank.normal,
+    ),
+    EntryEntity(
+      id: entry3Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'question',
+      creationAt: aDateTime,
+      lastModificationAt: aDateTime,
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
+      rank: Rank.vital,
+    ),
+    EntryEntity(
+      id: entry4Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'question',
+      creationAt: aDateTime.subtract(const Duration(days: 2)),
+      lastModificationAt: aDateTime.subtract(const Duration(days: 2)),
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
+      rank: Rank.vital,
+    ),
+  ];
   final List<EntryEntity> scoreEntries = [
     entries1[2],
     entries1[0],
@@ -110,6 +157,7 @@ void main() {
   ];
   final List<EntryEntity> strugglingEntries = [entries1[2], entries1[0]];
   final List<EntryEntity> todayEntries = [entries2[1], entries2[2]];
+  final List<EntryEntity> unseenEntries = [entries3[3], entries3[0]];
   EntriesPageData entriesPageData1 = EntriesPageData(
     fieldList: fieldListEntity,
     entries: entries1,
@@ -117,6 +165,10 @@ void main() {
   EntriesPageData entriesPageData2 = EntriesPageData(
     fieldList: fieldListEntity,
     entries: entries2,
+  );
+  EntriesPageData entriesPageData3 = EntriesPageData(
+    fieldList: fieldListEntity,
+    entries: entries3,
   );
   late WatchEntriesUsecase watchEntriesUsecase;
 
@@ -177,6 +229,13 @@ void main() {
             name: todayTabName,
             description: todayTabDescription,
           ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: unseenTabName,
+            description: unseenTabDescription,
+            entries: [],
+          ),
         ],
       ),
       EntriesState(
@@ -201,6 +260,12 @@ void main() {
             name: todayTabName,
             description: todayTabDescription,
           ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: unseenTabName,
+            description: unseenTabDescription,
+          ),
         ],
       ),
     ],
@@ -210,7 +275,7 @@ void main() {
     '''
     When PrepareTab(1) event is added
     the entries is prepared for the struggling tab and 
-    an updated state is emmited
+    an updated state is emmitted
     ''',
     build: buildBloc,
     seed: () => EntriesState(
@@ -237,6 +302,13 @@ void main() {
           outdated: true,
           name: todayTabName,
           description: todayTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: unseenTabName,
+          description: unseenTabDescription,
           entries: [],
         ),
       ],
@@ -271,6 +343,13 @@ void main() {
             description: todayTabDescription,
             entries: [],
           ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: unseenTabName,
+            description: unseenTabDescription,
+            entries: [],
+          ),
         ],
       ),
     ],
@@ -280,7 +359,7 @@ void main() {
     '''
     When PrepareTab(2) event is added
     the entries is prepared for the today tab and 
-    an updated state is emmited
+    an updated state is emmitted
     ''',
     setUp: () {
       watchEntriesUsecase = MockWatchEntriesUsecase();
@@ -303,7 +382,7 @@ void main() {
         ),
         const TabData(
           status: TabDataStatus.loading,
-          outdated: false,
+          outdated: true,
           name: strugglingTabName,
           description: strugglingTabDescription,
           entries: [],
@@ -313,6 +392,13 @@ void main() {
           outdated: true,
           name: todayTabName,
           description: todayTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: unseenTabName,
+          description: unseenTabDescription,
           entries: [],
         ),
       ],
@@ -334,7 +420,7 @@ void main() {
           ),
           const TabData(
             status: TabDataStatus.loading,
-            outdated: false,
+            outdated: true,
             name: strugglingTabName,
             description: strugglingTabDescription,
             entries: [],
@@ -345,6 +431,102 @@ void main() {
             name: todayTabName,
             description: todayTabDescription,
             entries: todayEntries,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: unseenTabName,
+            description: unseenTabDescription,
+            entries: [],
+          ),
+        ],
+      ),
+    ],
+  );
+
+  blocTest<EntriesBloc, EntriesState>(
+    '''
+    When PrepareTab(3) event is added
+    the entries is prepared for the today tab and 
+    an updated state is emmitted
+    ''',
+    setUp: () {
+      watchEntriesUsecase = MockWatchEntriesUsecase();
+      when(
+        () => watchEntriesUsecase.call(fieldListEntity.id!),
+      ).thenAnswer((_) => Stream.value(entriesPageData3));
+    },
+    build: buildBloc,
+    seed: () => EntriesState(
+      status: EntriesStatus.success,
+      entriesPageData: entriesPageData3,
+      currentTabIndex: EntriesBloc.scoreTabIndex,
+      tabs: [
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: scoreTabName,
+          description: scoreTabDescription,
+          entries: scoreEntries,
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: strugglingTabName,
+          description: strugglingTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: todayTabName,
+          description: todayTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: unseenTabName,
+          description: unseenTabDescription,
+          entries: [],
+        ),
+      ],
+    ),
+    act: (bloc) => bloc.add(PrepareTab(EntriesBloc.unseenTabIndex, aDateTime)),
+    wait: const Duration(milliseconds: 1),
+    expect: () => [
+      EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData3,
+        currentTabIndex: EntriesBloc.unseenTabIndex,
+        tabs: [
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: scoreTabName,
+            description: scoreTabDescription,
+            entries: scoreEntries,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+            entries: [],
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: [],
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: unseenTabName,
+            description: unseenTabDescription,
+            entries: unseenEntries,
           ),
         ],
       ),

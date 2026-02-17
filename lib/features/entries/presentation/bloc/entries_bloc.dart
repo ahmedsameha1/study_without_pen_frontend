@@ -17,6 +17,7 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   static const scoreTabIndex = 0;
   static const strugglingTabIndex = 1;
   static const todayTabIndex = 2;
+  static const unseenTabIndex = 3;
 
   Future<void> _onSubscriptionRequested(
     EntriesSubscriptionRequested event,
@@ -70,6 +71,19 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
                         entry.creationAt.year == event.now.year &&
                         entry.creationAt.month == event.now.month &&
                         entry.creationAt.day == event.now.day,
+                  )
+                  .toList()
+                ..sort(
+                  (a, b) =>
+                      b.creationAt.difference(a.creationAt).inMicroseconds,
+                ),
+            unseenTabIndex =>
+              entries
+                  .where(
+                    (entry) =>
+                        entry.askedCount == 0 &&
+                        entry.creationAt.isBefore(event.now) &&
+                        entry.creationAt.day != event.now.day,
                   )
                   .toList()
                 ..sort(
