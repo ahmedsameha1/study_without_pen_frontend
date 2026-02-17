@@ -49,62 +49,66 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     PrepareTab event,
     Emitter<EntriesState> emit,
   ) async {
-    List<TabData> tabs = [...state.tabs];
-    final tab = tabs.removeAt(event.tabIndex);
-    tabs.insert(
-      event.tabIndex,
-      TabData(
-        outdated: false,
-        name: tab.name,
-        description: tab.description,
-        status: TabDataStatus.ready,
-        entries: await compute<List<EntryEntity>, List<EntryEntity>>(
-          (List<EntryEntity> entries) => switch (event.tabIndex) {
-            scoreTabIndex =>
-              entries..sort((a, b) => a.score >= b.score ? -1 : 1),
-            strugglingTabIndex =>
-              entries.where((entry) => entry.wrongness > 0.6).toList()
-                ..sort((a, b) => a.score >= b.score ? -1 : 1),
-            todayTabIndex =>
-              entries
-                  .where(
-                    (entry) =>
-                        entry.creationAt.year == event.now.year &&
-                        entry.creationAt.month == event.now.month &&
-                        entry.creationAt.day == event.now.day,
-                  )
-                  .toList()
-                ..sort(
-                  (a, b) =>
-                      b.creationAt.difference(a.creationAt).inMicroseconds,
+    if (state.tabs[event.tabIndex].outdated) {
+      List<TabData> tabs = [...state.tabs];
+      final tab = tabs.removeAt(event.tabIndex);
+      tabs.insert(
+        event.tabIndex,
+        TabData(
+          outdated: false,
+          name: tab.name,
+          description: tab.description,
+          status: TabDataStatus.ready,
+          entries: await compute<List<EntryEntity>, List<EntryEntity>>(
+            (List<EntryEntity> entries) => switch (event.tabIndex) {
+              scoreTabIndex =>
+                entries..sort((a, b) => a.score >= b.score ? -1 : 1),
+              strugglingTabIndex =>
+                entries.where((entry) => entry.wrongness > 0.6).toList()
+                  ..sort((a, b) => a.score >= b.score ? -1 : 1),
+              todayTabIndex =>
+                entries
+                    .where(
+                      (entry) =>
+                          entry.creationAt.year == event.now.year &&
+                          entry.creationAt.month == event.now.month &&
+                          entry.creationAt.day == event.now.day,
+                    )
+                    .toList()
+                  ..sort(
+                    (a, b) =>
+                        b.creationAt.difference(a.creationAt).inMicroseconds,
+                  ),
+              unseenTabIndex =>
+                entries
+                    .where(
+                      (entry) =>
+                          entry.askedCount == 0 &&
+                          entry.creationAt.isBefore(event.now) &&
+                          entry.creationAt.day != event.now.day,
+                    )
+                    .toList()
+                  ..sort(
+                    (a, b) =>
+                        b.creationAt.difference(a.creationAt).inMicroseconds,
+                  ),
+              browseTabIndex =>
+                entries..sort(
+                  (a, b) => a.order > b.order
+                      ? 1
+                      : b.question.compareTo(a.question) > 0
+                      ? 1
+                      : b.creationAt.difference(a.creationAt).inMicroseconds,
                 ),
-            unseenTabIndex =>
-              entries
-                  .where(
-                    (entry) =>
-                        entry.askedCount == 0 &&
-                        entry.creationAt.isBefore(event.now) &&
-                        entry.creationAt.day != event.now.day,
-                  )
-                  .toList()
-                ..sort(
-                  (a, b) =>
-                      b.creationAt.difference(a.creationAt).inMicroseconds,
-                ),
-            browseTabIndex =>
-              entries..sort(
-                (a, b) => a.order > b.order
-                    ? 1
-                    : b.question.compareTo(a.question) > 0
-                    ? 1
-                    : b.creationAt.difference(a.creationAt).inMicroseconds,
-              ),
-            _ => throw ArgumentError(''),
-          },
-          List<EntryEntity>.from(state.entriesPageData!.entries),
+              _ => throw ArgumentError(''),
+            },
+            List<EntryEntity>.from(state.entriesPageData!.entries),
+          ),
         ),
-      ),
-    );
-    emit(state.copyWith(currentTabIndex: event.tabIndex, tabs: tabs));
+      );
+      emit(state.copyWith(currentTabIndex: event.tabIndex, tabs: tabs));
+    } else {
+      emit(state.copyWith(currentTabIndex: event.tabIndex));
+    }
   }
 }
