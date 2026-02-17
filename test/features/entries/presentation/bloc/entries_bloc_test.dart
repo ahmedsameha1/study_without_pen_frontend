@@ -115,6 +115,7 @@ void main() {
       askedCount: 0,
       wronglyAnsweredCount: 0,
       rank: Rank.important,
+      order: 1,
     ),
     EntryEntity(
       id: entry2Id,
@@ -126,17 +127,19 @@ void main() {
       askedCount: 4,
       wronglyAnsweredCount: 2,
       rank: Rank.normal,
+      order: 1,
     ),
     EntryEntity(
       id: entry3Id,
       fieldListId: fieldListId,
       answer: 'answer',
-      question: 'question',
+      question: 'aQuestion',
       creationAt: aDateTime,
       lastModificationAt: aDateTime,
       askedCount: 0,
       wronglyAnsweredCount: 0,
       rank: Rank.vital,
+      order: 1,
     ),
     EntryEntity(
       id: entry4Id,
@@ -148,6 +151,7 @@ void main() {
       askedCount: 0,
       wronglyAnsweredCount: 0,
       rank: Rank.vital,
+      order: 0,
     ),
   ];
   final List<EntryEntity> scoreEntries = [
@@ -158,6 +162,12 @@ void main() {
   final List<EntryEntity> strugglingEntries = [entries1[2], entries1[0]];
   final List<EntryEntity> todayEntries = [entries2[1], entries2[2]];
   final List<EntryEntity> unseenEntries = [entries3[3], entries3[0]];
+  final List<EntryEntity> browseEntries = [
+    entries3[3],
+    entries3[2],
+    entries3[1],
+    entries3[0],
+  ];
   EntriesPageData entriesPageData1 = EntriesPageData(
     fieldList: fieldListEntity,
     entries: entries1,
@@ -236,6 +246,13 @@ void main() {
             description: unseenTabDescription,
             entries: [],
           ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: browseTabName,
+            description: browseTabDescription,
+            entries: [],
+          ),
         ],
       ),
       EntriesState(
@@ -265,6 +282,13 @@ void main() {
             outdated: true,
             name: unseenTabName,
             description: unseenTabDescription,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: browseTabName,
+            description: browseTabDescription,
+            entries: [],
           ),
         ],
       ),
@@ -311,6 +335,13 @@ void main() {
           description: unseenTabDescription,
           entries: [],
         ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: browseTabName,
+          description: browseTabDescription,
+          entries: [],
+        ),
       ],
     ),
     act: (bloc) =>
@@ -348,6 +379,13 @@ void main() {
             outdated: true,
             name: unseenTabName,
             description: unseenTabDescription,
+            entries: [],
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: browseTabName,
+            description: browseTabDescription,
             entries: [],
           ),
         ],
@@ -401,6 +439,13 @@ void main() {
           description: unseenTabDescription,
           entries: [],
         ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: browseTabName,
+          description: browseTabDescription,
+          entries: [],
+        ),
       ],
     ),
     act: (bloc) => bloc.add(PrepareTab(EntriesBloc.todayTabIndex, aDateTime)),
@@ -437,6 +482,13 @@ void main() {
             outdated: true,
             name: unseenTabName,
             description: unseenTabDescription,
+            entries: [],
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: browseTabName,
+            description: browseTabDescription,
             entries: [],
           ),
         ],
@@ -490,6 +542,13 @@ void main() {
           description: unseenTabDescription,
           entries: [],
         ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: browseTabName,
+          description: browseTabDescription,
+          entries: [],
+        ),
       ],
     ),
     act: (bloc) => bloc.add(PrepareTab(EntriesBloc.unseenTabIndex, aDateTime)),
@@ -527,6 +586,116 @@ void main() {
             name: unseenTabName,
             description: unseenTabDescription,
             entries: unseenEntries,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: browseTabName,
+            description: browseTabDescription,
+            entries: [],
+          ),
+        ],
+      ),
+    ],
+  );
+
+  blocTest<EntriesBloc, EntriesState>(
+    '''
+    When PrepareTab(4) event is added
+    the entries is prepared for the today tab and 
+    an updated state is emmitted
+    ''',
+    setUp: () {
+      watchEntriesUsecase = MockWatchEntriesUsecase();
+      when(
+        () => watchEntriesUsecase.call(fieldListEntity.id!),
+      ).thenAnswer((_) => Stream.value(entriesPageData3));
+    },
+    build: buildBloc,
+    seed: () => EntriesState(
+      status: EntriesStatus.success,
+      entriesPageData: entriesPageData3,
+      currentTabIndex: EntriesBloc.scoreTabIndex,
+      tabs: [
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: scoreTabName,
+          description: scoreTabDescription,
+          entries: scoreEntries,
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: strugglingTabName,
+          description: strugglingTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: todayTabName,
+          description: todayTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: unseenTabName,
+          description: unseenTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: browseTabName,
+          description: browseTabDescription,
+          entries: [],
+        ),
+      ],
+    ),
+    act: (bloc) => bloc.add(PrepareTab(EntriesBloc.browseTabIndex, aDateTime)),
+    wait: const Duration(milliseconds: 1),
+    expect: () => [
+      EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData3,
+        currentTabIndex: EntriesBloc.browseTabIndex,
+        tabs: [
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: scoreTabName,
+            description: scoreTabDescription,
+            entries: scoreEntries,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+            entries: [],
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: [],
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: unseenTabName,
+            description: unseenTabDescription,
+            entries: [],
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: browseTabName,
+            description: browseTabDescription,
+            entries: browseEntries,
           ),
         ],
       ),
