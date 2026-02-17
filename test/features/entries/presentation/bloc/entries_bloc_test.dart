@@ -20,7 +20,7 @@ class FakeEntry extends Fake implements EntryEntity {}
 class FakeEntriesPageData extends Fake implements EntriesPageData {}
 
 void main() {
-  DateTime fieldListDateTime = DateTime(2025);
+  DateTime aDateTime = DateTime.utc(2025);
   final fieldId = const Uuid().v4();
   final fieldListId = const Uuid().v4();
   final entry1Id = const Uuid().v4();
@@ -30,17 +30,17 @@ void main() {
     id: fieldListId,
     fieldId: fieldId,
     name: 'field list name',
-    creationAt: fieldListDateTime,
-    lastModificationAt: fieldListDateTime,
+    creationAt: aDateTime,
+    lastModificationAt: aDateTime,
   );
-  List<EntryEntity> entries = [
+  List<EntryEntity> entries1 = [
     EntryEntity(
       id: entry1Id,
       fieldListId: fieldListId,
       answer: 'answer1',
       question: 'question',
-      creationAt: fieldListDateTime,
-      lastModificationAt: fieldListDateTime,
+      creationAt: aDateTime,
+      lastModificationAt: aDateTime,
       askedCount: 4,
       wronglyAnsweredCount: 3,
       rank: Rank.important,
@@ -50,8 +50,8 @@ void main() {
       fieldListId: fieldListId,
       answer: 'answer',
       question: 'question',
-      creationAt: fieldListDateTime,
-      lastModificationAt: fieldListDateTime,
+      creationAt: aDateTime,
+      lastModificationAt: aDateTime,
       askedCount: 4,
       wronglyAnsweredCount: 2,
       rank: Rank.normal,
@@ -61,18 +61,62 @@ void main() {
       fieldListId: fieldListId,
       answer: 'answer',
       question: 'question',
-      creationAt: fieldListDateTime,
-      lastModificationAt: fieldListDateTime,
+      creationAt: aDateTime,
+      lastModificationAt: aDateTime,
       askedCount: 4,
       wronglyAnsweredCount: 4,
       rank: Rank.vital,
     ),
   ];
-  final List<EntryEntity> scoreEntries = [entries[2], entries[0], entries[1]];
-  final List<EntryEntity> strugglingEntries = [entries[2], entries[0]];
-  EntriesPageData entriesPageData = EntriesPageData(
+  List<EntryEntity> entries2 = [
+    EntryEntity(
+      id: entry1Id,
+      fieldListId: fieldListId,
+      answer: 'answer1',
+      question: 'question',
+      creationAt: DateTime.utc(2026),
+      lastModificationAt: DateTime.utc(2026),
+      askedCount: 4,
+      wronglyAnsweredCount: 3,
+      rank: Rank.important,
+    ),
+    EntryEntity(
+      id: entry2Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'question',
+      creationAt: aDateTime.add(const Duration(hours: 4)),
+      lastModificationAt: aDateTime.add(const Duration(hours: 4)),
+      askedCount: 4,
+      wronglyAnsweredCount: 2,
+      rank: Rank.normal,
+    ),
+    EntryEntity(
+      id: entry3Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'question',
+      creationAt: aDateTime.add(const Duration(hours: 2)),
+      lastModificationAt: aDateTime.add(const Duration(hours: 2)),
+      askedCount: 4,
+      wronglyAnsweredCount: 4,
+      rank: Rank.vital,
+    ),
+  ];
+  final List<EntryEntity> scoreEntries = [
+    entries1[2],
+    entries1[0],
+    entries1[1],
+  ];
+  final List<EntryEntity> strugglingEntries = [entries1[2], entries1[0]];
+  final List<EntryEntity> todayEntries = [entries2[1], entries2[2]];
+  EntriesPageData entriesPageData1 = EntriesPageData(
     fieldList: fieldListEntity,
-    entries: entries,
+    entries: entries1,
+  );
+  EntriesPageData entriesPageData2 = EntriesPageData(
+    fieldList: fieldListEntity,
+    entries: entries2,
   );
   late WatchEntriesUsecase watchEntriesUsecase;
 
@@ -85,7 +129,7 @@ void main() {
     watchEntriesUsecase = MockWatchEntriesUsecase();
     when(
       () => watchEntriesUsecase.call(fieldListEntity.id!),
-    ).thenAnswer((_) => Stream.value(entriesPageData));
+    ).thenAnswer((_) => Stream.value(entriesPageData1));
   });
 
   EntriesBloc buildBloc() => EntriesBloc(watchEntriesUsecase);
@@ -115,7 +159,7 @@ void main() {
       const EntriesState(status: EntriesStatus.loading),
       EntriesState(
         status: EntriesStatus.success,
-        entriesPageData: entriesPageData,
+        entriesPageData: entriesPageData1,
         currentTabIndex: EntriesBloc.scoreTabIndex,
         tabs: [
           const TabData(
@@ -128,11 +172,16 @@ void main() {
             name: strugglingTabName,
             description: strugglingTabDescription,
           ),
+          const TabData(
+            status: TabDataStatus.loading,
+            name: todayTabName,
+            description: todayTabDescription,
+          ),
         ],
       ),
       EntriesState(
         status: EntriesStatus.success,
-        entriesPageData: entriesPageData,
+        entriesPageData: entriesPageData1,
         currentTabIndex: EntriesBloc.scoreTabIndex,
         tabs: [
           TabData(
@@ -146,6 +195,11 @@ void main() {
             status: TabDataStatus.loading,
             name: strugglingTabName,
             description: strugglingTabDescription,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            name: todayTabName,
+            description: todayTabDescription,
           ),
         ],
       ),
@@ -161,7 +215,7 @@ void main() {
     build: buildBloc,
     seed: () => EntriesState(
       status: EntriesStatus.success,
-      entriesPageData: entriesPageData,
+      entriesPageData: entriesPageData1,
       currentTabIndex: EntriesBloc.scoreTabIndex,
       tabs: [
         TabData(
@@ -178,14 +232,22 @@ void main() {
           description: strugglingTabDescription,
           entries: [],
         ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: todayTabName,
+          description: todayTabDescription,
+          entries: [],
+        ),
       ],
     ),
-    act: (bloc) => bloc.add(const PrepareTab(1)),
+    act: (bloc) =>
+        bloc.add(PrepareTab(EntriesBloc.strugglingTabIndex, aDateTime)),
     wait: const Duration(milliseconds: 1),
     expect: () => [
       EntriesState(
         status: EntriesStatus.success,
-        entriesPageData: entriesPageData,
+        entriesPageData: entriesPageData1,
         currentTabIndex: EntriesBloc.strugglingTabIndex,
         tabs: [
           TabData(
@@ -201,6 +263,88 @@ void main() {
             name: strugglingTabName,
             description: strugglingTabDescription,
             entries: strugglingEntries,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: [],
+          ),
+        ],
+      ),
+    ],
+  );
+
+  blocTest<EntriesBloc, EntriesState>(
+    '''
+    When PrepareTab(2) event is added
+    the entries is prepared for the today tab and 
+    an updated state is emmited
+    ''',
+    setUp: () {
+      watchEntriesUsecase = MockWatchEntriesUsecase();
+      when(
+        () => watchEntriesUsecase.call(fieldListEntity.id!),
+      ).thenAnswer((_) => Stream.value(entriesPageData2));
+    },
+    build: buildBloc,
+    seed: () => EntriesState(
+      status: EntriesStatus.success,
+      entriesPageData: entriesPageData2,
+      currentTabIndex: EntriesBloc.scoreTabIndex,
+      tabs: [
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: scoreTabName,
+          description: scoreTabDescription,
+          entries: scoreEntries,
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: false,
+          name: strugglingTabName,
+          description: strugglingTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: todayTabName,
+          description: todayTabDescription,
+          entries: [],
+        ),
+      ],
+    ),
+    act: (bloc) => bloc.add(PrepareTab(EntriesBloc.todayTabIndex, aDateTime)),
+    wait: const Duration(milliseconds: 1),
+    expect: () => [
+      EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData2,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: scoreTabName,
+            description: scoreTabDescription,
+            entries: scoreEntries,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: false,
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+            entries: [],
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: todayEntries,
           ),
         ],
       ),
