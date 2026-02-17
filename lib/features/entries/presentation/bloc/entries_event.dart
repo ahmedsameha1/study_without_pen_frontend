@@ -24,8 +24,9 @@ class EntriesSubscriptionRequested extends EntriesEvent {
 }
 
 class PrepareTab extends EntriesEvent {
-  const PrepareTab(this.tabIndex);
+  const PrepareTab(this.tabIndex, this.now);
   final int tabIndex;
+  final DateTime now;
 
   @override
   bool operator ==(Object other) {
@@ -34,9 +35,10 @@ class PrepareTab extends EntriesEvent {
     }
     return other is PrepareTab &&
         runtimeType == other.runtimeType &&
-        tabIndex == other.tabIndex;
+        tabIndex == other.tabIndex &&
+        now == other.now;
   }
 
   @override
-  int get hashCode => tabIndex.hashCode;
+  int get hashCode => Object.hashAll([tabIndex, now]);
 }

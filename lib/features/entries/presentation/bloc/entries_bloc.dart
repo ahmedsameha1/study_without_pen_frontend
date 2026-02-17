@@ -16,6 +16,7 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   final WatchEntriesUsecase _watchEntriesUsecase;
   static const scoreTabIndex = 0;
   static const strugglingTabIndex = 1;
+  static const todayTabIndex = 2;
 
   Future<void> _onSubscriptionRequested(
     EntriesSubscriptionRequested event,
@@ -26,7 +27,7 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
       await emit.forEach<EntriesPageData>(
         _watchEntriesUsecase.call(event.fieldListId),
         onData: (entriesPageData) {
-          add(PrepareTab(state.currentTabIndex));
+          add(PrepareTab(state.currentTabIndex, DateTime.now()));
           return state.copyWith(
             status: EntriesStatus.success,
             entriesPageData: entriesPageData,
@@ -62,6 +63,19 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
             strugglingTabIndex =>
               entries.where((entry) => entry.wrongness > 0.6).toList()
                 ..sort((a, b) => a.score >= b.score ? -1 : 1),
+            todayTabIndex =>
+              entries
+                  .where(
+                    (entry) =>
+                        entry.creationAt.year == event.now.year &&
+                        entry.creationAt.month == event.now.month &&
+                        entry.creationAt.day == event.now.day,
+                  )
+                  .toList()
+                ..sort(
+                  (a, b) =>
+                      b.creationAt.difference(a.creationAt).inMicroseconds,
+                ),
             _ => throw ArgumentError(''),
           },
           List<EntryEntity>.from(state.entriesPageData!.entries),

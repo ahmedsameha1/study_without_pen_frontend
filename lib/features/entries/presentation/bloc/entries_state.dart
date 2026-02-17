@@ -12,6 +12,8 @@ const scoreTabName = 'score';
 const scoreTabDescription = 'scoreDescription';
 const strugglingTabName = 'struggling';
 const strugglingTabDescription = 'strugglingDescription';
+const todayTabName = 'today';
+const todayTabDescription = 'todayDescription';
 
 @freezed
 abstract class EntriesState with _$EntriesState {
@@ -32,6 +34,13 @@ abstract class EntriesState with _$EntriesState {
         outdated: true,
         name: strugglingTabName,
         description: strugglingTabDescription,
+        entries: <EntryEntity>[],
+      ),
+      TabData(
+        status: TabDataStatus.loading,
+        outdated: true,
+        name: todayTabName,
+        description: todayTabDescription,
         entries: <EntryEntity>[],
       ),
     ])

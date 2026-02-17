@@ -9,6 +9,7 @@ void main() {
       EntriesSubscriptionRequested(fieldListId),
       EntriesSubscriptionRequested(fieldListId),
     );
-    expect(const PrepareTab(1), const PrepareTab(1));
+    expect(PrepareTab(1, DateTime(2025)), PrepareTab(1, DateTime(2025)));
+    expect(PrepareTab(1, DateTime(2025)), isNot(PrepareTab(1, DateTime(2024))));
   });
 }
