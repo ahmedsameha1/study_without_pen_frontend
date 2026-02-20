@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 
+import '../../domain/models/entries_page_data.dart';
+
 @immutable
 sealed class EntriesEvent {
   const EntriesEvent();
@@ -41,4 +43,22 @@ class PrepareTab extends EntriesEvent {
 
   @override
   int get hashCode => Object.hashAll([tabIndex, now]);
+}
+
+class NewData extends EntriesEvent {
+  const NewData(this.data);
+  final EntriesPageData data;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    return other is NewData &&
+        runtimeType == other.runtimeType &&
+        data == other.data;
+  }
+
+  @override
+  int get hashCode => data.hashCode;
 }

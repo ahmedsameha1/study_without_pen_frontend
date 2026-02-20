@@ -11,6 +11,7 @@ import 'tab_data.dart';
 class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   EntriesBloc(this._watchEntriesUsecase) : super(const EntriesState()) {
     on<EntriesSubscriptionRequested>(_onSubscriptionRequested);
+    on<NewData>(_onNewData);
     on<PrepareTab>(_onPrepareTab);
   }
   final WatchEntriesUsecase _watchEntriesUsecase;
@@ -26,23 +27,27 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   ) async {
     emit(state.copyWith(status: EntriesStatus.loading));
     try {
-      await emit.forEach<EntriesPageData>(
+      await emit.onEach<EntriesPageData>(
         _watchEntriesUsecase.call(event.fieldListId),
         onData: (entriesPageData) {
+          add(NewData(entriesPageData));
           add(PrepareTab(state.currentTabIndex, DateTime.now()));
-          return state.copyWith(
-            status: EntriesStatus.success,
-            entriesPageData: entriesPageData,
-            tabs: state.tabs
-                .map((tab) => tab.copyWith(outdated: true))
-                .toList(),
-          );
         },
-        onError: (_, _) => state.copyWith(status: EntriesStatus.failure),
+        onError: (_, _) => emit(state.copyWith(status: EntriesStatus.failure)),
       );
     } catch (e) {
       emit(state.copyWith(status: EntriesStatus.failure));
     }
+  }
+
+  void _onNewData(NewData event, Emitter<EntriesState> emit) {
+    emit(
+      state.copyWith(
+        status: EntriesStatus.success,
+        entriesPageData: event.data,
+        tabs: state.tabs.map((tab) => tab.copyWith(outdated: true)).toList(),
+      ),
+    );
   }
 
   Future<void> _onPrepareTab(
