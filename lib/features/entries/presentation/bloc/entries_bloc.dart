@@ -45,7 +45,15 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
       state.copyWith(
         status: EntriesStatus.success,
         entriesPageData: event.data,
-        tabs: state.tabs.map((tab) => tab.copyWith(outdated: true)).toList(),
+        tabs: state.tabs
+            .map(
+              (tab) => tab.copyWith(
+                status: TabDataStatus.loading,
+                outdated: true,
+                entries: [],
+              ),
+            )
+            .toList(),
       ),
     );
   }

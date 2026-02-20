@@ -216,7 +216,7 @@ void main() {
 
   blocTest<EntriesBloc, EntriesState>(
     'emits state '
-    'when watchEntriesUsecase.call stream emits FieldListsPageData',
+    'when watchEntriesUsecase.call stream emits EntriesPageData',
     setUp: () {
       when(
         () => watchEntriesUsecase.call(fieldListEntity.id!),
@@ -224,7 +224,7 @@ void main() {
     },
     build: buildBloc,
     act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListId)),
-    wait: const Duration(milliseconds: 100),
+    wait: const Duration(milliseconds: 1),
     expect: () => [
       const EntriesState(status: EntriesStatus.loading),
       EntriesState(
@@ -284,6 +284,138 @@ void main() {
             status: TabDataStatus.loading,
             name: todayTabName,
             description: todayTabDescription,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: unseenTabName,
+            description: unseenTabDescription,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: browseTabName,
+            description: browseTabDescription,
+            entries: [],
+          ),
+        ],
+      ),
+    ],
+  );
+
+  blocTest<EntriesBloc, EntriesState>(
+    'emits state '
+    'when watchEntriesUsecase.call stream emits new EntriesPageData '
+    'after the first',
+    seed: () => EntriesState(
+      status: EntriesStatus.success,
+      entriesPageData: entriesPageData1,
+      currentTabIndex: EntriesBloc.todayTabIndex,
+      tabs: [
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: scoreTabName,
+          description: scoreTabDescription,
+          entries: unseenEntries1,
+        ),
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: strugglingTabName,
+          description: strugglingTabDescription,
+          entries: strugglingEntries1,
+        ),
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: todayTabName,
+          description: todayTabDescription,
+          entries: browseEntries1,
+        ),
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: unseenTabName,
+          description: unseenTabDescription,
+          entries: scoreEntries1,
+        ),
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: browseTabName,
+          description: browseTabDescription,
+          entries: todayEntries1,
+        ),
+      ],
+    ),
+    build: buildBloc,
+    act: (bloc) {
+      bloc
+        ..add(NewData(entriesPageData2))
+        ..add(PrepareTab(EntriesBloc.todayTabIndex, aDateTime));
+    },
+    wait: const Duration(milliseconds: 1),
+    expect: () => [
+      EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData2,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(
+            status: TabDataStatus.loading,
+            name: scoreTabName,
+            description: scoreTabDescription,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            name: todayTabName,
+            description: todayTabDescription,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: unseenTabName,
+            description: unseenTabDescription,
+            entries: [],
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: browseTabName,
+            description: browseTabDescription,
+            entries: [],
+          ),
+        ],
+      ),
+      EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData2,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: scoreTabName,
+            description: scoreTabDescription,
+            entries: [],
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: todayEntries2,
           ),
           const TabData(
             status: TabDataStatus.loading,
