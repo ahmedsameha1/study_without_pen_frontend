@@ -1,3 +1,4 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,9 +11,12 @@ import 'tab_data.dart';
 
 class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   EntriesBloc(this._watchEntriesUsecase) : super(const EntriesState()) {
-    on<EntriesSubscriptionRequested>(_onSubscriptionRequested);
-    on<NewData>(_onNewData);
-    on<PrepareTab>(_onPrepareTab);
+    on<EntriesSubscriptionRequested>(
+      _onSubscriptionRequested,
+      transformer: sequential(),
+    );
+    on<NewData>(_onNewData, transformer: sequential());
+    on<PrepareTab>(_onPrepareTab, transformer: sequential());
   }
   final WatchEntriesUsecase _watchEntriesUsecase;
   static const scoreTabIndex = 0;
@@ -30,8 +34,10 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
       await emit.onEach<EntriesPageData>(
         _watchEntriesUsecase.call(event.fieldListId),
         onData: (entriesPageData) {
-          add(NewData(entriesPageData));
-          add(PrepareTab(state.currentTabIndex, DateTime.now()));
+          if (!isClosed) {
+            add(NewData(entriesPageData));
+            add(PrepareTab(state.currentTabIndex, DateTime.now()));
+          }
         },
         onError: (_, _) => emit(state.copyWith(status: EntriesStatus.failure)),
       );
@@ -97,8 +103,9 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
                     .where(
                       (entry) =>
                           entry.askedCount == 0 &&
-                          entry.creationAt.isBefore(event.now) &&
-                          entry.creationAt.day != event.now.day,
+                          !(entry.creationAt.year == event.now.year &&
+                              entry.creationAt.month == event.now.month &&
+                              entry.creationAt.day == event.now.day),
                     )
                     .toList()
                   ..sort(
@@ -106,13 +113,21 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
                         b.creationAt.difference(a.creationAt).inMicroseconds,
                   ),
               browseTabIndex =>
-                entries..sort(
-                  (a, b) => a.order > b.order
-                      ? 1
-                      : b.question.compareTo(a.question) > 0
-                      ? 1
-                      : b.creationAt.difference(a.creationAt).inMicroseconds,
-                ),
+                entries..sort((a, b) {
+                  final orderResult = a.order.compareTo(b.order);
+                  if (orderResult != 0) {
+                    return orderResult;
+                  } else {
+                    final questionResult = a.question.compareTo(b.question);
+                    if (questionResult != 0) {
+                      return questionResult;
+                    } else {
+                      return b.creationAt
+                          .difference(a.creationAt)
+                          .inMicroseconds;
+                    }
+                  }
+                }),
               _ => throw ArgumentError(''),
             },
             List<EntryEntity>.from(state.entriesPageData!.entries),

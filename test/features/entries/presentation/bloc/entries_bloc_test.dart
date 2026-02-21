@@ -154,6 +154,106 @@ void main() {
       order: 0,
     ),
   ];
+  List<EntryEntity> entries4 = [
+    EntryEntity(
+      id: entry1Id,
+      fieldListId: fieldListId,
+      answer: 'answer1',
+      question: 'question',
+      creationAt: DateTime(2024, 2, 1),
+      lastModificationAt: DateTime(2024, 2, 1),
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
+      rank: Rank.important,
+      order: 1,
+    ),
+    EntryEntity(
+      id: entry2Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'question',
+      creationAt: aDateTime.subtract(const Duration(days: 2)),
+      lastModificationAt: aDateTime.subtract(const Duration(days: 2)),
+      askedCount: 4,
+      wronglyAnsweredCount: 2,
+      rank: Rank.normal,
+      order: 1,
+    ),
+    EntryEntity(
+      id: entry3Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'aQuestion',
+      creationAt: aDateTime,
+      lastModificationAt: aDateTime,
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
+      rank: Rank.vital,
+      order: 1,
+    ),
+    EntryEntity(
+      id: entry4Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'question',
+      creationAt: DateTime(2024, 3, 1),
+      lastModificationAt: DateTime(2024, 3, 1),
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
+      rank: Rank.vital,
+      order: 0,
+    ),
+  ];
+  List<EntryEntity> entries5 = [
+    EntryEntity(
+      id: entry1Id,
+      fieldListId: fieldListId,
+      answer: 'answer1',
+      question: 'question',
+      creationAt: DateTime(2024, 2, 1),
+      lastModificationAt: DateTime(2024, 2, 1),
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
+      rank: Rank.important,
+      order: 1,
+    ),
+    EntryEntity(
+      id: entry2Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'question',
+      creationAt: aDateTime.subtract(const Duration(days: 2)),
+      lastModificationAt: aDateTime.subtract(const Duration(days: 2)),
+      askedCount: 4,
+      wronglyAnsweredCount: 2,
+      rank: Rank.normal,
+      order: 2,
+    ),
+    EntryEntity(
+      id: entry3Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'aQuestion',
+      creationAt: aDateTime,
+      lastModificationAt: aDateTime,
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
+      rank: Rank.vital,
+      order: 2,
+    ),
+    EntryEntity(
+      id: entry4Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'question',
+      creationAt: DateTime(2024, 3, 1),
+      lastModificationAt: DateTime(2024, 3, 1),
+      askedCount: 0,
+      wronglyAnsweredCount: 0,
+      rank: Rank.vital,
+      order: 3,
+    ),
+  ];
   final List<EntryEntity> scoreEntries1 = [
     entries1[2],
     entries1[0],
@@ -171,12 +271,19 @@ void main() {
   final List<EntryEntity> todayEntries2 = [entries2[1], entries2[2]];
   final List<EntryEntity> unseenEntries1 = [];
   final List<EntryEntity> unseenEntries3 = [entries3[3], entries3[0]];
+  final List<EntryEntity> unseenEntries4 = [entries4[3], entries4[0]];
   final List<EntryEntity> browseEntries1 = entries1;
   final List<EntryEntity> browseEntries3 = [
     entries3[3],
     entries3[2],
     entries3[1],
     entries3[0],
+  ];
+  final List<EntryEntity> browseEntries5 = [
+    entries5[0],
+    entries5[2],
+    entries5[1],
+    entries5[3],
   ];
   EntriesPageData entriesPageData1 = EntriesPageData(
     fieldList: fieldListEntity,
@@ -189,6 +296,14 @@ void main() {
   EntriesPageData entriesPageData3 = EntriesPageData(
     fieldList: fieldListEntity,
     entries: entries3,
+  );
+  EntriesPageData entriesPageData4 = EntriesPageData(
+    fieldList: fieldListEntity,
+    entries: entries4,
+  );
+  EntriesPageData entriesPageData5 = EntriesPageData(
+    fieldList: fieldListEntity,
+    entries: entries5,
   );
   WatchEntriesUsecase watchEntriesUsecase = MockWatchEntriesUsecase();
 
@@ -1016,6 +1131,109 @@ void main() {
 
   blocTest<EntriesBloc, EntriesState>(
     '''
+    When PrepareTab(3) event is added
+    the entries is prepared for the today tab and 
+    an updated state is emmitted 2
+    ''',
+    setUp: () {
+      watchEntriesUsecase = MockWatchEntriesUsecase();
+      when(
+        () => watchEntriesUsecase.call(fieldListEntity.id!),
+      ).thenAnswer((_) => Stream.value(entriesPageData4));
+    },
+    build: buildBloc,
+    seed: () => EntriesState(
+      status: EntriesStatus.success,
+      entriesPageData: entriesPageData4,
+      currentTabIndex: EntriesBloc.scoreTabIndex,
+      tabs: [
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: scoreTabName,
+          description: scoreTabDescription,
+          entries: scoreEntries3,
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: strugglingTabName,
+          description: strugglingTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: todayTabName,
+          description: todayTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: unseenTabName,
+          description: unseenTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: browseTabName,
+          description: browseTabDescription,
+          entries: [],
+        ),
+      ],
+    ),
+    act: (bloc) => bloc.add(PrepareTab(EntriesBloc.unseenTabIndex, aDateTime)),
+    wait: const Duration(milliseconds: 1),
+    expect: () => [
+      EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData4,
+        currentTabIndex: EntriesBloc.unseenTabIndex,
+        tabs: [
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: scoreTabName,
+            description: scoreTabDescription,
+            entries: scoreEntries3,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+            entries: [],
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: [],
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: unseenTabName,
+            description: unseenTabDescription,
+            entries: unseenEntries4,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: browseTabName,
+            description: browseTabDescription,
+            entries: [],
+          ),
+        ],
+      ),
+    ],
+  );
+
+  blocTest<EntriesBloc, EntriesState>(
+    '''
     When PrepareTab(3) event is added and
     the already prepared entries for the unseen tab with an updated tabIndex
     is emmitted
@@ -1111,7 +1329,7 @@ void main() {
   blocTest<EntriesBloc, EntriesState>(
     '''
     When PrepareTab(4) event is added
-    the entries is prepared for the today tab and 
+    the entries is prepared for the browse tab and 
     an updated state is emmitted
     ''',
     setUp: () {
@@ -1205,6 +1423,109 @@ void main() {
             name: browseTabName,
             description: browseTabDescription,
             entries: browseEntries3,
+          ),
+        ],
+      ),
+    ],
+  );
+
+  blocTest<EntriesBloc, EntriesState>(
+    '''
+    When PrepareTab(4) event is added
+    the entries is prepared for the browse tab and 
+    an updated state is emmitted 2
+    ''',
+    setUp: () {
+      watchEntriesUsecase = MockWatchEntriesUsecase();
+      when(
+        () => watchEntriesUsecase.call(fieldListEntity.id!),
+      ).thenAnswer((_) => Stream.value(entriesPageData5));
+    },
+    build: buildBloc,
+    seed: () => EntriesState(
+      status: EntriesStatus.success,
+      entriesPageData: entriesPageData5,
+      currentTabIndex: EntriesBloc.scoreTabIndex,
+      tabs: [
+        TabData(
+          status: TabDataStatus.ready,
+          outdated: false,
+          name: scoreTabName,
+          description: scoreTabDescription,
+          entries: scoreEntries3,
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: strugglingTabName,
+          description: strugglingTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: todayTabName,
+          description: todayTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: unseenTabName,
+          description: unseenTabDescription,
+          entries: [],
+        ),
+        const TabData(
+          status: TabDataStatus.loading,
+          outdated: true,
+          name: browseTabName,
+          description: browseTabDescription,
+          entries: [],
+        ),
+      ],
+    ),
+    act: (bloc) => bloc.add(PrepareTab(EntriesBloc.browseTabIndex, aDateTime)),
+    wait: const Duration(milliseconds: 1),
+    expect: () => [
+      EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData5,
+        currentTabIndex: EntriesBloc.browseTabIndex,
+        tabs: [
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: scoreTabName,
+            description: scoreTabDescription,
+            entries: scoreEntries3,
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+            entries: [],
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: [],
+          ),
+          const TabData(
+            status: TabDataStatus.loading,
+            outdated: true,
+            name: unseenTabName,
+            description: unseenTabDescription,
+            entries: [],
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            outdated: false,
+            name: browseTabName,
+            description: browseTabDescription,
+            entries: browseEntries5,
           ),
         ],
       ),
