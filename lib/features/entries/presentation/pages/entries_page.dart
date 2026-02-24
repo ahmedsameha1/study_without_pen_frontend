@@ -53,17 +53,15 @@ class _EntriesPageViewState extends State<EntriesPageView>
       length: BlocProvider.of<EntriesBloc>(context).state.tabs.length,
       vsync: this,
     );
-    _tabController.addListener(() {
-      BlocProvider.of<EntriesBloc>(
-        context,
-      ).add(PrepareTab(_tabController.index, DateTime.now()));
-    });
+    _tabController.addListener(_handleTabChange);
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController
+      ..removeListener(_handleTabChange)
+      ..dispose();
     super.dispose();
   }
 
@@ -356,6 +354,14 @@ class _EntriesPageViewState extends State<EntriesPageView>
       }
     },
   );
+
+  void _handleTabChange() {
+    if (!_tabController.indexIsChanging) {
+      BlocProvider.of<EntriesBloc>(
+        context,
+      ).add(PrepareTab(_tabController.index, DateTime.now()));
+    }
+  }
 }
 
 class _StickyHeader extends SliverPersistentHeaderDelegate {

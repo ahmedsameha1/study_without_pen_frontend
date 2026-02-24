@@ -134,6 +134,7 @@ void main() {
         scoreChip.labelStyle,
         Theme.of(tester.element(find.byWidget(scoreChip))).textTheme.labelSmall,
       );
+      expect(scoreChip.padding, EdgeInsets.zero);
       Chip wrongnessChip = tester.widget(
         find.descendant(
           of: find.byWidget(scoreRankRow),
@@ -150,6 +151,7 @@ void main() {
           tester.element(find.byWidget(wrongnessChip)),
         ).textTheme.labelSmall,
       );
+      expect(wrongnessChip.padding, EdgeInsets.zero);
       Chip rankChip = tester.widget(
         find.descendant(
           of: find.byWidget(scoreRankRow),
@@ -161,6 +163,7 @@ void main() {
         rankChip.labelStyle,
         Theme.of(tester.element(find.byWidget(rankChip))).textTheme.labelSmall,
       );
+      expect(rankChip.padding, EdgeInsets.zero);
       expect(
         find.descendant(
           of: find.byWidget(firstRow),
