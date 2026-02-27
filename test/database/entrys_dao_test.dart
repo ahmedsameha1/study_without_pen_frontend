@@ -432,6 +432,754 @@ void main() {
     });
   });
 
+  group("search entries by text", () {
+    test(
+      'Get all entries that have a text in the question or answer 1',
+      () async {
+        String text = 'hand';
+        String id2 = const Uuid().v4();
+        String id3 = const Uuid().v4();
+        String id4 = const Uuid().v4();
+        String id5 = const Uuid().v4();
+        DateTime creationAt2 = DateTime.utc(2019, 1, 1);
+        DateTime creationAt3 = DateTime.utc(2021, 1, 1);
+        DateTime creationAt4 = DateTime.utc(2018, 1, 1);
+        DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
+        DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
+        DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+        var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answer: text,
+          question: question,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: 3,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id2,
+          fieldListId: fieldListId,
+          answer: answer2,
+          question: text,
+          creationAt: creationAt3,
+          lastModificationAt: lastModificationAt3,
+          order: 2,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id3,
+          fieldListId: fieldListId,
+          answer: text,
+          question: text,
+          creationAt: creationAt2,
+          lastModificationAt: lastModificationAt2,
+          order: 2,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id4,
+          fieldListId: fieldListId,
+          answer: answer4,
+          question: question4,
+          creationAt: creationAt4,
+          lastModificationAt: lastModificationAt4,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id5,
+          fieldListId: fieldListId,
+          answer: text,
+          question: question4,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        final entries = await entrysDao
+            .searchByTextInQuestionOrAnswer(fieldListId, text)
+            .first;
+        expect(entries.length, 4);
+        entry = entries[0];
+        expect(entry.id, id5);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, text);
+        expect(entry.question, question4);
+        expect(entry.creationAt, creationAt);
+        expect(entry.lastModificationAt, lastModificationAt);
+        expect(entry.order, order);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[1];
+        expect(entry.id, id2);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, answer2);
+        expect(entry.question, text);
+        expect(entry.creationAt, creationAt3);
+        expect(entry.lastModificationAt, lastModificationAt3);
+        expect(entry.order, 2);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[2];
+        expect(entry.id, id3);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, text);
+        expect(entry.question, text);
+        expect(entry.creationAt, creationAt2);
+        expect(entry.lastModificationAt, lastModificationAt2);
+        expect(entry.order, 2);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[3];
+        expect(entry.id, id);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, text);
+        expect(entry.question, question);
+        expect(entry.creationAt, creationAt);
+        expect(entry.lastModificationAt, lastModificationAt);
+        expect(entry.order, 3);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+      },
+    );
+
+    test(
+      'Get all entries that have a text in the question or answer 2',
+      () async {
+        String text = 'hand';
+        String texT = '${text}a';
+        String id2 = const Uuid().v4();
+        String id3 = const Uuid().v4();
+        String id4 = const Uuid().v4();
+        String id5 = const Uuid().v4();
+        DateTime creationAt2 = DateTime.utc(2019, 1, 1);
+        DateTime creationAt3 = DateTime.utc(2021, 1, 1);
+        DateTime creationAt4 = DateTime.utc(2018, 1, 1);
+        DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
+        DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
+        DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+        var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answer: texT,
+          question: question,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: 3,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id2,
+          fieldListId: fieldListId,
+          answer: answer2,
+          question: texT,
+          creationAt: creationAt3,
+          lastModificationAt: lastModificationAt3,
+          order: 2,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id3,
+          fieldListId: fieldListId,
+          answer: texT,
+          question: texT,
+          creationAt: creationAt2,
+          lastModificationAt: lastModificationAt2,
+          order: 2,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id4,
+          fieldListId: fieldListId,
+          answer: answer4,
+          question: question4,
+          creationAt: creationAt4,
+          lastModificationAt: lastModificationAt4,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id5,
+          fieldListId: fieldListId,
+          answer: texT,
+          question: question4,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        final entries = await entrysDao
+            .searchByTextInQuestionOrAnswer(fieldListId, text)
+            .first;
+        expect(entries.length, 4);
+        entry = entries[0];
+        expect(entry.id, id5);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, texT);
+        expect(entry.question, question4);
+        expect(entry.creationAt, creationAt);
+        expect(entry.lastModificationAt, lastModificationAt);
+        expect(entry.order, order);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[1];
+        expect(entry.id, id2);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, answer2);
+        expect(entry.question, texT);
+        expect(entry.creationAt, creationAt3);
+        expect(entry.lastModificationAt, lastModificationAt3);
+        expect(entry.order, 2);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[2];
+        expect(entry.id, id3);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, texT);
+        expect(entry.question, texT);
+        expect(entry.creationAt, creationAt2);
+        expect(entry.lastModificationAt, lastModificationAt2);
+        expect(entry.order, 2);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[3];
+        expect(entry.id, id);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, texT);
+        expect(entry.question, question);
+        expect(entry.creationAt, creationAt);
+        expect(entry.lastModificationAt, lastModificationAt);
+        expect(entry.order, 3);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+      },
+    );
+
+    test(
+      'Get all entries that have a text in the question or answer 3',
+      () async {
+        String text = 'hand';
+        String texT = 'a${text}a';
+        String id2 = const Uuid().v4();
+        String id3 = const Uuid().v4();
+        String id4 = const Uuid().v4();
+        String id5 = const Uuid().v4();
+        DateTime creationAt2 = DateTime.utc(2019, 1, 1);
+        DateTime creationAt3 = DateTime.utc(2021, 1, 1);
+        DateTime creationAt4 = DateTime.utc(2018, 1, 1);
+        DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
+        DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
+        DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+        var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answer: texT,
+          question: question,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: 3,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id2,
+          fieldListId: fieldListId,
+          answer: answer2,
+          question: texT,
+          creationAt: creationAt3,
+          lastModificationAt: lastModificationAt3,
+          order: 2,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id3,
+          fieldListId: fieldListId,
+          answer: texT,
+          question: texT,
+          creationAt: creationAt2,
+          lastModificationAt: lastModificationAt2,
+          order: 2,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id4,
+          fieldListId: fieldListId,
+          answer: answer4,
+          question: question4,
+          creationAt: creationAt4,
+          lastModificationAt: lastModificationAt4,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id5,
+          fieldListId: fieldListId,
+          answer: texT,
+          question: question4,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        final entries = await entrysDao
+            .searchByTextInQuestionOrAnswer(fieldListId, text)
+            .first;
+        expect(entries.length, 4);
+        entry = entries[0];
+        expect(entry.id, id5);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, texT);
+        expect(entry.question, question4);
+        expect(entry.creationAt, creationAt);
+        expect(entry.lastModificationAt, lastModificationAt);
+        expect(entry.order, order);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[1];
+        expect(entry.id, id2);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, answer2);
+        expect(entry.question, texT);
+        expect(entry.creationAt, creationAt3);
+        expect(entry.lastModificationAt, lastModificationAt3);
+        expect(entry.order, 2);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[2];
+        expect(entry.id, id3);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, texT);
+        expect(entry.question, texT);
+        expect(entry.creationAt, creationAt2);
+        expect(entry.lastModificationAt, lastModificationAt2);
+        expect(entry.order, 2);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[3];
+        expect(entry.id, id);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, texT);
+        expect(entry.question, question);
+        expect(entry.creationAt, creationAt);
+        expect(entry.lastModificationAt, lastModificationAt);
+        expect(entry.order, 3);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+      },
+    );
+
+    test(
+      'Get all entries that have a text in the question or answer 4',
+      () async {
+        String text = 'hand';
+        String texT = 'a$text';
+        String id2 = const Uuid().v4();
+        String id3 = const Uuid().v4();
+        String id4 = const Uuid().v4();
+        String id5 = const Uuid().v4();
+        DateTime creationAt2 = DateTime.utc(2019, 1, 1);
+        DateTime creationAt3 = DateTime.utc(2021, 1, 1);
+        DateTime creationAt4 = DateTime.utc(2018, 1, 1);
+        DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
+        DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
+        DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+        var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answer: texT,
+          question: question,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: 3,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id2,
+          fieldListId: fieldListId,
+          answer: answer2,
+          question: texT,
+          creationAt: creationAt3,
+          lastModificationAt: lastModificationAt3,
+          order: 2,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id3,
+          fieldListId: fieldListId,
+          answer: texT,
+          question: texT,
+          creationAt: creationAt2,
+          lastModificationAt: lastModificationAt2,
+          order: 2,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id4,
+          fieldListId: fieldListId,
+          answer: answer4,
+          question: question4,
+          creationAt: creationAt4,
+          lastModificationAt: lastModificationAt4,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id5,
+          fieldListId: fieldListId,
+          answer: texT,
+          question: question4,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        final entries = await entrysDao
+            .searchByTextInQuestionOrAnswer(fieldListId, text)
+            .first;
+        expect(entries.length, 4);
+        entry = entries[0];
+        expect(entry.id, id5);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, texT);
+        expect(entry.question, question4);
+        expect(entry.creationAt, creationAt);
+        expect(entry.lastModificationAt, lastModificationAt);
+        expect(entry.order, order);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[1];
+        expect(entry.id, id2);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, answer2);
+        expect(entry.question, texT);
+        expect(entry.creationAt, creationAt3);
+        expect(entry.lastModificationAt, lastModificationAt3);
+        expect(entry.order, 2);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[2];
+        expect(entry.id, id3);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, texT);
+        expect(entry.question, texT);
+        expect(entry.creationAt, creationAt2);
+        expect(entry.lastModificationAt, lastModificationAt2);
+        expect(entry.order, 2);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[3];
+        expect(entry.id, id);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, texT);
+        expect(entry.question, question);
+        expect(entry.creationAt, creationAt);
+        expect(entry.lastModificationAt, lastModificationAt);
+        expect(entry.order, 3);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+      },
+    );
+
+    test(
+      'Get all entries that have a text in the question or answer 5',
+      () async {
+        String text = 'hand';
+        String texT = 'a$text';
+        String teXt = '${text}a';
+        String tExt = 'a${text}a';
+        String id2 = const Uuid().v4();
+        String id3 = const Uuid().v4();
+        String id4 = const Uuid().v4();
+        String id5 = const Uuid().v4();
+        DateTime creationAt2 = DateTime.utc(2019, 1, 1);
+        DateTime creationAt3 = DateTime.utc(2021, 1, 1);
+        DateTime creationAt4 = DateTime.utc(2018, 1, 1);
+        DateTime lastModificationAt2 = DateTime.utc(2019, 2, 1);
+        DateTime lastModificationAt3 = DateTime.utc(2021, 2, 1);
+        DateTime lastModificationAt4 = DateTime.utc(2019, 2, 1);
+        var entry = Entry(
+          id: id,
+          fieldListId: fieldListId,
+          answer: text,
+          question: question,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: 3,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id2,
+          fieldListId: fieldListId,
+          answer: answer2,
+          question: teXt,
+          creationAt: creationAt3,
+          lastModificationAt: lastModificationAt3,
+          order: 2,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id3,
+          fieldListId: fieldListId,
+          answer: text,
+          question: tExt,
+          creationAt: creationAt2,
+          lastModificationAt: lastModificationAt2,
+          order: 2,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id4,
+          fieldListId: fieldListId,
+          answer: answer4,
+          question: question4,
+          creationAt: creationAt4,
+          lastModificationAt: lastModificationAt4,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        entry = Entry(
+          id: id5,
+          fieldListId: fieldListId,
+          answer: texT,
+          question: question4,
+          creationAt: creationAt,
+          lastModificationAt: lastModificationAt,
+          order: order,
+          didAskedAtCurrentTestRound: didAskedAtCurrentTestRound,
+          emulatedCreatedAt: emulatedCreatedAt,
+          rank: rank,
+          askedCount: askedCount,
+          wronglyAnsweredCount: wronglyAnsweredCount,
+        );
+        await entrysDao.create(entry.toCompanion(true));
+        final entries = await entrysDao
+            .searchByTextInQuestionOrAnswer(fieldListId, text)
+            .first;
+        expect(entries.length, 4);
+        entry = entries[0];
+        expect(entry.id, id5);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, texT);
+        expect(entry.question, question4);
+        expect(entry.creationAt, creationAt);
+        expect(entry.lastModificationAt, lastModificationAt);
+        expect(entry.order, order);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[1];
+        expect(entry.id, id2);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, answer2);
+        expect(entry.question, teXt);
+        expect(entry.creationAt, creationAt3);
+        expect(entry.lastModificationAt, lastModificationAt3);
+        expect(entry.order, 2);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[2];
+        expect(entry.id, id3);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, text);
+        expect(entry.question, tExt);
+        expect(entry.creationAt, creationAt2);
+        expect(entry.lastModificationAt, lastModificationAt2);
+        expect(entry.order, 2);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+        entry = entries[3];
+        expect(entry.id, id);
+        expect(entry.fieldListId, fieldListId);
+        expect(entry.answer, text);
+        expect(entry.question, question);
+        expect(entry.creationAt, creationAt);
+        expect(entry.lastModificationAt, lastModificationAt);
+        expect(entry.order, 3);
+        expect(entry.didAskedAtCurrentTestRound, didAskedAtCurrentTestRound);
+        expect(entry.emulatedCreatedAt, emulatedCreatedAt);
+        expect(entry.rank, rank);
+        expect(entry.askedCount, askedCount);
+        expect(entry.wronglyAnsweredCount, wronglyAnsweredCount);
+      },
+    );
+  });
+
   group("Create an Entry", () {
     test("Invalid Entry: id is an invalid UUID v4", () async {
       var entry = Entry(

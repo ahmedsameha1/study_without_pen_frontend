@@ -10,7 +10,7 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
   EntrysDao(super.appDatabase);
 
   Future<int> create(EntrysCompanion entrysCompanion) {
-    // the following checks are here because it is hard to write them in a check  
+    // the following checks are here because it is hard to write them in a check
     // function in the definition of the table
     if (entrysCompanion.id.present && !isValid(entrysCompanion.id.value)) {
       throw InvalidDataException("id");
@@ -65,6 +65,28 @@ class EntrysDao extends DatabaseAccessor<AppDatabase> with _$EntrysDaoMixin {
     return (select(
       entrys,
     )..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+  }
+
+  Stream<List<Entry>> searchByTextInQuestionOrAnswer(
+    String fieldListId,
+    String text,
+  ) {
+    final String searchText = '%$text%';
+    return (select(entrys)
+          ..where(
+            (row) =>
+                row.fieldListId.equals(fieldListId) &
+                (row.question.like(searchText) | row.answer.like(searchText)),
+          )
+          ..orderBy([
+            ((row) =>
+                OrderingTerm(expression: row.order, mode: OrderingMode.asc)),
+            ((row) => OrderingTerm(
+              expression: row.creationAt,
+              mode: OrderingMode.desc,
+            )),
+          ]))
+        .watch();
   }
 
   Future<bool> mutate(EntrysCompanion entrysCompanion) {
