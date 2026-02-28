@@ -325,7 +325,7 @@ void main() {
     build: buildBloc,
     act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListId)),
     verify: (_) {
-      verify(() => watchEntriesUsecase.call(fieldListId)).called(1);
+      verify(() => watchEntriesUsecase.watchData(fieldListId)).called(1);
     },
   );
 
@@ -334,7 +334,7 @@ void main() {
     'when watchEntriesUsecase.call stream emits EntriesPageData',
     setUp: () {
       when(
-        () => watchEntriesUsecase.call(fieldListEntity.id!),
+        () => watchEntriesUsecase.watchData(fieldListEntity.id!),
       ).thenAnswer((_) => Stream.value(entriesPageData1));
     },
     build: buildBloc,
@@ -838,7 +838,7 @@ void main() {
     setUp: () {
       watchEntriesUsecase = MockWatchEntriesUsecase();
       when(
-        () => watchEntriesUsecase.call(fieldListEntity.id!),
+        () => watchEntriesUsecase.watchData(fieldListEntity.id!),
       ).thenAnswer((_) => Stream.value(entriesPageData2));
     },
     build: buildBloc,
@@ -1035,7 +1035,7 @@ void main() {
     setUp: () {
       watchEntriesUsecase = MockWatchEntriesUsecase();
       when(
-        () => watchEntriesUsecase.call(fieldListEntity.id!),
+        () => watchEntriesUsecase.watchData(fieldListEntity.id!),
       ).thenAnswer((_) => Stream.value(entriesPageData3));
     },
     build: buildBloc,
@@ -1138,7 +1138,7 @@ void main() {
     setUp: () {
       watchEntriesUsecase = MockWatchEntriesUsecase();
       when(
-        () => watchEntriesUsecase.call(fieldListEntity.id!),
+        () => watchEntriesUsecase.watchData(fieldListEntity.id!),
       ).thenAnswer((_) => Stream.value(entriesPageData4));
     },
     build: buildBloc,
@@ -1335,7 +1335,7 @@ void main() {
     setUp: () {
       watchEntriesUsecase = MockWatchEntriesUsecase();
       when(
-        () => watchEntriesUsecase.call(fieldListEntity.id!),
+        () => watchEntriesUsecase.watchData(fieldListEntity.id!),
       ).thenAnswer((_) => Stream.value(entriesPageData3));
     },
     build: buildBloc,
@@ -1438,7 +1438,7 @@ void main() {
     setUp: () {
       watchEntriesUsecase = MockWatchEntriesUsecase();
       when(
-        () => watchEntriesUsecase.call(fieldListEntity.id!),
+        () => watchEntriesUsecase.watchData(fieldListEntity.id!),
       ).thenAnswer((_) => Stream.value(entriesPageData5));
     },
     build: buildBloc,
@@ -1630,7 +1630,7 @@ void main() {
     build: buildBloc,
     setUp: () {
       when(
-        () => watchEntriesUsecase.call(fieldListId),
+        () => watchEntriesUsecase.watchData(fieldListId),
       ).thenAnswer((_) => Stream.error(Exception('oops!')));
     },
     act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListId)),
@@ -1646,7 +1646,7 @@ void main() {
     build: buildBloc,
     setUp: () {
       when(
-        () => watchEntriesUsecase.call(fieldListId),
+        () => watchEntriesUsecase.watchData(fieldListId),
       ).thenThrow((_) => SqliteException(1, 'sqlexception'));
     },
     act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListId)),

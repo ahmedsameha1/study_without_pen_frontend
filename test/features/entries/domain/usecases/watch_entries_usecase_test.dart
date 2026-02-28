@@ -58,77 +58,122 @@ void main() {
     fieldListsRepository,
     entriesRepository,
   );
-  test('call() throws what EntriesRepository.watch() throw', () {
-    when(
-      () => fieldListsRepository.watchFieldList(fieldListId),
-    ).thenAnswer((_) => Stream.empty());
-    when(
-      () => entriesRepository.watch(fieldListId),
-    ).thenThrow(SqliteException(1, 'sqlexception1'));
-    expect(
-      () => watchEntriesUsecase.call(fieldListId),
-      throwsA(
-        predicate(
-          (e) =>
-              e is SqliteException &&
-              e.extendedResultCode == 1 &&
-              e.message == 'sqlexception1',
-        ),
-      ),
-    );
-  });
 
-  test('call() throws what FieldListsRepository.watchFieldList() throw', () {
-    when(
-      () => fieldListsRepository.watchFieldList(fieldListId),
-    ).thenThrow(SqliteException(1, 'sqlexception1'));
-    when(
-      () => entriesRepository.watch(fieldListId),
-    ).thenAnswer((_) => Stream.empty());
-    expect(
-      () => watchEntriesUsecase.call(fieldListId),
-      throwsA(
-        predicate(
-          (e) =>
-              e is SqliteException &&
-              e.extendedResultCode == 1 &&
-              e.message == 'sqlexception1',
-        ),
-      ),
-    );
-  });
-
-  test(
-    '''call() doesn't return a Stream of EntriesPageData if any of '''
-    '''FieldListsRepository.watchFieldList() and EntriesRepository.watch() return an empty Stream''',
-    () {
+  group('watchData()', () {
+    test('Throws what EntriesRepository.watch() throw', () {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
       ).thenAnswer((_) => Stream.empty());
       when(
         () => entriesRepository.watch(fieldListId),
-      ).thenAnswer((_) => Stream.value(entries));
-      expect(watchEntriesUsecase.call(fieldListId), emitsInOrder([]));
+      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      expect(
+        () => watchEntriesUsecase.watchData(fieldListId),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception1',
+          ),
+        ),
+      );
+    });
 
-      ///
+    test('Throws what FieldListsRepository.watchFieldList() throw', () {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenAnswer((_) => Stream.value(fieldListEntity));
+      ).thenThrow(SqliteException(1, 'sqlexception1'));
       when(
         () => entriesRepository.watch(fieldListId),
       ).thenAnswer((_) => Stream.empty());
-      expect(watchEntriesUsecase.call(fieldListId), emitsInOrder([]));
-    },
-  );
+      expect(
+        () => watchEntriesUsecase.watchData(fieldListId),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception1',
+          ),
+        ),
+      );
+    });
 
-  test(
-    '''call() returns a Stream of EntriesPageData with what '''
-    '''entriesRepository.watch() and fieldListsRepository.watchFieldList() return''',
-    () {
+    test(
+      '''Return an empty Stream of EntriesPageData if any of '''
+      '''FieldListsRepository.watchFieldList() and EntriesRepository.watch() return an empty Stream''',
+      () {
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => Stream.empty());
+        when(
+          () => entriesRepository.watch(fieldListId),
+        ).thenAnswer((_) => Stream.value(entries));
+        expect(watchEntriesUsecase.watchData(fieldListId), emitsInOrder([]));
+
+        ///
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => Stream.value(fieldListEntity));
+        when(
+          () => entriesRepository.watch(fieldListId),
+        ).thenAnswer((_) => Stream.empty());
+        expect(watchEntriesUsecase.watchData(fieldListId), emitsInOrder([]));
+      },
+    );
+
+    test(
+      '''Returns a Stream of EntriesPageData with what '''
+      '''entriesRepository.watch() and fieldListsRepository.watchFieldList() return''',
+      () {
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => Stream.fromIterable([fieldListEntity]));
+        when(() => entriesRepository.watch(fieldListId)).thenAnswer(
+          (_) => Stream.fromIterable([
+            [entries[0]],
+            [entries[0], entries[1]],
+            [entries[1]],
+          ]),
+        );
+        expect(
+          watchEntriesUsecase.watchData(fieldListId),
+          emitsInOrder([
+            EntriesPageData(fieldList: fieldListEntity, entries: [entries[0]]),
+            EntriesPageData(
+              fieldList: fieldListEntity,
+              entries: [entries[0], entries[1]],
+            ),
+            EntriesPageData(fieldList: fieldListEntity, entries: [entries[1]]),
+          ]),
+        );
+      },
+    );
+  });
+
+  group('watchSearchData()', () {
+    final String text = 'text';
+    test('Throws what EntriesRepository.search() throw', () {
       when(
-        () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenAnswer((_) => Stream.fromIterable([fieldListEntity]));
-      when(() => entriesRepository.watch(fieldListId)).thenAnswer(
+        () => entriesRepository.search(fieldListId, text),
+      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      expect(
+        () => watchEntriesUsecase.watchSearchData(fieldListId, text),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception1',
+          ),
+        ),
+      );
+    });
+
+    test('''Returns a Stream of List<EntryEntity> with what '''
+        '''entriesRepository.watchSearchData() return''', () {
+      when(() => entriesRepository.search(fieldListId, text)).thenAnswer(
         (_) => Stream.fromIterable([
           [entries[0]],
           [entries[0], entries[1]],
@@ -136,16 +181,13 @@ void main() {
         ]),
       );
       expect(
-        watchEntriesUsecase.call(fieldListId),
+        watchEntriesUsecase.watchSearchData(fieldListId, text),
         emitsInOrder([
-          EntriesPageData(fieldList: fieldListEntity, entries: [entries[0]]),
-          EntriesPageData(
-            fieldList: fieldListEntity,
-            entries: [entries[0], entries[1]],
-          ),
-          EntriesPageData(fieldList: fieldListEntity, entries: [entries[1]]),
+          [entries[0]],
+          [entries[0], entries[1]],
+          [entries[1]],
         ]),
       );
-    },
-  );
+    });
+  });
 }

@@ -32,7 +32,7 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     emit(state.copyWith(status: EntriesStatus.loading));
     try {
       await emit.onEach<EntriesPageData>(
-        _watchEntriesUsecase.call(event.fieldListId),
+        _watchEntriesUsecase.watchData(event.fieldListId),
         onData: (entriesPageData) {
           add(NewData(entriesPageData));
           add(PrepareTab(state.currentTabIndex, DateTime.now()));
