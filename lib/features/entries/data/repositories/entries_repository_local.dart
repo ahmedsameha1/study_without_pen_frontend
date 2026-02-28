@@ -1,16 +1,16 @@
 import 'package:drift/drift.dart';
-import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
-import 'package:study_without_pen_by_flutter/features/entries/data/repositories/entries_repository.dart';
-import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
+
+import '../../../../database/app_database.dart';
+import '../../../../database/entrys_dao.dart';
+import '../../domain/models/entry_entity.dart';
+import 'entries_repository.dart';
 
 class EntriesRepositoryLocal implements EntriesRepository {
   const EntriesRepositoryLocal(this._entrysDao);
   final EntrysDao _entrysDao;
 
   @override
-  Stream<List<EntryEntity>> watch(String fieldListId) {
-    return _entrysDao
+  Stream<List<EntryEntity>> watch(String fieldListId) => _entrysDao
         .watchByFieldListId(fieldListId)
         .map(
           (list) => list
@@ -39,11 +39,40 @@ class EntriesRepositoryLocal implements EntriesRepository {
               )
               .toList(),
         );
-  }
 
   @override
-  Future<int> create(EntryEntity entryEntity) {
-    return _entrysDao.create(
+  Stream<List<EntryEntity>> search(String fieldListId, String text) => _entrysDao
+        .searchByTextInQuestionOrAnswer(fieldListId, text)
+        .map(
+          (list) => list
+              .map(
+                (entry) => EntryEntity(
+                  id: entry.id,
+                  fieldListId: entry.fieldListId,
+                  answer: entry.answer,
+                  question: entry.question,
+                  creationAt: entry.creationAt,
+                  lastModificationAt: entry.lastModificationAt,
+                  order: entry.order,
+                  didAskedAtCurrentTestRound: entry.didAskedAtCurrentTestRound,
+                  emulatedCreatedAt: entry.emulatedCreatedAt,
+                  rank: switch (entry.rank) {
+                    0 => Rank.low,
+                    1 => Rank.normal,
+                    2 => Rank.important,
+                    3 => Rank.vital,
+                    _ => throw AssertionError('Invalid rank'),
+                  },
+                  askedCount: entry.askedCount.toInt(),
+                  wronglyAnsweredCount: entry.wronglyAnsweredCount.toInt(),
+                  lastAskedAt: entry.lastAskedAt,
+                ),
+              )
+              .toList(),
+        );
+
+  @override
+  Future<int> create(EntryEntity entryEntity) => _entrysDao.create(
       EntrysCompanion(
         fieldListId: Value(entryEntity.fieldListId),
         answer: Value(entryEntity.answer),
@@ -62,5 +91,4 @@ class EntriesRepositoryLocal implements EntriesRepository {
         ),
       ),
     );
-  }
 }
