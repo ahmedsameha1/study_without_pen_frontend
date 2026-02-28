@@ -1036,4 +1036,43 @@ void main() {
       },
     );
   });
+
+  group('watchSearchData()', () {
+    final String text = 'text';
+    test('Throws what EntriesRepository.search() throw', () {
+      when(
+        () => entriesRepository.search(fieldListId, text),
+      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      expect(
+        () => watchEntriesUsecase.watchSearchData(fieldListId, text),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception1',
+          ),
+        ),
+      );
+    });
+
+    test('''Returns a Stream of List<EntryEntity> with what '''
+        '''entriesRepository.watchSearchData() return''', () {
+      when(() => entriesRepository.search(fieldListId, text)).thenAnswer(
+        (_) => Stream.fromIterable([
+          [entries[0]],
+          [entries[0], entries[1]],
+          [entries[1]],
+        ]),
+      );
+      expect(
+        watchEntriesUsecase.watchSearchData(fieldListId, text),
+        emitsInOrder([
+          [entries[0]],
+          [entries[0], entries[1]],
+          [entries[1]],
+        ]),
+      );
+    });
+  });
 }

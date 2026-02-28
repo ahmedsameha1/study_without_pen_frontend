@@ -141,4 +141,7 @@ class WatchEntriesUsecase {
         }
       }
     });
+
+  Stream<List<EntryEntity>> watchSearchData(String fieldListId, String text) =>
+      _entriesRepository.search(fieldListId, text);
 }

@@ -162,7 +162,7 @@ void main() {
       setUp(() {
         watchEntriesUsecase = MockWatchEntriesUsecase();
         when(
-          () => watchEntriesUsecase.call(fieldListEntity.id!),
+          () => watchEntriesUsecase.watchData(fieldListEntity.id!),
         ).thenAnswer((_) => Stream.value(entriesPageData));
       });
 
@@ -193,7 +193,9 @@ void main() {
           fieldListEntity.id!,
           fieldListEntity.fieldId,
         );
-        verify(() => watchEntriesUsecase.call(fieldListEntity.id!)).called(1);
+        verify(
+          () => watchEntriesUsecase.watchData(fieldListEntity.id!),
+        ).called(1);
       });
     });
 
