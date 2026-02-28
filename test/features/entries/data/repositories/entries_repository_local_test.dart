@@ -26,21 +26,20 @@ void main() {
     wronglyAnsweredCount: 2,
   );
 
-  test('watch() throws what entrysDao.watchByFieldListId() throw', () {
-    when(
-      () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
-    ).thenThrow(SqliteException(1, 'sqlexception'));
-    expect(
-      () => entriesRepository.watch(entryEntity.fieldListId),
-      throwsA(
-        predicate((e) => e is SqliteException && e.message == 'sqlexception'),
-      ),
-    );
-  });
+  group('watch()', () {
+    test('Throws what entrysDao.watchByFieldListId() throw', () {
+      when(
+        () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
+      ).thenThrow(SqliteException(1, 'sqlexception'));
+      expect(
+        () => entriesRepository.watch(entryEntity.fieldListId),
+        throwsA(
+          predicate((e) => e is SqliteException && e.message == 'sqlexception'),
+        ),
+      );
+    });
 
-  test(
-    'watch() returns what entrysDao.watchByFieldListId() return: rank normal',
-    () {
+    test('Returns what entrysDao.watchByFieldListId() return: rank normal', () {
       when(
         () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
       ).thenAnswer(
@@ -66,12 +65,9 @@ void main() {
           [entryEntity],
         ]),
       );
-    },
-  );
+    });
 
-  test(
-    'watch() returns what entrysDao.watchByFieldListId() return: rank low',
-    () {
+    test('Returns what entrysDao.watchByFieldListId() return: rank low', () {
       when(
         () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
       ).thenAnswer(
@@ -97,43 +93,44 @@ void main() {
           [entryEntity.copyWith(rank: Rank.low)],
         ]),
       );
-    },
-  );
+    });
 
-  test(
-    'watch() returns what entrysDao.watchByFieldListId() return: rank important',
-    () {
-      when(
-        () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
-      ).thenAnswer(
-        (_) => Stream.value([
-          Entry(
-            id: entryEntity.id!,
-            fieldListId: entryEntity.fieldListId,
-            answer: entryEntity.answer,
-            question: entryEntity.question,
-            creationAt: entryEntity.creationAt,
-            lastModificationAt: entryEntity.lastModificationAt,
-            order: entryEntity.order,
-            didAskedAtCurrentTestRound: entryEntity.didAskedAtCurrentTestRound,
-            rank: Rank.important.index,
-            askedCount: BigInt.from(entryEntity.askedCount),
-            wronglyAnsweredCount: BigInt.from(entryEntity.wronglyAnsweredCount),
-          ),
-        ]),
-      );
-      expect(
-        entriesRepository.watch(entryEntity.fieldListId),
-        emitsInOrder([
-          [entryEntity.copyWith(rank: Rank.important)],
-        ]),
-      );
-    },
-  );
+    test(
+      'Returns what entrysDao.watchByFieldListId() return: rank important',
+      () {
+        when(
+          () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
+        ).thenAnswer(
+          (_) => Stream.value([
+            Entry(
+              id: entryEntity.id!,
+              fieldListId: entryEntity.fieldListId,
+              answer: entryEntity.answer,
+              question: entryEntity.question,
+              creationAt: entryEntity.creationAt,
+              lastModificationAt: entryEntity.lastModificationAt,
+              order: entryEntity.order,
+              didAskedAtCurrentTestRound:
+                  entryEntity.didAskedAtCurrentTestRound,
+              rank: Rank.important.index,
+              askedCount: BigInt.from(entryEntity.askedCount),
+              wronglyAnsweredCount: BigInt.from(
+                entryEntity.wronglyAnsweredCount,
+              ),
+              lastAskedAt: entryEntity.lastAskedAt,
+            ),
+          ]),
+        );
+        expect(
+          entriesRepository.watch(entryEntity.fieldListId),
+          emitsInOrder([
+            [entryEntity.copyWith(rank: Rank.important)],
+          ]),
+        );
+      },
+    );
 
-  test(
-    'watch() returns what entrysDao.watchByFieldListId() return: rank vital',
-    () {
+    test('Returns what entrysDao.watchByFieldListId() return: rank vital', () {
       when(
         () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
       ).thenAnswer(
@@ -159,8 +156,180 @@ void main() {
           [entryEntity.copyWith(rank: Rank.vital)],
         ]),
       );
-    },
-  );
+    });
+
+    group('search()', () {
+      final String text = 'text';
+      test('Throws what entrysDao.searchByTextInQuestionOrAnswer() throw', () {
+        when(
+          () => entrysDao.searchByTextInQuestionOrAnswer(
+            entryEntity.fieldListId,
+            text,
+          ),
+        ).thenThrow(SqliteException(1, 'sqlexception'));
+        expect(
+          () => entriesRepository.search(entryEntity.fieldListId, text),
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message == 'sqlexception',
+            ),
+          ),
+        );
+      });
+
+      test(
+        'Returns what entrysDao.searchByTextInQuestionOrAnswer() return: rank normal',
+        () {
+          when(
+            () => entrysDao.searchByTextInQuestionOrAnswer(
+              entryEntity.fieldListId,
+              text,
+            ),
+          ).thenAnswer(
+            (_) => Stream.value([
+              Entry(
+                id: entryEntity.id!,
+                fieldListId: entryEntity.fieldListId,
+                answer: entryEntity.answer,
+                question: entryEntity.question,
+                creationAt: entryEntity.creationAt,
+                lastModificationAt: entryEntity.lastModificationAt,
+                order: entryEntity.order,
+                didAskedAtCurrentTestRound:
+                    entryEntity.didAskedAtCurrentTestRound,
+                rank: entryEntity.rank.index,
+                askedCount: BigInt.from(entryEntity.askedCount),
+                wronglyAnsweredCount: BigInt.from(
+                  entryEntity.wronglyAnsweredCount,
+                ),
+                lastAskedAt: entryEntity.lastAskedAt,
+              ),
+            ]),
+          );
+          expect(
+            entriesRepository.search(entryEntity.fieldListId, text),
+            emitsInOrder([
+              [entryEntity],
+            ]),
+          );
+        },
+      );
+
+      test(
+        'Returns what entrysDao.searchByTextInQuestionOrAnswer() return: rank low',
+        () {
+          when(
+            () => entrysDao.searchByTextInQuestionOrAnswer(
+              entryEntity.fieldListId,
+              text,
+            ),
+          ).thenAnswer(
+            (_) => Stream.value([
+              Entry(
+                id: entryEntity.id!,
+                fieldListId: entryEntity.fieldListId,
+                answer: entryEntity.answer,
+                question: entryEntity.question,
+                creationAt: entryEntity.creationAt,
+                lastModificationAt: entryEntity.lastModificationAt,
+                order: entryEntity.order,
+                didAskedAtCurrentTestRound:
+                    entryEntity.didAskedAtCurrentTestRound,
+                rank: Rank.low.index,
+                askedCount: BigInt.from(entryEntity.askedCount),
+                wronglyAnsweredCount: BigInt.from(
+                  entryEntity.wronglyAnsweredCount,
+                ),
+                lastAskedAt: entryEntity.lastAskedAt,
+              ),
+            ]),
+          );
+          expect(
+            entriesRepository.search(entryEntity.fieldListId, text),
+            emitsInOrder([
+              [entryEntity.copyWith(rank: Rank.low)],
+            ]),
+          );
+        },
+      );
+
+      test(
+        'Returns what entrysDao.searchByTextInQuestionOrAnswer() return: rank important',
+        () {
+          when(
+            () => entrysDao.searchByTextInQuestionOrAnswer(
+              entryEntity.fieldListId,
+              text,
+            ),
+          ).thenAnswer(
+            (_) => Stream.value([
+              Entry(
+                id: entryEntity.id!,
+                fieldListId: entryEntity.fieldListId,
+                answer: entryEntity.answer,
+                question: entryEntity.question,
+                creationAt: entryEntity.creationAt,
+                lastModificationAt: entryEntity.lastModificationAt,
+                order: entryEntity.order,
+                didAskedAtCurrentTestRound:
+                    entryEntity.didAskedAtCurrentTestRound,
+                rank: Rank.important.index,
+                askedCount: BigInt.from(entryEntity.askedCount),
+                wronglyAnsweredCount: BigInt.from(
+                  entryEntity.wronglyAnsweredCount,
+                ),
+                lastAskedAt: entryEntity.lastAskedAt,
+              ),
+            ]),
+          );
+          expect(
+            entriesRepository.search(entryEntity.fieldListId, text),
+            emitsInOrder([
+              [entryEntity.copyWith(rank: Rank.important)],
+            ]),
+          );
+        },
+      );
+
+      test(
+        'Returns what entrysDao.searchByTextInQuestionOrAnswer() return: rank vital',
+        () {
+          when(
+            () => entrysDao.searchByTextInQuestionOrAnswer(
+              entryEntity.fieldListId,
+              text,
+            ),
+          ).thenAnswer(
+            (_) => Stream.value([
+              Entry(
+                id: entryEntity.id!,
+                fieldListId: entryEntity.fieldListId,
+                answer: entryEntity.answer,
+                question: entryEntity.question,
+                creationAt: entryEntity.creationAt,
+                lastModificationAt: entryEntity.lastModificationAt,
+                order: entryEntity.order,
+                didAskedAtCurrentTestRound:
+                    entryEntity.didAskedAtCurrentTestRound,
+                rank: Rank.vital.index,
+                askedCount: BigInt.from(entryEntity.askedCount),
+                wronglyAnsweredCount: BigInt.from(
+                  entryEntity.wronglyAnsweredCount,
+                ),
+                lastAskedAt: entryEntity.lastAskedAt,
+              ),
+            ]),
+          );
+          expect(
+            entriesRepository.search(entryEntity.fieldListId, text),
+            emitsInOrder([
+              [entryEntity.copyWith(rank: Rank.vital)],
+            ]),
+          );
+        },
+      );
+    });
+  });
 
   test('create() throws what EntrysDao.create() throw', () {
     when(
