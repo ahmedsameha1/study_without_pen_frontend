@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +19,10 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     );
     on<NewData>(_onNewData, transformer: sequential());
     on<PrepareTab>(_onPrepareTab, transformer: sequential());
+    on<SearchInputChanged>(_onSearchInputChanged, transformer: restartable());
+    on<OpenSearch>(_onOpenSearch, transformer: sequential());
+    on<CloseSearch>(_onCloseSearch, transformer: sequential());
+    on<SubmitSearch>(_onSubmitSearch, transformer: sequential());
   }
   final WatchEntriesUsecase _watchEntriesUsecase;
   static const scoreTabIndex = 0;
@@ -126,6 +132,7 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
                     }
                   }
                 }),
+              5 => [],
               _ => throw ArgumentError(''),
             },
             List<EntryEntity>.from(state.entriesPageData!.entries),
@@ -136,5 +143,117 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     } else {
       emit(state.copyWith(currentTabIndex: event.tabIndex));
     }
+  }
+
+  Future<void> _onSearchInputChanged(
+    SearchInputChanged event,
+    Emitter<EntriesState> emit,
+  ) async {
+    if (event.searchText.isNotEmpty) {
+      List<TabData> tabs = [...state.tabs];
+      final tab = tabs.removeAt(5);
+      tabs.insert(
+        5,
+        const TabData(
+          status: TabDataStatus.loading,
+          name: 'search',
+          description: 'search',
+        ),
+      );
+      emit(state.copyWith(tabs: tabs));
+      await emit.forEach(
+        _watchEntriesUsecase.watchSearchData(
+          event.fieldListId,
+          event.searchText,
+        ),
+        onData: (entries) {
+          List<TabData> tabs = [...state.tabs];
+          final tab = tabs.removeAt(5);
+          tabs.insert(
+            5,
+            TabData(
+              status: TabDataStatus.ready,
+              name: 'search',
+              description: 'search',
+              outdated: false,
+              entries: entries,
+            ),
+          );
+          return state.copyWith(tabs: tabs);
+        },
+      );
+    } else {
+      List<TabData> tabs = [...state.tabs];
+      final tab = tabs.removeAt(5);
+      tabs.insert(
+        5,
+        const TabData(
+          status: TabDataStatus.loading,
+          name: 'search',
+          description: 'search',
+        ),
+      );
+      emit(state.copyWith(tabs: tabs));
+    }
+  }
+
+  Future<void> _onSubmitSearch(
+    SubmitSearch event,
+    Emitter<EntriesState> emit,
+  ) async {
+    if (event.searchText.isNotEmpty) {
+      List<TabData> tabs = [...state.tabs];
+      final tab = tabs.removeAt(5);
+      tabs.insert(5, const TabData(name: 'search', description: 'search'));
+      emit(state.copyWith(tabs: tabs, status: EntriesStatus.success));
+      await emit.forEach(
+        _watchEntriesUsecase.watchSearchData(
+          event.fieldListId,
+          event.searchText,
+        ),
+        onData: (entries) {
+          List<TabData> tabs = [...state.tabs];
+          final tab = tabs.removeAt(5);
+          tabs.insert(
+            5,
+            TabData(
+              status: TabDataStatus.ready,
+              name: 'search',
+              description: 'search',
+              outdated: false,
+              entries: entries,
+            ),
+          );
+          return state.copyWith(tabs: tabs, status: EntriesStatus.success);
+        },
+      );
+    } else {
+      List<TabData> tabs = [...state.tabs];
+      final tab = tabs.removeAt(5);
+      tabs.insert(
+        5,
+        const TabData(
+          status: TabDataStatus.ready,
+          name: 'search',
+          description: 'search',
+          outdated: false,
+        ),
+      );
+      emit(state.copyWith(tabs: tabs));
+    }
+  }
+
+  Future<void> _onOpenSearch(
+    OpenSearch event,
+    Emitter<EntriesState> emit,
+  ) async {
+    emit(state.copyWith(status: EntriesStatus.search));
+  }
+
+  Future<void> _onCloseSearch(
+    CloseSearch event,
+    Emitter<EntriesState> emit,
+  ) async {
+    emit(state.copyWith(status: EntriesStatus.success));
   }
 }

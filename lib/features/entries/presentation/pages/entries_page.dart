@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -46,6 +48,14 @@ class EntriesPageView extends StatefulWidget {
 class _EntriesPageViewState extends State<EntriesPageView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  SearchController _searchController = SearchController();
+  Timer? _debounceTimer;
+
+  @override
+  void initState() {
+    _searchController.addListener(_handleSearchChange);
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -62,11 +72,19 @@ class _EntriesPageViewState extends State<EntriesPageView>
     _tabController
       ..removeListener(_handleTabChange)
       ..dispose();
+    _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<EntriesBloc, EntriesState>(
+  Widget build(BuildContext context) => BlocConsumer<EntriesBloc, EntriesState>(
+    listenWhen: (previous, current) => previous.status != EntriesStatus.search,
+    listener: (context, state) {
+      if (state.status == EntriesStatus.search) {
+        _searchController.openView();
+      }
+    },
     builder: (context, state) {
       if (state.status == EntriesStatus.loading ||
           state.status == EntriesStatus.initial) {
@@ -101,13 +119,76 @@ class _EntriesPageViewState extends State<EntriesPageView>
                           title: Text(state.entriesPageData!.fieldList.name),
                           actions: [
                             SearchAnchor(
+                              searchController: _searchController,
                               builder: (context, controller) => IconButton(
                                 onPressed: () {
-                                  controller.openView();
+                                  BlocProvider.of<EntriesBloc>(
+                                    context,
+                                  ).add(OpenSearch());
+                                  _searchController.text = '';
                                 },
                                 icon: const Icon(Icons.search),
                               ),
                               suggestionsBuilder: (context, controller) => [],
+                              viewBuilder: (suggestions) {
+                                if (_searchController.text.isEmpty) {
+                                  return const SizedBox.shrink();
+                                } else {
+                                  return BlocProvider<EntriesBloc>.value(
+                                    value: BlocProvider.of<EntriesBloc>(
+                                      context,
+                                    ),
+                                    child: Builder(
+                                      builder: (context) =>
+                                          BlocSelector<
+                                            EntriesBloc,
+                                            EntriesState,
+                                            TabData
+                                          >(
+                                            selector: (state) => state.tabs
+                                                .where(
+                                                  (tab) => tab.name == 'search',
+                                                )
+                                                .first,
+                                            builder: (context, state) {
+                                              if (state.status ==
+                                                  TabDataStatus.loading) {
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              } else {
+                                                return Container(
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).scaffoldBackgroundColor,
+                                                  alignment: Alignment.center,
+                                                  child: ListView(
+                                                    children: state.entries
+                                                        .map(
+                                                          (entry) => EntryCard(
+                                                            entry: entry,
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                    ),
+                                  );
+                                }
+                              },
+                              viewOnClose: () {
+                                BlocProvider.of<EntriesBloc>(
+                                  context,
+                                ).add(CloseSearch());
+                              },
+                              viewOnSubmitted: (value) {
+                                _searchController.closeView(null);
+                                _tabController.animateTo(5);
+                              },
                             ),
                           ],
                         ),
@@ -220,6 +301,7 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                   browseTabName => AppLocalizations.of(
                                     context,
                                   )!.browse,
+                                  'search' => 'Search',
                                   _ => throw ArgumentError(tab.name),
                                 }),
                               )
@@ -306,6 +388,7 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                                           .length,
                                                       tab.entries.length,
                                                     ),
+                                                  'search' => 'Search',
                                                   _ => throw ArgumentError(
                                                     tab.description,
                                                   ),
@@ -362,6 +445,15 @@ class _EntriesPageViewState extends State<EntriesPageView>
         context,
       ).add(PrepareTab(_tabController.index, DateTime.now()));
     }
+  }
+
+  void _handleSearchChange() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+      BlocProvider.of<EntriesBloc>(
+        context,
+      ).add(SearchInputChanged(widget.fieldListId, _searchController.text));
+    });
   }
 }
 

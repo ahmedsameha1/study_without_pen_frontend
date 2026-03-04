@@ -62,3 +62,19 @@ class NewData extends EntriesEvent {
   @override
   int get hashCode => data.hashCode;
 }
+
+class SearchInputChanged extends EntriesEvent {
+  const SearchInputChanged(this.fieldListId, this.searchText);
+  final String fieldListId;
+  final String searchText;
+}
+
+class SubmitSearch extends EntriesEvent {
+  const SubmitSearch(this.fieldListId, this.searchText);
+  final String fieldListId;
+  final String searchText;
+}
+class OpenSearch extends EntriesEvent{
+}
+class CloseSearch extends EntriesEvent{
+}

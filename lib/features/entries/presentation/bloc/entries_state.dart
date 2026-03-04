@@ -6,7 +6,7 @@ import 'tab_data.dart';
 
 part 'entries_state.freezed.dart';
 
-enum EntriesStatus { initial, loading, success, failure }
+enum EntriesStatus { initial, loading, success, failure , search}
 
 const scoreTabName = 'score';
 const scoreTabDescription = 'scoreDescription';
@@ -18,6 +18,8 @@ const unseenTabName = 'unseen';
 const unseenTabDescription = 'unseenDescription';
 const browseTabName = 'browse';
 const browseTabDescription = 'browseDescription';
+const searchTabName = 'search';
+const searchTabDescription = 'search';
 
 @freezed
 abstract class EntriesState with _$EntriesState {
@@ -59,6 +61,13 @@ abstract class EntriesState with _$EntriesState {
         outdated: true,
         name: browseTabName,
         description: browseTabDescription,
+        entries: <EntryEntity>[],
+      ),
+      TabData(
+        status: TabDataStatus.loading,
+        outdated: true,
+        name: searchTabName,
+        description: searchTabDescription,
         entries: <EntryEntity>[],
       ),
     ])
