@@ -2868,11 +2868,8 @@ void main() {
       expect(gottenFieldList.doesObfuscateQuestion, doesObfuscateQuestion);
     });
 
-    test("Good case: the FieldList is not found", () async {
-      var gottenFieldList = await fieldListsDao
-          .watchById(const Uuid().v4())
-          .first;
-      expect(gottenFieldList, null);
+    test('Good case: the FieldList is not found', () async {
+      expect(fieldListsDao.watchById(const Uuid().v4()), emitsError(anything));
     });
 
     test("test default values", () async {
@@ -5118,7 +5115,6 @@ void main() {
     );
     await fieldListsDao.create(fieldList.toCompanion(true));
     await fieldListsDao.remove(id);
-    var gottenFieldList = await fieldListsDao.watchById(id).first;
-    expect(gottenFieldList, null);
+    expect(fieldListsDao.watchById(id), emitsError(anything));
   });
 }

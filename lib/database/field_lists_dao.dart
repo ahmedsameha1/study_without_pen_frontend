@@ -72,10 +72,10 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     return into(fieldLists).insert(fieldListsCompanion);
   }
 
-  Stream<FieldList?> watchById(String id) {
+  Stream<FieldList> watchById(String id) {
     return (select(
       fieldLists,
-    )..where(((tbl) => tbl.id.equals(id)))).watchSingleOrNull();
+    )..where(((tbl) => tbl.id.equals(id)))).watchSingle();
   }
 
   Stream<List<FieldList>> watchByFieldId(String fieldId) {
