@@ -57,6 +57,21 @@ class WatchEntriesUsecase {
     );
   }
 
+  Stream<EntriesPageData> watchEntriesForUnseen(String fieldListId) {
+    final now = clock.now();
+    return Rx.combineLatest2(
+      _entriesRepository.watch(fieldListId).switchMap((list) {
+        final entries = List<EntryEntity>.from(list);
+        return Stream.fromFuture(
+          Isolate.run(() => _prepareEntriesForUnseen(entries, now)),
+        );
+      }),
+      _fieldListsRepository.watchFieldList(fieldListId),
+      (entries, fieldList) =>
+          EntriesPageData(fieldList: fieldList, entries: entries),
+    );
+  }
+
   static List<EntryEntity> _prepareEntriesForScore(List<EntryEntity> entries) =>
       entries..sort((a, b) => b.score.compareTo(a.score));
 
@@ -69,13 +84,29 @@ class WatchEntriesUsecase {
   static List<EntryEntity> _prepareEntriesForToday(
     List<EntryEntity> entries,
     DateTime now,
-  ) => entries
-        .where(
-          (entry) =>
-              entry.creationAt.year == now.year &&
-              entry.creationAt.month == now.month &&
-              entry.creationAt.day == now.day,
-        )
-        .toList()
-      ..sort((a, b) => b.creationAt.difference(a.creationAt).inMicroseconds);
+  ) =>
+      entries
+          .where(
+            (entry) =>
+                entry.creationAt.year == now.year &&
+                entry.creationAt.month == now.month &&
+                entry.creationAt.day == now.day,
+          )
+          .toList()
+        ..sort((a, b) => b.creationAt.difference(a.creationAt).inMicroseconds);
+
+  static List<EntryEntity> _prepareEntriesForUnseen(
+    List<EntryEntity> entries,
+    DateTime now,
+  ) =>
+      entries
+          .where(
+            (entry) =>
+                entry.askedCount == 0 &&
+                !(entry.creationAt.year == now.year &&
+                    entry.creationAt.month == now.month &&
+                    entry.creationAt.day == now.day),
+          )
+          .toList()
+        ..sort((a, b) => b.creationAt.difference(a.creationAt).inMicroseconds);
 }
