@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/features/entries/data/repositories/entries_repository.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entries_page_data.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
@@ -14,6 +17,7 @@ class MockEntriesRepository extends Mock implements EntriesRepository {}
 class MockFieldListsRepository extends Mock implements FieldListsRepository {}
 
 void main() {
+  DateTime aDateTime = DateTime.utc(2025);
   DateTime fieldListDateTime = DateTime(2025);
   final fieldListId = const Uuid().v4();
   final entry1Id = const Uuid().v4();
@@ -52,63 +56,111 @@ void main() {
       lastModificationAt: fieldListDateTime,
     ),
   ];
+  List<EntryEntity> entries1 = [
+    EntryEntity(
+      id: entry1Id,
+      fieldListId: fieldListId,
+      answer: 'answer1',
+      question: 'aquestion',
+      creationAt: aDateTime.add(const Duration(hours: 2)),
+      lastModificationAt: aDateTime.add(const Duration(hours: 2)),
+      askedCount: 4,
+      wronglyAnsweredCount: 3,
+      rank: Rank.important,
+    ),
+    EntryEntity(
+      id: entry2Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'bquestion',
+      creationAt: aDateTime.add(const Duration(hours: 1)),
+      lastModificationAt: aDateTime.add(const Duration(hours: 1)),
+      askedCount: 4,
+      wronglyAnsweredCount: 2,
+      rank: Rank.normal,
+    ),
+    EntryEntity(
+      id: entry3Id,
+      fieldListId: fieldListId,
+      answer: 'answer',
+      question: 'cquestion',
+      creationAt: aDateTime,
+      lastModificationAt: aDateTime,
+      askedCount: 4,
+      wronglyAnsweredCount: 4,
+      rank: Rank.vital,
+    ),
+  ];
+  final List<EntryEntity> scoreEntries1 = [
+    entries1[2],
+    entries1[0],
+    entries1[1],
+  ];
   EntriesRepository entriesRepository = MockEntriesRepository();
   FieldListsRepository fieldListsRepository = MockFieldListsRepository();
   WatchEntriesUsecase watchEntriesUsecase = WatchEntriesUsecase(
     fieldListsRepository,
     entriesRepository,
   );
-  test('call() throws what EntriesRepository.watch() throw', () {
-    when(
-      () => fieldListsRepository.watchFieldList(fieldListId),
-    ).thenAnswer((_) => Stream.empty());
-    when(
-      () => entriesRepository.watch(fieldListId),
-    ).thenThrow(SqliteException(1, 'sqlexception1'));
-    expect(
-      () => watchEntriesUsecase.call(fieldListId),
-      throwsA(
-        predicate(
-          (e) =>
-              e is SqliteException &&
-              e.extendedResultCode == 1 &&
-              e.message == 'sqlexception1',
-        ),
-      ),
-    );
-  });
-
-  test('call() throws what FieldListsRepository.watchFieldList() throw', () {
-    when(
-      () => fieldListsRepository.watchFieldList(fieldListId),
-    ).thenThrow(SqliteException(1, 'sqlexception1'));
-    when(
-      () => entriesRepository.watch(fieldListId),
-    ).thenAnswer((_) => Stream.empty());
-    expect(
-      () => watchEntriesUsecase.call(fieldListId),
-      throwsA(
-        predicate(
-          (e) =>
-              e is SqliteException &&
-              e.extendedResultCode == 1 &&
-              e.message == 'sqlexception1',
-        ),
-      ),
-    );
-  });
-
   test(
-    '''call() doesn't return a Stream of EntriesPageData if any of '''
-    '''FieldListsRepository.watchFieldList() and EntriesRepository.watch() return an empty Stream''',
+    'watchEntriesForScore() throws what EntriesRepository.watch() throw',
     () {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenAnswer((_) => Stream.empty());
+      ).thenAnswer((_) => const Stream.empty());
+      when(
+        () => entriesRepository.watch(fieldListId),
+      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      expect(
+        () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception1',
+          ),
+        ),
+      );
+    },
+  );
+
+  test(
+    'watchEntriesForScore() throws what FieldListsRepository.watchFieldList() throw',
+    () {
+      when(
+        () => fieldListsRepository.watchFieldList(fieldListId),
+      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(
+        () => entriesRepository.watch(fieldListId),
+      ).thenAnswer((_) => const Stream.empty());
+      expect(
+        () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception1',
+          ),
+        ),
+      );
+    },
+  );
+
+  test(
+    '''should emit an empty stream when any repository dependency is empty''',
+    () {
+      when(
+        () => fieldListsRepository.watchFieldList(fieldListId),
+      ).thenAnswer((_) => const Stream.empty());
       when(
         () => entriesRepository.watch(fieldListId),
       ).thenAnswer((_) => Stream.value(entries));
-      expect(watchEntriesUsecase.call(fieldListId), emitsInOrder([]));
+      expect(
+        watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        emitsInOrder([]),
+      );
 
       ///
       when(
@@ -116,36 +168,67 @@ void main() {
       ).thenAnswer((_) => Stream.value(fieldListEntity));
       when(
         () => entriesRepository.watch(fieldListId),
-      ).thenAnswer((_) => Stream.empty());
-      expect(watchEntriesUsecase.call(fieldListId), emitsInOrder([]));
+      ).thenAnswer((_) => const Stream.empty());
+      expect(
+        watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        emitsInOrder([]),
+      );
     },
   );
 
   test(
-    '''call() returns a Stream of EntriesPageData with what '''
-    '''entriesRepository.watch() and fieldListsRepository.watchFieldList() return''',
-    () {
+    ''''should combine field list and entry data into a unified stream of EntriesPageData '''
+    '''should emit sequential updates when repositories yield data over time''',
+    () async {
+      StreamController<List<EntryEntity>> streamController = StreamController();
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
       ).thenAnswer((_) => Stream.fromIterable([fieldListEntity]));
-      when(() => entriesRepository.watch(fieldListId)).thenAnswer(
-        (_) => Stream.fromIterable([
-          [entries[0]],
-          [entries[0], entries[1]],
-          [entries[1]],
-        ]),
-      );
-      expect(
-        watchEntriesUsecase.call(fieldListId),
+      when(
+        () => entriesRepository.watch(fieldListId),
+      ).thenAnswer((_) => streamController.stream);
+      final future = expectLater(
+        watchEntriesUsecase.watchEntriesForScore(fieldListId),
         emitsInOrder([
           EntriesPageData(fieldList: fieldListEntity, entries: [entries[0]]),
-          EntriesPageData(
-            fieldList: fieldListEntity,
-            entries: [entries[0], entries[1]],
-          ),
+          EntriesPageData(fieldList: fieldListEntity, entries: scoreEntries1),
           EntriesPageData(fieldList: fieldListEntity, entries: [entries[1]]),
         ]),
       );
+      streamController.add([entries[0]]);
+      await Future.delayed(Duration(milliseconds: 10));
+      streamController.add(entries1);
+      await Future.delayed(Duration(milliseconds: 10));
+      streamController.add([entries[1]]);
+      await streamController.close();
+      await future;
+    },
+  );
+
+  test(
+    ''''should combine field list and entry data into a unified stream of EntriesPageData '''
+    '''should handle rapid repository updates correctly''',
+    () async {
+      StreamController<List<EntryEntity>> streamController = StreamController();
+
+      streamController = StreamController();
+      when(
+        () => fieldListsRepository.watchFieldList(fieldListId),
+      ).thenAnswer((_) => Stream.fromIterable([fieldListEntity]));
+      when(
+        () => entriesRepository.watch(fieldListId),
+      ).thenAnswer((_) => streamController.stream);
+      final future = expectLater(
+        watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        emitsInOrder([
+          EntriesPageData(fieldList: fieldListEntity, entries: scoreEntries1),
+        ]),
+      );
+      streamController.add([entries[0]]);
+      streamController.add([entries[1]]);
+      streamController.add(entries1);
+      await streamController.close();
+      await future;
     },
   );
 }
