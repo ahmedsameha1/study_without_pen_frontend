@@ -72,6 +72,21 @@ class WatchEntriesUsecase {
     );
   }
 
+  Stream<EntriesPageData> watchEntriesForBrowse(String fieldListId) {
+    final now = clock.now();
+    return Rx.combineLatest2(
+      _entriesRepository.watch(fieldListId).switchMap((list) {
+        final entries = List<EntryEntity>.from(list);
+        return Stream.fromFuture(
+          Isolate.run(() => _prepareEntriesForBrowse(entries)),
+        );
+      }),
+      _fieldListsRepository.watchFieldList(fieldListId),
+      (entries, fieldList) =>
+          EntriesPageData(fieldList: fieldList, entries: entries),
+    );
+  }
+
   static List<EntryEntity> _prepareEntriesForScore(List<EntryEntity> entries) =>
       entries..sort((a, b) => b.score.compareTo(a.score));
 
@@ -109,4 +124,21 @@ class WatchEntriesUsecase {
           )
           .toList()
         ..sort((a, b) => b.creationAt.difference(a.creationAt).inMicroseconds);
+
+  static List<EntryEntity> _prepareEntriesForBrowse(
+    List<EntryEntity> entries,
+  ) => entries
+    ..sort((a, b) {
+      final orderResult = a.order.compareTo(b.order);
+      if (orderResult != 0) {
+        return orderResult;
+      } else {
+        final questionResult = a.question.compareTo(b.question);
+        if (questionResult != 0) {
+          return questionResult;
+        } else {
+          return b.creationAt.difference(a.creationAt).inMicroseconds;
+        }
+      }
+    });
 }
