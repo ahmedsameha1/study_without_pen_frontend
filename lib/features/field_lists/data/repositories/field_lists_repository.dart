@@ -3,5 +3,5 @@ import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/
 abstract class FieldListsRepository {
   Future<int> create(FieldListEntity fieldListEntity);
   Stream<List<FieldListEntity>> watch(String fieldId);
-  Stream<FieldListEntity?> watchFieldList(String fieldListId);
+  Stream<FieldListEntity> watchFieldList(String fieldListId);
 }

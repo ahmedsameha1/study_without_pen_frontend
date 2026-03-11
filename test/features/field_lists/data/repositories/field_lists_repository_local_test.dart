@@ -189,6 +189,17 @@ void main() {
     );
   });
 
+  test('watchFieldList() return a stream that emits an error when '
+      'FieldListsDao.watchById() stream emits an error', () {
+    when(
+      () => fieldListsDao.watchById(fieldListEntity.id!),
+    ).thenAnswer((_) => Stream.error('Not Found'));
+    expect(
+      fieldListsRepository.watchFieldList(fieldListEntity.id!),
+      emitsError(predicate((e) => e is String && e == 'Not Found')),
+    );
+  });
+
   test(
     'watchFieldList() returns what fieldListsDao.watchByFieldId() return',
     () {
