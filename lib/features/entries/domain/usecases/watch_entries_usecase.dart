@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:clock/clock.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../field_lists/data/repositories/field_lists_repository.dart';
@@ -41,6 +42,21 @@ class WatchEntriesUsecase {
             EntriesPageData(fieldList: fieldList, entries: entries),
       );
 
+  Stream<EntriesPageData> watchEntriesForToday(String fieldListId) {
+    final now = clock.now();
+    return Rx.combineLatest2(
+      _entriesRepository.watch(fieldListId).switchMap((list) {
+        final entries = List<EntryEntity>.from(list);
+        return Stream.fromFuture(
+          Isolate.run(() => _prepareEntriesForToday(entries, now)),
+        );
+      }),
+      _fieldListsRepository.watchFieldList(fieldListId),
+      (entries, fieldList) =>
+          EntriesPageData(fieldList: fieldList, entries: entries),
+    );
+  }
+
   static List<EntryEntity> _prepareEntriesForScore(List<EntryEntity> entries) =>
       entries..sort((a, b) => b.score.compareTo(a.score));
 
@@ -49,4 +65,17 @@ class WatchEntriesUsecase {
   ) =>
       entries.where((entry) => entry.wrongness > 0.6).toList()
         ..sort((a, b) => a.score >= b.score ? -1 : 1);
+
+  static List<EntryEntity> _prepareEntriesForToday(
+    List<EntryEntity> entries,
+    DateTime now,
+  ) => entries
+        .where(
+          (entry) =>
+              entry.creationAt.year == now.year &&
+              entry.creationAt.month == now.month &&
+              entry.creationAt.day == now.day,
+        )
+        .toList()
+      ..sort((a, b) => b.creationAt.difference(a.creationAt).inMicroseconds);
 }
