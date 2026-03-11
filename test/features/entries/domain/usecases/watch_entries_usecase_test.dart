@@ -102,9 +102,9 @@ void main() {
     fieldListsRepository,
     entriesRepository,
   );
-  test(
-    'watchEntriesForScore() throws what EntriesRepository.watch() throw',
-    () {
+
+  group('watchEntriesForScore', () {
+    test('throws what EntriesRepository.watch() throw', () {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
@@ -122,12 +122,9 @@ void main() {
           ),
         ),
       );
-    },
-  );
+    });
 
-  test(
-    'watchEntriesForScore() throws what FieldListsRepository.watchFieldList() throw',
-    () {
+    test('throws what FieldListsRepository.watchFieldList() throw', () {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
       ).thenThrow(SqliteException(1, 'sqlexception1'));
@@ -145,90 +142,225 @@ void main() {
           ),
         ),
       );
-    },
-  );
+    });
 
-  test(
-    '''should emit an empty stream when any repository dependency is empty''',
-    () {
+    test(
+      '''should emit an empty stream when any repository dependency is empty''',
+      () {
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => const Stream.empty());
+        when(
+          () => entriesRepository.watch(fieldListId),
+        ).thenAnswer((_) => Stream.value(entries));
+        expect(
+          watchEntriesUsecase.watchEntriesForScore(fieldListId),
+          emitsInOrder([]),
+        );
+
+        ///
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => Stream.value(fieldListEntity));
+        when(
+          () => entriesRepository.watch(fieldListId),
+        ).thenAnswer((_) => const Stream.empty());
+        expect(
+          watchEntriesUsecase.watchEntriesForScore(fieldListId),
+          emitsInOrder([]),
+        );
+      },
+    );
+
+    test(
+      ''''should combine field list and entry data into a unified stream of EntriesPageData '''
+      '''should emit sequential updates when repositories yield data over time''',
+      () async {
+        StreamController<List<EntryEntity>> streamController =
+            StreamController();
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => Stream.fromIterable([fieldListEntity]));
+        when(
+          () => entriesRepository.watch(fieldListId),
+        ).thenAnswer((_) => streamController.stream);
+        final future = expectLater(
+          watchEntriesUsecase.watchEntriesForScore(fieldListId),
+          emitsInOrder([
+            EntriesPageData(fieldList: fieldListEntity, entries: [entries[0]]),
+            EntriesPageData(fieldList: fieldListEntity, entries: scoreEntries1),
+            EntriesPageData(fieldList: fieldListEntity, entries: [entries[1]]),
+          ]),
+        );
+        streamController.add([entries[0]]);
+        await Future.delayed(Duration(milliseconds: 10));
+        streamController.add(entries1);
+        await Future.delayed(Duration(milliseconds: 10));
+        streamController.add([entries[1]]);
+        await streamController.close();
+        await future;
+      },
+    );
+
+    test(
+      ''''should combine field list and entry data into a unified stream of EntriesPageData '''
+      '''should handle rapid repository updates correctly''',
+      () async {
+        StreamController<List<EntryEntity>> streamController =
+            StreamController();
+
+        streamController = StreamController();
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => Stream.fromIterable([fieldListEntity]));
+        when(
+          () => entriesRepository.watch(fieldListId),
+        ).thenAnswer((_) => streamController.stream);
+        final future = expectLater(
+          watchEntriesUsecase.watchEntriesForScore(fieldListId),
+          emitsInOrder([
+            EntriesPageData(fieldList: fieldListEntity, entries: scoreEntries1),
+          ]),
+        );
+        streamController.add([entries[0]]);
+        streamController.add([entries[1]]);
+        streamController.add(entries1);
+        await streamController.close();
+        await future;
+      },
+    );
+  });
+
+  group('watchEntriesForStruggling', () {
+    test('throws what EntriesRepository.watch() throw', () {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
       when(
         () => entriesRepository.watch(fieldListId),
-      ).thenAnswer((_) => Stream.value(entries));
+      ).thenThrow(SqliteException(1, 'sqlexception1'));
       expect(
-        watchEntriesUsecase.watchEntriesForScore(fieldListId),
-        emitsInOrder([]),
+        () => watchEntriesUsecase.watchEntriesForStruggling(fieldListId),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception1',
+          ),
+        ),
       );
+    });
 
-      ///
+    test('throws what FieldListsRepository.watchFieldList() throw', () {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenAnswer((_) => Stream.value(fieldListEntity));
+      ).thenThrow(SqliteException(1, 'sqlexception1'));
       when(
         () => entriesRepository.watch(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
       expect(
-        watchEntriesUsecase.watchEntriesForScore(fieldListId),
-        emitsInOrder([]),
+        () => watchEntriesUsecase.watchEntriesForStruggling(fieldListId),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception1',
+          ),
+        ),
       );
-    },
-  );
+    });
 
-  test(
-    ''''should combine field list and entry data into a unified stream of EntriesPageData '''
-    '''should emit sequential updates when repositories yield data over time''',
-    () async {
-      StreamController<List<EntryEntity>> streamController = StreamController();
-      when(
-        () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenAnswer((_) => Stream.fromIterable([fieldListEntity]));
-      when(
-        () => entriesRepository.watch(fieldListId),
-      ).thenAnswer((_) => streamController.stream);
-      final future = expectLater(
-        watchEntriesUsecase.watchEntriesForScore(fieldListId),
-        emitsInOrder([
-          EntriesPageData(fieldList: fieldListEntity, entries: [entries[0]]),
-          EntriesPageData(fieldList: fieldListEntity, entries: scoreEntries1),
-          EntriesPageData(fieldList: fieldListEntity, entries: [entries[1]]),
-        ]),
-      );
-      streamController.add([entries[0]]);
-      await Future.delayed(Duration(milliseconds: 10));
-      streamController.add(entries1);
-      await Future.delayed(Duration(milliseconds: 10));
-      streamController.add([entries[1]]);
-      await streamController.close();
-      await future;
-    },
-  );
+    test(
+      '''should emit an empty stream when any repository dependency is empty''',
+      () {
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => const Stream.empty());
+        when(
+          () => entriesRepository.watch(fieldListId),
+        ).thenAnswer((_) => Stream.value(entries));
+        expect(
+          watchEntriesUsecase.watchEntriesForStruggling(fieldListId),
+          emitsInOrder([]),
+        );
 
-  test(
-    ''''should combine field list and entry data into a unified stream of EntriesPageData '''
-    '''should handle rapid repository updates correctly''',
-    () async {
-      StreamController<List<EntryEntity>> streamController = StreamController();
+        ///
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => Stream.value(fieldListEntity));
+        when(
+          () => entriesRepository.watch(fieldListId),
+        ).thenAnswer((_) => const Stream.empty());
+        expect(
+          watchEntriesUsecase.watchEntriesForStruggling(fieldListId),
+          emitsInOrder([]),
+        );
+      },
+    );
 
-      streamController = StreamController();
-      when(
-        () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenAnswer((_) => Stream.fromIterable([fieldListEntity]));
-      when(
-        () => entriesRepository.watch(fieldListId),
-      ).thenAnswer((_) => streamController.stream);
-      final future = expectLater(
-        watchEntriesUsecase.watchEntriesForScore(fieldListId),
-        emitsInOrder([
-          EntriesPageData(fieldList: fieldListEntity, entries: scoreEntries1),
-        ]),
-      );
-      streamController.add([entries[0]]);
-      streamController.add([entries[1]]);
-      streamController.add(entries1);
-      await streamController.close();
-      await future;
-    },
-  );
+    test(
+      ''''should combine field list and entry data into a unified stream of EntriesPageData '''
+      '''should emit sequential updates when repositories yield data over time''',
+      () async {
+        StreamController<List<EntryEntity>> streamController =
+            StreamController();
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => Stream.fromIterable([fieldListEntity]));
+        when(
+          () => entriesRepository.watch(fieldListId),
+        ).thenAnswer((_) => streamController.stream);
+        final future = expectLater(
+          watchEntriesUsecase.watchEntriesForStruggling(fieldListId),
+          emitsInOrder([
+            EntriesPageData(fieldList: fieldListEntity, entries: [entries1[2]]),
+            EntriesPageData(
+              fieldList: fieldListEntity,
+              entries: [entries1[2], entries1[0]],
+            ),
+          ]),
+        );
+        streamController.add([entries1[2]]);
+        await Future.delayed(Duration(milliseconds: 10));
+        streamController.add(entries1);
+        await Future.delayed(Duration(milliseconds: 10));
+        streamController.add([entries[1]]);
+        await streamController.close();
+        await future;
+      },
+    );
+
+    test(
+      ''''should combine field list and entry data into a unified stream of EntriesPageData '''
+      '''should handle rapid repository updates correctly''',
+      () async {
+        StreamController<List<EntryEntity>> streamController =
+            StreamController();
+
+        streamController = StreamController();
+        when(
+          () => fieldListsRepository.watchFieldList(fieldListId),
+        ).thenAnswer((_) => Stream.fromIterable([fieldListEntity]));
+        when(
+          () => entriesRepository.watch(fieldListId),
+        ).thenAnswer((_) => streamController.stream);
+        final future = expectLater(
+          watchEntriesUsecase.watchEntriesForStruggling(fieldListId),
+          emitsInOrder([
+            EntriesPageData(
+              fieldList: fieldListEntity,
+              entries: [entries1[2], entries1[0]],
+            ),
+          ]),
+        );
+        streamController.add([entries1[2]]);
+        streamController.add([entries[1]]);
+        streamController.add(entries1);
+        await streamController.close();
+        await future;
+      },
+    );
+  });
 }

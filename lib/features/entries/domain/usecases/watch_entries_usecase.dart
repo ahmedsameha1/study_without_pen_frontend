@@ -28,6 +28,25 @@ class WatchEntriesUsecase {
             EntriesPageData(fieldList: fieldList, entries: entries),
       );
 
+  Stream<EntriesPageData> watchEntriesForStruggling(String fieldListId) =>
+      Rx.combineLatest2(
+        _entriesRepository.watch(fieldListId).switchMap((list) {
+          final entries = List<EntryEntity>.from(list);
+          return Stream.fromFuture(
+            Isolate.run(() => _prepareEntriesForStruggling(entries)),
+          );
+        }),
+        _fieldListsRepository.watchFieldList(fieldListId),
+        (entries, fieldList) =>
+            EntriesPageData(fieldList: fieldList, entries: entries),
+      );
+
   static List<EntryEntity> _prepareEntriesForScore(List<EntryEntity> entries) =>
       entries..sort((a, b) => b.score.compareTo(a.score));
+
+  static List<EntryEntity> _prepareEntriesForStruggling(
+    List<EntryEntity> entries,
+  ) =>
+      entries.where((entry) => entry.wrongness > 0.6).toList()
+        ..sort((a, b) => a.score >= b.score ? -1 : 1);
 }
