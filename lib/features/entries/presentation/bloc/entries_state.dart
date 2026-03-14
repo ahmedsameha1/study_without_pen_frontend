@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/models/entries_page_data.dart';
 
-import '../../domain/models/entry_entity.dart';
 import 'tab_data.dart';
 
 part 'entries_state.freezed.dart';
@@ -26,41 +25,11 @@ abstract class EntriesState with _$EntriesState {
     EntriesPageData? entriesPageData,
     @Default(0) int currentTabIndex,
     @Default([
-      TabData(
-        status: TabDataStatus.loading,
-        outdated: true,
-        name: scoreTabName,
-        description: scoreTabDescription,
-        entries: <EntryEntity>[],
-      ),
-      TabData(
-        status: TabDataStatus.loading,
-        outdated: true,
-        name: strugglingTabName,
-        description: strugglingTabDescription,
-        entries: <EntryEntity>[],
-      ),
-      TabData(
-        status: TabDataStatus.loading,
-        outdated: true,
-        name: todayTabName,
-        description: todayTabDescription,
-        entries: <EntryEntity>[],
-      ),
-      TabData(
-        status: TabDataStatus.loading,
-        outdated: true,
-        name: unseenTabName,
-        description: unseenTabDescription,
-        entries: <EntryEntity>[],
-      ),
-      TabData(
-        status: TabDataStatus.loading,
-        outdated: true,
-        name: browseTabName,
-        description: browseTabDescription,
-        entries: <EntryEntity>[],
-      ),
+      TabData(name: scoreTabName, description: scoreTabDescription),
+      TabData(name: strugglingTabName, description: strugglingTabDescription),
+      TabData(name: todayTabName, description: todayTabDescription),
+      TabData(name: unseenTabName, description: unseenTabDescription),
+      TabData(name: browseTabName, description: browseTabDescription),
     ])
     List<TabData> tabs,
   }) = _EntriesState;

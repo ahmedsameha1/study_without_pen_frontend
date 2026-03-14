@@ -7,6 +7,8 @@ sealed class EntriesEvent {
   const EntriesEvent();
 }
 
+class PrepareScoreTab extends EntriesEvent {}
+
 class EntriesSubscriptionRequested extends EntriesEvent {
   const EntriesSubscriptionRequested(this.fieldListId);
   final String fieldListId;

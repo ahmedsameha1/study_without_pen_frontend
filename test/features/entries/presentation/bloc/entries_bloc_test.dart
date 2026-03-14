@@ -322,78 +322,281 @@ void main() {
   test('Bloc has a correct initial state', () {
     expect(EntriesBloc(watchEntriesUsecase).state, const EntriesState());
   });
-
-  blocTest<EntriesBloc, EntriesState>(
-    '''
+  group('EntriesSubscriptionRequested event', () {
+    blocTest<EntriesBloc, EntriesState>(
+      '''
     When EntriesSubscriptionRequested event is added
     watchEntriesUsecase.call() is called
     ''',
-    build: buildBloc,
-    act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListId)),
-    verify: (_) {
-      verify(
-        () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
-      ).called(1);
-    },
-  );
+      build: buildBloc,
+      act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListId)),
+      verify: (_) {
+        verify(
+          () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        ).called(1);
+      },
+    );
 
-  blocTest<EntriesBloc, EntriesState>(
-    'should emit [loading, success] with categorized tabs when entries are successfully fetched',
-    build: buildBloc,
-    act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!)),
-    expect: () => [
-      const EntriesState(status: EntriesStatus.loading),
-      EntriesState(
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit [loading, success] with categorized tabs when entries are successfully fetched',
+      build: buildBloc,
+      act: (bloc) =>
+          bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!)),
+      expect: () => [
+        const EntriesState(status: EntriesStatus.loading),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          tabs: [
+            TabData(
+              status: TabDataStatus.ready,
+              name: scoreTabName,
+              description: scoreTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit [loading, failure] when watching entries encounters an error in the stream',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        ).thenAnswer((_) => Stream.error(Exception('oops!')));
+      },
+      build: buildBloc,
+      act: (bloc) =>
+          bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!)),
+      expect: () => [
+        const EntriesState(status: EntriesStatus.loading),
+        const EntriesState(status: EntriesStatus.failure),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit [loading, failure] when watching entries encounters an error by throwing exception',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        ).thenThrow((_) => Exception('oops!'));
+      },
+      build: buildBloc,
+      act: (bloc) =>
+          bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!)),
+      expect: () => [
+        const EntriesState(status: EntriesStatus.loading),
+        const EntriesState(status: EntriesStatus.failure),
+      ],
+    );
+  });
+
+  group('PrepareScoreTab event', () {
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit success with categorized tabs when entries are successfully fetched '
+      'when there is undefault current state',
+      seed: () => EntriesState(
         status: EntriesStatus.success,
-        entriesPageData: entriesPageData1,
+        entriesPageData: entriesPageData2,
+        currentTabIndex: EntriesBloc.todayTabIndex,
         tabs: [
-          TabData(
-            status: TabDataStatus.ready,
-            name: scoreTabName,
-            description: scoreTabDescription,
-            entries: entriesPageData1.entries,
-          ),
+          const TabData(name: scoreTabName, description: scoreTabDescription),
           const TabData(
             name: strugglingTabName,
             description: strugglingTabDescription,
           ),
-          const TabData(name: todayTabName, description: todayTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData2.entries,
+          ),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
         ],
       ),
-    ],
-  );
+      build: buildBloc,
+      act: (bloc) => bloc.add(PrepareScoreTab()),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData2,
+          currentTabIndex: EntriesBloc.scoreTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.scoreTabIndex,
+          tabs: [
+            TabData(
+              status: TabDataStatus.ready,
+              name: scoreTabName,
+              description: scoreTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+      ],
+    );
 
-  blocTest<EntriesBloc, EntriesState>(
-    'should emit [loading, failure] when watching entries encounters an error in the stream',
-    setUp: () {
-      when(
-        () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
-      ).thenAnswer((_) => Stream.error(Exception('oops!')));
-    },
-    build: buildBloc,
-    act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!)),
-    expect: () => [
-      const EntriesState(status: EntriesStatus.loading),
-      const EntriesState(status: EntriesStatus.failure),
-    ],
-  );
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure when entriesPageData is null',
+      build: buildBloc,
+      act: (bloc) => bloc.add(PrepareScoreTab()),
+      expect: () => [const EntriesState(status: EntriesStatus.failure)],
+    );
 
-  blocTest<EntriesBloc, EntriesState>(
-    'should emit [loading, failure] when watching entries encounters an error by throwing exception',
-    setUp: () {
-      when(
-        () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
-      ).thenThrow((_) => Exception('oops!'));
-    },
-    build: buildBloc,
-    act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!)),
-    expect: () => [
-      const EntriesState(status: EntriesStatus.loading),
-      const EntriesState(status: EntriesStatus.failure),
-    ],
-  );
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure when watching entries encounters an error in the stream',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        ).thenAnswer((_) => Stream.error(Exception('oops!')));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData2,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(PrepareScoreTab()),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData2,
+          currentTabIndex: EntriesBloc.scoreTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        const EntriesState(status: EntriesStatus.failure),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure when watching entries encounters an error by throwing exception',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        ).thenThrow((_) => Exception('oops!'));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData2,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(PrepareScoreTab()),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData2,
+          currentTabIndex: EntriesBloc.scoreTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        const EntriesState(status: EntriesStatus.failure),
+      ],
+    );
+  });
 
   /*
   blocTest<EntriesBloc, EntriesState>(

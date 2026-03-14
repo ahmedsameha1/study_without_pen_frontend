@@ -12,6 +12,7 @@ import 'tab_data.dart';
 class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   EntriesBloc(this._watchEntriesUsecase) : super(const EntriesState()) {
     on<EntriesSubscriptionRequested>(_onSubscriptionRequested);
+    on<PrepareScoreTab>(_onPrepareScoreTab, transformer: restartable());
     on<NewData>(_onNewData, transformer: sequential());
     on<PrepareTab>(_onPrepareTab, transformer: sequential());
   }
@@ -30,23 +31,46 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     await _prepareScoreTab(event.fieldListId, emit);
   }
 
+  Future<void> _onPrepareScoreTab(
+    PrepareScoreTab event,
+    Emitter<EntriesState> emit,
+  ) async {
+    if (state.entriesPageData != null) {
+      await _prepareScoreTab(state.entriesPageData!.fieldList.id!, emit);
+    } else {
+      emit(
+        state.copyWith(
+          status: EntriesStatus.failure,
+          currentTabIndex: scoreTabIndex,
+        ),
+      );
+    }
+  }
+
   Future<void> _prepareScoreTab(
     String fieldListId,
     Emitter<EntriesState> emit,
   ) async {
     try {
+      emit(
+        state.copyWith(
+          currentTabIndex: EntriesBloc.scoreTabIndex,
+          tabs: const EntriesState().tabs.map((tab) => tab.copyWith()).toList(),
+        ),
+      );
       await emit.onEach<EntriesPageData>(
         _watchEntriesUsecase.watchEntriesForScore(fieldListId),
         onData: (entriesPageData) {
           emit(
             state.copyWith(
-              entriesPageData: entriesPageData,
               status: EntriesStatus.success,
-              tabs: state.tabs.map((tab) {
+              currentTabIndex: EntriesBloc.scoreTabIndex,
+              entriesPageData: entriesPageData,
+              tabs: const EntriesState().tabs.map((tab) {
                 if (tab.name == scoreTabName) {
                   return tab.copyWith(
-                    entries: entriesPageData.entries,
                     status: TabDataStatus.ready,
+                    entries: entriesPageData.entries,
                   );
                 } else {
                   return tab.copyWith();
@@ -55,10 +79,11 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
             ),
           );
         },
-        onError: (_, _) => emit(state.copyWith(status: EntriesStatus.failure)),
+        onError: (_, _) =>
+            emit(const EntriesState(status: EntriesStatus.failure)),
       );
     } catch (e) {
-      emit(state.copyWith(status: EntriesStatus.failure));
+      emit(const EntriesState(status: EntriesStatus.failure));
     }
   }
 
