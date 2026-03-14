@@ -11,10 +11,7 @@ import 'tab_data.dart';
 
 class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   EntriesBloc(this._watchEntriesUsecase) : super(const EntriesState()) {
-    on<EntriesSubscriptionRequested>(
-      _onSubscriptionRequested,
-      transformer: sequential(),
-    );
+    on<EntriesSubscriptionRequested>(_onSubscriptionRequested);
     on<NewData>(_onNewData, transformer: sequential());
     on<PrepareTab>(_onPrepareTab, transformer: sequential());
   }
@@ -30,12 +27,33 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     Emitter<EntriesState> emit,
   ) async {
     emit(state.copyWith(status: EntriesStatus.loading));
+    await _prepareScoreTab(event.fieldListId, emit);
+  }
+
+  Future<void> _prepareScoreTab(
+    String fieldListId,
+    Emitter<EntriesState> emit,
+  ) async {
     try {
       await emit.onEach<EntriesPageData>(
-        _watchEntriesUsecase.call(event.fieldListId),
+        _watchEntriesUsecase.watchEntriesForScore(fieldListId),
         onData: (entriesPageData) {
-          add(NewData(entriesPageData));
-          add(PrepareTab(state.currentTabIndex, DateTime.now()));
+          emit(
+            state.copyWith(
+              entriesPageData: entriesPageData,
+              status: EntriesStatus.success,
+              tabs: state.tabs.map((tab) {
+                if (tab.name == scoreTabName) {
+                  return tab.copyWith(
+                    entries: entriesPageData.entries,
+                    status: TabDataStatus.ready,
+                  );
+                } else {
+                  return tab.copyWith();
+                }
+              }).toList(),
+            ),
+          );
         },
         onError: (_, _) => emit(state.copyWith(status: EntriesStatus.failure)),
       );

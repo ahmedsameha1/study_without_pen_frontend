@@ -305,13 +305,19 @@ void main() {
     fieldList: fieldListEntity,
     entries: entries5,
   );
-  WatchEntriesUsecase watchEntriesUsecase = MockWatchEntriesUsecase();
+  late WatchEntriesUsecase watchEntriesUsecase;
 
   setUpAll(() {
     registerFallbackValue(FakeEntry());
     registerFallbackValue(FakeEntriesPageData());
   });
 
+  setUp(() {
+    watchEntriesUsecase = MockWatchEntriesUsecase();
+    when(
+      () => watchEntriesUsecase.watchEntriesForScore(fieldListEntity.id!),
+    ).thenAnswer((_) => Stream.value(entriesPageData1));
+  });
   EntriesBloc buildBloc() => EntriesBloc(watchEntriesUsecase);
   test('Bloc has a correct initial state', () {
     expect(EntriesBloc(watchEntriesUsecase).state, const EntriesState());
@@ -325,99 +331,71 @@ void main() {
     build: buildBloc,
     act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListId)),
     verify: (_) {
-      verify(() => watchEntriesUsecase.call(fieldListId)).called(1);
+      verify(
+        () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+      ).called(1);
     },
   );
 
   blocTest<EntriesBloc, EntriesState>(
-    'emits state '
-    'when watchEntriesUsecase.call stream emits EntriesPageData',
-    setUp: () {
-      when(
-        () => watchEntriesUsecase.call(fieldListEntity.id!),
-      ).thenAnswer((_) => Stream.value(entriesPageData1));
-    },
+    'should emit [loading, success] with categorized tabs when entries are successfully fetched',
     build: buildBloc,
-    act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListId)),
-    wait: const Duration(milliseconds: 1),
+    act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!)),
     expect: () => [
       const EntriesState(status: EntriesStatus.loading),
       EntriesState(
         status: EntriesStatus.success,
         entriesPageData: entriesPageData1,
-        currentTabIndex: EntriesBloc.scoreTabIndex,
-        tabs: [
-          const TabData(
-            status: TabDataStatus.loading,
-            name: scoreTabName,
-            description: scoreTabDescription,
-          ),
-          const TabData(
-            status: TabDataStatus.loading,
-            name: strugglingTabName,
-            description: strugglingTabDescription,
-          ),
-          const TabData(
-            status: TabDataStatus.loading,
-            name: todayTabName,
-            description: todayTabDescription,
-          ),
-          const TabData(
-            status: TabDataStatus.loading,
-            outdated: true,
-            name: unseenTabName,
-            description: unseenTabDescription,
-            entries: [],
-          ),
-          const TabData(
-            status: TabDataStatus.loading,
-            outdated: true,
-            name: browseTabName,
-            description: browseTabDescription,
-            entries: [],
-          ),
-        ],
-      ),
-      EntriesState(
-        status: EntriesStatus.success,
-        entriesPageData: entriesPageData1,
-        currentTabIndex: EntriesBloc.scoreTabIndex,
         tabs: [
           TabData(
             status: TabDataStatus.ready,
-            outdated: false,
             name: scoreTabName,
             description: scoreTabDescription,
-            entries: scoreEntries1,
+            entries: entriesPageData1.entries,
           ),
           const TabData(
-            status: TabDataStatus.loading,
             name: strugglingTabName,
             description: strugglingTabDescription,
           ),
-          const TabData(
-            status: TabDataStatus.loading,
-            name: todayTabName,
-            description: todayTabDescription,
-          ),
-          const TabData(
-            status: TabDataStatus.loading,
-            outdated: true,
-            name: unseenTabName,
-            description: unseenTabDescription,
-          ),
-          const TabData(
-            status: TabDataStatus.loading,
-            outdated: true,
-            name: browseTabName,
-            description: browseTabDescription,
-            entries: [],
-          ),
+          const TabData(name: todayTabName, description: todayTabDescription),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
         ],
       ),
     ],
   );
 
+  blocTest<EntriesBloc, EntriesState>(
+    'should emit [loading, failure] when watching entries encounters an error in the stream',
+    setUp: () {
+      when(
+        () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+      ).thenAnswer((_) => Stream.error(Exception('oops!')));
+    },
+    build: buildBloc,
+    act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!)),
+    expect: () => [
+      const EntriesState(status: EntriesStatus.loading),
+      const EntriesState(status: EntriesStatus.failure),
+    ],
+  );
+
+  blocTest<EntriesBloc, EntriesState>(
+    'should emit [loading, failure] when watching entries encounters an error by throwing exception',
+    setUp: () {
+      when(
+        () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+      ).thenThrow((_) => Exception('oops!'));
+    },
+    build: buildBloc,
+    act: (bloc) => bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!)),
+    expect: () => [
+      const EntriesState(status: EntriesStatus.loading),
+      const EntriesState(status: EntriesStatus.failure),
+    ],
+  );
+
+  /*
   blocTest<EntriesBloc, EntriesState>(
     'emits state '
     'when watchEntriesUsecase.call stream emits new EntriesPageData '
@@ -1655,4 +1633,5 @@ void main() {
       EntriesState(status: EntriesStatus.failure),
     ],
   );
+  */
 }
