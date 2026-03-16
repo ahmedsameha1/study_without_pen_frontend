@@ -1,19 +1,9 @@
 import 'package:flutter/foundation.dart';
 
-import '../../domain/models/entries_page_data.dart';
-
 @immutable
 sealed class EntriesEvent {
   const EntriesEvent();
 }
-
-class PrepareScoreTab extends EntriesEvent {}
-
-class PrepareStrugglingTab extends EntriesEvent {}
-
-class PrepareTodayTab extends EntriesEvent {}
-
-class PrepareUnseenTab extends EntriesEvent {}
 
 class EntriesSubscriptionRequested extends EntriesEvent {
   const EntriesSubscriptionRequested(this.fieldListId);
@@ -33,40 +23,12 @@ class EntriesSubscriptionRequested extends EntriesEvent {
   int get hashCode => fieldListId.hashCode;
 }
 
-class PrepareTab extends EntriesEvent {
-  const PrepareTab(this.tabIndex, this.now);
-  final int tabIndex;
-  final DateTime now;
+class PrepareScoreTab extends EntriesEvent {}
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    return other is PrepareTab &&
-        runtimeType == other.runtimeType &&
-        tabIndex == other.tabIndex &&
-        now == other.now;
-  }
+class PrepareStrugglingTab extends EntriesEvent {}
 
-  @override
-  int get hashCode => Object.hashAll([tabIndex, now]);
-}
+class PrepareTodayTab extends EntriesEvent {}
 
-class NewData extends EntriesEvent {
-  const NewData(this.data);
-  final EntriesPageData data;
+class PrepareUnseenTab extends EntriesEvent {}
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    return other is NewData &&
-        runtimeType == other.runtimeType &&
-        data == other.data;
-  }
-
-  @override
-  int get hashCode => data.hashCode;
-}
+class PrepareBrowseTab extends EntriesEvent {}

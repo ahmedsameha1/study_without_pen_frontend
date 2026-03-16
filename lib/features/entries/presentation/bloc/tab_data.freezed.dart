@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TabData {
 
- String get name; String get description; TabDataStatus get status; bool get outdated; List<EntryEntity> get entries;
+ String get name; String get description; TabDataStatus get status; List<EntryEntity> get entries;
 /// Create a copy of TabData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $TabDataCopyWith<TabData> get copyWith => _$TabDataCopyWithImpl<TabData>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TabData&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.status, status) || other.status == status)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&const DeepCollectionEquality().equals(other.entries, entries));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TabData&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.entries, entries));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,description,status,outdated,const DeepCollectionEquality().hash(entries));
+int get hashCode => Object.hash(runtimeType,name,description,status,const DeepCollectionEquality().hash(entries));
 
 @override
 String toString() {
-  return 'TabData(name: $name, description: $description, status: $status, outdated: $outdated, entries: $entries)';
+  return 'TabData(name: $name, description: $description, status: $status, entries: $entries)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $TabDataCopyWith<$Res>  {
   factory $TabDataCopyWith(TabData value, $Res Function(TabData) _then) = _$TabDataCopyWithImpl;
 @useResult
 $Res call({
- String name, String description, TabDataStatus status, bool outdated, List<EntryEntity> entries
+ String name, String description, TabDataStatus status, List<EntryEntity> entries
 });
 
 
@@ -62,13 +62,12 @@ class _$TabDataCopyWithImpl<$Res>
 
 /// Create a copy of TabData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? description = null,Object? status = null,Object? outdated = null,Object? entries = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? description = null,Object? status = null,Object? entries = null,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as TabDataStatus,outdated: null == outdated ? _self.outdated : outdated // ignore: cast_nullable_to_non_nullable
-as bool,entries: null == entries ? _self.entries : entries // ignore: cast_nullable_to_non_nullable
+as TabDataStatus,entries: null == entries ? _self.entries : entries // ignore: cast_nullable_to_non_nullable
 as List<EntryEntity>,
   ));
 }
@@ -154,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String description,  TabDataStatus status,  bool outdated,  List<EntryEntity> entries)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String description,  TabDataStatus status,  List<EntryEntity> entries)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TabData() when $default != null:
-return $default(_that.name,_that.description,_that.status,_that.outdated,_that.entries);case _:
+return $default(_that.name,_that.description,_that.status,_that.entries);case _:
   return orElse();
 
 }
@@ -175,10 +174,10 @@ return $default(_that.name,_that.description,_that.status,_that.outdated,_that.e
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String description,  TabDataStatus status,  bool outdated,  List<EntryEntity> entries)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String description,  TabDataStatus status,  List<EntryEntity> entries)  $default,) {final _that = this;
 switch (_that) {
 case _TabData():
-return $default(_that.name,_that.description,_that.status,_that.outdated,_that.entries);case _:
+return $default(_that.name,_that.description,_that.status,_that.entries);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +194,10 @@ return $default(_that.name,_that.description,_that.status,_that.outdated,_that.e
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String description,  TabDataStatus status,  bool outdated,  List<EntryEntity> entries)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String description,  TabDataStatus status,  List<EntryEntity> entries)?  $default,) {final _that = this;
 switch (_that) {
 case _TabData() when $default != null:
-return $default(_that.name,_that.description,_that.status,_that.outdated,_that.entries);case _:
+return $default(_that.name,_that.description,_that.status,_that.entries);case _:
   return null;
 
 }
@@ -210,13 +209,12 @@ return $default(_that.name,_that.description,_that.status,_that.outdated,_that.e
 
 
 class _TabData implements TabData {
-  const _TabData({required this.name, required this.description, this.status = TabDataStatus.loading, this.outdated = true, final  List<EntryEntity> entries = const []}): _entries = entries;
+  const _TabData({required this.name, required this.description, this.status = TabDataStatus.loading, final  List<EntryEntity> entries = const []}): _entries = entries;
   
 
 @override final  String name;
 @override final  String description;
 @override@JsonKey() final  TabDataStatus status;
-@override@JsonKey() final  bool outdated;
  final  List<EntryEntity> _entries;
 @override@JsonKey() List<EntryEntity> get entries {
   if (_entries is EqualUnmodifiableListView) return _entries;
@@ -235,16 +233,16 @@ _$TabDataCopyWith<_TabData> get copyWith => __$TabDataCopyWithImpl<_TabData>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TabData&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.status, status) || other.status == status)&&(identical(other.outdated, outdated) || other.outdated == outdated)&&const DeepCollectionEquality().equals(other._entries, _entries));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TabData&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._entries, _entries));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,name,description,status,outdated,const DeepCollectionEquality().hash(_entries));
+int get hashCode => Object.hash(runtimeType,name,description,status,const DeepCollectionEquality().hash(_entries));
 
 @override
 String toString() {
-  return 'TabData(name: $name, description: $description, status: $status, outdated: $outdated, entries: $entries)';
+  return 'TabData(name: $name, description: $description, status: $status, entries: $entries)';
 }
 
 
@@ -255,7 +253,7 @@ abstract mixin class _$TabDataCopyWith<$Res> implements $TabDataCopyWith<$Res> {
   factory _$TabDataCopyWith(_TabData value, $Res Function(_TabData) _then) = __$TabDataCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String description, TabDataStatus status, bool outdated, List<EntryEntity> entries
+ String name, String description, TabDataStatus status, List<EntryEntity> entries
 });
 
 
@@ -272,13 +270,12 @@ class __$TabDataCopyWithImpl<$Res>
 
 /// Create a copy of TabData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? description = null,Object? status = null,Object? outdated = null,Object? entries = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? description = null,Object? status = null,Object? entries = null,}) {
   return _then(_TabData(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as TabDataStatus,outdated: null == outdated ? _self.outdated : outdated // ignore: cast_nullable_to_non_nullable
-as bool,entries: null == entries ? _self._entries : entries // ignore: cast_nullable_to_non_nullable
+as TabDataStatus,entries: null == entries ? _self._entries : entries // ignore: cast_nullable_to_non_nullable
 as List<EntryEntity>,
   ));
 }

@@ -12,7 +12,6 @@ abstract class TabData with _$TabData {
     required String name,
     required String description,
     @Default(TabDataStatus.loading) TabDataStatus status,
-    @Default(true) bool outdated,
     @Default([]) List<EntryEntity> entries,
   }) = _TabData;
 }
