@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
-import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
@@ -594,6 +595,212 @@ void main() {
           ],
         ),
         const EntriesState(status: EntriesStatus.failure),
+      ],
+    );
+  });
+
+  group('PrepareStrugglingTab event', () {
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit success with categorized tabs when entries are successfully fetched '
+      'when there is undefault current state',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchEntriesForStruggling(fieldListId),
+        ).thenAnswer((_) => Stream.value(entriesPageData1));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData3,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(PrepareStrugglingTab()),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData3,
+          currentTabIndex: EntriesBloc.strugglingTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData3,
+          currentTabIndex: EntriesBloc.strugglingTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            TabData(
+              status: TabDataStatus.ready,
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure when entriesPageData is null',
+      build: buildBloc,
+      act: (bloc) => bloc.add(PrepareStrugglingTab()),
+      expect: () => [
+        const EntriesState(
+          status: EntriesStatus.failure,
+          currentTabIndex: EntriesBloc.strugglingTabIndex,
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure when watching entries encounters an error in the stream',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchEntriesForStruggling(fieldListId),
+        ).thenAnswer((_) => Stream.error(Exception('oops!')));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData3,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(PrepareStrugglingTab()),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData3,
+          currentTabIndex: EntriesBloc.strugglingTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        const EntriesState(
+          status: EntriesStatus.failure,
+          currentTabIndex: EntriesBloc.strugglingTabIndex,
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure when watching entries encounters an error by throwing exception',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchEntriesForStruggling(fieldListId),
+        ).thenThrow((_) => Exception('oops!'));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData3,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(PrepareStrugglingTab()),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData3,
+          currentTabIndex: EntriesBloc.strugglingTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        const EntriesState(
+          status: EntriesStatus.failure,
+          currentTabIndex: EntriesBloc.strugglingTabIndex,
+        ),
       ],
     );
   });

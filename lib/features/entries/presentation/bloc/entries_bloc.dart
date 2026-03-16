@@ -13,6 +13,10 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   EntriesBloc(this._watchEntriesUsecase) : super(const EntriesState()) {
     on<EntriesSubscriptionRequested>(_onSubscriptionRequested);
     on<PrepareScoreTab>(_onPrepareScoreTab, transformer: restartable());
+    on<PrepareStrugglingTab>(
+      _onPrepareStrugglingTab,
+      transformer: restartable(),
+    );
     on<NewData>(_onNewData, transformer: sequential());
     on<PrepareTab>(_onPrepareTab, transformer: sequential());
   }
@@ -84,6 +88,74 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
       );
     } catch (e) {
       emit(const EntriesState(status: EntriesStatus.failure));
+    }
+  }
+
+  Future<void> _onPrepareStrugglingTab(
+    PrepareStrugglingTab event,
+    Emitter<EntriesState> emit,
+  ) async {
+    await _prepareTab(
+      emit,
+      _watchEntriesUsecase.watchEntriesForStruggling,
+      strugglingTabName,
+      strugglingTabIndex,
+    );
+  }
+
+  Future<void> _prepareTab(
+    Emitter<EntriesState> emit,
+    Stream<EntriesPageData> Function(String fieldListId) call,
+    String tabName,
+    int tabIndex,
+  ) async {
+    if (state.entriesPageData != null) {
+      emit(
+        state.copyWith(
+          currentTabIndex: tabIndex,
+          tabs: const EntriesState().tabs.map((tab) => tab.copyWith()).toList(),
+        ),
+      );
+      try {
+        await emit.onEach<EntriesPageData>(
+          call(state.entriesPageData!.fieldList.id!),
+          onData: (entriesPageData) => emit(
+            state.copyWith(
+              status: EntriesStatus.success,
+              tabs: const EntriesState().tabs.map((tab) {
+                if (tab.name == tabName) {
+                  return tab.copyWith(
+                    status: TabDataStatus.ready,
+                    entries: entriesPageData.entries,
+                  );
+                } else {
+                  return tab.copyWith();
+                }
+              }).toList(),
+            ),
+          ),
+          onError: (_, _) => emit(
+            const EntriesState().copyWith(
+              status: EntriesStatus.failure,
+              currentTabIndex: tabIndex,
+            ),
+          ),
+        );
+      } catch (e) {
+        emit(
+          const EntriesState().copyWith(
+            status: EntriesStatus.failure,
+            currentTabIndex: tabIndex,
+          ),
+        );
+      }
+    } else {
+      emit(
+        state.copyWith(
+          status: EntriesStatus.failure,
+          currentTabIndex: tabIndex,
+        ),
+      );
     }
   }
 
