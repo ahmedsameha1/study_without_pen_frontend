@@ -18,6 +18,7 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
       transformer: restartable(),
     );
     on<PrepareTodayTab>(_onPrepareTodayTab, transformer: restartable());
+    on<PrepareUnseenTab>(_onPrepareUnseenTab, transformer: restartable());
     on<NewData>(_onNewData, transformer: sequential());
     on<PrepareTab>(_onPrepareTab, transformer: sequential());
   }
@@ -113,6 +114,18 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
       _watchEntriesUsecase.watchEntriesForToday,
       todayTabName,
       todayTabIndex,
+    );
+  }
+
+  Future<void> _onPrepareUnseenTab(
+    PrepareUnseenTab event,
+    Emitter<EntriesState> emit,
+  ) async {
+    await _prepareTab(
+      emit,
+      _watchEntriesUsecase.watchEntriesForUnseen,
+      unseenTabName,
+      unseenTabIndex,
     );
   }
 

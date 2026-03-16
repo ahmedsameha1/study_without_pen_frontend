@@ -1011,7 +1011,6 @@ void main() {
     );
   });
 
-  /*
   group('PrepareUnseenTab event', () {
     blocTest<EntriesBloc, EntriesState>(
       'should emit success with categorized tabs when entries are successfully fetched '
@@ -1024,7 +1023,7 @@ void main() {
       seed: () => EntriesState(
         status: EntriesStatus.success,
         entriesPageData: entriesPageData3,
-        currentTabIndex: EntriesBloc.todayTabIndex,
+        currentTabIndex: EntriesBloc.strugglingTabIndex,
         tabs: [
           const TabData(name: scoreTabName, description: scoreTabDescription),
           TabData(
@@ -1039,12 +1038,12 @@ void main() {
         ],
       ),
       build: buildBloc,
-      act: (bloc) => bloc.add(PrepareTodayTab()),
+      act: (bloc) => bloc.add(PrepareUnseenTab()),
       expect: () => [
         EntriesState(
           status: EntriesStatus.success,
           entriesPageData: entriesPageData3,
-          currentTabIndex: EntriesBloc.todayTabIndex,
+          currentTabIndex: EntriesBloc.unseenTabIndex,
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -1065,22 +1064,19 @@ void main() {
         EntriesState(
           status: EntriesStatus.success,
           entriesPageData: entriesPageData3,
-          currentTabIndex: EntriesBloc.todayTabIndex,
+          currentTabIndex: EntriesBloc.unseenTabIndex,
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
               name: strugglingTabName,
               description: strugglingTabDescription,
             ),
+            const TabData(name: todayTabName, description: todayTabDescription),
             TabData(
               status: TabDataStatus.ready,
-              name: todayTabName,
-              description: todayTabDescription,
-              entries: entriesPageData1.entries,
-            ),
-            const TabData(
               name: unseenTabName,
               description: unseenTabDescription,
+              entries: entriesPageData1.entries,
             ),
             const TabData(
               name: browseTabName,
@@ -1094,11 +1090,11 @@ void main() {
     blocTest<EntriesBloc, EntriesState>(
       'should emit failure when entriesPageData is null',
       build: buildBloc,
-      act: (bloc) => bloc.add(PrepareTodayTab()),
+      act: (bloc) => bloc.add(PrepareUnseenTab()),
       expect: () => [
         const EntriesState(
           status: EntriesStatus.failure,
-          currentTabIndex: EntriesBloc.todayTabIndex,
+          currentTabIndex: EntriesBloc.unseenTabIndex,
         ),
       ],
     );
@@ -1107,12 +1103,13 @@ void main() {
       'should emit failure when watching entries encounters an error in the stream',
       setUp: () {
         when(
-          () => watchEntriesUsecase.watchEntriesForToday(fieldListId),
+          () => watchEntriesUsecase.watchEntriesForUnseen(fieldListId),
         ).thenAnswer((_) => Stream.error(Exception('oops!')));
       },
       seed: () => EntriesState(
         status: EntriesStatus.success,
         entriesPageData: entriesPageData3,
+        currentTabIndex: EntriesBloc.strugglingTabIndex,
         tabs: [
           const TabData(name: scoreTabName, description: scoreTabDescription),
           TabData(
@@ -1127,12 +1124,12 @@ void main() {
         ],
       ),
       build: buildBloc,
-      act: (bloc) => bloc.add(PrepareTodayTab()),
+      act: (bloc) => bloc.add(PrepareUnseenTab()),
       expect: () => [
         EntriesState(
           status: EntriesStatus.success,
           entriesPageData: entriesPageData3,
-          currentTabIndex: EntriesBloc.todayTabIndex,
+          currentTabIndex: EntriesBloc.unseenTabIndex,
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -1152,7 +1149,7 @@ void main() {
         ),
         const EntriesState(
           status: EntriesStatus.failure,
-          currentTabIndex: EntriesBloc.todayTabIndex,
+          currentTabIndex: EntriesBloc.unseenTabIndex,
         ),
       ],
     );
@@ -1161,12 +1158,13 @@ void main() {
       'should emit failure when watching entries encounters an error by throwing exception',
       setUp: () {
         when(
-          () => watchEntriesUsecase.watchEntriesForToday(fieldListId),
+          () => watchEntriesUsecase.watchEntriesForUnseen(fieldListId),
         ).thenThrow((_) => Exception('oops!'));
       },
       seed: () => EntriesState(
         status: EntriesStatus.success,
         entriesPageData: entriesPageData3,
+        currentTabIndex: EntriesBloc.strugglingTabIndex,
         tabs: [
           const TabData(name: scoreTabName, description: scoreTabDescription),
           TabData(
@@ -1181,12 +1179,12 @@ void main() {
         ],
       ),
       build: buildBloc,
-      act: (bloc) => bloc.add(PrepareTodayTab()),
+      act: (bloc) => bloc.add(PrepareUnseenTab()),
       expect: () => [
         EntriesState(
           status: EntriesStatus.success,
           entriesPageData: entriesPageData3,
-          currentTabIndex: EntriesBloc.todayTabIndex,
+          currentTabIndex: EntriesBloc.unseenTabIndex,
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -1206,12 +1204,13 @@ void main() {
         ),
         const EntriesState(
           status: EntriesStatus.failure,
-          currentTabIndex: EntriesBloc.todayTabIndex,
+          currentTabIndex: EntriesBloc.unseenTabIndex,
         ),
       ],
     );
   });
 
+  /*
   blocTest<EntriesBloc, EntriesState>(
     'emits state '
     'when watchEntriesUsecase.call stream emits new EntriesPageData '

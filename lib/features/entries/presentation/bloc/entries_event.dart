@@ -13,6 +13,8 @@ class PrepareStrugglingTab extends EntriesEvent {}
 
 class PrepareTodayTab extends EntriesEvent {}
 
+class PrepareUnseenTab extends EntriesEvent {}
+
 class EntriesSubscriptionRequested extends EntriesEvent {
   const EntriesSubscriptionRequested(this.fieldListId);
   final String fieldListId;
