@@ -17,6 +17,7 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
       _onPrepareStrugglingTab,
       transformer: restartable(),
     );
+    on<PrepareTodayTab>(_onPrepareTodayTab, transformer: restartable());
     on<NewData>(_onNewData, transformer: sequential());
     on<PrepareTab>(_onPrepareTab, transformer: sequential());
   }
@@ -100,6 +101,18 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
       _watchEntriesUsecase.watchEntriesForStruggling,
       strugglingTabName,
       strugglingTabIndex,
+    );
+  }
+
+  Future<void> _onPrepareTodayTab(
+    PrepareTodayTab event,
+    Emitter<EntriesState> emit,
+  ) async {
+    await _prepareTab(
+      emit,
+      _watchEntriesUsecase.watchEntriesForToday,
+      todayTabName,
+      todayTabIndex,
     );
   }
 
