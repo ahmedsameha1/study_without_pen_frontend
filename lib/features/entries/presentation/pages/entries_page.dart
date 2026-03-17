@@ -358,9 +358,19 @@ class _EntriesPageViewState extends State<EntriesPageView>
 
   void _handleTabChange() {
     if (!_tabController.indexIsChanging) {
-      BlocProvider.of<EntriesBloc>(
-        context,
-      ).add(PrepareTab(_tabController.index, DateTime.now()));
+      if (_tabController.index == EntriesBloc.scoreTabIndex) {
+        BlocProvider.of<EntriesBloc>(context).add(PrepareScoreTab());
+      } else if (_tabController.index == EntriesBloc.strugglingTabIndex) {
+        BlocProvider.of<EntriesBloc>(context).add(PrepareStrugglingTab());
+      } else if (_tabController.index == EntriesBloc.todayTabIndex) {
+        BlocProvider.of<EntriesBloc>(context).add(PrepareTodayTab());
+      } else if (_tabController.index == EntriesBloc.unseenTabIndex) {
+        BlocProvider.of<EntriesBloc>(context).add(PrepareUnseenTab());
+      } else if (_tabController.index == EntriesBloc.browseTabIndex) {
+        BlocProvider.of<EntriesBloc>(context).add(PrepareBrowseTab());
+      } else {
+        throw ArgumentError(_tabController.index);
+      }
     }
   }
 }
