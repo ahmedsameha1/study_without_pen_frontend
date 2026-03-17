@@ -373,6 +373,184 @@ void main() {
       ],
     );
 
+    StreamController<EntriesPageData> streamController1 = StreamController();
+    StreamController<EntriesPageData> streamController2 = StreamController();
+    blocTest<EntriesBloc, EntriesState>(
+      'fffffff',
+      setUp: () {
+        watchEntriesUsecase = MockWatchEntriesUsecase();
+        when(
+          () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        ).thenAnswer((_) => streamController1.stream);
+        when(
+          () => watchEntriesUsecase.watchEntriesForToday(fieldListId),
+        ).thenAnswer((_) => streamController2.stream);
+      },
+      build: buildBloc,
+      act: (bloc) async {
+        bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!));
+        streamController1.add(entriesPageData1);
+        await Future.delayed(Duration.zero);
+        bloc.add(PrepareTodayTab());
+        streamController1.add(entriesPageData2);
+        await Future.delayed(Duration.zero);
+        streamController2.add(entriesPageData2);
+        await Future.delayed(Duration.zero);
+        streamController1.add(entriesPageData3);
+        await Future.delayed(Duration.zero);
+        streamController2.add(entriesPageData3);
+        await Future.delayed(Duration.zero);
+      },
+      expect: () => [
+        const EntriesState(status: EntriesStatus.loading),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          tabs: [
+            TabData(
+              status: TabDataStatus.ready,
+              name: scoreTabName,
+              description: scoreTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData2,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData2,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData2.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData3,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData2.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData3,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData3.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+          ],
+        ),
+      ],
+    );
+
     blocTest<EntriesBloc, EntriesState>(
       'should emit [loading, failure] when watching entries encounters an error in the stream',
       setUp: () {
@@ -456,7 +634,7 @@ void main() {
         ),
         EntriesState(
           status: EntriesStatus.success,
-          entriesPageData: entriesPageData1,
+          entriesPageData: entriesPageData2,
           currentTabIndex: EntriesBloc.scoreTabIndex,
           tabs: [
             TabData(

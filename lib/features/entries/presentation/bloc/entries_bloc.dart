@@ -31,56 +31,55 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     Emitter<EntriesState> emit,
   ) async {
     emit(state.copyWith(status: EntriesStatus.loading));
-    await _prepareScoreTab(event.fieldListId, emit);
+    await _handleSubscription(event.fieldListId, emit);
   }
 
   Future<void> _onPrepareScoreTab(
     PrepareScoreTab event,
     Emitter<EntriesState> emit,
   ) async {
-    if (state.entriesPageData != null) {
-      await _prepareScoreTab(state.entriesPageData!.fieldList.id!, emit);
-    } else {
-      emit(
-        state.copyWith(
-          status: EntriesStatus.failure,
-          currentTabIndex: scoreTabIndex,
-        ),
-      );
-    }
+    await _prepareTab(
+      emit,
+      _watchEntriesUsecase.watchEntriesForScore,
+      scoreTabName,
+      scoreTabIndex,
+    );
   }
 
-  Future<void> _prepareScoreTab(
+  Future<void> _handleSubscription(
     String fieldListId,
     Emitter<EntriesState> emit,
   ) async {
     try {
-      emit(
-        state.copyWith(
-          currentTabIndex: EntriesBloc.scoreTabIndex,
-          tabs: const EntriesState().tabs.map((tab) => tab.copyWith()).toList(),
-        ),
-      );
       await emit.onEach<EntriesPageData>(
         _watchEntriesUsecase.watchEntriesForScore(fieldListId),
         onData: (entriesPageData) {
-          emit(
-            state.copyWith(
-              status: EntriesStatus.success,
-              currentTabIndex: EntriesBloc.scoreTabIndex,
-              entriesPageData: entriesPageData,
-              tabs: const EntriesState().tabs.map((tab) {
-                if (tab.name == scoreTabName) {
-                  return tab.copyWith(
-                    status: TabDataStatus.ready,
-                    entries: entriesPageData.entries,
-                  );
-                } else {
-                  return tab.copyWith();
-                }
-              }).toList(),
-            ),
-          );
+          if (state.currentTabIndex == EntriesBloc.scoreTabIndex) {
+            emit(
+              state.copyWith(
+                status: EntriesStatus.success,
+                entriesPageData: entriesPageData,
+                tabs: const EntriesState().tabs.map((tab) {
+                  if (tab.name == scoreTabName) {
+                    return tab.copyWith(
+                      status: TabDataStatus.ready,
+                      entries: entriesPageData.entries,
+                    );
+                  } else {
+                    return tab;
+                  }
+                }).toList(),
+              ),
+            );
+          } else {
+            emit(
+              state.copyWith(
+                status: EntriesStatus.success,
+                entriesPageData: entriesPageData,
+                tabs: state.tabs,
+              ),
+            );
+          }
         },
         onError: (_, _) =>
             emit(const EntriesState(status: EntriesStatus.failure)),
@@ -146,9 +145,10 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   ) async {
     if (state.entriesPageData != null) {
       emit(
-        state.copyWith(
+        EntriesState(
+          status: EntriesStatus.success,
           currentTabIndex: tabIndex,
-          tabs: const EntriesState().tabs.map((tab) => tab.copyWith()).toList(),
+          entriesPageData: state.entriesPageData,
         ),
       );
       try {
@@ -157,14 +157,14 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
           onData: (entriesPageData) => emit(
             state.copyWith(
               status: EntriesStatus.success,
-              tabs: const EntriesState().tabs.map((tab) {
+              tabs: state.tabs.map((tab) {
                 if (tab.name == tabName) {
                   return tab.copyWith(
                     status: TabDataStatus.ready,
                     entries: entriesPageData.entries,
                   );
                 } else {
-                  return tab.copyWith();
+                  return tab;
                 }
               }).toList(),
             ),
