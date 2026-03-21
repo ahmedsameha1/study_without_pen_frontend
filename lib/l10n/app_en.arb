@@ -103,9 +103,7 @@
         "placeholders": {
             "numberOfDisplayedEntries": {
                 "type": "int"
-            }
-        },
-        "placeholders": {
+            },
             "numberOfEntries": {
                 "type": "int"
             }
@@ -116,9 +114,7 @@
         "placeholders": {
             "numberOfDisplayedEntries": {
                 "type": "int"
-            }
-        },
-        "placeholders": {
+            },
             "numberOfEntries": {
                 "type": "int"
             }
@@ -129,9 +125,7 @@
         "placeholders": {
             "numberOfDisplayedEntries": {
                 "type": "int"
-            }
-        },
-        "placeholders": {
+            },
             "numberOfEntries": {
                 "type": "int"
             }
@@ -142,9 +136,7 @@
         "placeholders": {
             "numberOfDisplayedEntries": {
                 "type": "int"
-            }
-        },
-        "placeholders": {
+            },
             "numberOfEntries": {
                 "type": "int"
             }
@@ -155,15 +147,21 @@
         "placeholders": {
             "numberOfDisplayedEntries": {
                 "type": "int"
-            }
-        },
-        "placeholders": {
+            },
             "numberOfEntries": {
                 "type": "int"
             }
         }
     },
-    "searchDescription": "Search result",
+    "searchDescription": "Search result for \"{searchText}\"",
+    "@searchDescription": {
+        "placeholders": {
+            "searchText": {
+                "type": "String"
+            }
+        }
+    },
+    "defaultSearchDescription": "Search result is displyed here",
     "created": "Created",
     "creationError": "Error while creation",
     "noFields": "Currently, there are no fields!",

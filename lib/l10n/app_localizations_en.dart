@@ -144,47 +144,40 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String scoreDescription(
-    int numberOfEntries,
-    Object numberOfDisplayedEntries,
-  ) {
+  String scoreDescription(int numberOfDisplayedEntries, int numberOfEntries) {
     return '$numberOfDisplayedEntries/$numberOfEntries entries ordered by score descendingly';
   }
 
   @override
   String strugglingDescription(
+    int numberOfDisplayedEntries,
     int numberOfEntries,
-    Object numberOfDisplayedEntries,
   ) {
     return '$numberOfDisplayedEntries/$numberOfEntries entries with a 60%+ wrongness rate';
   }
 
   @override
-  String todayDescription(
-    int numberOfEntries,
-    Object numberOfDisplayedEntries,
-  ) {
+  String todayDescription(int numberOfDisplayedEntries, int numberOfEntries) {
     return '$numberOfDisplayedEntries/$numberOfEntries entries created today';
   }
 
   @override
-  String unseenDescription(
-    int numberOfEntries,
-    Object numberOfDisplayedEntries,
-  ) {
+  String unseenDescription(int numberOfDisplayedEntries, int numberOfEntries) {
     return '$numberOfDisplayedEntries/$numberOfEntries entries from previous days yet to be studied';
   }
 
   @override
-  String browseDescription(
-    int numberOfEntries,
-    Object numberOfDisplayedEntries,
-  ) {
+  String browseDescription(int numberOfDisplayedEntries, int numberOfEntries) {
     return '$numberOfDisplayedEntries/$numberOfEntries entries indexed by order and alphabet';
   }
 
   @override
-  String get searchDescription => 'Search result';
+  String searchDescription(String searchText) {
+    return 'Search result for \"$searchText\"';
+  }
+
+  @override
+  String get defaultSearchDescription => 'Search result is displyed here';
 
   @override
   String get created => 'Created';

@@ -320,46 +320,46 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries ordered by score descendingly'**
-  String scoreDescription(int numberOfEntries, Object numberOfDisplayedEntries);
+  String scoreDescription(int numberOfDisplayedEntries, int numberOfEntries);
 
   /// No description provided for @strugglingDescription.
   ///
   /// In en, this message translates to:
   /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries with a 60%+ wrongness rate'**
   String strugglingDescription(
+    int numberOfDisplayedEntries,
     int numberOfEntries,
-    Object numberOfDisplayedEntries,
   );
 
   /// No description provided for @todayDescription.
   ///
   /// In en, this message translates to:
   /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries created today'**
-  String todayDescription(int numberOfEntries, Object numberOfDisplayedEntries);
+  String todayDescription(int numberOfDisplayedEntries, int numberOfEntries);
 
   /// No description provided for @unseenDescription.
   ///
   /// In en, this message translates to:
   /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries from previous days yet to be studied'**
-  String unseenDescription(
-    int numberOfEntries,
-    Object numberOfDisplayedEntries,
-  );
+  String unseenDescription(int numberOfDisplayedEntries, int numberOfEntries);
 
   /// No description provided for @browseDescription.
   ///
   /// In en, this message translates to:
   /// **'{numberOfDisplayedEntries}/{numberOfEntries} entries indexed by order and alphabet'**
-  String browseDescription(
-    int numberOfEntries,
-    Object numberOfDisplayedEntries,
-  );
+  String browseDescription(int numberOfDisplayedEntries, int numberOfEntries);
 
   /// No description provided for @searchDescription.
   ///
   /// In en, this message translates to:
-  /// **'Search result'**
-  String get searchDescription;
+  /// **'Search result for \"{searchText}\"'**
+  String searchDescription(String searchText);
+
+  /// No description provided for @defaultSearchDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Search result is displyed here'**
+  String get defaultSearchDescription;
 
   /// No description provided for @created.
   ///

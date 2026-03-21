@@ -414,9 +414,15 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                               tab.entries.length,
                                             ),
                                           searchTabDescription =>
-                                            AppLocalizations.of(
-                                              context,
-                                            )!.searchDescription,
+                                            state.searchText != null
+                                                ? AppLocalizations.of(
+                                                    context,
+                                                  )!.searchDescription(
+                                                    state.searchText!,
+                                                  )
+                                                : AppLocalizations.of(
+                                                    context,
+                                                  )!.defaultSearchDescription,
                                           _ => throw ArgumentError(
                                             tab.description,
                                           ),

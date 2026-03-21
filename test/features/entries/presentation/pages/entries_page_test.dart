@@ -31,8 +31,7 @@ Future<void> _createEntriesPageInASkeleton(
   WatchEntriesUsecase watchEntriesUsecase,
   String fieldListId,
   String fieldId,
-) async {
-  return tester.pumpWidget(
+) async => tester.pumpWidget(
     RepositoryProvider.value(
       value: watchEntriesUsecase,
       child: MaterialApp(
@@ -40,23 +39,17 @@ Future<void> _createEntriesPageInASkeleton(
       ),
     ),
   );
-}
 
 Future<void> _createEntriesPageViewInASkeleton(
   WidgetTester tester,
   Locale locale,
   GoRouter goRouter,
-  // Todo Consider removing this
-  WatchEntriesUsecase watchEntriesUsecase,
   EntriesBloc entriesBloc,
   String fieldListId,
   String fieldId,
-) {
-  return tester.pumpWidget(
-    RepositoryProvider.value(
-      value: watchEntriesUsecase,
-      child: MaterialApp(
-        localizationsDelegates: [AppLocalizations.delegate],
+) => tester.pumpWidget(
+       MaterialApp(
+        localizationsDelegates: const [AppLocalizations.delegate],
         supportedLocales: AppLocalizations.supportedLocales,
         locale: locale,
         home: InheritedGoRouter(
@@ -66,10 +59,8 @@ Future<void> _createEntriesPageViewInASkeleton(
             child: EntriesPageView(fieldId: fieldId, fieldListId: fieldListId),
           ),
         ),
-      ),
     ),
   );
-}
 
 void main() {
   DateTime fieldListDateTime = DateTime(2025);
@@ -223,7 +214,6 @@ void main() {
             tester,
             currentLocale,
             goRouter,
-            watchEntriesUsecase,
             entriesBloc,
             fieldListEntity.id!,
             fieldListEntity.fieldId,
@@ -285,7 +275,6 @@ void main() {
             tester,
             currentLocale,
             goRouter,
-            watchEntriesUsecase,
             entriesBloc,
             fieldListEntity.id!,
             fieldListEntity.fieldId,
@@ -396,7 +385,6 @@ void main() {
             tester,
             currentLocale,
             goRouter,
-            watchEntriesUsecase,
             entriesBloc,
             fieldListEntity.id!,
             fieldListEntity.fieldId,
@@ -744,7 +732,6 @@ void main() {
           tester,
           currentLocale,
           goRouter,
-          watchEntriesUsecase,
           entriesBloc,
           fieldListEntity.id!,
           fieldListEntity.fieldId,
