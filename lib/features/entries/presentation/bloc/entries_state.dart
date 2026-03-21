@@ -26,6 +26,7 @@ abstract class EntriesState with _$EntriesState {
     @Default(EntriesStatus.initial) EntriesStatus status,
     EntriesPageData? entriesPageData,
     @Default(0) int currentTabIndex,
+    String? searchText,
     @Default([
       TabData(name: scoreTabName, description: scoreTabDescription),
       TabData(name: strugglingTabName, description: strugglingTabDescription),

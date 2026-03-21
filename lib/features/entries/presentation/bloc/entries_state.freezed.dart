@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EntriesState {
 
- EntriesStatus get status; EntriesPageData? get entriesPageData; int get currentTabIndex; List<TabData> get tabs;
+ EntriesStatus get status; EntriesPageData? get entriesPageData; int get currentTabIndex; String? get searchText; List<TabData> get tabs;
 /// Create a copy of EntriesState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $EntriesStateCopyWith<EntriesState> get copyWith => _$EntriesStateCopyWithImpl<E
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntriesState&&(identical(other.status, status) || other.status == status)&&(identical(other.entriesPageData, entriesPageData) || other.entriesPageData == entriesPageData)&&(identical(other.currentTabIndex, currentTabIndex) || other.currentTabIndex == currentTabIndex)&&const DeepCollectionEquality().equals(other.tabs, tabs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EntriesState&&(identical(other.status, status) || other.status == status)&&(identical(other.entriesPageData, entriesPageData) || other.entriesPageData == entriesPageData)&&(identical(other.currentTabIndex, currentTabIndex) || other.currentTabIndex == currentTabIndex)&&(identical(other.searchText, searchText) || other.searchText == searchText)&&const DeepCollectionEquality().equals(other.tabs, tabs));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,entriesPageData,currentTabIndex,const DeepCollectionEquality().hash(tabs));
+int get hashCode => Object.hash(runtimeType,status,entriesPageData,currentTabIndex,searchText,const DeepCollectionEquality().hash(tabs));
 
 @override
 String toString() {
-  return 'EntriesState(status: $status, entriesPageData: $entriesPageData, currentTabIndex: $currentTabIndex, tabs: $tabs)';
+  return 'EntriesState(status: $status, entriesPageData: $entriesPageData, currentTabIndex: $currentTabIndex, searchText: $searchText, tabs: $tabs)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $EntriesStateCopyWith<$Res>  {
   factory $EntriesStateCopyWith(EntriesState value, $Res Function(EntriesState) _then) = _$EntriesStateCopyWithImpl;
 @useResult
 $Res call({
- EntriesStatus status, EntriesPageData? entriesPageData, int currentTabIndex, List<TabData> tabs
+ EntriesStatus status, EntriesPageData? entriesPageData, int currentTabIndex, String? searchText, List<TabData> tabs
 });
 
 
@@ -62,12 +62,13 @@ class _$EntriesStateCopyWithImpl<$Res>
 
 /// Create a copy of EntriesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? entriesPageData = freezed,Object? currentTabIndex = null,Object? tabs = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? entriesPageData = freezed,Object? currentTabIndex = null,Object? searchText = freezed,Object? tabs = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EntriesStatus,entriesPageData: freezed == entriesPageData ? _self.entriesPageData : entriesPageData // ignore: cast_nullable_to_non_nullable
 as EntriesPageData?,currentTabIndex: null == currentTabIndex ? _self.currentTabIndex : currentTabIndex // ignore: cast_nullable_to_non_nullable
-as int,tabs: null == tabs ? _self.tabs : tabs // ignore: cast_nullable_to_non_nullable
+as int,searchText: freezed == searchText ? _self.searchText : searchText // ignore: cast_nullable_to_non_nullable
+as String?,tabs: null == tabs ? _self.tabs : tabs // ignore: cast_nullable_to_non_nullable
 as List<TabData>,
   ));
 }
@@ -165,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( EntriesStatus status,  EntriesPageData? entriesPageData,  int currentTabIndex,  List<TabData> tabs)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( EntriesStatus status,  EntriesPageData? entriesPageData,  int currentTabIndex,  String? searchText,  List<TabData> tabs)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EntriesState() when $default != null:
-return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.tabs);case _:
+return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.searchText,_that.tabs);case _:
   return orElse();
 
 }
@@ -186,10 +187,10 @@ return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( EntriesStatus status,  EntriesPageData? entriesPageData,  int currentTabIndex,  List<TabData> tabs)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( EntriesStatus status,  EntriesPageData? entriesPageData,  int currentTabIndex,  String? searchText,  List<TabData> tabs)  $default,) {final _that = this;
 switch (_that) {
 case _EntriesState():
-return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.tabs);case _:
+return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.searchText,_that.tabs);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +207,10 @@ return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( EntriesStatus status,  EntriesPageData? entriesPageData,  int currentTabIndex,  List<TabData> tabs)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( EntriesStatus status,  EntriesPageData? entriesPageData,  int currentTabIndex,  String? searchText,  List<TabData> tabs)?  $default,) {final _that = this;
 switch (_that) {
 case _EntriesState() when $default != null:
-return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.tabs);case _:
+return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.searchText,_that.tabs);case _:
   return null;
 
 }
@@ -221,12 +222,13 @@ return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.t
 
 
 class _EntriesState implements EntriesState {
-  const _EntriesState({this.status = EntriesStatus.initial, this.entriesPageData, this.currentTabIndex = 0, final  List<TabData> tabs = const [TabData(name: scoreTabName, description: scoreTabDescription), TabData(name: strugglingTabName, description: strugglingTabDescription), TabData(name: todayTabName, description: todayTabDescription), TabData(name: unseenTabName, description: unseenTabDescription), TabData(name: browseTabName, description: browseTabDescription), TabData(status: TabDataStatus.ready, name: searchTabName, description: searchTabDescription)]}): _tabs = tabs;
+  const _EntriesState({this.status = EntriesStatus.initial, this.entriesPageData, this.currentTabIndex = 0, this.searchText, final  List<TabData> tabs = const [TabData(name: scoreTabName, description: scoreTabDescription), TabData(name: strugglingTabName, description: strugglingTabDescription), TabData(name: todayTabName, description: todayTabDescription), TabData(name: unseenTabName, description: unseenTabDescription), TabData(name: browseTabName, description: browseTabDescription), TabData(status: TabDataStatus.ready, name: searchTabName, description: searchTabDescription)]}): _tabs = tabs;
   
 
 @override@JsonKey() final  EntriesStatus status;
 @override final  EntriesPageData? entriesPageData;
 @override@JsonKey() final  int currentTabIndex;
+@override final  String? searchText;
  final  List<TabData> _tabs;
 @override@JsonKey() List<TabData> get tabs {
   if (_tabs is EqualUnmodifiableListView) return _tabs;
@@ -245,16 +247,16 @@ _$EntriesStateCopyWith<_EntriesState> get copyWith => __$EntriesStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntriesState&&(identical(other.status, status) || other.status == status)&&(identical(other.entriesPageData, entriesPageData) || other.entriesPageData == entriesPageData)&&(identical(other.currentTabIndex, currentTabIndex) || other.currentTabIndex == currentTabIndex)&&const DeepCollectionEquality().equals(other._tabs, _tabs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EntriesState&&(identical(other.status, status) || other.status == status)&&(identical(other.entriesPageData, entriesPageData) || other.entriesPageData == entriesPageData)&&(identical(other.currentTabIndex, currentTabIndex) || other.currentTabIndex == currentTabIndex)&&(identical(other.searchText, searchText) || other.searchText == searchText)&&const DeepCollectionEquality().equals(other._tabs, _tabs));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,entriesPageData,currentTabIndex,const DeepCollectionEquality().hash(_tabs));
+int get hashCode => Object.hash(runtimeType,status,entriesPageData,currentTabIndex,searchText,const DeepCollectionEquality().hash(_tabs));
 
 @override
 String toString() {
-  return 'EntriesState(status: $status, entriesPageData: $entriesPageData, currentTabIndex: $currentTabIndex, tabs: $tabs)';
+  return 'EntriesState(status: $status, entriesPageData: $entriesPageData, currentTabIndex: $currentTabIndex, searchText: $searchText, tabs: $tabs)';
 }
 
 
@@ -265,7 +267,7 @@ abstract mixin class _$EntriesStateCopyWith<$Res> implements $EntriesStateCopyWi
   factory _$EntriesStateCopyWith(_EntriesState value, $Res Function(_EntriesState) _then) = __$EntriesStateCopyWithImpl;
 @override @useResult
 $Res call({
- EntriesStatus status, EntriesPageData? entriesPageData, int currentTabIndex, List<TabData> tabs
+ EntriesStatus status, EntriesPageData? entriesPageData, int currentTabIndex, String? searchText, List<TabData> tabs
 });
 
 
@@ -282,12 +284,13 @@ class __$EntriesStateCopyWithImpl<$Res>
 
 /// Create a copy of EntriesState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? entriesPageData = freezed,Object? currentTabIndex = null,Object? tabs = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? entriesPageData = freezed,Object? currentTabIndex = null,Object? searchText = freezed,Object? tabs = null,}) {
   return _then(_EntriesState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as EntriesStatus,entriesPageData: freezed == entriesPageData ? _self.entriesPageData : entriesPageData // ignore: cast_nullable_to_non_nullable
 as EntriesPageData?,currentTabIndex: null == currentTabIndex ? _self.currentTabIndex : currentTabIndex // ignore: cast_nullable_to_non_nullable
-as int,tabs: null == tabs ? _self._tabs : tabs // ignore: cast_nullable_to_non_nullable
+as int,searchText: freezed == searchText ? _self.searchText : searchText // ignore: cast_nullable_to_non_nullable
+as String?,tabs: null == tabs ? _self._tabs : tabs // ignore: cast_nullable_to_non_nullable
 as List<TabData>,
   ));
 }

@@ -415,6 +415,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData1,
           currentTabIndex: EntriesBloc.searchTabIndex,
+          searchText: 'a',
           tabs: [
             TabData(
               status: TabDataStatus.ready,
@@ -445,6 +446,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData1,
           currentTabIndex: EntriesBloc.searchTabIndex,
+          searchText: 'a',
           tabs: [
             TabData(
               status: TabDataStatus.ready,
@@ -477,6 +479,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData1,
           currentTabIndex: EntriesBloc.todayTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -504,6 +507,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData2,
           currentTabIndex: EntriesBloc.todayTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -531,6 +535,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData2,
           currentTabIndex: EntriesBloc.todayTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -563,6 +568,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData3,
           currentTabIndex: EntriesBloc.todayTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -595,6 +601,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData3,
           currentTabIndex: EntriesBloc.todayTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -2415,6 +2422,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData1,
           currentTabIndex: EntriesBloc.searchTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -2445,6 +2453,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData1,
           currentTabIndex: EntriesBloc.searchTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -2587,6 +2596,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData1,
           currentTabIndex: EntriesBloc.searchTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -2617,6 +2627,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData1,
           currentTabIndex: EntriesBloc.searchTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -2687,6 +2698,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData1,
           currentTabIndex: EntriesBloc.searchTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(
@@ -2717,6 +2729,7 @@ void main() {
           status: EntriesStatus.success,
           entriesPageData: entriesPageData1,
           currentTabIndex: EntriesBloc.searchTabIndex,
+          searchText: 'a',
           tabs: [
             const TabData(name: scoreTabName, description: scoreTabDescription),
             const TabData(

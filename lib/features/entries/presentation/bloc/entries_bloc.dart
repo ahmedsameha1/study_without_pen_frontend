@@ -38,28 +38,9 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     Emitter<EntriesState> emit,
   ) async {
     emit(state.copyWith(status: EntriesStatus.loading));
-    await _handleSubscription(event.fieldListId, emit);
-  }
-
-  Future<void> _onPrepareScoreTab(
-    PrepareScoreTab event,
-    Emitter<EntriesState> emit,
-  ) async {
-    await _prepareTab(
-      emit,
-      _watchEntriesUsecase.watchEntriesForScore,
-      scoreTabName,
-      scoreTabIndex,
-    );
-  }
-
-  Future<void> _handleSubscription(
-    String fieldListId,
-    Emitter<EntriesState> emit,
-  ) async {
     try {
       await emit.onEach<EntriesPageData>(
-        _watchEntriesUsecase.watchEntriesForScore(fieldListId),
+        _watchEntriesUsecase.watchEntriesForScore(event.fieldListId),
         onData: (entriesPageData) {
           if (state.currentTabIndex == EntriesBloc.scoreTabIndex) {
             emit(
@@ -94,6 +75,18 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     } catch (e) {
       emit(const EntriesState(status: EntriesStatus.failure));
     }
+  }
+
+  Future<void> _onPrepareScoreTab(
+    PrepareScoreTab event,
+    Emitter<EntriesState> emit,
+  ) async {
+    await _prepareTab(
+      emit,
+      _watchEntriesUsecase.watchEntriesForScore,
+      scoreTabName,
+      scoreTabIndex,
+    );
   }
 
   Future<void> _onPrepareStrugglingTab(
@@ -318,6 +311,7 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
           state.copyWith(
             status: EntriesStatus.success,
             currentTabIndex: searchTabIndex,
+            searchText: event.searchText,
             tabs: state.tabs.map((tab) {
               if (tab.name == searchTabName) {
                 return const TabData(
