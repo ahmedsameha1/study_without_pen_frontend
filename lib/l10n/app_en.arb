@@ -163,6 +163,7 @@
             }
         }
     },
+    "searchDescription": "Search result",
     "created": "Created",
     "creationError": "Error while creation",
     "noFields": "Currently, there are no fields!",
@@ -170,6 +171,7 @@
     "failureLoadingFields": "An error occurred while loading the fields!",
     "failureLoadingData": "An error occurred while loading the data!",
     "failureLoadingEntries": "An error occurred while loading entries!",
+    "failureLoadingSearchResult": "An error occurred while loading search result!",
     "noFieldLists": "Currently, there are no lists!",
     "selectCheckType": "Select check type",
     "howAppCheckAnswers": "How app checks your answers",
@@ -194,6 +196,7 @@
     "today": "Today",
     "unseen": "Unseen",
     "browse": "Browse",
+    "search": "Search",
     "wrongness": "Wrongness",
     "study": "Study",
     "test": "Test",

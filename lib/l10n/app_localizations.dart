@@ -355,6 +355,12 @@ abstract class AppLocalizations {
     Object numberOfDisplayedEntries,
   );
 
+  /// No description provided for @searchDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Search result'**
+  String get searchDescription;
+
   /// No description provided for @created.
   ///
   /// In en, this message translates to:
@@ -396,6 +402,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred while loading entries!'**
   String get failureLoadingEntries;
+
+  /// No description provided for @failureLoadingSearchResult.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while loading search result!'**
+  String get failureLoadingSearchResult;
 
   /// No description provided for @noFieldLists.
   ///
@@ -540,6 +552,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Browse'**
   String get browse;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
 
   /// No description provided for @wrongness.
   ///

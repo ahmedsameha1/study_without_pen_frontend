@@ -4,7 +4,7 @@ import '../../domain/models/entry_entity.dart';
 
 part 'tab_data.freezed.dart';
 
-enum TabDataStatus { loading, ready }
+enum TabDataStatus { loading, ready, failure }
 
 @freezed
 abstract class TabData with _$TabData {

@@ -221,7 +221,7 @@ return $default(_that.status,_that.entriesPageData,_that.currentTabIndex,_that.t
 
 
 class _EntriesState implements EntriesState {
-  const _EntriesState({this.status = EntriesStatus.initial, this.entriesPageData, this.currentTabIndex = 0, final  List<TabData> tabs = const [TabData(name: scoreTabName, description: scoreTabDescription), TabData(name: strugglingTabName, description: strugglingTabDescription), TabData(name: todayTabName, description: todayTabDescription), TabData(name: unseenTabName, description: unseenTabDescription), TabData(name: browseTabName, description: browseTabDescription)]}): _tabs = tabs;
+  const _EntriesState({this.status = EntriesStatus.initial, this.entriesPageData, this.currentTabIndex = 0, final  List<TabData> tabs = const [TabData(name: scoreTabName, description: scoreTabDescription), TabData(name: strugglingTabName, description: strugglingTabDescription), TabData(name: todayTabName, description: todayTabDescription), TabData(name: unseenTabName, description: unseenTabDescription), TabData(name: browseTabName, description: browseTabDescription), TabData(status: TabDataStatus.ready, name: searchTabName, description: searchTabDescription)]}): _tabs = tabs;
   
 
 @override@JsonKey() final  EntriesStatus status;

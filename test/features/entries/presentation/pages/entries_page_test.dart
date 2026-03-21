@@ -162,7 +162,7 @@ void main() {
       setUp(() {
         watchEntriesUsecase = MockWatchEntriesUsecase();
         when(
-          () => watchEntriesUsecase.watchData(fieldListEntity.id!),
+          () => watchEntriesUsecase.watchEntriesForScore(fieldListEntity.id!),
         ).thenAnswer((_) => Stream.value(entriesPageData));
       });
 
@@ -184,19 +184,20 @@ void main() {
         );
       });
 
-      testWidgets('Test calling watchEntriesUsecase.call() on initialization', (
-        WidgetTester tester,
-      ) async {
-        await _createEntriesPageInASkeleton(
-          tester,
-          watchEntriesUsecase,
-          fieldListEntity.id!,
-          fieldListEntity.fieldId,
-        );
-        verify(
-          () => watchEntriesUsecase.watchData(fieldListEntity.id!),
-        ).called(1);
-      });
+      testWidgets(
+        'Test calling watchEntriesUsecase.watchEntriesForScore() on initialization',
+        (WidgetTester tester) async {
+          await _createEntriesPageInASkeleton(
+            tester,
+            watchEntriesUsecase,
+            fieldListEntity.id!,
+            fieldListEntity.fieldId,
+          );
+          verify(
+            () => watchEntriesUsecase.watchEntriesForScore(fieldListEntity.id!),
+          ).called(1);
+        },
+      );
     });
 
     group('EntriesPageView', () {
@@ -361,14 +362,12 @@ void main() {
                     name: scoreTabName,
                     description: scoreTabDescription,
                     status: TabDataStatus.ready,
-                    outdated: false,
                     entries: entries,
                   ),
                   TabData(
                     name: strugglingTabName,
                     description: strugglingTabDescription,
                     status: TabDataStatus.ready,
-                    outdated: false,
                     entries: entries,
                   ),
                   const TabData(
@@ -382,6 +381,11 @@ void main() {
                   const TabData(
                     name: browseTabName,
                     description: browseTabDescription,
+                  ),
+                  const TabData(
+                    status: TabDataStatus.ready,
+                    name: searchTabName,
+                    description: searchTabDescription,
                   ),
                 ],
               ),

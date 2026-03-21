@@ -255,37 +255,6 @@ void main() {
       order: 3,
     ),
   ];
-  final List<EntryEntity> scoreEntries1 = [
-    entries1[2],
-    entries1[0],
-    entries1[1],
-  ];
-  final List<EntryEntity> scoreEntries2 = scoreEntries1;
-  final List<EntryEntity> scoreEntries3 = [
-    entries3[1],
-    entries3[2],
-    entries3[3],
-    entries3[0],
-  ];
-  final List<EntryEntity> strugglingEntries1 = [entries1[2], entries1[0]];
-  final List<EntryEntity> todayEntries1 = entries1;
-  final List<EntryEntity> todayEntries2 = [entries2[1], entries2[2]];
-  final List<EntryEntity> unseenEntries1 = [];
-  final List<EntryEntity> unseenEntries3 = [entries3[3], entries3[0]];
-  final List<EntryEntity> unseenEntries4 = [entries4[3], entries4[0]];
-  final List<EntryEntity> browseEntries1 = entries1;
-  final List<EntryEntity> browseEntries3 = [
-    entries3[3],
-    entries3[2],
-    entries3[1],
-    entries3[0],
-  ];
-  final List<EntryEntity> browseEntries5 = [
-    entries5[0],
-    entries5[2],
-    entries5[1],
-    entries5[3],
-  ];
   EntriesPageData entriesPageData1 = EntriesPageData(
     fieldList: fieldListEntity,
     entries: entries1,
@@ -298,15 +267,7 @@ void main() {
     fieldList: fieldListEntity,
     entries: entries3,
   );
-  EntriesPageData entriesPageData4 = EntriesPageData(
-    fieldList: fieldListEntity,
-    entries: entries4,
-  );
-  EntriesPageData entriesPageData5 = EntriesPageData(
-    fieldList: fieldListEntity,
-    entries: entries5,
-  );
-  late WatchEntriesUsecase watchEntriesUsecase;
+  WatchEntriesUsecase watchEntriesUsecase = MockWatchEntriesUsecase();
 
   setUpAll(() {
     registerFallbackValue(FakeEntry());
@@ -324,6 +285,14 @@ void main() {
     expect(EntriesBloc(watchEntriesUsecase).state, const EntriesState());
   });
   group('EntriesSubscriptionRequested event', () {
+    StreamController<EntriesPageData> streamController1 = StreamController();
+    StreamController<EntriesPageData> streamController2 = StreamController();
+
+    tearDownAll(() {
+      streamController1.close();
+      streamController2.close();
+    });
+
     blocTest<EntriesBloc, EntriesState>(
       '''
     When EntriesSubscriptionRequested event is added
@@ -368,15 +337,19 @@ void main() {
               name: browseTabName,
               description: browseTabDescription,
             ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
           ],
         ),
       ],
     );
 
-    StreamController<EntriesPageData> streamController1 = StreamController();
-    StreamController<EntriesPageData> streamController2 = StreamController();
     blocTest<EntriesBloc, EntriesState>(
-      'fffffff',
+      'check handling the two live streams of the subscription event and '
+      'the current tab other than score tab',
       setUp: () {
         watchEntriesUsecase = MockWatchEntriesUsecase();
         when(
@@ -385,11 +358,16 @@ void main() {
         when(
           () => watchEntriesUsecase.watchEntriesForToday(fieldListId),
         ).thenAnswer((_) => streamController2.stream);
+        when(
+          () => watchEntriesUsecase.watchSearchData(fieldListId, 'a'),
+        ).thenAnswer((_) => Stream.value(entriesPageData1.entries));
       },
       build: buildBloc,
       act: (bloc) async {
         bloc.add(EntriesSubscriptionRequested(fieldListEntity.id!));
         streamController1.add(entriesPageData1);
+        await Future.delayed(Duration.zero);
+        bloc.add(const SubmitSearch('a'));
         await Future.delayed(Duration.zero);
         bloc.add(PrepareTodayTab());
         streamController1.add(entriesPageData2);
@@ -426,6 +404,73 @@ void main() {
               name: browseTabName,
               description: browseTabDescription,
             ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.searchTabIndex,
+          tabs: [
+            TabData(
+              status: TabDataStatus.ready,
+              name: scoreTabName,
+              description: scoreTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.searchTabIndex,
+          tabs: [
+            TabData(
+              status: TabDataStatus.ready,
+              name: scoreTabName,
+              description: scoreTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            const TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData1.entries,
+            ),
           ],
         ),
         EntriesState(
@@ -447,6 +492,12 @@ void main() {
               name: browseTabName,
               description: browseTabDescription,
             ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData1.entries,
+            ),
           ],
         ),
         EntriesState(
@@ -459,7 +510,7 @@ void main() {
               name: strugglingTabName,
               description: strugglingTabDescription,
             ),
-            TabData(name: todayTabName, description: todayTabDescription),
+            const TabData(name: todayTabName, description: todayTabDescription),
             const TabData(
               name: unseenTabName,
               description: unseenTabDescription,
@@ -467,6 +518,12 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData1.entries,
             ),
           ],
         ),
@@ -493,6 +550,12 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData1.entries,
             ),
           ],
         ),
@@ -519,6 +582,12 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData1.entries,
             ),
           ],
         ),
@@ -545,6 +614,12 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData1.entries,
             ),
           ],
         ),
@@ -606,6 +681,12 @@ void main() {
           ),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData3.entries,
+          ),
         ],
       ),
       build: buildBloc,
@@ -629,6 +710,12 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData3.entries,
             ),
           ],
         ),
@@ -655,6 +742,12 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData3.entries,
             ),
           ],
         ),
@@ -693,6 +786,11 @@ void main() {
           ),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          const TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+          ),
         ],
       ),
       build: buildBloc,
@@ -716,6 +814,11 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
             ),
           ],
         ),
@@ -748,6 +851,11 @@ void main() {
           ),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          const TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+          ),
         ],
       ),
       build: buildBloc,
@@ -771,6 +879,11 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
             ),
           ],
         ),
@@ -806,6 +919,12 @@ void main() {
           ),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData3.entries,
+          ),
         ],
       ),
       build: buildBloc,
@@ -830,6 +949,12 @@ void main() {
               name: browseTabName,
               description: browseTabDescription,
             ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData3.entries,
+            ),
           ],
         ),
         EntriesState(
@@ -852,6 +977,12 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData3.entries,
             ),
           ],
         ),
@@ -895,6 +1026,11 @@ void main() {
           ),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          const TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+          ),
         ],
       ),
       build: buildBloc,
@@ -918,6 +1054,11 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
             ),
           ],
         ),
@@ -953,6 +1094,11 @@ void main() {
           ),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          const TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+          ),
         ],
       ),
       build: buildBloc,
@@ -976,6 +1122,11 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
             ),
           ],
         ),
@@ -1011,6 +1162,12 @@ void main() {
           const TabData(name: todayTabName, description: todayTabDescription),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData3.entries,
+          ),
         ],
       ),
       build: buildBloc,
@@ -1034,6 +1191,12 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData3.entries,
             ),
           ],
         ),
@@ -1060,6 +1223,12 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData3.entries,
             ),
           ],
         ),
@@ -1100,6 +1269,11 @@ void main() {
           const TabData(name: todayTabName, description: todayTabDescription),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          const TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+          ),
         ],
       ),
       build: buildBloc,
@@ -1123,6 +1297,11 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
             ),
           ],
         ),
@@ -1155,6 +1334,11 @@ void main() {
           const TabData(name: todayTabName, description: todayTabDescription),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          const TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+          ),
         ],
       ),
       build: buildBloc,
@@ -1178,6 +1362,11 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
             ),
           ],
         ),
@@ -1213,6 +1402,12 @@ void main() {
           const TabData(name: todayTabName, description: todayTabDescription),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData3.entries,
+          ),
         ],
       ),
       build: buildBloc,
@@ -1237,6 +1432,12 @@ void main() {
               name: browseTabName,
               description: browseTabDescription,
             ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData3.entries,
+            ),
           ],
         ),
         EntriesState(
@@ -1259,6 +1460,12 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData3.entries,
             ),
           ],
         ),
@@ -1299,6 +1506,11 @@ void main() {
           const TabData(name: todayTabName, description: todayTabDescription),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          const TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+          ),
         ],
       ),
       build: buildBloc,
@@ -1322,6 +1534,11 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
             ),
           ],
         ),
@@ -1354,6 +1571,11 @@ void main() {
           const TabData(name: todayTabName, description: todayTabDescription),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          const TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+          ),
         ],
       ),
       build: buildBloc,
@@ -1377,6 +1599,11 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
             ),
           ],
         ),
@@ -1412,6 +1639,12 @@ void main() {
           const TabData(name: todayTabName, description: todayTabDescription),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData3.entries,
+          ),
         ],
       ),
       build: buildBloc,
@@ -1436,6 +1669,12 @@ void main() {
               name: browseTabName,
               description: browseTabDescription,
             ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData3.entries,
+            ),
           ],
         ),
         EntriesState(
@@ -1458,6 +1697,12 @@ void main() {
               name: browseTabName,
               description: browseTabDescription,
               entries: entriesPageData1.entries,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData3.entries,
             ),
           ],
         ),
@@ -1498,6 +1743,11 @@ void main() {
           const TabData(name: todayTabName, description: todayTabDescription),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          const TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+          ),
         ],
       ),
       build: buildBloc,
@@ -1521,6 +1771,11 @@ void main() {
             const TabData(
               name: browseTabName,
               description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
             ),
           ],
         ),
@@ -1553,6 +1808,11 @@ void main() {
           const TabData(name: todayTabName, description: todayTabDescription),
           const TabData(name: unseenTabName, description: unseenTabDescription),
           const TabData(name: browseTabName, description: browseTabDescription),
+          const TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+          ),
         ],
       ),
       build: buildBloc,
@@ -1577,11 +1837,987 @@ void main() {
               name: browseTabName,
               description: browseTabDescription,
             ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
           ],
         ),
         const EntriesState(
           status: EntriesStatus.failure,
           currentTabIndex: EntriesBloc.browseTabIndex,
+        ),
+      ],
+    );
+  });
+
+  group('SwitchToSearchTab event', () {
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit the same state with searchTabIndex 1',
+      build: buildBloc,
+      act: (bloc) => bloc.add(SwitchToSearchTab()),
+      expect: () => [
+        const EntriesState().copyWith(
+          currentTabIndex: EntriesBloc.searchTabIndex,
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit the same state with searchTabIndex 2',
+      seed: () => EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(SwitchToSearchTab()),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.searchTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData2.entries,
+            ),
+          ],
+        ),
+      ],
+    );
+  });
+
+  group('OpenSearch event', () {
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit the same state with search status',
+      seed: () => EntriesState(
+        status: EntriesStatus.success,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(OpenSearch()),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.search,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData2.entries,
+            ),
+          ],
+        ),
+      ],
+    );
+  });
+
+  group('SearchInputChanged event', () {
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit [loading, ready] in the search tab with the result of the search text',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchSearchData(fieldListId, 'a'),
+        ).thenAnswer((_) => Stream.value(entriesPageData2.entries));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.search,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(const SearchInputChanged('a')),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.search,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.search,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData2.entries,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit the default search tab when the search text is empty',
+      seed: () => EntriesState(
+        status: EntriesStatus.search,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(const SearchInputChanged('')),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.search,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure in the search tab when the search stream emits an error',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchSearchData(fieldListId, 'a'),
+        ).thenAnswer((_) => Stream.error(Exception('Opps')));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.search,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(const SearchInputChanged('a')),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.search,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.search,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.failure,
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure in the search tab when the search throws an error',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchSearchData(fieldListId, 'a'),
+        ).thenThrow((_) => Exception('Opps'));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.search,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(const SearchInputChanged('a')),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.search,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.search,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.failure,
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure when there is no entriesPageData',
+      build: buildBloc,
+      act: (bloc) => bloc.add(const SearchInputChanged('a')),
+      expect: () => [const EntriesState(status: EntriesStatus.failure)],
+    );
+  });
+
+  group('SubmitSearch event', () {
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit [loading, ready] in the search tab with the result of the search text',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchSearchData(fieldListId, 'a'),
+        ).thenAnswer((_) => Stream.value(entriesPageData2.entries));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.search,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(const SubmitSearch('a')),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.searchTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.searchTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData2.entries,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit state with success the default search tab and keep  '
+      'the currentTabIndex when the search text is empty',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchSearchData(fieldListId, 'a'),
+        ).thenAnswer((_) => Stream.value(entriesPageData2.entries));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.search,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(const SubmitSearch('')),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure in the search tab when the search stream emits an error',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchSearchData(fieldListId, 'a'),
+        ).thenAnswer((_) => Stream.error(Exception('Opps')));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.search,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(const SubmitSearch('a')),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.searchTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.searchTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.failure,
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure in the search tab when the search throws an error',
+      setUp: () {
+        when(
+          () => watchEntriesUsecase.watchSearchData(fieldListId, 'a'),
+        ).thenThrow((_) => Exception('Opps'));
+      },
+      seed: () => EntriesState(
+        status: EntriesStatus.search,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(const SubmitSearch('a')),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.searchTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.searchTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            const TabData(
+              status: TabDataStatus.failure,
+              name: searchTabName,
+              description: searchTabDescription,
+            ),
+          ],
+        ),
+      ],
+    );
+
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit failure when there is no entriesPageData',
+      build: buildBloc,
+      act: (bloc) => bloc.add(const SubmitSearch('a')),
+      expect: () => [const EntriesState(status: EntriesStatus.failure)],
+    );
+  });
+
+  group('CloseSearch event', () {
+    blocTest<EntriesBloc, EntriesState>(
+      'should emit the same state with success status',
+      seed: () => EntriesState(
+        status: EntriesStatus.search,
+        entriesPageData: entriesPageData1,
+        currentTabIndex: EntriesBloc.todayTabIndex,
+        tabs: [
+          const TabData(name: scoreTabName, description: scoreTabDescription),
+          const TabData(
+            name: strugglingTabName,
+            description: strugglingTabDescription,
+          ),
+          TabData(
+            status: TabDataStatus.ready,
+            name: todayTabName,
+            description: todayTabDescription,
+            entries: entriesPageData1.entries,
+          ),
+          const TabData(name: unseenTabName, description: unseenTabDescription),
+          const TabData(name: browseTabName, description: browseTabDescription),
+          TabData(
+            status: TabDataStatus.ready,
+            name: searchTabName,
+            description: searchTabDescription,
+            entries: entriesPageData2.entries,
+          ),
+        ],
+      ),
+      build: buildBloc,
+      act: (bloc) => bloc.add(CloseSearch()),
+      expect: () => [
+        EntriesState(
+          status: EntriesStatus.success,
+          entriesPageData: entriesPageData1,
+          currentTabIndex: EntriesBloc.todayTabIndex,
+          tabs: [
+            const TabData(name: scoreTabName, description: scoreTabDescription),
+            const TabData(
+              name: strugglingTabName,
+              description: strugglingTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: todayTabName,
+              description: todayTabDescription,
+              entries: entriesPageData1.entries,
+            ),
+            const TabData(
+              name: unseenTabName,
+              description: unseenTabDescription,
+            ),
+            const TabData(
+              name: browseTabName,
+              description: browseTabDescription,
+            ),
+            TabData(
+              status: TabDataStatus.ready,
+              name: searchTabName,
+              description: searchTabDescription,
+              entries: entriesPageData2.entries,
+            ),
+          ],
         ),
       ],
     );

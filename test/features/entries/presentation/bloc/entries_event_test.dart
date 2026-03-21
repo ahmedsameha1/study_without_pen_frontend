@@ -21,8 +21,21 @@ void main() {
       EntriesSubscriptionRequested(fieldListId),
       EntriesSubscriptionRequested(fieldListId),
     );
-    expect(PrepareTab(1, DateTime(2025)), PrepareTab(1, DateTime(2025)));
-    expect(PrepareTab(1, DateTime(2025)), isNot(PrepareTab(1, DateTime(2024))));
-    expect(NewData(entriesPageData), NewData(entriesPageData));
+    expect(
+      EntriesSubscriptionRequested(fieldListId),
+      isNot(const EntriesSubscriptionRequested('ohwtgetgw')),
+    );
+    expect(PrepareScoreTab(), PrepareScoreTab());
+    expect(PrepareStrugglingTab(), PrepareStrugglingTab());
+    expect(PrepareTodayTab(), PrepareTodayTab());
+    expect(PrepareUnseenTab(), PrepareUnseenTab());
+    expect(PrepareBrowseTab(), PrepareBrowseTab());
+    expect(SwitchToSearchTab(), SwitchToSearchTab());
+    expect(OpenSearch(), OpenSearch());
+    expect(CloseSearch(), CloseSearch());
+    expect(const SearchInputChanged('a'), const SearchInputChanged('a'));
+    expect(const SearchInputChanged('a'), isNot(const SearchInputChanged('b')));
+    expect(const SubmitSearch('a'), const SubmitSearch('a'));
+    expect(const SubmitSearch('a'), isNot(const SubmitSearch('b')));
   });
 }

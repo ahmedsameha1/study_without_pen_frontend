@@ -184,6 +184,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get searchDescription => 'Search result';
+
+  @override
   String get created => 'Created';
 
   @override
@@ -205,6 +208,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get failureLoadingEntries =>
       'An error occurred while loading entries!';
+
+  @override
+  String get failureLoadingSearchResult =>
+      'An error occurred while loading search result!';
 
   @override
   String get noFieldLists => 'Currently, there are no lists!';
@@ -277,6 +284,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get browse => 'Browse';
+
+  @override
+  String get search => 'Search';
 
   @override
   String get wrongness => 'Wrongness';

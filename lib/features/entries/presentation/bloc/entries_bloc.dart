@@ -2,6 +2,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/models/entries_page_data.dart';
+
 import '../../domain/usecases/watch_entries_usecase.dart';
 import 'entries_event.dart';
 import 'entries_state.dart';
@@ -18,6 +19,11 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
     on<PrepareTodayTab>(_onPrepareTodayTab, transformer: restartable());
     on<PrepareUnseenTab>(_onPrepareUnseenTab, transformer: restartable());
     on<PrepareBrowseTab>(_onPrepareBrowseTab, transformer: restartable());
+    on<SwitchToSearchTab>(_onSwitchToSearchTab);
+    on<OpenSearch>(_onOpenSearch, transformer: sequential());
+    on<SearchInputChanged>(_onSearchInputChanged, transformer: restartable());
+    on<SubmitSearch>(_onSubmitSearch, transformer: restartable());
+    on<CloseSearch>(_onCloseSearch, transformer: sequential());
   }
   final WatchEntriesUsecase _watchEntriesUsecase;
   static const scoreTabIndex = 0;
@@ -25,6 +31,7 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   static const todayTabIndex = 2;
   static const unseenTabIndex = 3;
   static const browseTabIndex = 4;
+  static const searchTabIndex = 5;
 
   Future<void> _onSubscriptionRequested(
     EntriesSubscriptionRequested event,
@@ -145,10 +152,17 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
   ) async {
     if (state.entriesPageData != null) {
       emit(
-        EntriesState(
+        state.copyWith(
           status: EntriesStatus.success,
           currentTabIndex: tabIndex,
           entriesPageData: state.entriesPageData,
+          tabs: state.tabs.map((tab) {
+            if (tab.name != searchTabName) {
+              return TabData(name: tab.name, description: tab.description);
+            } else {
+              return tab;
+            }
+          }).toList(),
         ),
       );
       try {
@@ -192,5 +206,217 @@ class EntriesBloc extends Bloc<EntriesEvent, EntriesState> {
         ),
       );
     }
+  }
+
+  Future<void> _onSwitchToSearchTab(
+    SwitchToSearchTab event,
+    Emitter<EntriesState> emit,
+  ) async {
+    emit(state.copyWith(currentTabIndex: EntriesBloc.searchTabIndex));
+  }
+
+  Future<void> _onSearchInputChanged(
+    SearchInputChanged event,
+    Emitter<EntriesState> emit,
+  ) async {
+    if (state.entriesPageData != null) {
+      if (event.searchText.isNotEmpty) {
+        emit(
+          state.copyWith(
+            tabs: state.tabs.map((tab) {
+              if (tab.name == searchTabName) {
+                return const TabData(
+                  name: searchTabName,
+                  description: searchTabDescription,
+                );
+              } else {
+                return tab;
+              }
+            }).toList(),
+          ),
+        );
+        try {
+          await emit.forEach(
+            _watchEntriesUsecase.watchSearchData(
+              state.entriesPageData!.fieldList.id!,
+              event.searchText,
+            ),
+            onData: (entries) => state.copyWith(
+              tabs: state.tabs.map((tab) {
+                if (tab.name == searchTabName) {
+                  return TabData(
+                    status: TabDataStatus.ready,
+                    name: searchTabName,
+                    description: searchTabDescription,
+                    entries: entries,
+                  );
+                } else {
+                  return tab;
+                }
+              }).toList(),
+            ),
+            onError: (_, _) => state.copyWith(
+              tabs: state.tabs.map((tab) {
+                if (tab.name == searchTabName) {
+                  return const TabData(
+                    status: TabDataStatus.failure,
+                    name: searchTabName,
+                    description: searchTabDescription,
+                  );
+                } else {
+                  return tab;
+                }
+              }).toList(),
+            ),
+          );
+        } catch (e) {
+          emit(
+            state.copyWith(
+              tabs: state.tabs.map((tab) {
+                if (tab.name == searchTabName) {
+                  return const TabData(
+                    status: TabDataStatus.failure,
+                    name: searchTabName,
+                    description: searchTabDescription,
+                  );
+                } else {
+                  return tab;
+                }
+              }).toList(),
+            ),
+          );
+        }
+      } else {
+        emit(
+          state.copyWith(
+            tabs: state.tabs.map((tab) {
+              if (tab.name == searchTabName) {
+                return const TabData(
+                  status: TabDataStatus.ready,
+                  name: searchTabName,
+                  description: searchTabDescription,
+                );
+              } else {
+                return tab;
+              }
+            }).toList(),
+          ),
+        );
+      }
+    } else {
+      emit(const EntriesState(status: EntriesStatus.failure));
+    }
+  }
+
+  Future<void> _onSubmitSearch(
+    SubmitSearch event,
+    Emitter<EntriesState> emit,
+  ) async {
+    if (state.entriesPageData != null) {
+      if (event.searchText.isNotEmpty) {
+        emit(
+          state.copyWith(
+            status: EntriesStatus.success,
+            currentTabIndex: searchTabIndex,
+            tabs: state.tabs.map((tab) {
+              if (tab.name == searchTabName) {
+                return const TabData(
+                  name: searchTabName,
+                  description: searchTabDescription,
+                );
+              } else {
+                return tab;
+              }
+            }).toList(),
+          ),
+        );
+        try {
+          await emit.forEach(
+            _watchEntriesUsecase.watchSearchData(
+              state.entriesPageData!.fieldList.id!,
+              event.searchText,
+            ),
+            onData: (entries) => state.copyWith(
+              tabs: state.tabs.map((tab) {
+                if (tab.name == searchTabName) {
+                  return TabData(
+                    status: TabDataStatus.ready,
+                    name: searchTabName,
+                    description: searchTabDescription,
+                    entries: entries,
+                  );
+                } else {
+                  return tab;
+                }
+              }).toList(),
+            ),
+            onError: (_, _) => state.copyWith(
+              status: EntriesStatus.success,
+              tabs: state.tabs.map((tab) {
+                if (tab.name == searchTabName) {
+                  return const TabData(
+                    status: TabDataStatus.failure,
+                    name: searchTabName,
+                    description: searchTabDescription,
+                  );
+                } else {
+                  return tab;
+                }
+              }).toList(),
+            ),
+          );
+        } catch (e) {
+          emit(
+            state.copyWith(
+              status: EntriesStatus.success,
+              tabs: state.tabs.map((tab) {
+                if (tab.name == searchTabName) {
+                  return const TabData(
+                    status: TabDataStatus.failure,
+                    name: searchTabName,
+                    description: searchTabDescription,
+                  );
+                } else {
+                  return tab;
+                }
+              }).toList(),
+            ),
+          );
+        }
+      } else {
+        emit(
+          state.copyWith(
+            status: EntriesStatus.success,
+            tabs: state.tabs.map((tab) {
+              if (tab.name == searchTabName) {
+                return const TabData(
+                  status: TabDataStatus.ready,
+                  name: searchTabName,
+                  description: searchTabDescription,
+                );
+              } else {
+                return tab;
+              }
+            }).toList(),
+          ),
+        );
+      }
+    } else {
+      emit(const EntriesState(status: EntriesStatus.failure));
+    }
+  }
+
+  Future<void> _onOpenSearch(
+    OpenSearch event,
+    Emitter<EntriesState> emit,
+  ) async {
+    emit(state.copyWith(status: EntriesStatus.search));
+  }
+
+  Future<void> _onCloseSearch(
+    CloseSearch event,
+    Emitter<EntriesState> emit,
+  ) async {
+    emit(state.copyWith(status: EntriesStatus.success));
   }
 }

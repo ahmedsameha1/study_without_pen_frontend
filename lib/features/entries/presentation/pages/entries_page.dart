@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -46,6 +48,14 @@ class EntriesPageView extends StatefulWidget {
 class _EntriesPageViewState extends State<EntriesPageView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final SearchController _searchController = SearchController();
+  Timer? _debounceTimer;
+
+  @override
+  void initState() {
+    _searchController.addListener(_handleSearchChange);
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -62,11 +72,28 @@ class _EntriesPageViewState extends State<EntriesPageView>
     _tabController
       ..removeListener(_handleTabChange)
       ..dispose();
+    _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<EntriesBloc, EntriesState>(
+  Widget build(BuildContext context) => BlocConsumer<EntriesBloc, EntriesState>(
+    listenWhen: (previous, current) =>
+        current.status == EntriesStatus.search ||
+        current.status == EntriesStatus.success,
+    listener: (context, state) {
+      if (state.status == EntriesStatus.search) {
+        if (!_searchController.isOpen) {
+          _searchController.openView();
+        }
+      } else if (state.status == EntriesStatus.success &&
+          state.currentTabIndex == EntriesBloc.searchTabIndex &&
+          _searchController.isOpen) {
+        _tabController.animateTo(5);
+        _searchController.closeView(null);
+      }
+    },
     builder: (context, state) {
       if (state.status == EntriesStatus.loading ||
           state.status == EntriesStatus.initial) {
@@ -82,7 +109,6 @@ class _EntriesPageViewState extends State<EntriesPageView>
           ),
         );
       } else {
-        // EntriesStatus.success
         return Scaffold(
           appBar: state.entriesPageData!.entries.isEmpty
               ? AppBar(title: Text(state.entriesPageData!.fieldList.name))
@@ -101,13 +127,87 @@ class _EntriesPageViewState extends State<EntriesPageView>
                           title: Text(state.entriesPageData!.fieldList.name),
                           actions: [
                             SearchAnchor(
+                              searchController: _searchController,
                               builder: (context, controller) => IconButton(
                                 onPressed: () {
-                                  controller.openView();
+                                  BlocProvider.of<EntriesBloc>(
+                                    context,
+                                  ).add(OpenSearch());
+                                  _searchController.text = '';
                                 },
                                 icon: const Icon(Icons.search),
                               ),
                               suggestionsBuilder: (context, controller) => [],
+                              viewBuilder: (suggestions) {
+                                if (_searchController.text.isEmpty) {
+                                  return const SizedBox.shrink();
+                                } else {
+                                  return BlocProvider<EntriesBloc>.value(
+                                    value: BlocProvider.of<EntriesBloc>(
+                                      context,
+                                    ),
+                                    child: Builder(
+                                      builder: (context) =>
+                                          BlocSelector<
+                                            EntriesBloc,
+                                            EntriesState,
+                                            TabData
+                                          >(
+                                            selector: (state) => state.tabs
+                                                .where(
+                                                  (tab) =>
+                                                      tab.name == searchTabName,
+                                                )
+                                                .first,
+                                            builder: (context, state) {
+                                              if (state.status ==
+                                                  TabDataStatus.loading) {
+                                                return const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              } else if (state.status ==
+                                                  TabDataStatus.failure) {
+                                                return Center(
+                                                  child: Text(
+                                                    AppLocalizations.of(
+                                                      context,
+                                                    )!.failureLoadingSearchResult,
+                                                  ),
+                                                );
+                                              } else {
+                                                return Container(
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).scaffoldBackgroundColor,
+                                                  alignment: Alignment.center,
+                                                  child: ListView(
+                                                    children: state.entries
+                                                        .map(
+                                                          (entry) => EntryCard(
+                                                            entry: entry,
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                    ),
+                                  );
+                                }
+                              },
+                              viewOnClose: () {
+                                BlocProvider.of<EntriesBloc>(
+                                  context,
+                                ).add(CloseSearch());
+                              },
+                              viewOnSubmitted: (value) {
+                                BlocProvider.of<EntriesBloc>(
+                                  context,
+                                ).add(SubmitSearch(value));
+                              },
                             ),
                           ],
                         ),
@@ -220,6 +320,9 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                   browseTabName => AppLocalizations.of(
                                     context,
                                   )!.browse,
+                                  searchTabName => AppLocalizations.of(
+                                    context,
+                                  )!.search,
                                   _ => throw ArgumentError(tab.name),
                                 }),
                               )
@@ -229,118 +332,125 @@ class _EntriesPageViewState extends State<EntriesPageView>
                     ],
                     body: TabBarView(
                       controller: _tabController,
-                      children: state.tabs
-                          .map(
-                            (tab) => tab.status == TabDataStatus.loading
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : Builder(
-                                    builder: (context) => CustomScrollView(
-                                      key: PageStorageKey<String>(tab.name),
-                                      slivers: [
-                                        SliverOverlapInjector(
-                                          handle:
-                                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                      children: state.tabs.map((tab) {
+                        if (tab.status == TabDataStatus.loading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (state.status == TabDataStatus.failure) {
+                          return Center(
+                            child: Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.failureLoadingSearchResult,
+                            ),
+                          );
+                        } else {
+                          return Builder(
+                            builder: (context) => CustomScrollView(
+                              key: PageStorageKey<String>(tab.name),
+                              slivers: [
+                                SliverOverlapInjector(
+                                  handle:
+                                      NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                        context,
+                                      ),
+                                ),
+                                SliverPadding(
+                                  key: const Key('descriptionSliverPadding'),
+                                  padding: const EdgeInsetsGeometry.all(5),
+                                  sliver: SliverToBoxAdapter(
+                                    child: Center(
+                                      child: Text(
+                                        switch (tab.description) {
+                                          scoreTabDescription =>
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.scoreDescription(
+                                              state
+                                                  .entriesPageData!
+                                                  .entries
+                                                  .length,
+                                              tab.entries.length,
+                                            ),
+                                          strugglingTabDescription =>
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.strugglingDescription(
+                                              state
+                                                  .entriesPageData!
+                                                  .entries
+                                                  .length,
+                                              tab.entries.length,
+                                            ),
+                                          todayTabDescription =>
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.todayDescription(
+                                              state
+                                                  .entriesPageData!
+                                                  .entries
+                                                  .length,
+                                              tab.entries.length,
+                                            ),
+                                          unseenTabDescription =>
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.unseenDescription(
+                                              state
+                                                  .entriesPageData!
+                                                  .entries
+                                                  .length,
+                                              tab.entries.length,
+                                            ),
+                                          browseTabDescription =>
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.browseDescription(
+                                              state
+                                                  .entriesPageData!
+                                                  .entries
+                                                  .length,
+                                              tab.entries.length,
+                                            ),
+                                          searchTabDescription =>
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.searchDescription,
+                                          _ => throw ArgumentError(
+                                            tab.description,
+                                          ),
+                                        },
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: Theme.of(
                                                 context,
-                                              ),
-                                        ),
-                                        SliverPadding(
-                                          key: const Key(
-                                            'descriptionSliverPadding',
-                                          ),
-                                          padding: const EdgeInsetsGeometry.all(
-                                            5,
-                                          ),
-                                          sliver: SliverToBoxAdapter(
-                                            child: Center(
-                                              child: Text(
-                                                switch (tab.description) {
-                                                  scoreTabDescription =>
-                                                    AppLocalizations.of(
-                                                      context,
-                                                    )!.scoreDescription(
-                                                      state
-                                                          .entriesPageData!
-                                                          .entries
-                                                          .length,
-                                                      tab.entries.length,
-                                                    ),
-                                                  strugglingTabDescription =>
-                                                    AppLocalizations.of(
-                                                      context,
-                                                    )!.strugglingDescription(
-                                                      state
-                                                          .entriesPageData!
-                                                          .entries
-                                                          .length,
-                                                      tab.entries.length,
-                                                    ),
-                                                  todayTabDescription =>
-                                                    AppLocalizations.of(
-                                                      context,
-                                                    )!.todayDescription(
-                                                      state
-                                                          .entriesPageData!
-                                                          .entries
-                                                          .length,
-                                                      tab.entries.length,
-                                                    ),
-                                                  unseenTabDescription =>
-                                                    AppLocalizations.of(
-                                                      context,
-                                                    )!.unseenDescription(
-                                                      state
-                                                          .entriesPageData!
-                                                          .entries
-                                                          .length,
-                                                      tab.entries.length,
-                                                    ),
-                                                  browseTabDescription =>
-                                                    AppLocalizations.of(
-                                                      context,
-                                                    )!.browseDescription(
-                                                      state
-                                                          .entriesPageData!
-                                                          .entries
-                                                          .length,
-                                                      tab.entries.length,
-                                                    ),
-                                                  _ => throw ArgumentError(
-                                                    tab.description,
-                                                  ),
-                                                },
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall!
-                                                    .copyWith(
-                                                      color: Theme.of(
-                                                        context,
-                                                      ).hintColor,
-                                                    )
-                                                    .copyWith(
-                                                      backgroundColor: Theme.of(
-                                                        context,
-                                                      ).colorScheme.onSecondary,
-                                                    ),
-                                              ),
+                                              ).hintColor,
+                                            )
+                                            .copyWith(
+                                              backgroundColor: Theme.of(
+                                                context,
+                                              ).colorScheme.onSecondary,
                                             ),
-                                          ),
-                                        ),
-                                        SliverList(
-                                          key: PageStorageKey<String>(tab.name),
-                                          delegate: SliverChildBuilderDelegate(
-                                            childCount: tab.entries.length,
-                                            (context, index) => EntryCard(
-                                              entry: tab.entries[index],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
-                          )
-                          .toList(),
+                                ),
+                                SliverList(
+                                  key: PageStorageKey<String>(tab.name),
+                                  delegate: SliverChildBuilderDelegate(
+                                    childCount: tab.entries.length,
+                                    (context, index) =>
+                                        EntryCard(entry: tab.entries[index]),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      }).toList(),
                     ),
                   ),
           ),
@@ -368,10 +478,21 @@ class _EntriesPageViewState extends State<EntriesPageView>
         BlocProvider.of<EntriesBloc>(context).add(PrepareUnseenTab());
       } else if (_tabController.index == EntriesBloc.browseTabIndex) {
         BlocProvider.of<EntriesBloc>(context).add(PrepareBrowseTab());
+      } else if (_tabController.index == EntriesBloc.searchTabIndex) {
+        BlocProvider.of<EntriesBloc>(context).add(SwitchToSearchTab());
       } else {
         throw ArgumentError(_tabController.index);
       }
     }
+  }
+
+  void _handleSearchChange() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+      BlocProvider.of<EntriesBloc>(
+        context,
+      ).add(SearchInputChanged(_searchController.text));
+    });
   }
 }
 
