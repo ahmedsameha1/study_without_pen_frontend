@@ -126,39 +126,6 @@ class EntryCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      key: Key('answerButtonsSizedBox'),
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.onSecondary,
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            style: Theme.of(context).textTheme.titleSmall,
-                            AppLocalizations.of(context)!.study,
-                          ),
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.onSecondary,
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            style: Theme.of(context).textTheme.titleSmall,
-                            AppLocalizations.of(context)!.test,
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

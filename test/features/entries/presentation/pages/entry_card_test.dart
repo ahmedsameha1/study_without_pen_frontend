@@ -231,68 +231,6 @@ void main() {
         ).textTheme.bodyLarge,
       );
       expect(answerSelectableText.data, entry1.answer);
-      SizedBox answerButtonsSizedBox = tester.widget(
-        find.descendant(
-          of: find.byWidget(outerColumn),
-          matching: find.byKey(const Key('answerButtonsSizedBox')),
-        ),
-      );
-      expect(answerButtonsSizedBox.height, 10);
-      Row buttonsRow = tester.widget(
-        find.descendant(
-          of: find.byWidget(outerColumn),
-          matching: rowFinder.at(4),
-        ),
-      );
-      expect(buttonsRow.mainAxisAlignment, MainAxisAlignment.spaceAround);
-      ElevatedButton studyButton = tester.widget(
-        find.descendant(
-          of: find.byWidget(buttonsRow),
-          matching: find.byType(ElevatedButton).at(0),
-        ),
-      );
-      expect(
-        studyButton.style,
-        ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(
-            tester.element(find.byType(ElevatedButton).at(0)),
-          ).colorScheme.onSecondary,
-        ),
-      );
-      Text studyText = tester.widget(
-        find.descendant(
-          of: find.byWidget(studyButton),
-          matching: find.text(expectedStudyString),
-        ),
-      );
-      expect(
-        studyText.style,
-        Theme.of(tester.element(find.byWidget(studyText))).textTheme.titleSmall,
-      );
-      ElevatedButton testButton = tester.widget(
-        find.descendant(
-          of: find.byWidget(buttonsRow),
-          matching: find.byType(ElevatedButton).at(1),
-        ),
-      );
-      expect(
-        testButton.style,
-        ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(
-            tester.element(find.byType(ElevatedButton).at(1)),
-          ).colorScheme.onSecondary,
-        ),
-      );
-      Text testText = tester.widget(
-        find.descendant(
-          of: find.byWidget(testButton),
-          matching: find.text(expectedTestString),
-        ),
-      );
-      expect(
-        testText.style,
-        Theme.of(tester.element(find.byWidget(testText))).textTheme.titleSmall,
-      );
     });
 
     testWidgets('rank is normal', (WidgetTester tester) async {
