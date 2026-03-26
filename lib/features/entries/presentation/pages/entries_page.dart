@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../common/router_config.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../study_test/presentation/bloc/study_test_state.dart';
 import '../../domain/usecases/watch_entries_usecase.dart';
 import '../bloc/entries_bloc.dart';
 import '../bloc/entries_event.dart';
@@ -159,14 +160,14 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                                       tab.name == searchTabName,
                                                 )
                                                 .first,
-                                            builder: (context, state) {
-                                              if (state.status ==
+                                            builder: (context, selectorState) {
+                                              if (selectorState.status ==
                                                   TabDataStatus.loading) {
                                                 return const Center(
                                                   child:
                                                       CircularProgressIndicator(),
                                                 );
-                                              } else if (state.status ==
+                                              } else if (selectorState.status ==
                                                   TabDataStatus.failure) {
                                                 return Center(
                                                   child: Text(
@@ -182,10 +183,16 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                                   ).scaffoldBackgroundColor,
                                                   alignment: Alignment.center,
                                                   child: ListView(
-                                                    children: state.entries
+                                                    children: selectorState
+                                                        .entries
                                                         .map(
                                                           (entry) => EntryCard(
                                                             entry: entry,
+                                                            onTap: () {
+                                                              openStudyTestPage(
+                                                                state,
+                                                              );
+                                                            },
                                                           ),
                                                         )
                                                         .toList(),
@@ -448,8 +455,12 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                   key: PageStorageKey<String>(tab.name),
                                   delegate: SliverChildBuilderDelegate(
                                     childCount: tab.entries.length,
-                                    (context, index) =>
-                                        EntryCard(entry: tab.entries[index]),
+                                    (context, index) => EntryCard(
+                                      entry: tab.entries[index],
+                                      onTap: () {
+                                        openStudyTestPage(state);
+                                      },
+                                    ),
                                   ),
                                 ),
                               ],
@@ -499,6 +510,14 @@ class _EntriesPageViewState extends State<EntriesPageView>
         context,
       ).add(SearchInputChanged(_searchController.text));
     });
+  }
+
+  void openStudyTestPage(EntriesState state) {
+    GoRouter.of(context).go(
+      '$fieldListsPath${widget.fieldId}$entriesPath'
+      '${state.entriesPageData!.fieldList.id!}$studyTest',
+      extra: StudyTestState(),
+    );
   }
 }
 

@@ -32,13 +32,13 @@ Future<void> _createEntriesPageInASkeleton(
   String fieldListId,
   String fieldId,
 ) async => tester.pumpWidget(
-    RepositoryProvider.value(
-      value: watchEntriesUsecase,
-      child: MaterialApp(
-        home: EntriesPage(fieldId: fieldId, fieldListId: fieldListId),
-      ),
+  RepositoryProvider.value(
+    value: watchEntriesUsecase,
+    child: MaterialApp(
+      home: EntriesPage(fieldId: fieldId, fieldListId: fieldListId),
     ),
-  );
+  ),
+);
 
 Future<void> _createEntriesPageViewInASkeleton(
   WidgetTester tester,
@@ -48,19 +48,19 @@ Future<void> _createEntriesPageViewInASkeleton(
   String fieldListId,
   String fieldId,
 ) => tester.pumpWidget(
-       MaterialApp(
-        localizationsDelegates: const [AppLocalizations.delegate],
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: locale,
-        home: InheritedGoRouter(
-          goRouter: goRouter,
-          child: BlocProvider.value(
-            value: entriesBloc,
-            child: EntriesPageView(fieldId: fieldId, fieldListId: fieldListId),
-          ),
-        ),
+  MaterialApp(
+    localizationsDelegates: const [AppLocalizations.delegate],
+    supportedLocales: AppLocalizations.supportedLocales,
+    locale: locale,
+    home: InheritedGoRouter(
+      goRouter: goRouter,
+      child: BlocProvider.value(
+        value: entriesBloc,
+        child: EntriesPageView(fieldId: fieldId, fieldListId: fieldListId),
+      ),
     ),
-  );
+  ),
+);
 
 void main() {
   DateTime fieldListDateTime = DateTime(2025);
@@ -758,6 +758,73 @@ void main() {
           ),
         ).called(1);
       });
+
+      /*
+      // Fails
+      testWidgets('Clicking the EntryCard goes to StudyTestPage', (
+        WidgetTester tester,
+      ) async {
+        whenListen<EntriesState>(
+          entriesBloc,
+          Stream.fromIterable([
+            EntriesState(
+              status: EntriesStatus.success,
+              entriesPageData: EntriesPageData(
+                fieldList: fieldListEntity,
+                entries: [entries[0]],
+              ),
+              tabs: [
+                TabData(
+                  name: scoreTabName,
+                  description: scoreTabDescription,
+                  status: TabDataStatus.ready,
+                  entries: [entries[0]],
+                ),
+                const TabData(
+                  name: strugglingTabName,
+                  description: strugglingTabDescription,
+                ),
+                const TabData(
+                  name: todayTabName,
+                  description: todayTabDescription,
+                ),
+                const TabData(
+                  name: unseenTabName,
+                  description: unseenTabDescription,
+                ),
+                const TabData(
+                  name: browseTabName,
+                  description: browseTabDescription,
+                ),
+                const TabData(
+                  status: TabDataStatus.ready,
+                  name: searchTabName,
+                  description: searchTabDescription,
+                ),
+              ],
+            ),
+          ]),
+          initialState: const EntriesState(status: EntriesStatus.initial),
+        );
+        await _createEntriesPageViewInASkeleton(
+          tester,
+          currentLocale,
+          goRouter,
+          entriesBloc,
+          fieldListEntity.id!,
+          fieldListEntity.fieldId,
+        );
+        await tester.pump();
+        await tester.pumpAndSettle();
+        await tester.tap(find.byType(EntryCard));
+        await tester.pumpAndSettle();
+        verify(
+          () => goRouter.go(
+            '$fieldListsPath${fieldListEntity.fieldId}$entriesPath${fieldListEntity.id!}$studyTest',
+          ),
+        ).called(1);
+      });
+      */
     });
   });
 }
