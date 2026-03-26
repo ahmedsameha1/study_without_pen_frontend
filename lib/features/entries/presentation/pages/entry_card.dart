@@ -6,8 +6,9 @@ import '../../domain/models/entry_entity.dart';
 
 /// This widget represents an entry in the entries page
 class EntryCard extends StatelessWidget {
-  const EntryCard({required this.entry, super.key});
+  const EntryCard({required this.entry, required this.onTap, super.key});
   final EntryEntity entry;
+  final GestureTapCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,7 @@ class EntryCard extends StatelessWidget {
       child: Dismissible(
         key: const Key('hi'),
         child: InkWell(
+          onTap: onTap,
           child: Card(
             elevation: 5,
             margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/common/theme.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
@@ -9,8 +10,13 @@ import 'package:uuid/uuid.dart';
 
 import '../../../common/common_finders.dart';
 
+class OnTap extends Mock {
+  void call();
+}
+
 void main() {
   group('English', () {
+    final OnTap onTap = OnTap();
     const Locale currentLocale = Locale('en');
     const expectedScoreString = 'Score';
     const expectedWrongnessString = 'Wrongness';
@@ -18,8 +24,6 @@ void main() {
     const expectedNormalString = 'Normal';
     const expectedImportantString = 'Important';
     const expectedVitalString = 'Vital';
-    const expectedTestString = 'Test';
-    const expectedStudyString = 'Study';
     final entry1 = EntryEntity(
       fieldListId: const Uuid().v4(),
       answer: 'answer',
@@ -60,7 +64,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry1),
+          home: EntryCard(entry: entry1, onTap: onTap.call),
         ),
       );
       expect(
@@ -241,7 +245,10 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry1.copyWith(rank: Rank.normal)),
+          home: EntryCard(
+            entry: entry1.copyWith(rank: Rank.normal),
+            onTap: onTap.call,
+          ),
         ),
       );
       Chip rankChip = tester.widget(
@@ -258,7 +265,10 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry1.copyWith(rank: Rank.important)),
+          home: EntryCard(
+            entry: entry1.copyWith(rank: Rank.important),
+            onTap: onTap.call,
+          ),
         ),
       );
       Chip rankChip = tester.widget(
@@ -275,7 +285,10 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry1.copyWith(rank: Rank.vital)),
+          home: EntryCard(
+            entry: entry1.copyWith(rank: Rank.vital),
+            onTap: onTap.call,
+          ),
         ),
       );
       Chip rankChip = tester.widget(
@@ -292,7 +305,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry2),
+          home: EntryCard(entry: entry2, onTap: onTap.call),
         ),
       );
       Container container = tester.widget(
@@ -315,7 +328,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           theme: AppTheme.theme,
-          home: EntryCard(entry: entry3),
+          home: EntryCard(entry: entry3, onTap: onTap.call),
         ),
       );
       Container container = tester.widget(
@@ -328,6 +341,24 @@ void main() {
         ((container.decoration! as BoxDecoration).border! as Border).left,
         BorderSide(color: Colors.red.shade700, width: 4),
       );
+    });
+
+    testWidgets('tapping the EntryCard calling onTap', (
+      WidgetTester tester,
+    ) async {
+      await tester.binding.setLocale('en', 'US');
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: currentLocale,
+          theme: AppTheme.theme,
+          home: EntryCard(entry: entry3, onTap: onTap.call),
+        ),
+      );
+      await tester.tap(find.byType(EntryCard));
+      await tester.pumpAndSettle();
+      verify(onTap.call).called(1);
     });
   });
 }
