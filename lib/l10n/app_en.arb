@@ -199,5 +199,6 @@
     "study": "Study",
     "test": "Test",
     "mastered": "Mastered",
-    "needsFocus": "Needs Focus"
+    "needsFocus": "Needs Focus",
+    "enterYourAnswer": "Enter your answer"
 }

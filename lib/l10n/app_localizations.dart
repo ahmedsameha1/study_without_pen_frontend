@@ -588,6 +588,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Needs Focus'**
   String get needsFocus;
+
+  /// No description provided for @enterYourAnswer.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your answer'**
+  String get enterYourAnswer;
 }
 
 class _AppLocalizationsDelegate

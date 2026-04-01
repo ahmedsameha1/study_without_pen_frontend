@@ -295,4 +295,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get needsFocus => 'Needs Focus';
+
+  @override
+  String get enterYourAnswer => 'Enter your answer';
 }
