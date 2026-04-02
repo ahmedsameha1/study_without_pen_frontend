@@ -298,4 +298,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enterYourAnswer => 'Enter your answer';
+
+  @override
+  String get check => 'Check';
 }

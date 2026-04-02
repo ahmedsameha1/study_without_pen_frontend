@@ -594,6 +594,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter your answer'**
   String get enterYourAnswer;
+
+  /// No description provided for @check.
+  ///
+  /// In en, this message translates to:
+  /// **'Check'**
+  String get check;
 }
 
 class _AppLocalizationsDelegate

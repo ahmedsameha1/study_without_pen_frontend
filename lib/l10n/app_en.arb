@@ -200,5 +200,6 @@
     "test": "Test",
     "mastered": "Mastered",
     "needsFocus": "Needs Focus",
-    "enterYourAnswer": "Enter your answer"
+    "enterYourAnswer": "Enter your answer",
+    "check": "Check"
 }
