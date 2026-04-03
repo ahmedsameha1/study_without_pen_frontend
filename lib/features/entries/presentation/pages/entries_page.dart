@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/router_config.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../study_test/presentation/bloc/study_test_state.dart';
+import '../../domain/models/entry_entity.dart';
 import '../../domain/usecases/watch_entries_usecase.dart';
 import '../bloc/entries_bloc.dart';
 import '../bloc/entries_event.dart';
@@ -185,12 +187,17 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                                   child: ListView(
                                                     children: selectorState
                                                         .entries
-                                                        .map(
-                                                          (entry) => EntryCard(
+                                                        .mapIndexed<EntryCard>(
+                                                          (
+                                                            index,
+                                                            entry,
+                                                          ) => EntryCard(
                                                             entry: entry,
                                                             onTap: () {
                                                               openStudyTestPage(
-                                                                state,
+                                                                selectorState
+                                                                    .entries,
+                                                                index,
                                                               );
                                                             },
                                                           ),
@@ -458,7 +465,7 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                     (context, index) => EntryCard(
                                       entry: tab.entries[index],
                                       onTap: () {
-                                        openStudyTestPage(state);
+                                        openStudyTestPage(tab.entries, index);
                                       },
                                     ),
                                   ),
@@ -512,11 +519,15 @@ class _EntriesPageViewState extends State<EntriesPageView>
     });
   }
 
-  void openStudyTestPage(EntriesState state) {
+  void openStudyTestPage(List<EntryEntity> entries, int currentEntryIndex) {
     GoRouter.of(context).go(
       '$fieldListsPath${widget.fieldId}$entriesPath'
-      '${state.entriesPageData!.fieldList.id!}$studyTest',
-      extra: StudyTestState(),
+      '${widget.fieldListId}$studyTest',
+      extra: StudyTestState(
+        entries: entries,
+        currentEntryIndex: currentEntryIndex,
+        counts: entries.map((entry) => (0, 0)).toList(),
+      ),
     );
   }
 }
