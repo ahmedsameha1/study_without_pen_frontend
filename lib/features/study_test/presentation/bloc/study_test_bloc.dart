@@ -4,5 +4,11 @@ import 'study_test_event.dart';
 import 'study_test_state.dart';
 
 class StudyTestBloc extends Bloc<StudyTestEvent, StudyTestState> {
-  StudyTestBloc(StudyTestState state) : super(state);
+  StudyTestBloc(super.state) {
+    on<ChangeEntry>(_onChangeEntry);
+  }
+
+  void _onChangeEntry(ChangeEntry event, Emitter<StudyTestState> emit) {
+    emit(state.copyWith(currentEntryIndex: event.index));
+  }
 }
