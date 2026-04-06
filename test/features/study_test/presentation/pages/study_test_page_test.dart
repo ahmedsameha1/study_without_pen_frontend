@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_bloc.dart';
+import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_event.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_state.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/pages/study_test_page.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/pages/study_test_page_view_content.dart';
@@ -51,7 +52,7 @@ void main() {
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          MaterialApp(home: StudyTestPage(state: const StudyTestState())),
+          MaterialApp(home: StudyTestPage(state: StudyTestState())),
         );
         expect(
           find.descendant(
@@ -118,6 +119,34 @@ void main() {
         await tester.tap(find.text(expectedTestString));
         await tester.pumpAndSettle();
         expect(find.text('33'), findsOne);
+      });
+
+      testWidgets('a ChangeEntry event is added when swipe the page', (
+        WidgetTester tester,
+      ) async {
+        whenListen<StudyTestState>(
+          studyTestBloc,
+          Stream.fromIterable([]),
+          initialState: StudyTestState(
+            entries: entries,
+            currentEntryIndex: 1,
+            counts: [(12, 45), (3, 33), (8, 18)],
+          ),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            localizationsDelegates: const [AppLocalizations.delegate],
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: currentLocale,
+            home: BlocProvider.value(
+              value: studyTestBloc,
+              child: const StudyTestPageView(),
+            ),
+          ),
+        );
+        await tester.drag(find.text(entries[1].question), const Offset(800, 0));
+        await tester.pumpAndSettle();
+        verify(() => studyTestBloc.add(ChangeEntry(0))).called(1);
       });
     });
   });

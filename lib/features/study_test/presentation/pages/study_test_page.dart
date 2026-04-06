@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/study_test_bloc.dart';
+import '../bloc/study_test_event.dart';
 import '../bloc/study_test_state.dart';
 import 'study_test_page_view_content.dart';
 
@@ -49,6 +50,8 @@ class _StudyTestPageViewState extends State<StudyTestPageView> {
       child: BlocBuilder<StudyTestBloc, StudyTestState>(
         builder: (context, state) => PageView(
           controller: _pageController,
+          onPageChanged: (value) =>
+              BlocProvider.of<StudyTestBloc>(context).add(ChangeEntry(value)),
           children: state.entries
               .mapIndexed(
                 (index, entry) => StudyTestPageViewContent(
