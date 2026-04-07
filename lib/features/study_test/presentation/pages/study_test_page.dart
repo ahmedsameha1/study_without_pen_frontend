@@ -58,6 +58,7 @@ class _StudyTestPageViewState extends State<StudyTestPageView> {
                   entry: entry,
                   studyCount: state.counts[index].$1,
                   testCount: state.counts[index].$2,
+                  tabIndex: state.counts[index].$3,
                 ),
               )
               .toList(),

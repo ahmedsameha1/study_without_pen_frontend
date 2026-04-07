@@ -5,7 +5,6 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../entries/domain/models/entry_entity.dart';
 import '../bloc/study_test_bloc.dart';
 import '../bloc/study_test_event.dart';
-import '../bloc/study_test_state.dart';
 import 'study_tab_view.dart';
 import 'test_tab_view.dart';
 
@@ -14,27 +13,24 @@ class StudyTestPageViewContent extends StatelessWidget {
     required this.entry,
     required this.studyCount,
     required this.testCount,
+    required this.tabIndex,
     super.key,
   });
   final EntryEntity entry;
   final int studyCount;
   final int testCount;
-  final StudyTestTab tab;
+  final int tabIndex;
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
-    initialIndex: switch (tab) {
-      StudyTestTab.study => 0,
-      StudyTestTab.test => 1,
-    },
+    initialIndex: tabIndex,
     length: 2,
     child: Column(
       key: const Key('outerColumn'),
       children: [
         TabBar(
-          onTap: (value) => BlocProvider.of<StudyTestBloc>(
-            context,
-          ).add(ChangeTab(value == 0 ? StudyTestTab.study : StudyTestTab.test)),
+          onTap: (value) =>
+              BlocProvider.of<StudyTestBloc>(context).add(ChangeTab(value)),
           tabs: [
             Text(AppLocalizations.of(context)!.study),
             Text(AppLocalizations.of(context)!.test),

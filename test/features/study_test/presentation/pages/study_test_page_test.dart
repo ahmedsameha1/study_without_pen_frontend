@@ -120,6 +120,16 @@ void main() {
         await tester.tap(find.text(expectedTestString));
         await tester.pumpAndSettle();
         expect(find.text('33'), findsOne);
+        await tester.drag(find.text(entries[1].question), const Offset(800, 0));
+        await tester.pumpAndSettle();
+        expect(find.text(entries[0].question), findsOne);
+        expect(find.text(entries[0].answer), findsNothing);
+        expect(find.text('45'), findsOne);
+        await tester.tap(find.text(expectedStudyString));
+        await tester.pumpAndSettle();
+        expect(find.text(entries[0].question), findsOne);
+        expect(find.text(entries[0].answer), findsOne);
+        expect(find.text('12'), findsOne);
       });
 
       testWidgets('a ChangeEntry event is added when swipe the page', (

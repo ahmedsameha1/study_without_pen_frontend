@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
+import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_bloc.dart';
+import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_event.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_state.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/pages/study_tab_view.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/pages/study_test_page_view_content.dart';
@@ -10,6 +14,8 @@ import 'package:uuid/uuid.dart';
 
 import '../../../common/common_finders.dart';
 
+class MockStudyTestBloc extends Mock implements StudyTestBloc {}
+
 void main() {
   group('English locale', () {
     Locale currentLocale = const Locale('en');
@@ -17,7 +23,7 @@ void main() {
     String expectedTestString = 'Test';
     const studyCount = 23;
     const testCount = 74;
-    const StudyTestTab tab = StudyTestTab.study;
+    const int tabIndex = 0;
     EntryEntity entry = EntryEntity(
       fieldListId: const Uuid().v4(),
       answer: 'answer',
@@ -28,18 +34,25 @@ void main() {
     testWidgets('Test the precense of the main widgets', (
       WidgetTester tester,
     ) async {
+      StudyTestBloc studyTestBloc = MockStudyTestBloc();
+      when(
+        () => studyTestBloc.stream,
+      ).thenAnswer((_) => Stream.value(StudyTestState()));
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: const [AppLocalizations.delegate],
           supportedLocales: AppLocalizations.supportedLocales,
           locale: currentLocale,
           //theme: AppTheme.theme,
-          home: Scaffold(
-            body: StudyTestPageViewContent(
-              entry: entry,
-              studyCount: studyCount,
-              testCount: testCount,
-              tab: tab,
+          home: BlocProvider.value(
+            value: studyTestBloc,
+            child: Scaffold(
+              body: StudyTestPageViewContent(
+                entry: entry,
+                studyCount: studyCount,
+                testCount: testCount,
+                tabIndex: tabIndex,
+              ),
             ),
           ),
         ),
@@ -81,6 +94,9 @@ void main() {
       await tester.tap(find.text(expectedTestString));
       await tester.pumpAndSettle();
       expect(find.text('$testCount'), findsOne);
+      await tester.tap(find.text(expectedStudyString));
+      await tester.pumpAndSettle();
+      verify(() => studyTestBloc.add(ChangeTab(1))).called(1);
     });
   });
 }
