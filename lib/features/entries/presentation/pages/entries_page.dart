@@ -526,7 +526,7 @@ class _EntriesPageViewState extends State<EntriesPageView>
       extra: StudyTestState(
         entries: entries,
         currentEntryIndex: currentEntryIndex,
-        counts: entries.map((entry) => (0, 0)).toList(),
+        counts: entries.map((entry) => (0, 0, 0)).toList(),
       ),
     );
   }

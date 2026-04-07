@@ -5,5 +5,7 @@ void main() {
   test('Supports value equality', () {
     expect(ChangeEntry(3), ChangeEntry(3));
     expect(ChangeEntry(3), isNot(ChangeEntry(5)));
+    expect(ChangeTab(0), ChangeTab(0));
+    expect(ChangeTab(1), isNot(ChangeTab(0)));
   });
 }

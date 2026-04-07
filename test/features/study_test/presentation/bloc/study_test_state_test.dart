@@ -40,7 +40,7 @@ void main() {
           ),
         ],
         currentEntryIndex: 1,
-        counts: [(1, 2)],
+        counts: [(1, 2, 0)],
       ),
       throwsA(
         isA<AssertionError>().having(

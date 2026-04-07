@@ -4,7 +4,7 @@ import '../../../entries/domain/models/entry_entity.dart';
 
 part 'study_test_state.freezed.dart';
 
-typedef EntryCounts = (int studyCount, int testCount);
+typedef EntryCounts = (int studyCount, int testCount, int tab);
 
 @freezed
 abstract class StudyTestState with _$StudyTestState {

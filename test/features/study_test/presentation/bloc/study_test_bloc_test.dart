@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
@@ -46,14 +44,32 @@ void main() {
     seed: () => StudyTestState(
       entries: entries,
       currentEntryIndex: 1,
-      counts: [(1, 2), (3, 4), (5, 6)],
+      counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
     ),
     act: (bloc) => bloc.add(ChangeEntry(2)),
     expect: () => [
       StudyTestState(
         entries: entries,
         currentEntryIndex: 2,
-        counts: [(1, 2), (3, 4), (5, 6)],
+        counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
+      ),
+    ],
+  );
+
+  blocTest(
+    'update tab when the tab is changed',
+    build: () => StudyTestBloc(StudyTestState()),
+    seed: () => StudyTestState(
+      entries: entries,
+      currentEntryIndex: 1,
+      counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
+    ),
+    act: (bloc) => bloc.add(ChangeTab(1)),
+    expect: () => [
+      StudyTestState(
+        entries: entries,
+        currentEntryIndex: 1,
+        counts: [(1, 2, 0), (3, 4, 1), (5, 6, 0)],
       ),
     ],
   );

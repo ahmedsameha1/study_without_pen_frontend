@@ -20,6 +20,7 @@ void main() {
   group('English locale', () {
     Locale currentLocale = const Locale('en');
     String expectedTestString = 'Test';
+    String expectedStudyString = 'Study';
     List<EntryEntity> entries = [
       EntryEntity(
         id: const Uuid().v4(),
@@ -80,7 +81,7 @@ void main() {
           initialState: StudyTestState(
             entries: entries,
             currentEntryIndex: 1,
-            counts: [(12, 45), (3, 33), (8, 18)],
+            counts: [(12, 45, 1), (3, 33, 0), (8, 18, 1)],
           ),
         );
         await tester.pumpWidget(
@@ -130,7 +131,7 @@ void main() {
           initialState: StudyTestState(
             entries: entries,
             currentEntryIndex: 1,
-            counts: [(12, 45), (3, 33), (8, 18)],
+            counts: [(12, 45, 0), (3, 33, 0), (8, 18, 0)],
           ),
         );
         await tester.pumpWidget(

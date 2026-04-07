@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
+import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_state.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/pages/study_tab_view.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/pages/study_test_page_view_content.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/pages/test_tab_view.dart';
@@ -16,6 +17,7 @@ void main() {
     String expectedTestString = 'Test';
     const studyCount = 23;
     const testCount = 74;
+    const StudyTestTab tab = StudyTestTab.study;
     EntryEntity entry = EntryEntity(
       fieldListId: const Uuid().v4(),
       answer: 'answer',
@@ -37,6 +39,7 @@ void main() {
               entry: entry,
               studyCount: studyCount,
               testCount: testCount,
+              tab: tab,
             ),
           ),
         ),
