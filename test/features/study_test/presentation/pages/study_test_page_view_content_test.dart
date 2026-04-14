@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_event.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_state.dart';
@@ -17,6 +18,42 @@ import '../../../common/common_finders.dart';
 class MockStudyTestBloc extends Mock implements StudyTestBloc {}
 
 void main() {
+  DateTime creationAt = DateTime(2024);
+  FieldListEntity fieldListEntity = FieldListEntity(
+    id: const Uuid().v4(),
+    fieldId: const Uuid().v4(),
+    name: 'name',
+    creationAt: creationAt,
+    lastModificationAt: creationAt,
+  );
+  List<EntryEntity> entries = [
+    EntryEntity(
+      id: const Uuid().v4(),
+      fieldListId: fieldListEntity.id!,
+      answer: 'answer1',
+      question: 'question1',
+      creationAt: DateTime(2025).subtract(const Duration(days: 4)),
+      lastModificationAt: DateTime(2025).subtract(const Duration(days: 3)),
+    ),
+    EntryEntity(
+      id: const Uuid().v4(),
+      fieldListId: fieldListEntity.id!,
+      answer: 'answer2',
+      question: 'question2',
+      creationAt: DateTime(2025).subtract(const Duration(days: 2)),
+      lastModificationAt: DateTime(2025).subtract(const Duration(days: 1)),
+    ),
+    EntryEntity(
+      id: const Uuid().v4(),
+      fieldListId: fieldListEntity.id!,
+      answer: 'answer3',
+      question: 'question3',
+      creationAt: DateTime(2025).subtract(const Duration(days: 6)),
+      lastModificationAt: DateTime(2025).subtract(const Duration(days: 5)),
+    ),
+  ];
+  List<EntryCounts> counts = [(0, 0, 0), (0, 0, 0), (0, 0, 0)];
+
   group('English locale', () {
     Locale currentLocale = const Locale('en');
     String expectedStudyString = 'Study';
@@ -35,9 +72,15 @@ void main() {
       WidgetTester tester,
     ) async {
       StudyTestBloc studyTestBloc = MockStudyTestBloc();
-      when(
-        () => studyTestBloc.stream,
-      ).thenAnswer((_) => Stream.value(StudyTestState()));
+      when(() => studyTestBloc.stream).thenAnswer(
+        (_) => Stream.value(
+          StudyTestState(
+            fieldList: fieldListEntity,
+            entries: entries,
+            counts: counts,
+          ),
+        ),
+      );
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: const [AppLocalizations.delegate],

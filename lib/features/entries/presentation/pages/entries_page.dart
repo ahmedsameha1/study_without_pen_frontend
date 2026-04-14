@@ -524,6 +524,9 @@ class _EntriesPageViewState extends State<EntriesPageView>
       '$fieldListsPath${widget.fieldId}$entriesPath'
       '${widget.fieldListId}$studyTest',
       extra: StudyTestState(
+        fieldList: BlocProvider.of<EntriesBloc>(
+          context,
+        ).state.entriesPageData!.fieldList,
         entries: entries,
         currentEntryIndex: currentEntryIndex,
         counts: entries.map((entry) => (0, 0, 0)).toList(),

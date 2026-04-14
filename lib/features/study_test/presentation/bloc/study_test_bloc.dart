@@ -8,10 +8,11 @@ class StudyTestBloc extends Bloc<StudyTestEvent, StudyTestState> {
   StudyTestBloc(super.state) {
     on<ChangeEntry>(_onChangeEntry);
     on<ChangeTab>(_onChangeTab);
+    on<ChangeUserAnswer>(_onChangeUserAnswer);
   }
 
   void _onChangeEntry(ChangeEntry event, Emitter<StudyTestState> emit) {
-    emit(state.copyWith(currentEntryIndex: event.index));
+    emit(state.copyWith(currentEntryIndex: event.index, userAnswer: ''));
   }
 
   void _onChangeTab(ChangeTab event, Emitter<StudyTestState> emit) {
@@ -24,7 +25,34 @@ class StudyTestBloc extends Bloc<StudyTestEvent, StudyTestState> {
             return count;
           }
         }).toList(),
+        userAnswer: '',
       ),
     );
+  }
+
+  void _onChangeUserAnswer(
+    ChangeUserAnswer event,
+    Emitter<StudyTestState> emit,
+  ) {
+    if (event.userAnswer == state.entries[state.currentEntryIndex].answer) {
+      emit(
+        state.copyWith(
+          userAnswer: '',
+          counts: state.counts.mapIndexed((index, count) {
+            if (index == state.currentEntryIndex) {
+              if (count.$3 == 0) {
+                return (count.$1 + 1, count.$2, count.$3);
+              } else {
+                return (count.$1, count.$2 + 1, count.$3);
+              }
+            } else {
+              return count;
+            }
+          }).toList(),
+        ),
+      );
+    } else {
+      emit(state.copyWith(userAnswer: event.userAnswer));
+    }
   }
 }

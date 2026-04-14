@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_event.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_state.dart';
@@ -17,6 +18,14 @@ import '../../../common/common_finders.dart';
 class MockStudyTestBloc extends Mock implements StudyTestBloc {}
 
 void main() {
+  DateTime creationAt = DateTime(2024);
+  FieldListEntity fieldListEntity = FieldListEntity(
+    id: const Uuid().v4(),
+    fieldId: const Uuid().v4(),
+    name: 'name',
+    creationAt: creationAt,
+    lastModificationAt: creationAt,
+  );
   group('English locale', () {
     Locale currentLocale = const Locale('en');
     String expectedTestString = 'Test';
@@ -48,12 +57,25 @@ void main() {
       ),
     ];
 
+    List<EntryCounts> counts = [(0, 0, 0), (0, 0, 0), (0, 0, 0)];
+
     group('StudyTestPage', () {
       testWidgets('Test the presence of StudyTestPageView widget', (
         WidgetTester tester,
       ) async {
         await tester.pumpWidget(
-          MaterialApp(home: StudyTestPage(state: StudyTestState())),
+          MaterialApp(
+            localizationsDelegates: const [AppLocalizations.delegate],
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: currentLocale,
+            home: StudyTestPage(
+              state: StudyTestState(
+                fieldList: fieldListEntity,
+                entries: entries,
+                counts: counts,
+              ),
+            ),
+          ),
         );
         expect(
           find.descendant(
@@ -79,6 +101,7 @@ void main() {
           studyTestBloc,
           Stream.fromIterable([]),
           initialState: StudyTestState(
+            fieldList: fieldListEntity,
             entries: entries,
             currentEntryIndex: 1,
             counts: [(12, 45, 1), (3, 33, 0), (8, 18, 1)],
@@ -139,6 +162,7 @@ void main() {
           studyTestBloc,
           Stream.fromIterable([]),
           initialState: StudyTestState(
+            fieldList: fieldListEntity,
             entries: entries,
             currentEntryIndex: 1,
             counts: [(12, 45, 0), (3, 33, 0), (8, 18, 0)],

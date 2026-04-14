@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../entries/domain/models/entry_entity.dart';
+import '../../../field_lists/domain/models/field_list_entity.dart';
 
 part 'study_test_state.freezed.dart';
 
@@ -13,8 +14,10 @@ abstract class StudyTestState with _$StudyTestState {
     'entries length must be equal to counts length',
   )
   const factory StudyTestState({
-    @Default([]) List<EntryEntity> entries,
+    required FieldListEntity fieldList,
+    required List<EntryEntity> entries,
+    required List<EntryCounts> counts,
     @Default(0) int currentEntryIndex,
-    @Default([]) List<EntryCounts> counts,
+    @Default('') String userAnswer,
   }) = _StudyTestState;
 }

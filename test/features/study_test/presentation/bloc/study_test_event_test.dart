@@ -7,5 +7,7 @@ void main() {
     expect(ChangeEntry(3), isNot(ChangeEntry(5)));
     expect(ChangeTab(0), ChangeTab(0));
     expect(ChangeTab(1), isNot(ChangeTab(0)));
+    expect(ChangeUserAnswer('hi'), ChangeUserAnswer('hi'));
+    expect(ChangeUserAnswer('hello'), isNot(ChangeUserAnswer('hi')));
   });
 }

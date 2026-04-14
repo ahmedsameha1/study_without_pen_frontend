@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$StudyTestState {
 
- List<EntryEntity> get entries; int get currentEntryIndex; List<EntryCounts> get counts;
+ FieldListEntity get fieldList; List<EntryEntity> get entries; List<EntryCounts> get counts; int get currentEntryIndex; String get userAnswer;
 /// Create a copy of StudyTestState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $StudyTestStateCopyWith<StudyTestState> get copyWith => _$StudyTestStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StudyTestState&&const DeepCollectionEquality().equals(other.entries, entries)&&(identical(other.currentEntryIndex, currentEntryIndex) || other.currentEntryIndex == currentEntryIndex)&&const DeepCollectionEquality().equals(other.counts, counts));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StudyTestState&&(identical(other.fieldList, fieldList) || other.fieldList == fieldList)&&const DeepCollectionEquality().equals(other.entries, entries)&&const DeepCollectionEquality().equals(other.counts, counts)&&(identical(other.currentEntryIndex, currentEntryIndex) || other.currentEntryIndex == currentEntryIndex)&&(identical(other.userAnswer, userAnswer) || other.userAnswer == userAnswer));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(entries),currentEntryIndex,const DeepCollectionEquality().hash(counts));
+int get hashCode => Object.hash(runtimeType,fieldList,const DeepCollectionEquality().hash(entries),const DeepCollectionEquality().hash(counts),currentEntryIndex,userAnswer);
 
 @override
 String toString() {
-  return 'StudyTestState(entries: $entries, currentEntryIndex: $currentEntryIndex, counts: $counts)';
+  return 'StudyTestState(fieldList: $fieldList, entries: $entries, counts: $counts, currentEntryIndex: $currentEntryIndex, userAnswer: $userAnswer)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $StudyTestStateCopyWith<$Res>  {
   factory $StudyTestStateCopyWith(StudyTestState value, $Res Function(StudyTestState) _then) = _$StudyTestStateCopyWithImpl;
 @useResult
 $Res call({
- List<EntryEntity> entries, int currentEntryIndex, List<EntryCounts> counts
+ FieldListEntity fieldList, List<EntryEntity> entries, List<EntryCounts> counts, int currentEntryIndex, String userAnswer
 });
 
 
-
+$FieldListEntityCopyWith<$Res> get fieldList;
 
 }
 /// @nodoc
@@ -62,15 +62,26 @@ class _$StudyTestStateCopyWithImpl<$Res>
 
 /// Create a copy of StudyTestState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? entries = null,Object? currentEntryIndex = null,Object? counts = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? fieldList = null,Object? entries = null,Object? counts = null,Object? currentEntryIndex = null,Object? userAnswer = null,}) {
   return _then(_self.copyWith(
-entries: null == entries ? _self.entries : entries // ignore: cast_nullable_to_non_nullable
-as List<EntryEntity>,currentEntryIndex: null == currentEntryIndex ? _self.currentEntryIndex : currentEntryIndex // ignore: cast_nullable_to_non_nullable
-as int,counts: null == counts ? _self.counts : counts // ignore: cast_nullable_to_non_nullable
-as List<EntryCounts>,
+fieldList: null == fieldList ? _self.fieldList : fieldList // ignore: cast_nullable_to_non_nullable
+as FieldListEntity,entries: null == entries ? _self.entries : entries // ignore: cast_nullable_to_non_nullable
+as List<EntryEntity>,counts: null == counts ? _self.counts : counts // ignore: cast_nullable_to_non_nullable
+as List<EntryCounts>,currentEntryIndex: null == currentEntryIndex ? _self.currentEntryIndex : currentEntryIndex // ignore: cast_nullable_to_non_nullable
+as int,userAnswer: null == userAnswer ? _self.userAnswer : userAnswer // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
-
+/// Create a copy of StudyTestState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FieldListEntityCopyWith<$Res> get fieldList {
+  
+  return $FieldListEntityCopyWith<$Res>(_self.fieldList, (value) {
+    return _then(_self.copyWith(fieldList: value));
+  });
+}
 }
 
 
@@ -152,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<EntryEntity> entries,  int currentEntryIndex,  List<EntryCounts> counts)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( FieldListEntity fieldList,  List<EntryEntity> entries,  List<EntryCounts> counts,  int currentEntryIndex,  String userAnswer)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StudyTestState() when $default != null:
-return $default(_that.entries,_that.currentEntryIndex,_that.counts);case _:
+return $default(_that.fieldList,_that.entries,_that.counts,_that.currentEntryIndex,_that.userAnswer);case _:
   return orElse();
 
 }
@@ -173,10 +184,10 @@ return $default(_that.entries,_that.currentEntryIndex,_that.counts);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<EntryEntity> entries,  int currentEntryIndex,  List<EntryCounts> counts)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( FieldListEntity fieldList,  List<EntryEntity> entries,  List<EntryCounts> counts,  int currentEntryIndex,  String userAnswer)  $default,) {final _that = this;
 switch (_that) {
 case _StudyTestState():
-return $default(_that.entries,_that.currentEntryIndex,_that.counts);case _:
+return $default(_that.fieldList,_that.entries,_that.counts,_that.currentEntryIndex,_that.userAnswer);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +204,10 @@ return $default(_that.entries,_that.currentEntryIndex,_that.counts);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<EntryEntity> entries,  int currentEntryIndex,  List<EntryCounts> counts)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( FieldListEntity fieldList,  List<EntryEntity> entries,  List<EntryCounts> counts,  int currentEntryIndex,  String userAnswer)?  $default,) {final _that = this;
 switch (_that) {
 case _StudyTestState() when $default != null:
-return $default(_that.entries,_that.currentEntryIndex,_that.counts);case _:
+return $default(_that.fieldList,_that.entries,_that.counts,_that.currentEntryIndex,_that.userAnswer);case _:
   return null;
 
 }
@@ -208,24 +219,26 @@ return $default(_that.entries,_that.currentEntryIndex,_that.counts);case _:
 
 
 class _StudyTestState implements StudyTestState {
-  const _StudyTestState({final  List<EntryEntity> entries = const [], this.currentEntryIndex = 0, final  List<EntryCounts> counts = const []}): assert(entries.length == counts.length, 'entries length must be equal to counts length'),_entries = entries,_counts = counts;
+  const _StudyTestState({required this.fieldList, required final  List<EntryEntity> entries, required final  List<EntryCounts> counts, this.currentEntryIndex = 0, this.userAnswer = ''}): assert(entries.length == counts.length, 'entries length must be equal to counts length'),_entries = entries,_counts = counts;
   
 
+@override final  FieldListEntity fieldList;
  final  List<EntryEntity> _entries;
-@override@JsonKey() List<EntryEntity> get entries {
+@override List<EntryEntity> get entries {
   if (_entries is EqualUnmodifiableListView) return _entries;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_entries);
 }
 
-@override@JsonKey() final  int currentEntryIndex;
  final  List<EntryCounts> _counts;
-@override@JsonKey() List<EntryCounts> get counts {
+@override List<EntryCounts> get counts {
   if (_counts is EqualUnmodifiableListView) return _counts;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_counts);
 }
 
+@override@JsonKey() final  int currentEntryIndex;
+@override@JsonKey() final  String userAnswer;
 
 /// Create a copy of StudyTestState
 /// with the given fields replaced by the non-null parameter values.
@@ -237,16 +250,16 @@ _$StudyTestStateCopyWith<_StudyTestState> get copyWith => __$StudyTestStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StudyTestState&&const DeepCollectionEquality().equals(other._entries, _entries)&&(identical(other.currentEntryIndex, currentEntryIndex) || other.currentEntryIndex == currentEntryIndex)&&const DeepCollectionEquality().equals(other._counts, _counts));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StudyTestState&&(identical(other.fieldList, fieldList) || other.fieldList == fieldList)&&const DeepCollectionEquality().equals(other._entries, _entries)&&const DeepCollectionEquality().equals(other._counts, _counts)&&(identical(other.currentEntryIndex, currentEntryIndex) || other.currentEntryIndex == currentEntryIndex)&&(identical(other.userAnswer, userAnswer) || other.userAnswer == userAnswer));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_entries),currentEntryIndex,const DeepCollectionEquality().hash(_counts));
+int get hashCode => Object.hash(runtimeType,fieldList,const DeepCollectionEquality().hash(_entries),const DeepCollectionEquality().hash(_counts),currentEntryIndex,userAnswer);
 
 @override
 String toString() {
-  return 'StudyTestState(entries: $entries, currentEntryIndex: $currentEntryIndex, counts: $counts)';
+  return 'StudyTestState(fieldList: $fieldList, entries: $entries, counts: $counts, currentEntryIndex: $currentEntryIndex, userAnswer: $userAnswer)';
 }
 
 
@@ -257,11 +270,11 @@ abstract mixin class _$StudyTestStateCopyWith<$Res> implements $StudyTestStateCo
   factory _$StudyTestStateCopyWith(_StudyTestState value, $Res Function(_StudyTestState) _then) = __$StudyTestStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<EntryEntity> entries, int currentEntryIndex, List<EntryCounts> counts
+ FieldListEntity fieldList, List<EntryEntity> entries, List<EntryCounts> counts, int currentEntryIndex, String userAnswer
 });
 
 
-
+@override $FieldListEntityCopyWith<$Res> get fieldList;
 
 }
 /// @nodoc
@@ -274,16 +287,27 @@ class __$StudyTestStateCopyWithImpl<$Res>
 
 /// Create a copy of StudyTestState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? entries = null,Object? currentEntryIndex = null,Object? counts = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? fieldList = null,Object? entries = null,Object? counts = null,Object? currentEntryIndex = null,Object? userAnswer = null,}) {
   return _then(_StudyTestState(
-entries: null == entries ? _self._entries : entries // ignore: cast_nullable_to_non_nullable
-as List<EntryEntity>,currentEntryIndex: null == currentEntryIndex ? _self.currentEntryIndex : currentEntryIndex // ignore: cast_nullable_to_non_nullable
-as int,counts: null == counts ? _self._counts : counts // ignore: cast_nullable_to_non_nullable
-as List<EntryCounts>,
+fieldList: null == fieldList ? _self.fieldList : fieldList // ignore: cast_nullable_to_non_nullable
+as FieldListEntity,entries: null == entries ? _self._entries : entries // ignore: cast_nullable_to_non_nullable
+as List<EntryEntity>,counts: null == counts ? _self._counts : counts // ignore: cast_nullable_to_non_nullable
+as List<EntryCounts>,currentEntryIndex: null == currentEntryIndex ? _self.currentEntryIndex : currentEntryIndex // ignore: cast_nullable_to_non_nullable
+as int,userAnswer: null == userAnswer ? _self.userAnswer : userAnswer // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
-
+/// Create a copy of StudyTestState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FieldListEntityCopyWith<$Res> get fieldList {
+  
+  return $FieldListEntityCopyWith<$Res>(_self.fieldList, (value) {
+    return _then(_self.copyWith(fieldList: value));
+  });
+}
 }
 
 // dart format on
