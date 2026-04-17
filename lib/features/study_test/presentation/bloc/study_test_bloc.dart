@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../database/app_database.dart';
 import 'study_test_event.dart';
 import 'study_test_state.dart';
 
@@ -34,7 +35,37 @@ class StudyTestBloc extends Bloc<StudyTestEvent, StudyTestState> {
     ChangeUserAnswer event,
     Emitter<StudyTestState> emit,
   ) {
-    if (event.userAnswer == state.entries[state.currentEntryIndex].answer) {
+    switch (state.fieldList.checkType) {
+      case CheckType.DO_NOT_IGNORE_CASE:
+        updateStateAccordingToAnswerChecking(
+          event.userAnswer == state.entries[state.currentEntryIndex].answer,
+          emit,
+          event,
+        );
+        break;
+      case CheckType.IGNORE_CASE:
+        updateStateAccordingToAnswerChecking(
+          event.userAnswer.toLowerCase() ==
+              state.entries[state.currentEntryIndex].answer.toLowerCase(),
+          emit,
+          event,
+        );
+        break;
+      default:
+        updateStateAccordingToAnswerChecking(
+          event.userAnswer == state.entries[state.currentEntryIndex].answer,
+          emit,
+          event,
+        );
+    }
+  }
+
+  void updateStateAccordingToAnswerChecking(
+    bool result,
+    Emitter<StudyTestState> emit,
+    ChangeUserAnswer event,
+  ) {
+    if (result) {
       emit(
         state.copyWith(
           userAnswer: '',
