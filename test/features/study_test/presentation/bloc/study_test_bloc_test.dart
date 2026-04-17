@@ -16,7 +16,7 @@ void main() {
     name: 'name',
     creationAt: creationAt,
     lastModificationAt: creationAt,
-    checkType: CheckType.DO_NOT_IGNORE_CASE.index,
+    checkType: CheckType.DO_NOT_IGNORE_CASE,
   );
   List<EntryEntity> entries = [
     EntryEntity(

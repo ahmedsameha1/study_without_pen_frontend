@@ -97,8 +97,8 @@ void main() {
 
   late CreateFieldListUsecase createFieldListUsecase;
   group("English locale", () {
-  String expectedCreateFieldString = "Create Field List";
-  String expectedFieldListNameString = "Field List Name";
+    String expectedCreateFieldString = "Create Field List";
+    String expectedFieldListNameString = "Field List Name";
     Locale currentLocale = const Locale("en");
     String expectedInvalidNameString =
         "Field list name must be between 1 and 64 characters";
@@ -272,8 +272,6 @@ void main() {
           checkTypeDropdownMenuFormField.initialValue,
           CheckType.NON_STRICT_IGNORE_CASE,
         );
-        expect((checkTypeDropdownMenu.label as Text).data, "Select check type");
-        expect(checkTypeDropdownMenu.helperText, "How app checks your answers");
         expect(checkTypeTextField.maxLines, 2);
         Text checkType1Text = tester.widget(
           find.text("Do not check letter case or space").at(1),

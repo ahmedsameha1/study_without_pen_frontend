@@ -47,7 +47,7 @@ void main() {
         FieldListEntity(
           fieldId: fieldId,
           name: fieldListName,
-          checkType: checkType.index,
+          checkType: checkType,
           doesReadAnswer: readAnswer,
           creationAt: creationAt,
           lastModificationAt: creationAt,
@@ -81,7 +81,7 @@ void main() {
         FieldListEntity(
           fieldId: fieldId,
           name: fieldListName,
-          checkType: checkType.index,
+          checkType: checkType,
           doesReadAnswer: readAnswer,
           creationAt: creationAt,
           lastModificationAt: creationAt,

@@ -17,7 +17,7 @@ class CreateFieldListUsecase {
     FieldListEntity fieldListEntity = FieldListEntity(
       fieldId: fieldId,
       name: fieldListName,
-      checkType: checkType.index,
+      checkType: checkType,
       doesReadAnswer: readAnswer,
       color: color,
       creationAt: now,

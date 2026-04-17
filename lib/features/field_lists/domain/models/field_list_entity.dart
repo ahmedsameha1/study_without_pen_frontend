@@ -25,10 +25,6 @@ abstract class FieldListEntity with _$FieldListEntity {
          'FieldList name must be between ${FieldLists.MINIMUM_LENGTH_OF_NAME} and ${FieldLists.MAXIMUM_LENGTH_OF_NAME} characters',
        ),
        assert(
-         checkType >= 0 && checkType <= CheckType.DO_NOT_IGNORE_CASE.index,
-         'checkType must be bigger than or equal 0 and smaller than or equal ${CheckType.DO_NOT_IGNORE_CASE.index}',
-       ),
-       assert(
          sortBy >= 0 && sortBy < SortBy.MAX.index,
          'sortBy must be bigger than or equal 0 and smaller than ${SortBy.MAX.index}',
        ),
@@ -105,7 +101,7 @@ abstract class FieldListEntity with _$FieldListEntity {
     required String name,
     required DateTime creationAt,
     required DateTime lastModificationAt,
-    @Default(0) int checkType,
+    @Default(CheckType.NON_STRICT_DO_NOT_IGNORE_CASE) CheckType checkType,
     @Default(0) int sortBy,
     @Default(0) int usageCount,
     @Default(FieldLists.MAXIMUM_COLOR) int color,
@@ -125,7 +121,7 @@ abstract class FieldListEntity with _$FieldListEntity {
   @override
   final String name;
   @override
-  final int checkType;
+  final CheckType checkType;
   @override
   final int sortBy;
   @override

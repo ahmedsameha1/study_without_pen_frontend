@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FieldListEntity {
 
- String get name; int get checkType; int get sortBy; int get usageCount; int get color; int? get emulationNumberOfQuestions; int? get testsReadingQuestionLetterDuration; int? get testsFindingAnswerDuration; int? get testsTypingAnswerLetterDuration; int? get studyTillCorrectReadingQuestionLetterDuration; int? get studyTillCorrectFindingAnswerDuration; int? get studyTillCorrectTypingAnswerLetterDuration; int get testsTimeOfAnswerAction; String? get id; String get fieldId; DateTime get creationAt; DateTime get lastModificationAt; String? get languageTag; bool get doesReadAnswer; String? get emulationDays; bool get doesObfuscateQuestion;
+ String get name; CheckType get checkType; int get sortBy; int get usageCount; int get color; int? get emulationNumberOfQuestions; int? get testsReadingQuestionLetterDuration; int? get testsFindingAnswerDuration; int? get testsTypingAnswerLetterDuration; int? get studyTillCorrectReadingQuestionLetterDuration; int? get studyTillCorrectFindingAnswerDuration; int? get studyTillCorrectTypingAnswerLetterDuration; int get testsTimeOfAnswerAction; String? get id; String get fieldId; DateTime get creationAt; DateTime get lastModificationAt; String? get languageTag; bool get doesReadAnswer; String? get emulationDays; bool get doesObfuscateQuestion;
 /// Create a copy of FieldListEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $FieldListEntityCopyWith<$Res>  {
   factory $FieldListEntityCopyWith(FieldListEntity value, $Res Function(FieldListEntity) _then) = _$FieldListEntityCopyWithImpl;
 @useResult
 $Res call({
- String? id, String fieldId, String name, DateTime creationAt, DateTime lastModificationAt, int checkType, int sortBy, int usageCount, int color, int? emulationNumberOfQuestions, int? testsReadingQuestionLetterDuration, int? testsFindingAnswerDuration, int? testsTypingAnswerLetterDuration, int? studyTillCorrectReadingQuestionLetterDuration, int? studyTillCorrectFindingAnswerDuration, int? studyTillCorrectTypingAnswerLetterDuration, int testsTimeOfAnswerAction, String? languageTag, bool doesReadAnswer, String? emulationDays, bool doesObfuscateQuestion
+ String? id, String fieldId, String name, DateTime creationAt, DateTime lastModificationAt, CheckType checkType, int sortBy, int usageCount, int color, int? emulationNumberOfQuestions, int? testsReadingQuestionLetterDuration, int? testsFindingAnswerDuration, int? testsTypingAnswerLetterDuration, int? studyTillCorrectReadingQuestionLetterDuration, int? studyTillCorrectFindingAnswerDuration, int? studyTillCorrectTypingAnswerLetterDuration, int testsTimeOfAnswerAction, String? languageTag, bool doesReadAnswer, String? emulationDays, bool doesObfuscateQuestion
 });
 
 
@@ -70,7 +70,7 @@ as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non
 as String,creationAt: null == creationAt ? _self.creationAt : creationAt // ignore: cast_nullable_to_non_nullable
 as DateTime,lastModificationAt: null == lastModificationAt ? _self.lastModificationAt : lastModificationAt // ignore: cast_nullable_to_non_nullable
 as DateTime,checkType: null == checkType ? _self.checkType : checkType // ignore: cast_nullable_to_non_nullable
-as int,sortBy: null == sortBy ? _self.sortBy : sortBy // ignore: cast_nullable_to_non_nullable
+as CheckType,sortBy: null == sortBy ? _self.sortBy : sortBy // ignore: cast_nullable_to_non_nullable
 as int,usageCount: null == usageCount ? _self.usageCount : usageCount // ignore: cast_nullable_to_non_nullable
 as int,color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as int,emulationNumberOfQuestions: freezed == emulationNumberOfQuestions ? _self.emulationNumberOfQuestions : emulationNumberOfQuestions // ignore: cast_nullable_to_non_nullable
@@ -170,7 +170,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String fieldId,  String name,  DateTime creationAt,  DateTime lastModificationAt,  int checkType,  int sortBy,  int usageCount,  int color,  int? emulationNumberOfQuestions,  int? testsReadingQuestionLetterDuration,  int? testsFindingAnswerDuration,  int? testsTypingAnswerLetterDuration,  int? studyTillCorrectReadingQuestionLetterDuration,  int? studyTillCorrectFindingAnswerDuration,  int? studyTillCorrectTypingAnswerLetterDuration,  int testsTimeOfAnswerAction,  String? languageTag,  bool doesReadAnswer,  String? emulationDays,  bool doesObfuscateQuestion)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String fieldId,  String name,  DateTime creationAt,  DateTime lastModificationAt,  CheckType checkType,  int sortBy,  int usageCount,  int color,  int? emulationNumberOfQuestions,  int? testsReadingQuestionLetterDuration,  int? testsFindingAnswerDuration,  int? testsTypingAnswerLetterDuration,  int? studyTillCorrectReadingQuestionLetterDuration,  int? studyTillCorrectFindingAnswerDuration,  int? studyTillCorrectTypingAnswerLetterDuration,  int testsTimeOfAnswerAction,  String? languageTag,  bool doesReadAnswer,  String? emulationDays,  bool doesObfuscateQuestion)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FieldListEntity() when $default != null:
 return $default(_that.id,_that.fieldId,_that.name,_that.creationAt,_that.lastModificationAt,_that.checkType,_that.sortBy,_that.usageCount,_that.color,_that.emulationNumberOfQuestions,_that.testsReadingQuestionLetterDuration,_that.testsFindingAnswerDuration,_that.testsTypingAnswerLetterDuration,_that.studyTillCorrectReadingQuestionLetterDuration,_that.studyTillCorrectFindingAnswerDuration,_that.studyTillCorrectTypingAnswerLetterDuration,_that.testsTimeOfAnswerAction,_that.languageTag,_that.doesReadAnswer,_that.emulationDays,_that.doesObfuscateQuestion);case _:
@@ -191,7 +191,7 @@ return $default(_that.id,_that.fieldId,_that.name,_that.creationAt,_that.lastMod
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String fieldId,  String name,  DateTime creationAt,  DateTime lastModificationAt,  int checkType,  int sortBy,  int usageCount,  int color,  int? emulationNumberOfQuestions,  int? testsReadingQuestionLetterDuration,  int? testsFindingAnswerDuration,  int? testsTypingAnswerLetterDuration,  int? studyTillCorrectReadingQuestionLetterDuration,  int? studyTillCorrectFindingAnswerDuration,  int? studyTillCorrectTypingAnswerLetterDuration,  int testsTimeOfAnswerAction,  String? languageTag,  bool doesReadAnswer,  String? emulationDays,  bool doesObfuscateQuestion)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String fieldId,  String name,  DateTime creationAt,  DateTime lastModificationAt,  CheckType checkType,  int sortBy,  int usageCount,  int color,  int? emulationNumberOfQuestions,  int? testsReadingQuestionLetterDuration,  int? testsFindingAnswerDuration,  int? testsTypingAnswerLetterDuration,  int? studyTillCorrectReadingQuestionLetterDuration,  int? studyTillCorrectFindingAnswerDuration,  int? studyTillCorrectTypingAnswerLetterDuration,  int testsTimeOfAnswerAction,  String? languageTag,  bool doesReadAnswer,  String? emulationDays,  bool doesObfuscateQuestion)  $default,) {final _that = this;
 switch (_that) {
 case _FieldListEntity():
 return $default(_that.id,_that.fieldId,_that.name,_that.creationAt,_that.lastModificationAt,_that.checkType,_that.sortBy,_that.usageCount,_that.color,_that.emulationNumberOfQuestions,_that.testsReadingQuestionLetterDuration,_that.testsFindingAnswerDuration,_that.testsTypingAnswerLetterDuration,_that.studyTillCorrectReadingQuestionLetterDuration,_that.studyTillCorrectFindingAnswerDuration,_that.studyTillCorrectTypingAnswerLetterDuration,_that.testsTimeOfAnswerAction,_that.languageTag,_that.doesReadAnswer,_that.emulationDays,_that.doesObfuscateQuestion);case _:
@@ -211,7 +211,7 @@ return $default(_that.id,_that.fieldId,_that.name,_that.creationAt,_that.lastMod
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String fieldId,  String name,  DateTime creationAt,  DateTime lastModificationAt,  int checkType,  int sortBy,  int usageCount,  int color,  int? emulationNumberOfQuestions,  int? testsReadingQuestionLetterDuration,  int? testsFindingAnswerDuration,  int? testsTypingAnswerLetterDuration,  int? studyTillCorrectReadingQuestionLetterDuration,  int? studyTillCorrectFindingAnswerDuration,  int? studyTillCorrectTypingAnswerLetterDuration,  int testsTimeOfAnswerAction,  String? languageTag,  bool doesReadAnswer,  String? emulationDays,  bool doesObfuscateQuestion)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String fieldId,  String name,  DateTime creationAt,  DateTime lastModificationAt,  CheckType checkType,  int sortBy,  int usageCount,  int color,  int? emulationNumberOfQuestions,  int? testsReadingQuestionLetterDuration,  int? testsFindingAnswerDuration,  int? testsTypingAnswerLetterDuration,  int? studyTillCorrectReadingQuestionLetterDuration,  int? studyTillCorrectFindingAnswerDuration,  int? studyTillCorrectTypingAnswerLetterDuration,  int testsTimeOfAnswerAction,  String? languageTag,  bool doesReadAnswer,  String? emulationDays,  bool doesObfuscateQuestion)?  $default,) {final _that = this;
 switch (_that) {
 case _FieldListEntity() when $default != null:
 return $default(_that.id,_that.fieldId,_that.name,_that.creationAt,_that.lastModificationAt,_that.checkType,_that.sortBy,_that.usageCount,_that.color,_that.emulationNumberOfQuestions,_that.testsReadingQuestionLetterDuration,_that.testsFindingAnswerDuration,_that.testsTypingAnswerLetterDuration,_that.studyTillCorrectReadingQuestionLetterDuration,_that.studyTillCorrectFindingAnswerDuration,_that.studyTillCorrectTypingAnswerLetterDuration,_that.testsTimeOfAnswerAction,_that.languageTag,_that.doesReadAnswer,_that.emulationDays,_that.doesObfuscateQuestion);case _:
@@ -226,7 +226,7 @@ return $default(_that.id,_that.fieldId,_that.name,_that.creationAt,_that.lastMod
 
 
 class _FieldListEntity extends FieldListEntity {
-   _FieldListEntity({this.id, required this.fieldId, required final  String name, required this.creationAt, required this.lastModificationAt, final  int checkType = 0, final  int sortBy = 0, final  int usageCount = 0, final  int color = FieldLists.MAXIMUM_COLOR, final  int? emulationNumberOfQuestions, final  int? testsReadingQuestionLetterDuration, final  int? testsFindingAnswerDuration, final  int? testsTypingAnswerLetterDuration, final  int? studyTillCorrectReadingQuestionLetterDuration, final  int? studyTillCorrectFindingAnswerDuration, final  int? studyTillCorrectTypingAnswerLetterDuration, final  int testsTimeOfAnswerAction = 1, this.languageTag, this.doesReadAnswer = false, this.emulationDays, this.doesObfuscateQuestion = false}): super._(name: name, checkType: checkType, sortBy: sortBy, usageCount: usageCount, color: color, emulationNumberOfQuestions: emulationNumberOfQuestions, testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration, testsFindingAnswerDuration: testsFindingAnswerDuration, testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration, studyTillCorrectReadingQuestionLetterDuration: studyTillCorrectReadingQuestionLetterDuration, studyTillCorrectFindingAnswerDuration: studyTillCorrectFindingAnswerDuration, studyTillCorrectTypingAnswerLetterDuration: studyTillCorrectTypingAnswerLetterDuration, testsTimeOfAnswerAction: testsTimeOfAnswerAction);
+   _FieldListEntity({this.id, required this.fieldId, required final  String name, required this.creationAt, required this.lastModificationAt, final  CheckType checkType = CheckType.NON_STRICT_DO_NOT_IGNORE_CASE, final  int sortBy = 0, final  int usageCount = 0, final  int color = FieldLists.MAXIMUM_COLOR, final  int? emulationNumberOfQuestions, final  int? testsReadingQuestionLetterDuration, final  int? testsFindingAnswerDuration, final  int? testsTypingAnswerLetterDuration, final  int? studyTillCorrectReadingQuestionLetterDuration, final  int? studyTillCorrectFindingAnswerDuration, final  int? studyTillCorrectTypingAnswerLetterDuration, final  int testsTimeOfAnswerAction = 1, this.languageTag, this.doesReadAnswer = false, this.emulationDays, this.doesObfuscateQuestion = false}): super._(name: name, checkType: checkType, sortBy: sortBy, usageCount: usageCount, color: color, emulationNumberOfQuestions: emulationNumberOfQuestions, testsReadingQuestionLetterDuration: testsReadingQuestionLetterDuration, testsFindingAnswerDuration: testsFindingAnswerDuration, testsTypingAnswerLetterDuration: testsTypingAnswerLetterDuration, studyTillCorrectReadingQuestionLetterDuration: studyTillCorrectReadingQuestionLetterDuration, studyTillCorrectFindingAnswerDuration: studyTillCorrectFindingAnswerDuration, studyTillCorrectTypingAnswerLetterDuration: studyTillCorrectTypingAnswerLetterDuration, testsTimeOfAnswerAction: testsTimeOfAnswerAction);
   
 
 @override final  String? id;
@@ -268,7 +268,7 @@ abstract mixin class _$FieldListEntityCopyWith<$Res> implements $FieldListEntity
   factory _$FieldListEntityCopyWith(_FieldListEntity value, $Res Function(_FieldListEntity) _then) = __$FieldListEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String fieldId, String name, DateTime creationAt, DateTime lastModificationAt, int checkType, int sortBy, int usageCount, int color, int? emulationNumberOfQuestions, int? testsReadingQuestionLetterDuration, int? testsFindingAnswerDuration, int? testsTypingAnswerLetterDuration, int? studyTillCorrectReadingQuestionLetterDuration, int? studyTillCorrectFindingAnswerDuration, int? studyTillCorrectTypingAnswerLetterDuration, int testsTimeOfAnswerAction, String? languageTag, bool doesReadAnswer, String? emulationDays, bool doesObfuscateQuestion
+ String? id, String fieldId, String name, DateTime creationAt, DateTime lastModificationAt, CheckType checkType, int sortBy, int usageCount, int color, int? emulationNumberOfQuestions, int? testsReadingQuestionLetterDuration, int? testsFindingAnswerDuration, int? testsTypingAnswerLetterDuration, int? studyTillCorrectReadingQuestionLetterDuration, int? studyTillCorrectFindingAnswerDuration, int? studyTillCorrectTypingAnswerLetterDuration, int testsTimeOfAnswerAction, String? languageTag, bool doesReadAnswer, String? emulationDays, bool doesObfuscateQuestion
 });
 
 
@@ -293,7 +293,7 @@ as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non
 as String,creationAt: null == creationAt ? _self.creationAt : creationAt // ignore: cast_nullable_to_non_nullable
 as DateTime,lastModificationAt: null == lastModificationAt ? _self.lastModificationAt : lastModificationAt // ignore: cast_nullable_to_non_nullable
 as DateTime,checkType: null == checkType ? _self.checkType : checkType // ignore: cast_nullable_to_non_nullable
-as int,sortBy: null == sortBy ? _self.sortBy : sortBy // ignore: cast_nullable_to_non_nullable
+as CheckType,sortBy: null == sortBy ? _self.sortBy : sortBy // ignore: cast_nullable_to_non_nullable
 as int,usageCount: null == usageCount ? _self.usageCount : usageCount // ignore: cast_nullable_to_non_nullable
 as int,color: null == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as int,emulationNumberOfQuestions: freezed == emulationNumberOfQuestions ? _self.emulationNumberOfQuestions : emulationNumberOfQuestions // ignore: cast_nullable_to_non_nullable

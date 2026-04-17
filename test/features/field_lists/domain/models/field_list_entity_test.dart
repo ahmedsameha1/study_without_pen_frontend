@@ -80,45 +80,6 @@ void main() {
     expect(fieldListEntity.name, "field list name");
   });
 
-  test(
-    'FieldListEntity throws AssertionError when created with invalid checkType',
-    () {
-      expect(
-        () => FieldListEntity(
-          fieldId: "woehwfgehfg",
-          name: "field list name",
-          creationAt: DateTime(2020, 2, 20),
-          lastModificationAt: DateTime(2020, 2, 20),
-          checkType: CheckType.DO_NOT_IGNORE_CASE.index + 1,
-        ),
-        throwsA(
-          predicate(
-            (e) =>
-                e is AssertionError &&
-                e.message ==
-                    'checkType must be bigger than or equal 0 and smaller than or equal ${CheckType.DO_NOT_IGNORE_CASE.index}',
-          ),
-        ),
-      );
-      expect(
-        () => FieldListEntity(
-          fieldId: "woehwfgehfg",
-          name: "field list name",
-          creationAt: DateTime(2020, 2, 20),
-          lastModificationAt: DateTime(2020, 2, 20),
-          checkType: -1,
-        ),
-        throwsA(
-          predicate(
-            (e) =>
-                e is AssertionError &&
-                e.message ==
-                    'checkType must be bigger than or equal 0 and smaller than or equal ${CheckType.DO_NOT_IGNORE_CASE.index}',
-          ),
-        ),
-      );
-    },
-  );
   test('FieldListEntity checkType default value', () {
     final fieldListEntity = FieldListEntity(
       fieldId: "woehwfgehfg",
@@ -126,7 +87,7 @@ void main() {
       creationAt: DateTime(2020, 2, 20),
       lastModificationAt: DateTime(2020, 2, 20),
     );
-    expect(fieldListEntity.checkType, 0);
+    expect(fieldListEntity.checkType, CheckType.NON_STRICT_DO_NOT_IGNORE_CASE);
   });
   test('FieldListEntity checkType has the correct value', () {
     final fieldListEntity = FieldListEntity(
@@ -134,9 +95,9 @@ void main() {
       name: "field list name",
       creationAt: DateTime(2020, 2, 20),
       lastModificationAt: DateTime(2020, 2, 20),
-      checkType: 1,
+      checkType: CheckType.IGNORE_CASE,
     );
-    expect(fieldListEntity.checkType, 1);
+    expect(fieldListEntity.checkType, CheckType.IGNORE_CASE);
   });
 
   test(
