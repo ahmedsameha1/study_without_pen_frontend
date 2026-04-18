@@ -18,6 +18,6 @@ abstract class StudyTestState with _$StudyTestState {
     required List<EntryEntity> entries,
     required List<EntryCounts> counts,
     @Default(0) int currentEntryIndex,
-    @Default('') String userAnswer,
+    @Default(false) bool isUserAnswerCorrect,
   }) = _StudyTestState;
 }

@@ -150,89 +150,7 @@ void main() {
   );
 
   blocTest(
-    'userAnswer updated when user changes his answer',
-    build: () => StudyTestBloc(
-      StudyTestState(
-        fieldList: fieldListEntity1,
-        entries: entries1,
-        counts: counts,
-      ),
-    ),
-    seed: () => StudyTestState(
-      fieldList: fieldListEntity1,
-      entries: entries1,
-      currentEntryIndex: 1,
-      counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
-      userAnswer: 'answe',
-    ),
-    act: (bloc) => bloc.add(ChangeUserAnswer('answer')),
-    expect: () => [
-      StudyTestState(
-        fieldList: fieldListEntity1,
-        entries: entries1,
-        currentEntryIndex: 1,
-        counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
-        userAnswer: 'answer',
-      ),
-    ],
-  );
-
-  blocTest(
-    'userAnswer updated when user changes tab',
-    build: () => StudyTestBloc(
-      StudyTestState(
-        fieldList: fieldListEntity1,
-        entries: entries1,
-        counts: counts,
-      ),
-    ),
-    seed: () => StudyTestState(
-      fieldList: fieldListEntity1,
-      entries: entries1,
-      currentEntryIndex: 1,
-      counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
-      userAnswer: 'answe',
-    ),
-    act: (bloc) => bloc.add(ChangeTab(1)),
-    expect: () => [
-      StudyTestState(
-        fieldList: fieldListEntity1,
-        entries: entries1,
-        currentEntryIndex: 1,
-        counts: [(1, 2, 0), (3, 4, 1), (5, 6, 0)],
-      ),
-    ],
-  );
-
-  blocTest(
-    'userAnswer updated when user changes entry',
-    build: () => StudyTestBloc(
-      StudyTestState(
-        fieldList: fieldListEntity1,
-        entries: entries1,
-        counts: counts,
-      ),
-    ),
-    seed: () => StudyTestState(
-      fieldList: fieldListEntity1,
-      entries: entries1,
-      currentEntryIndex: 1,
-      counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
-      userAnswer: 'answe',
-    ),
-    act: (bloc) => bloc.add(ChangeEntry(2)),
-    expect: () => [
-      StudyTestState(
-        fieldList: fieldListEntity1,
-        entries: entries1,
-        currentEntryIndex: 2,
-        counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
-      ),
-    ],
-  );
-
-  blocTest(
-    'userAnswer updated when user answer matches the currnet entry answer 1 '
+    'isUserAnswerCorrect updated when user answer matches the currnet entry answer 1 '
     'matches exactly',
     build: () => StudyTestBloc(
       StudyTestState(
@@ -246,21 +164,29 @@ void main() {
       entries: entries1,
       currentEntryIndex: 1,
       counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
-      userAnswer: 'answe',
+      isUserAnswerCorrect: false,
     ),
-    act: (bloc) => bloc.add(ChangeUserAnswer(entries1[1].answer)),
+    act: (bloc) => bloc.add(CheckUserAnswer(entries1[1].answer)),
     expect: () => [
       StudyTestState(
         fieldList: fieldListEntity1,
         entries: entries1,
         currentEntryIndex: 1,
         counts: [(1, 2, 0), (4, 4, 0), (5, 6, 0)],
+        isUserAnswerCorrect: true,
+      ),
+      StudyTestState(
+        fieldList: fieldListEntity1,
+        entries: entries1,
+        currentEntryIndex: 1,
+        counts: [(1, 2, 0), (4, 4, 0), (5, 6, 0)],
+        isUserAnswerCorrect: false,
       ),
     ],
   );
 
   blocTest(
-    'userAnswer updated when user answer matches the currnet entry answer 2 '
+    'isUserAnswerCorrect updated when user answer matches the currnet entry answer 2 '
     'matches exactly',
     build: () => StudyTestBloc(
       StudyTestState(
@@ -274,21 +200,29 @@ void main() {
       entries: entries1,
       currentEntryIndex: 1,
       counts: [(1, 2, 0), (3, 4, 1), (5, 6, 0)],
-      userAnswer: 'answe',
+      isUserAnswerCorrect: false,
     ),
-    act: (bloc) => bloc.add(ChangeUserAnswer(entries1[1].answer)),
+    act: (bloc) => bloc.add(CheckUserAnswer(entries1[1].answer)),
     expect: () => [
       StudyTestState(
         fieldList: fieldListEntity1,
         entries: entries1,
         currentEntryIndex: 1,
         counts: [(1, 2, 0), (3, 5, 1), (5, 6, 0)],
+        isUserAnswerCorrect: true,
+      ),
+      StudyTestState(
+        fieldList: fieldListEntity1,
+        entries: entries1,
+        currentEntryIndex: 1,
+        counts: [(1, 2, 0), (3, 5, 1), (5, 6, 0)],
+        isUserAnswerCorrect: false,
       ),
     ],
   );
 
   blocTest(
-    'userAnswer updated when user answer matches the currnet entry answer 1 '
+    'isUserAnswerCorrect updated when user answer matches the currnet entry answer 1 '
     'matches but ignore case',
     build: () => StudyTestBloc(
       StudyTestState(
@@ -302,21 +236,29 @@ void main() {
       entries: entries2,
       currentEntryIndex: 1,
       counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
-      userAnswer: 'answe'.toUpperCase(),
+      isUserAnswerCorrect: false,
     ),
-    act: (bloc) => bloc.add(ChangeUserAnswer(entries1[1].answer.toUpperCase())),
+    act: (bloc) => bloc.add(CheckUserAnswer(entries1[1].answer.toUpperCase())),
     expect: () => [
       StudyTestState(
         fieldList: fieldListEntity2,
         entries: entries2,
         currentEntryIndex: 1,
         counts: [(1, 2, 0), (4, 4, 0), (5, 6, 0)],
+        isUserAnswerCorrect: true,
+      ),
+      StudyTestState(
+        fieldList: fieldListEntity2,
+        entries: entries2,
+        currentEntryIndex: 1,
+        counts: [(1, 2, 0), (4, 4, 0), (5, 6, 0)],
+        isUserAnswerCorrect: false,
       ),
     ],
   );
 
   blocTest(
-    'userAnswer updated when user answer matches the currnet entry answer 2 '
+    'isUserAnswerCorrect updated when user answer matches the currnet entry answer 2 '
     'matches but ignore case',
     build: () => StudyTestBloc(
       StudyTestState(
@@ -330,15 +272,23 @@ void main() {
       entries: entries2,
       currentEntryIndex: 1,
       counts: [(1, 2, 0), (3, 4, 1), (5, 6, 0)],
-      userAnswer: 'answe'.toUpperCase(),
+      isUserAnswerCorrect: false,
     ),
-    act: (bloc) => bloc.add(ChangeUserAnswer(entries1[1].answer.toUpperCase())),
+    act: (bloc) => bloc.add(CheckUserAnswer(entries1[1].answer.toUpperCase())),
     expect: () => [
       StudyTestState(
         fieldList: fieldListEntity2,
         entries: entries2,
         currentEntryIndex: 1,
         counts: [(1, 2, 0), (3, 5, 1), (5, 6, 0)],
+        isUserAnswerCorrect: true,
+      ),
+      StudyTestState(
+        fieldList: fieldListEntity2,
+        entries: entries2,
+        currentEntryIndex: 1,
+        counts: [(1, 2, 0), (3, 5, 1), (5, 6, 0)],
+        isUserAnswerCorrect: false,
       ),
     ],
   );

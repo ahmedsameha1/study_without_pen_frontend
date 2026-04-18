@@ -9,11 +9,11 @@ class StudyTestBloc extends Bloc<StudyTestEvent, StudyTestState> {
   StudyTestBloc(super.state) {
     on<ChangeEntry>(_onChangeEntry);
     on<ChangeTab>(_onChangeTab);
-    on<ChangeUserAnswer>(_onChangeUserAnswer);
+    on<CheckUserAnswer>(_onChangeUserAnswer);
   }
 
   void _onChangeEntry(ChangeEntry event, Emitter<StudyTestState> emit) {
-    emit(state.copyWith(currentEntryIndex: event.index, userAnswer: ''));
+    emit(state.copyWith(currentEntryIndex: event.index));
   }
 
   void _onChangeTab(ChangeTab event, Emitter<StudyTestState> emit) {
@@ -26,13 +26,12 @@ class StudyTestBloc extends Bloc<StudyTestEvent, StudyTestState> {
             return count;
           }
         }).toList(),
-        userAnswer: '',
       ),
     );
   }
 
   void _onChangeUserAnswer(
-    ChangeUserAnswer event,
+    CheckUserAnswer event,
     Emitter<StudyTestState> emit,
   ) {
     switch (state.fieldList.checkType) {
@@ -63,12 +62,12 @@ class StudyTestBloc extends Bloc<StudyTestEvent, StudyTestState> {
   void updateStateAccordingToAnswerChecking(
     bool result,
     Emitter<StudyTestState> emit,
-    ChangeUserAnswer event,
+    CheckUserAnswer event,
   ) {
     if (result) {
       emit(
         state.copyWith(
-          userAnswer: '',
+          isUserAnswerCorrect: true,
           counts: state.counts.mapIndexed((index, count) {
             if (index == state.currentEntryIndex) {
               if (count.$3 == 0) {
@@ -82,8 +81,7 @@ class StudyTestBloc extends Bloc<StudyTestEvent, StudyTestState> {
           }).toList(),
         ),
       );
-    } else {
-      emit(state.copyWith(userAnswer: event.userAnswer));
+      emit(state.copyWith(isUserAnswerCorrect: false));
     }
   }
 }

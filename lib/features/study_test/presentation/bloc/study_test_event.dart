@@ -38,8 +38,8 @@ class ChangeTab extends StudyTestEvent {
   int get hashCode => tab.hashCode;
 }
 
-class ChangeUserAnswer extends StudyTestEvent {
-  ChangeUserAnswer(this.userAnswer);
+class CheckUserAnswer extends StudyTestEvent {
+  CheckUserAnswer(this.userAnswer);
   String userAnswer;
 
   @override
@@ -47,7 +47,7 @@ class ChangeUserAnswer extends StudyTestEvent {
     if (identical(this, other)) {
       return true;
     }
-    return other is ChangeUserAnswer &&
+    return other is CheckUserAnswer &&
         runtimeType == other.runtimeType &&
         userAnswer == other.userAnswer;
   }
