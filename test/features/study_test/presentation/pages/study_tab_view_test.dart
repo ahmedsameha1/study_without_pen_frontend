@@ -1,7 +1,14 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/common/theme.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
+import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_bloc.dart';
+import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_event.dart';
+import 'package:study_without_pen_by_flutter/features/study_test/presentation/bloc/study_test_state.dart';
 import 'package:study_without_pen_by_flutter/features/study_test/presentation/pages/study_tab_view.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
 import 'package:uuid/uuid.dart';
@@ -9,31 +16,89 @@ import 'package:uuid/uuid.dart';
 import '../../../common/common_finders.dart';
 import '../../../common/widget_testing_helper.dart';
 
+class MockStudyTestBloc extends Mock implements StudyTestBloc {}
+
+Widget _createInASkeleton(
+  Locale currentLocale,
+  StudyTestBloc studyTestBloc,
+  List<EntryEntity> entries,
+  int count,
+) => MaterialApp(
+  localizationsDelegates: const [AppLocalizations.delegate],
+  supportedLocales: AppLocalizations.supportedLocales,
+  locale: currentLocale,
+  theme: AppTheme.theme,
+  home: Scaffold(
+    body: BlocProvider.value(
+      value: studyTestBloc,
+      child: Builder(
+        builder: (context) {
+          return StudyTabView(entry: entries[1], count: count);
+        },
+      ),
+    ),
+  ),
+);
 void main() {
   group('English locale', () {
     Locale currentLocale = const Locale('en');
     String expectedEnterYourAnswerString = 'Enter your answer';
-    const count = 23;
-    EntryEntity entry = EntryEntity(
-      fieldListId: const Uuid().v4(),
-      answer: 'answer',
-      question: 'question',
-      creationAt: DateTime(2025),
-      lastModificationAt: DateTime(2025),
+    DateTime creationAt = DateTime(2024);
+    FieldListEntity fieldListEntity = FieldListEntity(
+      id: const Uuid().v4(),
+      fieldId: const Uuid().v4(),
+      name: 'name',
+      creationAt: creationAt,
+      lastModificationAt: creationAt,
     );
+
+    List<EntryEntity> entries = [
+      EntryEntity(
+        id: const Uuid().v4(),
+        fieldListId: const Uuid().v4(),
+        answer: 'answer1',
+        question: 'question1',
+        creationAt: DateTime(2025).subtract(const Duration(days: 4)),
+        lastModificationAt: DateTime(2025).subtract(const Duration(days: 3)),
+      ),
+      EntryEntity(
+        fieldListId: const Uuid().v4(),
+        answer: 'answer',
+        question: 'question',
+        creationAt: DateTime(2025),
+        lastModificationAt: DateTime(2025),
+      ),
+      EntryEntity(
+        id: const Uuid().v4(),
+        fieldListId: const Uuid().v4(),
+        answer: 'answer3',
+        question: 'question3',
+        creationAt: DateTime(2025).subtract(const Duration(days: 6)),
+        lastModificationAt: DateTime(2025).subtract(const Duration(days: 5)),
+      ),
+    ];
+    const count = 23;
+
+    late StudyTestBloc studyTestBloc;
+    setUp(() {
+      studyTestBloc = MockStudyTestBloc();
+    });
+
     testWidgets('Test the precense of the main widgets', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: const [AppLocalizations.delegate],
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: currentLocale,
-          theme: AppTheme.theme,
-          home: Scaffold(
-            body: StudyTabView(entry: entry, count: count),
-          ),
+      whenListen<StudyTestState>(
+        studyTestBloc,
+        Stream.fromIterable([]),
+        initialState: StudyTestState(
+          fieldList: fieldListEntity,
+          entries: entries,
+          currentEntryIndex: 1,
+          counts: [(12, 45, 0), (3, 33, 0), (8, 18, 0)],
         ),
+      );
+      await tester.pumpWidget(
+        _createInASkeleton(currentLocale, studyTestBloc, entries, count),
       );
       Scrollbar scrollbar = tester.widget(
         find.descendant(
@@ -113,7 +178,7 @@ void main() {
           ),
         ),
       );
-      expect(questionText.data, entry.question);
+      expect(questionText.data, entries[1].question);
       expect(
         questionText.style,
         Theme.of(
@@ -176,7 +241,7 @@ void main() {
           ),
         ),
       );
-      expect(answerText.data, entry.answer);
+      expect(answerText.data, entries[1].answer);
       expect(
         answerText.style,
         Theme.of(tester.element(find.byWidget(answerText))).textTheme.bodyLarge,
@@ -273,5 +338,26 @@ void main() {
         userAnswerSizedBox,
       ]);
     });
+
+    testWidgets(
+      'when user answer changed CheckUserAnswer event is added to bloc',
+      (WidgetTester tester) async {
+        whenListen<StudyTestState>(
+          studyTestBloc,
+          Stream.fromIterable([]),
+          initialState: StudyTestState(
+            fieldList: fieldListEntity,
+            entries: entries,
+            currentEntryIndex: 1,
+            counts: [(12, 45, 0), (3, 33, 0), (8, 18, 0)],
+          ),
+        );
+        await tester.pumpWidget(
+          _createInASkeleton(currentLocale, studyTestBloc, entries, count),
+        );
+        await tester.enterText(textFormFieldFinder, 'an');
+        verify(() => studyTestBloc.add(CheckUserAnswer('an')));
+      },
+    );
   });
 }
