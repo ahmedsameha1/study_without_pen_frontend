@@ -16,15 +16,31 @@ class TestTabView extends StatefulWidget {
   State<TestTabView> createState() => _TestTabViewState();
 }
 
-class _TestTabViewState extends State<TestTabView> {
+class _TestTabViewState extends State<TestTabView>
+    with SingleTickerProviderStateMixin {
   static const OutlineInputBorder _outlineInputBorder = OutlineInputBorder();
   late final ScrollController _scrollController;
   late TextEditingController _userAnswerTextEditingController;
+  late AnimationController _animationController;
+  late Animation<double> _fadeTranstion;
+  late Animation<Offset> _slideTranstion;
 
   @override
   void initState() {
     _userAnswerTextEditingController = TextEditingController();
     _scrollController = ScrollController();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
+
+    _fadeTranstion = Tween<double>(begin: 1, end: 0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
+    _slideTranstion =
+        Tween<Offset>(begin: Offset.zero, end: const Offset(0, -2.5)).animate(
+          CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+        );
     super.initState();
   }
 
@@ -32,6 +48,7 @@ class _TestTabViewState extends State<TestTabView> {
   void dispose() {
     _userAnswerTextEditingController.dispose();
     _scrollController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -42,6 +59,7 @@ class _TestTabViewState extends State<TestTabView> {
     listener: (BuildContext context, state) {
       if (state.isUserAnswerCorrect) {
         _userAnswerTextEditingController.clear();
+        _animationController.forward(from: 0);
       }
     },
     child: Center(
@@ -94,28 +112,56 @@ class _TestTabViewState extends State<TestTabView> {
                 SizedBox(
                   key: const Key('userAnswerSizedBox'),
                   height: 200,
-                  child: TextFormField(
-                    controller: _userAnswerTextEditingController,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                    expands: true,
-                    maxLines: null,
-                    textAlign: TextAlign.center,
-                    keyboardType: TextInputType.multiline,
-                    autofocus: true,
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    textInputAction: TextInputAction.newline,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.enterYourAnswer,
-                      contentPadding: const EdgeInsets.only(
-                        top: 20,
-                        bottom: 10,
-                        left: 10,
-                        right: 10,
+                  child: Stack(
+                    children: [
+                      TextFormField(
+                        key: const Key(
+                          'test_tab_view_user_answer_text_form_field',
+                        ),
+                        controller: _userAnswerTextEditingController,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                        expands: true,
+                        maxLines: null,
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.multiline,
+                        autofocus: true,
+                        autocorrect: false,
+                        enableSuggestions: false,
+                        textInputAction: TextInputAction.newline,
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(
+                            context,
+                          )!.enterYourAnswer,
+                          contentPadding: const EdgeInsets.only(
+                            top: 20,
+                            bottom: 10,
+                            left: 10,
+                            right: 10,
+                          ),
+                          filled: true,
+                          border: const OutlineInputBorder(gapPadding: 0),
+                        ),
                       ),
-                      filled: true,
-                      border: const OutlineInputBorder(gapPadding: 0),
-                    ),
+                      if (_animationController.isAnimating)
+                        AnimatedBuilder(
+                          animation: _animationController,
+                          builder: (context, child) => SlideTransition(
+                            position: _slideTranstion,
+                            child: FadeTransition(
+                              opacity: _fadeTranstion,
+                              child: child,
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Icon(Icons.star, color: Colors.yellow, size: 72),
+                              Icon(Icons.star, color: Colors.yellow, size: 72),
+                              Icon(Icons.star, color: Colors.yellow, size: 72),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
                 ),
                 const SizedBox(
