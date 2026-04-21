@@ -144,6 +144,9 @@ class _StudyTabViewState extends State<StudyTabView>
                     clipBehavior: Clip.none,
                     children: [
                       TextFormField(
+                        key: const Key(
+                          'study_tab_view_user_answer_text_form_field',
+                        ),
                         controller: _userAnswerTextEditingController,
                         style: Theme.of(context).textTheme.bodyLarge,
                         expands: true,
@@ -180,38 +183,24 @@ class _StudyTabViewState extends State<StudyTabView>
                           ),
                         ),
                       ),
-                      if (
-                          _animationController.isAnimating)
+                      if (_animationController.isAnimating)
                         AnimatedBuilder(
                           animation: _animationController,
-                          builder: (context, child) => 
-                           SlideTransition(
+                          builder: (context, child) => SlideTransition(
                             position: _slideTranstion,
                             child: FadeTransition(
                               opacity: _fadeTranstion,
                               child: child,
                             ),
                           ),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                    size: 72,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                    size: 72,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                    size: 72,
-                                  ),
-                                ],
-                              ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Icon(Icons.star, color: Colors.yellow, size: 72),
+                              Icon(Icons.star, color: Colors.yellow, size: 72),
+                              Icon(Icons.star, color: Colors.yellow, size: 72),
+                            ],
+                          ),
                         ),
                     ],
                   ),

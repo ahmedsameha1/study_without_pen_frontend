@@ -81,6 +81,13 @@ void main() {
           ),
         ),
       );
+      when(() => studyTestBloc.state).thenReturn(
+        StudyTestState(
+          fieldList: fieldListEntity,
+          entries: entries,
+          counts: counts,
+        ),
+      );
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: const [AppLocalizations.delegate],
