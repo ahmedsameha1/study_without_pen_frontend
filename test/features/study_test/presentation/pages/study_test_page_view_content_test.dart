@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -52,15 +53,12 @@ void main() {
       lastModificationAt: DateTime(2025).subtract(const Duration(days: 5)),
     ),
   ];
-  List<EntryCounts> counts = [(0, 0, 0), (0, 0, 0), (0, 0, 0)];
+  List<EntryCounts> counts = [(23, 74, 0), (0, 0, 0), (0, 0, 0)];
 
   group('English locale', () {
     Locale currentLocale = const Locale('en');
     String expectedStudyString = 'Study';
     String expectedTestString = 'Test';
-    const studyCount = 23;
-    const testCount = 74;
-    const int tabIndex = 0;
     EntryEntity entry = EntryEntity(
       fieldListId: const Uuid().v4(),
       answer: 'answer',
@@ -72,19 +70,13 @@ void main() {
       WidgetTester tester,
     ) async {
       StudyTestBloc studyTestBloc = MockStudyTestBloc();
-      when(() => studyTestBloc.stream).thenAnswer(
-        (_) => Stream.value(
-          StudyTestState(
-            fieldList: fieldListEntity,
-            entries: entries,
-            counts: counts,
-          ),
-        ),
-      );
-      when(() => studyTestBloc.state).thenReturn(
-        StudyTestState(
+      whenListen<StudyTestState>(
+        studyTestBloc,
+        Stream.fromIterable([]),
+        initialState: StudyTestState(
           fieldList: fieldListEntity,
           entries: entries,
+          currentEntryIndex: 0,
           counts: counts,
         ),
       );
@@ -96,14 +88,7 @@ void main() {
           //theme: AppTheme.theme,
           home: BlocProvider.value(
             value: studyTestBloc,
-            child: Scaffold(
-              body: StudyTestPageViewContent(
-                entry: entry,
-                studyCount: studyCount,
-                testCount: testCount,
-                tabIndex: tabIndex,
-              ),
-            ),
+            child: const Scaffold(body: StudyTestPageViewContent()),
           ),
         ),
       );
@@ -140,13 +125,13 @@ void main() {
       expect(tabBarView.physics, const NeverScrollableScrollPhysics());
       expect(tabBarView.children[0], isA<StudyTabView>());
       expect(tabBarView.children[1], isA<TestTabView>());
-      expect(find.text('$studyCount'), findsOne);
+      expect(find.text('${counts[0].$1}'), findsOne);
       await tester.tap(find.text(expectedTestString));
       await tester.pumpAndSettle();
-      expect(find.text('$testCount'), findsOne);
+      verify(() => studyTestBloc.add(ChangeTab(1))).called(1);
       await tester.tap(find.text(expectedStudyString));
       await tester.pumpAndSettle();
-      verify(() => studyTestBloc.add(ChangeTab(1))).called(1);
+      verify(() => studyTestBloc.add(ChangeTab(0))).called(1);
     });
   });
 }

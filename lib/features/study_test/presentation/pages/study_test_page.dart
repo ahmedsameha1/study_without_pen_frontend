@@ -53,14 +53,7 @@ class _StudyTestPageViewState extends State<StudyTestPageView> {
           onPageChanged: (value) =>
               BlocProvider.of<StudyTestBloc>(context).add(ChangeEntry(value)),
           children: state.entries
-              .mapIndexed(
-                (index, entry) => StudyTestPageViewContent(
-                  entry: entry,
-                  studyCount: state.counts[index].$1,
-                  testCount: state.counts[index].$2,
-                  tabIndex: state.counts[index].$3,
-                ),
-              )
+              .mapIndexed((index, entry) => const StudyTestPageViewContent())
               .toList(),
         ),
       ),

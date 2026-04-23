@@ -56,8 +56,7 @@ void main() {
         lastModificationAt: DateTime(2025).subtract(const Duration(days: 5)),
       ),
     ];
-
-    List<EntryCounts> counts = [(0, 0, 0), (0, 0, 0), (0, 0, 0)];
+    List<EntryCounts> counts = [(12, 45, 1), (3, 33, 0), (8, 18, 1)];
 
     group('StudyTestPage', () {
       testWidgets('Test the presence of StudyTestPageView widget', (
@@ -104,7 +103,7 @@ void main() {
             fieldList: fieldListEntity,
             entries: entries,
             currentEntryIndex: 1,
-            counts: [(12, 45, 1), (3, 33, 0), (8, 18, 1)],
+            counts: counts,
           ),
         );
         await tester.pumpWidget(
@@ -139,20 +138,16 @@ void main() {
         );
         expect(find.text(entries[1].question), findsOne);
         expect(find.text(entries[1].answer), findsOne);
-        expect(find.text('3'), findsOne);
+        expect(find.text('${counts[1].$1}'), findsOne);
         await tester.tap(find.text(expectedTestString));
         await tester.pumpAndSettle();
-        expect(find.text('33'), findsOne);
+        verify(() => studyTestBloc.add(ChangeTab(1))).called(1);
         await tester.drag(find.text(entries[1].question), const Offset(800, 0));
         await tester.pumpAndSettle();
-        expect(find.text(entries[0].question), findsOne);
-        expect(find.text(entries[0].answer), findsNothing);
-        expect(find.text('45'), findsOne);
+        verify(() => studyTestBloc.add(ChangeEntry(0))).called(1);
         await tester.tap(find.text(expectedStudyString));
         await tester.pumpAndSettle();
-        expect(find.text(entries[0].question), findsOne);
-        expect(find.text(entries[0].answer), findsOne);
-        expect(find.text('12'), findsOne);
+        verify(() => studyTestBloc.add(ChangeTab(0))).called(1);
       });
 
       testWidgets('a ChangeEntry event is added when swipe the page', (
