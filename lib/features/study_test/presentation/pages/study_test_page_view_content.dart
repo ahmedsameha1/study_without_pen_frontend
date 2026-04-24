@@ -30,16 +30,10 @@ class StudyTestPageViewContent extends StatelessWidget {
                   Text(AppLocalizations.of(context)!.test),
                 ],
               ),
-              Expanded(
+              const Expanded(
                 child: TabBarView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    const StudyTabView(),
-                    TestTabView(
-                      entry: state.entries[state.currentEntryIndex],
-                      count: state.counts[state.currentEntryIndex].$2,
-                    ),
-                  ],
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [StudyTabView(), TestTabView()],
                 ),
               ),
             ],

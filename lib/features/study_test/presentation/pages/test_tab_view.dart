@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../l10n/app_localizations.dart';
-import '../../../entries/domain/models/entry_entity.dart';
 import '../bloc/study_test_bloc.dart';
 import '../bloc/study_test_event.dart';
 import '../bloc/study_test_state.dart';
 
 class TestTabView extends StatefulWidget {
-  const TestTabView({required this.entry, required this.count, super.key});
-  final EntryEntity entry;
-  final int count;
+  const TestTabView({super.key});
 
   @override
   State<TestTabView> createState() => _TestTabViewState();
@@ -55,14 +52,14 @@ class _TestTabViewState extends State<TestTabView>
   @override
   Widget build(
     BuildContext context,
-  ) => BlocListener<StudyTestBloc, StudyTestState>(
+  ) => BlocConsumer<StudyTestBloc, StudyTestState>(
     listener: (BuildContext context, state) {
       if (state.isUserAnswerCorrect) {
         _userAnswerTextEditingController.clear();
         _animationController.forward(from: 0);
       }
     },
-    child: Center(
+    builder: (context, state) => Center(
       child: Scrollbar(
         controller: _scrollController,
         interactive: true,
@@ -96,7 +93,7 @@ class _TestTabViewState extends State<TestTabView>
                         constraints: const BoxConstraints(minHeight: 180),
                         child: Center(
                           child: Text(
-                            widget.entry.question,
+                            state.entries[state.currentEntryIndex].question,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
@@ -180,7 +177,7 @@ class _TestTabViewState extends State<TestTabView>
                           children: [Text(AppLocalizations.of(context)!.check)],
                         ),
                       ),
-                      Text('${widget.count}'),
+                      Text('${state.counts[state.currentEntryIndex].$2}'),
                     ],
                   ),
                 ),
