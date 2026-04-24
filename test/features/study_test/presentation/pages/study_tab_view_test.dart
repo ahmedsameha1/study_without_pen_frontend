@@ -18,27 +18,20 @@ import '../../../common/widget_testing_helper.dart';
 
 class MockStudyTestBloc extends Mock implements StudyTestBloc {}
 
-Widget _createInASkeleton(
-  Locale currentLocale,
-  StudyTestBloc studyTestBloc,
-  List<EntryEntity> entries,
-  int count,
-) => MaterialApp(
-  localizationsDelegates: const [AppLocalizations.delegate],
-  supportedLocales: AppLocalizations.supportedLocales,
-  locale: currentLocale,
-  theme: AppTheme.theme,
-  home: Scaffold(
-    body: BlocProvider.value(
-      value: studyTestBloc,
-      child: Builder(
-        builder: (context) {
-          return StudyTabView(entry: entries[1], count: count);
-        },
+Widget _createInASkeleton(Locale currentLocale, StudyTestBloc studyTestBloc) =>
+    MaterialApp(
+      localizationsDelegates: const [AppLocalizations.delegate],
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: currentLocale,
+      theme: AppTheme.theme,
+      home: Scaffold(
+        body: BlocProvider.value(
+          value: studyTestBloc,
+          child: Builder(builder: (context) => const StudyTabView()),
+        ),
       ),
-    ),
-  ),
-);
+    );
+
 void main() {
   group('English locale', () {
     Locale currentLocale = const Locale('en');
@@ -77,7 +70,7 @@ void main() {
         lastModificationAt: DateTime(2025).subtract(const Duration(days: 5)),
       ),
     ];
-    const count = 23;
+    final counts = [(12, 45, 0), (3, 33, 0), (8, 18, 0)];
 
     late StudyTestBloc studyTestBloc;
     setUp(() {
@@ -94,12 +87,10 @@ void main() {
           fieldList: fieldListEntity,
           entries: entries,
           currentEntryIndex: 1,
-          counts: [(12, 45, 0), (3, 33, 0), (8, 18, 0)],
+          counts: counts,
         ),
       );
-      await tester.pumpWidget(
-        _createInASkeleton(currentLocale, studyTestBloc, entries, count),
-      );
+      await tester.pumpWidget(_createInASkeleton(currentLocale, studyTestBloc));
       Scrollbar scrollbar = tester.widget(
         find.descendant(
           of: find.byType(StudyTabView),
@@ -315,7 +306,7 @@ void main() {
       Text countText = tester.widget(
         find.descendant(
           of: find.byWidget(countPadding),
-          matching: find.text('$count'),
+          matching: find.text('${counts[1].$1}'),
         ),
       );
       expect(
@@ -353,7 +344,7 @@ void main() {
           ),
         );
         await tester.pumpWidget(
-          _createInASkeleton(currentLocale, studyTestBloc, entries, count),
+          _createInASkeleton(currentLocale, studyTestBloc),
         );
         await tester.enterText(textFormFieldFinder, 'an');
         verify(() => studyTestBloc.add(CheckUserAnswer('an')));

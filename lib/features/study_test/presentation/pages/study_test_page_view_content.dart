@@ -34,10 +34,7 @@ class StudyTestPageViewContent extends StatelessWidget {
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    StudyTabView(
-                      entry: state.entries[state.currentEntryIndex],
-                      count: state.counts[state.currentEntryIndex].$1,
-                    ),
+                    const StudyTabView(),
                     TestTabView(
                       entry: state.entries[state.currentEntryIndex],
                       count: state.counts[state.currentEntryIndex].$2,

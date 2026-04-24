@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../l10n/app_localizations.dart';
-import '../../../entries/domain/models/entry_entity.dart';
 import '../bloc/study_test_bloc.dart';
 import '../bloc/study_test_event.dart';
 import '../bloc/study_test_state.dart';
 
 class StudyTabView extends StatefulWidget {
-  const StudyTabView({required this.entry, required this.count, super.key});
-  final EntryEntity entry;
-  final int count;
+  const StudyTabView({super.key});
 
   @override
   State<StudyTabView> createState() => _StudyTabViewState();
@@ -55,14 +52,14 @@ class _StudyTabViewState extends State<StudyTabView>
   @override
   Widget build(
     BuildContext context,
-  ) => BlocListener<StudyTestBloc, StudyTestState>(
+  ) => BlocConsumer<StudyTestBloc, StudyTestState>(
     listener: (BuildContext context, state) {
       if (state.isUserAnswerCorrect) {
         _userAnswerTextEditingController.clear();
         _animationController.forward(from: 0);
       }
     },
-    child: Center(
+    builder: (BuildContext context, state) => Center(
       child: Scrollbar(
         controller: _scrollController,
         interactive: true,
@@ -96,7 +93,7 @@ class _StudyTabViewState extends State<StudyTabView>
                         constraints: const BoxConstraints(minHeight: 180),
                         child: Center(
                           child: Text(
-                            widget.entry.question,
+                            state.entries[state.currentEntryIndex].question,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
@@ -124,7 +121,7 @@ class _StudyTabViewState extends State<StudyTabView>
                         constraints: const BoxConstraints(minHeight: 180),
                         child: Center(
                           child: Text(
-                            widget.entry.answer,
+                            state.entries[state.currentEntryIndex].answer,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
@@ -177,7 +174,7 @@ class _StudyTabViewState extends State<StudyTabView>
                       Padding(
                         padding: const EdgeInsets.only(top: 3, left: 6),
                         child: Text(
-                          '${widget.count}',
+                          '${state.counts[state.currentEntryIndex].$1}',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
                           ),

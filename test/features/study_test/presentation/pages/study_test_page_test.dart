@@ -98,7 +98,14 @@ void main() {
       ) async {
         whenListen<StudyTestState>(
           studyTestBloc,
-          Stream.fromIterable([]),
+          Stream.fromIterable([
+            StudyTestState(
+              fieldList: fieldListEntity,
+              entries: entries,
+              currentEntryIndex: 0,
+              counts: [(12, 45, 1), (3, 33, 0), (8, 18, 1)],
+            ),
+          ]),
           initialState: StudyTestState(
             fieldList: fieldListEntity,
             entries: entries,
@@ -142,7 +149,10 @@ void main() {
         await tester.tap(find.text(expectedTestString));
         await tester.pumpAndSettle();
         verify(() => studyTestBloc.add(ChangeTab(1))).called(1);
-        await tester.drag(find.text(entries[1].question), const Offset(800, 0));
+        await tester.drag(
+          find.byKey(const Key('questionSizedBox')),
+          const Offset(800, 0),
+        );
         await tester.pumpAndSettle();
         verify(() => studyTestBloc.add(ChangeEntry(0))).called(1);
         await tester.tap(find.text(expectedStudyString));
