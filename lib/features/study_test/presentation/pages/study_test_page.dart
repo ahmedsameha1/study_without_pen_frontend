@@ -48,13 +48,12 @@ class _StudyTestPageViewState extends State<StudyTestPageView> {
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
       child: BlocBuilder<StudyTestBloc, StudyTestState>(
-        builder: (context, state) => PageView(
+        builder: (context, state) => PageView.builder(
           controller: _pageController,
           onPageChanged: (value) =>
               BlocProvider.of<StudyTestBloc>(context).add(ChangeEntry(value)),
-          children: state.entries
-              .mapIndexed((index, entry) => const StudyTestPageViewContent())
-              .toList(),
+          itemCount: state.entries.length,
+          itemBuilder: (_, _) => const StudyTestPageViewContent(),
         ),
       ),
     ),

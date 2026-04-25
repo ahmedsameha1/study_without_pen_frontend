@@ -280,7 +280,6 @@ void main() {
       expect(userAnswerTextField.maxLines, isNull);
       expect(userAnswerTextField.textAlign, TextAlign.center);
       expect(userAnswerTextField.keyboardType, TextInputType.multiline);
-      expect(userAnswerTextField.autofocus, true);
       expect(userAnswerTextField.autocorrect, false);
       expect(userAnswerTextField.enableSuggestions, false);
       expect(userAnswerTextField.textInputAction, TextInputAction.newline);

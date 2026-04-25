@@ -21,6 +21,7 @@ class _StudyTabViewState extends State<StudyTabView>
   late AnimationController _animationController;
   late Animation<double> _fadeTranstion;
   late Animation<Offset> _slideTranstion;
+  late FocusNode _focusNode;
 
   @override
   void initState() {
@@ -28,7 +29,7 @@ class _StudyTabViewState extends State<StudyTabView>
     _scrollController = ScrollController();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 350),
+      duration: const Duration(milliseconds: 500),
     );
 
     _fadeTranstion = Tween<double>(begin: 1, end: 0).animate(
@@ -38,6 +39,7 @@ class _StudyTabViewState extends State<StudyTabView>
         Tween<Offset>(begin: Offset.zero, end: const Offset(0, -2.5)).animate(
           CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
         );
+    _focusNode = FocusNode();
     super.initState();
   }
 
@@ -46,6 +48,7 @@ class _StudyTabViewState extends State<StudyTabView>
     _userAnswerTextEditingController.dispose();
     _scrollController.dispose();
     _animationController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -53,10 +56,19 @@ class _StudyTabViewState extends State<StudyTabView>
   Widget build(
     BuildContext context,
   ) => BlocConsumer<StudyTestBloc, StudyTestState>(
+    listenWhen: (previous, current) =>
+        current.isUserAnswerCorrect != null ||
+        current.counts[current.currentEntryIndex].$3 !=
+            previous.counts[previous.currentEntryIndex].$3,
     listener: (BuildContext context, state) {
-      if (state.isUserAnswerCorrect) {
+      if (state.isUserAnswerCorrect != null && state.isUserAnswerCorrect!) {
         _userAnswerTextEditingController.clear();
         _animationController.forward(from: 0);
+      }
+      if (state.counts[state.currentEntryIndex].$3 == 0) {
+        _focusNode.requestFocus();
+      } else if (state.counts[state.currentEntryIndex].$3 == 1) {
+        _focusNode.unfocus();
       }
     },
     builder: (BuildContext context, state) => Center(
@@ -145,12 +157,12 @@ class _StudyTabViewState extends State<StudyTabView>
                           'study_tab_view_user_answer_text_form_field',
                         ),
                         controller: _userAnswerTextEditingController,
+                        focusNode: _focusNode,
                         style: Theme.of(context).textTheme.bodyLarge,
                         expands: true,
                         maxLines: null,
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.multiline,
-                        autofocus: true,
                         autocorrect: false,
                         enableSuggestions: false,
                         textInputAction: TextInputAction.newline,
