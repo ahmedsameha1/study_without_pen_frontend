@@ -164,7 +164,7 @@ void main() {
       entries: entries1,
       currentEntryIndex: 1,
       counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
-      isUserAnswerCorrect: false,
+      isUserAnswerCorrect: null,
     ),
     act: (bloc) => bloc.add(CheckUserAnswer(entries1[1].answer)),
     expect: () => [
@@ -180,7 +180,7 @@ void main() {
         entries: entries1,
         currentEntryIndex: 1,
         counts: [(1, 2, 0), (4, 4, 0), (5, 6, 0)],
-        isUserAnswerCorrect: false,
+        isUserAnswerCorrect: null,
       ),
     ],
   );
@@ -200,7 +200,7 @@ void main() {
       entries: entries1,
       currentEntryIndex: 1,
       counts: [(1, 2, 0), (3, 4, 1), (5, 6, 0)],
-      isUserAnswerCorrect: false,
+      isUserAnswerCorrect: null,
     ),
     act: (bloc) => bloc.add(CheckUserAnswer(entries1[1].answer)),
     expect: () => [
@@ -216,7 +216,7 @@ void main() {
         entries: entries1,
         currentEntryIndex: 1,
         counts: [(1, 2, 0), (3, 5, 1), (5, 6, 0)],
-        isUserAnswerCorrect: false,
+        isUserAnswerCorrect: null,
       ),
     ],
   );
@@ -236,7 +236,7 @@ void main() {
       entries: entries2,
       currentEntryIndex: 1,
       counts: [(1, 2, 0), (3, 4, 0), (5, 6, 0)],
-      isUserAnswerCorrect: false,
+      isUserAnswerCorrect: null,
     ),
     act: (bloc) => bloc.add(CheckUserAnswer(entries1[1].answer.toUpperCase())),
     expect: () => [
@@ -252,7 +252,7 @@ void main() {
         entries: entries2,
         currentEntryIndex: 1,
         counts: [(1, 2, 0), (4, 4, 0), (5, 6, 0)],
-        isUserAnswerCorrect: false,
+        isUserAnswerCorrect: null,
       ),
     ],
   );
@@ -272,7 +272,7 @@ void main() {
       entries: entries2,
       currentEntryIndex: 1,
       counts: [(1, 2, 0), (3, 4, 1), (5, 6, 0)],
-      isUserAnswerCorrect: false,
+      isUserAnswerCorrect: null,
     ),
     act: (bloc) => bloc.add(CheckUserAnswer(entries1[1].answer.toUpperCase())),
     expect: () => [
@@ -288,7 +288,42 @@ void main() {
         entries: entries2,
         currentEntryIndex: 1,
         counts: [(1, 2, 0), (3, 5, 1), (5, 6, 0)],
+        isUserAnswerCorrect: null,
+      ),
+    ],
+  );
+
+  blocTest(
+    'isUserAnswerCorrect updated when user answer does not match the currnet entry answer',
+    build: () => StudyTestBloc(
+      StudyTestState(
+        fieldList: fieldListEntity2,
+        entries: entries2,
+        counts: counts,
+      ),
+    ),
+    seed: () => StudyTestState(
+      fieldList: fieldListEntity2,
+      entries: entries2,
+      currentEntryIndex: 1,
+      counts: [(1, 2, 0), (3, 4, 1), (5, 6, 0)],
+      isUserAnswerCorrect: null,
+    ),
+    act: (bloc) => bloc.add(CheckUserAnswer(entries1[1].answer.substring(1))),
+    expect: () => [
+      StudyTestState(
+        fieldList: fieldListEntity2,
+        entries: entries2,
+        currentEntryIndex: 1,
+        counts: [(1, 2, 0), (3, 4, 1), (5, 6, 0)],
         isUserAnswerCorrect: false,
+      ),
+      StudyTestState(
+        fieldList: fieldListEntity2,
+        entries: entries2,
+        currentEntryIndex: 1,
+        counts: [(1, 2, 0), (3, 4, 1), (5, 6, 0)],
+        isUserAnswerCorrect: null,
       ),
     ],
   );

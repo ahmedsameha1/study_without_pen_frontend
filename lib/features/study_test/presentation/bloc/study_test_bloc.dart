@@ -81,7 +81,9 @@ class StudyTestBloc extends Bloc<StudyTestEvent, StudyTestState> {
           }).toList(),
         ),
       );
+    } else {
       emit(state.copyWith(isUserAnswerCorrect: false));
     }
+    emit(state.copyWith(isUserAnswerCorrect: null));
   }
 }
