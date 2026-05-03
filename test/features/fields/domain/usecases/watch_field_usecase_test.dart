@@ -12,14 +12,20 @@ void main() {
   WatchFieldUsecase watchFieldUsecase = WatchFieldUsecase(fieldRepository);
   String fieldId = 'weoghwoeg';
   test('call() returns what FieldRepository.watchField() return', () {
-    when(() => fieldRepository.watchField(fieldId))
-        .thenThrow(SqliteException(1, 'sqlexception'));
+    when(() => fieldRepository.watchField(fieldId)).thenThrow(
+      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+    );
     expect(
-        () => watchFieldUsecase.call(fieldId),
-        throwsA(predicate((e) =>
-            e is SqliteException &&
-            e.extendedResultCode == 1 &&
-            e.message == 'sqlexception')));
+      () => watchFieldUsecase.call(fieldId),
+      throwsA(
+        predicate(
+          (e) =>
+              e is SqliteException &&
+              e.extendedResultCode == 1 &&
+              e.message == 'sqlexception',
+        ),
+      ),
+    );
   });
 
   test('call() returns what FieldRepository.watchField() return', () {
@@ -30,18 +36,37 @@ void main() {
     DateTime creationAt = DateTime(2020, 1, 1);
     final userAccountId = "fwefhwo";
 
-    when(() => fieldRepository.watchField(fieldId)).thenAnswer((_) =>
-        Stream.value(FieldEntity(id, userAccountId, name, creationAt,
-            creationAt, usageCount, color)));
+    when(() => fieldRepository.watchField(fieldId)).thenAnswer(
+      (_) => Stream.value(
+        FieldEntity(
+          id,
+          userAccountId,
+          name,
+          creationAt,
+          creationAt,
+          usageCount,
+          color,
+        ),
+      ),
+    );
     expect(
-        watchFieldUsecase.call(fieldId),
-        emitsInOrder([
-          FieldEntity(id, userAccountId, name, creationAt, creationAt,
-              usageCount, color)
-        ]));
+      watchFieldUsecase.call(fieldId),
+      emitsInOrder([
+        FieldEntity(
+          id,
+          userAccountId,
+          name,
+          creationAt,
+          creationAt,
+          usageCount,
+          color,
+        ),
+      ]),
+    );
 
-    when(() => fieldRepository.watchField(fieldId))
-        .thenAnswer((_) => Stream.value(null));
+    when(
+      () => fieldRepository.watchField(fieldId),
+    ).thenAnswer((_) => Stream.value(null));
     expect(watchFieldUsecase.call(fieldId), emitsInOrder([null]));
   });
 }

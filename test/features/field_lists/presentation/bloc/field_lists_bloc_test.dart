@@ -21,30 +21,42 @@ class FakeFieldEntity extends Fake implements FieldEntity {}
 class FakeFieldListEntity extends Fake implements FieldListEntity {}
 
 void main() {
-  final fieldEntity = FieldEntity("owghoghw", "woeghwiouegfwo", "field name1",
-      DateTime(2020, 1, 1), DateTime(2021, 1, 1), 0, 0xff520404);
+  final fieldEntity = FieldEntity(
+    "owghoghw",
+    "woeghwiouegfwo",
+    "field name1",
+    DateTime(2020, 1, 1),
+    DateTime(2021, 1, 1),
+    0,
+    0xff520404,
+  );
   List<FieldListEntity> mockFieldListEntities = [
     FieldListEntity(
-        id: 'wofhweohg',
-        fieldId: fieldEntity.id!,
-        name: "field list name 1",
-        creationAt: DateTime(2020),
-        lastModificationAt: DateTime(2020)),
+      id: 'wofhweohg',
+      fieldId: fieldEntity.id!,
+      name: "field list name 1",
+      creationAt: DateTime(2020),
+      lastModificationAt: DateTime(2020),
+    ),
     FieldListEntity(
-        id: 'e3wngwgpwertpweortk',
-        fieldId: fieldEntity.id!,
-        name: 'field list name 2',
-        creationAt: DateTime(2021),
-        lastModificationAt: DateTime(2021)),
+      id: 'e3wngwgpwertpweortk',
+      fieldId: fieldEntity.id!,
+      name: 'field list name 2',
+      creationAt: DateTime(2021),
+      lastModificationAt: DateTime(2021),
+    ),
     FieldListEntity(
-        id: 'weofwheofhweofjwelfmwofise',
-        fieldId: fieldEntity.id!,
-        name: 'field list name 3',
-        creationAt: DateTime(2022),
-        lastModificationAt: DateTime(2022))
+      id: 'weofwheofhweofjwelfmwofise',
+      fieldId: fieldEntity.id!,
+      name: 'field list name 3',
+      creationAt: DateTime(2022),
+      lastModificationAt: DateTime(2022),
+    ),
   ];
-  FieldListsPageData mockFieldListsPageData =
-      FieldListsPageData(field: fieldEntity, fieldLists: mockFieldListEntities);
+  FieldListsPageData mockFieldListsPageData = FieldListsPageData(
+    field: fieldEntity,
+    fieldLists: mockFieldListEntities,
+  );
   late WatchFieldListsUsecase watchFieldListsUsecase;
 
   setUpAll(() {
@@ -54,8 +66,9 @@ void main() {
 
   setUp(() {
     watchFieldListsUsecase = MockWatchFieldListsUsecase();
-    when(() => watchFieldListsUsecase.call(fieldEntity.id!))
-        .thenAnswer((_) => Stream.value(mockFieldListsPageData));
+    when(
+      () => watchFieldListsUsecase.call(fieldEntity.id!),
+    ).thenAnswer((_) => Stream.value(mockFieldListsPageData));
   });
 
   FieldListsBloc buildBloc() {
@@ -76,60 +89,67 @@ void main() {
   );
 
   blocTest<FieldListsBloc, FieldListsState>(
-      'emits state with status and FieldListsPageData '
-      'when watchFieldListsUsecase.call stream emits FieldListsPageData',
-      build: buildBloc,
-      act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
-      expect: () => [
-            FieldListsState(
-              status: FieldListsStatus.loading,
-            ),
-            FieldListsState(
-                status: FieldListsStatus.success,
-                fieldListsPageData: mockFieldListsPageData),
-          ]);
+    'emits state with status and FieldListsPageData '
+    'when watchFieldListsUsecase.call stream emits FieldListsPageData',
+    build: buildBloc,
+    act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
+    expect: () => [
+      FieldListsState(status: FieldListsStatus.loading),
+      FieldListsState(
+        status: FieldListsStatus.success,
+        fieldListsPageData: mockFieldListsPageData,
+      ),
+    ],
+  );
 
   blocTest<FieldListsBloc, FieldListsState>(
-      'emits state with failure status '
-      'when watchFieldListsUsecase.call stream emits '
-      'a FieldListsPageDate with a null fieldName',
-      build: buildBloc,
-      act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
-      setUp: () {
-        when(() => watchFieldListsUsecase.call(fieldEntity.id!)).thenAnswer(
-            (_) => Stream.value(FieldListsPageData(
-                field: null, fieldLists: mockFieldListEntities)));
-      },
-      expect: () => [
-            const FieldListsState(status: FieldListsStatus.loading),
-            FieldListsState(status: FieldListsStatus.failure)
-          ]);
+    'emits state with failure status '
+    'when watchFieldListsUsecase.call stream emits '
+    'a FieldListsPageDate with a null fieldName',
+    build: buildBloc,
+    act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
+    setUp: () {
+      when(() => watchFieldListsUsecase.call(fieldEntity.id!)).thenAnswer(
+        (_) => Stream.value(
+          FieldListsPageData(field: null, fieldLists: mockFieldListEntities),
+        ),
+      );
+    },
+    expect: () => [
+      const FieldListsState(status: FieldListsStatus.loading),
+      FieldListsState(status: FieldListsStatus.failure),
+    ],
+  );
 
   blocTest<FieldListsBloc, FieldListsState>(
-      'emits state with failure status '
-      'when watchFieldListsUsecase.call stream emits an error',
-      build: buildBloc,
-      act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
-      setUp: () {
-        when(() => watchFieldListsUsecase.call(fieldEntity.id!))
-            .thenAnswer((_) => Stream.error(Exception("oops!")));
-      },
-      expect: () => [
-            const FieldListsState(status: FieldListsStatus.loading),
-            FieldListsState(status: FieldListsStatus.failure)
-          ]);
+    'emits state with failure status '
+    'when watchFieldListsUsecase.call stream emits an error',
+    build: buildBloc,
+    act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
+    setUp: () {
+      when(
+        () => watchFieldListsUsecase.call(fieldEntity.id!),
+      ).thenAnswer((_) => Stream.error(Exception("oops!")));
+    },
+    expect: () => [
+      const FieldListsState(status: FieldListsStatus.loading),
+      FieldListsState(status: FieldListsStatus.failure),
+    ],
+  );
 
   blocTest<FieldListsBloc, FieldListsState>(
-      'emits state with failure status '
-      'when watchFieldListsUsecase.call throws an exception',
-      build: buildBloc,
-      act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
-      setUp: () {
-        when(() => watchFieldListsUsecase.call(fieldEntity.id!))
-            .thenThrow((_) => SqliteException(1, "sqlexception"));
-      },
-      expect: () => [
-            const FieldListsState(status: FieldListsStatus.loading),
-            FieldListsState(status: FieldListsStatus.failure)
-          ]);
+    'emits state with failure status '
+    'when watchFieldListsUsecase.call throws an exception',
+    build: buildBloc,
+    act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
+    setUp: () {
+      when(() => watchFieldListsUsecase.call(fieldEntity.id!)).thenThrow(
+        (_) => SqliteException(extendedResultCode: 1, message: "sqlexception"),
+      );
+    },
+    expect: () => [
+      const FieldListsState(status: FieldListsStatus.loading),
+      FieldListsState(status: FieldListsStatus.failure),
+    ],
+  );
 }

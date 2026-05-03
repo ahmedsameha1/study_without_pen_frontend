@@ -20,42 +20,64 @@ void main() {
   test('call() throws AssertionError when there is a validation error', () {
     name = "";
     expect(
-        () => usecase.call(userAccountId, name, color),
-        throwsA(predicate((e) =>
-            e is AssertionError &&
-            e.message == 'Field name must be between 1 and 64 characters')));
+      () => usecase.call(userAccountId, name, color),
+      throwsA(
+        predicate(
+          (e) =>
+              e is AssertionError &&
+              e.message == 'Field name must be between 1 and 64 characters',
+        ),
+      ),
+    );
   });
 
   test('call() throws what FieldRepository.create() throw', () {
     name = 'field name';
-    when(() => fieldRepository.create(FieldEntity(
-        null,
-        userAccountId,
-        name,
-        creationAt,
-        creationAt,
-        usageCount,
-        color))).thenThrow(SqliteException(1, 'sqlexception'));
+    when(
+      () => fieldRepository.create(
+        FieldEntity(
+          null,
+          userAccountId,
+          name,
+          creationAt,
+          creationAt,
+          usageCount,
+          color,
+        ),
+      ),
+    ).thenThrow(
+      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+    );
     withClock(Clock.fixed(creationAt), () async {
       expect(
-          () => usecase.call(userAccountId, name, color),
-          throwsA(predicate((e) =>
-              e is SqliteException &&
-              e.extendedResultCode == 1 &&
-              e.message == 'sqlexception')));
+        () => usecase.call(userAccountId, name, color),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception',
+          ),
+        ),
+      );
     });
   });
 
   test('call() success', () {
     name = 'field name';
-    when(() => fieldRepository.create(FieldEntity(
-        null,
-        userAccountId,
-        name,
-        creationAt,
-        creationAt,
-        usageCount,
-        color))).thenAnswer((_) => Future.value(1));
+    when(
+      () => fieldRepository.create(
+        FieldEntity(
+          null,
+          userAccountId,
+          name,
+          creationAt,
+          creationAt,
+          usageCount,
+          color,
+        ),
+      ),
+    ).thenAnswer((_) => Future.value(1));
     withClock(Clock.fixed(creationAt), () async {
       expect(() => usecase.call(userAccountId, name, color), returnsNormally);
     });

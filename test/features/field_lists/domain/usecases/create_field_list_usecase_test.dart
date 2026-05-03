@@ -53,7 +53,9 @@ void main() {
           lastModificationAt: creationAt,
         ),
       ),
-    ).thenThrow(SqliteException(1, 'sqlexception'));
+    ).thenThrow(
+      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+    );
     withClock(Clock.fixed(creationAt), () async {
       expect(
         () => createFieldListUsecase.call(

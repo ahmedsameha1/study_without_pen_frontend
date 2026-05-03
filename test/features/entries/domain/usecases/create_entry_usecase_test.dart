@@ -66,7 +66,9 @@ void main() {
           lastModificationAt: creationAt,
         ),
       ),
-    ).thenThrow(SqliteException(1, 'sqlexception'));
+    ).thenThrow(
+      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+    );
     withClock(Clock.fixed(creationAt), () async {
       expect(
         () => createEntryUsecase.call(
@@ -121,7 +123,9 @@ void main() {
     () {
       when(
         () => fieldListsRepository.watchFieldList(fieldListEntity.id!),
-      ).thenThrow(SqliteException(1, 'sqlexception'));
+      ).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+      );
       expect(
         () => createEntryUsecase.watchFieldList(fieldListEntity.id!),
         throwsA(

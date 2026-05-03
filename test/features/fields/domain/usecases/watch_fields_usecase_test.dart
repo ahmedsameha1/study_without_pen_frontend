@@ -12,14 +12,20 @@ void main() {
   WatchFieldsUsecase watchFieldsUsecase = WatchFieldsUsecase(fieldRepository);
   final userAccountId = "fwefhwo";
   test('call() throws what FieldRepository.watch() throw', () {
-    when(() => fieldRepository.watch(userAccountId))
-        .thenThrow(SqliteException(1, 'sqlexception'));
+    when(() => fieldRepository.watch(userAccountId)).thenThrow(
+      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+    );
     expect(
-        () => watchFieldsUsecase.call(userAccountId),
-        throwsA(predicate((e) =>
-            e is SqliteException &&
-            e.extendedResultCode == 1 &&
-            e.message == 'sqlexception')));
+      () => watchFieldsUsecase.call(userAccountId),
+      throwsA(
+        predicate(
+          (e) =>
+              e is SqliteException &&
+              e.extendedResultCode == 1 &&
+              e.message == 'sqlexception',
+        ),
+      ),
+    );
   });
 
   test('call() returns what FieldRepository.watch() return', () {
@@ -28,18 +34,34 @@ void main() {
     final usageCount = 0;
     int color = 0xff520404;
     DateTime creationAt = DateTime(2020, 1, 1);
-    when(() => fieldRepository.watch(userAccountId)).thenAnswer((_) =>
-        Stream.value([
-          FieldEntity(id, userAccountId, name, creationAt, creationAt,
-              usageCount, color)
-        ]));
+    when(() => fieldRepository.watch(userAccountId)).thenAnswer(
+      (_) => Stream.value([
+        FieldEntity(
+          id,
+          userAccountId,
+          name,
+          creationAt,
+          creationAt,
+          usageCount,
+          color,
+        ),
+      ]),
+    );
     expect(
-        watchFieldsUsecase.call(userAccountId),
-        emitsInOrder([
-          [
-            FieldEntity(id, userAccountId, name, creationAt, creationAt,
-                usageCount, color)
-          ]
-        ]));
+      watchFieldsUsecase.call(userAccountId),
+      emitsInOrder([
+        [
+          FieldEntity(
+            id,
+            userAccountId,
+            name,
+            creationAt,
+            creationAt,
+            usageCount,
+            color,
+          ),
+        ],
+      ]),
+    );
   });
 }

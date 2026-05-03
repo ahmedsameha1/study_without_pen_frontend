@@ -21,52 +21,58 @@ void main() {
     expect(createFieldCubit.state, StateStatus.initial);
   });
 
-  blocTest<CreateFieldCubit, StateStatus>('''
+  blocTest<CreateFieldCubit, StateStatus>(
+    '''
     When calling CreateFieldUseCase.call() throws an AssertionError then the state
     should be CreateFieldState.validationFailure then CreateFieldState.initial''',
-      build: () {
-        createFieldUseCase = MockCreateFieldUseCase();
-        when(() => createFieldUseCase.call(userId, name, color)).thenThrow(
-            AssertionError('Field name must be between 1 and 64 characters'));
-        return createFieldCubit = CreateFieldCubit(createFieldUseCase);
-      },
-      act: (cubit) => cubit.createField(userId, name, color),
-      expect: () => [
-            StateStatus.loading,
-            StateStatus.validationFailure,
-            StateStatus.initial
-          ]);
+    build: () {
+      createFieldUseCase = MockCreateFieldUseCase();
+      when(() => createFieldUseCase.call(userId, name, color)).thenThrow(
+        AssertionError('Field name must be between 1 and 64 characters'),
+      );
+      return createFieldCubit = CreateFieldCubit(createFieldUseCase);
+    },
+    act: (cubit) => cubit.createField(userId, name, color),
+    expect: () => [
+      StateStatus.loading,
+      StateStatus.validationFailure,
+      StateStatus.initial,
+    ],
+  );
 
-  blocTest<CreateFieldCubit, StateStatus>('''
+  blocTest<CreateFieldCubit, StateStatus>(
+    '''
     When calling CreateFieldUseCase.call() throws an error other than AssertionError 
     then the state should be CreateFieldState.persistanceFailure then CreateFieldState.initial''',
-      build: () {
-        name = "field name";
-        createFieldUseCase = MockCreateFieldUseCase();
-        when(() => createFieldUseCase.call(userId, name, color))
-            .thenThrow(SqliteException(1, 'Error from database'));
-        return createFieldCubit = CreateFieldCubit(createFieldUseCase);
-      },
-      act: (cubit) => cubit.createField(userId, name, color),
-      expect: () => [
-            StateStatus.loading,
-            StateStatus.persistenceFailure,
-            StateStatus.initial
-          ]);
+    build: () {
+      name = "field name";
+      createFieldUseCase = MockCreateFieldUseCase();
+      when(() => createFieldUseCase.call(userId, name, color)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'Error from database'),
+      );
+      return createFieldCubit = CreateFieldCubit(createFieldUseCase);
+    },
+    act: (cubit) => cubit.createField(userId, name, color),
+    expect: () => [
+      StateStatus.loading,
+      StateStatus.persistenceFailure,
+      StateStatus.initial,
+    ],
+  );
 
-  blocTest<CreateFieldCubit, StateStatus>('''
+  blocTest<CreateFieldCubit, StateStatus>(
+    '''
     When calling CreateFieldUseCase.call() return a future of int
     should be CreateFieldState.success''',
-      build: () {
-        name = "field name";
-        createFieldUseCase = MockCreateFieldUseCase();
-        when(() => createFieldUseCase.call(userId, name, color))
-            .thenAnswer((_) => Future.value(1));
-        return createFieldCubit = CreateFieldCubit(createFieldUseCase);
-      },
-      act: (cubit) => cubit.createField(userId, name, color),
-      expect: () => [
-            StateStatus.loading,
-            StateStatus.success,
-          ]);
+    build: () {
+      name = "field name";
+      createFieldUseCase = MockCreateFieldUseCase();
+      when(
+        () => createFieldUseCase.call(userId, name, color),
+      ).thenAnswer((_) => Future.value(1));
+      return createFieldCubit = CreateFieldCubit(createFieldUseCase);
+    },
+    act: (cubit) => cubit.createField(userId, name, color),
+    expect: () => [StateStatus.loading, StateStatus.success],
+  );
 }

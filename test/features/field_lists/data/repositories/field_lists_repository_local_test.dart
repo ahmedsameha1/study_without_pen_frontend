@@ -24,9 +24,9 @@ void main() {
   );
 
   test('watch() throws what fieldListsDao.watchByFieldId() throw', () {
-    when(
-      () => fieldListsDao.watchByFieldId(fieldListEntity.fieldId),
-    ).thenThrow(SqliteException(1, 'sqlexception'));
+    when(() => fieldListsDao.watchByFieldId(fieldListEntity.fieldId)).thenThrow(
+      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+    );
     expect(
       () => fieldListsRepository.watch(fieldListEntity.fieldId),
       throwsA(
@@ -122,7 +122,9 @@ void main() {
           ),
         ),
       ),
-    ).thenThrow(SqliteException(1, 'sqlexception'));
+    ).thenThrow(
+      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+    );
     expect(
       () => fieldListsRepository.create(fieldListEntity),
       throwsA(
@@ -178,9 +180,9 @@ void main() {
   });
 
   test('watchFieldList() throws what FieldListsDao.watchById() throw', () {
-    when(
-      () => fieldListsDao.watchById(fieldListEntity.id!),
-    ).thenThrow(SqliteException(1, 'sqlexception'));
+    when(() => fieldListsDao.watchById(fieldListEntity.id!)).thenThrow(
+      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+    );
     expect(
       () => fieldListsRepository.watchFieldList(fieldListEntity.id!),
       throwsA(

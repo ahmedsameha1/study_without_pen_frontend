@@ -29,8 +29,9 @@ void main() {
        FieldsState(FieldsStateStatus.loading, [])
        then FieldsState(FieldsStateStatus.failure, []))''',
     build: () {
-      when(() => watchFieldsUsecase.call(userAccountId))
-          .thenThrow(SqliteException(1, 'sqlexception'));
+      when(() => watchFieldsUsecase.call(userAccountId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+      );
       return FieldsCubit(watchFieldsUsecase);
     },
     act: (bloc) => bloc.watch(userAccountId),
@@ -46,11 +47,19 @@ void main() {
        FieldsState(StateStatus.loading, [])
        FieldsState(StateStatus.success, the returned List of FieldEntity)''',
     build: () {
-      when(() => watchFieldsUsecase.call(userAccountId)).thenAnswer((_) =>
-          Stream.value([
-            FieldEntity(id, userAccountId, name, creationAt, creationAt,
-                usageCount, color)
-          ]));
+      when(() => watchFieldsUsecase.call(userAccountId)).thenAnswer(
+        (_) => Stream.value([
+          FieldEntity(
+            id,
+            userAccountId,
+            name,
+            creationAt,
+            creationAt,
+            usageCount,
+            color,
+          ),
+        ]),
+      );
       return FieldsCubit(watchFieldsUsecase);
     },
     act: (bloc) => bloc.watch(userAccountId),
@@ -58,7 +67,14 @@ void main() {
       FieldsState(StateStatus.loading, []),
       FieldsState(StateStatus.success, [
         FieldEntity(
-            id, userAccountId, name, creationAt, creationAt, usageCount, color)
+          id,
+          userAccountId,
+          name,
+          creationAt,
+          creationAt,
+          usageCount,
+          color,
+        ),
       ]),
     ],
   );

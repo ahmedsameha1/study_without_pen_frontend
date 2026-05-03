@@ -304,7 +304,10 @@ void main() {
           rank: entry.rank,
           order: entry.order,
         ),
-      ).thenThrow((_) => SqliteException(1, 'sqliteexception'));
+      ).thenThrow(
+        (_) =>
+            SqliteException(extendedResultCode: 1, message: 'sqliteexception'),
+      );
     },
     build: buildBloc,
     seed: () => CreateEntryState(
@@ -362,7 +365,11 @@ void main() {
           rank: entry.rank,
           order: entry.order,
         ),
-      ).thenAnswer((_) => Future.error(SqliteException(1, 'sqliteexception')));
+      ).thenAnswer(
+        (_) => Future.error(
+          SqliteException(extendedResultCode: 1, message: 'sqliteexception'),
+        ),
+      );
     },
     build: buildBloc,
     seed: () => CreateEntryState(
@@ -420,7 +427,9 @@ void main() {
           rank: entry.rank,
           order: entry.order,
         ),
-      ).thenThrow(SqliteException(1, 'UNIQUE constraint'));
+      ).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'UNIQUE constraint'),
+      );
     },
     build: buildBloc,
     seed: () => CreateEntryState(
@@ -548,7 +557,11 @@ void main() {
     setUp: () {
       when(
         () => createEntryUsecase.watchFieldList(fieldListEntity.id!),
-      ).thenAnswer((_) => Stream.error(SqliteException(1, 'sqlexception')));
+      ).thenAnswer(
+        (_) => Stream.error(
+          SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+        ),
+      );
     },
     seed: () => CreateEntryState(
       status: CreateEntryStatus.loading,
@@ -576,7 +589,11 @@ void main() {
     setUp: () {
       when(
         () => createEntryUsecase.watchFieldList(fieldListEntity.id!),
-      ).thenAnswer((_) => Stream.error(SqliteException(1, 'sqlexception')));
+      ).thenAnswer(
+        (_) => Stream.error(
+          SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+        ),
+      );
     },
     seed: () => CreateEntryState(
       status: CreateEntryStatus.initial,
@@ -605,7 +622,9 @@ void main() {
     setUp: () {
       when(
         () => createEntryUsecase.watchFieldList(fieldListEntity.id!),
-      ).thenThrow(SqliteException(1, 'sqlexception'));
+      ).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+      );
     },
     seed: () => CreateEntryState(
       status: CreateEntryStatus.loading,
@@ -633,7 +652,9 @@ void main() {
     setUp: () {
       when(
         () => createEntryUsecase.watchFieldList(fieldListEntity.id!),
-      ).thenThrow(SqliteException(1, 'sqlexception'));
+      ).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+      );
     },
     seed: () => CreateEntryState(
       status: CreateEntryStatus.initial,

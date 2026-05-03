@@ -305,9 +305,9 @@ void main() {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
-      when(
-        () => entriesRepository.watch(fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => entriesRepository.watch(fieldListId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       expect(
         () => watchEntriesUsecase.watchEntriesForScore(fieldListId),
         throwsA(
@@ -322,9 +322,9 @@ void main() {
     });
 
     test('throws what FieldListsRepository.watchFieldList() throw', () {
-      when(
-        () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => fieldListsRepository.watchFieldList(fieldListId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       when(
         () => entriesRepository.watch(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
@@ -432,9 +432,9 @@ void main() {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
-      when(
-        () => entriesRepository.watch(fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => entriesRepository.watch(fieldListId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       expect(
         () => watchEntriesUsecase.watchEntriesForStruggling(fieldListId),
         throwsA(
@@ -449,9 +449,9 @@ void main() {
     });
 
     test('throws what FieldListsRepository.watchFieldList() throw', () {
-      when(
-        () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => fieldListsRepository.watchFieldList(fieldListId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       when(
         () => entriesRepository.watch(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
@@ -564,9 +564,9 @@ void main() {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
-      when(
-        () => entriesRepository.watch(fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => entriesRepository.watch(fieldListId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       expect(
         () => watchEntriesUsecase.watchEntriesForToday(fieldListId),
         throwsA(
@@ -581,9 +581,9 @@ void main() {
     });
 
     test('throws what FieldListsRepository.watchFieldList() throw', () {
-      when(
-        () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => fieldListsRepository.watchFieldList(fieldListId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       when(
         () => entriesRepository.watch(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
@@ -703,9 +703,9 @@ void main() {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
-      when(
-        () => entriesRepository.watch(fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => entriesRepository.watch(fieldListId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       expect(
         () => watchEntriesUsecase.watchEntriesForUnseen(fieldListId),
         throwsA(
@@ -720,9 +720,9 @@ void main() {
     });
 
     test('throws what FieldListsRepository.watchFieldList() throw', () {
-      when(
-        () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => fieldListsRepository.watchFieldList(fieldListId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       when(
         () => entriesRepository.watch(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
@@ -899,9 +899,9 @@ void main() {
       when(
         () => fieldListsRepository.watchFieldList(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
-      when(
-        () => entriesRepository.watch(fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => entriesRepository.watch(fieldListId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       expect(
         () => watchEntriesUsecase.watchEntriesForBrowse(fieldListId),
         throwsA(
@@ -916,9 +916,9 @@ void main() {
     });
 
     test('throws what FieldListsRepository.watchFieldList() throw', () {
-      when(
-        () => fieldListsRepository.watchFieldList(fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => fieldListsRepository.watchFieldList(fieldListId)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       when(
         () => entriesRepository.watch(fieldListId),
       ).thenAnswer((_) => const Stream.empty());
@@ -1040,9 +1040,9 @@ void main() {
   group('watchSearchData()', () {
     final String text = 'text';
     test('Throws what EntriesRepository.search() throw', () {
-      when(
-        () => entriesRepository.search(fieldListId, text),
-      ).thenThrow(SqliteException(1, 'sqlexception1'));
+      when(() => entriesRepository.search(fieldListId, text)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+      );
       expect(
         () => watchEntriesUsecase.watchSearchData(fieldListId, text),
         throwsA(

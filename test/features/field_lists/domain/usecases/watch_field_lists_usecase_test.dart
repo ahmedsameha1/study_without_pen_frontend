@@ -49,9 +49,9 @@ void main() {
     when(
       () => fieldsRepository.watchField(fieldId),
     ).thenAnswer((_) => Stream.empty());
-    when(
-      () => fieldListsRepository.watch(fieldId),
-    ).thenThrow(SqliteException(1, 'sqlexception1'));
+    when(() => fieldListsRepository.watch(fieldId)).thenThrow(
+      SqliteException(extendedResultCode: 1, message: 'sqlexception1'),
+    );
     expect(
       () => watchFieldListsUsecase.call(fieldId),
       throwsA(
@@ -66,9 +66,9 @@ void main() {
   });
 
   test('call() throws what FieldsRepository.watchField() throw', () {
-    when(
-      () => fieldsRepository.watchField(fieldId),
-    ).thenThrow(SqliteException(2, 'sqlexception2'));
+    when(() => fieldsRepository.watchField(fieldId)).thenThrow(
+      SqliteException(extendedResultCode: 2, message: 'sqlexception2'),
+    );
     when(
       () => fieldListsRepository.watch(fieldId),
     ).thenAnswer((_) => Stream.empty());

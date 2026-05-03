@@ -31,7 +31,9 @@ void main() {
     test('Throws what entrysDao.watchByFieldListId() throw', () {
       when(
         () => entrysDao.watchByFieldListId(entryEntity.fieldListId),
-      ).thenThrow(SqliteException(1, 'sqlexception'));
+      ).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+      );
       expect(
         () => entriesRepository.watch(entryEntity.fieldListId),
         throwsA(
@@ -170,7 +172,9 @@ void main() {
             entryEntity.fieldListId,
             text,
           ),
-        ).thenThrow(SqliteException(1, 'sqlexception'));
+        ).thenThrow(
+          SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+        );
         expect(
           () => entriesRepository.search(entryEntity.fieldListId, text),
           throwsA(
@@ -356,7 +360,9 @@ void main() {
           ),
         ),
       ),
-    ).thenThrow(SqliteException(1, 'sqlexception'));
+    ).thenThrow(
+      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+    );
     expect(
       () => entriesRepository.create(entryEntity),
       throwsA(
