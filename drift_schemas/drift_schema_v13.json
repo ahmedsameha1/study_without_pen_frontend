@@ -1,0 +1,1629 @@
+{
+  "_meta": {
+    "description": "This file contains a serialized version of schema entities for drift.",
+    "version": "1.3.0"
+  },
+  "options": {
+    "store_date_time_values_as_text": true
+  },
+  "entities": [
+    {
+      "id": 0,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "field",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY AUTOINCREMENT NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "auto-increment"
+            ]
+          },
+          {
+            "name": "name",
+            "getter_name": "name",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "UNIQUE NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique"
+            ]
+          },
+          {
+            "name": "string_or_blob",
+            "getter_name": "stringOrBlob",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "locale",
+            "getter_name": "locale",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "check_type",
+            "getter_name": "checkType",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 3",
+            "default_dart": "const CustomExpression('3')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "sort_by",
+            "getter_name": "sortBy",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "color",
+            "getter_name": "color",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "list_text_size",
+            "getter_name": "listTextSize",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "question_area_size",
+            "getter_name": "questionAreaSize",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 1",
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "answer_area_size",
+            "getter_name": "answerAreaSize",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 1",
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "test_text_size",
+            "getter_name": "testTextSize",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "action_bar_shown",
+            "getter_name": "actionBarShown",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "read_answer",
+            "getter_name": "readAnswer",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "usage_count",
+            "getter_name": "usageCount",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "creation_emulation_number",
+            "getter_name": "creationEmulationNumber",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "creation_emulation_what_days",
+            "getter_name": "creationEmulationWhatDays",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "random_quick_test_number_of_tests",
+            "getter_name": "randomQuickTestNumberOfTests",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "random_quick_test_number_of_tries",
+            "getter_name": "randomQuickTestNumberOfTries",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "random_quick_test_number_of_questions",
+            "getter_name": "randomQuickTestNumberOfQuestions",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "random_quick_test_controlled_portion",
+            "getter_name": "randomQuickTestControlledPortion",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "random_quick_test_wrongness_level",
+            "getter_name": "randomQuickTestWrongnessLevel",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "random_quick_test_rank_level",
+            "getter_name": "randomQuickTestRankLevel",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "reading_question_letter_second_tests",
+            "getter_name": "readingQuestionLetterSecondTests",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "find_answer_time_tests",
+            "getter_name": "findAnswerTimeTests",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "typing_answer_letter_second_tests",
+            "getter_name": "typingAnswerLetterSecondTests",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "reading_question_letter_second_study_till_correct",
+            "getter_name": "readingQuestionLetterSecondStudyTillCorrect",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "find_answer_time_study_till_correct",
+            "getter_name": "findAnswerTimeStudyTillCorrect",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "typing_answer_letter_second_study_till_correct",
+            "getter_name": "typingAnswerLetterSecondStudyTillCorrect",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "time_of_answer_tests_do_what",
+            "getter_name": "timeOfAnswerTestsDoWhat",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "obfuscate_question",
+            "getter_name": "obfuscateQuestion",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "creation_date",
+            "getter_name": "creationDate",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME'))",
+            "default_dart": "const CustomExpression('DATETIME(CURRENT_TIMESTAMP, \\'LOCALTIME\\')')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 1,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "string",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "value",
+            "getter_name": "value",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "UNIQUE NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "unique"
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 2,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "not_string",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "value",
+            "getter_name": "value",
+            "moor_type": "blob",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    },
+    {
+      "id": 3,
+      "references": [
+        1,
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "string_entry",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY AUTOINCREMENT NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "auto-increment"
+            ]
+          },
+          {
+            "name": "question",
+            "getter_name": "question",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "answer",
+            "getter_name": "answer",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "field",
+            "getter_name": "field",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused_enhanced_test_order",
+            "getter_name": "pausedEnhancedTestOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused_fully_random_test_order",
+            "getter_name": "pausedFullyRandomTestOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused_study_period_order",
+            "getter_name": "pausedStudyPeriodOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused_study_again_enhanced_test_order",
+            "getter_name": "pausedStudyAgainEnhancedTestOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused_study_again_fully_random_test_order",
+            "getter_name": "pausedStudyAgainFullyRandomTestOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "asked_count",
+            "getter_name": "askedCount",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "wrongly_answered_count",
+            "getter_name": "wronglyAnsweredCount",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "rank",
+            "getter_name": "rank",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "creation_emulated_date",
+            "getter_name": "creationEmulatedDate",
+            "moor_type": "dateTime",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "remind_at",
+            "getter_name": "remindAt",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "remind_at_pendingintent_request",
+            "getter_name": "remindAtPendingintentRequest",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "whether_asked_at_current_test_round",
+            "getter_name": "whetherAskedAtCurrentTestRound",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT 1",
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "order_of_entry",
+            "getter_name": "orderOfEntry",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT 999999999",
+            "default_dart": "const CustomExpression('999999999')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "creation_date",
+            "getter_name": "creationDate",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME'))",
+            "default_dart": "const CustomExpression('DATETIME(CURRENT_TIMESTAMP, \\'LOCALTIME\\')')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(question)REFERENCES string(_id)ON UPDATE CASCADE ON DELETE NO ACTION",
+          "FOREIGN KEY(answer)REFERENCES string(_id)ON UPDATE CASCADE ON DELETE NO ACTION",
+          "FOREIGN KEY(field)REFERENCES field(_id)ON UPDATE CASCADE ON DELETE CASCADE",
+          "UNIQUE(question, answer, field)"
+        ],
+        "unique_keys": [
+          [
+            "question",
+            "answer",
+            "field"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "references": [
+        2,
+        1,
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "not_string_entry",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY AUTOINCREMENT NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "auto-increment"
+            ]
+          },
+          {
+            "name": "question",
+            "getter_name": "question",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "answer",
+            "getter_name": "answer",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "field",
+            "getter_name": "field",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused_enhanced_test_order",
+            "getter_name": "pausedEnhancedTestOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused_fully_random_test_order",
+            "getter_name": "pausedFullyRandomTestOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused_study_period_order",
+            "getter_name": "pausedStudyPeriodOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused_study_again_enhanced_test_order",
+            "getter_name": "pausedStudyAgainEnhancedTestOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "paused_study_again_fully_random_test_order",
+            "getter_name": "pausedStudyAgainFullyRandomTestOrder",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "asked_count",
+            "getter_name": "askedCount",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "wrongly_answered_count",
+            "getter_name": "wronglyAnsweredCount",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "rank",
+            "getter_name": "rank",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "creation_emulated_date",
+            "getter_name": "creationEmulatedDate",
+            "moor_type": "dateTime",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "remind_at",
+            "getter_name": "remindAt",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "remind_at_pendingintent_request",
+            "getter_name": "remindAtPendingintentRequest",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "whether_asked_at_current_test_round",
+            "getter_name": "whetherAskedAtCurrentTestRound",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT 1",
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "order_of_entry",
+            "getter_name": "orderOfEntry",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT 999999999",
+            "default_dart": "const CustomExpression('999999999')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "creation_date",
+            "getter_name": "creationDate",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME'))",
+            "default_dart": "const CustomExpression('DATETIME(CURRENT_TIMESTAMP, \\'LOCALTIME\\')')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(question)REFERENCES not_string(_id)ON UPDATE CASCADE ON DELETE NO ACTION",
+          "FOREIGN KEY(answer)REFERENCES string(_id)ON UPDATE CASCADE ON DELETE NO ACTION",
+          "FOREIGN KEY(field)REFERENCES field(_id)ON UPDATE CASCADE ON DELETE CASCADE",
+          "UNIQUE(question, answer, field)"
+        ],
+        "unique_keys": [
+          [
+            "question",
+            "answer",
+            "field"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "references": [
+        3
+      ],
+      "type": "table",
+      "data": {
+        "name": "test_wrong_answer_string",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "test_type",
+            "getter_name": "testType",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "entry",
+            "getter_name": "entry",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "wrong_answer",
+            "getter_name": "wrongAnswer",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(entry)REFERENCES string_entry(_id)ON UPDATE CASCADE ON DELETE CASCADE"
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "references": [
+        4
+      ],
+      "type": "table",
+      "data": {
+        "name": "test_wrong_answer_not_string",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "test_type",
+            "getter_name": "testType",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "entry",
+            "getter_name": "entry",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "wrong_answer",
+            "getter_name": "wrongAnswer",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(entry)REFERENCES not_string_entry(_id)ON UPDATE CASCADE ON DELETE CASCADE"
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "references": [
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "test_paused",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "test_type",
+            "getter_name": "testType",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "field",
+            "getter_name": "field",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "current_question_counter",
+            "getter_name": "currentQuestionCounter",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "wrong_answers_count",
+            "getter_name": "wrongAnswersCount",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "tries_number",
+            "getter_name": "triesNumber",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "elapsed_time_of_paused_test_session",
+            "getter_name": "elapsedTimeOfPausedTestSession",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "UNIQUE(test_type, field)",
+          "FOREIGN KEY(field)REFERENCES field(_id)ON UPDATE CASCADE ON DELETE CASCADE"
+        ],
+        "unique_keys": [
+          [
+            "test_type",
+            "field"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "references": [
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "study_till_correct_repeated_entry",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "field",
+            "getter_name": "field",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "study_till_correct_type",
+            "getter_name": "studyTillCorrectType",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "repeated_entry",
+            "getter_name": "repeatedEntry",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(field)REFERENCES field(_id)ON UPDATE CASCADE ON DELETE CASCADE",
+          "UNIQUE(field, study_till_correct_type, repeated_entry)"
+        ],
+        "unique_keys": [
+          [
+            "field",
+            "study_till_correct_type",
+            "repeated_entry"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "references": [
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "study_till_correct_paused",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "field",
+            "getter_name": "field",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "study_till_correct_type",
+            "getter_name": "studyTillCorrectType",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "current_question_counter",
+            "getter_name": "currentQuestionCounter",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "tries_number",
+            "getter_name": "triesNumber",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "elapsed_time_of_paused_study_till_correct_session",
+            "getter_name": "elapsedTimeOfPausedStudyTillCorrectSession",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "in_repeated",
+            "getter_name": "inRepeated",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(field)REFERENCES field(_id)ON UPDATE CASCADE ON DELETE CASCADE",
+          "UNIQUE(field, study_till_correct_type)"
+        ],
+        "unique_keys": [
+          [
+            "field",
+            "study_till_correct_type"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "references": [
+        3,
+        1
+      ],
+      "type": "table",
+      "data": {
+        "name": "alternative_answer_string",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "entry",
+            "getter_name": "entry",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "alternative_answer",
+            "getter_name": "alternativeAnswer",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "answered_count",
+            "getter_name": "answeredCount",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(entry)REFERENCES string_entry(_id)ON UPDATE CASCADE ON DELETE CASCADE",
+          "FOREIGN KEY(alternative_answer)REFERENCES string(_id)ON UPDATE CASCADE ON DELETE NO ACTION",
+          "UNIQUE(entry, alternative_answer)"
+        ],
+        "unique_keys": [
+          [
+            "entry",
+            "alternative_answer"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 11,
+      "references": [
+        4,
+        1
+      ],
+      "type": "table",
+      "data": {
+        "name": "alternative_answer_not_string",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "entry",
+            "getter_name": "entry",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "alternative_answer",
+            "getter_name": "alternativeAnswer",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "answered_count",
+            "getter_name": "answeredCount",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL DEFAULT 0",
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(entry)REFERENCES not_string_entry(_id)ON UPDATE CASCADE ON DELETE CASCADE",
+          "FOREIGN KEY(alternative_answer)REFERENCES string(_id)ON UPDATE CASCADE ON DELETE NO ACTION",
+          "UNIQUE(entry, alternative_answer)"
+        ],
+        "unique_keys": [
+          [
+            "entry",
+            "alternative_answer"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 12,
+      "references": [
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "excluded_time",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "field",
+            "getter_name": "field",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "starts",
+            "getter_name": "starts",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "ends",
+            "getter_name": "ends",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(field)REFERENCES field(_id)ON UPDATE CASCADE ON DELETE CASCADE"
+        ]
+      }
+    },
+    {
+      "id": 13,
+      "references": [
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "scheduled_time_backup",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "field",
+            "getter_name": "field",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "session_type",
+            "getter_name": "sessionType",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "time",
+            "getter_name": "time",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "pendingintent_request",
+            "getter_name": "pendingintentRequest",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "not_random_quick_test_number_or_percentage",
+            "getter_name": "notRandomQuickTestNumberOrPercentage",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "not_random_quick_test_number",
+            "getter_name": "notRandomQuickTestNumber",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "not_random_quick_test_tries",
+            "getter_name": "notRandomQuickTestTries",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT NULL",
+            "default_dart": "const CustomExpression('NULL')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "not_random_quick_test_controlled_portion",
+            "getter_name": "notRandomQuickTestControlledPortion",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "not_random_quick_test_wrongness_level",
+            "getter_name": "notRandomQuickTestWrongnessLevel",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "not_random_quick_test_rank_level",
+            "getter_name": "notRandomQuickTestRankLevel",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": "DEFAULT (-1)",
+            "default_dart": "const CustomExpression('-1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(field)REFERENCES field(_id)ON UPDATE CASCADE ON DELETE CASCADE"
+        ]
+      }
+    },
+    {
+      "id": 14,
+      "references": [
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "field_note",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "_id",
+            "getter_name": "id",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "PRIMARY KEY NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          },
+          {
+            "name": "field",
+            "getter_name": "field",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "note",
+            "getter_name": "note",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [
+          "FOREIGN KEY(field)REFERENCES field(_id)ON UPDATE CASCADE ON DELETE CASCADE",
+          "UNIQUE(field, note)"
+        ],
+        "unique_keys": [
+          [
+            "field",
+            "note"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 15,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "google_payment_order_id",
+        "was_declared_in_moor": true,
+        "columns": [
+          {
+            "name": "order_id",
+            "getter_name": "orderId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": "NOT NULL PRIMARY KEY",
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              "primary-key"
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": []
+      }
+    }
+  ]
+}

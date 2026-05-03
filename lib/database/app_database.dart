@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart';
@@ -17,6 +18,8 @@ import 'test_sessions_dao.dart';
 import 'wrong_answers_dao.dart';
 
 part 'app_database.g.dart';
+
+const migrationUserAccountId = '95bfc9e1-7d6a-4f92-bee2-562692bc4333';
 
 class Entrys extends Table {
   static const int minimumTextLength = 1;
@@ -403,28 +406,169 @@ class WrongAnswers extends Table {
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  static const databaseFileName = "db.sqlite";
-  static LazyDatabase openConnection() {
-    return LazyDatabase(() async {
-      final dbDirectory = await getApplicationDocumentsDirectory();
-      final file = File(join(dbDirectory.path, databaseFileName));
-      return NativeDatabase(file);
-    });
-  }
+  static const databaseFileName = "app_database.sqlite";
+  static LazyDatabase openConnection() => LazyDatabase(() async {
+    final dbDirectory = await getApplicationDocumentsDirectory();
+    final file = File(join(dbDirectory.path, databaseFileName));
+    return NativeDatabase(file);
+  });
 
   AppDatabase(QueryExecutor queryExecutor) : super(queryExecutor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 14;
 
   @override
-  MigrationStrategy get migration {
-    return MigrationStrategy(
-      beforeOpen: (details) async {
-        await customStatement("PRAGMA foreign_keys = ON");
-      },
-    );
-  }
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) async => m.createAll(),
+    beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+    },
+    onUpgrade: (m, from, to) async {
+      if (from == 13) {
+        await transaction(() async {
+          await customStatement('DROP TABLE IF EXISTS not_string');
+          await customStatement('DROP TABLE IF EXISTS not_string_entry');
+          await customStatement(
+            'DROP TABLE IF EXISTS test_wrong_answer_string',
+          );
+          await customStatement(
+            'DROP TABLE IF EXISTS test_wrong_answer_not_string',
+          );
+          await customStatement('DROP TABLE IF EXISTS test_paused');
+          await customStatement(
+            'DROP TABLE IF EXISTS study_till_correct_repeated_entry',
+          );
+          await customStatement(
+            'DROP TABLE IF EXISTS study_till_correct_paused',
+          );
+          await customStatement(
+            'DROP TABLE IF EXISTS alternative_answer_string',
+          );
+          await customStatement(
+            'DROP TABLE IF EXISTS alternative_answer_not_string',
+          );
+          await customStatement('DROP TABLE IF EXISTS excluded_time');
+          await customStatement('DROP TABLE IF EXISTS scheduled_time_backup');
+          await customStatement('DROP TABLE IF EXISTS google_payment_order_id');
+          await m.createAll();
+          final now = clock.now();
+          final fieldId = const Uuid().v4();
+          await m.database
+              .into(fields)
+              .insert(
+                FieldsCompanion(
+                  id: Value(fieldId),
+                  userAccountId: const Value(migrationUserAccountId),
+                  name: const Value('field'),
+                  creationAt: Value(now),
+                  lastModificationAt: Value(now),
+                ),
+              );
+          await customStatement(
+            '''
+INSERT INTO field_lists (
+  field_id,
+  name,
+  creation_at,
+  last_modification_at,
+  language_tag,
+  check_type,
+  sort_by,
+  does_read_answer,
+  usage_count,
+  color,
+  emulation_number_of_questions,
+  emulation_days,
+  tests_reading_question_letter_duration,
+  tests_finding_answer_duration,
+  tests_typing_answer_letter_duration,
+  study_till_correct_reading_question_letter_duration,
+  study_till_correct_finding_answer_duration,
+  study_till_correct_typing_answer_letter_duration,
+  tests_time_of_answer_action,
+  does_obfuscate_question
+)
+SELECT
+  ?, -- field_id
+  name,
+  creation_date,
+  creation_date,
+  locale,
+  check_type,
+  sort_by,
+  read_answer,
+  usage_count,
+  color,
+  creation_emulation_number,
+  creation_emulation_what_days,
+  reading_question_letter_second_tests,
+  find_answer_time_tests,
+  typing_answer_letter_second_tests,
+  reading_question_letter_second_study_till_correct,
+  find_answer_time_study_till_correct,
+  typing_answer_letter_second_study_till_correct,
+  time_of_answer_tests_do_what,
+  obfuscate_question
+FROM field
+         ''',
+            [fieldId],
+          );
+          await customStatement('''
+INSERT INTO entrys (
+  field_list_id,
+  answer,
+  question,
+  creation_at,
+  last_modification_at,
+  "order",                           -- Quoted to avoid reserved keyword conflict
+  did_asked_at_current_test_round,
+  emulated_created_at,
+  rank,
+  asked_count,
+  wrongly_answered_count
+)
+SELECT
+  fl.id,                             -- From field_lists (New UUID)
+  s2.value,                          -- From string (Answer text)
+  s1.value,                          -- From string (Question text)
+  se.creation_date,
+  se.creation_date,                  -- Mapping creation to modification
+  se.order_of_entry,
+  se.whether_asked_at_current_test_round,
+  se.creation_emulated_date,
+  se.rank,
+  se.asked_count,
+  se.wrongly_answered_count
+FROM string_entry se
+INNER JOIN string s1      ON se.question = s1._id
+INNER JOIN string s2      ON se.answer = s2._id
+INNER JOIN field f        ON se.field = f._id
+INNER JOIN field_lists fl ON f.name = fl.name
+         ''');
+          await customStatement(
+            '''
+INSERT INTO field_list_notes (
+  field_list_id,
+  tex_t,
+  creation_at,
+  last_modification_at
+  )
+SELECT
+  fl.id,
+  fn.note,
+  ?,
+  ?
+FROM field f
+INNER JOIN field_lists fl ON f.name = fl.name
+INNER JOIN field_note fn ON fn.field = f._id
+          ''',
+            [now.toIso8601String(), now.toIso8601String()],
+          );
+        });
+      }
+    },
+  );
 }
 
 bool isValid(String uuid) {
