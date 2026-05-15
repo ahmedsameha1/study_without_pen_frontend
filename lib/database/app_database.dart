@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import './before_db_v14_constants.dart';
 import 'entrys_dao.dart';
 import 'field_list_notes_dao.dart';
 import 'field_lists_dao.dart';
@@ -435,7 +436,135 @@ class AppDatabase extends _$AppDatabase {
     beforeOpen: (details) async {
       await customStatement('PRAGMA foreign_keys = ON');
     },
-  }
+    onUpgrade: (m, from, to) async {
+      await transaction(() async {
+        if (from < 3) {
+          await customStatement('''
+        CREATE TABLE tempTable ( 
+                 ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME} TEXT PRIMARY KEY, 
+                 $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 DATETIME DEFAULT CURRENT_TIMESTAMP )
+                ''');
+
+          await customStatement('''
+                INSERT INTO  tempTable ( ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME}
+                , $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 )
+                SELECT ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME} ,
+                 $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32
+                 FROM  ${Old_Field_DBV6_AppV32.TABLE_NAME}
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS ${Old_Field_DBV6_AppV32.TABLE_NAME}
+                ''');
+
+          await customStatement('''
+CREATE TABLE  ${Old_Field_DBV6_AppV32.TABLE_NAME} ( 
+             ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME} TEXT PRIMARY KEY NOT NULL, 
+            ${Old_Field_DBV6_AppV32.COLUMN_FIELD_TYPE} INTEGER NOT NULL DEFAULT 0 , 
+            $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 DATETIME DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')) )
+                ''');
+
+          await customStatement('''
+                INSERT INTO  ${Old_Field_DBV6_AppV32.TABLE_NAME} ( ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME}
+                ,$Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 ) 
+                SELECT ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME} ,
+               $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32
+               FROM tempTable
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+
+          await customStatement('''
+                ALTER TABLE ${Old_Question_DBV6_AppV32.TABLE_NAME} RENAME TO tempTable
+                ''');
+
+          await customStatement('''
+                CREATE TABLE ${Old_Question_DBV6_AppV32.TABLE_NAME} ( ${Old_Question_DBV6_AppV32.COLUMN_QUESTION_ENTRY}
+            TEXT PRIMARY KEY NOT NULL, 
+            $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 DATETIME DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')) )
+                ''');
+
+          await customStatement('''
+                INSERT INTO ${Old_Question_DBV6_AppV32.TABLE_NAME} ( ${Old_Question_DBV6_AppV32.COLUMN_QUESTION_ENTRY}
+                , $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32  ) 
+                SELECT ${Old_Question_DBV6_AppV32.COLUMN_QUESTION_ENTRY} , 
+                $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32
+                FROM tempTable
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+
+          await customStatement('''
+                ALTER TABLE ${Old_Answer_DBV6_AppV32.TABLE_NAME} RENAME TO tempTable
+                ''');
+
+          await customStatement('''
+          CREATE TABLE  ${Old_Answer_DBV6_AppV32.TABLE_NAME}
+             (  ${Old_Answer_DBV6_AppV32.COLUMN_ANSWER_ENTRY}
+            TEXT PRIMARY KEY NOT NULL, 
+            $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 DATETIME DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')) )
+                ''');
+
+          await customStatement('''
+                INSERT INTO ${Old_Answer_DBV6_AppV32.TABLE_NAME}  ( ${Old_Answer_DBV6_AppV32.COLUMN_ANSWER_ENTRY}
+                , $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 ) 
+                SELECT ${Old_Answer_DBV6_AppV32.COLUMN_ANSWER_ENTRY} ,
+                $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32
+                FROM tempTable
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+
+          await customStatement('''
+ALTER TABLE  ${Old_Linker_DBV6_AppV32.TABLE_NAME} RENAME TO tempTable
+                ''');
+
+          await customStatement('''
+CREATE TABLE ${Old_Linker_DBV6_AppV32.TABLE_NAME}
+             ( ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK} TEXT NOT NULL, 
+             ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK} TEXT NOT NULL, 
+             ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK} TEXT NOT NULL, 
+             ${Old_Linker_DBV6_AppV32.COLUMN_STUDY_DURING_ORDER} INTEGER NOT NULL DEFAULT -1 , 
+             ${Old_Linker_DBV6_AppV32.COLUMN_TEST_ORDER} INTEGER NOT NULL DEFAULT -1 , 
+             ${Old_Linker_DBV6_AppV32.COLUMN_TEST_WRONG_ANSWERS} TEXT NOT NULL DEFAULT '' , 
+             $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 DATETIME DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')), 
+            FOREIGN KEY ( ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK} ) REFERENCES 
+             ${Old_Question_DBV6_AppV32.TABLE_NAME} ( ${Old_Question_DBV6_AppV32.COLUMN_QUESTION_ENTRY} ) ON DELETE CASCADE ON UPDATE CASCADE ,
+            FOREIGN KEY ( ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK} ) REFERENCES 
+             ${Old_Answer_DBV6_AppV32.TABLE_NAME} ( ${Old_Answer_DBV6_AppV32.COLUMN_ANSWER_ENTRY} ) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY ( ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK} ) REFERENCES 
+             ${Old_Field_DBV6_AppV32.TABLE_NAME} ( ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME} ) ON DELETE CASCADE ON UPDATE CASCADE,
+            PRIMARY KEY ( ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK} ,
+             ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK} ,
+             ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK} ))
+                ''');
+
+          await customStatement('''
+                INSERT INTO ${Old_Linker_DBV6_AppV32.TABLE_NAME} ( ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK}
+                , ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK} ,
+                 ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK} ,
+                $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 ) 
+                SELECT ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK}
+                , ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK} ,
+                ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK} ,
+                $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32
+                FROM tempTable
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+        }
+
+      });
+    },
+  );
 }
 
 bool isValid(String uuid) {
