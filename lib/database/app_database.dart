@@ -39,13 +39,13 @@ class Entrys extends Table {
   DateTimeColumn get lastModificationAt =>
       dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
   IntColumn get order => integer()
-      .withDefault(Constant(Entrys.ORDER_MINIMUM_VALUE))
+      .withDefault(const Constant(Entrys.ORDER_MINIMUM_VALUE))
       .check(
         order.isSmallerOrEqualValue(Entrys.ORDER_MAXIMUM_VALUE) &
             order.isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
       )();
   BoolColumn get didAskedAtCurrentTestRound =>
-      boolean().withDefault(Constant(true))();
+      boolean().withDefault(const Constant(true))();
   DateTimeColumn get emulatedCreatedAt => dateTime().nullable()();
   IntColumn get rank => integer()
       .withDefault(Constant(Rank.normal.index))
@@ -110,15 +110,16 @@ class FieldLists extends Table {
         sortBy.isBiggerOrEqualValue(0) &
             sortBy.isSmallerThanValue(SortBy.MAX.index),
       )();
-  BoolColumn get doesReadAnswer => boolean().withDefault(Constant(false))();
+  BoolColumn get doesReadAnswer =>
+      boolean().withDefault(const Constant(false))();
   IntColumn get usageCount => integer()
-      .withDefault(Constant(0))
+      .withDefault(const Constant(0))
       .check(
         usageCount.isBiggerOrEqualValue(FieldLists.MINIMUM_USAGE_COUNT) &
             usageCount.isSmallerOrEqualValue(FieldLists.MAXIMUM_USAGE_COUNT),
       )();
   IntColumn get color => integer()
-      .withDefault(Constant(FieldLists.MAXIMUM_COLOR))
+      .withDefault(const Constant(FieldLists.MAXIMUM_COLOR))
       .check(
         color.isBiggerOrEqualValue(FieldLists.MINIMUM_COLOR) &
             color.isSmallerOrEqualValue(FieldLists.MAXIMUM_COLOR),
@@ -175,7 +176,7 @@ class FieldLists extends Table {
             ),
       )();
   BoolColumn get doesObfuscateQuestion =>
-      boolean().withDefault(Constant(false))();
+      boolean().withDefault(const Constant(false))();
 
   @override
   Set<Column> get primaryKey => {id};
@@ -211,13 +212,13 @@ class Fields extends Table {
   DateTimeColumn get lastModificationAt =>
       dateTime().check(lastModificationAt.isBiggerOrEqual(creationAt))();
   IntColumn get usageCount => integer()
-      .withDefault(Constant(Fields.DEFAULT_USAGE_COUNT))
+      .withDefault(const Constant(Fields.DEFAULT_USAGE_COUNT))
       .check(
         usageCount.isBiggerOrEqualValue(Fields.MINIMUM_USAGE_COUNT) &
             usageCount.isSmallerOrEqualValue(Fields.MAXIMUM_USAGE_COUNT),
       )();
   IntColumn get color => integer()
-      .withDefault(Constant(Fields.DEFAULT_COLOR))
+      .withDefault(const Constant(Fields.DEFAULT_COLOR))
       .check(
         color.isBiggerOrEqualValue(Fields.MINIMUM_COLOR) &
             color.isSmallerOrEqualValue(Fields.MAXIMUM_COLOR),
@@ -298,7 +299,7 @@ class Sessions extends Table {
         triesNumber.isSmallerOrEqualValue(Sessions.MAXIMUM_TRIES_NUMBER),
   )();
   IntColumn get triesCounter => integer()
-      .withDefault(Constant(0))
+      .withDefault(const Constant(0))
       .check(
         triesCounter.isBiggerOrEqualValue(Sessions.MINIMUM_TRIES_COUNTER) &
             triesCounter.isSmallerOrEqualValue(Sessions.MAXIMUM_TRIES_COUNTER) &
@@ -307,12 +308,13 @@ class Sessions extends Table {
   IntColumn get elapsedTime => integer().check(
     elapsedTime.isBiggerOrEqualValue(Sessions.MINIMUM_ELAPSED_TIME),
   )();
-  BoolColumn get isCompleted => boolean().withDefault(Constant(false))();
+  BoolColumn get isCompleted => boolean().withDefault(const Constant(false))();
   BoolColumn get lastCheckedAnswerResult =>
-      boolean().withDefault(Constant(false))();
-  BoolColumn get shouldCheckAnAnswer => boolean().withDefault(Constant(true))();
+      boolean().withDefault(const Constant(false))();
+  BoolColumn get shouldCheckAnAnswer =>
+      boolean().withDefault(const Constant(true))();
   IntColumn get currentHintCounter => integer()
-      .withDefault(Constant(0))
+      .withDefault(const Constant(0))
       .check(
         currentHintCounter.isBiggerOrEqualValue(
               Sessions.MINIMUM_CURRENT_HINT_COUNTER,
@@ -344,7 +346,7 @@ class TestSessions extends Table {
 
   TextColumn get sessionId => text().references(Sessions, #id)();
   IntColumn get wrongAnswerCounter => integer()
-      .withDefault(Constant(0))
+      .withDefault(const Constant(0))
       .check(
         wrongAnswerCounter.isBiggerOrEqualValue(
               TestSessions.MINIMUM_WRONG_ANSWER_COUNTER,
@@ -403,27 +405,36 @@ class WrongAnswers extends Table {
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  static const databaseFileName = "db.sqlite";
-  static LazyDatabase openConnection() {
-    return LazyDatabase(() async {
-      final dbDirectory = await getApplicationDocumentsDirectory();
-      final file = File(join(dbDirectory.path, databaseFileName));
-      return NativeDatabase(file);
-    });
-  }
+  static LazyDatabase openConnection() => LazyDatabase(() async {
+    const databaseFileName = 'data';
+    final applicationDocumentDirectory =
+        await getApplicationDocumentsDirectory();
+    var file = File(
+      join(
+        applicationDocumentDirectory.parent.path,
+        'databases',
+        databaseFileName,
+      ),
+    );
+    if (!file.existsSync()) {
+      file = File(join(applicationDocumentDirectory.path, databaseFileName));
+    }
+    return NativeDatabase(file);
+  });
 
   AppDatabase(QueryExecutor queryExecutor) : super(queryExecutor);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 14;
 
   @override
-  MigrationStrategy get migration {
-    return MigrationStrategy(
-      beforeOpen: (details) async {
-        await customStatement("PRAGMA foreign_keys = ON");
-      },
-    );
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (m) async {
+      await m.createAll();
+    },
+    beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+    },
   }
 }
 
