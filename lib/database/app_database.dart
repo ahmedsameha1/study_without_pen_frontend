@@ -1176,6 +1176,199 @@ DROP TABLE IF EXISTS field_type
                 ''');
         }
 
+        if (from < 13) {
+          await customStatement('''
+DELETE FROM ${FField.TABLE_NAME} WHERE ${Old_Field_DBV12_AppV68.COLUMN_FIELD_TYPE} = 1
+''');
+
+          await customStatement('''
+ALTER TABLE ${Old_Field_DBV12_AppV68.TABLE_NAME} RENAME TO tempTable
+''');
+
+          await customStatement('''
+CREATE TABLE IF NOT EXISTS ${FField.TABLE_NAME} ( 
+            $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+            ${FField.COLUMN_FIELD_NAME} TEXT UNIQUE NOT NULL, 
+            ${FField.COLUMN_ENTRY_QUESTION_COLUMN_DATA_TYPE} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_LOCALE} TEXT DEFAULT NULL, 
+            ${FField.COLUMN_CHECK_TYPE} INTEGER NOT NULL DEFAULT ${FField.DO_NOT_IGNORE_CASE} , 
+            ${FField.COLUMN_SORT_BY} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_COLOR} INTEGER NOT NULL DEFAULT -1, 
+            ${FField.COLUMN_LIST_TEXT_SIZE} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_QUESTION_AREA_SIZE} INTEGER NOT NULL DEFAULT 1, 
+            ${FField.COLUMN_ANSWER_AREA_SIZE} INTEGER NOT NULL DEFAULT 1, 
+            ${FField.COLUMN_TEST_TEXT_SIZE} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_ACTION_BAR_SHOWN} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_READ_ANSWER} INTEGER NOT NULL DEFAULT ${FField.DO_NOT_READ_ANSWER} , 
+            ${FField.COLUMN_USAGE_COUNT} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_CREATION_EMULATION_NUMBER} INTEGER NOT NULL DEFAULT ${Constants.NOT_EMULATED} , 
+            ${FField.COLUMN_CREATION_EMULATION_WHAT_DAYS} INTEGER DEFAULT NULL, 
+            ${FField.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TESTS} INTEGER NOT NULL DEFAULT ${FField.ZERO_RANDOM_QUICK_TESTS} , 
+            ${FField.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TRIES} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_QUESTIONS} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_RANDOM_QUICK_TEST_CONTROLLED_PORTION} INTEGER NOT NULL DEFAULT -1, 
+            ${FField.COLUMN_RANDOM_QUICK_TEST_WRONGNESS_LEVEL} INTEGER NOT NULL DEFAULT -1, 
+            ${FField.COLUMN_RANDOM_QUICK_TEST_RANK_LEVEL} INTEGER NOT NULL DEFAULT -1, 
+            ${FField.COLUMN_READING_QUESTION_LETTER_SECOND_TESTS} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_FIND_ANSWER_TIME_TESTS} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_TYPING_ANSWER_LETTER_SECOND_TESTS} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_READING_QUESTION_LETTER_SECOND_STUDY_TILL_CORRECT} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_FIND_ANSWER_TIME_STUDY_TILL_CORRECT} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_TYPING_ANSWER_LETTER_SECOND_STUDY_TILL_CORRECT} INTEGER NOT NULL DEFAULT 0, 
+            ${FField.COLUMN_TIME_OF_ANSWER_TESTS_DO_WHAT} INTEGER NOT NULL DEFAULT ${TimeOfAnswer.NOTIFY}, 
+            ${FField.COLUMN_OBFUSCATE_QUESTION} INTEGER NOT NULL DEFAULT 0, 
+            $CREATION_DATE DATETIME NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')) )
+''');
+
+          await customStatement('''
+INSERT INTO ${FField.TABLE_NAME} ( $COLUMN_ID
+                     , ${FField.COLUMN_FIELD_NAME}
+                     , ${FField.COLUMN_ENTRY_QUESTION_COLUMN_DATA_TYPE}
+                     , ${FField.COLUMN_LOCALE}
+                     , ${FField.COLUMN_CHECK_TYPE}
+                     , ${FField.COLUMN_SORT_BY}
+                     , ${FField.COLUMN_LIST_TEXT_SIZE}
+                     , ${FField.COLUMN_QUESTION_AREA_SIZE}
+                     , ${FField.COLUMN_ANSWER_AREA_SIZE}
+                     , ${FField.COLUMN_TEST_TEXT_SIZE}
+                     , ${FField.COLUMN_ACTION_BAR_SHOWN}
+                     , ${FField.COLUMN_READ_ANSWER}
+                     , ${FField.COLUMN_USAGE_COUNT}
+                     , ${FField.COLUMN_CREATION_EMULATION_NUMBER}
+                     , ${FField.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TESTS}
+                     , ${FField.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TRIES}
+                     , ${FField.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_QUESTIONS}
+                     , ${FField.COLUMN_RANDOM_QUICK_TEST_CONTROLLED_PORTION}
+                     , ${FField.COLUMN_RANDOM_QUICK_TEST_WRONGNESS_LEVEL}
+                     , ${FField.COLUMN_RANDOM_QUICK_TEST_RANK_LEVEL}
+                     , $CREATION_DATE )
+                    SELECT $COLUMN_ID
+                     , ${Old_Field_DBV12_AppV68.COLUMN_FIELD_NAME}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_ENTRY_QUESTION_COLUMN_DATA_TYPE}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_LOCALE}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_CHECK_TYPE}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_SORT_BY}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_LIST_TEXT_SIZE}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_QUESTION_AREA_SIZE}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_ANSWER_AREA_SIZE}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_TEST_TEXT_SIZE}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_ACTION_BAR_SHOWN}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_READ_ANSWER}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_USAGE_COUNT}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_CREATION_EMULATION_NUMBER}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TESTS}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TRIES}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_QUESTIONS}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_CONTROLLED_PORTION}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_WRONGNESS_LEVEL}
+                     , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_RANK_LEVEL}
+                     , $CREATION_DATE
+                     FROM tempTable
+''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+
+          await customStatement('''
+                ALTER TABLE ${String_Entry.TABLE_NAME} RENAME TO tempTable
+                ''');
+
+          await customStatement('''
+                CREATE TABLE IF NOT EXISTS ${String_Entry.TABLE_NAME} ( 
+            $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+            ${String_Entry.COLUMN_QUESTION} INTEGER NOT NULL, 
+            ${String_Entry.COLUMN_ANSWER} INTEGER NOT NULL, 
+            ${String_Entry.COLUMN_FIELD} INTEGER NOT NULL, 
+            ${String_Entry.COLUMN_PAUSED_ENHANCED_TEST_ORDER} INTEGER NOT NULL DEFAULT -1, 
+            ${String_Entry.COLUMN_PAUSED_FULLY_RANDOM_TEST_ORDER} INTEGER NOT NULL DEFAULT -1, 
+            ${String_Entry.COLUMN_PAUSED_STUDY_PERIOD_ORDER} INTEGER NOT NULL DEFAULT -1, 
+            ${String_Entry.COLUMN_PAUSED_STUDY_AGAIN_ENHANCED_TEST_ORDER} INTEGER NOT NULL DEFAULT -1, 
+            ${String_Entry.COLUMN_PAUSED_STUDY_AGAIN_FULLY_RANDOM_TEST_ORDER} INTEGER NOT NULL DEFAULT -1, 
+            ${String_Entry.COLUMN_ASKED_COUNT} INTEGER NOT NULL DEFAULT 0, 
+            ${String_Entry.COLUMN_WRONGLY_ANSWERED_COUNT} INTEGER NOT NULL DEFAULT 0, 
+            ${String_Entry.COLUMN_RANK} INTEGER NOT NULL DEFAULT 0, 
+            ${String_Entry.COLUMN_CREATION_EMULATED_DATE} DATETIME DEFAULT NULL, 
+            ${String_Entry.COLUMN_REMIND_AT} INTEGER DEFAULT NULL, 
+            ${String_Entry.COLUMN_REMIND_AT_PENDINGINTENT_REQUEST} INTEGER DEFAULT NULL, 
+            ${String_Entry.COLUMN_WHETHER_ASKED_AT_CURRENT_TEST_ROUND} INTEGER DEFAULT ${TestRound.ASKED_AT_CURRENT_ROUND} , 
+            ${String_Entry.COLUMN_ORDER_OF_ENTRY} INTEGER DEFAULT 999999999, 
+            $CREATION_DATE DATETIME NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')), 
+            FOREIGN KEY( ${String_Entry.COLUMN_QUESTION} ) REFERENCES ${STring.TABLE_NAME} ( $COLUMN_ID ) ON UPDATE CASCADE ON DELETE NO ACTION, 
+            FOREIGN KEY( ${String_Entry.COLUMN_ANSWER} ) REFERENCES ${STring.TABLE_NAME} ( $COLUMN_ID ) ON UPDATE CASCADE ON DELETE NO ACTION, 
+            FOREIGN KEY( ${String_Entry.COLUMN_FIELD} ) REFERENCES ${FField.TABLE_NAME} ( $COLUMN_ID ) ON UPDATE CASCADE ON DELETE CASCADE, 
+             UNIQUE ( ${String_Entry.COLUMN_QUESTION} , 
+             ${String_Entry.COLUMN_ANSWER} , 
+             ${String_Entry.COLUMN_FIELD} ))
+                ''');
+
+          await customStatement('''
+                INSERT INTO ${String_Entry.TABLE_NAME} ( $COLUMN_ID
+                     , ${String_Entry.COLUMN_QUESTION}
+                     , ${String_Entry.COLUMN_ANSWER}
+                     , ${String_Entry.COLUMN_FIELD}
+                     , ${String_Entry.COLUMN_ASKED_COUNT}
+                     , ${String_Entry.COLUMN_WRONGLY_ANSWERED_COUNT}
+                     , ${String_Entry.COLUMN_RANK}
+                     , ${String_Entry.COLUMN_CREATION_EMULATED_DATE}
+                     , ${String_Entry.COLUMN_REMIND_AT}
+                     , ${String_Entry.COLUMN_REMIND_AT_PENDINGINTENT_REQUEST}
+                     , ${String_Entry.COLUMN_WHETHER_ASKED_AT_CURRENT_TEST_ROUND}
+                     , ${String_Entry.COLUMN_ORDER_OF_ENTRY}
+                     , $CREATION_DATE)
+                    SELECT $COLUMN_ID
+                     , ${String_Entry.COLUMN_QUESTION}
+                     , ${String_Entry.COLUMN_ANSWER}
+                     , ${String_Entry.COLUMN_FIELD}
+                     , ${String_Entry.COLUMN_ASKED_COUNT}
+                     , ${String_Entry.COLUMN_WRONGLY_ANSWERED_COUNT}
+                     , ${String_Entry.COLUMN_RANK}
+                     , ${String_Entry.COLUMN_CREATION_EMULATED_DATE}
+                     , ${String_Entry.COLUMN_REMIND_AT}
+                     , ${String_Entry.COLUMN_REMIND_AT_PENDINGINTENT_REQUEST}
+                     , ${String_Entry.COLUMN_WHETHER_ASKED_AT_CURRENT_TEST_ROUND}
+                     , ${String_Entry.COLUMN_ORDER_OF_ENTRY}
+                     , $CREATION_DATE
+                     FROM tempTable
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+
+          await customStatement('''
+UPDATE ${String_Entry.TABLE_NAME} SET ${String_Entry.COLUMN_ORDER_OF_ENTRY} = 999999999 WHERE ${String_Entry.COLUMN_ORDER_OF_ENTRY} IS NULL 
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS ${Old_Study_Period_Repeated_Entry_DBV12_AppV68.TABLE_NAME} 
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS ${Old_Study_Period_Paused_DBV12_AppV68.TABLE_NAME} 
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS symbol
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS field_type_symbol
+                ''');
+
+          await customStatement('''
+DELETE FROM ${FField.TABLE_NAME} WHERE LENGTH( ${FField.COLUMN_FIELD_NAME} ) > 500
+''');
+
+          await customStatement('''
+DELETE FROM ${String_Entry.TABLE_NAME} WHERE ${String_Entry.COLUMN_QUESTION} IN (SELECT $COLUMN_ID FROM ${STring.TABLE_NAME} WHERE LENGTH( ${STring.COLUMN_VALUE} ) > 500 )
+OR ${String_Entry.COLUMN_ANSWER} IN (SELECT $COLUMN_ID FROM ${STring.TABLE_NAME} WHERE LENGTH( ${STring.COLUMN_VALUE} ) > 500 )
+''');
+
+          await customStatement('''
+DELETE FROM ${STring.TABLE_NAME} WHERE LENGTH( ${STring.COLUMN_VALUE} ) > 500
+''');
+        }
       });
     },
   );
