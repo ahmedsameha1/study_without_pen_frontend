@@ -1,0 +1,2495 @@
+{
+  "_meta": {
+    "description": "This file contains a serialized version of schema entities for drift.",
+    "version": "1.3.0"
+  },
+  "options": {
+    "store_date_time_values_as_text": true
+  },
+  "entities": [
+    {
+      "id": 0,
+      "references": [],
+      "type": "table",
+      "data": {
+        "name": "fields",
+        "was_declared_in_moor": false,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": "() => const Uuid().v4()",
+            "dsl_features": []
+          },
+          {
+            "name": "user_account_id",
+            "getter_name": "userAccountId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "StringExpressionOperators",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "userAccountId",
+                        "tag": "userAccountId"
+                      },
+                      ").trim().length).isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Fields",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_LENGTH_OF_USER_ACCOUNT_ID)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "name",
+            "getter_name": "name",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "StringExpressionOperators",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "name",
+                        "tag": "name"
+                      },
+                      ").trim().length).isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Fields",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_LENGTH_OF_NAME) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "name",
+                        "tag": "name"
+                      },
+                      ".length).isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Fields",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_LENGTH_OF_NAME)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "creation_at",
+            "getter_name": "creationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "last_modification_at",
+            "getter_name": "lastModificationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "lastModificationAt",
+                        "tag": "lastModificationAt"
+                      },
+                      ").isBiggerOrEqual(",
+                      {
+                        "lexeme": "creationAt",
+                        "tag": "creationAt"
+                      },
+                      ")"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "usage_count",
+            "getter_name": "usageCount",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "usageCount",
+                        "tag": "usageCount"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Fields",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_USAGE_COUNT) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "usageCount",
+                        "tag": "usageCount"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Fields",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_USAGE_COUNT)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "color",
+            "getter_name": "color",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('4294967295')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "color",
+                        "tag": "color"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Fields",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_COLOR) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "color",
+                        "tag": "color"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Fields",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_COLOR)"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [],
+        "explicit_pk": [
+          "id"
+        ],
+        "unique_keys": [
+          [
+            "user_account_id",
+            "name"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "references": [
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "field_lists",
+        "was_declared_in_moor": false,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": "() => const Uuid().v4()",
+            "dsl_features": []
+          },
+          {
+            "name": "field_id",
+            "getter_name": "fieldId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "REFERENCES fields (id)",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "REFERENCES fields (id)"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "fields",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "name",
+            "getter_name": "name",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "StringExpressionOperators",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "name",
+                        "tag": "name"
+                      },
+                      ").trim().length).isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_LENGTH_OF_NAME) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "name",
+                        "tag": "name"
+                      },
+                      ".length).isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_LENGTH_OF_NAME)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "creation_at",
+            "getter_name": "creationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "last_modification_at",
+            "getter_name": "lastModificationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "lastModificationAt",
+                        "tag": "lastModificationAt"
+                      },
+                      ").isBiggerOrEqual(",
+                      {
+                        "lexeme": "creationAt",
+                        "tag": "creationAt"
+                      },
+                      ")"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "language_tag",
+            "getter_name": "languageTag",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "check_type",
+            "getter_name": "checkType",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "checkType",
+                        "tag": "checkType"
+                      },
+                      ").isBiggerOrEqualValue(0) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "checkType",
+                        "tag": "checkType"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "CheckType",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".DO_NOT_IGNORE_CASE.index)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "sort_by",
+            "getter_name": "sortBy",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "sortBy",
+                        "tag": "sortBy"
+                      },
+                      ").isBiggerOrEqualValue(0) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "sortBy",
+                        "tag": "sortBy"
+                      },
+                      ").isSmallerThanValue(",
+                      {
+                        "lexeme": "SortBy",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAX.index)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "does_read_answer",
+            "getter_name": "doesReadAnswer",
+            "moor_type": "bool",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "CHECK (\"does_read_answer\" IN (0, 1))",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "CHECK (\"does_read_answer\" IN (0, 1))"
+            },
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "usage_count",
+            "getter_name": "usageCount",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "usageCount",
+                        "tag": "usageCount"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_USAGE_COUNT) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "usageCount",
+                        "tag": "usageCount"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_USAGE_COUNT)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "color",
+            "getter_name": "color",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('4294967295')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "color",
+                        "tag": "color"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_COLOR) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "color",
+                        "tag": "color"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_COLOR)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "emulation_number_of_questions",
+            "getter_name": "emulationNumberOfQuestions",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "emulationNumberOfQuestions",
+                        "tag": "emulationNumberOfQuestions"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_EMULATION_NUMBER_OF_QUESTIONS) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "emulationNumberOfQuestions",
+                        "tag": "emulationNumberOfQuestions"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_EMULATION_NUMBER_OF_QUESTIONS)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "emulation_days",
+            "getter_name": "emulationDays",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "tests_reading_question_letter_duration",
+            "getter_name": "testsReadingQuestionLetterDuration",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "testsReadingQuestionLetterDuration",
+                        "tag": "testsReadingQuestionLetterDuration"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_TESTS_DURATIONS)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "tests_finding_answer_duration",
+            "getter_name": "testsFindingAnswerDuration",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "testsFindingAnswerDuration",
+                        "tag": "testsFindingAnswerDuration"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_TESTS_DURATIONS)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "tests_typing_answer_letter_duration",
+            "getter_name": "testsTypingAnswerLetterDuration",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "testsTypingAnswerLetterDuration",
+                        "tag": "testsTypingAnswerLetterDuration"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_TESTS_DURATIONS)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "study_till_correct_reading_question_letter_duration",
+            "getter_name": "studyTillCorrectReadingQuestionLetterDuration",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "studyTillCorrectReadingQuestionLetterDuration",
+                        "tag": "studyTillCorrectReadingQuestionLetterDuration"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_STUDY_TILL_CORRECT_DURATIONS)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "study_till_correct_finding_answer_duration",
+            "getter_name": "studyTillCorrectFindingAnswerDuration",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "studyTillCorrectFindingAnswerDuration",
+                        "tag": "studyTillCorrectFindingAnswerDuration"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_STUDY_TILL_CORRECT_DURATIONS)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "study_till_correct_typing_answer_letter_duration",
+            "getter_name": "studyTillCorrectTypingAnswerLetterDuration",
+            "moor_type": "int",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "studyTillCorrectTypingAnswerLetterDuration",
+                        "tag": "studyTillCorrectTypingAnswerLetterDuration"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldLists",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_STUDY_TILL_CORRECT_DURATIONS)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "tests_time_of_answer_action",
+            "getter_name": "testsTimeOfAnswerAction",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "testsTimeOfAnswerAction",
+                        "tag": "testsTimeOfAnswerAction"
+                      },
+                      ").isBiggerOrEqualValue(0) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "testsTimeOfAnswerAction",
+                        "tag": "testsTimeOfAnswerAction"
+                      },
+                      ").isSmallerThanValue(",
+                      {
+                        "lexeme": "TimeOfAnswerAction",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAX.index)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "does_obfuscate_question",
+            "getter_name": "doesObfuscateQuestion",
+            "moor_type": "bool",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "CHECK (\"does_obfuscate_question\" IN (0, 1))",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "CHECK (\"does_obfuscate_question\" IN (0, 1))"
+            },
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [],
+        "explicit_pk": [
+          "id"
+        ],
+        "unique_keys": [
+          [
+            "field_id",
+            "name"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "references": [
+        1
+      ],
+      "type": "table",
+      "data": {
+        "name": "entrys",
+        "was_declared_in_moor": false,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": "() => const Uuid().v4()",
+            "dsl_features": []
+          },
+          {
+            "name": "field_list_id",
+            "getter_name": "fieldListId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "REFERENCES field_lists (id)",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "REFERENCES field_lists (id)"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "field_lists",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "answer",
+            "getter_name": "answer",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "StringExpressionOperators",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "answer",
+                        "tag": "answer"
+                      },
+                      ").trim().length).isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Entrys",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".minimumTextLength) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "answer",
+                        "tag": "answer"
+                      },
+                      ".length).isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Entrys",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".maximumTextLength)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "question",
+            "getter_name": "question",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "StringExpressionOperators",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "question",
+                        "tag": "question"
+                      },
+                      ").trim().length).isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Entrys",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".minimumTextLength) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "question",
+                        "tag": "question"
+                      },
+                      ".length).isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Entrys",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".maximumTextLength)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "creation_at",
+            "getter_name": "creationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "last_modification_at",
+            "getter_name": "lastModificationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "lastModificationAt",
+                        "tag": "lastModificationAt"
+                      },
+                      ").isBiggerOrEqual(",
+                      {
+                        "lexeme": "creationAt",
+                        "tag": "creationAt"
+                      },
+                      ")"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "order",
+            "getter_name": "order",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "order",
+                        "tag": "order"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Entrys",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".ORDER_MAXIMUM_VALUE) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "order",
+                        "tag": "order"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Entrys",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".ORDER_MINIMUM_VALUE)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "did_asked_at_current_test_round",
+            "getter_name": "didAskedAtCurrentTestRound",
+            "moor_type": "bool",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "CHECK (\"did_asked_at_current_test_round\" IN (0, 1))",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "CHECK (\"did_asked_at_current_test_round\" IN (0, 1))"
+            },
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "emulated_created_at",
+            "getter_name": "emulatedCreatedAt",
+            "moor_type": "dateTime",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "rank",
+            "getter_name": "rank",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "rank",
+                        "tag": "rank"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Rank",
+                        "import_uri": "package:study_without_pen_by_flutter/database/entrys_dao.dart"
+                      },
+                      ".vital.index) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "rank",
+                        "tag": "rank"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Rank",
+                        "import_uri": "package:study_without_pen_by_flutter/database/entrys_dao.dart"
+                      },
+                      ".low.index)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "asked_count",
+            "getter_name": "askedCount",
+            "moor_type": "bigInt",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "askedCount",
+                        "tag": "askedCount"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Entrys",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".ASKED_COUNT_MINIMUM_VALUE)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "wrongly_answered_count",
+            "getter_name": "wronglyAnsweredCount",
+            "moor_type": "bigInt",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "wronglyAnsweredCount",
+                        "tag": "wronglyAnsweredCount"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Entrys",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".WRONGLY_ANSWERED_COUNT_MINIMUM_VALUE)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "last_asked_at",
+            "getter_name": "lastAskedAt",
+            "moor_type": "dateTime",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [],
+        "explicit_pk": [
+          "id"
+        ],
+        "unique_keys": [
+          [
+            "field_list_id",
+            "answer",
+            "question"
+          ]
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "references": [
+        0
+      ],
+      "type": "table",
+      "data": {
+        "name": "field_notes",
+        "was_declared_in_moor": false,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": "() => const Uuid().v4()",
+            "dsl_features": []
+          },
+          {
+            "name": "field_id",
+            "getter_name": "fieldId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "REFERENCES fields (id)",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "REFERENCES fields (id)"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "fields",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "tex_t",
+            "getter_name": "texT",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "StringExpressionOperators",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "texT",
+                        "tag": "texT"
+                      },
+                      ").trim().length).isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldNotes",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_LENGTH_OF_TEXT) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "texT",
+                        "tag": "texT"
+                      },
+                      ".length).isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "FieldNotes",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_LENGTH_OF_TEXT)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "creation_at",
+            "getter_name": "creationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "last_modification_at",
+            "getter_name": "lastModificationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "lastModificationAt",
+                        "tag": "lastModificationAt"
+                      },
+                      ").isBiggerOrEqual(",
+                      {
+                        "lexeme": "creationAt",
+                        "tag": "creationAt"
+                      },
+                      ")"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [],
+        "explicit_pk": [
+          "id"
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "references": [
+        1
+      ],
+      "type": "table",
+      "data": {
+        "name": "field_list_notes",
+        "was_declared_in_moor": false,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": "() => const Uuid().v4()",
+            "dsl_features": []
+          },
+          {
+            "name": "field_list_id",
+            "getter_name": "fieldListId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "REFERENCES field_lists (id)",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "REFERENCES field_lists (id)"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "field_lists",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "tex_t",
+            "getter_name": "texT",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "StringExpressionOperators",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "texT",
+                        "tag": "texT"
+                      },
+                      ").trim().length).isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "FieldListNotes",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_LENGTH_OF_TEXT) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "texT",
+                        "tag": "texT"
+                      },
+                      ".length).isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "FieldListNotes",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_LENGTH_OF_TEXT)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "creation_at",
+            "getter_name": "creationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "last_modification_at",
+            "getter_name": "lastModificationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "lastModificationAt",
+                        "tag": "lastModificationAt"
+                      },
+                      ").isBiggerOrEqual(",
+                      {
+                        "lexeme": "creationAt",
+                        "tag": "creationAt"
+                      },
+                      ")"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [],
+        "explicit_pk": [
+          "id"
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "references": [
+        1
+      ],
+      "type": "table",
+      "data": {
+        "name": "sessions",
+        "was_declared_in_moor": false,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": "() => const Uuid().v4()",
+            "dsl_features": []
+          },
+          {
+            "name": "field_list_id",
+            "getter_name": "fieldListId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "REFERENCES field_lists (id)",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "REFERENCES field_lists (id)"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "field_lists",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "current_question_counter",
+            "getter_name": "currentQuestionCounter",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "currentQuestionCounter",
+                        "tag": "currentQuestionCounter"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Sessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_CURRENT_QUESTION_COUNTER) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "currentQuestionCounter",
+                        "tag": "currentQuestionCounter"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Sessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_CURRENT_QUESTION_COUNTER)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "tries_number",
+            "getter_name": "triesNumber",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "triesNumber",
+                        "tag": "triesNumber"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Sessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_TRIES_NUMBER) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "triesNumber",
+                        "tag": "triesNumber"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Sessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_TRIES_NUMBER)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "tries_counter",
+            "getter_name": "triesCounter",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "triesCounter",
+                        "tag": "triesCounter"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Sessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_TRIES_COUNTER) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "triesCounter",
+                        "tag": "triesCounter"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Sessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_TRIES_COUNTER) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "triesCounter",
+                        "tag": "triesCounter"
+                      },
+                      ").isSmallerThan(",
+                      {
+                        "lexeme": "triesNumber",
+                        "tag": "triesNumber"
+                      },
+                      ")"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "elapsed_time",
+            "getter_name": "elapsedTime",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "elapsedTime",
+                        "tag": "elapsedTime"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Sessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_ELAPSED_TIME)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "is_completed",
+            "getter_name": "isCompleted",
+            "moor_type": "bool",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "CHECK (\"is_completed\" IN (0, 1))",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "CHECK (\"is_completed\" IN (0, 1))"
+            },
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "last_checked_answer_result",
+            "getter_name": "lastCheckedAnswerResult",
+            "moor_type": "bool",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "CHECK (\"last_checked_answer_result\" IN (0, 1))",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "CHECK (\"last_checked_answer_result\" IN (0, 1))"
+            },
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "should_check_an_answer",
+            "getter_name": "shouldCheckAnAnswer",
+            "moor_type": "bool",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "CHECK (\"should_check_an_answer\" IN (0, 1))",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "CHECK (\"should_check_an_answer\" IN (0, 1))"
+            },
+            "default_dart": "const CustomExpression('1')",
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "current_hint_counter",
+            "getter_name": "currentHintCounter",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "currentHintCounter",
+                        "tag": "currentHintCounter"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "Sessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_CURRENT_HINT_COUNTER) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "currentHintCounter",
+                        "tag": "currentHintCounter"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "Sessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_CURRENT_HINT_COUNTER)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "creation_at",
+            "getter_name": "creationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          },
+          {
+            "name": "last_modification_at",
+            "getter_name": "lastModificationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "lastModificationAt",
+                        "tag": "lastModificationAt"
+                      },
+                      ").isBiggerOrEqual(",
+                      {
+                        "lexeme": "creationAt",
+                        "tag": "creationAt"
+                      },
+                      ")"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [],
+        "explicit_pk": [
+          "id"
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "references": [
+        5,
+        2
+      ],
+      "type": "table",
+      "data": {
+        "name": "session_entrys",
+        "was_declared_in_moor": false,
+        "columns": [
+          {
+            "name": "session_id",
+            "getter_name": "sessionId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "REFERENCES sessions (id)",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "REFERENCES sessions (id)"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "sessions",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "entry_id",
+            "getter_name": "entryId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "REFERENCES entrys (id)",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "REFERENCES entrys (id)"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "entrys",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [],
+        "explicit_pk": [
+          "session_id",
+          "entry_id"
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "references": [
+        5
+      ],
+      "type": "table",
+      "data": {
+        "name": "test_sessions",
+        "was_declared_in_moor": false,
+        "columns": [
+          {
+            "name": "session_id",
+            "getter_name": "sessionId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "REFERENCES sessions (id)",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "REFERENCES sessions (id)"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "sessions",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "wrong_answer_counter",
+            "getter_name": "wrongAnswerCounter",
+            "moor_type": "int",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": "const CustomExpression('0')",
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "wrongAnswerCounter",
+                        "tag": "wrongAnswerCounter"
+                      },
+                      ").isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "TestSessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_WRONG_ANSWER_COUNTER) & ",
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "wrongAnswerCounter",
+                        "tag": "wrongAnswerCounter"
+                      },
+                      ").isSmallerOrEqualValue(",
+                      {
+                        "lexeme": "TestSessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MAXIMUM_WRONG_ANSWER_COUNTER)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "last_answer",
+            "getter_name": "lastAnswer",
+            "moor_type": "string",
+            "nullable": true,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "StringExpressionOperators",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "lastAnswer",
+                        "tag": "lastAnswer"
+                      },
+                      ").trim().length).isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "TestSessions",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_LAST_ANSWER)"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [],
+        "explicit_pk": [
+          "session_id"
+        ]
+      }
+    },
+    {
+      "id": 8,
+      "references": [
+        5,
+        2
+      ],
+      "type": "table",
+      "data": {
+        "name": "wrong_answers",
+        "was_declared_in_moor": false,
+        "columns": [
+          {
+            "name": "id",
+            "getter_name": "id",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": "() => const Uuid().v4()",
+            "dsl_features": []
+          },
+          {
+            "name": "session_id",
+            "getter_name": "sessionId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "REFERENCES sessions (id)",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "REFERENCES sessions (id)"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "sessions",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "entry_id",
+            "getter_name": "entryId",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "defaultConstraints": "REFERENCES entrys (id)",
+            "dialectAwareDefaultConstraints": {
+              "sqlite": "REFERENCES entrys (id)"
+            },
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "foreign_key": {
+                  "to": {
+                    "table": "entrys",
+                    "column": "id"
+                  },
+                  "initially_deferred": false,
+                  "on_update": null,
+                  "on_delete": null
+                }
+              }
+            ]
+          },
+          {
+            "name": "value",
+            "getter_name": "value",
+            "moor_type": "string",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": [
+              {
+                "check": {
+                  "dart_expression": {
+                    "elements": [
+                      {
+                        "lexeme": "ComparableExpr",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "StringExpressionOperators",
+                        "import_uri": "package:drift/src/runtime/query_builder/query_builder.dart"
+                      },
+                      "(",
+                      {
+                        "lexeme": "value",
+                        "tag": "value"
+                      },
+                      ").trim().length).isBiggerOrEqualValue(",
+                      {
+                        "lexeme": "WrongAnswers",
+                        "import_uri": "package:study_without_pen_by_flutter/database/app_database.dart"
+                      },
+                      ".MINIMUM_VALUE_LENGTH)"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "creation_at",
+            "getter_name": "creationAt",
+            "moor_type": "dateTime",
+            "nullable": false,
+            "customConstraints": null,
+            "default_dart": null,
+            "default_client_dart": null,
+            "dsl_features": []
+          }
+        ],
+        "is_virtual": false,
+        "without_rowid": false,
+        "constraints": [],
+        "explicit_pk": [
+          "id"
+        ]
+      }
+    }
+  ],
+  "fixed_sql": [
+    {
+      "name": "fields",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"fields\" (\"id\" TEXT NOT NULL, \"user_account_id\" TEXT NOT NULL CHECK(LENGTH(TRIM(\"user_account_id\")) >= 28), \"name\" TEXT NOT NULL CHECK(LENGTH(TRIM(\"name\")) >= 1 AND LENGTH(\"name\") <= 64), \"creation_at\" TEXT NOT NULL, \"last_modification_at\" TEXT NOT NULL CHECK(JULIANDAY(\"last_modification_at\") >= JULIANDAY(\"creation_at\")), \"usage_count\" INTEGER NOT NULL DEFAULT 0 CHECK(\"usage_count\" >= 0 AND \"usage_count\" <= 4294967295), \"color\" INTEGER NOT NULL DEFAULT 4294967295 CHECK(\"color\" >= 0 AND \"color\" <= 4294967295), PRIMARY KEY (\"id\"), UNIQUE (\"user_account_id\", \"name\"));"
+        }
+      ]
+    },
+    {
+      "name": "field_lists",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"field_lists\" (\"id\" TEXT NOT NULL, \"field_id\" TEXT NOT NULL REFERENCES fields (id), \"name\" TEXT NOT NULL CHECK(LENGTH(TRIM(\"name\")) >= 1 AND LENGTH(\"name\") <= 64), \"creation_at\" TEXT NOT NULL, \"last_modification_at\" TEXT NOT NULL CHECK(JULIANDAY(\"last_modification_at\") >= JULIANDAY(\"creation_at\")), \"language_tag\" TEXT NULL, \"check_type\" INTEGER NOT NULL DEFAULT 0 CHECK(\"check_type\" >= 0 AND \"check_type\" <= 3), \"sort_by\" INTEGER NOT NULL DEFAULT 0 CHECK(\"sort_by\" >= 0 AND \"sort_by\" < 14), \"does_read_answer\" INTEGER NOT NULL DEFAULT 0 CHECK (\"does_read_answer\" IN (0, 1)), \"usage_count\" INTEGER NOT NULL DEFAULT 0 CHECK(\"usage_count\" >= 0 AND \"usage_count\" <= 65535), \"color\" INTEGER NOT NULL DEFAULT 4294967295 CHECK(\"color\" >= 0 AND \"color\" <= 4294967295), \"emulation_number_of_questions\" INTEGER NULL CHECK(\"emulation_number_of_questions\" >= 0 AND \"emulation_number_of_questions\" <= 255), \"emulation_days\" TEXT NULL, \"tests_reading_question_letter_duration\" INTEGER NULL CHECK(\"tests_reading_question_letter_duration\" >= 1), \"tests_finding_answer_duration\" INTEGER NULL CHECK(\"tests_finding_answer_duration\" >= 1), \"tests_typing_answer_letter_duration\" INTEGER NULL CHECK(\"tests_typing_answer_letter_duration\" >= 1), \"study_till_correct_reading_question_letter_duration\" INTEGER NULL CHECK(\"study_till_correct_reading_question_letter_duration\" >= 1), \"study_till_correct_finding_answer_duration\" INTEGER NULL CHECK(\"study_till_correct_finding_answer_duration\" >= 1), \"study_till_correct_typing_answer_letter_duration\" INTEGER NULL CHECK(\"study_till_correct_typing_answer_letter_duration\" >= 1), \"tests_time_of_answer_action\" INTEGER NOT NULL DEFAULT 1 CHECK(\"tests_time_of_answer_action\" >= 0 AND \"tests_time_of_answer_action\" < 2), \"does_obfuscate_question\" INTEGER NOT NULL DEFAULT 0 CHECK (\"does_obfuscate_question\" IN (0, 1)), PRIMARY KEY (\"id\"), UNIQUE (\"field_id\", \"name\"));"
+        }
+      ]
+    },
+    {
+      "name": "entrys",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"entrys\" (\"id\" TEXT NOT NULL, \"field_list_id\" TEXT NOT NULL REFERENCES field_lists (id), \"answer\" TEXT NOT NULL CHECK(LENGTH(TRIM(\"answer\")) >= 1 AND LENGTH(\"answer\") <= 2000), \"question\" TEXT NOT NULL CHECK(LENGTH(TRIM(\"question\")) >= 1 AND LENGTH(\"question\") <= 2000), \"creation_at\" TEXT NOT NULL, \"last_modification_at\" TEXT NOT NULL CHECK(JULIANDAY(\"last_modification_at\") >= JULIANDAY(\"creation_at\")), \"order\" INTEGER NOT NULL DEFAULT 0 CHECK(\"order\" <= 65535 AND \"order\" >= 0), \"did_asked_at_current_test_round\" INTEGER NOT NULL DEFAULT 1 CHECK (\"did_asked_at_current_test_round\" IN (0, 1)), \"emulated_created_at\" TEXT NULL, \"rank\" INTEGER NOT NULL DEFAULT 1 CHECK(\"rank\" <= 3 AND \"rank\" >= 0), \"asked_count\" INTEGER NOT NULL DEFAULT 0 CHECK(\"asked_count\" >= 0), \"wrongly_answered_count\" INTEGER NOT NULL DEFAULT 0 CHECK(\"wrongly_answered_count\" >= 0), \"last_asked_at\" TEXT NULL, PRIMARY KEY (\"id\"), UNIQUE (\"field_list_id\", \"answer\", \"question\"));"
+        }
+      ]
+    },
+    {
+      "name": "field_notes",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"field_notes\" (\"id\" TEXT NOT NULL, \"field_id\" TEXT NOT NULL REFERENCES fields (id), \"tex_t\" TEXT NOT NULL CHECK(LENGTH(TRIM(\"tex_t\")) >= 1 AND LENGTH(\"tex_t\") <= 2000), \"creation_at\" TEXT NOT NULL, \"last_modification_at\" TEXT NOT NULL CHECK(JULIANDAY(\"last_modification_at\") >= JULIANDAY(\"creation_at\")), PRIMARY KEY (\"id\"));"
+        }
+      ]
+    },
+    {
+      "name": "field_list_notes",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"field_list_notes\" (\"id\" TEXT NOT NULL, \"field_list_id\" TEXT NOT NULL REFERENCES field_lists (id), \"tex_t\" TEXT NOT NULL CHECK(LENGTH(TRIM(\"tex_t\")) >= 1 AND LENGTH(\"tex_t\") <= 2000), \"creation_at\" TEXT NOT NULL, \"last_modification_at\" TEXT NOT NULL CHECK(JULIANDAY(\"last_modification_at\") >= JULIANDAY(\"creation_at\")), PRIMARY KEY (\"id\"));"
+        }
+      ]
+    },
+    {
+      "name": "sessions",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"sessions\" (\"id\" TEXT NOT NULL, \"field_list_id\" TEXT NOT NULL REFERENCES field_lists (id), \"current_question_counter\" INTEGER NOT NULL CHECK(\"current_question_counter\" >= 0 AND \"current_question_counter\" <= 4294967295), \"tries_number\" INTEGER NOT NULL CHECK(\"tries_number\" >= 0 AND \"tries_number\" <= 255), \"tries_counter\" INTEGER NOT NULL DEFAULT 0 CHECK((\"tries_counter\" >= 0 AND \"tries_counter\" <= 255) AND \"tries_counter\" < \"tries_number\"), \"elapsed_time\" INTEGER NOT NULL CHECK(\"elapsed_time\" >= 1), \"is_completed\" INTEGER NOT NULL DEFAULT 0 CHECK (\"is_completed\" IN (0, 1)), \"last_checked_answer_result\" INTEGER NOT NULL DEFAULT 0 CHECK (\"last_checked_answer_result\" IN (0, 1)), \"should_check_an_answer\" INTEGER NOT NULL DEFAULT 1 CHECK (\"should_check_an_answer\" IN (0, 1)), \"current_hint_counter\" INTEGER NOT NULL DEFAULT 0 CHECK(\"current_hint_counter\" >= 0 AND \"current_hint_counter\" <= 255), \"creation_at\" TEXT NOT NULL, \"last_modification_at\" TEXT NOT NULL CHECK(JULIANDAY(\"last_modification_at\") >= JULIANDAY(\"creation_at\")), PRIMARY KEY (\"id\"));"
+        }
+      ]
+    },
+    {
+      "name": "session_entrys",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"session_entrys\" (\"session_id\" TEXT NOT NULL REFERENCES sessions (id), \"entry_id\" TEXT NOT NULL REFERENCES entrys (id), PRIMARY KEY (\"session_id\", \"entry_id\"));"
+        }
+      ]
+    },
+    {
+      "name": "test_sessions",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"test_sessions\" (\"session_id\" TEXT NOT NULL REFERENCES sessions (id), \"wrong_answer_counter\" INTEGER NOT NULL DEFAULT 0 CHECK(\"wrong_answer_counter\" >= 0 AND \"wrong_answer_counter\" <= 4294967295), \"last_answer\" TEXT NULL CHECK(LENGTH(TRIM(\"last_answer\")) >= 1), PRIMARY KEY (\"session_id\"));"
+        }
+      ]
+    },
+    {
+      "name": "wrong_answers",
+      "sql": [
+        {
+          "dialect": "sqlite",
+          "sql": "CREATE TABLE IF NOT EXISTS \"wrong_answers\" (\"id\" TEXT NOT NULL, \"session_id\" TEXT NOT NULL REFERENCES sessions (id), \"entry_id\" TEXT NOT NULL REFERENCES entrys (id), \"value\" TEXT NOT NULL CHECK(LENGTH(TRIM(\"value\")) >= 1), \"creation_at\" TEXT NOT NULL, PRIMARY KEY (\"id\"));"
+        }
+      ]
+    }
+  ]
+}
