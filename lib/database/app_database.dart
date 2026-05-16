@@ -1104,6 +1104,78 @@ CREATE TABLE IF NOT EXISTS ${Field_Note.TABLE_NAME} (
             ${Field_Note.COLUMN_NOTE}  ))
                 ''');
         }
+
+        if (from < 11) {
+          await customStatement('''
+DROP TABLE IF EXISTS field_type_symbol 
+                ''');
+
+          await customStatement('''
+DROP TABLE IF EXISTS field_type
+                ''');
+
+          await customStatement('''
+                ALTER TABLE ${Old_String_Entry.TABLE_NAME} RENAME TO tempTable
+                ''');
+
+          await customStatement('''
+                CREATE TABLE IF NOT EXISTS ${String_Entry.TABLE_NAME} ( 
+            $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+            ${String_Entry.COLUMN_QUESTION} INTEGER NOT NULL, 
+            ${String_Entry.COLUMN_ANSWER} INTEGER NOT NULL, 
+            ${String_Entry.COLUMN_FIELD} INTEGER NOT NULL, 
+            ${String_Entry.COLUMN_ASKED_COUNT} INTEGER NOT NULL DEFAULT 0, 
+            ${String_Entry.COLUMN_WRONGLY_ANSWERED_COUNT} INTEGER NOT NULL DEFAULT 0, 
+            ${String_Entry.COLUMN_RANK} INTEGER NOT NULL DEFAULT 0, 
+            ${String_Entry.COLUMN_CREATION_EMULATED_DATE} DATETIME DEFAULT NULL, 
+            ${String_Entry.COLUMN_REMIND_AT} INTEGER DEFAULT NULL, 
+            ${String_Entry.COLUMN_REMIND_AT_PENDINGINTENT_REQUEST} INTEGER DEFAULT NULL, 
+            ${String_Entry.COLUMN_WHETHER_ASKED_AT_CURRENT_TEST_ROUND} INTEGER DEFAULT ${TestRound.ASKED_AT_CURRENT_ROUND}, 
+            ${String_Entry.COLUMN_ORDER_OF_ENTRY} INTEGER DEFAULT 999999999, 
+            $CREATION_DATE DATETIME NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')), 
+            FOREIGN KEY( ${String_Entry.COLUMN_QUESTION} ) REFERENCES  ${STring.TABLE_NAME} ( $COLUMN_ID ) ON UPDATE CASCADE ON DELETE NO ACTION, 
+            FOREIGN KEY( ${String_Entry.COLUMN_ANSWER} ) REFERENCES ${STring.TABLE_NAME} ( $COLUMN_ID ) ON UPDATE CASCADE ON DELETE NO ACTION, 
+            FOREIGN KEY( ${String_Entry.COLUMN_FIELD} ) REFERENCES  ${FField.TABLE_NAME} ( $COLUMN_ID ) ON UPDATE CASCADE ON DELETE CASCADE, 
+             UNIQUE ( ${String_Entry.COLUMN_QUESTION} , 
+             ${String_Entry.COLUMN_ANSWER} , 
+             ${String_Entry.COLUMN_FIELD}  ))
+                ''');
+
+          await customStatement('''
+                INSERT INTO  ${String_Entry.TABLE_NAME} (  $COLUMN_ID
+                     , ${String_Entry.COLUMN_QUESTION}
+                     , ${String_Entry.COLUMN_ANSWER}
+                     , ${String_Entry.COLUMN_FIELD}
+                     , ${String_Entry.COLUMN_ASKED_COUNT}
+                     , ${String_Entry.COLUMN_WRONGLY_ANSWERED_COUNT}
+                     , ${String_Entry.COLUMN_RANK}
+                     , ${String_Entry.COLUMN_CREATION_EMULATED_DATE}
+                     , ${String_Entry.COLUMN_REMIND_AT}
+                     , ${String_Entry.COLUMN_REMIND_AT_PENDINGINTENT_REQUEST}
+                     , ${String_Entry.COLUMN_WHETHER_ASKED_AT_CURRENT_TEST_ROUND}
+                     , ${String_Entry.COLUMN_ORDER_OF_ENTRY}
+                     , $CREATION_DATE)
+                    SELECT $COLUMN_ID
+                     , ${Old_String_Entry.COLUMN_QUESTION}
+                     , ${Old_String_Entry.COLUMN_ANSWER}
+                     , ${Old_String_Entry.COLUMN_FIELD}
+                     , ${Old_String_Entry.COLUMN_ASKED_COUNT}
+                     , ${Old_String_Entry.COLUMN_WRONGLY_ANSWERED_COUNT}
+                     , ${Old_String_Entry.COLUMN_RANK}
+                     , ${Old_String_Entry.COLUMN_CREATION_EMULATED_DATE}
+                     , ${Old_String_Entry.COLUMN_REMIND_AT}
+                     , ${Old_String_Entry.COLUMN_REMIND_AT_PENDINGINTENT_REQUEST}
+                     , ${Old_String_Entry.COLUMN_WHETHER_ASKED_AT_CURRENT_TEST_ROUND}
+                     , ${Old_String_Entry.COLUMN_ORDER_OF_ENTRY}
+                     , $CREATION_DATE
+                     FROM tempTable
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+        }
+
       });
     },
   );
