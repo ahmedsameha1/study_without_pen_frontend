@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart';
@@ -18,6 +19,8 @@ import 'test_sessions_dao.dart';
 import 'wrong_answers_dao.dart';
 
 part 'app_database.g.dart';
+
+const migrationUserAccountId = '95bfc9e1-7d6a-4f92-bee2-562692bc4333';
 
 class Entrys extends Table {
   static const int minimumTextLength = 1;
@@ -1368,6 +1371,213 @@ OR ${String_Entry.COLUMN_ANSWER} IN (SELECT $COLUMN_ID FROM ${STring.TABLE_NAME}
           await customStatement('''
 DELETE FROM ${STring.TABLE_NAME} WHERE LENGTH( ${STring.COLUMN_VALUE} ) > 500
 ''');
+        }
+
+        if (from < 14) {
+          await customStatement('DROP TABLE IF EXISTS not_string');
+          await customStatement('DROP TABLE IF EXISTS not_string_entry');
+          await customStatement(
+            'DROP TABLE IF EXISTS test_wrong_answer_string',
+          );
+          await customStatement(
+            'DROP TABLE IF EXISTS test_wrong_answer_not_string',
+          );
+          await customStatement('DROP TABLE IF EXISTS test_paused');
+          await customStatement(
+            'DROP TABLE IF EXISTS study_till_correct_repeated_entry',
+          );
+          await customStatement(
+            'DROP TABLE IF EXISTS study_till_correct_paused',
+          );
+          await customStatement(
+            'DROP TABLE IF EXISTS alternative_answer_string',
+          );
+          await customStatement(
+            'DROP TABLE IF EXISTS alternative_answer_not_string',
+          );
+          await customStatement('DROP TABLE IF EXISTS excluded_time');
+          await customStatement('DROP TABLE IF EXISTS scheduled_time_backup');
+          await customStatement('DROP TABLE IF EXISTS google_payment_order_id');
+          await m.createAll();
+          final now = clock.now();
+          final fieldId = const Uuid().v4();
+          await m.database
+              .into(fields)
+              .insert(
+                FieldsCompanion(
+                  id: Value(fieldId),
+                  userAccountId: const Value(migrationUserAccountId),
+                  name: const Value('field'),
+                  creationAt: Value(now),
+                  lastModificationAt: Value(now),
+                ),
+              );
+          List<QueryRow> results = await customSelect('''
+SELECT
+  _id,
+  name,
+  creation_date,
+  creation_date,
+  locale,
+  check_type,
+  sort_by,
+  read_answer,
+  usage_count,
+  color,
+  creation_emulation_number,
+  creation_emulation_what_days,
+  reading_question_letter_second_tests,
+  find_answer_time_tests,
+  typing_answer_letter_second_tests,
+  reading_question_letter_second_study_till_correct,
+  find_answer_time_study_till_correct,
+  typing_answer_letter_second_study_till_correct,
+  time_of_answer_tests_do_what,
+  obfuscate_question
+FROM field
+''').get();
+          final List<FieldListsCompanion> fieldListCompanions = [];
+          final fieldToFieldListMapping = <int, String>{};
+          for (int i = 0; i < results.length; i++) {
+            final data = results[i].data;
+            final String currentFieldListId = const Uuid().v4();
+            fieldToFieldListMapping[data['_id'] as int] = currentFieldListId;
+            fieldListCompanions.add(
+              FieldListsCompanion(
+                id: Value(currentFieldListId),
+                fieldId: Value(fieldId),
+                name: Value(data['name'] as String),
+                creationAt: Value(
+                  DateTime.parse(data['creation_date'] as String),
+                ),
+                lastModificationAt: Value(
+                  DateTime.parse(data['creation_date'] as String),
+                ),
+                languageTag: Value(data['locale'] as String?),
+                checkType: Value(data['check_type'] as int),
+                sortBy: Value(data['sort_by'] as int),
+                doesReadAnswer: Value((data['read_answer'] as int) == 1),
+                usageCount: Value(data['usage_count'] as int),
+                color: Value(
+                  (data['color'] as int) < 0 ? 0 : (data['color'] as int),
+                ),
+                testsReadingQuestionLetterDuration:
+                    (data['reading_question_letter_second_tests'] as int) > 0
+                    ? Value(data['reading_question_letter_second_tests'] as int)
+                    : const Value.absent(),
+                testsFindingAnswerDuration:
+                    (data['find_answer_time_tests'] as int) > 0
+                    ? Value(data['find_answer_time_tests'] as int)
+                    : const Value.absent(),
+                testsTypingAnswerLetterDuration:
+                    (data['typing_answer_letter_second_tests'] as int) > 0
+                    ? Value(data['typing_answer_letter_second_tests'] as int)
+                    : const Value.absent(),
+                studyTillCorrectReadingQuestionLetterDuration:
+                    (data['reading_question_letter_second_study_till_correct']
+                            as int) >
+                        0
+                    ? Value(
+                        data['reading_question_letter_second_study_till_correct']
+                            as int,
+                      )
+                    : const Value.absent(),
+                studyTillCorrectFindingAnswerDuration:
+                    (data['find_answer_time_study_till_correct'] as int) > 0
+                    ? Value(data['find_answer_time_study_till_correct'] as int)
+                    : const Value.absent(),
+                studyTillCorrectTypingAnswerLetterDuration:
+                    (data['typing_answer_letter_second_study_till_correct']
+                            as int) >
+                        0
+                    ? Value(
+                        data['typing_answer_letter_second_study_till_correct']
+                            as int,
+                      )
+                    : const Value.absent(),
+                testsTimeOfAnswerAction: Value(
+                  data['time_of_answer_tests_do_what'] as int,
+                ),
+                doesObfuscateQuestion: Value(
+                  (data['obfuscate_question'] as int) == 1,
+                ),
+              ),
+            );
+          }
+          await batch(
+            (batch) => batch.insertAll(fieldLists, fieldListCompanions),
+          );
+          results = await customSelect('''
+SELECT
+  s2.value answer,
+  s1.value question,
+  se.field,
+  se.creation_date creationAt,
+  se.creation_date lastModificationAt,
+  se.order_of_entry,
+  se.whether_asked_at_current_test_round,
+  se.creation_emulated_date,
+  se.rank,
+  se.asked_count,
+  se.wrongly_answered_count
+FROM string_entry se
+INNER JOIN string s1      ON se.question = s1._id
+INNER JOIN string s2      ON se.answer = s2._id
+''').get();
+          List<EntrysCompanion> entrysCompanions = [];
+          for (int i = 0; i < results.length; i++) {
+            final data = results[i].data;
+            entrysCompanions.add(
+              EntrysCompanion(
+                fieldListId: Value(
+                  fieldToFieldListMapping[data['field'] as int]!,
+                ),
+                answer: Value(data['answer'] as String),
+                question: Value(data['question'] as String),
+                creationAt: Value(DateTime.parse(data['creationAt'] as String)),
+                lastModificationAt: Value(
+                  DateTime.parse(data['lastModificationAt'] as String),
+                ),
+                order: (data['order_of_entry'] as int) != 999999999
+                    ? Value(data['order_of_entry'] as int)
+                    : const Value.absent(),
+                didAskedAtCurrentTestRound: Value(
+                  (data['whether_asked_at_current_test_round'] as int) == 1,
+                ),
+                rank: Value(data['rank'] as int),
+                askedCount: Value(BigInt.parse(data['asked_count'].toString())),
+                wronglyAnsweredCount: Value(
+                  BigInt.parse(data['wrongly_answered_count'].toString()),
+                ),
+              ),
+            );
+          }
+          await batch((batch) => batch.insertAll(entrys, entrysCompanions));
+          results = await customSelect(
+            '''SELECT field, note FROM field_note''',
+          ).get();
+          List<FieldListNotesCompanion> fieldListNotesCompanions = [];
+          for (int i = 0; i < results.length; i++) {
+            final data = results[i].data;
+            fieldListNotesCompanions.add(
+              FieldListNotesCompanion(
+                fieldListId: Value(
+                  fieldToFieldListMapping[data['field'] as int]!,
+                ),
+                texT: Value(data['note'] as String),
+                creationAt: Value(now),
+                lastModificationAt: Value(now),
+              ),
+            );
+          }
+          await batch(
+            (batch) =>
+                batch.insertAll(fieldListNotes, fieldListNotesCompanions),
+          );
+          await customStatement('DROP TABLE IF EXISTS field');
+          await customStatement('DROP TABLE IF EXISTS string_entry');
+          await customStatement('DROP TABLE IF EXISTS string');
+          await customStatement('DROP TABLE IF EXISTS field_note');
         }
       });
     },
