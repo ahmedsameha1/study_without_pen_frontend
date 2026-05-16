@@ -570,6 +570,100 @@ CREATE TABLE  ${Old_Study_During_Temp_DBV6_AppV32.TABLE_NAME}
             ${Old_Study_During_Temp_DBV6_AppV32.COLUMN_FIELD} TEXT NOT NULL )
                 ''');
         }
+
+        if (from < 5) {
+          await customStatement('''
+ALTER TABLE ${Old_Field_DBV6_AppV32.TABLE_NAME} RENAME TO tempTable
+                ''');
+
+          await customStatement('''
+                CREATE TABLE ${Old_Field_DBV6_AppV32.TABLE_NAME} ( 
+            ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME} TEXT PRIMARY KEY NOT NULL, 
+            ${Old_Field_DBV6_AppV32.COLUMN_FIELD_TYPE} INTEGER NOT NULL DEFAULT 0 , 
+            $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 DATETIME DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')) )
+                ''');
+
+          await customStatement('''
+                INSERT INTO ${Old_Field_DBV6_AppV32.TABLE_NAME} (  ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME}
+                 , $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 ) 
+                SELECT ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME}
+                , $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32
+                FROM tempTable
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+
+          await customStatement('''
+                ALTER TABLE ${Old_Linker_DBV6_AppV32.TABLE_NAME} RENAME TO tempTable
+                ''');
+
+          await customStatement('''
+CREATE TABLE  ${Old_Linker_DBV6_AppV32.TABLE_NAME}
+             ( ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK} TEXT NOT NULL, 
+             ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK} TEXT NOT NULL, 
+             ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK} TEXT NOT NULL, 
+             ${Old_Linker_DBV6_AppV32.COLUMN_STUDY_DURING_ORDER} INTEGER NOT NULL DEFAULT -1 , 
+             ${Old_Linker_DBV6_AppV32.COLUMN_TEST_ORDER} INTEGER NOT NULL DEFAULT -1 , 
+             ${Old_Linker_DBV6_AppV32.COLUMN_TEST_WRONG_ANSWERS} TEXT NOT NULL DEFAULT '' , 
+             $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 DATETIME DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')), 
+             FOREIGN KEY ( ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK} ) REFERENCES 
+             ${Old_Question_DBV6_AppV32.TABLE_NAME} ( ${Old_Question_DBV6_AppV32.COLUMN_QUESTION_ENTRY} ) ON DELETE CASCADE ON UPDATE CASCADE,
+             FOREIGN KEY ( ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK} ) REFERENCES 
+             ${Old_Answer_DBV6_AppV32.TABLE_NAME} ( ${Old_Answer_DBV6_AppV32.COLUMN_ANSWER_ENTRY} ) ON DELETE CASCADE ON UPDATE CASCADE,
+            FOREIGN KEY ( ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK} ) REFERENCES 
+            ${Old_Field_DBV6_AppV32.TABLE_NAME} ( ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME} ) ON DELETE CASCADE ON UPDATE CASCADE,
+             PRIMARY KEY ( ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK} ,
+             ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK} ,
+             ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK} ))
+                ''');
+
+          await customStatement('''
+INSERT INTO  ${Old_Linker_DBV6_AppV32.TABLE_NAME} ( ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK}
+                , ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK}
+                 , ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK}
+                 ,  $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32  ) 
+                SELECT  ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK}
+                , ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK}
+                , ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK}
+                , $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32
+                FROM tempTable
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+
+          await customStatement('''
+  WITH OrderedData AS (
+    SELECT 
+      ${Old_Study_During_Temp_DBV6_AppV32.COLUMN_QUESTION}, 
+      ${Old_Study_During_Temp_DBV6_AppV32.COLUMN_ANSWER}, 
+      ${Old_Study_During_Temp_DBV6_AppV32.COLUMN_FIELD}, 
+      (ROW_NUMBER() OVER (PARTITION BY field) - 1) as relative_pos
+    FROM ${Old_Study_During_Temp_DBV6_AppV32.TABLE_NAME}
+  )
+  UPDATE ${Old_Linker_DBV6_AppV32.TABLE_NAME}
+  SET ${Old_Linker_DBV6_AppV32.COLUMN_STUDY_DURING_ORDER} = (
+    SELECT relative_pos 
+    FROM OrderedData 
+    WHERE OrderedData.question = ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK}
+      AND OrderedData.answer = ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK}
+      AND OrderedData.field = ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK}
+  )
+  WHERE EXISTS (
+    SELECT 1 FROM OrderedData 
+    WHERE OrderedData.question = ${Old_Linker_DBV6_AppV32.COLUMN_QUESTION_LINK}
+      AND OrderedData.answer = ${Old_Linker_DBV6_AppV32.COLUMN_ANSWER_LINK}
+      AND OrderedData.field = ${Old_Linker_DBV6_AppV32.COLUMN_FIELD_LINK}
+  );
+''');
+
+          await customStatement('''
+DROP TABLE IF EXISTS ${Old_Study_During_Temp_DBV6_AppV32.TABLE_NAME}
+                ''');
+        }
       });
     },
   );
