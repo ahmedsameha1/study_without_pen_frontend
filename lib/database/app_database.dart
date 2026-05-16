@@ -664,6 +664,32 @@ INSERT INTO  ${Old_Linker_DBV6_AppV32.TABLE_NAME} ( ${Old_Linker_DBV6_AppV32.COL
 DROP TABLE IF EXISTS ${Old_Study_During_Temp_DBV6_AppV32.TABLE_NAME}
                 ''');
         }
+
+        if (from < 6) {
+          await customStatement('''
+ALTER TABLE ${Old_Field_DBV6_AppV32.TABLE_NAME} RENAME TO tempTable
+                ''');
+
+          await customStatement('''
+CREATE TABLE ${Old_Field_DBV6_AppV32.TABLE_NAME} (
+             ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME} TEXT PRIMARY KEY NOT NULL, 
+            ${Old_Field_DBV6_AppV32.COLUMN_FIELD_TYPE} INTEGER NOT NULL DEFAULT 0 , 
+            $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 DATETIME DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')) )
+                ''');
+
+          await customStatement('''
+          INSERT INTO ${Old_Field_DBV6_AppV32.TABLE_NAME} ( ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME}
+                 , $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32 ) 
+                SELECT ${Old_Field_DBV6_AppV32.COLUMN_FIELD_NAME}
+                , $Old_COLUMN_NAME_CREATED_AT_DBV6_AppV32
+                FROM tempTable
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+        }
+
       });
     },
   );
