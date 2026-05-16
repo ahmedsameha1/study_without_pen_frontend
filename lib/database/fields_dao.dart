@@ -1,6 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
-import 'package:study_without_pen_by_flutter/database/app_database.dart';
+import 'app_database.dart';
 
 part 'fields_dao.g.dart';
 
@@ -20,20 +20,19 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
     return into(fields).insert(fieldsCompanion);
   }
 
-  Stream<Field?> watchById(String id) {
-    return (select(fields)..where((tbl) => tbl.id.equals(id)))
-        .watchSingleOrNull();
-  }
+  Stream<Field?> watchById(String id) => (select(
+      fields,
+    )..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
 
-  Stream<List<Field>> watchByUserAccountId(String id) {
-    return (select(fields)
+  Stream<List<Field>> watchByUserAccountId(String id) => (select(fields)
           ..where((tbl) => tbl.userAccountId.equals(id))
           ..orderBy([
             (tbl) => OrderingTerm(
-                expression: tbl.usageCount, mode: OrderingMode.desc)
+              expression: tbl.usageCount,
+              mode: OrderingMode.desc,
+            ),
           ]))
         .watch();
-  }
 
   Future<bool> mutate(FieldsCompanion fieldsCompanion) async {
     if (fieldsCompanion.creationAt.value.toUtc().isAfter(clock.now())) {
@@ -50,7 +49,11 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
     return update(fields).replace(fieldsCompanion);
   }
 
-  remove(String id) {
-    return (delete(fields)..where((tbl) => tbl.id.equals(id))).go();
-  }
+  remove(String id) => (delete(fields)..where((tbl) => tbl.id.equals(id))).go();
+
+  Future<void> giveUserTheUserlessData(String userAccountId) =>
+      (update(fields)..where(
+            (table) => table.userAccountId.equals(migrationUserAccountId),
+          ))
+          .write(FieldsCompanion(userAccountId: Value(userAccountId)));
 }
