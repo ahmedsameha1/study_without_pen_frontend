@@ -1582,6 +1582,10 @@ INNER JOIN string s2      ON se.answer = s2._id
       });
     },
   );
+
+  Future<void> runMigrationsEarly() async {
+    await customSelect('SELECT 1').get();
+  }
 }
 
 bool isValid(String uuid) {

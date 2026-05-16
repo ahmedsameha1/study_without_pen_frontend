@@ -40,6 +40,7 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   appDatabase = AppDatabase(AppDatabase.openConnection());
+  await appDatabase.runMigrationsEarly();
   FieldsDao fieldsDao = FieldsDao(appDatabase);
   FieldListsDao fieldListsDao = FieldListsDao(appDatabase);
   EntrysDao entrysDao = EntrysDao(appDatabase);
