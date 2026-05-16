@@ -947,6 +947,93 @@ CREATE TABLE IF NOT EXISTS ${Old_String_Entry.TABLE_NAME} (
                 DROP TABLE IF EXISTS tempTable
                 ''');
         }
+
+        if (from < 9) {
+          await customStatement('''
+            ALTER TABLE ${Old_Field_DBV12_AppV68.TABLE_NAME} RENAME TO tempTable
+                ''');
+
+          await customStatement('''
+CREATE TABLE IF NOT EXISTS ${Old_Field_DBV12_AppV68.TABLE_NAME} ( 
+            $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+            ${Old_Field_DBV12_AppV68.COLUMN_FIELD_NAME} TEXT UNIQUE NOT NULL, 
+            ${Old_Field_DBV12_AppV68.COLUMN_FIELD_TYPE} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_ENTRY_QUESTION_COLUMN_DATA_TYPE} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_LOCALE} TEXT DEFAULT NULL, 
+            ${Old_Field_DBV12_AppV68.COLUMN_CHECK_TYPE} INTEGER NOT NULL DEFAULT ${FField.DO_NOT_IGNORE_CASE} , 
+            ${Old_Field_DBV12_AppV68.COLUMN_SORT_BY} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_LIST_TEXT_SIZE} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_QUESTION_AREA_SIZE} INTEGER NOT NULL DEFAULT 1, 
+            ${Old_Field_DBV12_AppV68.COLUMN_ANSWER_AREA_SIZE} INTEGER NOT NULL DEFAULT 1, 
+            ${Old_Field_DBV12_AppV68.COLUMN_TEST_TEXT_SIZE} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_ACTION_BAR_SHOWN} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_READ_ANSWER} INTEGER NOT NULL DEFAULT ${FField.DO_NOT_READ_ANSWER} , 
+            ${Old_Field_DBV12_AppV68.COLUMN_USAGE_COUNT} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_CREATION_EMULATION_NUMBER} INTEGER NOT NULL DEFAULT  ${Constants.NOT_EMULATED} , 
+            ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TESTS} INTEGER NOT NULL DEFAULT ${FField.ZERO_RANDOM_QUICK_TESTS} , 
+            ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TRIES} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_QUESTIONS} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_CONTROLLED_PORTION} INTEGER NOT NULL DEFAULT -1, 
+            ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_WRONGNESS_LEVEL} INTEGER NOT NULL DEFAULT -1, 
+            ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_RANK_LEVEL} INTEGER NOT NULL DEFAULT -1, 
+            ${Old_Field_DBV12_AppV68.COLUMN_READING_QUESTION_LETTER_SECOND_TESTS} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_FIND_ANSWER_TIME_TESTS} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_TYPING_ANSWER_LETTER_SECOND_TESTS} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_READING_QUESTION_LETTER_SECOND_STUDY_TILL_CORRECT} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_FIND_ANSWER_TIME_STUDY_TILL_CORRECT} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_TYPING_ANSWER_LETTER_SECOND_STUDY_TILL_CORRECT} INTEGER NOT NULL DEFAULT 0, 
+            ${Old_Field_DBV12_AppV68.COLUMN_TIME_OF_ANSWER_TESTS_DO_WHAT} INTEGER NOT NULL DEFAULT ${TimeOfAnswer.NOTIFY} , 
+            ${Old_Field_DBV12_AppV68.COLUMN_OBFUSCATE_QUESTION} INTEGER NOT NULL DEFAULT 0, 
+            $CREATION_DATE DATETIME NOT NULL DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')))
+                ''');
+
+          await customStatement('''
+                INSERT INTO ${Old_Field_DBV12_AppV68.TABLE_NAME} ( $COLUMN_ID
+                    , ${Old_Field_DBV12_AppV68.COLUMN_FIELD_NAME}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_FIELD_TYPE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_ENTRY_QUESTION_COLUMN_DATA_TYPE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_LOCALE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_CHECK_TYPE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_SORT_BY}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_LIST_TEXT_SIZE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_QUESTION_AREA_SIZE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_ANSWER_AREA_SIZE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_TEST_TEXT_SIZE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_ACTION_BAR_SHOWN}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_READ_ANSWER}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_USAGE_COUNT}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_CREATION_EMULATION_NUMBER}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TESTS}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TRIES}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_QUESTIONS}
+                    , $CREATION_DATE)
+                    SELECT $COLUMN_ID
+                    , ${Old_Field_DBV12_AppV68.COLUMN_FIELD_NAME}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_FIELD_TYPE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_ENTRY_QUESTION_COLUMN_DATA_TYPE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_LOCALE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_CHECK_TYPE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_SORT_BY}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_LIST_TEXT_SIZE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_QUESTION_AREA_SIZE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_ANSWER_AREA_SIZE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_TEST_TEXT_SIZE}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_ACTION_BAR_SHOWN}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_READ_ANSWER}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_USAGE_COUNT}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_CREATION_EMULATION_NUMBER}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TESTS}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_TRIES}
+                    , ${Old_Field_DBV12_AppV68.COLUMN_RANDOM_QUICK_TEST_NUMBER_OF_QUESTIONS}
+                    , $CREATION_DATE
+                    FROM tempTable
+                ''');
+
+          await customStatement('''
+                DROP TABLE IF EXISTS tempTable
+                ''');
+        }
+
       });
     },
   );
