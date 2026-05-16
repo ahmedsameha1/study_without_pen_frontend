@@ -562,6 +562,14 @@ CREATE TABLE ${Old_Linker_DBV6_AppV32.TABLE_NAME}
                 ''');
         }
 
+        if (from < 4) {
+          await customStatement('''
+CREATE TABLE  ${Old_Study_During_Temp_DBV6_AppV32.TABLE_NAME}
+             ( ${Old_Study_During_Temp_DBV6_AppV32.COLUMN_QUESTION} TEXT NOT NULL, 
+            ${Old_Study_During_Temp_DBV6_AppV32.COLUMN_ANSWER} TEXT NOT NULL, 
+            ${Old_Study_During_Temp_DBV6_AppV32.COLUMN_FIELD} TEXT NOT NULL )
+                ''');
+        }
       });
     },
   );
