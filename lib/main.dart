@@ -9,6 +9,7 @@ import 'package:nonso/nonso.dart' as nonso;
 
 import 'common/widgets/app.dart';
 import 'database/app_database.dart';
+import 'database/database_connection.dart';
 import 'database/entrys_dao.dart';
 import 'database/field_lists_dao.dart';
 import 'database/fields_dao.dart';
@@ -39,7 +40,7 @@ Future<void> main() async {
   };
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  appDatabase = AppDatabase(AppDatabase.openConnection());
+  appDatabase = AppDatabase(openConnection());
   await appDatabase.runMigrationsEarly();
   FieldsDao fieldsDao = FieldsDao(appDatabase);
   FieldListsDao fieldListsDao = FieldListsDao(appDatabase);

@@ -1,10 +1,5 @@
-import 'dart:io';
-
 import 'package:clock/clock.dart';
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import './before_db_v14_constants.dart';
@@ -409,23 +404,6 @@ class WrongAnswers extends Table {
   ],
 )
 class AppDatabase extends _$AppDatabase {
-  static LazyDatabase openConnection() => LazyDatabase(() async {
-    const databaseFileName = 'data';
-    final applicationDocumentDirectory =
-        await getApplicationDocumentsDirectory();
-    var file = File(
-      join(
-        applicationDocumentDirectory.parent.path,
-        'databases',
-        databaseFileName,
-      ),
-    );
-    if (!file.existsSync()) {
-      file = File(join(applicationDocumentDirectory.path, databaseFileName));
-    }
-    return NativeDatabase(file);
-  });
-
   AppDatabase(QueryExecutor queryExecutor) : super(queryExecutor);
 
   @override
