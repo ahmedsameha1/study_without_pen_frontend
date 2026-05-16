@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: String.fromEnvironment('FIREBASE_API_KEY_ANDROID'),
-    appId: '1:8613264590:android:03e259f7a922a81421649f',
+    appId: String.fromEnvironment('APP_ID_KEY'),
     messagingSenderId: '8613264590',
     projectId: 'learn-gcp-380012',
     storageBucket: 'learn-gcp-380012.firebasestorage.app',

@@ -9,6 +9,22 @@ plugins {
 }
 
 android {
+    flavorDimensions "default"
+
+    productFlavors {
+        dev {
+            dimension "default"
+            resValue "string", "app_name", "App Dev"
+            applicationId "com.ahmedsameha1.studywithoutpen"
+        }
+
+        prod {
+            dimension "default"
+            applicationId "com.ahmedsameha1.peninbin"
+            versionCode 116
+        }
+    }
+
     namespace = "com.ahmedsameha1.studywithoutpen"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
