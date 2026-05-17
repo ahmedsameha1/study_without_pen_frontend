@@ -29,305 +29,410 @@ void main() {
   group("Create a Field", () {
     test("Invalid Field: id is an invalid UUID v4", () async {
       var field = Field(
-          id: "wewen",
-          userAccountId: userAccountId,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.create(field.toCompanion(true));
-      },
-          throwsA(predicate(
-              (e) => e is InvalidDataException && e.message.contains("id"))));
+        id: "wewen",
+        userAccountId: userAccountId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color,
+      );
+      expect(
+        () async {
+          await fieldsDao.create(field.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) => e is InvalidDataException && e.message.contains("id"),
+          ),
+        ),
+      );
     });
 
     test("No Field with the same id", () async {
       var field1 = Field(
-          id: id,
-          userAccountId: userAccountId,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
+        id: id,
+        userAccountId: userAccountId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color,
+      );
       var field2 = Field(
-          id: id,
-          userAccountId: userAccountId,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.create(field1.toCompanion(true));
-        await fieldsDao.create(field2.toCompanion(true));
-      },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("id"))));
+        id: id,
+        userAccountId: userAccountId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color,
+      );
+      expect(
+        () async {
+          await fieldsDao.create(field1.toCompanion(true));
+          await fieldsDao.create(field2.toCompanion(true));
+        },
+        throwsA(
+          predicate((e) => e is SqliteException && e.message.contains("id")),
+        ),
+      );
     });
 
     test("Invalid Field: userAccountId is an empty String", () {
       var field = Field(
-          id: id,
-          userAccountId: "",
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.create(field.toCompanion(true));
-      },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("user_account_id"))));
+        id: id,
+        userAccountId: "",
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color,
+      );
+      expect(
+        () async {
+          await fieldsDao.create(field.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException && e.message.contains("user_account_id"),
+          ),
+        ),
+      );
       field = Field(
-          id: id,
-          userAccountId: " " * Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.create(field.toCompanion(true));
-      },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("user_account_id"))));
+        id: id,
+        userAccountId: " " * Fields.MINIMUM_LENGTH_OF_USER_ACCOUNT_ID,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color,
+      );
+      expect(
+        () async {
+          await fieldsDao.create(field.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException && e.message.contains("user_account_id"),
+          ),
+        ),
+      );
     });
 
     test(
-        "Invalid Field: name length is less than ${Fields.MINIMUM_LENGTH_OF_NAME}",
-        () async {
-      var field = Field(
+      "Invalid Field: name length is less than ${Fields.MINIMUM_LENGTH_OF_NAME}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: "",
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.create(field.toCompanion(true));
-      },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("name"))));
-      field = Field(
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.create(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("name"),
+            ),
+          ),
+        );
+        field = Field(
           id: id,
           userAccountId: userAccountId,
           name: " ",
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.create(field.toCompanion(true));
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.create(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("name"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("name"))));
-    });
+    );
 
     test(
-        "Invalid Field: name length is bigger than ${Fields.MAXIMUM_LENGTH_OF_NAME}",
-        () async {
-      var field = Field(
+      "Invalid Field: name length is bigger than ${Fields.MAXIMUM_LENGTH_OF_NAME}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: "s" * (Fields.MAXIMUM_LENGTH_OF_NAME + 1),
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.create(field.toCompanion(true));
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.create(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("name"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("name"))));
-    });
+    );
 
     test("Invalid Field: userAccountId & name aren't unique", () async {
       var field = Field(
-          id: id,
-          userAccountId: userAccountId,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
+        id: id,
+        userAccountId: userAccountId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color,
+      );
       var field2 = Field(
-          id: const Uuid().v4(),
-          userAccountId: userAccountId,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
+        id: const Uuid().v4(),
+        userAccountId: userAccountId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color,
+      );
       await fieldsDao.create(field.toCompanion(true));
-      expect(() async {
-        await fieldsDao.create(field2.toCompanion(true));
-      },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("UNIQUE"))));
+      expect(
+        () async {
+          await fieldsDao.create(field2.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) => e is SqliteException && e.message.contains("UNIQUE"),
+          ),
+        ),
+      );
     });
 
     test("Invalid Field: creationAt is in the future", () async {
       withClock(Clock.fixed(DateTime(2020, 1, 1)), () async {
         var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: DateTime(2020, 2, 2),
-            lastModificationAt: lastModificationAt,
-            usageCount: usageCount,
-            color: color);
-        expect(() async {
-          await fieldsDao.create(field.toCompanion(true));
-        },
-            throwsA(predicate((e) =>
-                e is InvalidDataException &&
-                e.message.contains("creationAt"))));
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: DateTime(2020, 2, 2),
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.create(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) =>
+                  e is InvalidDataException && e.message.contains("creationAt"),
+            ),
+          ),
+        );
       });
     });
 
     test("Invalid Field: lastModificationAt is in the future", () async {
       withClock(Clock.fixed(DateTime(2020, 2, 2)), () async {
         var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: DateTime(2020, 3, 3),
-            usageCount: usageCount,
-            color: color);
-        expect(() async {
-          await fieldsDao.create(field.toCompanion(true));
-        },
-            throwsA(predicate((e) =>
-                e is InvalidDataException &&
-                e.message.contains("lastModificationAt"))));
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: DateTime(2020, 3, 3),
+          usageCount: usageCount,
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.create(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) =>
+                  e is InvalidDataException &&
+                  e.message.contains("lastModificationAt"),
+            ),
+          ),
+        );
       });
     });
 
     test("Invalid Field: lastModificationAt is before creationAt", () async {
       withClock(Clock.fixed(DateTime(2020, 2, 2)), () async {
         var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: DateTime(2019, 3, 3),
-            usageCount: usageCount,
-            color: color);
-        expect(() async {
-          await fieldsDao.create(field.toCompanion(true));
-        },
-            throwsA(predicate((e) =>
-                e is SqliteException &&
-                e.message.contains("last_modification_at"))));
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: DateTime(2019, 3, 3),
+          usageCount: usageCount,
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.create(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) =>
+                  e is SqliteException &&
+                  e.message.contains("last_modification_at"),
+            ),
+          ),
+        );
       });
     });
 
     test(
-        "Invalid Field: usageCount is smaller than ${Fields.MINIMUM_USAGE_COUNT}",
-        () async {
-      var field = Field(
+      "Invalid Field: usageCount is smaller than ${Fields.MINIMUM_USAGE_COUNT}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: Fields.MINIMUM_USAGE_COUNT - 1,
-          color: color);
-      expect(() async {
-        await fieldsDao.create(field.toCompanion(true));
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.create(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("usage_count"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("usage_count"))));
-    });
+    );
 
     test(
-        "Invalid Field: usageCount is bigger than ${Fields.MAXIMUM_USAGE_COUNT}",
-        () async {
-      var field = Field(
+      "Invalid Field: usageCount is bigger than ${Fields.MAXIMUM_USAGE_COUNT}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: Fields.MAXIMUM_USAGE_COUNT + 1,
-          color: color);
-      expect(() async {
-        await fieldsDao.create(field.toCompanion(true));
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.create(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("usage_count"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("usage_count"))));
-    });
+    );
 
-    test("Invalid Field: color is smaller than ${Fields.MINIMUM_COLOR}",
-        () async {
-      var field = Field(
+    test(
+      "Invalid Field: color is smaller than ${Fields.MINIMUM_COLOR}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: usageCount,
-          color: Fields.MINIMUM_COLOR - 1);
-      expect(() async {
-        await fieldsDao.create(field.toCompanion(true));
+          color: Fields.MINIMUM_COLOR - 1,
+        );
+        expect(
+          () async {
+            await fieldsDao.create(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("color"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("color"))));
-    });
+    );
 
-    test("Invalid Field: color is bigger than ${Fields.MAXIMUM_COLOR}",
-        () async {
-      var field = Field(
+    test(
+      "Invalid Field: color is bigger than ${Fields.MAXIMUM_COLOR}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: usageCount,
-          color: Fields.MAXIMUM_COLOR + 1);
-      expect(() async {
-        await fieldsDao.create(field.toCompanion(true));
+          color: Fields.MAXIMUM_COLOR + 1,
+        );
+        expect(
+          () async {
+            await fieldsDao.create(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("color"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("color"))));
-    });
+    );
 
     test("Good case 1: create Field without 'id'", () async {
       var fieldCompanion = FieldsCompanion(
-          userAccountId: Value(userAccountId),
-          name: Value(name),
-          creationAt: Value(creationAt),
-          lastModificationAt: Value(lastModificationAt),
-          usageCount: Value(usageCount),
-          color: Value(color));
+        userAccountId: Value(userAccountId),
+        name: Value(name),
+        creationAt: Value(creationAt),
+        lastModificationAt: Value(lastModificationAt),
+        usageCount: Value(usageCount),
+        color: Value(color),
+      );
       await fieldsDao.create(fieldCompanion);
     });
 
     test("Good case 2: create Field without usageCount", () async {
       var fieldCompanion = FieldsCompanion(
-          id: Value(id),
-          userAccountId: Value(userAccountId),
-          name: Value(name),
-          creationAt: Value(creationAt),
-          lastModificationAt: Value(lastModificationAt),
-          color: Value(color));
+        id: Value(id),
+        userAccountId: Value(userAccountId),
+        name: Value(name),
+        creationAt: Value(creationAt),
+        lastModificationAt: Value(lastModificationAt),
+        color: Value(color),
+      );
       await fieldsDao.create(fieldCompanion);
     });
 
     test("Good case 3: create Field without color", () async {
       var fieldCompanion = FieldsCompanion(
-          id: Value(id),
-          userAccountId: Value(userAccountId),
-          name: Value(name),
-          creationAt: Value(creationAt),
-          lastModificationAt: Value(lastModificationAt),
-          usageCount: Value(usageCount));
+        id: Value(id),
+        userAccountId: Value(userAccountId),
+        name: Value(name),
+        creationAt: Value(creationAt),
+        lastModificationAt: Value(lastModificationAt),
+        usageCount: Value(usageCount),
+      );
       await fieldsDao.create(fieldCompanion);
     });
   });
@@ -335,13 +440,14 @@ void main() {
   group("Geting a specific Field by id", () {
     test("Good case: this specific field is found", () async {
       var field = Field(
-          id: id,
-          userAccountId: userAccountId,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
+        id: id,
+        userAccountId: userAccountId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color,
+      );
       await fieldsDao.create(field.toCompanion(true));
       Field? gottenField = await fieldsDao.watchById(id).first;
       gottenField = gottenField!;
@@ -361,11 +467,12 @@ void main() {
 
     test("Test default values", () async {
       var fieldCompanion = FieldsCompanion(
-          id: Value(id),
-          userAccountId: Value(userAccountId),
-          name: Value(name),
-          creationAt: Value(creationAt),
-          lastModificationAt: Value(lastModificationAt));
+        id: Value(id),
+        userAccountId: Value(userAccountId),
+        name: Value(name),
+        creationAt: Value(creationAt),
+        lastModificationAt: Value(lastModificationAt),
+      );
       await fieldsDao.create(fieldCompanion);
       Field? gottenField = await fieldsDao.watchById(id).first;
       gottenField = gottenField!;
@@ -415,61 +522,68 @@ void main() {
     int color5 = 0x55994433;
     int color6 = 0x55aa4433;
     var field1 = Field(
-        id: fieldId1,
-        userAccountId: userAccountId1,
-        name: name1,
-        creationAt: creationAt1,
-        lastModificationAt: lastModificationAt1,
-        usageCount: usageCount1,
-        color: color1);
+      id: fieldId1,
+      userAccountId: userAccountId1,
+      name: name1,
+      creationAt: creationAt1,
+      lastModificationAt: lastModificationAt1,
+      usageCount: usageCount1,
+      color: color1,
+    );
     var field2 = Field(
-        id: fieldId2,
-        userAccountId: userAccountId2,
-        name: name2,
-        creationAt: creationAt2,
-        lastModificationAt: lastModificationAt2,
-        usageCount: usageCount2,
-        color: color2);
+      id: fieldId2,
+      userAccountId: userAccountId2,
+      name: name2,
+      creationAt: creationAt2,
+      lastModificationAt: lastModificationAt2,
+      usageCount: usageCount2,
+      color: color2,
+    );
     var field3 = Field(
-        id: fieldId3,
-        userAccountId: userAccountId3,
-        name: name3,
-        creationAt: creationAt3,
-        lastModificationAt: lastModificationAt3,
-        usageCount: usageCount3,
-        color: color3);
+      id: fieldId3,
+      userAccountId: userAccountId3,
+      name: name3,
+      creationAt: creationAt3,
+      lastModificationAt: lastModificationAt3,
+      usageCount: usageCount3,
+      color: color3,
+    );
     var field4 = Field(
-        id: fieldId4,
-        userAccountId: userAccountId1,
-        name: name4,
-        creationAt: creationAt4,
-        lastModificationAt: lastModificationAt4,
-        usageCount: usageCount4,
-        color: color4);
+      id: fieldId4,
+      userAccountId: userAccountId1,
+      name: name4,
+      creationAt: creationAt4,
+      lastModificationAt: lastModificationAt4,
+      usageCount: usageCount4,
+      color: color4,
+    );
     var field5 = Field(
-        id: fieldId5,
-        userAccountId: userAccountId2,
-        name: name5,
-        creationAt: creationAt5,
-        lastModificationAt: lastModificationAt5,
-        usageCount: usageCount5,
-        color: color5);
+      id: fieldId5,
+      userAccountId: userAccountId2,
+      name: name5,
+      creationAt: creationAt5,
+      lastModificationAt: lastModificationAt5,
+      usageCount: usageCount5,
+      color: color5,
+    );
     var field6 = Field(
-        id: fieldId6,
-        userAccountId: userAccountId1,
-        name: name6,
-        creationAt: creationAt6,
-        lastModificationAt: lastModificationAt6,
-        usageCount: usageCount6,
-        color: color6);
+      id: fieldId6,
+      userAccountId: userAccountId1,
+      name: name6,
+      creationAt: creationAt6,
+      lastModificationAt: lastModificationAt6,
+      usageCount: usageCount6,
+      color: color6,
+    );
     await fieldsDao.create(field1.toCompanion(true));
     await fieldsDao.create(field2.toCompanion(true));
     await fieldsDao.create(field3.toCompanion(true));
     await fieldsDao.create(field4.toCompanion(true));
     await fieldsDao.create(field5.toCompanion(true));
     await fieldsDao.create(field6.toCompanion(true));
-    Stream<List<Field>> fieldsStream =
-        fieldsDao.watchByUserAccountId(userAccountId1);
+    Stream<List<Field>> fieldsStream = fieldsDao.watchByUserAccountId(
+      userAccountId1,
+    );
     List<Field> fields = await fieldsStream.first;
     expect(fields.length, 3);
     var gottenField = fields[0];
@@ -531,220 +645,299 @@ void main() {
   group("Update Field", () {
     setUp(() async {
       var field = Field(
-          id: id,
-          userAccountId: userAccountId,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
+        id: id,
+        userAccountId: userAccountId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color,
+      );
       await fieldsDao.create(field.toCompanion(true));
     });
 
     test(
-        "Invalid update: name length is less than ${Fields.MINIMUM_LENGTH_OF_NAME}",
-        () async {
-      var field = Field(
+      "Invalid update: name length is less than ${Fields.MINIMUM_LENGTH_OF_NAME}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: "",
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.mutate(field.toCompanion(true));
-      },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("name"))));
-      field = Field(
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.mutate(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("name"),
+            ),
+          ),
+        );
+        field = Field(
           id: id,
           userAccountId: userAccountId,
           name: " ",
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.mutate(field.toCompanion(true));
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.mutate(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("name"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("name"))));
-    });
+    );
 
     test(
-        "Invalid update: name length is bigger than ${Fields.MAXIMUM_LENGTH_OF_NAME}",
-        () async {
-      var field = Field(
+      "Invalid update: name length is bigger than ${Fields.MAXIMUM_LENGTH_OF_NAME}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: "s" * (Fields.MAXIMUM_LENGTH_OF_NAME + 1),
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.mutate(field.toCompanion(true));
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.mutate(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("name"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("name"))));
-    });
+    );
 
     test("Invalid update: creationAt is in the future", () async {
       withClock(Clock.fixed(DateTime(2020, 1, 1)), () async {
         var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: DateTime(2020, 2, 2),
-            lastModificationAt: lastModificationAt,
-            usageCount: usageCount,
-            color: color);
-        expect(() async {
-          await fieldsDao.mutate(field.toCompanion(true));
-        },
-            throwsA(predicate((e) =>
-                e is InvalidDataException &&
-                e.message.contains("creationAt"))));
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: DateTime(2020, 2, 2),
+          lastModificationAt: lastModificationAt,
+          usageCount: usageCount,
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.mutate(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) =>
+                  e is InvalidDataException && e.message.contains("creationAt"),
+            ),
+          ),
+        );
       });
     });
 
     test("Invalid update: lastModificationAt is in the future", () async {
       withClock(Clock.fixed(DateTime(2020, 2, 2)), () async {
         var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: DateTime(2020, 3, 3),
-            usageCount: usageCount,
-            color: color);
-        expect(() async {
-          await fieldsDao.mutate(field.toCompanion(true));
-        },
-            throwsA(predicate((e) =>
-                e is InvalidDataException &&
-                e.message.contains("lastModificationAt"))));
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: DateTime(2020, 3, 3),
+          usageCount: usageCount,
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.mutate(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) =>
+                  e is InvalidDataException &&
+                  e.message.contains("lastModificationAt"),
+            ),
+          ),
+        );
       });
     });
 
     test("Invalid update: lastModificationAt is before creationAt", () async {
       withClock(Clock.fixed(DateTime(2020, 2, 2)), () async {
         var field = Field(
-            id: id,
-            userAccountId: userAccountId,
-            name: name,
-            creationAt: creationAt,
-            lastModificationAt: DateTime(2019, 3, 3),
-            usageCount: usageCount,
-            color: color);
-        expect(() async {
-          await fieldsDao.mutate(field.toCompanion(true));
-        },
-            throwsA(predicate((e) =>
-                e is SqliteException &&
-                e.message.contains("last_modification_at"))));
+          id: id,
+          userAccountId: userAccountId,
+          name: name,
+          creationAt: creationAt,
+          lastModificationAt: DateTime(2019, 3, 3),
+          usageCount: usageCount,
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.mutate(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) =>
+                  e is SqliteException &&
+                  e.message.contains("last_modification_at"),
+            ),
+          ),
+        );
       });
     });
 
     test(
-        "Invalid update: usageCount is smaller than ${Fields.MINIMUM_USAGE_COUNT}",
-        () async {
-      var field = Field(
+      "Invalid update: usageCount is smaller than ${Fields.MINIMUM_USAGE_COUNT}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: Fields.MINIMUM_USAGE_COUNT - 1,
-          color: color);
-      expect(() async {
-        await fieldsDao.mutate(field.toCompanion(true));
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.mutate(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("usage_count"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("usage_count"))));
-    });
+    );
 
     test(
-        "Invalid update: usageCount is bigger than ${Fields.MAXIMUM_USAGE_COUNT}",
-        () async {
-      var field = Field(
+      "Invalid update: usageCount is bigger than ${Fields.MAXIMUM_USAGE_COUNT}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: Fields.MAXIMUM_USAGE_COUNT + 1,
-          color: color);
-      expect(() async {
-        await fieldsDao.mutate(field.toCompanion(true));
+          color: color,
+        );
+        expect(
+          () async {
+            await fieldsDao.mutate(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("usage_count"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate((e) =>
-              e is SqliteException && e.message.contains("usage_count"))));
-    });
+    );
 
-    test("Invalid update: color is smaller than ${Fields.MINIMUM_COLOR}",
-        () async {
-      var field = Field(
+    test(
+      "Invalid update: color is smaller than ${Fields.MINIMUM_COLOR}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: usageCount,
-          color: Fields.MINIMUM_COLOR - 1);
-      expect(() async {
-        await fieldsDao.mutate(field.toCompanion(true));
+          color: Fields.MINIMUM_COLOR - 1,
+        );
+        expect(
+          () async {
+            await fieldsDao.mutate(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("color"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("color"))));
-    });
+    );
 
-    test("Invalid update: color is bigger than ${Fields.MAXIMUM_COLOR}",
-        () async {
-      var field = Field(
+    test(
+      "Invalid update: color is bigger than ${Fields.MAXIMUM_COLOR}",
+      () async {
+        var field = Field(
           id: id,
           userAccountId: userAccountId,
           name: name,
           creationAt: creationAt,
           lastModificationAt: lastModificationAt,
           usageCount: usageCount,
-          color: Fields.MAXIMUM_COLOR + 1);
-      expect(() async {
-        await fieldsDao.mutate(field.toCompanion(true));
+          color: Fields.MAXIMUM_COLOR + 1,
+        );
+        expect(
+          () async {
+            await fieldsDao.mutate(field.toCompanion(true));
+          },
+          throwsA(
+            predicate(
+              (e) => e is SqliteException && e.message.contains("color"),
+            ),
+          ),
+        );
       },
-          throwsA(predicate(
-              (e) => e is SqliteException && e.message.contains("color"))));
-    });
+    );
 
     test("Invalid update: trying to update userAccountId", () async {
       final newUserAccoutId = const Uuid().v4();
       var field = Field(
-          id: id,
-          userAccountId: newUserAccoutId,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: color);
-      expect(() async {
-        await fieldsDao.mutate(field.toCompanion(true));
-      },
-          throwsA(predicate((e) =>
-              e is InvalidDataException &&
-              e.message.contains("Updating userAccountId"))));
+        id: id,
+        userAccountId: newUserAccoutId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: color,
+      );
+      expect(
+        () async {
+          await fieldsDao.mutate(field.toCompanion(true));
+        },
+        throwsA(
+          predicate(
+            (e) =>
+                e is InvalidDataException &&
+                e.message.contains("Updating userAccountId"),
+          ),
+        ),
+      );
     });
 
     test("Good case 1", () async {
       var newColor = 0x34567891;
       var field = Field(
-          id: id,
-          userAccountId: userAccountId,
-          name: name,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: usageCount,
-          color: newColor);
+        id: id,
+        userAccountId: userAccountId,
+        name: name,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: usageCount,
+        color: newColor,
+      );
       await fieldsDao.mutate(field.toCompanion(true));
       var gottenField = await fieldsDao.watchById(id).first;
       gottenField = gottenField!;
@@ -761,13 +954,14 @@ void main() {
       var newName = "newName";
       var newUsageCount = 69;
       var field = Field(
-          id: id,
-          userAccountId: userAccountId,
-          name: newName,
-          creationAt: creationAt,
-          lastModificationAt: lastModificationAt,
-          usageCount: newUsageCount,
-          color: color);
+        id: id,
+        userAccountId: userAccountId,
+        name: newName,
+        creationAt: creationAt,
+        lastModificationAt: lastModificationAt,
+        usageCount: newUsageCount,
+        color: color,
+      );
       await fieldsDao.mutate(field.toCompanion(true));
       var gottenField = await fieldsDao.watchById(id).first;
       gottenField = gottenField!;
@@ -783,16 +977,50 @@ void main() {
 
   test("Delete some Field", () async {
     var field = Field(
-        id: id,
-        userAccountId: userAccountId,
-        name: name,
-        creationAt: creationAt,
-        lastModificationAt: lastModificationAt,
-        usageCount: usageCount,
-        color: color);
+      id: id,
+      userAccountId: userAccountId,
+      name: name,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      usageCount: usageCount,
+      color: color,
+    );
     await fieldsDao.create(field.toCompanion(true));
     await fieldsDao.remove(id);
     var gottenField = await fieldsDao.watchById(id).first;
     expect(gottenField, null);
+  });
+
+  test('giveUserTheUserlessData()', () async {
+    final anotherUserAccountId = const Uuid().v4();
+    final field1 = Field(
+      id: id,
+      userAccountId: userAccountId,
+      name: name,
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      usageCount: usageCount,
+      color: color,
+    );
+    await fieldsDao.create(field1.toCompanion(true));
+    final field2 = Field(
+      id: const Uuid().v4(),
+      userAccountId: migrationUserAccountId,
+      name: '${name}2',
+      creationAt: creationAt,
+      lastModificationAt: lastModificationAt,
+      usageCount: usageCount,
+      color: color,
+    );
+    await fieldsDao.create(field2.toCompanion(true));
+    await fieldsDao.giveUserTheUserlessData(anotherUserAccountId);
+    expect(
+      await fieldsDao.watchByUserAccountId(migrationUserAccountId).first,
+      isEmpty,
+    );
+    expect(await fieldsDao.watchByUserAccountId(userAccountId).first, [field1]);
+    expect(await fieldsDao.watchByUserAccountId(anotherUserAccountId).first, [
+      field2.copyWith(userAccountId: anotherUserAccountId),
+    ]);
   });
 }

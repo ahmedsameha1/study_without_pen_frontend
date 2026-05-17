@@ -9,6 +9,7 @@ import 'package:nonso/nonso.dart' as nonso;
 
 import 'common/widgets/app.dart';
 import 'database/app_database.dart';
+import 'database/database_connection.dart';
 import 'database/entrys_dao.dart';
 import 'database/field_lists_dao.dart';
 import 'database/fields_dao.dart';
@@ -25,6 +26,7 @@ import 'features/fields/data/repositories/fields_repository_local.dart';
 import 'features/fields/domain/usecases/create_field_usecase.dart';
 import 'features/fields/domain/usecases/watch_field_usecase.dart';
 import 'features/fields/domain/usecases/watch_fields_usecase.dart';
+import 'features/userless_data_migration/domain/usecases/give_user_to_the_userless_data_after_first_signin_usecase.dart';
 import 'firebase_options.dart';
 
 late AppDatabase appDatabase;
@@ -39,7 +41,8 @@ Future<void> main() async {
   };
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  appDatabase = AppDatabase(AppDatabase.openConnection());
+  appDatabase = AppDatabase(openConnection());
+  await appDatabase.runMigrationsEarly();
   FieldsDao fieldsDao = FieldsDao(appDatabase);
   FieldListsDao fieldListsDao = FieldListsDao(appDatabase);
   EntrysDao entrysDao = EntrysDao(appDatabase);
@@ -77,6 +80,11 @@ Future<void> main() async {
         RepositoryProvider<WatchEntriesUsecase>(
           create: (context) =>
               WatchEntriesUsecase(fieldListsRepository, entriesRepository),
+        ),
+        RepositoryProvider<GiveUserToTheUserlessDataAfterFirstSignInUsecase>(
+          create: (context) => GiveUserToTheUserlessDataAfterFirstSignInUsecase(
+            fieldsRepository,
+          ),
         ),
       ],
       child: App(),

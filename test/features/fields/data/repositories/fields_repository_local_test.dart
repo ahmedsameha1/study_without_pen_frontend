@@ -143,4 +143,16 @@ void main() {
       emitsInOrder(<FieldEntity?>[null]),
     );
   });
+
+  test(
+    'giveUserTheUserlessData() calls FieldsDao.giveUserTheUserlessData()',
+    () {
+      final userAccountId = const Uuid().v4();
+      when(
+        () => fieldsDao.giveUserTheUserlessData(userAccountId),
+      ).thenAnswer((_) => Future.value());
+      fieldRepository.giveUserTheUserlessData(userAccountId);
+      verify(() => fieldsDao.giveUserTheUserlessData(userAccountId)).called(1);
+    },
+  );
 }

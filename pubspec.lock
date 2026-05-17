@@ -656,10 +656,10 @@ packages:
     dependency: "direct main"
     description:
       name: nonso
-      sha256: "47a42df610819f8b1030253c98643b8551e8531d35030421b9124aa488dd21e2"
+      sha256: fd09b75f2a84c38bfff38afb8968431e9a3f5ca3792b34baf109252092dbdbdb
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.23"
+    version: "0.0.24"
   package_config:
     dependency: transitive
     description:

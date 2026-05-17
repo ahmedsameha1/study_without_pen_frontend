@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart';
+
 import '../features/entries/presentation/pages/create_entry_page.dart';
 import '../features/entries/presentation/pages/entries_page.dart';
 import '../features/field_lists/presentation/pages/create_field_list_page.dart';
 import '../features/field_lists/presentation/pages/field_lists_page.dart';
 import '../features/fields/presentation/pages/create_field_page.dart';
 import '../features/fields/presentation/pages/fields_page.dart';
-
 import '../features/study_test/presentation/bloc/study_test_state.dart';
 import '../features/study_test/presentation/pages/study_test_page.dart';
+import '../features/userless_data_migration/domain/usecases/give_user_to_the_userless_data_after_first_signin_usecase.dart';
 
 const rootPath = '/';
 const createField = 'create_field';
@@ -55,7 +57,14 @@ GoRouter getRouterConfig() => GoRouter(
 Widget rootPathBuilder(
   BuildContext buildContext,
   GoRouterState goRouterState,
-) => AuthScreen(FieldsPage());
+) => AuthScreen(
+  const FieldsPage(),
+  afterSignInCallback: () async {
+    buildContext.read<GiveUserToTheUserlessDataAfterFirstSignInUsecase>().call(
+      BlocProvider.of<AuthBloc>(buildContext).state.user!.uid,
+    );
+  },
+);
 
 Widget createFieldPathBuilder(
   BuildContext buildContext,
