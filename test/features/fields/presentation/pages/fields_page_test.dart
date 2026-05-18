@@ -4,22 +4,19 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:drift/native.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
+import 'package:study_without_pen_by_flutter/common/router_config.dart' as real;
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_lists_page_data.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/field_lists_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_cubit.dart';
-import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_state.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/fields_page.dart';
-import 'package:study_without_pen_by_flutter/common/router_config.dart' as real;
 import 'package:study_without_pen_by_flutter/l10n/app_localizations_en.dart';
 
 import '../../../common/common_finders.dart';
@@ -82,6 +79,8 @@ void main() {
     Locale currentLocale = const Locale("en");
     String expectedNoFieldsString = "Currently, there are no fields!";
     String expectedErrorString = "An error occurred while loading the fields!";
+    String expectedSignOutString = 'Sign out';
+    String expectedAboutString = 'About';
 
     setUp(() {
       user = MockUser();
@@ -160,20 +159,6 @@ void main() {
         AppBar appBar = tester.widget<AppBar>(appBarFinder);
         Text title = appBar.title as Text;
         expect(title.data, AppLocalizationsEn().materialAppTitle);
-        final logoutIconButtonFinder = find.descendant(
-          of: find.byWidget(appBar),
-          matching: find.byType(IconButton),
-        );
-        final logoutIconButton = tester.widget<IconButton>(
-          logoutIconButtonFinder,
-        );
-        expect(appBar.actions, [logoutIconButton]);
-        final logoutIconFinder = find.descendant(
-          of: find.byWidget(logoutIconButton),
-          matching: find.byType(Icon),
-        );
-        final logoutIcon = tester.widget<Icon>(logoutIconFinder);
-        expect(logoutIcon.icon, Icons.logout);
         FloatingActionButton floatingActionButton = tester.widget(
           find.descendant(
             of: scaffoldFinder,
@@ -182,13 +167,9 @@ void main() {
         );
         Icon addIcon = floatingActionButton.child as Icon;
         expect(addIcon.icon, Icons.add);
-        BlocBuilder<FieldsCubit, FieldsState> blocBuilder = tester.widget(
-          find.byType(BlocBuilder<FieldsCubit, FieldsState>),
-        );
-        expect(scaffold.body, blocBuilder);
         expect(
           find.descendant(
-            of: find.byWidget(blocBuilder),
+            of: find.byWidget(scaffold),
             matching: find.descendant(
               of: centerFinder,
               matching: find.byType(CircularProgressIndicator),
@@ -196,11 +177,20 @@ void main() {
           ),
           findsOne,
         );
+        await tester.tap(
+          find.descendant(
+            of: find.byWidget(appBar),
+            matching: find.byType(PopupMenuButton<Text>),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text(expectedSignOutString), findsOne);
+        expect(find.text(expectedAboutString), findsOne);
         await tester.runAsync(() async {
           await tester.pump();
           Scrollbar scrollbar = tester.widget(
             find.descendant(
-              of: find.byWidget(blocBuilder),
+              of: find.byWidget(scaffold),
               matching: find.byType(Scrollbar),
             ),
           );
@@ -332,20 +322,6 @@ void main() {
         AppBar appBar = tester.widget<AppBar>(appBarFinder);
         Text title = appBar.title as Text;
         expect(title.data, AppLocalizationsEn().materialAppTitle);
-        final logoutIconButtonFinder = find.descendant(
-          of: find.byWidget(appBar),
-          matching: find.byType(IconButton),
-        );
-        final logoutIconButton = tester.widget<IconButton>(
-          logoutIconButtonFinder,
-        );
-        expect(appBar.actions, [logoutIconButton]);
-        final logoutIconFinder = find.descendant(
-          of: find.byWidget(logoutIconButton),
-          matching: find.byType(Icon),
-        );
-        final logoutIcon = tester.widget<Icon>(logoutIconFinder);
-        expect(logoutIcon.icon, Icons.logout);
         FloatingActionButton floatingActionButton = tester.widget(
           find.descendant(
             of: scaffoldFinder,
@@ -354,13 +330,9 @@ void main() {
         );
         Icon addIcon = floatingActionButton.child as Icon;
         expect(addIcon.icon, Icons.add);
-        BlocBuilder<FieldsCubit, FieldsState> blocBuilder = tester.widget(
-          find.byType(BlocBuilder<FieldsCubit, FieldsState>),
-        );
-        expect(scaffold.body, blocBuilder);
         expect(
           find.descendant(
-            of: find.byWidget(blocBuilder),
+            of: find.byWidget(scaffold),
             matching: find.descendant(
               of: centerFinder,
               matching: find.byType(CircularProgressIndicator),
@@ -368,22 +340,27 @@ void main() {
           ),
           findsOne,
         );
+        await tester.tap(
+          find.descendant(
+            of: find.byWidget(appBar),
+            matching: find.byType(PopupMenuButton<Text>),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text(expectedSignOutString), findsOne);
+        expect(find.text(expectedAboutString), findsOne);
         await tester.runAsync(() async {
           await tester.pump();
           expect(
             find.descendant(
-              of: find.byWidget(blocBuilder),
+              of: find.byWidget(scaffold),
               matching: find.descendant(
                 of: centerFinder,
-                matching: find.byType(Text),
+                matching: find.text(expectedNoFieldsString),
               ),
             ),
             findsOne,
           );
-          Text noFieldsText = tester.widget<Text>(
-            find.descendant(of: centerFinder, matching: find.byType(Text)),
-          );
-          expect(noFieldsText.data, expectedNoFieldsString);
         });
       },
     );
@@ -418,20 +395,15 @@ void main() {
         AppBar appBar = tester.widget<AppBar>(appBarFinder);
         Text title = appBar.title as Text;
         expect(title.data, AppLocalizationsEn().materialAppTitle);
-        final logoutIconButtonFinder = find.descendant(
-          of: find.byWidget(appBar),
-          matching: find.byType(IconButton),
+        await tester.tap(
+          find.descendant(
+            of: find.byWidget(appBar),
+            matching: find.byType(PopupMenuButton<Text>),
+          ),
         );
-        final logoutIconButton = tester.widget<IconButton>(
-          logoutIconButtonFinder,
-        );
-        expect(appBar.actions, [logoutIconButton]);
-        final logoutIconFinder = find.descendant(
-          of: find.byWidget(logoutIconButton),
-          matching: find.byType(Icon),
-        );
-        final logoutIcon = tester.widget<Icon>(logoutIconFinder);
-        expect(logoutIcon.icon, Icons.logout);
+        await tester.pumpAndSettle();
+        expect(find.text(expectedSignOutString), findsOne);
+        expect(find.text(expectedAboutString), findsOne);
         FloatingActionButton floatingActionButton = tester.widget(
           find.descendant(
             of: scaffoldFinder,
@@ -440,25 +412,17 @@ void main() {
         );
         Icon addIcon = floatingActionButton.child as Icon;
         expect(addIcon.icon, Icons.add);
-        BlocBuilder<FieldsCubit, FieldsState> blocBuilder = tester.widget(
-          find.byType(BlocBuilder<FieldsCubit, FieldsState>),
-        );
-        expect(scaffold.body, blocBuilder);
         await tester.pump();
         expect(
           find.descendant(
-            of: find.byWidget(blocBuilder),
+            of: find.byWidget(scaffold),
             matching: find.descendant(
               of: centerFinder,
-              matching: find.byType(Text),
+              matching: find.text(expectedErrorString),
             ),
           ),
           findsOne,
         );
-        Text errorText = tester.widget<Text>(
-          find.descendant(of: centerFinder, matching: find.byType(Text)),
-        );
-        expect(errorText.data, expectedErrorString);
       },
     );
 
@@ -493,20 +457,6 @@ void main() {
         AppBar appBar = tester.widget<AppBar>(appBarFinder);
         Text title = appBar.title as Text;
         expect(title.data, AppLocalizationsEn().materialAppTitle);
-        final logoutIconButtonFinder = find.descendant(
-          of: find.byWidget(appBar),
-          matching: find.byType(IconButton),
-        );
-        final logoutIconButton = tester.widget<IconButton>(
-          logoutIconButtonFinder,
-        );
-        expect(appBar.actions, [logoutIconButton]);
-        final logoutIconFinder = find.descendant(
-          of: find.byWidget(logoutIconButton),
-          matching: find.byType(Icon),
-        );
-        final logoutIcon = tester.widget<Icon>(logoutIconFinder);
-        expect(logoutIcon.icon, Icons.logout);
         FloatingActionButton floatingActionButton = tester.widget(
           find.descendant(
             of: scaffoldFinder,
@@ -515,13 +465,9 @@ void main() {
         );
         Icon addIcon = floatingActionButton.child as Icon;
         expect(addIcon.icon, Icons.add);
-        BlocBuilder<FieldsCubit, FieldsState> blocBuilder = tester.widget(
-          find.byType(BlocBuilder<FieldsCubit, FieldsState>),
-        );
-        expect(scaffold.body, blocBuilder);
         expect(
           find.descendant(
-            of: find.byWidget(blocBuilder),
+            of: find.byWidget(scaffold),
             matching: find.descendant(
               of: centerFinder,
               matching: find.byType(CircularProgressIndicator),
@@ -529,27 +475,32 @@ void main() {
           ),
           findsOne,
         );
+        await tester.tap(
+          find.descendant(
+            of: find.byWidget(appBar),
+            matching: find.byType(PopupMenuButton<Text>),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text(expectedSignOutString), findsOne);
+        expect(find.text(expectedAboutString), findsOne);
         await tester.runAsync(() async {
           await tester.pump();
           expect(
             find.descendant(
-              of: find.byWidget(blocBuilder),
+              of: find.byWidget(scaffold),
               matching: find.descendant(
                 of: centerFinder,
-                matching: find.byType(Text),
+                matching: find.text(expectedErrorString),
               ),
             ),
             findsOne,
           );
-          Text noFieldsText = tester.widget<Text>(
-            find.descendant(of: centerFinder, matching: find.byType(Text)),
-          );
-          expect(noFieldsText.data, expectedErrorString);
         });
       },
     );
 
-    testWidgets("Test that clicking the logoutIconButton calls signOut()", (
+    testWidgets('Test that clicking sign out calls signOut()', (
       WidgetTester tester,
     ) async {
       await goToFieldPage(
@@ -563,12 +514,14 @@ void main() {
         ),
         tester,
       );
-      final logoutIconButtonFinder = find.byIcon(Icons.logout);
-      await tester.tap(logoutIconButtonFinder);
+      await tester.tap(find.byType(PopupMenuButton<Text>));
+      await tester.pumpAndSettle();
+      final signOutTextFinder = find.text(expectedSignOutString);
+      await tester.tap(signOutTextFinder);
       verify(() => authBloc.signOut()).called(1);
     });
 
-    testWidgets("Test that clicking the logoutIconButton calls signOut()", (
+    testWidgets('Test that clicking about calls shows a dialog', (
       WidgetTester tester,
     ) async {
       await goToFieldPage(
@@ -582,9 +535,13 @@ void main() {
         ),
         tester,
       );
-      final logoutIconButtonFinder = find.byIcon(Icons.logout);
-      await tester.tap(logoutIconButtonFinder);
-      verify(() => authBloc.signOut()).called(1);
+      await tester.tap(find.byType(PopupMenuButton<Text>));
+      await tester.pumpAndSettle();
+      final aboutTextFinder = find.text(expectedAboutString);
+      await tester.tap(aboutTextFinder);
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsOne);
+      expect(find.text('View licenses'), findsOne);
     });
 
     testWidgets(

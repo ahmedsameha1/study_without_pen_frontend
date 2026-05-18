@@ -600,6 +600,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check'**
   String get check;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get signOut;
+
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
 }
 
 class _AppLocalizationsDelegate

@@ -201,5 +201,7 @@
     "mastered": "Mastered",
     "needsFocus": "Needs Focus",
     "enterYourAnswer": "Enter your answer",
-    "check": "Check"
+    "check": "Check",
+    "signOut": "Sign out",
+    "about": "About"
 }

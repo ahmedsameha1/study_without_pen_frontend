@@ -15,100 +15,101 @@ class FieldsPage extends StatelessWidget {
   const FieldsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider<FieldsCubit>(
-      create: (context) => FieldsCubit(context.read<nonso.WatchFieldsUsecase>())
-        ..watch(
-          context.read<nonso.AuthBloc>().state.user!.uid,
-        ),
-      child: const FieldsPageView(),
-    );
-  }
+  Widget build(BuildContext context) => BlocProvider<FieldsCubit>(
+    create: (context) =>
+        FieldsCubit(context.read<nonso.WatchFieldsUsecase>())
+          ..watch(context.read<nonso.AuthBloc>().state.user!.uid),
+    child: const FieldsPageView(),
+  );
 }
 
 class FieldsPageView extends StatelessWidget {
   const FieldsPageView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            AppLocalizations.of(context)!.materialAppTitle,
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      title: Text(AppLocalizations.of(context)!.materialAppTitle),
+      actions: [
+        PopupMenuButton<Text>(
+          itemBuilder: (_) => [
+            PopupMenuItem<Text>(
+              child: Text(AppLocalizations.of(context)!.signOut),
+              onTap: () {
                 context.read<nonso.AuthBloc>().signOut();
               },
-              icon: Icon(
-                Icons.logout,
-              ),
-            )
+            ),
+            PopupMenuItem<Text>(
+              child: Text(AppLocalizations.of(context)!.about),
+              onTap: () {
+                showAboutDialog(context: context);
+              },
+            ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            GoRouter.of(context).go(createFieldPath);
-          },
-          child: Icon(Icons.add),
-        ),
-        body: BlocBuilder<FieldsCubit, FieldsState>(builder: (context, state) {
-          if (state.fieldsStateStatus == StateStatus.loading) {
-            return Center(child: const CircularProgressIndicator());
-          } else if (state.fieldsStateStatus == StateStatus.failure) {
-            return Center(
-                child: Text(
-              AppLocalizations.of(context)!.failureLoadingFields,
-            ));
+      ],
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () {
+        GoRouter.of(context).go(createFieldPath);
+      },
+      child: Icon(Icons.add),
+    ),
+    body: BlocBuilder<FieldsCubit, FieldsState>(
+      builder: (context, state) {
+        if (state.fieldsStateStatus == StateStatus.loading) {
+          return Center(child: const CircularProgressIndicator());
+        } else if (state.fieldsStateStatus == StateStatus.failure) {
+          return Center(
+            child: Text(AppLocalizations.of(context)!.failureLoadingFields),
+          );
+        } else {
+          if (state.fields.isEmpty) {
+            return Center(child: Text(AppLocalizations.of(context)!.noFields));
           } else {
-            if (state.fields.isEmpty) {
-              return Center(
-                child: Text(
-                  AppLocalizations.of(context)!.noFields,
-                ),
-              );
-            } else {
-              return Scrollbar(
-                thumbVisibility: true,
-                trackVisibility: true,
-                thickness: 10.0,
-                radius: const Radius.circular(8.0),
-                interactive: true,
-                child: MasonryGridView.count(
-                  padding: const EdgeInsets.all(10.0),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                  itemCount: state.fields.length,
-                  itemBuilder: (context, index) {
-                    final color = Color(state.fields[index].color);
-                    return GestureDetector(
-                      onTap: () =>
-                          GoRouter.of(context).go('$fieldListsPath${state.fields[index].id!}'),
-                      child: Card(
-                        color: color,
-                        elevation: 2,
-                        child: Padding(
-                          key: Key('cardContentPadding'),
-                          padding: const EdgeInsets.all(10.0),
-                          child: Center(
-                            child: Text(
-                              state.fields[index].name,
-                              style: TextStyle(
-                                  color: color.computeLuminance() > 0.5
-                                      ? Colors.black
-                                      : Colors.white),
+            return Scrollbar(
+              thumbVisibility: true,
+              trackVisibility: true,
+              thickness: 10.0,
+              radius: const Radius.circular(8.0),
+              interactive: true,
+              child: MasonryGridView.count(
+                padding: const EdgeInsets.all(10.0),
+                crossAxisCount: 2,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+                itemCount: state.fields.length,
+                itemBuilder: (context, index) {
+                  final color = Color(state.fields[index].color);
+                  return GestureDetector(
+                    onTap: () => GoRouter.of(
+                      context,
+                    ).go('$fieldListsPath${state.fields[index].id!}'),
+                    child: Card(
+                      color: color,
+                      elevation: 2,
+                      child: Padding(
+                        key: Key('cardContentPadding'),
+                        padding: const EdgeInsets.all(10.0),
+                        child: Center(
+                          child: Text(
+                            state.fields[index].name,
+                            style: TextStyle(
+                              color: color.computeLuminance() > 0.5
+                                  ? Colors.black
+                                  : Colors.white,
                             ),
                           ),
                         ),
                       ),
-                    );
-                  },
-                ),
-              );
-            }
+                    ),
+                  );
+                },
+              ),
+            );
           }
-        }));
-  }
+        }
+      },
+    ),
+  );
 }

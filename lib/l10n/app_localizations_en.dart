@@ -301,4 +301,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get check => 'Check';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get about => 'About';
 }
