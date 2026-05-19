@@ -12,9 +12,9 @@ import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecase
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_event.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_state.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/field_lists_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_field_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/field_lists_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart'
     as nonso;
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
@@ -42,7 +42,7 @@ Future<void> _createFieldListPageInASkeleton(
     RepositoryProvider.value(
       value: watchFieldListsUsecase,
       child: MaterialApp(
-        localizationsDelegates: [
+        localizationsDelegates: const [
           AppLocalizations.delegate,
           nonso.AppLocalizations.delegate,
         ],
@@ -69,7 +69,7 @@ Future<void> _createFieldListPageViewInASkeleton(
     RepositoryProvider.value(
       value: watchFieldListsUsecase,
       child: MaterialApp(
-        localizationsDelegates: [
+        localizationsDelegates: const [
           AppLocalizations.delegate,
           nonso.AppLocalizations.delegate,
         ],
@@ -132,6 +132,7 @@ void main() {
 
   group("English locale", () {
     Locale currentLocale = const Locale("en");
+    String expectedNotesString = 'Notes';
 
     group('FieldListsPage', () {
       setUp(() {
@@ -178,8 +179,8 @@ void main() {
     group('FieldListsPageView', () {
       late MockNavigator navigator;
       late FieldListsBloc fieldListsBloc;
-      String expectedNoFieldListsString = "Currently, there are no lists!";
-      String expectedErrorString = "An error occurred while loading the data!";
+      String expectedNoFieldListsString = 'Currently, there are no lists!';
+      String expectedErrorString = 'An error occurred while loading the data!';
 
       setUp(() {
         navigator = MockNavigator();
@@ -196,7 +197,7 @@ void main() {
       });
 
       testWidgets(
-        "Test the presence of the main widgets when there is at least one fieldlist",
+        'Test the presence of the main widgets when there is at least one fieldlist',
         (WidgetTester tester) async {
           whenListen<FieldListsState>(
             fieldListsBloc,
@@ -356,6 +357,14 @@ void main() {
           );
           Text thirdText = thirdCenter.child as Text;
           expect(thirdText.style!.color, Colors.black);
+          await tester.tap(
+            find.descendant(
+              of: find.byWidget(appBar),
+              matching: find.byType(PopupMenuButton<Text>),
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(find.text(expectedNotesString), findsOne);
         },
       );
 

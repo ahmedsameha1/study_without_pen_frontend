@@ -612,6 +612,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'About'**
   String get about;
+
+  /// No description provided for @notes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
 }
 
 class _AppLocalizationsDelegate
