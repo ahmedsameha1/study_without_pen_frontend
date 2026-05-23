@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FieldListNotesState {
 
- FieldListNotesStatus get status; List<FieldListNoteEntity> get fieldListNotes;
+ FieldListNotesStatus get status; FieldListNotesPageData? get fieldListNotesPageData;
 /// Create a copy of FieldListNotesState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $FieldListNotesStateCopyWith<FieldListNotesState> get copyWith => _$FieldListNot
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FieldListNotesState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.fieldListNotes, fieldListNotes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FieldListNotesState&&(identical(other.status, status) || other.status == status)&&(identical(other.fieldListNotesPageData, fieldListNotesPageData) || other.fieldListNotesPageData == fieldListNotesPageData));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(fieldListNotes));
+int get hashCode => Object.hash(runtimeType,status,fieldListNotesPageData);
 
 @override
 String toString() {
-  return 'FieldListNotesState(status: $status, fieldListNotes: $fieldListNotes)';
+  return 'FieldListNotesState(status: $status, fieldListNotesPageData: $fieldListNotesPageData)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $FieldListNotesStateCopyWith<$Res>  {
   factory $FieldListNotesStateCopyWith(FieldListNotesState value, $Res Function(FieldListNotesState) _then) = _$FieldListNotesStateCopyWithImpl;
 @useResult
 $Res call({
- FieldListNotesStatus status, List<FieldListNoteEntity> fieldListNotes
+ FieldListNotesStatus status, FieldListNotesPageData? fieldListNotesPageData
 });
 
 
-
+$FieldListNotesPageDataCopyWith<$Res>? get fieldListNotesPageData;
 
 }
 /// @nodoc
@@ -62,14 +62,26 @@ class _$FieldListNotesStateCopyWithImpl<$Res>
 
 /// Create a copy of FieldListNotesState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? fieldListNotes = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? fieldListNotesPageData = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as FieldListNotesStatus,fieldListNotes: null == fieldListNotes ? _self.fieldListNotes : fieldListNotes // ignore: cast_nullable_to_non_nullable
-as List<FieldListNoteEntity>,
+as FieldListNotesStatus,fieldListNotesPageData: freezed == fieldListNotesPageData ? _self.fieldListNotesPageData : fieldListNotesPageData // ignore: cast_nullable_to_non_nullable
+as FieldListNotesPageData?,
   ));
 }
+/// Create a copy of FieldListNotesState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FieldListNotesPageDataCopyWith<$Res>? get fieldListNotesPageData {
+    if (_self.fieldListNotesPageData == null) {
+    return null;
+  }
 
+  return $FieldListNotesPageDataCopyWith<$Res>(_self.fieldListNotesPageData!, (value) {
+    return _then(_self.copyWith(fieldListNotesPageData: value));
+  });
+}
 }
 
 
@@ -151,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( FieldListNotesStatus status,  List<FieldListNoteEntity> fieldListNotes)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( FieldListNotesStatus status,  FieldListNotesPageData? fieldListNotesPageData)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FieldListNotesState() when $default != null:
-return $default(_that.status,_that.fieldListNotes);case _:
+return $default(_that.status,_that.fieldListNotesPageData);case _:
   return orElse();
 
 }
@@ -172,10 +184,10 @@ return $default(_that.status,_that.fieldListNotes);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( FieldListNotesStatus status,  List<FieldListNoteEntity> fieldListNotes)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( FieldListNotesStatus status,  FieldListNotesPageData? fieldListNotesPageData)  $default,) {final _that = this;
 switch (_that) {
 case _FieldListNotesState():
-return $default(_that.status,_that.fieldListNotes);case _:
+return $default(_that.status,_that.fieldListNotesPageData);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +204,10 @@ return $default(_that.status,_that.fieldListNotes);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( FieldListNotesStatus status,  List<FieldListNoteEntity> fieldListNotes)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( FieldListNotesStatus status,  FieldListNotesPageData? fieldListNotesPageData)?  $default,) {final _that = this;
 switch (_that) {
 case _FieldListNotesState() when $default != null:
-return $default(_that.status,_that.fieldListNotes);case _:
+return $default(_that.status,_that.fieldListNotesPageData);case _:
   return null;
 
 }
@@ -207,17 +219,11 @@ return $default(_that.status,_that.fieldListNotes);case _:
 
 
 class _FieldListNotesState implements FieldListNotesState {
-  const _FieldListNotesState({this.status = FieldListNotesStatus.initial, final  List<FieldListNoteEntity> fieldListNotes = const []}): _fieldListNotes = fieldListNotes;
+  const _FieldListNotesState({this.status = FieldListNotesStatus.initial, this.fieldListNotesPageData});
   
 
 @override@JsonKey() final  FieldListNotesStatus status;
- final  List<FieldListNoteEntity> _fieldListNotes;
-@override@JsonKey() List<FieldListNoteEntity> get fieldListNotes {
-  if (_fieldListNotes is EqualUnmodifiableListView) return _fieldListNotes;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_fieldListNotes);
-}
-
+@override final  FieldListNotesPageData? fieldListNotesPageData;
 
 /// Create a copy of FieldListNotesState
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +235,16 @@ _$FieldListNotesStateCopyWith<_FieldListNotesState> get copyWith => __$FieldList
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FieldListNotesState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._fieldListNotes, _fieldListNotes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FieldListNotesState&&(identical(other.status, status) || other.status == status)&&(identical(other.fieldListNotesPageData, fieldListNotesPageData) || other.fieldListNotesPageData == fieldListNotesPageData));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_fieldListNotes));
+int get hashCode => Object.hash(runtimeType,status,fieldListNotesPageData);
 
 @override
 String toString() {
-  return 'FieldListNotesState(status: $status, fieldListNotes: $fieldListNotes)';
+  return 'FieldListNotesState(status: $status, fieldListNotesPageData: $fieldListNotesPageData)';
 }
 
 
@@ -249,11 +255,11 @@ abstract mixin class _$FieldListNotesStateCopyWith<$Res> implements $FieldListNo
   factory _$FieldListNotesStateCopyWith(_FieldListNotesState value, $Res Function(_FieldListNotesState) _then) = __$FieldListNotesStateCopyWithImpl;
 @override @useResult
 $Res call({
- FieldListNotesStatus status, List<FieldListNoteEntity> fieldListNotes
+ FieldListNotesStatus status, FieldListNotesPageData? fieldListNotesPageData
 });
 
 
-
+@override $FieldListNotesPageDataCopyWith<$Res>? get fieldListNotesPageData;
 
 }
 /// @nodoc
@@ -266,15 +272,27 @@ class __$FieldListNotesStateCopyWithImpl<$Res>
 
 /// Create a copy of FieldListNotesState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? fieldListNotes = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? fieldListNotesPageData = freezed,}) {
   return _then(_FieldListNotesState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as FieldListNotesStatus,fieldListNotes: null == fieldListNotes ? _self._fieldListNotes : fieldListNotes // ignore: cast_nullable_to_non_nullable
-as List<FieldListNoteEntity>,
+as FieldListNotesStatus,fieldListNotesPageData: freezed == fieldListNotesPageData ? _self.fieldListNotesPageData : fieldListNotesPageData // ignore: cast_nullable_to_non_nullable
+as FieldListNotesPageData?,
   ));
 }
 
+/// Create a copy of FieldListNotesState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$FieldListNotesPageDataCopyWith<$Res>? get fieldListNotesPageData {
+    if (_self.fieldListNotesPageData == null) {
+    return null;
+  }
 
+  return $FieldListNotesPageDataCopyWith<$Res>(_self.fieldListNotesPageData!, (value) {
+    return _then(_self.copyWith(fieldListNotesPageData: value));
+  });
+}
 }
 
 // dart format on

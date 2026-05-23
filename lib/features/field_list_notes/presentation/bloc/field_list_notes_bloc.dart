@@ -20,9 +20,9 @@ class FieldListNotesBloc
     try {
       await emit.forEach(
         _watchFieldListNotesUsecase.call(event.fieldListId),
-        onData: (fieldListNotes) => state.copyWith(
+        onData: (fieldListNotesPageData) => state.copyWith(
           status: FieldListNotesStatus.success,
-          fieldListNotes: fieldListNotes,
+          fieldListNotesPageData: fieldListNotesPageData,
         ),
         onError: (_, _) => state.copyWith(status: FieldListNotesStatus.failure),
       );
