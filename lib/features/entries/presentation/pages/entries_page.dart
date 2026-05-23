@@ -223,6 +223,17 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                 ).add(SubmitSearch(value));
                               },
                             ),
+                            PopupMenuButton<Text>(
+                              itemBuilder: (_) => [
+                                PopupMenuItem<Text>(
+                                  child: Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.notes,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
