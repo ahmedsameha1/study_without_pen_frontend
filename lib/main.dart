@@ -11,12 +11,16 @@ import 'common/widgets/app.dart';
 import 'database/app_database.dart';
 import 'database/database_connection.dart';
 import 'database/entrys_dao.dart';
+import 'database/field_list_notes_dao.dart';
 import 'database/field_lists_dao.dart';
 import 'database/fields_dao.dart';
 import 'features/entries/data/repositories/entries_repository.dart';
 import 'features/entries/data/repositories/entries_repository_local.dart';
 import 'features/entries/domain/usecases/create_entry_usecase.dart';
 import 'features/entries/domain/usecases/watch_entries_usecase.dart';
+import 'features/field_list_notes/data/repositories/field_list_notes_repository.dart';
+import 'features/field_list_notes/data/repositories/field_list_notes_repository_local.dart';
+import 'features/field_list_notes/domain/usecases/watch_field_list_notes_usecase.dart';
 import 'features/field_lists/data/repositories/field_lists_repository.dart';
 import 'features/field_lists/data/repositories/field_lists_repository_local.dart';
 import 'features/field_lists/domain/usecases/create_field_list_usecase.dart';
@@ -46,11 +50,14 @@ Future<void> main() async {
   FieldsDao fieldsDao = FieldsDao(appDatabase);
   FieldListsDao fieldListsDao = FieldListsDao(appDatabase);
   EntrysDao entrysDao = EntrysDao(appDatabase);
+  FieldListNotesDao fieldListNotesDao = FieldListNotesDao(appDatabase);
   FieldsRepository fieldsRepository = FieldsRepositoryLocal(fieldsDao);
   FieldListsRepository fieldListsRepository = FieldListsRepositoryLocal(
     fieldListsDao,
   );
   EntriesRepository entriesRepository = EntriesRepositoryLocal(entrysDao);
+  FieldListNotesRepository fieldListNotesRepository =
+      FieldListNotesRepositoryLocal(fieldListNotesDao);
   runApp(
     MultiRepositoryProvider(
       providers: [
@@ -84,6 +91,12 @@ Future<void> main() async {
         RepositoryProvider<GiveUserToTheUserlessDataAfterFirstSignInUsecase>(
           create: (context) => GiveUserToTheUserlessDataAfterFirstSignInUsecase(
             fieldsRepository,
+          ),
+        ),
+        RepositoryProvider<WatchFieldListNotesUsecase>(
+          create: (context) => WatchFieldListNotesUsecase(
+            fieldListsRepository,
+            fieldListNotesRepository,
           ),
         ),
       ],

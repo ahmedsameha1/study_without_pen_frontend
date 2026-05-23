@@ -5,6 +5,7 @@ import 'package:nonso/nonso.dart';
 
 import '../features/entries/presentation/pages/create_entry_page.dart';
 import '../features/entries/presentation/pages/entries_page.dart';
+import '../features/field_list_notes/presentation/pages/field_list_notes_page.dart';
 import '../features/field_lists/presentation/pages/create_field_list_page.dart';
 import '../features/field_lists/presentation/pages/field_lists_page.dart';
 import '../features/fields/presentation/pages/create_field_page.dart';
@@ -26,6 +27,7 @@ const entriesPath = '/entries/';
 const createFieldList = '/create_field_list';
 const createEntry = '/create_entry';
 const studyTest = '/study_test';
+const fieldListNotes = '/field_list_notes';
 
 GoRouter getRouterConfig() => GoRouter(
   routes: [
@@ -45,6 +47,10 @@ GoRouter getRouterConfig() => GoRouter(
               routes: [
                 GoRoute(path: createEntry, builder: createEntryPathBuilder),
                 GoRoute(path: studyTest, builder: studyTestPathBuilder),
+                GoRoute(
+                  path: fieldListNotes,
+                  builder: fieldListNotesPathBuilder,
+                ),
               ],
             ),
           ],
@@ -81,6 +87,13 @@ Widget entriesPathBuilder(
   GoRouterState goRouterState,
 ) => EntriesPage(
   fieldId: goRouterState.pathParameters[fieldIdParameter]!,
+  fieldListId: goRouterState.pathParameters[fieldListIdParameter]!,
+);
+
+Widget fieldListNotesPathBuilder(
+  BuildContext buildContext,
+  GoRouterState goRouterState,
+) => FieldListNotesPage(
   fieldListId: goRouterState.pathParameters[fieldListIdParameter]!,
 );
 

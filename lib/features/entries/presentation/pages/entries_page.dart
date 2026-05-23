@@ -231,6 +231,10 @@ class _EntriesPageViewState extends State<EntriesPageView>
                                       context,
                                     )!.notes,
                                   ),
+                                  onTap: () => GoRouter.of(context).go(
+                                    '$fieldListsPath${widget.fieldId}$entriesPath'
+                                    '${state.entriesPageData!.fieldList.id!}$fieldListNotes',
+                                  ),
                                 ),
                               ],
                             ),
