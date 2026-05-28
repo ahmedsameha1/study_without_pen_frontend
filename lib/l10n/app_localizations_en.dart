@@ -203,6 +203,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'An error occurred while loading entries!';
 
   @override
+  String get failureLoadingNotes => 'An error occurred while loading notes!';
+
+  @override
   String get failureLoadingSearchResult =>
       'An error occurred while loading search result!';
 

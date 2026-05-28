@@ -403,6 +403,12 @@ abstract class AppLocalizations {
   /// **'An error occurred while loading entries!'**
   String get failureLoadingEntries;
 
+  /// No description provided for @failureLoadingNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while loading notes!'**
+  String get failureLoadingNotes;
+
   /// No description provided for @failureLoadingSearchResult.
   ///
   /// In en, this message translates to:
