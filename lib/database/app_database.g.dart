@@ -89,7 +89,7 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
         ).isSmallerOrEqualValue(Fields.MAXIMUM_USAGE_COUNT),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: Constant(Fields.DEFAULT_USAGE_COUNT),
+    defaultValue: const Constant(Fields.DEFAULT_USAGE_COUNT),
   );
   static const VerificationMeta _colorMeta = const VerificationMeta('color');
   @override
@@ -102,7 +102,7 @@ class $FieldsTable extends Fields with TableInfo<$FieldsTable, Field> {
         ComparableExpr(color).isSmallerOrEqualValue(Fields.MAXIMUM_COLOR),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: Constant(Fields.DEFAULT_COLOR),
+    defaultValue: const Constant(Fields.DEFAULT_COLOR),
   );
   @override
   List<GeneratedColumn> get $columns => [
@@ -625,7 +625,7 @@ class $FieldListsTable extends FieldLists
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'CHECK ("does_read_answer" IN (0, 1))',
     ),
-    defaultValue: Constant(false),
+    defaultValue: const Constant(false),
   );
   static const VerificationMeta _usageCountMeta = const VerificationMeta(
     'usageCount',
@@ -644,7 +644,7 @@ class $FieldListsTable extends FieldLists
         ).isSmallerOrEqualValue(FieldLists.MAXIMUM_USAGE_COUNT),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: Constant(0),
+    defaultValue: const Constant(0),
   );
   static const VerificationMeta _colorMeta = const VerificationMeta('color');
   @override
@@ -657,7 +657,7 @@ class $FieldListsTable extends FieldLists
         ComparableExpr(color).isSmallerOrEqualValue(FieldLists.MAXIMUM_COLOR),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: Constant(FieldLists.MAXIMUM_COLOR),
+    defaultValue: const Constant(FieldLists.MAXIMUM_COLOR),
   );
   static const VerificationMeta _emulationNumberOfQuestionsMeta =
       const VerificationMeta('emulationNumberOfQuestions');
@@ -806,7 +806,7 @@ class $FieldListsTable extends FieldLists
         defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("does_obfuscate_question" IN (0, 1))',
         ),
-        defaultValue: Constant(false),
+        defaultValue: const Constant(false),
       );
   @override
   List<GeneratedColumn> get $columns => [
@@ -2028,7 +2028,7 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         ComparableExpr(order).isBiggerOrEqualValue(Entrys.ORDER_MINIMUM_VALUE),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: Constant(Entrys.ORDER_MINIMUM_VALUE),
+    defaultValue: const Constant(Entrys.ORDER_MINIMUM_VALUE),
   );
   static const VerificationMeta _didAskedAtCurrentTestRoundMeta =
       const VerificationMeta('didAskedAtCurrentTestRound');
@@ -2043,7 +2043,7 @@ class $EntrysTable extends Entrys with TableInfo<$EntrysTable, Entry> {
         defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("did_asked_at_current_test_round" IN (0, 1))',
         ),
-        defaultValue: Constant(true),
+        defaultValue: const Constant(true),
       );
   static const VerificationMeta _emulatedCreatedAtMeta = const VerificationMeta(
     'emulatedCreatedAt',
@@ -3616,7 +3616,7 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
         ComparableExpr(triesCounter).isSmallerThan(triesNumber),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: Constant(0),
+    defaultValue: const Constant(0),
   );
   static const VerificationMeta _elapsedTimeMeta = const VerificationMeta(
     'elapsedTime',
@@ -3645,7 +3645,7 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'CHECK ("is_completed" IN (0, 1))',
     ),
-    defaultValue: Constant(false),
+    defaultValue: const Constant(false),
   );
   static const VerificationMeta _lastCheckedAnswerResultMeta =
       const VerificationMeta('lastCheckedAnswerResult');
@@ -3660,7 +3660,7 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
         defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("last_checked_answer_result" IN (0, 1))',
         ),
-        defaultValue: Constant(false),
+        defaultValue: const Constant(false),
       );
   static const VerificationMeta _shouldCheckAnAnswerMeta =
       const VerificationMeta('shouldCheckAnAnswer');
@@ -3674,7 +3674,7 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'CHECK ("should_check_an_answer" IN (0, 1))',
     ),
-    defaultValue: Constant(true),
+    defaultValue: const Constant(true),
   );
   static const VerificationMeta _currentHintCounterMeta =
       const VerificationMeta('currentHintCounter');
@@ -3692,7 +3692,7 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
         ).isSmallerOrEqualValue(Sessions.MAXIMUM_CURRENT_HINT_COUNTER),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: Constant(0),
+    defaultValue: const Constant(0),
   );
   static const VerificationMeta _creationAtMeta = const VerificationMeta(
     'creationAt',
@@ -4604,7 +4604,7 @@ class $TestSessionsTable extends TestSessions
         ).isSmallerOrEqualValue(TestSessions.MAXIMUM_WRONG_ANSWER_COUNTER),
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultValue: Constant(0),
+    defaultValue: const Constant(0),
   );
   static const VerificationMeta _lastAnswerMeta = const VerificationMeta(
     'lastAnswer',

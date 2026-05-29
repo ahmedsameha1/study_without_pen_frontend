@@ -6,4 +6,14 @@ part of 'field_notes_dao.dart';
 mixin _$FieldNotesDaoMixin on DatabaseAccessor<AppDatabase> {
   $FieldsTable get fields => attachedDatabase.fields;
   $FieldNotesTable get fieldNotes => attachedDatabase.fieldNotes;
+  FieldNotesDaoManager get managers => FieldNotesDaoManager(this);
+}
+
+class FieldNotesDaoManager {
+  final _$FieldNotesDaoMixin _db;
+  FieldNotesDaoManager(this._db);
+  $$FieldsTableTableManager get fields =>
+      $$FieldsTableTableManager(_db.attachedDatabase, _db.fields);
+  $$FieldNotesTableTableManager get fieldNotes =>
+      $$FieldNotesTableTableManager(_db.attachedDatabase, _db.fieldNotes);
 }
