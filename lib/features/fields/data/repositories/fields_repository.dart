@@ -5,4 +5,7 @@ abstract class FieldsRepository {
   Stream<List<FieldEntity>> watch(String userAccountId);
   Stream<FieldEntity?> watchField(String fieldId);
   Future<void> giveUserTheUserlessData(String userAccountId);
+  Stream<List<(FieldEntity, int)>> watchWithFieldListsCountByUserAccountId(
+    String userAccountId,
+  );
 }

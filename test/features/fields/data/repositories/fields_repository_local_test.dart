@@ -13,16 +13,17 @@ class MockFieldsDao extends Mock implements FieldsDao {}
 
 void main() {
   FieldsDao fieldsDao = MockFieldsDao();
-  FieldsRepository fieldRepository = FieldsRepositoryLocal(fieldsDao);
+  FieldsRepository fieldsRepository = FieldsRepositoryLocal(fieldsDao);
   FieldEntity fieldEntity = FieldEntity(
     const Uuid().v4(),
-    'wohfgowe',
+    const Uuid().v4(),
     'field name',
     DateTime(2020, 1, 1),
     DateTime(2020, 1, 1),
     0,
     0xff520404,
   );
+
   test('create() throws when FieldsDao.create() throws', () {
     when(
       () => fieldsDao.create(
@@ -39,7 +40,7 @@ void main() {
       SqliteException(extendedResultCode: 1, message: "sqlexception"),
     );
     expect(
-      () => fieldRepository.create(fieldEntity),
+      () => fieldsRepository.create(fieldEntity),
       throwsA(
         predicate((e) => e is SqliteException && e.message == "sqlexception"),
       ),
@@ -59,7 +60,7 @@ void main() {
         ),
       ),
     ).thenAnswer((_) => Future.value(1));
-    int value = await fieldRepository.create(fieldEntity);
+    int value = await fieldsRepository.create(fieldEntity);
     expect(value, 1);
   });
 
@@ -70,7 +71,7 @@ void main() {
       SqliteException(extendedResultCode: 1, message: 'sqlexception'),
     );
     expect(
-      () => fieldRepository.watch(fieldEntity.userAccountId),
+      () => fieldsRepository.watch(fieldEntity.userAccountId),
       throwsA(
         predicate((e) => e is SqliteException && e.message == 'sqlexception'),
       ),
@@ -96,7 +97,7 @@ void main() {
         ]),
       );
       expect(
-        fieldRepository.watch(fieldEntity.userAccountId),
+        fieldsRepository.watch(fieldEntity.userAccountId),
         emitsInOrder([
           [fieldEntity],
         ]),
@@ -109,7 +110,7 @@ void main() {
       SqliteException(extendedResultCode: 1, message: 'sqlexception'),
     );
     expect(
-      () => fieldRepository.watchField(fieldEntity.id!),
+      () => fieldsRepository.watchField(fieldEntity.id!),
       throwsA(
         predicate((e) => e is SqliteException && e.message == "sqlexception"),
       ),
@@ -131,7 +132,7 @@ void main() {
       ),
     );
     expect(
-      fieldRepository.watchField(fieldEntity.id!),
+      fieldsRepository.watchField(fieldEntity.id!),
       emitsInOrder(<FieldEntity?>[fieldEntity]),
     );
 
@@ -139,7 +140,7 @@ void main() {
       () => fieldsDao.watchById(fieldEntity.id!),
     ).thenAnswer((_) => Stream.value(null));
     expect(
-      fieldRepository.watchField(fieldEntity.id!),
+      fieldsRepository.watchField(fieldEntity.id!),
       emitsInOrder(<FieldEntity?>[null]),
     );
   });
@@ -147,12 +148,90 @@ void main() {
   test(
     'giveUserTheUserlessData() calls FieldsDao.giveUserTheUserlessData()',
     () {
-      final userAccountId = const Uuid().v4();
       when(
-        () => fieldsDao.giveUserTheUserlessData(userAccountId),
+        () => fieldsDao.giveUserTheUserlessData(fieldEntity.userAccountId),
       ).thenAnswer((_) => Future.value());
-      fieldRepository.giveUserTheUserlessData(userAccountId);
-      verify(() => fieldsDao.giveUserTheUserlessData(userAccountId)).called(1);
+      fieldsRepository.giveUserTheUserlessData(fieldEntity.userAccountId);
+      verify(
+        () => fieldsDao.giveUserTheUserlessData(fieldEntity.userAccountId),
+      ).called(1);
     },
   );
+
+  group('watchWithFieldListsCountByUserAccountId', () {
+    test(
+      'throws when FieldsDao.watchWithFieldListsCountByUserAccountId() throw 1',
+      () {
+        when(
+          () => fieldsDao.watchWithFieldListsCountByUserAccountId(
+            fieldEntity.userAccountId,
+          ),
+        ).thenThrow(
+          SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+        );
+        expect(
+          () => fieldsRepository.watchWithFieldListsCountByUserAccountId(
+            fieldEntity.userAccountId,
+          ),
+          throwsA(
+            predicate(
+              (e) =>
+                  e is SqliteException &&
+                  e.extendedResultCode == 1 &&
+                  e.message == 'sqlexception',
+            ),
+          ),
+        );
+      },
+    );
+
+    test(
+      'throws when FieldsDao.watchWithFieldListsCountByUserAccountId() throw 2',
+      () {
+        when(
+          () => fieldsDao.watchWithFieldListsCountByUserAccountId(
+            fieldEntity.userAccountId,
+          ),
+        ).thenAnswer((_) => Stream.error('Not Found'));
+        expect(
+          fieldsRepository.watchWithFieldListsCountByUserAccountId(
+            fieldEntity.userAccountId,
+          ),
+          emitsError(predicate((e) => e is String && e == 'Not Found')),
+        );
+      },
+    );
+
+    test(
+      'returns what FieldsDao.watchWithFieldListsCountByUserAccountId() return',
+      () {
+        when(
+          () => fieldsDao.watchWithFieldListsCountByUserAccountId(
+            fieldEntity.userAccountId,
+          ),
+        ).thenAnswer(
+          (_) => Stream.value([
+            (
+              Field(
+                id: fieldEntity.id!,
+                userAccountId: fieldEntity.userAccountId,
+                name: fieldEntity.name,
+                creationAt: fieldEntity.creationAt,
+                lastModificationAt: fieldEntity.creationAt,
+                usageCount: fieldEntity.usageCount,
+                color: fieldEntity.color,
+              ),
+              3,
+            ),
+          ]),
+        );
+        expect(
+          fieldsRepository.watchWithFieldListsCountByUserAccountId(
+            fieldEntity.userAccountId,
+          ),
+          emits([(fieldEntity, 3)]),
+        );
+      },
+    );
+  });
 }

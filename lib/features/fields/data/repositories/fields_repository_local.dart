@@ -60,4 +60,27 @@ class FieldsRepositoryLocal implements FieldsRepository {
   @override
   Future<void> giveUserTheUserlessData(String userAccountId) =>
       _fieldsDao.giveUserTheUserlessData(userAccountId);
+
+  Stream<List<(FieldEntity, int)>> watchWithFieldListsCountByUserAccountId(
+    String userAccountId,
+  ) => _fieldsDao
+      .watchWithFieldListsCountByUserAccountId(userAccountId)
+      .map(
+        (List<(Field, int)> list) => list
+            .map(
+              (record) => (
+                FieldEntity(
+                  record.$1.id,
+                  record.$1.userAccountId,
+                  record.$1.name,
+                  record.$1.creationAt,
+                  record.$1.lastModificationAt,
+                  record.$1.usageCount,
+                  record.$1.color,
+                ),
+                record.$2,
+              ),
+            )
+            .toList(),
+      );
 }
