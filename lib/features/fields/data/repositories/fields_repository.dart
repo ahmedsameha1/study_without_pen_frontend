@@ -2,7 +2,6 @@ import 'package:study_without_pen_by_flutter/features/fields/domain/models/field
 
 abstract class FieldsRepository {
   Future<int> create(FieldEntity fieldEntity);
-  Stream<List<FieldEntity>> watch(String userAccountId);
   Stream<FieldEntity?> watchField(String fieldId);
   Future<void> giveUserTheUserlessData(String userAccountId);
   Stream<List<(FieldEntity, int)>> watchWithFieldListsCountByUserAccountId(

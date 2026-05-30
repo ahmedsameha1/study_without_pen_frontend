@@ -21,25 +21,6 @@ class FieldsRepositoryLocal implements FieldsRepository {
   );
 
   @override
-  Stream<List<FieldEntity>> watch(String userAccountId) => _fieldsDao
-      .watchByUserAccountId(userAccountId)
-      .map(
-        (list) => list
-            .map(
-              (field) => FieldEntity(
-                field.id,
-                field.userAccountId,
-                field.name,
-                field.creationAt,
-                field.lastModificationAt,
-                field.usageCount,
-                field.color,
-              ),
-            )
-            .toList(),
-      );
-
-  @override
   Stream<FieldEntity?> watchField(String fieldId) =>
       _fieldsDao.watchById(fieldId).map((field) {
         if (field == null) {

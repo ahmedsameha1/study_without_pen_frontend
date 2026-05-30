@@ -4,14 +4,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/common/state_status.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
-import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_with_field_lists_count_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_state.dart';
 
-class MockWatchFieldsUseCase extends Mock implements WatchFieldsUsecase {}
+class MockWatchFieldsUseCase extends Mock
+    implements WatchFieldsWithFieldListsCountUsecase {}
 
 void main() {
-  WatchFieldsUsecase watchFieldsUsecase = MockWatchFieldsUseCase();
+  WatchFieldsWithFieldListsCountUsecase watchFieldsUsecase =
+      MockWatchFieldsUseCase();
   String userAccountId = "wefgweho";
   final id = "wefohweo";
   String name = "field name";
@@ -49,14 +51,17 @@ void main() {
     build: () {
       when(() => watchFieldsUsecase.call(userAccountId)).thenAnswer(
         (_) => Stream.value([
-          FieldEntity(
-            id,
-            userAccountId,
-            name,
-            creationAt,
-            creationAt,
-            usageCount,
-            color,
+          (
+            FieldEntity(
+              id,
+              userAccountId,
+              name,
+              creationAt,
+              creationAt,
+              usageCount,
+              color,
+            ),
+            3,
           ),
         ]),
       );
@@ -66,14 +71,17 @@ void main() {
     expect: () => [
       FieldsState(StateStatus.loading, []),
       FieldsState(StateStatus.success, [
-        FieldEntity(
-          id,
-          userAccountId,
-          name,
-          creationAt,
-          creationAt,
-          usageCount,
-          color,
+        (
+          FieldEntity(
+            id,
+            userAccountId,
+            name,
+            creationAt,
+            creationAt,
+            usageCount,
+            color,
+          ),
+          3,
         ),
       ]),
     ],

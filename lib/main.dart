@@ -29,7 +29,7 @@ import 'features/fields/data/repositories/fields_repository.dart';
 import 'features/fields/data/repositories/fields_repository_local.dart';
 import 'features/fields/domain/usecases/create_field_usecase.dart';
 import 'features/fields/domain/usecases/watch_field_usecase.dart';
-import 'features/fields/domain/usecases/watch_fields_usecase.dart';
+import 'features/fields/domain/usecases/watch_fields_with_field_lists_count_usecase.dart';
 import 'features/userless_data_migration/domain/usecases/give_user_to_the_userless_data_after_first_signin_usecase.dart';
 import 'firebase_options.dart';
 
@@ -67,8 +67,9 @@ Future<void> main() async {
         RepositoryProvider<CreateFieldUseCase>(
           create: (context) => CreateFieldUseCase(fieldsRepository),
         ),
-        RepositoryProvider<WatchFieldsUsecase>(
-          create: (context) => WatchFieldsUsecase(fieldsRepository),
+        RepositoryProvider<WatchFieldsWithFieldListsCountUsecase>(
+          create: (context) =>
+              WatchFieldsWithFieldListsCountUsecase(fieldsRepository),
         ),
         RepositoryProvider<WatchFieldUsecase>(
           create: (context) => WatchFieldUsecase(fieldsRepository),

@@ -64,47 +64,6 @@ void main() {
     expect(value, 1);
   });
 
-  test('watch() throws what FieldsDao.watchByUserAccountId() throw', () {
-    when(
-      () => fieldsDao.watchByUserAccountId(fieldEntity.userAccountId),
-    ).thenThrow(
-      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
-    );
-    expect(
-      () => fieldsRepository.watch(fieldEntity.userAccountId),
-      throwsA(
-        predicate((e) => e is SqliteException && e.message == 'sqlexception'),
-      ),
-    );
-  });
-
-  test(
-    'watch() returns what FieldsDao.watchByUserAccountId() return',
-    () async {
-      when(
-        () => fieldsDao.watchByUserAccountId(fieldEntity.userAccountId),
-      ).thenAnswer(
-        (_) => Stream.value([
-          Field(
-            id: fieldEntity.id!,
-            userAccountId: fieldEntity.userAccountId,
-            name: fieldEntity.name,
-            creationAt: fieldEntity.creationAt,
-            lastModificationAt: fieldEntity.creationAt,
-            usageCount: fieldEntity.usageCount,
-            color: fieldEntity.color,
-          ),
-        ]),
-      );
-      expect(
-        fieldsRepository.watch(fieldEntity.userAccountId),
-        emitsInOrder([
-          [fieldEntity],
-        ]),
-      );
-    },
-  );
-
   test('watchField() throws what FieldsDao.watchById throw', () {
     when(() => fieldsDao.watchById(fieldEntity.id!)).thenThrow(
       SqliteException(extendedResultCode: 1, message: 'sqlexception'),

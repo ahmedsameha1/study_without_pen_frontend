@@ -14,7 +14,7 @@ import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecase
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/field_lists_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_with_field_lists_count_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/fields_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations_en.dart';
@@ -31,9 +31,9 @@ Future<void> goToFieldPage(Widget widgetInskeleton, WidgetTester tester) async {
 
 void main() {
   late CreateFieldUseCase createFieldUseCase;
-  late WatchFieldsUsecase watchFieldsUsecase;
+  late WatchFieldsWithFieldListsCountUsecase watchFieldsUsecase;
   late WatchFieldListsUsecase watchFieldListsUsecase;
-  late StreamController<List<FieldEntity>> streamController;
+  late StreamController<List<(FieldEntity, int)>> streamController;
   String userAccountId = "fwefohwe";
   User user;
   late nonso.AuthBloc authBloc;
@@ -88,7 +88,7 @@ void main() {
       createFieldUseCase = MockCreateFieldUseCase();
       watchFieldsUsecase = MockWatchFieldsUsecase();
       watchFieldListsUsecase = MockWatchFieldListsUsecase();
-      streamController = StreamController<List<FieldEntity>>();
+      streamController = StreamController<List<(FieldEntity, int)>>();
       when(() => user.uid).thenReturn(userAccountId);
       when(() => authBloc.state).thenReturn(
         nonso.AuthState(
@@ -106,32 +106,41 @@ void main() {
       (WidgetTester tester) async {
         when(() => watchFieldsUsecase.call(userAccountId)).thenAnswer(
           (_) => Stream.value([
-            FieldEntity(
-              fieldId1,
-              userAccountId,
-              fieldName1,
-              creationAt1,
-              lastModificationAt1,
-              usageCount1,
-              color1,
+            (
+              FieldEntity(
+                fieldId1,
+                userAccountId,
+                fieldName1,
+                creationAt1,
+                lastModificationAt1,
+                usageCount1,
+                color1,
+              ),
+              3,
             ),
-            FieldEntity(
-              fieldId2,
-              userAccountId,
-              fieldName2,
-              creationAt2,
-              lastModificationAt2,
-              usageCount2,
-              color2,
+            (
+              FieldEntity(
+                fieldId2,
+                userAccountId,
+                fieldName2,
+                creationAt2,
+                lastModificationAt2,
+                usageCount2,
+                color2,
+              ),
+              2,
             ),
-            FieldEntity(
-              fieldId3,
-              userAccountId,
-              fieldName3,
-              creationAt3,
-              lastModificationAt3,
-              usageCount3,
-              color3,
+            (
+              FieldEntity(
+                fieldId3,
+                userAccountId,
+                fieldName3,
+                creationAt3,
+                lastModificationAt3,
+                usageCount3,
+                color3,
+              ),
+              1,
             ),
           ]),
         );
@@ -570,32 +579,41 @@ void main() {
     ) async {
       when(() => watchFieldsUsecase.call(userAccountId)).thenAnswer(
         (_) => Stream.value([
-          FieldEntity(
-            fieldId1,
-            userAccountId,
-            fieldName1,
-            creationAt1,
-            lastModificationAt1,
-            usageCount1,
-            color1,
+          (
+            FieldEntity(
+              fieldId1,
+              userAccountId,
+              fieldName1,
+              creationAt1,
+              lastModificationAt1,
+              usageCount1,
+              color1,
+            ),
+            3,
           ),
-          FieldEntity(
-            fieldId2,
-            userAccountId,
-            fieldName2,
-            creationAt2,
-            lastModificationAt2,
-            usageCount2,
-            color2,
+          (
+            FieldEntity(
+              fieldId2,
+              userAccountId,
+              fieldName2,
+              creationAt2,
+              lastModificationAt2,
+              usageCount2,
+              color2,
+            ),
+            2,
           ),
-          FieldEntity(
-            fieldId3,
-            userAccountId,
-            fieldName3,
-            creationAt3,
-            lastModificationAt3,
-            usageCount3,
-            color3,
+          (
+            FieldEntity(
+              fieldId3,
+              userAccountId,
+              fieldName3,
+              creationAt3,
+              lastModificationAt3,
+              usageCount3,
+              color3,
+            ),
+            1,
           ),
         ]),
       );

@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/common/state_status.dart';
-import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart'
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_with_field_lists_count_usecase.dart'
     as nonso;
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_state.dart';
@@ -17,7 +17,7 @@ class FieldsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider<FieldsCubit>(
     create: (context) =>
-        FieldsCubit(context.read<nonso.WatchFieldsUsecase>())
+        FieldsCubit(context.read<nonso.WatchFieldsWithFieldListsCountUsecase>())
           ..watch(context.read<nonso.AuthBloc>().state.user!.uid),
     child: const FieldsPageView(),
   );
@@ -64,7 +64,7 @@ class FieldsPageView extends StatelessWidget {
             child: Text(AppLocalizations.of(context)!.failureLoadingFields),
           );
         } else {
-          if (state.fields.isEmpty) {
+          if (state.fieldsWithFieldListsCount.isEmpty) {
             return Center(child: Text(AppLocalizations.of(context)!.noFields));
           } else {
             return Scrollbar(
@@ -78,13 +78,13 @@ class FieldsPageView extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
-                itemCount: state.fields.length,
+                itemCount: state.fieldsWithFieldListsCount.length,
                 itemBuilder: (context, index) {
-                  final color = Color(state.fields[index].color);
+                  final color = Color(state.fieldsWithFieldListsCount[index].$1.color);
                   return GestureDetector(
                     onTap: () => GoRouter.of(
                       context,
-                    ).go('$fieldListsPath${state.fields[index].id!}'),
+                    ).go('$fieldListsPath${state.fieldsWithFieldListsCount[index].$1.id!}'),
                     child: Card(
                       color: color,
                       elevation: 2,
@@ -93,7 +93,7 @@ class FieldsPageView extends StatelessWidget {
                         padding: const EdgeInsets.all(10.0),
                         child: Center(
                           child: Text(
-                            state.fields[index].name,
+                            state.fieldsWithFieldListsCount[index].$1.name,
                             style: TextStyle(
                               color: color.computeLuminance() > 0.5
                                   ? Colors.black

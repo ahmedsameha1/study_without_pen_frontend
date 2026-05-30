@@ -9,7 +9,7 @@ import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_field_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_with_field_lists_count_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/fields_page.dart';
 import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
@@ -19,7 +19,8 @@ class MockUser extends Mock implements User {}
 
 class MockCreateFieldUseCase extends Mock implements CreateFieldUseCase {}
 
-class MockWatchFieldsUsecase extends Mock implements WatchFieldsUsecase {}
+class MockWatchFieldsUsecase extends Mock
+    implements WatchFieldsWithFieldListsCountUsecase {}
 
 class MockWatchFieldUsecase extends Mock implements WatchFieldUsecase {}
 
@@ -29,9 +30,10 @@ class MockWatchFieldListsUsecase extends Mock
 class AppThemeForTests {
   static const seedColor = Color(0xFFEC407A);
   static final lightColorScheme = ColorScheme.fromSeed(
-      seedColor: seedColor,
-      dynamicSchemeVariant: DynamicSchemeVariant.content,
-      brightness: Brightness.light);
+    seedColor: seedColor,
+    dynamicSchemeVariant: DynamicSchemeVariant.content,
+    brightness: Brightness.light,
+  );
   static ThemeData get theme {
     ColorScheme colorScheme = lightColorScheme;
     final baseTheme = ThemeData(
@@ -42,34 +44,39 @@ class AppThemeForTests {
         foregroundColor: colorScheme.onPrimary,
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData().copyWith(
-          shape: CircleBorder(), backgroundColor: colorScheme.primary),
+        shape: CircleBorder(),
+        backgroundColor: colorScheme.primary,
+      ),
     );
     return baseTheme;
   }
 }
 
 Widget createWidgetInASkeleton(
-    nonso.AuthBloc bloc,
-    CreateFieldUseCase createFieldUseCase,
-    WatchFieldsUsecase watchFieldsUsecase,
-    WatchFieldListsUsecase watchFieldListsUsecase,
-    Locale locale,
-    GoRouter Function() getRouterConfig) {
+  nonso.AuthBloc bloc,
+  CreateFieldUseCase createFieldUseCase,
+  WatchFieldsWithFieldListsCountUsecase watchFieldsUsecase,
+  WatchFieldListsUsecase watchFieldListsUsecase,
+  Locale locale,
+  GoRouter Function() getRouterConfig,
+) {
   return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider.value(value: bloc),
-        RepositoryProvider.value(value: createFieldUseCase),
-        RepositoryProvider.value(value: watchFieldsUsecase),
-        RepositoryProvider.value(value: watchFieldListsUsecase),
+    providers: [
+      RepositoryProvider.value(value: bloc),
+      RepositoryProvider.value(value: createFieldUseCase),
+      RepositoryProvider.value(value: watchFieldsUsecase),
+      RepositoryProvider.value(value: watchFieldListsUsecase),
+    ],
+    child: MaterialApp.router(
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        nonso.AppLocalizations.delegate,
       ],
-      child: MaterialApp.router(
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            nonso.AppLocalizations.delegate
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: locale,
-          routerConfig: getRouterConfig()));
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: locale,
+      routerConfig: getRouterConfig(),
+    ),
+  );
 }
 
 class ParentPage extends StatelessWidget {
@@ -80,8 +87,9 @@ class ParentPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: TextButton(
-          onPressed: () => GoRouter.of(context).go(childPath),
-          child: Text("child")),
+        onPressed: () => GoRouter.of(context).go(childPath),
+        child: Text("child"),
+      ),
     );
   }
 }
@@ -98,12 +106,15 @@ bool checkWidgetsOrder(List<Widget> widgets, List<Widget> shouldList) {
 }
 
 GoRouter getRouterConfig() {
-  return GoRouter(routes: [
-    GoRoute(
+  return GoRouter(
+    routes: [
+      GoRoute(
         path: rootPath,
         builder: rootPathBuilder,
-        routes: [GoRoute(path: createField, builder: createFieldPathBuilder)])
-  ]);
+        routes: [GoRoute(path: createField, builder: createFieldPathBuilder)],
+      ),
+    ],
+  );
 }
 
 Widget rootPathBuilder(BuildContext buildContext, GoRouterState goRouterState) {
@@ -111,10 +122,10 @@ Widget rootPathBuilder(BuildContext buildContext, GoRouterState goRouterState) {
 }
 
 Widget createFieldPathBuilder(
-    BuildContext buildContext, GoRouterState goRouterState) {
-  return CreateFieldPage(
-    usecaseValidationTest: true,
-  );
+  BuildContext buildContext,
+  GoRouterState goRouterState,
+) {
+  return CreateFieldPage(usecaseValidationTest: true);
 }
 
 Future<void> runAppWhileHandlingFlutterError(WidgetTester tester) async {

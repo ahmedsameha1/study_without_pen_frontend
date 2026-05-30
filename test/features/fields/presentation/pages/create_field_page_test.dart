@@ -12,7 +12,7 @@ import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_with_field_lists_count_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/create_field_cubit.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/create_field_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/pages/fields_page.dart';
@@ -34,7 +34,7 @@ Future<void> goToCreateFieldPage(
 
 void main() {
   late CreateFieldUseCase createFieldUseCase;
-  late WatchFieldsUsecase watchFieldsUsecase;
+  late WatchFieldsWithFieldListsCountUsecase watchFieldsUsecase;
   late WatchFieldListsUsecase watchFieldListsUsecase;
   String userId = "fwefohwe";
   User user;
