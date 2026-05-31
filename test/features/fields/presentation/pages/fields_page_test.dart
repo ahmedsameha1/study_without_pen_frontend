@@ -81,6 +81,7 @@ void main() {
     String expectedErrorString = "An error occurred while loading the fields!";
     String expectedSignOutString = 'Sign out';
     String expectedAboutString = 'About';
+    String expectedListsString = 'Lists';
 
     setUp(() {
       user = MockUser();
@@ -227,7 +228,7 @@ void main() {
           Card firstCard = tester.widget<Card>(
             find.descendant(
               of: find.byType(MasonryGridView),
-              matching: find.byType(Card).at(0),
+              matching: cardFinder.at(0),
             ),
           );
           expect(firstCard.color, Color(color1));
@@ -239,20 +240,22 @@ void main() {
             ),
           );
           expect(firstPadding.padding, const EdgeInsets.all(10.0));
-          Center firstCenter = tester.widget(
+          ListTile firstListTile = tester.widget(
             find.descendant(
               of: find.byWidget(firstPadding),
-              matching: centerFinder,
+              matching: listTileFinder,
             ),
           );
-          expect((firstCenter.child as Text).data, fieldName1);
-          Text firstText = firstCenter.child as Text;
-          expect(firstText.data, fieldName1);
-          expect(firstText.style!.color, Colors.white);
+          Text firstTitleText = firstListTile.title as Text;
+          expect(firstTitleText.data, fieldName1);
+          expect(firstTitleText.style!.color, Colors.white);
+          Text firstSubTitleText = firstListTile.subtitle as Text;
+          expect(firstSubTitleText.data, '3 $expectedListsString');
+          expect(firstSubTitleText.style!.color, Colors.white);
           Card secondCard = tester.widget<Card>(
             find.descendant(
               of: find.byType(MasonryGridView),
-              matching: find.byType(Card).at(1),
+              matching: cardFinder.at(1),
             ),
           );
           expect(secondCard.color, Color(color2));
@@ -264,19 +267,22 @@ void main() {
             ),
           );
           expect(firstPadding.padding, const EdgeInsets.all(10.0));
-          Center secondCenter = tester.widget(
+          ListTile secondListTile = tester.widget(
             find.descendant(
               of: find.byWidget(secondPadding),
-              matching: centerFinder,
+              matching: listTileFinder,
             ),
           );
-          Text secondText = secondCenter.child as Text;
-          expect(secondText.data, fieldName2);
-          expect(secondText.style!.color, Colors.white);
+          Text secondTitleText = secondListTile.title as Text;
+          expect(secondTitleText.data, fieldName2);
+          expect(secondTitleText.style!.color, Colors.white);
+          Text secondSubTitleText = secondListTile.subtitle as Text;
+          expect(secondSubTitleText.data, '2 $expectedListsString');
+          expect(secondSubTitleText.style!.color, Colors.white);
           Card thirdCard = tester.widget<Card>(
             find.descendant(
               of: find.byType(MasonryGridView),
-              matching: find.byType(Card).at(2),
+              matching: cardFinder.at(2),
             ),
           );
           expect(thirdCard.color, Color(color3));
@@ -288,15 +294,18 @@ void main() {
             ),
           );
           expect(firstPadding.padding, const EdgeInsets.all(10.0));
-          Center thirdCenter = tester.widget(
+          ListTile thirdListTile = tester.widget(
             find.descendant(
               of: find.byWidget(thirdPadding),
-              matching: centerFinder,
+              matching: listTileFinder,
             ),
           );
-          Text thirdText = thirdCenter.child as Text;
-          expect(thirdText.data, fieldName3);
-          expect(thirdText.style!.color, Colors.black);
+          Text thirdTitleText = thirdListTile.title as Text;
+          expect(thirdTitleText.data, fieldName3);
+          expect(thirdTitleText.style!.color, Colors.black);
+          Text thirdSubTitleText = thirdListTile.subtitle as Text;
+          expect(thirdSubTitleText.data, '1 $expectedListsString');
+          expect(thirdSubTitleText.style!.color, Colors.black);
         });
       },
     );

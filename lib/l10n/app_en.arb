@@ -205,5 +205,6 @@
     "check": "Check",
     "signOut": "Sign out",
     "about": "About",
-    "notes": "Notes"
+    "notes": "Notes",
+    "lists": "Lists"
 }

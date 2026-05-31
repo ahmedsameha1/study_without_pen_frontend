@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart' as nonso;
-import 'package:study_without_pen_by_flutter/common/router_config.dart';
-import 'package:study_without_pen_by_flutter/common/state_status.dart';
-import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_with_field_lists_count_usecase.dart'
+
+import '../../../../common/router_config.dart';
+import '../../../../common/state_status.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../domain/usecases/watch_fields_with_field_lists_count_usecase.dart'
     as nonso;
-import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_cubit.dart';
-import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/fields_state.dart';
-import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
+import '../cubit/fields_cubit.dart';
+import '../cubit/fields_state.dart';
 
 class FieldsPage extends StatelessWidget {
   const FieldsPage({super.key});
@@ -57,6 +58,7 @@ class FieldsPageView extends StatelessWidget {
     ),
     body: BlocBuilder<FieldsCubit, FieldsState>(
       builder: (context, state) {
+        print(state.fieldsWithFieldListsCount);
         if (state.fieldsStateStatus == StateStatus.loading) {
           return Center(child: const CircularProgressIndicator());
         } else if (state.fieldsStateStatus == StateStatus.failure) {
@@ -80,26 +82,41 @@ class FieldsPageView extends StatelessWidget {
                 mainAxisSpacing: 5,
                 itemCount: state.fieldsWithFieldListsCount.length,
                 itemBuilder: (context, index) {
-                  final color = Color(state.fieldsWithFieldListsCount[index].$1.color);
-                  return GestureDetector(
-                    onTap: () => GoRouter.of(
-                      context,
-                    ).go('$fieldListsPath${state.fieldsWithFieldListsCount[index].$1.id!}'),
-                    child: Card(
-                      color: color,
-                      elevation: 2,
-                      child: Padding(
-                        key: Key('cardContentPadding'),
-                        padding: const EdgeInsets.all(10.0),
-                        child: Center(
-                          child: Text(
-                            state.fieldsWithFieldListsCount[index].$1.name,
-                            style: TextStyle(
-                              color: color.computeLuminance() > 0.5
-                                  ? Colors.black
-                                  : Colors.white,
-                            ),
+                  final color = Color(
+                    state.fieldsWithFieldListsCount[index].$1.color,
+                  );
+                  return Card(
+                    color: color,
+                    elevation: 2,
+                    child: Padding(
+                      key: const Key('cardContentPadding'),
+                      padding: const EdgeInsets.all(10),
+                      child: ListTile(
+                        title: Text(
+                          state.fieldsWithFieldListsCount[index].$1.name,
+                          style: TextStyle(
+                            color: color.computeLuminance() > 0.5
+                                ? Colors.black
+                                : Colors.white,
+                            fontSize: Theme.of(
+                              context,
+                            ).textTheme.titleLarge!.fontSize,
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
+                        subtitle: Text(
+                          '${state.fieldsWithFieldListsCount[index].$2} ${AppLocalizations.of(context)!.lists}',
+                          style: TextStyle(
+                            color: color.computeLuminance() > 0.5
+                                ? Colors.black
+                                : Colors.white,
+                            fontSize: Theme.of(
+                              context,
+                            ).textTheme.bodySmall!.fontSize,
+                          ),
+                        ),
+                        onTap: () => GoRouter.of(context).go(
+                          '$fieldListsPath${state.fieldsWithFieldListsCount[index].$1.id!}',
                         ),
                       ),
                     ),

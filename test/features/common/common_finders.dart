@@ -7,6 +7,7 @@ final safeAreaFinder = find.byType(SafeArea);
 final centerFinder = find.byType(Center);
 final paddingFinder = find.byType(Padding);
 final cardFinder = find.byType(Card);
+final listTileFinder = find.byType(ListTile);
 final singleChildScrollViewFinder = find.byType(SingleChildScrollView);
 final columnFinder = find.byType(Column);
 final rowFinder = find.byType(Row);
