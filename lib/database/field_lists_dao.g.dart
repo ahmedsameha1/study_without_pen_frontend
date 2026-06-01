@@ -6,6 +6,7 @@ part of 'field_lists_dao.dart';
 mixin _$FieldListsDaoMixin on DatabaseAccessor<AppDatabase> {
   $FieldsTable get fields => attachedDatabase.fields;
   $FieldListsTable get fieldLists => attachedDatabase.fieldLists;
+  $EntrysTable get entrys => attachedDatabase.entrys;
   FieldListsDaoManager get managers => FieldListsDaoManager(this);
 }
 
@@ -16,4 +17,6 @@ class FieldListsDaoManager {
       $$FieldsTableTableManager(_db.attachedDatabase, _db.fields);
   $$FieldListsTableTableManager get fieldLists =>
       $$FieldListsTableTableManager(_db.attachedDatabase, _db.fieldLists);
+  $$EntrysTableTableManager get entrys =>
+      $$EntrysTableTableManager(_db.attachedDatabase, _db.entrys);
 }

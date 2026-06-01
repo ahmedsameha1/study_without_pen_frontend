@@ -5,7 +5,7 @@ import 'app_database.dart';
 
 part 'field_lists_dao.g.dart';
 
-@DriftAccessor(tables: [FieldLists])
+@DriftAccessor(tables: [FieldLists, Entrys])
 class FieldListsDao extends DatabaseAccessor<AppDatabase>
     with _$FieldListsDaoMixin {
   FieldListsDao(AppDatabase appDatabase) : super(appDatabase);
@@ -78,16 +78,34 @@ class FieldListsDao extends DatabaseAccessor<AppDatabase>
     )..where(((tbl) => tbl.id.equals(id)))).watchSingle();
   }
 
-  Stream<List<FieldList>> watchByFieldId(String fieldId) {
-    return (select(fieldLists)
-          ..where((tbl) => tbl.fieldId.equals(fieldId))
-          ..orderBy([
-            (tbl) => OrderingTerm(
-              expression: tbl.usageCount,
-              mode: OrderingMode.desc,
-            ),
-          ]))
-        .watch();
+  Stream<List<(FieldList, int)>> watchWithEntriesCountByFieldId(
+    String fieldId,
+  ) {
+    final allEntries = Subquery(select(entrys), 's');
+    final count = allEntries.ref(entrys.id).count();
+    final query =
+        (select(fieldLists)
+              ..where((tbl) => tbl.fieldId.equals(fieldId))
+              ..orderBy([
+                (tbl) => OrderingTerm(
+                  expression: tbl.usageCount,
+                  mode: OrderingMode.desc,
+                ),
+              ]))
+            .join([
+              leftOuterJoin(
+                allEntries,
+                allEntries.ref(entrys.fieldListId).equalsExp(fieldLists.id),
+                useColumns: false,
+              ),
+            ])
+          ..addColumns([count])
+          ..groupBy([fieldLists.id]);
+    return query.watch().map(
+      (rows) => rows
+          .map((row) => (row.readTable(fieldLists), row.read(count)!))
+          .toList(),
+    );
   }
 
   Future<bool> mutate(FieldListsCompanion fieldListsCompanion) {
