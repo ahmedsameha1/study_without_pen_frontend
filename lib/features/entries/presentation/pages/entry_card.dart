@@ -101,7 +101,7 @@ class EntryCard extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Center(
-                            child: SelectableText(
+                            child: Text(
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleLarge!
                                   .copyWith(fontWeight: FontWeight.w600),
@@ -119,7 +119,7 @@ class EntryCard extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Center(
-                            child: SelectableText(
+                            child: Text(
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.bodyLarge,
                               entry.answer,

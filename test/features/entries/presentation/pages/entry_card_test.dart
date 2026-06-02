@@ -182,7 +182,7 @@ void main() {
         ),
       );
       expect(scoreRankQuestionSizedBox.height, 10);
-      SelectableText questionSelectableText = tester.widget(
+      Text questionText = tester.widget(
         find.descendant(
           of: find.byWidget(outerColumn),
           matching: find.descendant(
@@ -191,20 +191,20 @@ void main() {
               of: find.byType(Flexible),
               matching: find.descendant(
                 of: centerFinder,
-                matching: find.byType(SelectableText),
+                matching: find.byType(Text),
               ),
             ),
           ),
         ),
       );
-      expect(questionSelectableText.textAlign, TextAlign.center);
+      expect(questionText.textAlign, TextAlign.center);
       expect(
-        questionSelectableText.style,
+        questionText.style,
         Theme.of(
-          tester.element(find.byWidget(questionSelectableText)),
+          tester.element(find.byWidget(questionText)),
         ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
       );
-      expect(questionSelectableText.data, entry1.question);
+      expect(questionText.data, entry1.question);
       SizedBox questionAnswerSizedBox = tester.widget(
         find.descendant(
           of: find.byWidget(outerColumn),
@@ -212,7 +212,7 @@ void main() {
         ),
       );
       expect(questionAnswerSizedBox.height, 10);
-      SelectableText answerSelectableText = tester.widget(
+      Text answerText = tester.widget(
         find.descendant(
           of: find.byWidget(outerColumn),
           matching: find.descendant(
@@ -221,20 +221,20 @@ void main() {
               of: find.byType(Flexible),
               matching: find.descendant(
                 of: centerFinder,
-                matching: find.byType(SelectableText),
+                matching: find.byType(Text),
               ),
             ),
           ),
         ),
       );
-      expect(answerSelectableText.textAlign, TextAlign.center);
+      expect(answerText.textAlign, TextAlign.center);
       expect(
-        answerSelectableText.style,
+        answerText.style,
         Theme.of(
-          tester.element(find.byWidget(questionSelectableText)),
+          tester.element(find.byWidget(questionText)),
         ).textTheme.bodyLarge,
       );
-      expect(answerSelectableText.data, entry1.answer);
+      expect(answerText.data, entry1.answer);
     });
 
     testWidgets('rank is normal', (WidgetTester tester) async {
