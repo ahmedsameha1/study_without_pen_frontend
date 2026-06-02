@@ -10,7 +10,7 @@ import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/widgets/ok_cancel.dart';
 import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
 import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_with_entries_count_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_with_field_lists_count_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/create_field_cubit.dart';
@@ -35,7 +35,8 @@ Future<void> goToCreateFieldPage(
 void main() {
   late CreateFieldUseCase createFieldUseCase;
   late WatchFieldsWithFieldListsCountUsecase watchFieldsUsecase;
-  late WatchFieldListsUsecase watchFieldListsUsecase;
+  late WatchFieldListsWithEntriesCountUsecase
+  watchFieldListsWithEntriesCountUsecase;
   String userId = "fwefohwe";
   User user;
   late nonso.AuthBloc authBloc;
@@ -54,7 +55,7 @@ void main() {
     authBloc = MockAuthBloc();
     watchFieldsUsecase = MockWatchFieldsUsecase();
     createFieldUseCase = MockCreateFieldUseCase();
-    watchFieldListsUsecase = MockWatchFieldListsUsecase();
+    watchFieldListsWithEntriesCountUsecase = MockWatchFieldListsUsecase();
     when(() => user.uid).thenReturn(userId);
     when(() => authBloc.state).thenReturn(
       nonso.AuthState(
@@ -76,7 +77,7 @@ void main() {
           authBloc,
           createFieldUseCase,
           watchFieldsUsecase,
-          watchFieldListsUsecase,
+          watchFieldListsWithEntriesCountUsecase,
           currentLocale,
           this_app.getRouterConfig,
         ),
@@ -190,7 +191,7 @@ void main() {
           authBloc,
           createFieldUseCase,
           watchFieldsUsecase,
-          watchFieldListsUsecase,
+          watchFieldListsWithEntriesCountUsecase,
           currentLocale,
           this_app.getRouterConfig,
         ),
@@ -257,7 +258,7 @@ void main() {
           authBloc,
           createFieldUseCase,
           watchFieldsUsecase,
-          watchFieldListsUsecase,
+          watchFieldListsWithEntriesCountUsecase,
           currentLocale,
           this_app.getRouterConfig,
         ),
@@ -288,7 +289,7 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldListsUsecase,
+              watchFieldListsWithEntriesCountUsecase,
               currentLocale,
               getRouterConfig,
             ), //bybassing form validation
@@ -342,7 +343,7 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldListsUsecase,
+              watchFieldListsWithEntriesCountUsecase,
               currentLocale,
               this_app.getRouterConfig,
             ),
@@ -396,7 +397,7 @@ void main() {
               authBloc,
               createFieldUseCase,
               watchFieldsUsecase,
-              watchFieldListsUsecase,
+              watchFieldListsWithEntriesCountUsecase,
               currentLocale,
               this_app.getRouterConfig,
             ),

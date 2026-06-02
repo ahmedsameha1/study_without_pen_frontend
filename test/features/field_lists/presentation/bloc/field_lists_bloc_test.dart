@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_lists_page_data.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_with_entries_count_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_event.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_state.dart';
@@ -14,7 +14,7 @@ import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/wat
 class MockWatchFieldUsecase extends Mock implements WatchFieldUsecase {}
 
 class MockWatchFieldListsUsecase extends Mock
-    implements WatchFieldListsUsecase {}
+    implements WatchFieldListsWithEntriesCountUsecase {}
 
 class FakeFieldEntity extends Fake implements FieldEntity {}
 
@@ -30,34 +30,44 @@ void main() {
     0,
     0xff520404,
   );
-  List<FieldListEntity> mockFieldListEntities = [
-    FieldListEntity(
-      id: 'wofhweohg',
-      fieldId: fieldEntity.id!,
-      name: "field list name 1",
-      creationAt: DateTime(2020),
-      lastModificationAt: DateTime(2020),
+  List<(FieldListEntity, int)> mockFieldListEntities = [
+    (
+      FieldListEntity(
+        id: 'wofhweohg',
+        fieldId: fieldEntity.id!,
+        name: "field list name 1",
+        creationAt: DateTime(2020),
+        lastModificationAt: DateTime(2020),
+      ),
+      3,
     ),
-    FieldListEntity(
-      id: 'e3wngwgpwertpweortk',
-      fieldId: fieldEntity.id!,
-      name: 'field list name 2',
-      creationAt: DateTime(2021),
-      lastModificationAt: DateTime(2021),
+    (
+      FieldListEntity(
+        id: 'e3wngwgpwertpweortk',
+        fieldId: fieldEntity.id!,
+        name: 'field list name 2',
+        creationAt: DateTime(2021),
+        lastModificationAt: DateTime(2021),
+      ),
+      2,
     ),
-    FieldListEntity(
-      id: 'weofwheofhweofjwelfmwofise',
-      fieldId: fieldEntity.id!,
-      name: 'field list name 3',
-      creationAt: DateTime(2022),
-      lastModificationAt: DateTime(2022),
+    (
+      FieldListEntity(
+        id: 'weofwheofhweofjwelfmwofise',
+        fieldId: fieldEntity.id!,
+        name: 'field list name 3',
+        creationAt: DateTime(2022),
+        lastModificationAt: DateTime(2022),
+      ),
+      1,
     ),
   ];
   FieldListsPageData mockFieldListsPageData = FieldListsPageData(
     field: fieldEntity,
-    fieldLists: mockFieldListEntities,
+    fieldListsWithEntriesCount: mockFieldListEntities,
   );
-  late WatchFieldListsUsecase watchFieldListsUsecase;
+  late WatchFieldListsWithEntriesCountUsecase
+  watchFieldListsWithEntriesCountUsecase;
 
   setUpAll(() {
     registerFallbackValue(FakeFieldEntity());
@@ -65,14 +75,14 @@ void main() {
   });
 
   setUp(() {
-    watchFieldListsUsecase = MockWatchFieldListsUsecase();
+    watchFieldListsWithEntriesCountUsecase = MockWatchFieldListsUsecase();
     when(
-      () => watchFieldListsUsecase.call(fieldEntity.id!),
+      () => watchFieldListsWithEntriesCountUsecase.call(fieldEntity.id!),
     ).thenAnswer((_) => Stream.value(mockFieldListsPageData));
   });
 
   FieldListsBloc buildBloc() {
-    return FieldListsBloc(watchFieldListsUsecase);
+    return FieldListsBloc(watchFieldListsWithEntriesCountUsecase);
   }
 
   test('FieldListsBloc has a correct initial state', () {
@@ -84,7 +94,9 @@ void main() {
     build: buildBloc,
     act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
     verify: (_) {
-      verify(() => watchFieldListsUsecase.call(fieldEntity.id!)).called(1);
+      verify(
+        () => watchFieldListsWithEntriesCountUsecase.call(fieldEntity.id!),
+      ).called(1);
     },
   );
 
@@ -109,9 +121,14 @@ void main() {
     build: buildBloc,
     act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
     setUp: () {
-      when(() => watchFieldListsUsecase.call(fieldEntity.id!)).thenAnswer(
+      when(
+        () => watchFieldListsWithEntriesCountUsecase.call(fieldEntity.id!),
+      ).thenAnswer(
         (_) => Stream.value(
-          FieldListsPageData(field: null, fieldLists: mockFieldListEntities),
+          FieldListsPageData(
+            field: null,
+            fieldListsWithEntriesCount: mockFieldListEntities,
+          ),
         ),
       );
     },
@@ -128,7 +145,7 @@ void main() {
     act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
     setUp: () {
       when(
-        () => watchFieldListsUsecase.call(fieldEntity.id!),
+        () => watchFieldListsWithEntriesCountUsecase.call(fieldEntity.id!),
       ).thenAnswer((_) => Stream.error(Exception("oops!")));
     },
     expect: () => [
@@ -143,7 +160,9 @@ void main() {
     build: buildBloc,
     act: (bloc) => bloc.add(FieldListsSubscriptionRequested(fieldEntity.id!)),
     setUp: () {
-      when(() => watchFieldListsUsecase.call(fieldEntity.id!)).thenThrow(
+      when(
+        () => watchFieldListsWithEntriesCountUsecase.call(fieldEntity.id!),
+      ).thenThrow(
         (_) => SqliteException(extendedResultCode: 1, message: "sqlexception"),
       );
     },

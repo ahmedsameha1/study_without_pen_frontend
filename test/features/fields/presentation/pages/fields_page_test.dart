@@ -10,7 +10,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart' as real;
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_lists_page_data.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_with_entries_count_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/pages/field_lists_page.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/models/field_entity.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
@@ -32,7 +32,8 @@ Future<void> goToFieldPage(Widget widgetInskeleton, WidgetTester tester) async {
 void main() {
   late CreateFieldUseCase createFieldUseCase;
   late WatchFieldsWithFieldListsCountUsecase watchFieldsUsecase;
-  late WatchFieldListsUsecase watchFieldListsUsecase;
+  late WatchFieldListsWithEntriesCountUsecase
+  watchFieldListsWithEntriesCountUsecase;
   late StreamController<List<(FieldEntity, int)>> streamController;
   String userAccountId = "fwefohwe";
   User user;
@@ -88,7 +89,7 @@ void main() {
       authBloc = MockAuthBloc();
       createFieldUseCase = MockCreateFieldUseCase();
       watchFieldsUsecase = MockWatchFieldsUsecase();
-      watchFieldListsUsecase = MockWatchFieldListsUsecase();
+      watchFieldListsWithEntriesCountUsecase = MockWatchFieldListsUsecase();
       streamController = StreamController<List<(FieldEntity, int)>>();
       when(() => user.uid).thenReturn(userAccountId);
       when(() => authBloc.state).thenReturn(
@@ -150,7 +151,7 @@ void main() {
             authBloc,
             createFieldUseCase,
             watchFieldsUsecase,
-            watchFieldListsUsecase,
+            watchFieldListsWithEntriesCountUsecase,
             currentLocale,
             getRouterConfig,
           ),
@@ -321,7 +322,7 @@ void main() {
             authBloc,
             createFieldUseCase,
             watchFieldsUsecase,
-            watchFieldListsUsecase,
+            watchFieldListsWithEntriesCountUsecase,
             currentLocale,
             getRouterConfig,
           ),
@@ -394,7 +395,7 @@ void main() {
             authBloc,
             createFieldUseCase,
             watchFieldsUsecase,
-            watchFieldListsUsecase,
+            watchFieldListsWithEntriesCountUsecase,
             currentLocale,
             getRouterConfig,
           ),
@@ -456,7 +457,7 @@ void main() {
             authBloc,
             createFieldUseCase,
             watchFieldsUsecase,
-            watchFieldListsUsecase,
+            watchFieldListsWithEntriesCountUsecase,
             currentLocale,
             getRouterConfig,
           ),
@@ -526,7 +527,7 @@ void main() {
           authBloc,
           createFieldUseCase,
           watchFieldsUsecase,
-          watchFieldListsUsecase,
+          watchFieldListsWithEntriesCountUsecase,
           currentLocale,
           getRouterConfig,
         ),
@@ -547,7 +548,7 @@ void main() {
           authBloc,
           createFieldUseCase,
           watchFieldsUsecase,
-          watchFieldListsUsecase,
+          watchFieldListsWithEntriesCountUsecase,
           currentLocale,
           getRouterConfig,
         ),
@@ -571,7 +572,7 @@ void main() {
             authBloc,
             createFieldUseCase,
             watchFieldsUsecase,
-            watchFieldListsUsecase,
+            watchFieldListsWithEntriesCountUsecase,
             currentLocale,
             getRouterConfig,
           ),
@@ -626,9 +627,14 @@ void main() {
           ),
         ]),
       );
-      when(() => watchFieldListsUsecase.call(fieldId1)).thenAnswer(
+      when(
+        () => watchFieldListsWithEntriesCountUsecase.call(fieldId1),
+      ).thenAnswer(
         (_) => Stream.value(
-          FieldListsPageData(field: fieldEntity, fieldLists: []),
+          FieldListsPageData(
+            field: fieldEntity,
+            fieldListsWithEntriesCount: [],
+          ),
         ),
       );
       await goToFieldPage(
@@ -636,7 +642,7 @@ void main() {
           authBloc,
           createFieldUseCase,
           watchFieldsUsecase,
-          watchFieldListsUsecase,
+          watchFieldListsWithEntriesCountUsecase,
           currentLocale,
           real.getRouterConfig,
         ),

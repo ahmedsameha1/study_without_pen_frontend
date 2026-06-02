@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:nonso/nonso.dart' as nonso;
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_with_entries_count_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_field_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/watch_fields_with_field_lists_count_usecase.dart';
@@ -25,7 +25,7 @@ class MockWatchFieldsUsecase extends Mock
 class MockWatchFieldUsecase extends Mock implements WatchFieldUsecase {}
 
 class MockWatchFieldListsUsecase extends Mock
-    implements WatchFieldListsUsecase {}
+    implements WatchFieldListsWithEntriesCountUsecase {}
 
 class AppThemeForTests {
   static const seedColor = Color(0xFFEC407A);
@@ -56,7 +56,7 @@ Widget createWidgetInASkeleton(
   nonso.AuthBloc bloc,
   CreateFieldUseCase createFieldUseCase,
   WatchFieldsWithFieldListsCountUsecase watchFieldsUsecase,
-  WatchFieldListsUsecase watchFieldListsUsecase,
+  WatchFieldListsWithEntriesCountUsecase watchFieldListsWithEntriesCountUsecase,
   Locale locale,
   GoRouter Function() getRouterConfig,
 ) {
@@ -65,7 +65,7 @@ Widget createWidgetInASkeleton(
       RepositoryProvider.value(value: bloc),
       RepositoryProvider.value(value: createFieldUseCase),
       RepositoryProvider.value(value: watchFieldsUsecase),
-      RepositoryProvider.value(value: watchFieldListsUsecase),
+      RepositoryProvider.value(value: watchFieldListsWithEntriesCountUsecase),
     ],
     child: MaterialApp.router(
       localizationsDelegates: [

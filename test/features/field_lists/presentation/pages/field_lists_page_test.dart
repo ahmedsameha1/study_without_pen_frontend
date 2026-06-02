@@ -8,7 +8,7 @@ import 'package:mockingjay/mockingjay.dart';
 import 'package:study_without_pen_by_flutter/common/router_config.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_lists_page_data.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
+import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_with_entries_count_usecase.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_bloc.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_event.dart';
 import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_state.dart';
@@ -26,7 +26,7 @@ class MockGoRouter extends Mock implements GoRouter {}
 class MockWatchFieldUseCase extends Mock implements WatchFieldUsecase {}
 
 class MockWatchFieldListsUseCase extends Mock
-    implements WatchFieldListsUsecase {}
+    implements WatchFieldListsWithEntriesCountUsecase {}
 
 class MockFieldListsBloc extends MockBloc<FieldListsEvent, FieldListsState>
     implements FieldListsBloc {}
@@ -35,12 +35,12 @@ Future<void> _createFieldListPageInASkeleton(
   WidgetTester tester,
   Locale locale,
   GoRouter goRouter,
-  WatchFieldListsUsecase watchFieldListsUsecase,
+  WatchFieldListsWithEntriesCountUsecase watchFieldListsWithEntriesCountUsecase,
   String fieldId,
 ) async {
   await tester.pumpWidget(
     RepositoryProvider.value(
-      value: watchFieldListsUsecase,
+      value: watchFieldListsWithEntriesCountUsecase,
       child: MaterialApp(
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -61,13 +61,13 @@ Future<void> _createFieldListPageViewInASkeleton(
   WidgetTester tester,
   GoRouter goRouter,
   Locale locale,
-  WatchFieldListsUsecase watchFieldListsUsecase,
+  WatchFieldListsWithEntriesCountUsecase watchFieldListsWithEntriesCountUsecase,
   FieldListsBloc fieldListsBloc,
   String fieldId,
 ) async {
   await tester.pumpWidget(
     RepositoryProvider.value(
-      value: watchFieldListsUsecase,
+      value: watchFieldListsWithEntriesCountUsecase,
       child: MaterialApp(
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -97,37 +97,47 @@ void main() {
     0,
     0xff520404,
   );
-  List<FieldListEntity> mockFieldListEntities = [
-    FieldListEntity(
-      id: 'wofhweohg',
-      fieldId: mockFieldEntity.id!,
-      name: "field list name 1",
-      creationAt: DateTime(2020),
-      lastModificationAt: DateTime(2020),
-      color: Colors.red.toARGB32(),
+  List<(FieldListEntity, int)> mockFieldListEntities = [
+    (
+      FieldListEntity(
+        id: 'wofhweohg',
+        fieldId: mockFieldEntity.id!,
+        name: "field list name 1",
+        creationAt: DateTime(2020),
+        lastModificationAt: DateTime(2020),
+        color: Colors.red.toARGB32(),
+      ),
+      3,
     ),
-    FieldListEntity(
-      id: 'e3wngwgpwertpweortk',
-      fieldId: mockFieldEntity.id!,
-      name: 'field list name 2',
-      creationAt: DateTime(2021),
-      lastModificationAt: DateTime(2021),
-      color: 0xff520404,
+    (
+      FieldListEntity(
+        id: 'e3wngwgpwertpweortk',
+        fieldId: mockFieldEntity.id!,
+        name: 'field list name 2',
+        creationAt: DateTime(2021),
+        lastModificationAt: DateTime(2021),
+        color: 0xff520404,
+      ),
+      2,
     ),
-    FieldListEntity(
-      id: 'weofwheofhweofjwelfmwofise',
-      fieldId: mockFieldEntity.id!,
-      name: 'field list name 3',
-      creationAt: DateTime(2022),
-      lastModificationAt: DateTime(2022),
-      color: 0xffffffff,
+    (
+      FieldListEntity(
+        id: 'weofwheofhweofjwelfmwofise',
+        fieldId: mockFieldEntity.id!,
+        name: 'field list name 3',
+        creationAt: DateTime(2022),
+        lastModificationAt: DateTime(2022),
+        color: 0xffffffff,
+      ),
+      1,
     ),
   ];
   FieldListsPageData mockFieldListsPageData = FieldListsPageData(
     field: mockFieldEntity,
-    fieldLists: mockFieldListEntities,
+    fieldListsWithEntriesCount: mockFieldListEntities,
   );
-  late WatchFieldListsUsecase watchFieldListsUsecase;
+  late WatchFieldListsWithEntriesCountUsecase
+  watchFieldListsWithEntriesCountUsecase;
   late GoRouter goRouter = MockGoRouter();
 
   group("English locale", () {
@@ -136,9 +146,10 @@ void main() {
 
     group('FieldListsPage', () {
       setUp(() {
-        watchFieldListsUsecase = MockWatchFieldListsUseCase();
+        watchFieldListsWithEntriesCountUsecase = MockWatchFieldListsUseCase();
         when(
-          () => watchFieldListsUsecase.call(mockFieldEntity.id!),
+          () =>
+              watchFieldListsWithEntriesCountUsecase.call(mockFieldEntity.id!),
         ).thenAnswer((_) => Stream.value(mockFieldListsPageData));
       });
       testWidgets("Test the presence of FieldListsPageView widget", (
@@ -148,7 +159,7 @@ void main() {
           tester,
           currentLocale,
           goRouter,
-          watchFieldListsUsecase,
+          watchFieldListsWithEntriesCountUsecase,
           mockFieldEntity.id!,
         );
         expect(
@@ -167,11 +178,12 @@ void main() {
           tester,
           currentLocale,
           goRouter,
-          watchFieldListsUsecase,
+          watchFieldListsWithEntriesCountUsecase,
           mockFieldEntity.id!,
         );
         verify(
-          () => watchFieldListsUsecase.call(mockFieldEntity.id!),
+          () =>
+              watchFieldListsWithEntriesCountUsecase.call(mockFieldEntity.id!),
         ).called(1);
       });
     });
@@ -190,9 +202,10 @@ void main() {
         when(
           () => fieldListsBloc.state,
         ).thenReturn(FieldListsState(status: FieldListsStatus.loading));
-        watchFieldListsUsecase = MockWatchFieldListsUseCase();
+        watchFieldListsWithEntriesCountUsecase = MockWatchFieldListsUseCase();
         when(
-          () => watchFieldListsUsecase.call(mockFieldEntity.id!),
+          () =>
+              watchFieldListsWithEntriesCountUsecase.call(mockFieldEntity.id!),
         ).thenAnswer((_) => Stream.value(mockFieldListsPageData));
       });
 
@@ -213,7 +226,7 @@ void main() {
             tester,
             goRouter,
             currentLocale,
-            watchFieldListsUsecase,
+            watchFieldListsWithEntriesCountUsecase,
             fieldListsBloc,
             mockFieldEntity.id!,
           );
@@ -282,7 +295,7 @@ void main() {
               matching: find.byType(Card).at(0),
             ),
           );
-          expect(firstCard.color, Color(mockFieldListEntities[0].color));
+          expect(firstCard.color, Color(mockFieldListEntities[0].$1.color));
           expect(firstCard.elevation, 2);
           Padding firstPadding = tester.widget(
             find.descendant(
@@ -299,7 +312,7 @@ void main() {
           );
           expect(
             (firstCenter.child as Text).data,
-            mockFieldListEntities[0].name,
+            mockFieldListEntities[0].$1.name,
           );
           Text firstText = firstCenter.child as Text;
           expect(firstText.style!.color, Colors.white);
@@ -309,7 +322,7 @@ void main() {
               matching: find.byType(Card).at(1),
             ),
           );
-          expect(secondCard.color, Color(mockFieldListEntities[1].color));
+          expect(secondCard.color, Color(mockFieldListEntities[1].$1.color));
           expect(secondCard.elevation, 2);
           Padding secondPadding = tester.widget(
             find.descendant(
@@ -326,7 +339,7 @@ void main() {
           );
           expect(
             (secondCenter.child as Text).data,
-            mockFieldListEntities[1].name,
+            mockFieldListEntities[1].$1.name,
           );
           Text secondText = secondCenter.child as Text;
           expect(secondText.style!.color, Colors.white);
@@ -336,7 +349,7 @@ void main() {
               matching: find.byType(Card).at(2),
             ),
           );
-          expect(thirdCard.color, Color(mockFieldListEntities[2].color));
+          expect(thirdCard.color, Color(mockFieldListEntities[2].$1.color));
           expect(thirdCard.elevation, 2);
           Padding thirdPadding = tester.widget(
             find.descendant(
@@ -353,7 +366,7 @@ void main() {
           );
           expect(
             (thirdCenter.child as Text).data,
-            mockFieldListEntities[2].name,
+            mockFieldListEntities[2].$1.name,
           );
           Text thirdText = thirdCenter.child as Text;
           expect(thirdText.style!.color, Colors.black);
@@ -379,7 +392,7 @@ void main() {
                 status: FieldListsStatus.success,
                 fieldListsPageData: FieldListsPageData(
                   field: mockFieldListsPageData.field,
-                  fieldLists: [],
+                  fieldListsWithEntriesCount: [],
                 ),
               ),
             ]),
@@ -388,7 +401,7 @@ void main() {
             tester,
             goRouter,
             currentLocale,
-            watchFieldListsUsecase,
+            watchFieldListsWithEntriesCountUsecase,
             fieldListsBloc,
             mockFieldEntity.id!,
           );
@@ -454,7 +467,7 @@ void main() {
             tester,
             goRouter,
             currentLocale,
-            watchFieldListsUsecase,
+            watchFieldListsWithEntriesCountUsecase,
             fieldListsBloc,
             mockFieldEntity.id!,
           );
@@ -515,7 +528,7 @@ void main() {
             tester,
             goRouter,
             currentLocale,
-            watchFieldListsUsecase,
+            watchFieldListsWithEntriesCountUsecase,
             fieldListsBloc,
             mockFieldEntity.id!,
           );
@@ -523,7 +536,7 @@ void main() {
           await tester.tap(cardFinder.first);
           verify(
             () => goRouter.go(
-              '$fieldListsPath${mockFieldEntity.id!}$entriesPath${mockFieldListEntities[0].id!}',
+              '$fieldListsPath${mockFieldEntity.id!}$entriesPath${mockFieldListEntities[0].$1.id!}',
             ),
           ).called(1);
         },

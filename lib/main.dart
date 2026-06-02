@@ -24,7 +24,7 @@ import 'features/field_list_notes/domain/usecases/watch_field_list_notes_usecase
 import 'features/field_lists/data/repositories/field_lists_repository.dart';
 import 'features/field_lists/data/repositories/field_lists_repository_local.dart';
 import 'features/field_lists/domain/usecases/create_field_list_usecase.dart';
-import 'features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
+import 'features/field_lists/domain/usecases/watch_field_lists_with_entries_count_usecase.dart';
 import 'features/fields/data/repositories/fields_repository.dart';
 import 'features/fields/data/repositories/fields_repository_local.dart';
 import 'features/fields/domain/usecases/create_field_usecase.dart';
@@ -74,9 +74,11 @@ Future<void> main() async {
         RepositoryProvider<WatchFieldUsecase>(
           create: (context) => WatchFieldUsecase(fieldsRepository),
         ),
-        RepositoryProvider<WatchFieldListsUsecase>(
-          create: (context) =>
-              WatchFieldListsUsecase(fieldsRepository, fieldListsRepository),
+        RepositoryProvider<WatchFieldListsWithEntriesCountUsecase>(
+          create: (context) => WatchFieldListsWithEntriesCountUsecase(
+            fieldsRepository,
+            fieldListsRepository,
+          ),
         ),
         RepositoryProvider<CreateFieldListUsecase>(
           create: (context) => CreateFieldListUsecase(fieldListsRepository),

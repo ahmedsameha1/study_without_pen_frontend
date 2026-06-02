@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../common/router_config.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/usecases/watch_field_lists_usecase.dart';
+import '../../domain/usecases/watch_field_lists_with_entries_count_usecase.dart';
 import '../bloc/field_lists_bloc.dart';
 import '../bloc/field_lists_event.dart';
 import '../bloc/field_lists_state.dart';
@@ -17,7 +17,7 @@ class FieldListsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider<FieldListsBloc>(
     create: (context) =>
-        FieldListsBloc(context.read<WatchFieldListsUsecase>())
+        FieldListsBloc(context.read<WatchFieldListsWithEntriesCountUsecase>())
           ..add(FieldListsSubscriptionRequested(fieldId)),
     child: FieldListsPageView(fieldId: fieldId),
   );
@@ -53,7 +53,7 @@ class FieldListsPageView extends StatelessWidget {
           child: Text(AppLocalizations.of(context)!.failureLoadingData),
         ),
         FieldListsStatus.success =>
-          state.fieldListsPageData!.fieldLists.isEmpty
+          state.fieldListsPageData!.fieldListsWithEntriesCount.isEmpty
               ? Center(child: Text(AppLocalizations.of(context)!.noFieldLists))
               : Scrollbar(
                   thumbVisibility: true,
@@ -66,14 +66,19 @@ class FieldListsPageView extends StatelessWidget {
                     mainAxisSpacing: 5,
                     crossAxisSpacing: 5,
                     crossAxisCount: 2,
-                    itemCount: state.fieldListsPageData!.fieldLists.length,
+                    itemCount: state
+                        .fieldListsPageData!
+                        .fieldListsWithEntriesCount
+                        .length,
                     itemBuilder: (BuildContext context, int index) {
-                      final fieldList =
-                          state.fieldListsPageData!.fieldLists[index];
+                      final fieldList = state
+                          .fieldListsPageData!
+                          .fieldListsWithEntriesCount[index]
+                          .$1;
                       final color = Color(fieldList.color);
                       return InkWell(
                         onTap: () => GoRouter.of(context).go(
-                          '$fieldListsPath$fieldId$entriesPath${state.fieldListsPageData!.fieldLists[index].id!}',
+                          '$fieldListsPath$fieldId$entriesPath${state.fieldListsPageData!.fieldListsWithEntriesCount[index].$1.id!}',
                         ),
                         child: Card(
                           color: color,

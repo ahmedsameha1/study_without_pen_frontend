@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FieldListsPageData {
 
- FieldEntity? get field; List<FieldListEntity> get fieldLists;
+ FieldEntity? get field; List<(FieldListEntity, int)> get fieldListsWithEntriesCount;
 /// Create a copy of FieldListsPageData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $FieldListsPageDataCopyWith<FieldListsPageData> get copyWith => _$FieldListsPage
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FieldListsPageData&&(identical(other.field, field) || other.field == field)&&const DeepCollectionEquality().equals(other.fieldLists, fieldLists));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FieldListsPageData&&(identical(other.field, field) || other.field == field)&&const DeepCollectionEquality().equals(other.fieldListsWithEntriesCount, fieldListsWithEntriesCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,field,const DeepCollectionEquality().hash(fieldLists));
+int get hashCode => Object.hash(runtimeType,field,const DeepCollectionEquality().hash(fieldListsWithEntriesCount));
 
 @override
 String toString() {
-  return 'FieldListsPageData(field: $field, fieldLists: $fieldLists)';
+  return 'FieldListsPageData(field: $field, fieldListsWithEntriesCount: $fieldListsWithEntriesCount)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $FieldListsPageDataCopyWith<$Res>  {
   factory $FieldListsPageDataCopyWith(FieldListsPageData value, $Res Function(FieldListsPageData) _then) = _$FieldListsPageDataCopyWithImpl;
 @useResult
 $Res call({
- FieldEntity? field, List<FieldListEntity> fieldLists
+ FieldEntity? field, List<(FieldListEntity, int)> fieldListsWithEntriesCount
 });
 
 
@@ -62,11 +62,11 @@ class _$FieldListsPageDataCopyWithImpl<$Res>
 
 /// Create a copy of FieldListsPageData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? field = freezed,Object? fieldLists = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? field = freezed,Object? fieldListsWithEntriesCount = null,}) {
   return _then(_self.copyWith(
 field: freezed == field ? _self.field : field // ignore: cast_nullable_to_non_nullable
-as FieldEntity?,fieldLists: null == fieldLists ? _self.fieldLists : fieldLists // ignore: cast_nullable_to_non_nullable
-as List<FieldListEntity>,
+as FieldEntity?,fieldListsWithEntriesCount: null == fieldListsWithEntriesCount ? _self.fieldListsWithEntriesCount : fieldListsWithEntriesCount // ignore: cast_nullable_to_non_nullable
+as List<(FieldListEntity, int)>,
   ));
 }
 /// Create a copy of FieldListsPageData
@@ -163,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( FieldEntity? field,  List<FieldListEntity> fieldLists)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( FieldEntity? field,  List<(FieldListEntity, int)> fieldListsWithEntriesCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FieldListsPageData() when $default != null:
-return $default(_that.field,_that.fieldLists);case _:
+return $default(_that.field,_that.fieldListsWithEntriesCount);case _:
   return orElse();
 
 }
@@ -184,10 +184,10 @@ return $default(_that.field,_that.fieldLists);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( FieldEntity? field,  List<FieldListEntity> fieldLists)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( FieldEntity? field,  List<(FieldListEntity, int)> fieldListsWithEntriesCount)  $default,) {final _that = this;
 switch (_that) {
 case _FieldListsPageData():
-return $default(_that.field,_that.fieldLists);case _:
+return $default(_that.field,_that.fieldListsWithEntriesCount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +204,10 @@ return $default(_that.field,_that.fieldLists);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( FieldEntity? field,  List<FieldListEntity> fieldLists)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( FieldEntity? field,  List<(FieldListEntity, int)> fieldListsWithEntriesCount)?  $default,) {final _that = this;
 switch (_that) {
 case _FieldListsPageData() when $default != null:
-return $default(_that.field,_that.fieldLists);case _:
+return $default(_that.field,_that.fieldListsWithEntriesCount);case _:
   return null;
 
 }
@@ -219,15 +219,15 @@ return $default(_that.field,_that.fieldLists);case _:
 
 
 class _FieldListsPageData implements FieldListsPageData {
-  const _FieldListsPageData({this.field, required final  List<FieldListEntity> fieldLists}): _fieldLists = fieldLists;
+  const _FieldListsPageData({this.field, required final  List<(FieldListEntity, int)> fieldListsWithEntriesCount}): _fieldListsWithEntriesCount = fieldListsWithEntriesCount;
   
 
 @override final  FieldEntity? field;
- final  List<FieldListEntity> _fieldLists;
-@override List<FieldListEntity> get fieldLists {
-  if (_fieldLists is EqualUnmodifiableListView) return _fieldLists;
+ final  List<(FieldListEntity, int)> _fieldListsWithEntriesCount;
+@override List<(FieldListEntity, int)> get fieldListsWithEntriesCount {
+  if (_fieldListsWithEntriesCount is EqualUnmodifiableListView) return _fieldListsWithEntriesCount;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_fieldLists);
+  return EqualUnmodifiableListView(_fieldListsWithEntriesCount);
 }
 
 
@@ -241,16 +241,16 @@ _$FieldListsPageDataCopyWith<_FieldListsPageData> get copyWith => __$FieldListsP
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FieldListsPageData&&(identical(other.field, field) || other.field == field)&&const DeepCollectionEquality().equals(other._fieldLists, _fieldLists));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FieldListsPageData&&(identical(other.field, field) || other.field == field)&&const DeepCollectionEquality().equals(other._fieldListsWithEntriesCount, _fieldListsWithEntriesCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,field,const DeepCollectionEquality().hash(_fieldLists));
+int get hashCode => Object.hash(runtimeType,field,const DeepCollectionEquality().hash(_fieldListsWithEntriesCount));
 
 @override
 String toString() {
-  return 'FieldListsPageData(field: $field, fieldLists: $fieldLists)';
+  return 'FieldListsPageData(field: $field, fieldListsWithEntriesCount: $fieldListsWithEntriesCount)';
 }
 
 
@@ -261,7 +261,7 @@ abstract mixin class _$FieldListsPageDataCopyWith<$Res> implements $FieldListsPa
   factory _$FieldListsPageDataCopyWith(_FieldListsPageData value, $Res Function(_FieldListsPageData) _then) = __$FieldListsPageDataCopyWithImpl;
 @override @useResult
 $Res call({
- FieldEntity? field, List<FieldListEntity> fieldLists
+ FieldEntity? field, List<(FieldListEntity, int)> fieldListsWithEntriesCount
 });
 
 
@@ -278,11 +278,11 @@ class __$FieldListsPageDataCopyWithImpl<$Res>
 
 /// Create a copy of FieldListsPageData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? field = freezed,Object? fieldLists = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? field = freezed,Object? fieldListsWithEntriesCount = null,}) {
   return _then(_FieldListsPageData(
 field: freezed == field ? _self.field : field // ignore: cast_nullable_to_non_nullable
-as FieldEntity?,fieldLists: null == fieldLists ? _self._fieldLists : fieldLists // ignore: cast_nullable_to_non_nullable
-as List<FieldListEntity>,
+as FieldEntity?,fieldListsWithEntriesCount: null == fieldListsWithEntriesCount ? _self._fieldListsWithEntriesCount : fieldListsWithEntriesCount // ignore: cast_nullable_to_non_nullable
+as List<(FieldListEntity, int)>,
   ));
 }
 

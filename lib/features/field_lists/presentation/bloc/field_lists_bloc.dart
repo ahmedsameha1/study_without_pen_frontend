@@ -1,16 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_lists_page_data.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/domain/usecases/watch_field_lists_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_event.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/presentation/bloc/field_lists_state.dart';
+import '../../domain/models/field_lists_page_data.dart';
+import '../../domain/usecases/watch_field_lists_with_entries_count_usecase.dart';
+import 'field_lists_event.dart';
+import 'field_lists_state.dart';
 
 class FieldListsBloc extends Bloc<FieldListsEvent, FieldListsState> {
-  FieldListsBloc(this._watchFieldListsUsecase)
-      : super(const FieldListsState()) {
+  FieldListsBloc(this._watchFieldListsWithEntriesCountUsecase)
+    : super(const FieldListsState()) {
     on<FieldListsSubscriptionRequested>(_onSubscriptionRequested);
   }
 
-  final WatchFieldListsUsecase _watchFieldListsUsecase;
+  final WatchFieldListsWithEntriesCountUsecase
+  _watchFieldListsWithEntriesCountUsecase;
 
   Future<void> _onSubscriptionRequested(
     FieldListsSubscriptionRequested event,
@@ -19,18 +20,19 @@ class FieldListsBloc extends Bloc<FieldListsEvent, FieldListsState> {
     emit(state.copyWith(status: FieldListsStatus.loading));
     try {
       await emit.forEach<FieldListsPageData>(
-          _watchFieldListsUsecase.call(event.fieldId),
-          onData: (fieldListsPageData) {
-        if (fieldListsPageData.field == null) {
-          return state.copyWith(status: FieldListsStatus.failure);
-        } else {
-          return state.copyWith(
+        _watchFieldListsWithEntriesCountUsecase.call(event.fieldId),
+        onData: (fieldListsPageData) {
+          if (fieldListsPageData.field == null) {
+            return state.copyWith(status: FieldListsStatus.failure);
+          } else {
+            return state.copyWith(
               status: FieldListsStatus.success,
-              fieldListsPageData: fieldListsPageData);
-        }
-      }, onError: (_, __) {
-        return state.copyWith(status: FieldListsStatus.failure);
-      });
+              fieldListsPageData: fieldListsPageData,
+            );
+          }
+        },
+        onError: (_, _) => state.copyWith(status: FieldListsStatus.failure),
+      );
     } catch (e) {
       emit(state.copyWith(status: FieldListsStatus.failure));
     }
