@@ -206,5 +206,6 @@
     "signOut": "Sign out",
     "about": "About",
     "notes": "Notes",
-    "lists": "Lists"
+    "lists": "Lists",
+    "entries": "Entries"
 }

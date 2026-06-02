@@ -76,25 +76,38 @@ class FieldListsPageView extends StatelessWidget {
                           .fieldListsWithEntriesCount[index]
                           .$1;
                       final color = Color(fieldList.color);
-                      return InkWell(
-                        onTap: () => GoRouter.of(context).go(
-                          '$fieldListsPath$fieldId$entriesPath${state.fieldListsPageData!.fieldListsWithEntriesCount[index].$1.id!}',
-                        ),
-                        child: Card(
-                          color: color,
-                          elevation: 2,
-                          child: Padding(
-                            key: const Key('cardContentPadding'),
-                            padding: const EdgeInsetsGeometry.all(10),
-                            child: Center(
-                              child: Text(
-                                fieldList.name,
-                                style: TextStyle(
-                                  color: color.computeLuminance() > 0.5
-                                      ? Colors.black
-                                      : Colors.white,
-                                ),
+                      return Card(
+                        color: color,
+                        elevation: 2,
+                        child: Padding(
+                          key: const Key('cardContentPadding'),
+                          padding: const EdgeInsetsGeometry.all(10),
+                          child: ListTile(
+                            title: Text(
+                              fieldList.name,
+                              style: TextStyle(
+                                color: color.computeLuminance() > 0.5
+                                    ? Colors.black
+                                    : Colors.white,
+                                fontSize: Theme.of(
+                                  context,
+                                ).textTheme.titleLarge!.fontSize,
+                                fontWeight: FontWeight.bold,
                               ),
+                            ),
+                            subtitle: Text(
+                              '${state.fieldListsPageData!.fieldListsWithEntriesCount[index].$2} ${AppLocalizations.of(context)!.entries}',
+                              style: TextStyle(
+                                color: color.computeLuminance() > 0.5
+                                    ? Colors.black
+                                    : Colors.white,
+                                fontSize: Theme.of(
+                                  context,
+                                ).textTheme.bodySmall!.fontSize,
+                              ),
+                            ),
+                            onTap: () => GoRouter.of(context).go(
+                              '$fieldListsPath$fieldId$entriesPath${state.fieldListsPageData!.fieldListsWithEntriesCount[index].$1.id!}',
                             ),
                           ),
                         ),

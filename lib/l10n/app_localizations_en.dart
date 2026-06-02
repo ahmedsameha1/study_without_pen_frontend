@@ -316,4 +316,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lists => 'Lists';
+
+  @override
+  String get entries => 'Entries';
 }

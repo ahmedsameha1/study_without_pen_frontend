@@ -630,6 +630,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lists'**
   String get lists;
+
+  /// No description provided for @entries.
+  ///
+  /// In en, this message translates to:
+  /// **'Entries'**
+  String get entries;
 }
 
 class _AppLocalizationsDelegate

@@ -143,6 +143,7 @@ void main() {
   group("English locale", () {
     Locale currentLocale = const Locale("en");
     String expectedNotesString = 'Notes';
+    String expectedEntriesString = 'Entries';
 
     group('FieldListsPage', () {
       setUp(() {
@@ -292,7 +293,7 @@ void main() {
           Card firstCard = tester.widget<Card>(
             find.descendant(
               of: find.byType(MasonryGridView),
-              matching: find.byType(Card).at(0),
+              matching: cardFinder.at(0),
             ),
           );
           expect(firstCard.color, Color(mockFieldListEntities[0].$1.color));
@@ -300,22 +301,22 @@ void main() {
           Padding firstPadding = tester.widget(
             find.descendant(
               of: find.byWidget(firstCard),
-              matching: find.byKey(Key('cardContentPadding')),
+              matching: find.byKey(const Key('cardContentPadding')),
             ),
           );
           expect(firstPadding.padding, const EdgeInsets.all(10.0));
-          Center firstCenter = tester.widget(
+          ListTile firstListTile = tester.widget(
             find.descendant(
               of: find.byWidget(firstPadding),
-              matching: centerFinder,
+              matching: listTileFinder,
             ),
           );
-          expect(
-            (firstCenter.child as Text).data,
-            mockFieldListEntities[0].$1.name,
-          );
-          Text firstText = firstCenter.child as Text;
-          expect(firstText.style!.color, Colors.white);
+          Text firstTitleText = firstListTile.title as Text;
+          expect(firstTitleText.data, mockFieldListEntities[0].$1.name);
+          expect(firstTitleText.style!.color, Colors.white);
+          Text firstSubtitleText = firstListTile.subtitle as Text;
+          expect(firstSubtitleText.data, '3 $expectedEntriesString');
+          expect(firstSubtitleText.style!.color, Colors.white);
           Card secondCard = tester.widget<Card>(
             find.descendant(
               of: find.byType(MasonryGridView),
@@ -331,18 +332,18 @@ void main() {
             ),
           );
           expect(secondPadding.padding, const EdgeInsets.all(10.0));
-          Center secondCenter = tester.widget(
+          ListTile secondListTile = tester.widget(
             find.descendant(
               of: find.byWidget(secondPadding),
-              matching: centerFinder,
+              matching: listTileFinder,
             ),
           );
-          expect(
-            (secondCenter.child as Text).data,
-            mockFieldListEntities[1].$1.name,
-          );
-          Text secondText = secondCenter.child as Text;
-          expect(secondText.style!.color, Colors.white);
+          Text secondTitleText = secondListTile.title as Text;
+          expect(secondTitleText.data, mockFieldListEntities[1].$1.name);
+          expect(secondTitleText.style!.color, Colors.white);
+          Text secondSubtitleText = secondListTile.subtitle as Text;
+          expect(secondSubtitleText.data, '2 $expectedEntriesString');
+          expect(secondSubtitleText.style!.color, Colors.white);
           Card thirdCard = tester.widget<Card>(
             find.descendant(
               of: find.byType(MasonryGridView),
@@ -358,18 +359,18 @@ void main() {
             ),
           );
           expect(thirdPadding.padding, const EdgeInsets.all(10.0));
-          Center thirdCenter = tester.widget(
+          ListTile thirdListTile = tester.widget(
             find.descendant(
               of: find.byWidget(thirdPadding),
-              matching: centerFinder,
+              matching: listTileFinder,
             ),
           );
-          expect(
-            (thirdCenter.child as Text).data,
-            mockFieldListEntities[2].$1.name,
-          );
-          Text thirdText = thirdCenter.child as Text;
-          expect(thirdText.style!.color, Colors.black);
+          Text thirdTitleText = thirdListTile.title as Text;
+          expect(thirdTitleText.data, mockFieldListEntities[2].$1.name);
+          expect(thirdTitleText.style!.color, Colors.black);
+          Text thirdSubtitleText = thirdListTile.subtitle as Text;
+          expect(thirdSubtitleText.data, '1 $expectedEntriesString');
+          expect(thirdSubtitleText.style!.color, Colors.black);
           await tester.tap(
             find.descendant(
               of: find.byWidget(appBar),
