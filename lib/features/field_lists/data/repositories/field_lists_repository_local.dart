@@ -1,59 +1,63 @@
 import 'package:drift/drift.dart';
-import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/database/field_lists_dao.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/data/repositories/field_lists_repository.dart';
-import 'package:study_without_pen_by_flutter/features/field_lists/domain/models/field_list_entity.dart';
+
+import '../../../../database/app_database.dart';
+import '../../../../database/field_lists_dao.dart';
+import '../../domain/models/field_list_entity.dart';
+import 'field_lists_repository.dart';
 
 class FieldListsRepositoryLocal implements FieldListsRepository {
   FieldListsRepositoryLocal(this._fieldListsDao);
   final FieldListsDao _fieldListsDao;
   @override
-  Stream<List<FieldListEntity>> watch(String fieldId) {
-    return _fieldListsDao
-        .watchByFieldId(fieldId)
-        .map(
-          (list) => list
-              .map(
-                (fieldList) => FieldListEntity(
-                  id: fieldList.id,
-                  fieldId: fieldList.fieldId,
-                  name: fieldList.name,
-                  creationAt: fieldList.creationAt,
-                  lastModificationAt: fieldList.lastModificationAt,
-                  color: fieldList.color,
-                  checkType: switch (fieldList.checkType) {
+  Stream<List<(FieldListEntity, int)>> watchWithEntriesCountByFieldId(
+    String fieldId,
+  ) => _fieldListsDao
+      .watchWithEntriesCountByFieldId(fieldId)
+      .map(
+        (List<(FieldList, int)> list) => list
+            .map(
+              (record) => (
+                FieldListEntity(
+                  id: record.$1.id,
+                  fieldId: record.$1.fieldId,
+                  name: record.$1.name,
+                  creationAt: record.$1.creationAt,
+                  lastModificationAt: record.$1.lastModificationAt,
+                  color: record.$1.color,
+                  checkType: switch (record.$1.checkType) {
                     0 => CheckType.NON_STRICT_IGNORE_CASE,
                     1 => CheckType.NON_STRICT_DO_NOT_IGNORE_CASE,
                     2 => CheckType.IGNORE_CASE,
                     3 => CheckType.DO_NOT_IGNORE_CASE,
                     _ => throw ArgumentError(),
                   },
-                  sortBy: fieldList.sortBy,
-                  usageCount: fieldList.usageCount,
-                  languageTag: fieldList.languageTag,
-                  doesObfuscateQuestion: fieldList.doesObfuscateQuestion,
-                  doesReadAnswer: fieldList.doesReadAnswer,
+                  sortBy: record.$1.sortBy,
+                  usageCount: record.$1.usageCount,
+                  languageTag: record.$1.languageTag,
+                  doesObfuscateQuestion: record.$1.doesObfuscateQuestion,
+                  doesReadAnswer: record.$1.doesReadAnswer,
                   testsFindingAnswerDuration:
-                      fieldList.testsFindingAnswerDuration,
+                      record.$1.testsFindingAnswerDuration,
                   testsReadingQuestionLetterDuration:
-                      fieldList.testsReadingQuestionLetterDuration,
+                      record.$1.testsReadingQuestionLetterDuration,
                   testsTypingAnswerLetterDuration:
-                      fieldList.testsTypingAnswerLetterDuration,
+                      record.$1.testsTypingAnswerLetterDuration,
                   studyTillCorrectFindingAnswerDuration:
-                      fieldList.studyTillCorrectFindingAnswerDuration,
+                      record.$1.studyTillCorrectFindingAnswerDuration,
                   studyTillCorrectReadingQuestionLetterDuration:
-                      fieldList.studyTillCorrectReadingQuestionLetterDuration,
+                      record.$1.studyTillCorrectReadingQuestionLetterDuration,
                   studyTillCorrectTypingAnswerLetterDuration:
-                      fieldList.studyTillCorrectTypingAnswerLetterDuration,
-                  testsTimeOfAnswerAction: fieldList.testsTimeOfAnswerAction,
-                  emulationDays: fieldList.emulationDays,
+                      record.$1.studyTillCorrectTypingAnswerLetterDuration,
+                  testsTimeOfAnswerAction: record.$1.testsTimeOfAnswerAction,
+                  emulationDays: record.$1.emulationDays,
                   emulationNumberOfQuestions:
-                      fieldList.emulationNumberOfQuestions,
+                      record.$1.emulationNumberOfQuestions,
                 ),
-              )
-              .toList(),
-        );
-  }
+                record.$2,
+              ),
+            )
+            .toList(),
+      );
 
   @override
   Future<int> create(FieldListEntity fieldListEntity) => _fieldListsDao.create(

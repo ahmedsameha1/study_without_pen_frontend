@@ -23,62 +23,98 @@ void main() {
     lastModificationAt: DateTime(2020, 1, 1),
   );
 
-  test('watch() throws what fieldListsDao.watchByFieldId() throw', () {
-    when(() => fieldListsDao.watchByFieldId(fieldListEntity.fieldId)).thenThrow(
-      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
-    );
-    expect(
-      () => fieldListsRepository.watch(fieldListEntity.fieldId),
-      throwsA(
-        predicate((e) => e is SqliteException && e.message == 'sqlexception'),
-      ),
-    );
-  });
-
-  test('watch() returns what fieldListsDao.watchByFieldId() return', () {
-    when(
-      () => fieldListsDao.watchByFieldId(fieldListEntity.fieldId),
-    ).thenAnswer(
-      (_) => Stream.value([
-        FieldList(
-          id: fieldListEntity.id!,
-          fieldId: fieldListEntity.fieldId,
-          name: fieldListEntity.name,
-          creationAt: fieldListEntity.creationAt,
-          lastModificationAt: fieldListEntity.lastModificationAt,
-          checkType: fieldListEntity.checkType.index,
-          sortBy: fieldListEntity.sortBy,
-          doesReadAnswer: fieldListEntity.doesReadAnswer,
-          usageCount: fieldListEntity.usageCount,
-          color: fieldListEntity.color,
-          testsTimeOfAnswerAction: fieldListEntity.testsTimeOfAnswerAction,
-          doesObfuscateQuestion: fieldListEntity.doesObfuscateQuestion,
-          studyTillCorrectFindingAnswerDuration:
-              fieldListEntity.studyTillCorrectFindingAnswerDuration,
-          studyTillCorrectReadingQuestionLetterDuration:
-              fieldListEntity.studyTillCorrectReadingQuestionLetterDuration,
-          studyTillCorrectTypingAnswerLetterDuration:
-              fieldListEntity.studyTillCorrectTypingAnswerLetterDuration,
-          testsFindingAnswerDuration:
-              fieldListEntity.testsFindingAnswerDuration,
-          testsReadingQuestionLetterDuration:
-              fieldListEntity.testsReadingQuestionLetterDuration,
-          testsTypingAnswerLetterDuration:
-              fieldListEntity.testsTypingAnswerLetterDuration,
-          languageTag: fieldListEntity.languageTag,
-          emulationDays: fieldListEntity.emulationDays,
-          emulationNumberOfQuestions:
-              fieldListEntity.emulationNumberOfQuestions,
+  test(
+    'watchWithEntriesCountByFieldId() throws what fieldListsDao.watchWithEntriesCountByFieldId() throw 1',
+    () {
+      when(
+        () => fieldListsDao.watchWithEntriesCountByFieldId(
+          fieldListEntity.fieldId,
         ),
-      ]),
-    );
-    expect(
-      fieldListsRepository.watch(fieldListEntity.fieldId),
-      emitsInOrder([
-        [fieldListEntity],
-      ]),
-    );
-  });
+      ).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+      );
+      expect(
+        () => fieldListsRepository.watchWithEntriesCountByFieldId(
+          fieldListEntity.fieldId,
+        ),
+        throwsA(
+          predicate((e) => e is SqliteException && e.message == 'sqlexception'),
+        ),
+      );
+    },
+  );
+
+  test(
+    'watchWithEntriesCountByFieldId() throws what fieldListsDao.watchWithEntriesCountByFieldId() throw 2',
+    () {
+      when(
+        () => fieldListsDao.watchWithEntriesCountByFieldId(
+          fieldListEntity.fieldId,
+        ),
+      ).thenAnswer((_) => Stream.error('Not Found'));
+      expect(
+        fieldListsRepository.watchWithEntriesCountByFieldId(
+          fieldListEntity.fieldId,
+        ),
+        emitsError(predicate((e) => e is String && e == 'Not Found')),
+      );
+    },
+  );
+
+  test(
+    'watchWithEntriesCountByFieldId() returns what fieldListsDao.watchWithEntriesCountByFieldId() return',
+    () {
+      when(
+        () => fieldListsDao.watchWithEntriesCountByFieldId(
+          fieldListEntity.fieldId,
+        ),
+      ).thenAnswer(
+        (_) => Stream.value([
+          (
+            FieldList(
+              id: fieldListEntity.id!,
+              fieldId: fieldListEntity.fieldId,
+              name: fieldListEntity.name,
+              creationAt: fieldListEntity.creationAt,
+              lastModificationAt: fieldListEntity.lastModificationAt,
+              checkType: fieldListEntity.checkType.index,
+              sortBy: fieldListEntity.sortBy,
+              doesReadAnswer: fieldListEntity.doesReadAnswer,
+              usageCount: fieldListEntity.usageCount,
+              color: fieldListEntity.color,
+              testsTimeOfAnswerAction: fieldListEntity.testsTimeOfAnswerAction,
+              doesObfuscateQuestion: fieldListEntity.doesObfuscateQuestion,
+              studyTillCorrectFindingAnswerDuration:
+                  fieldListEntity.studyTillCorrectFindingAnswerDuration,
+              studyTillCorrectReadingQuestionLetterDuration:
+                  fieldListEntity.studyTillCorrectReadingQuestionLetterDuration,
+              studyTillCorrectTypingAnswerLetterDuration:
+                  fieldListEntity.studyTillCorrectTypingAnswerLetterDuration,
+              testsFindingAnswerDuration:
+                  fieldListEntity.testsFindingAnswerDuration,
+              testsReadingQuestionLetterDuration:
+                  fieldListEntity.testsReadingQuestionLetterDuration,
+              testsTypingAnswerLetterDuration:
+                  fieldListEntity.testsTypingAnswerLetterDuration,
+              languageTag: fieldListEntity.languageTag,
+              emulationDays: fieldListEntity.emulationDays,
+              emulationNumberOfQuestions:
+                  fieldListEntity.emulationNumberOfQuestions,
+            ),
+            3,
+          ),
+        ]),
+      );
+      expect(
+        fieldListsRepository.watchWithEntriesCountByFieldId(
+          fieldListEntity.fieldId,
+        ),
+        emitsInOrder([
+          [(fieldListEntity, 3)],
+        ]),
+      );
+    },
+  );
 
   test('create() throws what fieldListsDao.create() throw', () {
     when(
