@@ -9,7 +9,7 @@ part 'field_lists_dao.g.dart';
 class FieldListsDao extends DatabaseAccessor<AppDatabase>
     with _$FieldListsDaoMixin {
   FieldListsDao(AppDatabase appDatabase) : super(appDatabase);
-  create(FieldListsCompanion fieldListsCompanion) {
+  Future<int> create(FieldListsCompanion fieldListsCompanion) {
     if (fieldListsCompanion.id.present &&
         !isValid(fieldListsCompanion.id.value)) {
       throw InvalidDataException("id");

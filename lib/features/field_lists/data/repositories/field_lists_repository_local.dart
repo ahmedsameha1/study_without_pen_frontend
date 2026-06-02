@@ -56,84 +56,82 @@ class FieldListsRepositoryLocal implements FieldListsRepository {
   }
 
   @override
-  Future<int> create(FieldListEntity fieldListEntity) {
-    return _fieldListsDao.create(
-      FieldListsCompanion(
-        fieldId: Value(fieldListEntity.fieldId),
-        name: Value(fieldListEntity.name),
-        checkType: Value(fieldListEntity.checkType.index),
-        doesReadAnswer: Value(fieldListEntity.doesReadAnswer),
-        color: Value(fieldListEntity.color),
-        creationAt: Value(fieldListEntity.creationAt),
-        lastModificationAt: Value(fieldListEntity.lastModificationAt),
-        sortBy: Value(fieldListEntity.sortBy),
-        usageCount: Value(fieldListEntity.usageCount),
-        languageTag: Value(fieldListEntity.languageTag),
-        doesObfuscateQuestion: Value(fieldListEntity.doesObfuscateQuestion),
-        testsFindingAnswerDuration: Value(
-          fieldListEntity.testsFindingAnswerDuration,
-        ),
-        testsReadingQuestionLetterDuration: Value(
-          fieldListEntity.testsReadingQuestionLetterDuration,
-        ),
-        testsTypingAnswerLetterDuration: Value(
-          fieldListEntity.testsTypingAnswerLetterDuration,
-        ),
-        studyTillCorrectFindingAnswerDuration: Value(
-          fieldListEntity.studyTillCorrectFindingAnswerDuration,
-        ),
-        studyTillCorrectReadingQuestionLetterDuration: Value(
-          fieldListEntity.studyTillCorrectReadingQuestionLetterDuration,
-        ),
-        studyTillCorrectTypingAnswerLetterDuration: Value(
-          fieldListEntity.studyTillCorrectTypingAnswerLetterDuration,
-        ),
-        testsTimeOfAnswerAction: Value(fieldListEntity.testsTimeOfAnswerAction),
-        emulationDays: Value(fieldListEntity.emulationDays),
-        emulationNumberOfQuestions: Value(
-          fieldListEntity.emulationNumberOfQuestions,
-        ),
+  Future<int> create(FieldListEntity fieldListEntity) => _fieldListsDao.create(
+    FieldListsCompanion(
+      fieldId: Value(fieldListEntity.fieldId),
+      name: Value(fieldListEntity.name),
+      checkType: Value(fieldListEntity.checkType.index),
+      doesReadAnswer: Value(fieldListEntity.doesReadAnswer),
+      color: Value(fieldListEntity.color),
+      creationAt: Value(fieldListEntity.creationAt),
+      lastModificationAt: Value(fieldListEntity.lastModificationAt),
+      sortBy: Value(fieldListEntity.sortBy),
+      usageCount: Value(fieldListEntity.usageCount),
+      languageTag: Value(fieldListEntity.languageTag),
+      doesObfuscateQuestion: Value(fieldListEntity.doesObfuscateQuestion),
+      testsFindingAnswerDuration: Value(
+        fieldListEntity.testsFindingAnswerDuration,
       ),
-    );
-  }
+      testsReadingQuestionLetterDuration: Value(
+        fieldListEntity.testsReadingQuestionLetterDuration,
+      ),
+      testsTypingAnswerLetterDuration: Value(
+        fieldListEntity.testsTypingAnswerLetterDuration,
+      ),
+      studyTillCorrectFindingAnswerDuration: Value(
+        fieldListEntity.studyTillCorrectFindingAnswerDuration,
+      ),
+      studyTillCorrectReadingQuestionLetterDuration: Value(
+        fieldListEntity.studyTillCorrectReadingQuestionLetterDuration,
+      ),
+      studyTillCorrectTypingAnswerLetterDuration: Value(
+        fieldListEntity.studyTillCorrectTypingAnswerLetterDuration,
+      ),
+      testsTimeOfAnswerAction: Value(fieldListEntity.testsTimeOfAnswerAction),
+      emulationDays: Value(fieldListEntity.emulationDays),
+      emulationNumberOfQuestions: Value(
+        fieldListEntity.emulationNumberOfQuestions,
+      ),
+    ),
+  );
 
   @override
-  Stream<FieldListEntity> watchFieldList(String fieldListId) {
-    return _fieldListsDao.watchById(fieldListId).map((fieldList) {
-      return FieldListEntity(
-        id: fieldList.id,
-        fieldId: fieldList.fieldId,
-        name: fieldList.name,
-        creationAt: fieldList.creationAt,
-        lastModificationAt: fieldList.lastModificationAt,
-        languageTag: fieldList.languageTag,
-        checkType: switch (fieldList.checkType) {
-          0 => CheckType.NON_STRICT_IGNORE_CASE,
-          1 => CheckType.NON_STRICT_DO_NOT_IGNORE_CASE,
-          2 => CheckType.IGNORE_CASE,
-          3 => CheckType.DO_NOT_IGNORE_CASE,
-          _ => throw ArgumentError(),
-        },
-        sortBy: fieldList.sortBy,
-        doesReadAnswer: fieldList.doesReadAnswer,
-        usageCount: fieldList.usageCount,
-        color: fieldList.color,
-        emulationNumberOfQuestions: fieldList.emulationNumberOfQuestions,
-        emulationDays: fieldList.emulationDays,
-        testsReadingQuestionLetterDuration:
-            fieldList.testsReadingQuestionLetterDuration,
-        testsFindingAnswerDuration: fieldList.testsFindingAnswerDuration,
-        testsTypingAnswerLetterDuration:
-            fieldList.testsTypingAnswerLetterDuration,
-        studyTillCorrectReadingQuestionLetterDuration:
-            fieldList.studyTillCorrectReadingQuestionLetterDuration,
-        studyTillCorrectFindingAnswerDuration:
-            fieldList.studyTillCorrectFindingAnswerDuration,
-        studyTillCorrectTypingAnswerLetterDuration:
-            fieldList.studyTillCorrectTypingAnswerLetterDuration,
-        testsTimeOfAnswerAction: fieldList.testsTimeOfAnswerAction,
-        doesObfuscateQuestion: fieldList.doesObfuscateQuestion,
+  Stream<FieldListEntity> watchFieldList(String fieldListId) => _fieldListsDao
+      .watchById(fieldListId)
+      .map(
+        (fieldList) => FieldListEntity(
+          id: fieldList.id,
+          fieldId: fieldList.fieldId,
+          name: fieldList.name,
+          creationAt: fieldList.creationAt,
+          lastModificationAt: fieldList.lastModificationAt,
+          languageTag: fieldList.languageTag,
+          checkType: switch (fieldList.checkType) {
+            0 => CheckType.NON_STRICT_IGNORE_CASE,
+            1 => CheckType.NON_STRICT_DO_NOT_IGNORE_CASE,
+            2 => CheckType.IGNORE_CASE,
+            3 => CheckType.DO_NOT_IGNORE_CASE,
+            _ => throw ArgumentError(),
+          },
+          sortBy: fieldList.sortBy,
+          doesReadAnswer: fieldList.doesReadAnswer,
+          usageCount: fieldList.usageCount,
+          color: fieldList.color,
+          emulationNumberOfQuestions: fieldList.emulationNumberOfQuestions,
+          emulationDays: fieldList.emulationDays,
+          testsReadingQuestionLetterDuration:
+              fieldList.testsReadingQuestionLetterDuration,
+          testsFindingAnswerDuration: fieldList.testsFindingAnswerDuration,
+          testsTypingAnswerLetterDuration:
+              fieldList.testsTypingAnswerLetterDuration,
+          studyTillCorrectReadingQuestionLetterDuration:
+              fieldList.studyTillCorrectReadingQuestionLetterDuration,
+          studyTillCorrectFindingAnswerDuration:
+              fieldList.studyTillCorrectFindingAnswerDuration,
+          studyTillCorrectTypingAnswerLetterDuration:
+              fieldList.studyTillCorrectTypingAnswerLetterDuration,
+          testsTimeOfAnswerAction: fieldList.testsTimeOfAnswerAction,
+          doesObfuscateQuestion: fieldList.doesObfuscateQuestion,
+        ),
       );
-    });
-  }
 }
