@@ -7,4 +7,5 @@ abstract class FieldsRepository {
   Stream<List<(FieldEntity, int)>> watchWithFieldListsCountByUserAccountId(
     String userAccountId,
   );
+  Future<int> remove(String fieldId);
 }

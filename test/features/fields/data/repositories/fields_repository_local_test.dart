@@ -193,4 +193,37 @@ void main() {
       },
     );
   });
+
+  group('remove()', () {
+    test('throws what FieldsDao.remove() throw 1', () {
+      when(() => fieldsDao.remove(fieldEntity.id!)).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+      );
+      expect(
+        () => fieldsRepository.remove(fieldEntity.id!),
+        throwsA(
+          predicate(
+            (e) =>
+                e is SqliteException &&
+                e.extendedResultCode == 1 &&
+                e.message == 'sqlexception',
+          ),
+        ),
+      );
+    });
+
+    test('throws what FieldsDao.remove() throw 2', () {
+      when(
+        () => fieldsDao.remove(fieldEntity.id!),
+      ).thenAnswer((_) => Future.error('Not Found'));
+      expect(fieldsRepository.remove(fieldEntity.id!), throwsA('Not Found'));
+    });
+
+    test('returns what FieldsDao.remove() return', () {
+      when(
+        () => fieldsDao.remove(fieldEntity.id!),
+      ).thenAnswer((_) => Future.value(1));
+      expect(fieldsRepository.remove(fieldEntity.id!), completion(1));
+    });
+  });
 }

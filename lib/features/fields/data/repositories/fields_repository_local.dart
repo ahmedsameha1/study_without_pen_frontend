@@ -64,4 +64,6 @@ class FieldsRepositoryLocal implements FieldsRepository {
             )
             .toList(),
       );
+
+  Future<int> remove(String fieldId) => _fieldsDao.remove(fieldId);
 }

@@ -68,7 +68,8 @@ class FieldsDao extends DatabaseAccessor<AppDatabase> with _$FieldsDaoMixin {
     return update(fields).replace(fieldsCompanion);
   }
 
-  remove(String id) => (delete(fields)..where((tbl) => tbl.id.equals(id))).go();
+  Future<int> remove(String id) =>
+      (delete(fields)..where((tbl) => tbl.id.equals(id))).go();
 
   Future<void> giveUserTheUserlessData(String userAccountId) =>
       (update(fields)..where(
