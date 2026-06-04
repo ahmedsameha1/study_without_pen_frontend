@@ -5,21 +5,25 @@ import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart' as nonso;
 
 import '../../../../common/router_config.dart';
-import '../../../../common/state_status.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/usecases/watch_fields_with_field_lists_count_usecase.dart'
     as nonso;
-import '../cubit/fields_cubit.dart';
-import '../cubit/fields_state.dart';
+import '../bloc/fields_bloc.dart';
+import '../bloc/fields_event.dart';
+import '../bloc/fields_state.dart';
 
 class FieldsPage extends StatelessWidget {
   const FieldsPage({super.key});
 
   @override
-  Widget build(BuildContext context) => BlocProvider<FieldsCubit>(
+  Widget build(BuildContext context) => BlocProvider<FieldsBloc>(
     create: (context) =>
-        FieldsCubit(context.read<nonso.WatchFieldsWithFieldListsCountUsecase>())
-          ..watch(context.read<nonso.AuthBloc>().state.user!.uid),
+        FieldsBloc(context.read<nonso.WatchFieldsWithFieldListsCountUsecase>())
+          ..add(
+            FieldsSubscriptionRequested(
+              context.read<nonso.AuthBloc>().state.user!.uid,
+            ),
+          ),
     child: const FieldsPageView(),
   );
 }
@@ -54,14 +58,14 @@ class FieldsPageView extends StatelessWidget {
       onPressed: () {
         GoRouter.of(context).go(createFieldPath);
       },
-      child: Icon(Icons.add),
+      child: const Icon(Icons.add),
     ),
-    body: BlocBuilder<FieldsCubit, FieldsState>(
+    body: BlocBuilder<FieldsBloc, FieldsState>(
       builder: (context, state) {
-        print(state.fieldsWithFieldListsCount);
-        if (state.fieldsStateStatus == StateStatus.loading) {
-          return Center(child: const CircularProgressIndicator());
-        } else if (state.fieldsStateStatus == StateStatus.failure) {
+        if (state.status == FieldsStatus.loading ||
+            state.status == FieldsStatus.initial) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state.status == FieldsStatus.failure) {
           return Center(
             child: Text(AppLocalizations.of(context)!.failureLoadingFields),
           );

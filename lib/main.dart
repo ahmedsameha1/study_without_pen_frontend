@@ -64,8 +64,8 @@ Future<void> main() async {
         RepositoryProvider<nonso.AuthBloc>(
           create: (context) => nonso.AuthBloc(FirebaseAuth.instance),
         ),
-        RepositoryProvider<CreateFieldUseCase>(
-          create: (context) => CreateFieldUseCase(fieldsRepository),
+        RepositoryProvider<CreateFieldUsecase>(
+          create: (context) => CreateFieldUsecase(fieldsRepository),
         ),
         RepositoryProvider<WatchFieldsWithFieldListsCountUsecase>(
           create: (context) =>

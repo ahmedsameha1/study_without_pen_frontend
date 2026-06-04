@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FieldsState {
 
- StateStatus get fieldsStateStatus; List<(FieldEntity, int)> get fieldsWithFieldListsCount;
+ FieldsStatus get status; List<(FieldEntity, int)> get fieldsWithFieldListsCount;
 /// Create a copy of FieldsState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $FieldsStateCopyWith<FieldsState> get copyWith => _$FieldsStateCopyWithImpl<Fiel
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FieldsState&&(identical(other.fieldsStateStatus, fieldsStateStatus) || other.fieldsStateStatus == fieldsStateStatus)&&const DeepCollectionEquality().equals(other.fieldsWithFieldListsCount, fieldsWithFieldListsCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FieldsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other.fieldsWithFieldListsCount, fieldsWithFieldListsCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,fieldsStateStatus,const DeepCollectionEquality().hash(fieldsWithFieldListsCount));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(fieldsWithFieldListsCount));
 
 @override
 String toString() {
-  return 'FieldsState(fieldsStateStatus: $fieldsStateStatus, fieldsWithFieldListsCount: $fieldsWithFieldListsCount)';
+  return 'FieldsState(status: $status, fieldsWithFieldListsCount: $fieldsWithFieldListsCount)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $FieldsStateCopyWith<$Res>  {
   factory $FieldsStateCopyWith(FieldsState value, $Res Function(FieldsState) _then) = _$FieldsStateCopyWithImpl;
 @useResult
 $Res call({
- StateStatus fieldsStateStatus, List<(FieldEntity, int)> fieldsWithFieldListsCount
+ FieldsStatus status, List<(FieldEntity, int)> fieldsWithFieldListsCount
 });
 
 
@@ -62,10 +62,10 @@ class _$FieldsStateCopyWithImpl<$Res>
 
 /// Create a copy of FieldsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? fieldsStateStatus = null,Object? fieldsWithFieldListsCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? fieldsWithFieldListsCount = null,}) {
   return _then(_self.copyWith(
-fieldsStateStatus: null == fieldsStateStatus ? _self.fieldsStateStatus : fieldsStateStatus // ignore: cast_nullable_to_non_nullable
-as StateStatus,fieldsWithFieldListsCount: null == fieldsWithFieldListsCount ? _self.fieldsWithFieldListsCount : fieldsWithFieldListsCount // ignore: cast_nullable_to_non_nullable
+status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as FieldsStatus,fieldsWithFieldListsCount: null == fieldsWithFieldListsCount ? _self.fieldsWithFieldListsCount : fieldsWithFieldListsCount // ignore: cast_nullable_to_non_nullable
 as List<(FieldEntity, int)>,
   ));
 }
@@ -151,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( StateStatus fieldsStateStatus,  List<(FieldEntity, int)> fieldsWithFieldListsCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( FieldsStatus status,  List<(FieldEntity, int)> fieldsWithFieldListsCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FieldsState() when $default != null:
-return $default(_that.fieldsStateStatus,_that.fieldsWithFieldListsCount);case _:
+return $default(_that.status,_that.fieldsWithFieldListsCount);case _:
   return orElse();
 
 }
@@ -172,10 +172,10 @@ return $default(_that.fieldsStateStatus,_that.fieldsWithFieldListsCount);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( StateStatus fieldsStateStatus,  List<(FieldEntity, int)> fieldsWithFieldListsCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( FieldsStatus status,  List<(FieldEntity, int)> fieldsWithFieldListsCount)  $default,) {final _that = this;
 switch (_that) {
 case _FieldsState():
-return $default(_that.fieldsStateStatus,_that.fieldsWithFieldListsCount);case _:
+return $default(_that.status,_that.fieldsWithFieldListsCount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +192,10 @@ return $default(_that.fieldsStateStatus,_that.fieldsWithFieldListsCount);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( StateStatus fieldsStateStatus,  List<(FieldEntity, int)> fieldsWithFieldListsCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( FieldsStatus status,  List<(FieldEntity, int)> fieldsWithFieldListsCount)?  $default,) {final _that = this;
 switch (_that) {
 case _FieldsState() when $default != null:
-return $default(_that.fieldsStateStatus,_that.fieldsWithFieldListsCount);case _:
+return $default(_that.status,_that.fieldsWithFieldListsCount);case _:
   return null;
 
 }
@@ -207,10 +207,10 @@ return $default(_that.fieldsStateStatus,_that.fieldsWithFieldListsCount);case _:
 
 
 class _FieldsState implements FieldsState {
-  const _FieldsState([this.fieldsStateStatus = StateStatus.loading, final  List<(FieldEntity, int)> fieldsWithFieldListsCount = const []]): _fieldsWithFieldListsCount = fieldsWithFieldListsCount;
+  const _FieldsState([this.status = FieldsStatus.initial, final  List<(FieldEntity, int)> fieldsWithFieldListsCount = const []]): _fieldsWithFieldListsCount = fieldsWithFieldListsCount;
   
 
-@override@JsonKey() final  StateStatus fieldsStateStatus;
+@override@JsonKey() final  FieldsStatus status;
  final  List<(FieldEntity, int)> _fieldsWithFieldListsCount;
 @override@JsonKey() List<(FieldEntity, int)> get fieldsWithFieldListsCount {
   if (_fieldsWithFieldListsCount is EqualUnmodifiableListView) return _fieldsWithFieldListsCount;
@@ -229,16 +229,16 @@ _$FieldsStateCopyWith<_FieldsState> get copyWith => __$FieldsStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FieldsState&&(identical(other.fieldsStateStatus, fieldsStateStatus) || other.fieldsStateStatus == fieldsStateStatus)&&const DeepCollectionEquality().equals(other._fieldsWithFieldListsCount, _fieldsWithFieldListsCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FieldsState&&(identical(other.status, status) || other.status == status)&&const DeepCollectionEquality().equals(other._fieldsWithFieldListsCount, _fieldsWithFieldListsCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,fieldsStateStatus,const DeepCollectionEquality().hash(_fieldsWithFieldListsCount));
+int get hashCode => Object.hash(runtimeType,status,const DeepCollectionEquality().hash(_fieldsWithFieldListsCount));
 
 @override
 String toString() {
-  return 'FieldsState(fieldsStateStatus: $fieldsStateStatus, fieldsWithFieldListsCount: $fieldsWithFieldListsCount)';
+  return 'FieldsState(status: $status, fieldsWithFieldListsCount: $fieldsWithFieldListsCount)';
 }
 
 
@@ -249,7 +249,7 @@ abstract mixin class _$FieldsStateCopyWith<$Res> implements $FieldsStateCopyWith
   factory _$FieldsStateCopyWith(_FieldsState value, $Res Function(_FieldsState) _then) = __$FieldsStateCopyWithImpl;
 @override @useResult
 $Res call({
- StateStatus fieldsStateStatus, List<(FieldEntity, int)> fieldsWithFieldListsCount
+ FieldsStatus status, List<(FieldEntity, int)> fieldsWithFieldListsCount
 });
 
 
@@ -266,10 +266,10 @@ class __$FieldsStateCopyWithImpl<$Res>
 
 /// Create a copy of FieldsState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? fieldsStateStatus = null,Object? fieldsWithFieldListsCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? fieldsWithFieldListsCount = null,}) {
   return _then(_FieldsState(
-null == fieldsStateStatus ? _self.fieldsStateStatus : fieldsStateStatus // ignore: cast_nullable_to_non_nullable
-as StateStatus,null == fieldsWithFieldListsCount ? _self._fieldsWithFieldListsCount : fieldsWithFieldListsCount // ignore: cast_nullable_to_non_nullable
+null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as FieldsStatus,null == fieldsWithFieldListsCount ? _self._fieldsWithFieldListsCount : fieldsWithFieldListsCount // ignore: cast_nullable_to_non_nullable
 as List<(FieldEntity, int)>,
   ));
 }

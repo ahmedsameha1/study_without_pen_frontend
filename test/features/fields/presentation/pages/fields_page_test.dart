@@ -30,7 +30,7 @@ Future<void> goToFieldPage(Widget widgetInskeleton, WidgetTester tester) async {
 }
 
 void main() {
-  late CreateFieldUseCase createFieldUseCase;
+  late CreateFieldUsecase createFieldUseCase;
   late WatchFieldsWithFieldListsCountUsecase watchFieldsUsecase;
   late WatchFieldListsWithEntriesCountUsecase
   watchFieldListsWithEntriesCountUsecase;

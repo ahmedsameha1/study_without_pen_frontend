@@ -17,7 +17,7 @@ import 'package:study_without_pen_by_flutter/main.dart' as app;
 
 class MockUser extends Mock implements User {}
 
-class MockCreateFieldUseCase extends Mock implements CreateFieldUseCase {}
+class MockCreateFieldUseCase extends Mock implements CreateFieldUsecase {}
 
 class MockWatchFieldsUsecase extends Mock
     implements WatchFieldsWithFieldListsCountUsecase {}
@@ -54,7 +54,7 @@ class AppThemeForTests {
 
 Widget createWidgetInASkeleton(
   nonso.AuthBloc bloc,
-  CreateFieldUseCase createFieldUseCase,
+  CreateFieldUsecase createFieldUseCase,
   WatchFieldsWithFieldListsCountUsecase watchFieldsUsecase,
   WatchFieldListsWithEntriesCountUsecase watchFieldListsWithEntriesCountUsecase,
   Locale locale,

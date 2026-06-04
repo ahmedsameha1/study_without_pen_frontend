@@ -1,172 +1,173 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nonso/nonso.dart' as nonso;
-import 'package:study_without_pen_by_flutter/common/router_config.dart';
-import 'package:study_without_pen_by_flutter/common/state_status.dart';
-import 'package:study_without_pen_by_flutter/common/widgets/ok_cancel.dart';
-import 'package:study_without_pen_by_flutter/common/widgets/pick_color.dart';
-import 'package:study_without_pen_by_flutter/database/app_database.dart';
-import 'package:study_without_pen_by_flutter/features/fields/domain/usecases/create_field_usecase.dart';
-import 'package:study_without_pen_by_flutter/features/fields/presentation/cubit/create_field_cubit.dart';
-import 'package:study_without_pen_by_flutter/l10n/app_localizations.dart';
+
+import '../../../../common/router_config.dart';
+import '../../../../common/widgets/ok_cancel.dart';
+import '../../../../common/widgets/pick_color.dart';
+import '../../../../database/app_database.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../domain/usecases/create_field_usecase.dart';
+import '../bloc/create_field_bloc.dart';
+import '../bloc/create_field_event.dart';
+import '../bloc/create_field_state.dart';
 
 class CreateFieldPage extends StatelessWidget {
   const CreateFieldPage({this.usecaseValidationTest = false, super.key});
   final bool usecaseValidationTest;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider<CreateFieldCubit>(
-      create: (ctx) => CreateFieldCubit(ctx.read<CreateFieldUseCase>()),
-      child: CreateFieldPageView(usecaseValidationTest),
-    );
-  }
+  Widget build(BuildContext context) => BlocProvider<CreateFieldBloc>(
+    create: (ctx) => CreateFieldBloc(
+      ctx.read<CreateFieldUsecase>(),
+      context.read<nonso.AuthBloc>().state.user!.uid,
+    ),
+    child: CreateFieldPageView(usecaseValidationTest),
+  );
 }
-//TODO consider using regular StatefulWidget
-//TODO review this page to match Bloc Todo example on the bloc website
-class CreateFieldPageView extends HookWidget {
-  CreateFieldPageView(this.usecaseValidationTest, {super.key});
 
+class CreateFieldPageView extends StatefulWidget {
+  const CreateFieldPageView(this.usecaseValidationTest, {super.key});
   final bool usecaseValidationTest;
-  final GlobalKey<FormState> _nameFormKey = GlobalKey();
 
   @override
-  Widget build(BuildContext context) {
-    final color = useState<Color>(Colors.white);
-    final isNameValid = useState<bool>(false);
-    final state = context.select((CreateFieldCubit cubit) => cubit.state);
-    final TextEditingController nameTextEditingController =
-        useTextEditingController();
-    return BlocListener<CreateFieldCubit, StateStatus>(
-      listener: (context, state) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        if (state == StateStatus.validationFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                AppLocalizations.of(context)!.fieldNameValidationError(
-                  Fields.MINIMUM_LENGTH_OF_NAME,
-                  Fields.MAXIMUM_LENGTH_OF_NAME,
-                ),
+  State<CreateFieldPageView> createState() => _CreateFieldPageViewState();
+}
+
+class _CreateFieldPageViewState extends State<CreateFieldPageView> {
+  final GlobalKey<FormState> _nameFormKey = GlobalKey();
+  bool isNameValid = false;
+
+  @override
+  Widget build(
+    BuildContext context,
+  ) => BlocConsumer<CreateFieldBloc, CreateFieldState>(
+    listener: (context, state) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      if (state.status == CreateFieldStatus.validationFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.fieldNameValidationError(
+                Fields.MINIMUM_LENGTH_OF_NAME,
+                Fields.MAXIMUM_LENGTH_OF_NAME,
               ),
             ),
-          );
-        } else if (state == StateStatus.persistenceFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.creationError),
-            ),
-          );
-        } else if (state == StateStatus.success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.created)),
-          );
-          GoRouter.of(context).go(rootPath);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(title: Text(AppLocalizations.of(context)!.createField)),
-        body: SafeArea(
-          child: Center(
-            key: Key("center"),
-            child: state == StateStatus.loading || state == StateStatus.success
-                ? CircularProgressIndicator()
-                : Card(
-                    margin: const EdgeInsets.all(20),
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        key: const Key("paddingAroundColumn"),
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          key: Key("column"),
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Form(
-                              key: _nameFormKey,
-                              child: TextFormField(
-                                controller: nameTextEditingController,
-                                decoration: InputDecoration(
-                                  label: Text(
-                                    AppLocalizations.of(context)!.fieldName,
-                                  ),
+          ),
+        );
+      } else if (state.status == CreateFieldStatus.persistenceFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.creationError)),
+        );
+      } else if (state.status == CreateFieldStatus.success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.created)),
+        );
+        GoRouter.of(context).go(rootPath);
+      }
+    },
+    builder: (context, state) => Scaffold(
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.createField)),
+      body: SafeArea(
+        child: Center(
+          key: const Key('center'),
+          child:
+              state.status == CreateFieldStatus.loading ||
+                  state.status == CreateFieldStatus.success
+              ? const CircularProgressIndicator()
+              : Card(
+                  margin: const EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      key: const Key('paddingAroundColumn'),
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        key: const Key('column'),
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Form(
+                            key: _nameFormKey,
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                label: Text(
+                                  AppLocalizations.of(context)!.fieldName,
                                 ),
-                                textInputAction: TextInputAction.next,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                autofocus: true,
-                                validator: (value) {
-                                  if (value == null) {
-                                    return AppLocalizations.of(
-                                      context,
-                                    )!.fieldNameValidationError(
-                                      Fields.MINIMUM_LENGTH_OF_NAME,
-                                      Fields.MAXIMUM_LENGTH_OF_NAME,
-                                    );
-                                  }
-                                  int trimmedValue = value.trim().length;
-                                  if (trimmedValue <
-                                          Fields.MINIMUM_LENGTH_OF_NAME ||
-                                      trimmedValue >
-                                          Fields.MAXIMUM_LENGTH_OF_NAME) {
-                                    return AppLocalizations.of(
-                                      context,
-                                    )!.fieldNameValidationError(
-                                      Fields.MINIMUM_LENGTH_OF_NAME,
-                                      Fields.MAXIMUM_LENGTH_OF_NAME,
-                                    );
-                                  }
-                                  return null;
-                                },
                               ),
-                              onChanged: () => isNameValid.value =
-                                  _nameFormKey.currentState != null &&
-                                  _nameFormKey.currentState!.validate(),
-                            ),
-                            SizedBox(
-                              key: Key("sizedBoxBetweenFormAndStack"),
-                              height: 25,
-                            ),
-                            PickColor(
-                              color: Colors.white.toARGB32(),
-                              callback: (Color newColor) {
-                                color.value = newColor;
+                              textInputAction: TextInputAction.next,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              autofocus: true,
+                              validator: (value) {
+                                if (value == null) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.fieldNameValidationError(
+                                    Fields.MINIMUM_LENGTH_OF_NAME,
+                                    Fields.MAXIMUM_LENGTH_OF_NAME,
+                                  );
+                                }
+                                int trimmedValue = value.trim().length;
+                                if (trimmedValue <
+                                        Fields.MINIMUM_LENGTH_OF_NAME ||
+                                    trimmedValue >
+                                        Fields.MAXIMUM_LENGTH_OF_NAME) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.fieldNameValidationError(
+                                    Fields.MINIMUM_LENGTH_OF_NAME,
+                                    Fields.MAXIMUM_LENGTH_OF_NAME,
+                                  );
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                setState(() {
+                                  isNameValid =
+                                      _nameFormKey.currentState != null &&
+                                      _nameFormKey.currentState!.validate();
+                                });
+                                context.read<CreateFieldBloc>().add(
+                                  CreateFieldNameChanged(value),
+                                );
                               },
                             ),
-                            SizedBox(
-                              key: Key("sizedBoxBetweenStackAndButtons"),
-                              height: 25,
-                            ),
-                            OkCancel(
-                              valid: isNameValid.value,
-                              usecaseValidationTest: usecaseValidationTest,
-                              okCallback: () async {
-                                await context
-                                    .read<CreateFieldCubit>()
-                                    .createField(
-                                      context
-                                          .read<nonso.AuthBloc>()
-                                          .state
-                                          .user!
-                                          .uid,
-                                      //TODO trim the value
-                                      nameTextEditingController.text,
-                                      color.value.toARGB32(),
-                                    );
-                              },
-                              cancelCallback: () {
-                                GoRouter.of(context).pop();
-                              },
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(
+                            key: Key('sizedBoxBetweenFormAndStack'),
+                            height: 25,
+                          ),
+                          PickColor(
+                            color: Colors.white.toARGB32(),
+                            callback: (Color newColor) {
+                              context.read<CreateFieldBloc>().add(
+                                CreateFieldColorChanged(newColor.toARGB32()),
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                            key: Key('sizedBoxBetweenStackAndButtons'),
+                            height: 25,
+                          ),
+                          OkCancel(
+                            valid: isNameValid,
+                            usecaseValidationTest: widget.usecaseValidationTest,
+                            okCallback: () async {
+                              context.read<CreateFieldBloc>().add(
+                                const CreateFieldSubmitted(),
+                              );
+                            },
+                            cancelCallback: () {
+                              GoRouter.of(context).pop();
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),
-          ),
+                ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

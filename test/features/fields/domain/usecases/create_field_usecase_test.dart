@@ -15,7 +15,7 @@ void main() {
   final usageCount = 0;
   int color = 0xff520404;
   FieldsRepository fieldRepository = MockFieldRepository();
-  final usecase = CreateFieldUseCase(fieldRepository);
+  final usecase = CreateFieldUsecase(fieldRepository);
 
   test('call() throws AssertionError when there is a validation error', () {
     name = "";

@@ -3,13 +3,20 @@ import 'package:study_without_pen_by_flutter/features/fields/domain/models/field
 
 import '../../data/repositories/fields_repository.dart';
 
-class CreateFieldUseCase {
-  CreateFieldUseCase(this._repository);
+class CreateFieldUsecase {
+  CreateFieldUsecase(this._repository);
   final FieldsRepository _repository;
   Future<int> call(String userAccountId, String name, int color) {
     final now = clock.now();
-    FieldEntity fieldEntity =
-        FieldEntity(null, userAccountId, name, now, now, 0, color);
+    FieldEntity fieldEntity = FieldEntity(
+      null,
+      userAccountId,
+      name,
+      now,
+      now,
+      0,
+      color,
+    );
     return _repository.create(fieldEntity);
   }
 }
