@@ -6,8 +6,8 @@ import 'package:nonso/nonso.dart' as nonso;
 
 import '../../../../common/router_config.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../domain/usecases/watch_fields_with_field_lists_count_usecase.dart'
-    as nonso;
+import '../../domain/usecases/delete_field_usecase.dart';
+import '../../domain/usecases/watch_fields_with_field_lists_count_usecase.dart';
 import '../bloc/fields_bloc.dart';
 import '../bloc/fields_event.dart';
 import '../bloc/fields_state.dart';
@@ -18,12 +18,14 @@ class FieldsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider<FieldsBloc>(
     create: (context) =>
-        FieldsBloc(context.read<nonso.WatchFieldsWithFieldListsCountUsecase>())
-          ..add(
-            FieldsSubscriptionRequested(
-              context.read<nonso.AuthBloc>().state.user!.uid,
-            ),
+        FieldsBloc(
+          context.read<WatchFieldsWithFieldListsCountUsecase>(),
+          context.read<DeleteFieldUsecase>(),
+        )..add(
+          FieldsSubscriptionRequested(
+            context.read<nonso.AuthBloc>().state.user!.uid,
           ),
+        ),
     child: const FieldsPageView(),
   );
 }

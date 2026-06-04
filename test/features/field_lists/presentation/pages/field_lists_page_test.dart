@@ -144,6 +144,8 @@ void main() {
     Locale currentLocale = const Locale("en");
     String expectedNotesString = 'Notes';
     String expectedEntriesString = 'Entries';
+    String expectedNoFieldListsString = 'Currently, there are no lists!';
+    String expectedErrorString = 'An error occurred while loading the data!';
 
     group('FieldListsPage', () {
       setUp(() {
@@ -192,8 +194,6 @@ void main() {
     group('FieldListsPageView', () {
       late MockNavigator navigator;
       late FieldListsBloc fieldListsBloc;
-      String expectedNoFieldListsString = 'Currently, there are no lists!';
-      String expectedErrorString = 'An error occurred while loading the data!';
 
       setUp(() {
         navigator = MockNavigator();

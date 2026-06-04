@@ -11,5 +11,7 @@ void main() {
       FieldsSubscriptionRequested('hi'),
       isNot(FieldsSubscriptionRequested('hello')),
     );
+    expect(DeleteField('hi'), DeleteField('hi'));
+    expect(DeleteField('hi'), isNot(DeleteField('hello')));
   });
 }
