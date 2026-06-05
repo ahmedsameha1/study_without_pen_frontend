@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 
 import '../../../../database/entrys_dao.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -101,7 +102,7 @@ class EntryCard extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Center(
-                            child: Text(
+                            child: GptMarkdown(
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.titleLarge!
                                   .copyWith(fontWeight: FontWeight.w600),
@@ -119,7 +120,7 @@ class EntryCard extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Center(
-                            child: Text(
+                            child: GptMarkdown(
                               textAlign: TextAlign.center,
                               style: Theme.of(context).textTheme.bodyLarge,
                               entry.answer,

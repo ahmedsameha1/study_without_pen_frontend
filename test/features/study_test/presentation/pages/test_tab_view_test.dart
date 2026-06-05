@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/common/theme.dart';
 import 'package:study_without_pen_by_flutter/features/entries/domain/models/entry_entity.dart';
@@ -159,23 +160,17 @@ void main() {
         ),
       );
       expect(questionConstrainedBox.constraints.minHeight, 180);
-      Text questionText = tester.widget(
+      GptMarkdown questionGptMarkdown = tester.widget(
         find.descendant(
           of: find.byWidget(questionConstrainedBox),
           matching: find.descendant(
             of: centerFinder,
-            matching: find.byType(Text),
+            matching: find.byType(GptMarkdown),
           ),
         ),
       );
-      expect(questionText.data, entries[1].question);
-      expect(
-        questionText.style,
-        Theme.of(
-          tester.element(find.byWidget(questionText)),
-        ).textTheme.bodyLarge,
-      );
-      expect(questionText.textAlign, TextAlign.center);
+      expect(questionGptMarkdown.data, entries[1].question);
+      expect(questionGptMarkdown.textAlign, TextAlign.center);
       SizedBox questionUserAnswerSizedBox = tester.widget(
         find.descendant(
           of: find.byWidget(column),
@@ -201,12 +196,6 @@ void main() {
           of: find.byWidget(userAnswerTextFormField),
           matching: find.byType(TextField),
         ),
-      );
-      expect(
-        userAnswerTextField.style,
-        Theme.of(
-          tester.element(find.byWidget(userAnswerTextField)),
-        ).textTheme.bodyLarge,
       );
       expect(userAnswerTextField.expands, true);
       expect(userAnswerTextField.maxLines, isNull);

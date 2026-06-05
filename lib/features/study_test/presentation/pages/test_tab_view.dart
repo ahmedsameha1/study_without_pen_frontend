@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../bloc/study_test_bloc.dart';
@@ -127,7 +128,7 @@ class _TestTabViewState extends State<TestTabView>
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(minHeight: 180),
                         child: Center(
-                          child: Text(
+                          child: GptMarkdown(
                             state.entries[state.currentEntryIndex].question,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyLarge,

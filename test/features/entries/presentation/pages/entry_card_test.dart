@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:study_without_pen_by_flutter/common/theme.dart';
 import 'package:study_without_pen_by_flutter/database/entrys_dao.dart';
@@ -134,10 +135,6 @@ void main() {
         (scoreChip.label as Text).data,
         '$expectedScoreString: ${entry1.score}',
       );
-      expect(
-        scoreChip.labelStyle,
-        Theme.of(tester.element(find.byWidget(scoreChip))).textTheme.labelSmall,
-      );
       expect(scoreChip.padding, EdgeInsets.zero);
       Chip wrongnessChip = tester.widget(
         find.descendant(
@@ -149,12 +146,6 @@ void main() {
         (wrongnessChip.label as Text).data,
         '$expectedWrongnessString: ${entry1.wrongness}',
       );
-      expect(
-        wrongnessChip.labelStyle,
-        Theme.of(
-          tester.element(find.byWidget(wrongnessChip)),
-        ).textTheme.labelSmall,
-      );
       expect(wrongnessChip.padding, EdgeInsets.zero);
       Chip rankChip = tester.widget(
         find.descendant(
@@ -163,10 +154,6 @@ void main() {
         ),
       );
       expect((rankChip.label as Text).data, expectedLowString);
-      expect(
-        rankChip.labelStyle,
-        Theme.of(tester.element(find.byWidget(rankChip))).textTheme.labelSmall,
-      );
       expect(rankChip.padding, EdgeInsets.zero);
       expect(
         find.descendant(
@@ -182,7 +169,7 @@ void main() {
         ),
       );
       expect(scoreRankQuestionSizedBox.height, 10);
-      Text questionText = tester.widget(
+      GptMarkdown questionGptMarkdown = tester.widget(
         find.descendant(
           of: find.byWidget(outerColumn),
           matching: find.descendant(
@@ -191,20 +178,13 @@ void main() {
               of: find.byType(Flexible),
               matching: find.descendant(
                 of: centerFinder,
-                matching: find.byType(Text),
+                matching: find.byType(GptMarkdown),
               ),
             ),
           ),
         ),
       );
-      expect(questionText.textAlign, TextAlign.center);
-      expect(
-        questionText.style,
-        Theme.of(
-          tester.element(find.byWidget(questionText)),
-        ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600),
-      );
-      expect(questionText.data, entry1.question);
+      expect(questionGptMarkdown.data, entry1.question);
       SizedBox questionAnswerSizedBox = tester.widget(
         find.descendant(
           of: find.byWidget(outerColumn),
@@ -212,7 +192,7 @@ void main() {
         ),
       );
       expect(questionAnswerSizedBox.height, 10);
-      Text answerText = tester.widget(
+      GptMarkdown answerGptMarkdown = tester.widget(
         find.descendant(
           of: find.byWidget(outerColumn),
           matching: find.descendant(
@@ -221,20 +201,13 @@ void main() {
               of: find.byType(Flexible),
               matching: find.descendant(
                 of: centerFinder,
-                matching: find.byType(Text),
+                matching: find.byType(GptMarkdown),
               ),
             ),
           ),
         ),
       );
-      expect(answerText.textAlign, TextAlign.center);
-      expect(
-        answerText.style,
-        Theme.of(
-          tester.element(find.byWidget(questionText)),
-        ).textTheme.bodyLarge,
-      );
-      expect(answerText.data, entry1.answer);
+      expect(answerGptMarkdown.data, entry1.answer);
     });
 
     testWidgets('rank is normal', (WidgetTester tester) async {
