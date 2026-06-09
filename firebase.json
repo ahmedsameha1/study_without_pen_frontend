@@ -12,16 +12,16 @@
         "platforms": {
             "android": {
                 "default": {
-                    "projectId": "learn-gcp-380012",
-                    "appId": "1:8613264590:android:03e259f7a922a81421649f",
+                    "projectId": "studywithoutpen-77fe9",
+                    "appId": "1:314512579657:android:99a1dbdd7e91136b68f398",
                     "fileOutput": "android/app/google-services.json"
                 }
             },
             "dart": {
                 "lib/firebase_options.dart": {
-                    "projectId": "learn-gcp-380012",
+                    "projectId": "studywithoutpen-77fe9",
                     "configurations": {
-                        "android": "1:8613264590:android:03e259f7a922a81421649f"
+                        "android": "1:314512579657:android:99a1dbdd7e91136b68f398"
                     }
                 }
             }

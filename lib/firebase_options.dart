@@ -53,11 +53,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: String.fromEnvironment('FIREBASE_API_KEY_ANDROID'),
-    appId: String.fromEnvironment('APP_ID_KEY'),
-    messagingSenderId: '8613264590',
-    projectId: 'learn-gcp-380012',
-    storageBucket: 'learn-gcp-380012.firebasestorage.app',
+    apiKey: String.fromEnvironment('FIREBASE_API_KEY'),
+    appId: String.fromEnvironment('APP_ID'),
+    messagingSenderId: '314512579657',
+    projectId: 'studywithoutpen-77fe9',
+    storageBucket: 'studywithoutpen-77fe9.firebasestorage.app',
   );
-
 }
