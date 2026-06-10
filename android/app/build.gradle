@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id "com.android.application"
     // START: FlutterFire Configuration
@@ -7,20 +10,26 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     flavorDimensions "default"
 
     productFlavors {
         dev {
             dimension "default"
-            resValue "string", "app_name", "App Dev"
+            resValue "string", "app_name", "Study Without Pen! Dev"
             applicationId "com.ahmedsameha1.studywithoutpen"
         }
 
         prod {
             dimension "default"
+            resValue "string", "app_name", "Study Without Pen!"
             applicationId "com.ahmedsameha1.peninbin"
-            versionCode 116
         }
     }
 
@@ -44,11 +53,31 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("customDebug") {
+            storeFile = file("/mnt/old_home/ahmed/Documents/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+
+        release {
+            keyAlias = keystoreProperties['keyAlias']
+            keyPassword = keystoreProperties['keyPassword']
+            storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword = keystoreProperties['storePassword']
+        }
+    }
+
     buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("customDebug")
+        }
+
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig = signingConfigs.release
         }
     }
 }
