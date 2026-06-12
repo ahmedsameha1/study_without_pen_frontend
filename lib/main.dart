@@ -1,7 +1,7 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,14 +38,14 @@ late AppDatabase appDatabase;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FlutterError.onError = (details) =>
-      log(details.exceptionAsString(), stackTrace: details.stack);
-  WidgetsBinding.instance.platformDispatcher.onError = (error, stack) {
-    log(error.toString(), stackTrace: stack);
-    return true;
-  };
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FlutterError.onError = (errorDetails) =>
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   appDatabase = AppDatabase(openConnection());
   await appDatabase.runMigrationsEarly();
   FieldsDao fieldsDao = FieldsDao(appDatabase);
@@ -107,7 +107,7 @@ Future<void> main() async {
           create: (context) => DeleteFieldUsecase(fieldsRepository),
         ),
       ],
-      child: App(),
+      child: const App(),
     ),
   );
 }
