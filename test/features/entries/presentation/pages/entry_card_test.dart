@@ -133,7 +133,7 @@ void main() {
       );
       expect(
         (scoreChip.label as Text).data,
-        '$expectedScoreString: ${entry1.score}',
+        '$expectedScoreString: ${entry1.score.toStringAsFixed(2)}',
       );
       expect(scoreChip.padding, EdgeInsets.zero);
       Chip wrongnessChip = tester.widget(
@@ -144,7 +144,7 @@ void main() {
       );
       expect(
         (wrongnessChip.label as Text).data,
-        '$expectedWrongnessString: ${entry1.wrongness}',
+        '$expectedWrongnessString: ${entry1.wrongness.toStringAsFixed(2)}',
       );
       expect(wrongnessChip.padding, EdgeInsets.zero);
       Chip rankChip = tester.widget(

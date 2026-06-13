@@ -48,7 +48,7 @@ class EntryCard extends StatelessWidget {
                           children: [
                             Chip(
                               label: Text(
-                                '${AppLocalizations.of(context)!.score}: ${entry.score}',
+                                '${AppLocalizations.of(context)!.score}: ${entry.score.toStringAsFixed(2)}',
                               ),
                               labelStyle: Theme.of(
                                 context,
@@ -57,7 +57,7 @@ class EntryCard extends StatelessWidget {
                             ),
                             Chip(
                               label: Text(
-                                '${AppLocalizations.of(context)!.wrongness}: ${entry.wrongness}',
+                                '${AppLocalizations.of(context)!.wrongness}: ${entry.wrongness.toStringAsFixed(2)}',
                               ),
                               labelStyle: Theme.of(
                                 context,
