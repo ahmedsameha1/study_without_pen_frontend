@@ -26,6 +26,7 @@ void main() {
     const expectedImportantString = 'Important';
     const expectedVitalString = 'Vital';
     final entry1 = EntryEntity(
+      id: const Uuid().v4(),
       fieldListId: const Uuid().v4(),
       answer: 'answer',
       question: 'question',
@@ -36,6 +37,7 @@ void main() {
       wronglyAnsweredCount: 1,
     );
     final entry2 = EntryEntity(
+      id: const Uuid().v4(),
       fieldListId: const Uuid().v4(),
       answer: 'answer',
       question: 'question',
@@ -46,6 +48,7 @@ void main() {
       wronglyAnsweredCount: 4,
     );
     final entry3 = EntryEntity(
+      id: const Uuid().v4(),
       fieldListId: const Uuid().v4(),
       answer: 'answer',
       question: 'question',
@@ -208,6 +211,19 @@ void main() {
         ),
       );
       expect(answerGptMarkdown.data, entry1.answer);
+      await tester.drag(find.byWidget(card), const Offset(-200, 0));
+      await tester.pumpAndSettle();
+      expect(find.byIcon(Icons.delete), findsOne);
+      ColoredBox coloredBox = tester.widget(
+        find.byKey(const Key('deleteColoredBox')),
+      );
+      expect(coloredBox.color, Colors.red);
+      expect(answerGptMarkdown.data, entry1.answer);
+      await tester.drag(find.byWidget(card), const Offset(200, 0));
+      await tester.pumpAndSettle();
+      expect(find.byIcon(Icons.edit), findsOne);
+      coloredBox = tester.widget(find.byKey(const Key('editColoredBox')));
+      expect(coloredBox.color, Colors.teal);
     });
 
     testWidgets('rank is normal', (WidgetTester tester) async {

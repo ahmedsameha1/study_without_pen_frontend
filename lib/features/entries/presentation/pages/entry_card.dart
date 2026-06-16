@@ -22,7 +22,29 @@ class EntryCard extends StatelessWidget {
 
     return Material(
       child: Dismissible(
-        key: const Key('hi'),
+        key: Key(entry.id!),
+        secondaryBackground: const ColoredBox(
+          key: Key('deleteColoredBox'),
+          color: Colors.red,
+          child: Padding(
+            padding: EdgeInsets.all(35),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Icon(Icons.delete),
+            ),
+          ),
+        ),
+        background: const ColoredBox(
+          key: Key('editColoredBox'),
+          color: Colors.teal,
+          child: Padding(
+            padding: EdgeInsets.all(35),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Icon(Icons.edit),
+            ),
+          ),
+        ),
         child: InkWell(
           onTap: onTap,
           child: Card(
