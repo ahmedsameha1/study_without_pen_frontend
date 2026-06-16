@@ -14,10 +14,24 @@ class MockEntrysDao extends Mock implements EntrysDao {}
 void main() {
   EntrysDao entrysDao = MockEntrysDao();
   EntriesRepository entriesRepository = EntriesRepositoryLocal(entrysDao);
+  String id = const Uuid().v4();
   EntryEntity entryEntity = EntryEntity(
-    id: Uuid().v4(),
+    id: id,
     fieldListId: Uuid().v4(),
     answer: 'answer',
+    question: 'question',
+    creationAt: DateTime(2025),
+    lastModificationAt: DateTime(2025),
+    rank: Rank.normal,
+    askedCount: 8,
+    wronglyAnsweredCount: 2,
+    lastAskedAt: DateTime(2025, 2, 2),
+  );
+
+  EntryEntity entryEntity2 = EntryEntity(
+    id: id,
+    fieldListId: Uuid().v4(),
+    answer: 'answer2',
     question: 'question',
     creationAt: DateTime(2025),
     lastModificationAt: DateTime(2025),
@@ -339,60 +353,149 @@ void main() {
     });
   });
 
-  test('create() throws what EntrysDao.create() throw', () {
-    when(
-      () => entrysDao.create(
-        EntrysCompanion(
-          fieldListId: Value(entryEntity.fieldListId),
-          answer: Value(entryEntity.answer),
-          question: Value(entryEntity.question),
-          creationAt: Value(entryEntity.creationAt),
-          lastModificationAt: Value(entryEntity.lastModificationAt),
-          order: Value(entryEntity.order),
-          didAskedAtCurrentTestRound: Value(
-            entryEntity.didAskedAtCurrentTestRound,
-          ),
-          emulatedCreatedAt: Value(entryEntity.emulatedCreatedAt),
-          rank: Value(entryEntity.rank.index),
-          askedCount: Value(BigInt.from(entryEntity.askedCount)),
-          wronglyAnsweredCount: Value(
-            BigInt.from(entryEntity.wronglyAnsweredCount),
+  group('create()', () {
+    test('throws what EntrysDao.create() throw', () {
+      when(
+        () => entrysDao.create(
+          EntrysCompanion(
+            fieldListId: Value(entryEntity.fieldListId),
+            answer: Value(entryEntity.answer),
+            question: Value(entryEntity.question),
+            creationAt: Value(entryEntity.creationAt),
+            lastModificationAt: Value(entryEntity.lastModificationAt),
+            order: Value(entryEntity.order),
+            didAskedAtCurrentTestRound: Value(
+              entryEntity.didAskedAtCurrentTestRound,
+            ),
+            emulatedCreatedAt: Value(entryEntity.emulatedCreatedAt),
+            rank: Value(entryEntity.rank.index),
+            askedCount: Value(BigInt.from(entryEntity.askedCount)),
+            wronglyAnsweredCount: Value(
+              BigInt.from(entryEntity.wronglyAnsweredCount),
+            ),
           ),
         ),
-      ),
-    ).thenThrow(
-      SqliteException(extendedResultCode: 1, message: 'sqlexception'),
-    );
-    expect(
-      () => entriesRepository.create(entryEntity),
-      throwsA(
-        predicate((e) => e is SqliteException && e.message == 'sqlexception'),
-      ),
-    );
+      ).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+      );
+      expect(
+        () => entriesRepository.create(entryEntity),
+        throwsA(
+          predicate((e) => e is SqliteException && e.message == 'sqlexception'),
+        ),
+      );
+    });
+
+    test('returns what EntrysDao.create() return', () {
+      when(
+        () => entrysDao.create(
+          EntrysCompanion(
+            fieldListId: Value(entryEntity.fieldListId),
+            answer: Value(entryEntity.answer),
+            question: Value(entryEntity.question),
+            creationAt: Value(entryEntity.creationAt),
+            lastModificationAt: Value(entryEntity.lastModificationAt),
+            order: Value(entryEntity.order),
+            didAskedAtCurrentTestRound: Value(
+              entryEntity.didAskedAtCurrentTestRound,
+            ),
+            emulatedCreatedAt: Value(entryEntity.emulatedCreatedAt),
+            rank: Value(entryEntity.rank.index),
+            askedCount: Value(BigInt.from(entryEntity.askedCount)),
+            wronglyAnsweredCount: Value(
+              BigInt.from(entryEntity.wronglyAnsweredCount),
+            ),
+          ),
+        ),
+      ).thenAnswer((_) => Future.value(2));
+      expectLater(entriesRepository.create(entryEntity), completion(2));
+    });
   });
 
-  test('create() returns what EntrysDao.create() return', () {
-    when(
-      () => entrysDao.create(
-        EntrysCompanion(
-          fieldListId: Value(entryEntity.fieldListId),
-          answer: Value(entryEntity.answer),
-          question: Value(entryEntity.question),
-          creationAt: Value(entryEntity.creationAt),
-          lastModificationAt: Value(entryEntity.lastModificationAt),
-          order: Value(entryEntity.order),
-          didAskedAtCurrentTestRound: Value(
-            entryEntity.didAskedAtCurrentTestRound,
-          ),
-          emulatedCreatedAt: Value(entryEntity.emulatedCreatedAt),
-          rank: Value(entryEntity.rank.index),
-          askedCount: Value(BigInt.from(entryEntity.askedCount)),
-          wronglyAnsweredCount: Value(
-            BigInt.from(entryEntity.wronglyAnsweredCount),
+  group('update()', () {
+    test('throws what EntrysDao.mutate() throw 1', () {
+      when(
+        () => entrysDao.mutate(
+          EntrysCompanion(
+            id: Value(entryEntity2.id!),
+            fieldListId: Value(entryEntity2.fieldListId),
+            answer: Value(entryEntity2.answer),
+            question: Value(entryEntity2.question),
+            creationAt: Value(entryEntity2.creationAt),
+            lastModificationAt: Value(entryEntity2.lastModificationAt),
+            order: Value(entryEntity2.order),
+            didAskedAtCurrentTestRound: Value(
+              entryEntity2.didAskedAtCurrentTestRound,
+            ),
+            emulatedCreatedAt: Value(entryEntity2.emulatedCreatedAt),
+            rank: Value(entryEntity2.rank.index),
+            askedCount: Value(BigInt.from(entryEntity2.askedCount)),
+            wronglyAnsweredCount: Value(
+              BigInt.from(entryEntity2.wronglyAnsweredCount),
+            ),
           ),
         ),
-      ),
-    ).thenAnswer((_) => Future.value(2));
-    expectLater(entriesRepository.create(entryEntity), completion(2));
+      ).thenThrow(
+        SqliteException(extendedResultCode: 1, message: 'sqlexception'),
+      );
+      expect(
+        () => entriesRepository.update(entryEntity2),
+        throwsA(
+          predicate((e) => e is SqliteException && e.message == 'sqlexception'),
+        ),
+      );
+    });
+
+    test('throws what EntrysDao.mutate() throw 2', () {
+      when(
+        () => entrysDao.mutate(
+          EntrysCompanion(
+            id: Value(entryEntity2.id!),
+            fieldListId: Value(entryEntity2.fieldListId),
+            answer: Value(entryEntity2.answer),
+            question: Value(entryEntity2.question),
+            creationAt: Value(entryEntity2.creationAt),
+            lastModificationAt: Value(entryEntity2.lastModificationAt),
+            order: Value(entryEntity2.order),
+            didAskedAtCurrentTestRound: Value(
+              entryEntity2.didAskedAtCurrentTestRound,
+            ),
+            emulatedCreatedAt: Value(entryEntity2.emulatedCreatedAt),
+            rank: Value(entryEntity2.rank.index),
+            askedCount: Value(BigInt.from(entryEntity2.askedCount)),
+            wronglyAnsweredCount: Value(
+              BigInt.from(entryEntity2.wronglyAnsweredCount),
+            ),
+          ),
+        ),
+      ).thenAnswer((_) => Future.error('Opps'));
+      expect(entriesRepository.update(entryEntity2), throwsA('Opps'));
+    });
+
+    test('returns what EntrysDao.mutate() return', () {
+      when(
+        () => entrysDao.mutate(
+          EntrysCompanion(
+            id: Value(entryEntity2.id!),
+            fieldListId: Value(entryEntity2.fieldListId),
+            answer: Value(entryEntity2.answer),
+            question: Value(entryEntity2.question),
+            creationAt: Value(entryEntity2.creationAt),
+            lastModificationAt: Value(entryEntity2.lastModificationAt),
+            order: Value(entryEntity2.order),
+            didAskedAtCurrentTestRound: Value(
+              entryEntity2.didAskedAtCurrentTestRound,
+            ),
+            emulatedCreatedAt: Value(entryEntity2.emulatedCreatedAt),
+            rank: Value(entryEntity2.rank.index),
+            askedCount: Value(BigInt.from(entryEntity2.askedCount)),
+            wronglyAnsweredCount: Value(
+              BigInt.from(entryEntity2.wronglyAnsweredCount),
+            ),
+          ),
+        ),
+      ).thenAnswer((_) => Future.value(true));
+      expectLater(entriesRepository.update(entryEntity2), completion(true));
+    });
   });
 }
